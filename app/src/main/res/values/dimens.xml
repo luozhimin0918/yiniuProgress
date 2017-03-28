@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="actionbar_height">48dp</dimen>
+
+    <!--公用-->
+    <dimen name="font_title_max">20sp</dimen>
+    <!--首页-->
+    <dimen name="drawer_item_height">45dp</dimen>
+    <dimen name="drawer_image_height">165dp</dimen>
+
+</resources>

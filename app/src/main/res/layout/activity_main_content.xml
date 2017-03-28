@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/center_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1">
+
+    </FrameLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:onClick="clickSwitchFragment"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/main_rg_home"
+            android:text="主页"/>
+
+        <RadioButton
+            android:id="@+id/main_rb_major"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:onClick="clickSwitchFragment"
+            android:drawableTop="@drawable/main_rg_home"
+            android:text="要闻"/>
+
+        <RadioButton
+            android:id="@+id/main_rb_direct_av"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:onClick="clickSwitchFragment"
+            android:drawableTop="@drawable/main_rg_home"
+            android:text="直播"/>
+
+        <RadioButton
+            android:id="@+id/main_rb_market"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:onClick="clickSwitchFragment"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/main_rg_home"
+            android:text="行情"/>
+
+        <RadioButton
+            android:id="@+id/main_rb_calendar"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:onClick="clickSwitchFragment"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/main_rg_home"
+            android:text="日历"/>
+    </RadioGroup>
+</LinearLayout>
