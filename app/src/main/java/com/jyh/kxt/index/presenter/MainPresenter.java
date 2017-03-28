@@ -54,6 +54,7 @@ public class MainPresenter extends BasePresenter {
 
     /**
      * 切换Fragment
+     *
      * @param toFragment
      */
     public void switchToFragment(BaseFragment toFragment) {
@@ -64,9 +65,9 @@ public class MainPresenter extends BasePresenter {
             MainActivity mainActivity = (MainActivity) mContext;
             FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-            if (toFragment == null) {
-                if (!currentFragment.isAdded()) {
-                    transaction.add(R.id.center_content, currentFragment);
+            if (currentFragment == null) {
+                if (!toFragment.isAdded()) {
+                    transaction.add(R.id.center_content, toFragment);
                 }
             } else {
                 if (!toFragment.isAdded()) {
@@ -74,8 +75,9 @@ public class MainPresenter extends BasePresenter {
                 } else {
                     transaction.hide(currentFragment).show(toFragment);
                 }
-                mMainActivity.currentFragment = toFragment;
             }
+
+            mMainActivity.currentFragment = toFragment;
             transaction.commitAllowingStateLoss();
         }
     }

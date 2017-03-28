@@ -25,36 +25,32 @@
             android:layout_width="0dip"
             android:onClick="clickSwitchFragment"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/main_rg_home"
+            android:checked="true"
             android:text="主页"/>
 
         <RadioButton
-            android:id="@+id/main_rb_major"
+            android:id="@+id/rb_audio_visual"
             style="@style/Main_RB_Style"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:checked="true"
             android:onClick="clickSwitchFragment"
-            android:drawableTop="@drawable/main_rg_home"
-            android:text="要闻"/>
+            android:text="视听"/>
 
         <RadioButton
-            android:id="@+id/main_rb_direct_av"
+            android:id="@+id/rb_market"
             style="@style/Main_RB_Style"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:onClick="clickSwitchFragment"
-            android:drawableTop="@drawable/main_rg_home"
-            android:text="直播"/>
-
-        <RadioButton
-            android:id="@+id/main_rb_market"
-            style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:onClick="clickSwitchFragment"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/main_rg_home"
             android:text="行情"/>
+
+        <RadioButton
+            android:id="@+id/rb_datum"
+            style="@style/Main_RB_Style"
+            android:layout_width="0dip"
+            android:onClick="clickSwitchFragment"
+            android:layout_height="match_parent"
+            android:text="数据"/>
 
         <RadioButton
             android:id="@+id/main_rb_calendar"
@@ -62,7 +58,6 @@
             android:layout_width="0dip"
             android:onClick="clickSwitchFragment"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/main_rg_home"
-            android:text="日历"/>
+            android:text="探索"/>
     </RadioGroup>
 </LinearLayout>

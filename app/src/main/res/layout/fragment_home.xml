@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jyh.kxt.home.ui.HomeFragment">
+    tools:context="com.jyh.kxt.index.ui.fragment.HomeFragment">
 
     <TextView
+        android:id="@+id/tv_show_dialog"
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment"/>
 

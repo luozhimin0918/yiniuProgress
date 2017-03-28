@@ -1,6 +1,5 @@
 package com.jyh.kxt.index.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,8 +15,9 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.index.ui.fragment.AvFragment;
+import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.presenter.MainPresenter;
-import com.jyh.kxt.user.ui.SettingActivity;
 
 import butterknife.BindView;
 
@@ -29,8 +29,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
-    @BindView(R.id.center_content) FrameLayout flCenterContent;
-
 
     private MainPresenter mainPresenter;
 
@@ -42,6 +40,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     //Fragment相关
     public BaseFragment currentFragment;
+    private HomeFragment homeFragment;
+    private AvFragment avFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,27 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvNickName = (TextView) llHeaderLayout.findViewById(R.id.tv_nickname);
         mainPresenter.initHeaderLayout();
 
+        clickSwitchFragment(R.id.rb_home);
     }
 
     public void clickSwitchFragment(View view) {
-        switch (view.getId()) {
+        clickSwitchFragment(view.getId());
+    }
+
+    public void clickSwitchFragment(int viewId) {
+        BaseFragment mClickFragment = null;
+        switch (viewId) {
             case R.id.rb_home:
-                startActivity(new Intent(this, SettingActivity.class));
+                homeFragment = homeFragment == null ? HomeFragment.newInstance() : homeFragment;
+                mClickFragment = homeFragment;
                 break;
+            case R.id.rb_audio_visual:
+                avFragment = avFragment == null ? AvFragment.newInstance() : avFragment;
+                mClickFragment = avFragment;
+                break;
+        }
+        if (mClickFragment != null) {
+            mainPresenter.switchToFragment(mClickFragment);
         }
     }
 

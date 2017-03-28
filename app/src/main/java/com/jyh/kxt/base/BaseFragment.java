@@ -2,6 +2,7 @@ package com.jyh.kxt.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,15 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.e(TAG, "setUserVisibleHint: ");
+        if (isVisibleToUser) {
+        } else {
+
+        }
+    }
 
     /**
      * 显示屏幕Dialog
