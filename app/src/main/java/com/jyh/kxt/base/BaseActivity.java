@@ -26,10 +26,10 @@ import com.library.util.SystemUtil;
 
 public class BaseActivity extends LibActivity implements IBaseView {
 
-    /**
-     * 跳转Activity 策略
-     */
+    //跳转Activity 策略
     private int intentAnimation = 0;
+    //动画退出
+    private boolean isAnimationFinish;
 
     private PopupWindow waitPopup;
 
@@ -91,10 +91,21 @@ public class BaseActivity extends LibActivity implements IBaseView {
         addOverridePendingTransition(0);
     }
 
+
+    public void finish(boolean isAnimationFinish) {
+        this.isAnimationFinish = isAnimationFinish;
+        finish();
+    }
+
     @Override
     public void finish() {
         super.finish();
-        addOverridePendingTransition(1);
+        if (isAnimationFinish) {
+            intentAnimation = -1;
+            addOverridePendingTransition(1);
+        } else {
+            addOverridePendingTransition(1);
+        }
     }
 
     public void setIntentAnimation(int intentAnimation) {
@@ -107,8 +118,11 @@ public class BaseActivity extends LibActivity implements IBaseView {
      */
     private void addOverridePendingTransition(int from) {
         switch (intentAnimation) {
+            case -1://动画滑动退出的时候
+                overridePendingTransition(0, from == 1 ? R.anim.activity_out1 : 0);
+                break;
             case 0:
-            //                overridePendingTransition(0, 0);
+
                 break;
             case 1:
                 overridePendingTransition(from == 0 ? R.anim.activity_in : 0, from == 1 ? R.anim.activity_out : 0);

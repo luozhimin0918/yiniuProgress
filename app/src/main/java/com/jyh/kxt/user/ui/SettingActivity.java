@@ -14,15 +14,18 @@ import butterknife.BindView;
  */
 public class SettingActivity extends BaseSwipeBackActivity {
 
-    private SettingPresenter settingPresenter;
 
     @BindView(R.id.btn_exit_login) DiscolorButton btnExitLogin;
 
+    private SettingPresenter settingPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting, StatusBarColor.NO_COLOR);
+        setContentView(R.layout.activity_setting, StatusBarColor.THEME1);
 
         settingPresenter = new SettingPresenter(this);
+
     }
 }

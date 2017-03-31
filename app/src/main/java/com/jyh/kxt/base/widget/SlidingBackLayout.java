@@ -15,6 +15,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.library.util.SystemUtil;
 
 /**
@@ -143,8 +144,6 @@ public class SlidingBackLayout extends FrameLayout {
                     @Override
                     public void onViewReleased(View releasedChild, float xvel, float yvel) {
                         if (releasedChild == defChildAt) {
-//                                viewDragHelper.settleCapturedViewAt(0, 0);
-//                            invalidate();
                             if (defChildAt.getLeft() > getWidth() / 2) {
                                 startTranslationAnimator(getWidth(), 0);
                             } else {
@@ -197,7 +196,7 @@ public class SlidingBackLayout extends FrameLayout {
                         } else {
                             Context context = getContext();
                             if (context instanceof Activity) {
-                                ((Activity) context).finish();
+                                ((BaseActivity) context).finish(true);
                             }
                         }
                     }

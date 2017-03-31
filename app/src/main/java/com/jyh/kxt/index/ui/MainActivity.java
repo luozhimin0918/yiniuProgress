@@ -6,7 +6,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,9 +14,12 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.index.ui.fragment.AvFragment;
-import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.presenter.MainPresenter;
+import com.jyh.kxt.index.ui.fragment.AvFragment;
+import com.jyh.kxt.index.ui.fragment.DatumFragment;
+import com.jyh.kxt.index.ui.fragment.HomeFragment;
+import com.jyh.kxt.index.ui.fragment.MarketFragment;
+import com.jyh.kxt.index.ui.fragment.ProbeFragment;
 
 import butterknife.BindView;
 
@@ -42,6 +44,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public BaseFragment currentFragment;
     private HomeFragment homeFragment;
     private AvFragment avFragment;
+    private MarketFragment marketFragment;
+    private DatumFragment datumFragment;
+    private ProbeFragment probeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         clickSwitchFragment(R.id.rb_home);
     }
 
+    public void clickHeaderItem(View view) {
+        switch (view.getId()) {
+        }
+    }
+
     public void clickSwitchFragment(View view) {
         clickSwitchFragment(view.getId());
     }
@@ -77,6 +87,18 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.rb_audio_visual:
                 avFragment = avFragment == null ? AvFragment.newInstance() : avFragment;
                 mClickFragment = avFragment;
+                break;
+            case R.id.rb_market:
+                marketFragment = marketFragment == null ? MarketFragment.newInstance() : marketFragment;
+                mClickFragment = marketFragment;
+                break;
+            case R.id.rb_datum:
+                datumFragment = datumFragment == null ? DatumFragment.newInstance() : datumFragment;
+                mClickFragment = datumFragment;
+                break;
+            case R.id.rb_probe:
+                probeFragment = probeFragment == null ? ProbeFragment.newInstance() : probeFragment;
+                mClickFragment = probeFragment;
                 break;
         }
         if (mClickFragment != null) {
@@ -115,6 +137,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentFragment != null) {
+
         }
     }
 }

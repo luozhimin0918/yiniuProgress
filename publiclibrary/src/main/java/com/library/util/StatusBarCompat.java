@@ -14,42 +14,40 @@ public class StatusBarCompat {
     private static final int INVALID_VAL = -1;
 
     public static void compat(Activity activity, int statusColor) {
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
+        View userContentView = contentView.getChildAt(0);
+
+        contentView.removeView(userContentView);
+        decorView.removeAllViews();
+
+
+        LinearLayout replaceLayout = new LinearLayout(activity);
+        replaceLayout.setId(com.library.R.id.contents);
+
+        replaceLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        replaceLayout.setOrientation(LinearLayout.VERTICAL);
+
+        View statusBarView = new View(activity);
+        statusBarView.setTag("statusBar");
+
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                getStatusBarHeight(activity));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (statusColor == INVALID_VAL) {
-                return;
+            if (statusColor != INVALID_VAL) {
+                statusBarView.setBackgroundResource(statusColor);
+                replaceLayout.addView(statusBarView, lp);
             }
-
-            ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
-
-            View userContentView = contentView.getChildAt(0);
-
-            ViewGroup parent = (ViewGroup) contentView.getParent();
-            contentView.removeView(userContentView);
-            parent.removeView(contentView);
-
-            LinearLayout replaceLayout = new LinearLayout(activity);
-            replaceLayout.setId(com.library.R.id.contents);
-
-            replaceLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            replaceLayout.setOrientation(LinearLayout.VERTICAL);
-
-
-            View statusBarView = new View(activity);
-            statusBarView.setTag("statusBar");
-
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    getStatusBarHeight(activity));
-
-            statusBarView.setBackgroundResource(statusColor);
+        }else{
             replaceLayout.addView(statusBarView, lp);
-
-            replaceLayout.addView(userContentView);
-
-            parent.addView(replaceLayout);
         }
+
+        replaceLayout.addView(userContentView);
+        decorView.addView(replaceLayout);
     }
 
     public static void compat(LinearLayout replaceLayout, int statusColor) {
@@ -65,14 +63,14 @@ public class StatusBarCompat {
 
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    SystemUtil.getStatusHeight(mContext));
+                    getStatusBarHeight(mContext));
 
-            statusBarView.setBackgroundColor(statusColor);
+            statusBarView.setBackgroundResource(statusColor);
             replaceLayout.addView(statusBarView, lp);
         }
     }
 
-    public static int getStatusBarHeight(Context context) {
+    private static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

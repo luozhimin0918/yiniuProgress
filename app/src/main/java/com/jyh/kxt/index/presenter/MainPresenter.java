@@ -34,11 +34,12 @@ public class MainPresenter extends BasePresenter {
     }
 
     public void initHeaderLayout() {
-        String imgUrl = "http://img2.imgtn.bdimg.com/it/u=3699270011,3265098417&fm=214&gp=0.jpg";
+        String imgUrl = "http://img.kuaixun360.com//Uploads/Editor/2016-12-27/5861d5137548e.jpg";
 
         Glide.with(mContext)
                 .load(imgUrl)
                 .asBitmap()
+                .override(50, 50)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -48,6 +49,7 @@ public class MainPresenter extends BasePresenter {
 
         Glide.with(mContext)
                 .load(imgUrl)
+                .override(50, 50)
                 .bitmapTransform(new BlurTransformation(mContext, 10, 10))//高斯模糊
                 .into(mMainActivity.ivBlurAvatar);
     }

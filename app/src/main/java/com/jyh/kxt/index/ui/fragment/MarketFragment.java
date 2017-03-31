@@ -1,21 +1,18 @@
 package com.jyh.kxt.index.ui.fragment;
 
-
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.library.base.LibActivity;
 
 /**
- * 视听
+ * 行情
  */
-public class AvFragment extends BaseFragment {
+public class MarketFragment extends BaseFragment {
 
-    public static AvFragment newInstance() {
-        AvFragment fragment = new AvFragment();
+    public static MarketFragment newInstance() {
+        MarketFragment fragment = new MarketFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -23,6 +20,6 @@ public class AvFragment extends BaseFragment {
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_av, LibActivity.StatusBarColor.THEME1);
+        setContentView(R.layout.fragment_market);
     }
 }

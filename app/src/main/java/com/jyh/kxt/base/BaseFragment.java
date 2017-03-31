@@ -29,15 +29,6 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        Log.e(TAG, "setUserVisibleHint: ");
-        if (isVisibleToUser) {
-        } else {
-
-        }
-    }
 
     /**
      * 显示屏幕Dialog

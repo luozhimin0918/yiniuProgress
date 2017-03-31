@@ -77,6 +77,7 @@ public abstract class LibFragment extends Fragment {
     private void loadLayout(@LayoutRes int layoutResID, LibActivity.StatusBarColor statusBarColor) {
         View contentView = inflater.inflate(layoutResID, null);
         replaceLayout = (LinearLayout) inflater.inflate(R.layout.fragment_status, null);
+
         StatusBarCompat.compat(replaceLayout, statusBarColor.color);
 
         contentView.setLayoutParams(new LinearLayout.LayoutParams(

@@ -42,5 +42,5 @@
 
     <!--App内部应用色值-->
     <color name="black">#ff000000</color>
-    <color name="theme1">#ffffffff</color>
+    <color name="theme1">#ffffff</color>
 </resources>

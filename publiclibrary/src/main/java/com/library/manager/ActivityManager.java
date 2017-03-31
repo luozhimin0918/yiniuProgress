@@ -68,7 +68,6 @@ public class ActivityManager {
     public void popOneActivity(Activity activity) {
         if (activityStack != null && activityStack.size() > 0) {
             if (activity != null) {
-                activity.finish();
                 activityStack.remove(activity);
             }
         }
@@ -82,6 +81,7 @@ public class ActivityManager {
                 if (activity == null) {
                     break;
                 }
+                activity.finish();
                 popOneActivity(activity);
             }
         }
