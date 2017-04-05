@@ -30,7 +30,6 @@ public class BaseSwipeBackActivity extends BaseActivity {
         slidingBackLayout.setLayoutParams(new ViewGroup.LayoutParams(matchParent, matchParent));
 
         ViewGroup replaceLayout = (ViewGroup) findViewById(com.library.R.id.contents);
-
         ViewGroup parent = (ViewGroup) replaceLayout.getParent();
         parent.removeView(replaceLayout);
         slidingBackLayout.addView(replaceLayout);

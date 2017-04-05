@@ -10,5 +10,6 @@
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>
+    <dimen name="av_video_height">210dp</dimen>
 
 </resources>

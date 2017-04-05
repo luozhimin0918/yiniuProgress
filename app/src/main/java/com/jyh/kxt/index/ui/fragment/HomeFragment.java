@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.base.LibActivity;
@@ -29,7 +30,7 @@ public class HomeFragment extends BaseFragment {
     }
     @OnClick(R.id.tv_show_dialog)
     public void showDialog() {
-        startActivity(new Intent(getContext(), SettingActivity.class));
+        startActivity(new Intent(getContext(), VideoDetailActivity.class));
 //        showWaitDialog("请稍等");
     }
 

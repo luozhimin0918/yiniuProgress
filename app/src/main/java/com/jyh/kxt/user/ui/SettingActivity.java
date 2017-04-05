@@ -19,6 +19,7 @@ public class SettingActivity extends BaseSwipeBackActivity {
 
     private SettingPresenter settingPresenter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,6 +27,7 @@ public class SettingActivity extends BaseSwipeBackActivity {
         setContentView(R.layout.activity_setting, StatusBarColor.THEME1);
 
         settingPresenter = new SettingPresenter(this);
-
     }
+
+
 }

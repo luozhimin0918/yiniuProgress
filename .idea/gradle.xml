@@ -9,7 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/playerlibrary" />
             <option value="$PROJECT_DIR$/publiclibrary" />
+            <option value="$PROJECT_DIR$/superplayerlibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

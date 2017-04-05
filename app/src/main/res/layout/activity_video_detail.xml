@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_video_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.jyh.kxt.av.ui.VideoDetailActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.superplayer.library.SuperPlayer
+            android:id="@+id/view_super_player"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/av_video_height"
+            android:background="@color/black">
+        </com.superplayer.library.SuperPlayer>
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你好我是中国人"/>
+</LinearLayout>
