@@ -112,4 +112,8 @@ public class VideoDetailPresenter extends BasePresenter {
         builder.create();
         builder.show();
     }
+
+    public void addKeyBoardListener() {
+
+    }
 }

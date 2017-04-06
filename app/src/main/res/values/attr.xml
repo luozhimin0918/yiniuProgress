@@ -6,6 +6,9 @@
         <attr name="clickFontColor" format="color|reference"/>
         <attr name="defaultFontColor" format="color|reference"/>
         <attr name="cornerRadius" format="dimension"/>
+
+        <attr name="disabledBackground" format="color|reference"></attr>
+        <attr name="disabledFontColor" format="color|reference"></attr>
     </declare-styleable>
 
     <declare-styleable name="RoundImageView">

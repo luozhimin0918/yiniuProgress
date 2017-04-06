@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -15,7 +14,6 @@ import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.os.IBinder;
 import android.os.StatFs;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -425,17 +423,6 @@ public class SystemUtil {
         return false;
     }
 
-    /**
-     * 多种隐藏软件盘方法的其中一种
-     *
-     * @param token
-     */
-    public static void hideSoftInput(Context context, IBinder token) {
-        if (token != null) {
-            InputMethodManager im = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
 
     /**
      * 打开输入法窗口
@@ -520,4 +507,6 @@ public class SystemUtil {
     public static String getWebViewUA(Context mContext, WebSettings webSettings) {
         return webSettings.getUserAgentString() + "_dyhjwapp_android_" + getVersionName(mContext);
     }
+
+
 }

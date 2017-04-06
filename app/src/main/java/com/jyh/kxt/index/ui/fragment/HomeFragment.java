@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.base.LibActivity;
 
 import butterknife.OnClick;
@@ -26,12 +25,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_home, LibActivity.StatusBarColor.THEME1);
-
     }
+
     @OnClick(R.id.tv_show_dialog)
     public void showDialog() {
         startActivity(new Intent(getContext(), VideoDetailActivity.class));
-//        showWaitDialog("请稍等");
     }
-
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_spit1"
+        layout="@layout/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_alignParentTop="true"/>
+
+    <com.jyh.kxt.base.util.emoje.view.EmoticonsPageView
+        android:id="@+id/view_epv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view_eiv"
+        android:layout_below="@+id/view_spit1"
+        android:orientation="vertical"/>
+
+    <com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView
+        android:id="@+id/view_eiv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_above="@+id/view_spit2"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/indicator_margin">
+    </com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView>
+
+    <include
+        android:id="@+id/view_spit2"
+        layout="@layout/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/view_etv" />
+
+    <com.jyh.kxt.base.util.emoje.view.EmoticonsToolBarView
+        android:id="@+id/view_etv"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/bar_height"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"/>
+</RelativeLayout>

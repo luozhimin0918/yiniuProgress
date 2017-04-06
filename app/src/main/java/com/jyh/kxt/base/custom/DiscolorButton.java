@@ -2,7 +2,6 @@ package com.jyh.kxt.base.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewCompat;
@@ -20,7 +19,7 @@ import com.jyh.kxt.R;
 
 public class DiscolorButton extends Button {
 
-    private int clickBackground, defaultBackground, clickFontColor, defaultFontColor;
+    private int clickBackground, defaultBackground, clickFontColor, defaultFontColor, disabledBackground, disabledFontColor;
     private int cornerRadius;
 
     public DiscolorButton(Context context) {
@@ -48,6 +47,9 @@ public class DiscolorButton extends Button {
         clickFontColor = array.getColor(R.styleable.DiscolorButton_clickFontColor, 0);
         defaultFontColor = array.getColor(R.styleable.DiscolorButton_defaultFontColor, 0);
 
+        disabledBackground = array.getColor(R.styleable.DiscolorButton_disabledBackground, 0);
+        disabledFontColor = array.getColor(R.styleable.DiscolorButton_disabledFontColor, 0);
+
         cornerRadius = array.getDimensionPixelSize(R.styleable.DiscolorButton_cornerRadius, 0);
 
         array.recycle();
@@ -58,17 +60,19 @@ public class DiscolorButton extends Button {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                transformColorHelp(clickBackground, clickFontColor);
-                break;
-            case MotionEvent.ACTION_MOVE:
+        if (isEnabled()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    transformColorHelp(clickBackground, clickFontColor);
+                    break;
+                case MotionEvent.ACTION_MOVE:
 
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                transformColorHelp(defaultBackground, defaultFontColor);
-                break;
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    transformColorHelp(defaultBackground, defaultFontColor);
+                    break;
+            }
         }
         super.onTouchEvent(event);
         return true;
@@ -80,5 +84,16 @@ public class DiscolorButton extends Button {
         mGradientDrawable.setColor(bgColor);
         ViewCompat.setBackground(this, mGradientDrawable);
         setTextColor(fontColor);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        if (!enabled) {
+            transformColorHelp(disabledBackground, disabledFontColor);
+        } else {
+            transformColorHelp(defaultBackground, defaultFontColor);
+        }
     }
 }

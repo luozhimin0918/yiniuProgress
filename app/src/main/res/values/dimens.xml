@@ -12,4 +12,7 @@
     <dimen name="drawer_image_height">165dp</dimen>
     <dimen name="av_video_height">210dp</dimen>
 
+
+    <dimen name="indicator_margin">10dp</dimen>
+    <dimen name="bar_height">35dp</dimen>
 </resources>

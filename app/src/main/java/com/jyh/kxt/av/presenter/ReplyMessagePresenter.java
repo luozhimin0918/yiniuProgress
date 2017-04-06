@@ -1,0 +1,234 @@
+package com.jyh.kxt.av.presenter;
+
+import android.app.Service;
+import android.content.Context;
+import android.text.Editable;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.jyh.kxt.R;
+import com.jyh.kxt.base.BasePresenter;
+import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
+import com.jyh.kxt.base.util.emoje.bean.EmoticonBean;
+import com.jyh.kxt.base.util.emoje.utils.EmoticonsKeyboardBuilder;
+import com.jyh.kxt.base.util.emoje.utils.Utils;
+import com.jyh.kxt.base.util.emoje.view.EmoticonsEditText;
+import com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView;
+import com.jyh.kxt.base.util.emoje.view.EmoticonsPageView;
+import com.jyh.kxt.base.util.emoje.view.EmoticonsToolBarView;
+import com.jyh.kxt.base.util.emoje.view.I.IView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Mr'Dai on 2017/4/5.
+ */
+
+public class ReplyMessagePresenter extends BasePresenter {
+
+    @BindView(R.id.tv_publish) TextView tvPublish;
+    @BindView(R.id.fl_emoje) FrameLayout flEmoJe;
+    @BindView(R.id.eet_content) EmoticonsEditText eetContent;
+
+    public boolean isShowEmoJiView = false;
+    private View replyMessageView;
+    private View emoJeContentView;
+
+    private EmoticonsPageView mEmoticonsPageView;
+    private EmoticonsIndicatorView mEmoticonsIndicatorView;
+    private EmoticonsToolBarView mEmoticonsToolBarView;
+
+    private PopupUtil replyMessagePopup;
+
+    public ReplyMessagePresenter(IBaseView iBaseView) {
+        super(iBaseView);
+    }
+
+    public void initView(View replyMessageView, PopupUtil replyMessagePopup) {
+        ButterKnife.bind(this, replyMessageView);
+        this.replyMessageView = replyMessageView;
+        this.replyMessagePopup = replyMessagePopup;
+        this.eetContent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isShowEmoJiView) {
+                    isShowEmoJiView = false;
+
+                    ReplyMessagePresenter.this.replyMessageView.setVisibility(View.GONE);
+                    ReplyMessagePresenter.this.replyMessageView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReplyMessagePresenter.this.emoJeContentView.setVisibility(View.GONE);
+                            ReplyMessagePresenter.this.replyMessageView.setVisibility(View.VISIBLE);
+
+                            hideSoftInputFromWindow();
+                        }
+                    }, 500);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @OnClick({R.id.iv_emoji, R.id.tv_publish})
+    public void onViewClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_emoji:
+                showOrHideEmoJiView();
+                break;
+            case R.id.tv_publish:
+                replyMessagePopup.dismiss();
+                break;
+        }
+    }
+
+    private void showOrHideEmoJiView() {
+        isShowEmoJiView = !isShowEmoJiView;
+
+        int emoJeWidth = replyMessageView.getWidth();
+        int emoJeHeight = Utils.dip2px(mContext, Utils.getDefKeyboardHeight(mContext));
+        ViewGroup.LayoutParams emoJeParams = new ViewGroup.LayoutParams(emoJeWidth, emoJeHeight);
+
+        if (emoJeContentView == null) {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            emoJeContentView = inflater.inflate(R.layout.view_emoje_content, null);
+            addViewListener(emoJeContentView);
+            flEmoJe.addView(emoJeContentView, emoJeParams);
+        }
+
+        if (isShowEmoJiView) {
+            hideSoftInputFromWindow();
+            emoJeContentView.setVisibility(View.VISIBLE);
+            goneReplyMessageView();
+        } else {
+            emoJeContentView.setVisibility(View.GONE);
+            goneReplyMessageView();
+            replyMessageView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideSoftInputFromWindow();
+                }
+            }, 500);
+        }
+    }
+
+    private void hideSoftInputFromWindow() {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+
+    private void addViewListener(View view) {
+        mEmoticonsPageView = (EmoticonsPageView) view.findViewById(R.id.view_epv);
+        mEmoticonsIndicatorView = (EmoticonsIndicatorView) view.findViewById(R.id.view_eiv);
+        mEmoticonsToolBarView = (EmoticonsToolBarView) view.findViewById(R.id.view_etv);
+
+        setBuilder(EmoticonsUtils.getSimpleBuilder(mContext));
+
+        mEmoticonsPageView.setOnIndicatorListener(new EmoticonsPageView.OnEmoticonsPageViewListener() {
+            @Override
+            public void emoticonsPageViewInitFinish(int count) {
+                mEmoticonsIndicatorView.init(count);
+            }
+
+            @Override
+            public void emoticonsPageViewCountChanged(int count) {
+                mEmoticonsIndicatorView.setIndicatorCount(count);
+            }
+
+            @Override
+            public void playTo(int position) {
+                mEmoticonsIndicatorView.playTo(position);
+            }
+
+            @Override
+            public void playBy(int oldPosition, int newPosition) {
+                mEmoticonsIndicatorView.playBy(oldPosition, newPosition);
+            }
+        });
+
+        mEmoticonsPageView.setIViewListener(new IView() {
+            @Override
+            public void onItemClick(EmoticonBean bean) {
+                if (eetContent != null) {
+                    eetContent.setFocusable(true);
+                    eetContent.setFocusableInTouchMode(true);
+                    eetContent.requestFocus();
+
+                    // 删除
+                    if (bean.getEventType() == EmoticonBean.FACE_TYPE_DEL) {
+                        int action = KeyEvent.ACTION_DOWN;
+                        int code = KeyEvent.KEYCODE_DEL;
+                        KeyEvent event = new KeyEvent(action, code);
+                        eetContent.onKeyDown(KeyEvent.KEYCODE_DEL, event);
+                        return;
+                    }
+                    // 用户自定义
+                    else if (bean.getEventType() == EmoticonBean.FACE_TYPE_USERDEF) {
+                        return;
+                    }
+
+                    int index = eetContent.getSelectionStart();
+                    Editable editable = eetContent.getEditableText();
+                    if (index < 0) {
+                        editable.append(bean.getContent());
+                    } else {
+                        editable.insert(index, bean.getContent());
+                    }
+                }
+            }
+
+            @Override
+            public void onItemDisplay(EmoticonBean bean) {
+            }
+
+            @Override
+            public void onPageChangeTo(int position) {
+                mEmoticonsToolBarView.setToolBtnSelect(position);
+            }
+        });
+
+        mEmoticonsToolBarView.setOnToolBarItemClickListener(new EmoticonsToolBarView.OnToolBarItemClickListener() {
+            @Override
+            public void onToolBarItemClick(int position) {
+                mEmoticonsPageView.setPageSelect(position);
+            }
+        });
+    }
+
+    public void setBuilder(EmoticonsKeyboardBuilder builder) {
+        if (mEmoticonsPageView != null) {
+            mEmoticonsPageView.setBuilder(builder);
+        }
+        if (mEmoticonsToolBarView != null) {
+            mEmoticonsToolBarView.setBuilder(builder);
+        }
+    }
+
+    public void goneEmoJeView() {
+        if (emoJeContentView != null) {
+            emoJeContentView.setVisibility(View.GONE);
+        }
+    }
+
+    public void goneReplyMessageView() {
+        replyMessageView.setVisibility(View.GONE);
+        replyMessageView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                replyMessageView.setVisibility(View.VISIBLE);
+            }
+        }, 500);
+    }
+}
