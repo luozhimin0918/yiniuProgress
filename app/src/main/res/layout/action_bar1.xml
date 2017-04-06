@@ -8,9 +8,9 @@
     <ImageView
         android:id="@+id/iv_bar_break"
         android:layout_width="@dimen/actionbar_height"
-        android:padding="10dp"
-        android:layout_alignParentLeft="true"
         android:layout_height="@dimen/actionbar_height"
+        android:layout_alignParentLeft="true"
+        android:padding="10dp"
         android:src="@mipmap/ico_break"/>
 
     <TextView
@@ -18,22 +18,22 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/actionbar_height"
         android:layout_centerInParent="true"
-        android:gravity="center"
-        android:textColor="#333333"
+        android:layout_toLeftOf="@+id/iv_bar_function"
         android:layout_toRightOf="@+id/iv_bar_break"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
-        android:layout_toLeftOf="@+id/iv_bar_function"
-        android:textSize="@dimen/font_title_max"
-        android:text="设置"/>
+        android:textColor="@color/actionBar_textColor1"
+        android:textSize="@dimen/font_title_max"/>
 
-    <View
+    <TextView
         android:id="@+id/iv_bar_function"
         android:layout_width="@dimen/actionbar_height"
-        android:padding="10dp"
-        android:layout_alignParentRight="true"
         android:layout_height="@dimen/actionbar_height"
-        android:src="@mipmap/ico_break"/>
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:textColor="@color/actionBar_textColor2"
+        />
 
     <View
         android:layout_width="match_parent"

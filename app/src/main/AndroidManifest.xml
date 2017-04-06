@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".index.ui.MainActivity">
+        <activity
+            android:name=".index.ui.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,14 +24,19 @@
         </activity>
         <activity
             android:name=".user.ui.SettingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/TranslucentBgTheme"/>
 
         <activity
             android:name=".av.ui.VideoDetailActivity"
-            android:theme="@style/VideoTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor">
+            android:screenOrientation="sensor"
+            android:theme="@style/VideoTheme">
         </activity>
+
+        <activity
+            android:name=".user.ui.EditUserInfoActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

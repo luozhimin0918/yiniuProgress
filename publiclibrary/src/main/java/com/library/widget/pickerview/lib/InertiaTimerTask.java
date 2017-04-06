@@ -1,21 +1,14 @@
-// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.geocities.com/kpdus/jad.html
-// Decompiler options: braces fieldsfirst space lnc 
-
-package com.library.widget.wheel;
+package com.library.widget.pickerview.lib;
 
 import java.util.TimerTask;
-
-// Referenced classes of package com.qingchifan.view:
-//            LoopView
 
 final class InertiaTimerTask extends TimerTask {
 
     float a;
     final float velocityY;
-    final LoopView loopView;
+    final WheelView loopView;
 
-    InertiaTimerTask(LoopView loopview, float velocityY) {
+    InertiaTimerTask(WheelView loopview, float velocityY) {
         super();
         loopView = loopview;
         this.velocityY = velocityY;
@@ -41,15 +34,23 @@ final class InertiaTimerTask extends TimerTask {
             return;
         }
         int i = (int) ((a * 10F) / 1000F);
-        LoopView loopview = loopView;
-        loopview.totalScrollY = loopview.totalScrollY - i;
+        loopView.totalScrollY = loopView.totalScrollY - i;
         if (!loopView.isLoop) {
-            float itemHeight = loopView.lineSpacingMultiplier * loopView.maxTextHeight;
-            if (loopView.totalScrollY <= (int) ((float) (-loopView.initPosition) * itemHeight)) {
+            float itemHeight = loopView.itemHeight;
+            float top = (-loopView.initPosition) * itemHeight;
+            float bottom = (loopView.getItemsCount() - 1 - loopView.initPosition) * itemHeight;
+            if(loopView.totalScrollY - itemHeight*0.3 < top){
+                top = loopView.totalScrollY + i;
+            }
+            else if(loopView.totalScrollY + itemHeight*0.3 > bottom){
+                bottom = loopView.totalScrollY + i;
+            }
+
+            if (loopView.totalScrollY <= top){
                 a = 40F;
-                loopView.totalScrollY = (int) ((float) (-loopView.initPosition) * itemHeight);
-            } else if (loopView.totalScrollY >= (int) ((float) (loopView.items.size() - 1 - loopView.initPosition) * itemHeight)) {
-                loopView.totalScrollY = (int) ((float) (loopView.items.size() - 1 - loopView.initPosition) * itemHeight);
+                loopView.totalScrollY = (int)top;
+            } else if (loopView.totalScrollY >= bottom) {
+                loopView.totalScrollY = (int)bottom;
                 a = -40F;
             }
         }
@@ -60,4 +61,5 @@ final class InertiaTimerTask extends TimerTask {
         }
         loopView.handler.sendEmptyMessage(MessageHandler.WHAT_INVALIDATE_LOOP_VIEW);
     }
+
 }

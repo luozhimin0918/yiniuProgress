@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
@@ -26,11 +28,14 @@ import butterknife.BindView;
 /**
  * 主界面
  */
-public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener {
+public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener {
 
-    @BindView(R.id.ll_content) LinearLayout llContent;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     private MainPresenter mainPresenter;
 
@@ -39,6 +44,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public ImageView ivBlurAvatar;
     public RoundImageView rivAvatar;
     public TextView tvNickName;
+    public TextView tvCollect;//收藏
+    public TextView tvShare;//分享
+    public TextView tvComment;//评论
+    public TextView tvReply;//回复
+    public TextView tvActivity;//活动
+
 
     //Fragment相关
     public BaseFragment currentFragment;
@@ -54,7 +65,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
 
         mainPresenter = new MainPresenter(this);
+
         //侧边栏相关控件
+        initDrawer();
+
+        mainPresenter.initHeaderLayout();
+
+        clickSwitchFragment(R.id.rb_home);
+    }
+
+    /**
+     * 侧边栏相关控件
+     */
+    private void initDrawer() {
         drawer.addDrawerListener(this);
 
         llHeaderLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.nav_header_main, null);
@@ -63,9 +86,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         ivBlurAvatar = (ImageView) llHeaderLayout.findViewById(R.id.iv_blur_avatar);
         rivAvatar = (RoundImageView) llHeaderLayout.findViewById(R.id.riv_avatar);
         tvNickName = (TextView) llHeaderLayout.findViewById(R.id.tv_nickname);
-        mainPresenter.initHeaderLayout();
+        tvCollect = (TextView) llHeaderLayout.findViewById(R.id.tv_collect);
+        tvComment = (TextView) llHeaderLayout.findViewById(R.id.tv_comment);
+        tvReply = (TextView) llHeaderLayout.findViewById(R.id.tv_reply);
+        tvActivity = (TextView) llHeaderLayout.findViewById(R.id.tv_activity);
+        tvShare = (TextView) llHeaderLayout.findViewById(R.id.tv_share);
 
-        clickSwitchFragment(R.id.rb_home);
+        rivAvatar.setOnClickListener(this);
+        tvCollect.setOnClickListener(this);
+        tvComment.setOnClickListener(this);
+        tvReply.setOnClickListener(this);
+        tvActivity.setOnClickListener(this);
+        tvShare.setOnClickListener(this);
+
     }
 
     public void clickHeaderItem(View view) {
@@ -145,6 +178,32 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         super.onResume();
         if (currentFragment != null) {
 
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.riv_avatar:
+                //个人中心
+                Intent intent = new Intent(this, EditUserInfoActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_collect:
+                //收藏
+                break;
+            case R.id.tv_comment:
+                //评论
+                break;
+            case R.id.tv_reply:
+                //回复
+                break;
+            case R.id.tv_activity:
+                //活动
+                break;
+            case R.id.tv_share:
+                //推荐
+                break;
         }
     }
 }

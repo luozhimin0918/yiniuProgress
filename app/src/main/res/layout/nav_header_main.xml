@@ -37,6 +37,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_collect"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:gravity="center"
@@ -44,6 +45,7 @@
         android:text="我的收藏"/>
 
     <TextView
+        android:id="@+id/tv_comment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:gravity="center"
@@ -51,19 +53,22 @@
         android:text="我的评论"/>
 
     <TextView
+        android:id="@+id/tv_reply"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:gravity="center"
         android:text="我的回复"/>
 
     <TextView
+        android:id="@+id/tv_activity"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:onClick="clickHeaderItem"
         android:gravity="center"
+        android:onClick="clickHeaderItem"
         android:text="我的活动"/>
 
     <TextView
+        android:id="@+id/tv_share"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:gravity="center"
