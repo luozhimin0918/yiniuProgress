@@ -41,15 +41,15 @@
                         android:padding="@dimen/editUserInfo_padding1"
                         android:src="@mipmap/ico_break"/>
 
-                    <ImageView
+                    <com.jyh.kxt.base.custom.RoundImageView
                         android:id="@+id/iv_photo"
                         android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/item_height"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
                         android:layout_marginRight="@dimen/item_height"
-                        android:padding="@dimen/editUserInfo_padding2"
-                        android:src="@mipmap/ic_launcher"/>
+                        app:outsideRound="true"
+                        android:padding="@dimen/editUserInfo_padding2"/>
 
                     <View
                         android:layout_width="match_parent"

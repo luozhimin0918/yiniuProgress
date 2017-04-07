@@ -1,22 +1,31 @@
 package com.jyh.kxt.user.ui;
 
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
+import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
+import com.library.widget.window.ToastView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 项目名:Kxt
@@ -36,7 +45,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @BindView(R.id.iv_bar_function)
     TextView btnSubmit;
     @BindView(R.id.iv_photo)
-    ImageView ivPhoto;
+    RoundImageView ivPhoto;
     @BindView(R.id.rl_photo)
     RelativeLayout rlPhoto;
     @BindView(R.id.tv_nickname)
@@ -66,6 +75,9 @@ public class EditUserInfoActivity extends BaseActivity {
     @BindView(R.id.fl_picker)
     public FrameLayout fl_picker;
 
+    public static final String VIEW_NAME_IMG="view_name_img";
+    public static final String VIEW_NAME_TITLE="view_name_title";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +87,25 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter.loadCitis();
 
+        ViewCompat.setTransitionName(ivPhoto,VIEW_NAME_IMG);
+        ViewCompat.setTransitionName(tvNickname,VIEW_NAME_TITLE);
+
         tvTitle.setText("个人中心");
         btnSubmit.setText("完成");
+
+        String imgUrl = "http://img.kuaixun360.com//Uploads/Editor/2016-12-27/5861d5137548e.jpg";
+
+        Glide.with(this)
+                .load(imgUrl)
+                .asBitmap()
+                .override(50, 50)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ivPhoto.setImageBitmap(resource);
+                    }
+                });
+
     }
 
     /**
@@ -140,7 +169,17 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_address:
                 //修改地址
-                editUserInfoPresenter.showPickerCitisView();
+                if (editUserInfoPresenter.isLoadCityInfoError) {
+                    //加载失败
+                    if (editUserInfoPresenter.isLoadCityInfoOver)
+                        editUserInfoPresenter.loadCitis();//重新加载
+                    else
+                        ToastView.makeText3(this, "信息加载中");//已重新加载中,等待加载完毕
+                }
+                if (editUserInfoPresenter.isLoadCityInfoOver)//加载完毕,直接显示选择器
+                    editUserInfoPresenter.showPickerCitisView();
+                else
+                    ToastView.makeText3(this, "信息加载中");//加载中,等待加载完毕
                 break;
             case R.id.rl_work:
                 //修改工作
@@ -153,4 +192,5 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
         }
     }
+
 }

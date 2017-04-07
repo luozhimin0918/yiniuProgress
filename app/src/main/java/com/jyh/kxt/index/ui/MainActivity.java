@@ -3,6 +3,9 @@ package com.jyh.kxt.index.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,12 +33,9 @@ import butterknife.BindView;
  */
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener {
 
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    @BindView(R.id.ll_content) LinearLayout llContent;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
 
     private MainPresenter mainPresenter;
 
@@ -186,8 +186,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        new Pair<View, String>(rivAvatar, EditUserInfoActivity.VIEW_NAME_IMG), new Pair<View, String>(tvNickName,
+                                EditUserInfoActivity.VIEW_NAME_TITLE));
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
-                startActivity(intent);
+                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
                 break;
             case R.id.tv_collect:
                 //收藏
