@@ -13,17 +13,19 @@ import java.util.Date;
 
 public class DateUtils {
 
-    public static final String TYPE_YMD = "yyyy-MM-dd";
-    public static final String TYPE_YMDHMS = "yyyy-MM-dd HH:mm:ss";
-    public static final String TYPE_YMDHM = "yyyy-MM-dd HH:mm";
-    public static final String TYPE_MDHM = "MM-dd HH:mm";
-    public static final String TYPE_HMS = "HH:mm:ss";
-    public static final String TYPE_HM = "HH:mm";
+    public static final String TYPE_YMD = "yyyy-MM-dd"; //年月日
+    public static final String TYPE_YMDHMS = "yyyy-MM-dd HH:mm:ss";//年月日时分秒
+    public static final String TYPE_YMDHM = "yyyy-MM-dd HH:mm"; //年月日时分
+    public static final String TYPE_MDHM = "MM-dd HH:mm";//月日时分
+    public static final String TYPE_MD = "MM-dd"; //月日
+    public static final String TYPE_HMS = "HH:mm:ss"; //时分秒
+    public static final String TYPE_HM = "HH:mm"; //时分
+    public static final String TYPE_MS = "mm:ss"; //分秒
 
-    private static int oneDayLong = 1000 * 60 * 60 * 24;//一天时间毫秒值
-    private static int oneHourLong = 1000 * 60 * 60;//一小时时间毫秒值
-    private static int oneMinuteLong = 1000 * 60;//一分钟时间毫秒值
-    private static int oneSecondLong = 1000;//一秒时间毫秒值
+    public static int oneDayLong = 1000 * 60 * 60 * 24;//一天时间毫秒值
+    public static int oneHourLong = 1000 * 60 * 60;//一小时时间毫秒值
+    public static int oneMinuteLong = 1000 * 60;//一分钟时间毫秒值
+    public static int oneSecondLong = 1000;//一秒时间毫秒值
 
     /**
      * Date转String
