@@ -36,4 +36,5 @@ dependencies {
     compile project(':playerlibrary')
     compile project(':superplayerlibrary')
     compile files('libs/nineoldandroids-2.4.0.jar')
+    compile files('libs/x5.jar')
 }

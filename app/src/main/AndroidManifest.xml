@@ -26,7 +26,6 @@
             android:name=".user.ui.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentBgTheme"/>
-
         <activity
             android:name=".av.ui.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -37,6 +36,11 @@
         <activity
             android:name=".user.ui.EditUserInfoActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".index.ui.WebActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

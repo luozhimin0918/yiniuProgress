@@ -12,7 +12,6 @@ import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 设置
@@ -32,6 +31,13 @@ public class SettingActivity extends BaseSwipeBackActivity {
         setContentView(R.layout.activity_setting, StatusBarColor.THEME1);
 
         settingPresenter = new SettingPresenter(this);
+
+
+        EditTextValidator editTextValidator = new EditTextValidator(this)
+                .setButton(btnExitLogin)
+                .add(new ValidationModel(tetUsername, new UserNameValidation()))
+                .add(new ValidationModel(tetPassword, new UserNameValidation()))
+                .execute();
 
     }
 }
