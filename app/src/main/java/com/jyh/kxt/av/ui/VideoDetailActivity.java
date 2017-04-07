@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
+import com.jyh.kxt.base.util.emoje.utils.Utils;
 import com.superplayer.library.SuperPlayer;
 
 import butterknife.BindView;
@@ -26,6 +28,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
+    @BindView(R.id.activity_video_detail) LinearLayout llDetailContent;
 
     private VideoDetailPresenter videoDetailPresenter;
 
@@ -47,8 +50,6 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
         videoDetailPresenter = new VideoDetailPresenter(this);
         videoDetailPresenter.initVideo();
-
-        SoftKeyBoardListener.setListener(VideoDetailActivity.this, this);
     }
 
 
@@ -65,6 +66,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
      * 弹出回复的PopWindow
      */
     private void showReplyMessageView() {
+
         if (replyMessagePopup == null) {
             replyMessagePresenter = new ReplyMessagePresenter(this);
 
@@ -86,25 +88,31 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
             replyMessagePopup.setConfig(config);
 
             replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-            replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        }
 
+            SoftKeyBoardListener.setListener(VideoDetailActivity.this, this, llDetailContent);
+        }
         replyMessagePresenter.isShowEmoJiView = false;
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
         replyMessagePopup.showAtLocation(tvReplyMessage, Gravity.BOTTOM, 0, 0);
+
         replyMessagePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
             @Override
             public void onDismiss() {
                 replyMessagePresenter.goneEmoJeView();
             }
         });
+
     }
 
     @Override
     public void keyBoardShow(int height) {
+        Utils.setDefKeyboardHeight(this, height);
+        if (replyMessagePresenter != null) {
+            replyMessagePresenter.adjustEmoJeView();
+        }
     }
 
     @Override

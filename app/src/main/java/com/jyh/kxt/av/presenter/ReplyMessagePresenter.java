@@ -41,6 +41,7 @@ public class ReplyMessagePresenter extends BasePresenter {
     @BindView(R.id.eet_content) EmoticonsEditText eetContent;
 
     public boolean isShowEmoJiView = false;
+
     private View replyMessageView;
     private View emoJeContentView;
 
@@ -64,16 +65,9 @@ public class ReplyMessagePresenter extends BasePresenter {
                 if (isShowEmoJiView) {
                     isShowEmoJiView = false;
 
-                    ReplyMessagePresenter.this.replyMessageView.setVisibility(View.GONE);
-                    ReplyMessagePresenter.this.replyMessageView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ReplyMessagePresenter.this.emoJeContentView.setVisibility(View.GONE);
-                            ReplyMessagePresenter.this.replyMessageView.setVisibility(View.VISIBLE);
+                    emoJeContentView.setVisibility(View.GONE);
+                    hideSoftInputFromWindow();
 
-                            hideSoftInputFromWindow();
-                        }
-                    }, 500);
                     return true;
                 }
                 return false;
@@ -93,33 +87,30 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
     }
 
+
     private void showOrHideEmoJiView() {
         isShowEmoJiView = !isShowEmoJiView;
 
-        int emoJeWidth = replyMessageView.getWidth();
-        int emoJeHeight = Utils.dip2px(mContext, Utils.getDefKeyboardHeight(mContext));
-        ViewGroup.LayoutParams emoJeParams = new ViewGroup.LayoutParams(emoJeWidth, emoJeHeight);
-
         if (emoJeContentView == null) {
+
+            ViewGroup.LayoutParams emoJeParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             emoJeContentView = inflater.inflate(R.layout.view_emoje_content, null);
+
             addViewListener(emoJeContentView);
+
             flEmoJe.addView(emoJeContentView, emoJeParams);
         }
 
+        hideSoftInputFromWindow();
+
         if (isShowEmoJiView) {
-            hideSoftInputFromWindow();
             emoJeContentView.setVisibility(View.VISIBLE);
-            goneReplyMessageView();
         } else {
             emoJeContentView.setVisibility(View.GONE);
-            goneReplyMessageView();
-            replyMessageView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    hideSoftInputFromWindow();
-                }
-            }, 500);
         }
     }
 
@@ -222,13 +213,16 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
     }
 
-    public void goneReplyMessageView() {
-        replyMessageView.setVisibility(View.GONE);
-        replyMessageView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                replyMessageView.setVisibility(View.VISIBLE);
-            }
-        }, 500);
+    public void adjustEmoJeView() {
+        if (flEmoJe != null) {
+            int emoJeWidth = replyMessageView.getWidth();
+            int emoJeHeight = Utils.getDefKeyboardHeight(mContext);
+
+            ViewGroup.LayoutParams layoutParams = flEmoJe.getLayoutParams();
+            layoutParams.width = emoJeWidth;
+            layoutParams.height = emoJeHeight;
+
+            flEmoJe.setLayoutParams(layoutParams);
+        }
     }
 }

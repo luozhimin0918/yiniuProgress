@@ -2,6 +2,7 @@ package com.jyh.kxt.base.util;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -14,9 +15,15 @@ public class SoftKeyBoardListener {
     private OnSoftKeyBoardChangeListener onSoftKeyBoardChangeListener;
 
     public SoftKeyBoardListener(Activity activity) {
-        //获取activity的根视图
-        rootView = activity.getWindow().getDecorView();
+        this(activity, null);
+    }
 
+    public SoftKeyBoardListener(Activity activity, View keyRootView) {
+        if (keyRootView != null) {
+            rootView = keyRootView;
+        } else {
+            rootView = activity.getWindow().getDecorView();
+        }
         //监听视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -24,7 +31,9 @@ public class SoftKeyBoardListener {
                 //获取当前根视图在屏幕上显示的大小
                 Rect r = new Rect();
                 rootView.getWindowVisibleDisplayFrame(r);
+
                 int visibleHeight = r.height();
+                Log.e("visibleHeight", "onGlobalLayout: "+visibleHeight);
                 if (rootViewVisibleHeight == 0) {
                     rootViewVisibleHeight = visibleHeight;
                     return;
@@ -68,7 +77,12 @@ public class SoftKeyBoardListener {
     }
 
     public static void setListener(Activity activity, OnSoftKeyBoardChangeListener onSoftKeyBoardChangeListener) {
-        SoftKeyBoardListener softKeyBoardListener = new SoftKeyBoardListener(activity);
+        setListener(activity, onSoftKeyBoardChangeListener, null);
+    }
+
+    public static void setListener(Activity activity, OnSoftKeyBoardChangeListener onSoftKeyBoardChangeListener, View
+            observerView) {
+        SoftKeyBoardListener softKeyBoardListener = new SoftKeyBoardListener(activity, observerView);
         softKeyBoardListener.setOnSoftKeyBoardChangeListener(onSoftKeyBoardChangeListener);
     }
 }
