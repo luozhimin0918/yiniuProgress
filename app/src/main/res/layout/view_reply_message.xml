@@ -22,10 +22,10 @@
 
         <ImageView
             android:id="@+id/iv_emoji"
-            android:layout_width="25dp"
+            android:layout_width="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:src="@color/blue"/>
 
         <TextView

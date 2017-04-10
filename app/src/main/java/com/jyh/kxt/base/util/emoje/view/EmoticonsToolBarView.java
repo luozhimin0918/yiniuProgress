@@ -30,8 +30,8 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
     private LinearLayout ly_tool;
 
     private List<EmoticonSetBean> mEmoticonSetBeanList;
-    private ArrayList<ImageView> mToolBtnList = new ArrayList<ImageView>();
-    private int mBtnWidth = 60;
+    private ArrayList<ImageView> mToolBtnList = new ArrayList<>();
+    private int mBtnWidth  ;
 
     public EmoticonsToolBarView(Context context) {
         this(context, null);
@@ -46,13 +46,15 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
     }
 
     private void findView() {
+
+        mBtnWidth = (int) getResources().getDimension(R.dimen.bar_height);
         hsv_toolbar = (HorizontalScrollView) findViewById(R.id.hsv_toolbar);
         ly_tool = (LinearLayout) findViewById(R.id.ly_tool);
     }
 
-    private void scrollToBtnPosition(final int position){
+    private void scrollToBtnPosition(final int position) {
         int childCount = ly_tool.getChildCount();
-        if(position < childCount){
+        if (position < childCount) {
             hsv_toolbar.post(new Runnable() {
                 @Override
                 public void run() {
@@ -60,18 +62,18 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
 
                     int childX = (int) ViewHelper.getX(ly_tool.getChildAt(position));
 
-                    if(childX < mScrollX){
-                        hsv_toolbar.scrollTo(childX,0);
+                    if (childX < mScrollX) {
+                        hsv_toolbar.scrollTo(childX, 0);
                         return;
                     }
 
-                    int childWidth = (int)ly_tool.getChildAt(position).getWidth();
+                    int childWidth = (int) ly_tool.getChildAt(position).getWidth();
                     int hsvWidth = hsv_toolbar.getWidth();
                     int childRight = childX + childWidth;
                     int scrollRight = mScrollX + hsvWidth;
 
-                    if(childRight > scrollRight){
-                        hsv_toolbar.scrollTo(childRight - scrollRight,0);
+                    if (childRight > scrollRight) {
+                        hsv_toolbar.scrollTo(childRight - scrollRight, 0);
                         return;
                     }
                 }
@@ -90,17 +92,18 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
         }
     }
 
-    public void setBtnWidth(int width){
+    public void setBtnWidth(int width) {
         mBtnWidth = width;
     }
 
-    public void addData(int rec){
-        if(ly_tool != null){
-            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View toolBtnView = inflater.inflate(R.layout.item_toolbtn,null);
-            ImageView iv_icon = (ImageView)toolBtnView.findViewById(R.id.iv_icon);
+    public void addData(int rec) {
+        if (ly_tool != null) {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View toolBtnView = inflater.inflate(R.layout.item_toolbtn, null);
+            ImageView iv_icon = (ImageView) toolBtnView.findViewById(R.id.iv_icon);
             iv_icon.setImageResource(rec);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(Utils.dip2px(mContext,mBtnWidth), LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(Utils.dip2px(mContext, mBtnWidth),
+                    LayoutParams.MATCH_PARENT);
             iv_icon.setLayoutParams(imgParams);
             ly_tool.addView(toolBtnView);
             final int position = mToolBtnList.size();
@@ -118,19 +121,19 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
         }
     }
 
-    private int getIdValue(){
+    private int getIdValue() {
         int childCount = getChildCount();
         int id = 1;
-        if(childCount == 0){
+        if (childCount == 0) {
             return id;
         }
         boolean isKeep = true;
-        while (isKeep){
+        while (isKeep) {
             isKeep = false;
             Random random = new Random();
             id = random.nextInt(100);
-            for(int i = 0 ; i < childCount ; i++){
-                if(getChildAt(i).getId() == id){
+            for (int i = 0; i < childCount; i++) {
+                if (getChildAt(i).getId() == id) {
                     isKeep = true;
                     break;
                 }
@@ -139,42 +142,44 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
         return id;
     }
 
-    public void addFixedView(View view , boolean isRight){
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+    public void addFixedView(View view, boolean isRight) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams
+                .WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         RelativeLayout.LayoutParams hsvParams = (RelativeLayout.LayoutParams) hsv_toolbar.getLayoutParams();
-        if(view.getId() <= 0){
+        if (view.getId() <= 0) {
             view.setId(getIdValue());
         }
-        if(isRight){
+        if (isRight) {
             params.addRule(ALIGN_PARENT_RIGHT);
             hsvParams.addRule(LEFT_OF, view.getId());
-        }
-        else{
+        } else {
             params.addRule(ALIGN_PARENT_LEFT);
-            hsvParams.addRule(RIGHT_OF,view.getId());
+            hsvParams.addRule(RIGHT_OF, view.getId());
         }
-        addView(view,params);
+        addView(view, params);
         hsv_toolbar.setLayoutParams(hsvParams);
     }
 
     @Override
     public void setBuilder(EmoticonsKeyboardBuilder builder) {
         mEmoticonSetBeanList = builder.builder == null ? null : builder.builder.getEmoticonSetBeanList();
-        if(mEmoticonSetBeanList == null){
+        if (mEmoticonSetBeanList == null) {
             return;
         }
 
         int i = 0;
-        for(EmoticonSetBean bean : mEmoticonSetBeanList){
-            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View toolBtnView = inflater.inflate(R.layout.item_toolbtn,null);
-            ImageView iv_icon = (ImageView)toolBtnView.findViewById(R.id.iv_icon);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(Utils.dip2px(mContext,mBtnWidth), LayoutParams.MATCH_PARENT);
+        for (EmoticonSetBean bean : mEmoticonSetBeanList) {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View toolBtnView = inflater.inflate(R.layout.item_toolbtn, null);
+
+            ImageView iv_icon = (ImageView) toolBtnView.findViewById(R.id.iv_icon);
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(mBtnWidth,mBtnWidth);
+
             iv_icon.setLayoutParams(imgParams);
             ly_tool.addView(toolBtnView);
 
             try {
-                ImageLoader.getInstance(mContext).displayImage(bean.getIconUri(),iv_icon);
+                ImageLoader.getInstance(mContext).displayImage(bean.getIconUri(), iv_icon);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -197,14 +202,19 @@ public class EmoticonsToolBarView extends RelativeLayout implements IEmoticonsKe
     }
 
     private List<OnToolBarItemClickListener> mItemClickListeners;
+
     public interface OnToolBarItemClickListener {
         void onToolBarItemClick(int position);
     }
+
     public void addOnToolBarItemClickListener(OnToolBarItemClickListener listener) {
         if (mItemClickListeners == null) {
             mItemClickListeners = new ArrayList<OnToolBarItemClickListener>();
         }
         mItemClickListeners.add(listener);
     }
-    public void setOnToolBarItemClickListener(OnToolBarItemClickListener listener) { addOnToolBarItemClickListener(listener);}
+
+    public void setOnToolBarItemClickListener(OnToolBarItemClickListener listener) {
+        addOnToolBarItemClickListener(listener);
+    }
 }

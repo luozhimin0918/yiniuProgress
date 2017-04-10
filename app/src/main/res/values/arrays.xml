@@ -9,4 +9,17 @@
         <item>icon_photo</item>
         <item>icon_camera</item>
     </string-array>
+
+    <string-array name="nav_audio_visual">
+        <item>视听</item>
+        <item>排行</item>
+    </string-array>
+    <string-array name="nav_video_test">
+        <item>最新</item>
+        <item>财经观察</item>
+        <item>投资学堂</item>
+        <item>名师点评</item>
+        <item>财经狼眼</item>
+        <item>新手日记</item>
+    </string-array>
 </resources>

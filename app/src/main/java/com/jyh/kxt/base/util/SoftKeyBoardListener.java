@@ -2,7 +2,6 @@ package com.jyh.kxt.base.util;
 
 import android.app.Activity;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -33,7 +32,6 @@ public class SoftKeyBoardListener {
                 rootView.getWindowVisibleDisplayFrame(r);
 
                 int visibleHeight = r.height();
-                Log.e("visibleHeight", "onGlobalLayout: "+visibleHeight);
                 if (rootViewVisibleHeight == 0) {
                     rootViewVisibleHeight = visibleHeight;
                     return;

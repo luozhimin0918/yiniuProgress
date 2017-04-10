@@ -1,8 +1,5 @@
 package com.jyh.kxt.av.presenter;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
@@ -90,30 +87,5 @@ public class VideoDetailPresenter extends BasePresenter {
         videoDetailActivity.spVideo.setVideoPortraitHeight(avHeight);
 
         videoDetailActivity.spVideo.setScaleType(SuperPlayer.SCALETYPE_FITXY);
-    }
-
-    private void playVideoInquiry() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(videoDetailActivity)
-                .setTitle("播放提示")
-                .setMessage("当前网络为移动网络,是否继续播放?")
-                .setPositiveButton("是",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                initVideo();
-                            }
-                        })
-                .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-        builder.setCancelable(false);
-        builder.create();
-        builder.show();
-    }
-
-    public void addKeyBoardListener() {
-
     }
 }

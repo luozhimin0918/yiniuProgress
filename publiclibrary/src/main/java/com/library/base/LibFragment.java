@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.library.R;
-import com.library.base.http.RequestQueueUtil;
 import com.library.util.StatusBarCompat;
 
 import butterknife.ButterKnife;
@@ -28,7 +27,6 @@ public abstract class LibFragment extends Fragment {
     private LayoutInflater inflater;
     private Unbinder unbinder;
 
-//    private RequestQueue mQueue;
     /**
      * 使用OnDataBinding标注
      */

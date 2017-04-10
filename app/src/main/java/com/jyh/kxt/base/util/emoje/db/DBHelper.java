@@ -240,7 +240,10 @@ public class DBHelper {
 
         }
         finally {
-            cursor.close();
+            try {
+                cursor.close();
+            } catch (Exception e) {
+            }
         }
         return null;
     }

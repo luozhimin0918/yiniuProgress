@@ -32,8 +32,11 @@ public class EmoticonsUtils {
                     /**
                      * FROM DRAWABLE
                      */
-                    ArrayList<EmoticonBean> emojiArray = ParseData(DefEmoticons.emojiArray, EmoticonBean
-                            .FACE_TYPE_NOMAL, ImageBase.Scheme.DRAWABLE);
+                    ArrayList<EmoticonBean> emojiArray = ParseData(
+                            DefEmoticons.emojiArray,
+                            EmoticonBean.FACE_TYPE_NOMAL,
+                            ImageBase.Scheme.DRAWABLE);
+
                     EmoticonSetBean emojiEmoticonSetBean = new EmoticonSetBean("emoji", 3, 7);
                     emojiEmoticonSetBean.setIconUri("drawable://icon_emoji");
                     emojiEmoticonSetBean.setItemPadding(20);
@@ -42,36 +45,35 @@ public class EmoticonsUtils {
                     emojiEmoticonSetBean.setEmoticonList(emojiArray);
                     dbHelper.insertEmoticonSet(emojiEmoticonSetBean);
 
-                   /* *//**
+                    /**
                      * FROM ASSETS
-                     *//*
-                    ArrayList<EmoticonBean> xhsfaceArray = ParseData(xhsemojiArray, EmoticonBean.FACE_TYPE_NOMAL,
-                    ImageBase.Scheme.ASSETS);
-                    EmoticonSetBean xhsEmoticonSetBean = new EmoticonSetBean("xhs", 3, 7);
-                    xhsEmoticonSetBean.setIconUri("assets://xhsemoji_19.png");
-                    xhsEmoticonSetBean.setItemPadding(20);
-                    xhsEmoticonSetBean.setVerticalSpacing(10);
-                    xhsEmoticonSetBean.setShowDelBtn(true);
-                    xhsEmoticonSetBean.setEmoticonList(xhsfaceArray);
-                    dbHelper.insertEmoticonSet(xhsEmoticonSetBean);
+                     */
+//                    ArrayList<EmoticonBean> xhsfaceArray = ParseData(xhsemojiArray, EmoticonBean.FACE_TYPE_NOMAL,
+//                    ImageBase.Scheme.ASSETS);
+//                    EmoticonSetBean xhsEmoticonSetBean = new EmoticonSetBean("xhs", 3, 7);
+//                    xhsEmoticonSetBean.setIconUri("assets://xhsemoji_19.png");
+//                    xhsEmoticonSetBean.setItemPadding(20);
+//                    xhsEmoticonSetBean.setVerticalSpacing(10);
+//                    xhsEmoticonSetBean.setShowDelBtn(true);
+//                    xhsEmoticonSetBean.setEmoticonList(xhsfaceArray);
+//                    dbHelper.insertEmoticonSet(xhsEmoticonSetBean);
 
-                    *//**
+                     /**
                      * FROM FILE
-                     *//*
-                    String filePath = Environment.getExternalStorageDirectory() + "/wxemoticons";
-                    try{
-                        FileUtils.unzip(context.getAssets().open("wxemoticons.zip"), filePath);
-                    }catch(IOException e){
-                        e.printStackTrace();
-                    }
-
-                    XmlUtil xmlUtil = new XmlUtil(context);
-                    EmoticonSetBean bean =  xmlUtil.ParserXml(xmlUtil.getXmlFromSD(filePath + "/wxemoticons.xml"));
-                    bean.setItemPadding(20);
-                    bean.setVerticalSpacing(5);
-                    bean.setIconUri("file://" + filePath + "/icon_030_cover.png");
-                    dbHelper.insertEmoticonSet(bean);
-*/
+                     */
+//                    String filePath = Environment.getExternalStorageDirectory() + "/wxemoticons";
+//                    try{
+//                        FileUtils.unzip(context.getAssets().open("wxemoticons.zip"), filePath);
+//                    }catch(IOException e){
+//                        e.printStackTrace();
+//                    }
+//
+//                    XmlUtil xmlUtil = new XmlUtil(context);
+//                    EmoticonSetBean bean =  xmlUtil.ParserXml(xmlUtil.getXmlFromSD(filePath + "/wxemoticons.xml"));
+//                    bean.setItemPadding(20);
+//                    bean.setVerticalSpacing(5);
+//                    bean.setIconUri("file://" + filePath + "/icon_030_cover.png");
+//                    dbHelper.insertEmoticonSet(bean);
                     /**
                      * FROM HTTP/HTTPS
                      */
@@ -99,7 +101,8 @@ public class EmoticonsUtils {
         ArrayList<EmoticonSetBean> mEmoticonSetBeanList = dbHelper.queryEmoticonSet("emoji", "xhs");
         dbHelper.cleanup();
 
-        ArrayList<AppBean> mAppBeanList = new ArrayList<AppBean>();
+        ArrayList<AppBean> mAppBeanList = new ArrayList<>();
+
         String[] funcArray = context.getResources().getStringArray(R.array.apps_func);
         String[] funcIconArray = context.getResources().getStringArray(R.array.apps_func_icon);
         for (int i = 0; i < funcArray.length; i++) {

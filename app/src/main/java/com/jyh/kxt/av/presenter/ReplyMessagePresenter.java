@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -89,6 +90,8 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     private void showOrHideEmoJiView() {
+        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+
         isShowEmoJiView = !isShowEmoJiView;
 
         if (emoJeContentView == null) {
@@ -210,17 +213,20 @@ public class ReplyMessagePresenter extends BasePresenter {
     public void goneEmoJeView() {
         if (emoJeContentView != null) {
             emoJeContentView.setVisibility(View.GONE);
+            isShowEmoJiView = false;
         }
     }
 
-    public void adjustEmoJeView() {
-        if (flEmoJe != null) {
+    private int lastKeyboardHeight = 0;
+
+    public void adjustEmoJeView(int height) {
+        if (flEmoJe != null && height != lastKeyboardHeight) {
             int emoJeWidth = replyMessageView.getWidth();
-            int emoJeHeight = Utils.getDefKeyboardHeight(mContext);
+            lastKeyboardHeight = Utils.getDefKeyboardHeight(mContext);
 
             ViewGroup.LayoutParams layoutParams = flEmoJe.getLayoutParams();
             layoutParams.width = emoJeWidth;
-            layoutParams.height = emoJeHeight;
+            layoutParams.height = lastKeyboardHeight;
 
             flEmoJe.setLayoutParams(layoutParams);
         }

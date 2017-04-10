@@ -2,7 +2,6 @@ package com.jyh.kxt.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,10 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
 
     private IBaseView iBaseView;
 
+    private boolean isUserVisible = false;
+    private boolean isCreateView = false;
+    private boolean isViewPagerToCurrentLocate = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -25,10 +28,39 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         if (mParentActivity instanceof IBaseView) {
             iBaseView = (IBaseView) mParentActivity;
         }
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        isCreateView = true;
+        if (isViewPagerToCurrentLocate && !isUserVisible) {
+            userVisibleHint();
+            isUserVisible = true;
+        }
+        return view;
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isViewPagerToCurrentLocate = isVisibleToUser;
+        if (isViewPagerToCurrentLocate) {
+            if (isCreateView && !isUserVisible) {
+                userVisibleHint();
+                isUserVisible = true;
+            }
+        }
+    }
+
+    public void userVisibleHint() {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isUserVisible = false;
+        isCreateView = false;
+        isViewPagerToCurrentLocate = false;
+    }
 
     /**
      * 显示屏幕Dialog
