@@ -24,6 +24,9 @@ import com.superplayer.library.SuperPlayer;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 视听-视屏详细页
+ */
 public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;

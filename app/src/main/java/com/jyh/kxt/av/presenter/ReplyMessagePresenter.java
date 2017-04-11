@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -70,7 +69,7 @@ public class ReplyMessagePresenter extends BasePresenter {
                 if (isShowEmoJiView) {
                     isShowEmoJiView = false;
 
-                    emoJeContentView.setVisibility(View.GONE);
+                    flEmoJe.removeView(emoJeContentView);
                     hideSoftInputFromWindow();
 
                     return true;
@@ -104,24 +103,21 @@ public class ReplyMessagePresenter extends BasePresenter {
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             emoJeContentView = inflater.inflate(R.layout.view_emoje_content, null);
+            emoJeContentView.setLayoutParams(emoJeParams);
 
             addViewListener(emoJeContentView);
 
-            flEmoJe.addView(emoJeContentView, emoJeParams);
         }
-
-        hideSoftInputFromWindow();
 
         if (isShowEmoJiView) {
-            emoJeContentView.setVisibility(View.VISIBLE);
+            flEmoJe.addView(emoJeContentView);
         } else {
-            emoJeContentView.setVisibility(View.GONE);
+            flEmoJe.removeView(emoJeContentView);
         }
+        hideSoftInputFromWindow();
     }
 
     private void hideSoftInputFromWindow() {
-        videoDetailActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
@@ -216,7 +212,7 @@ public class ReplyMessagePresenter extends BasePresenter {
 
     public void goneEmoJeView() {
         if (emoJeContentView != null) {
-            emoJeContentView.setVisibility(View.GONE);
+            flEmoJe.removeView(emoJeContentView);
             isShowEmoJiView = false;
         }
     }

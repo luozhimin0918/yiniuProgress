@@ -14,6 +14,11 @@
         <item>视听</item>
         <item>排行</item>
     </string-array>
+    <string-array name="nav_datum">
+        <item>日历</item>
+        <item>数据</item>
+    </string-array>
+
     <string-array name="nav_video_test">
         <item>最新</item>
         <item>财经观察</item>

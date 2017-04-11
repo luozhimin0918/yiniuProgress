@@ -6,7 +6,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 
 /**
- * 探索
+ * 首页-探索
  */
 public class ProbeFragment extends BaseFragment {
 

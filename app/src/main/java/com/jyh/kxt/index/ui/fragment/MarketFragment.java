@@ -1,13 +1,12 @@
 package com.jyh.kxt.index.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 
 /**
- * 行情
+ * 首页-行情
  */
 public class MarketFragment extends BaseFragment {
 

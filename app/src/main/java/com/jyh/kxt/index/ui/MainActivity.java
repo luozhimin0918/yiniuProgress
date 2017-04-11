@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
@@ -25,7 +24,7 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.ProbeFragment;
-import com.library.widget.handmark.PullToRefreshListView;
+import com.jyh.kxt.user.ui.EditUserInfoActivity;
 
 import butterknife.BindView;
 
@@ -187,11 +186,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
-                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                        new Pair<View, String>(rivAvatar, EditUserInfoActivity.VIEW_NAME_IMG), new Pair<View, String>(tvNickName,
-                                EditUserInfoActivity.VIEW_NAME_TITLE));
+                Pair[] pairs = {
+                        new Pair<View, String>(rivAvatar, EditUserInfoActivity.VIEW_NAME_IMG),
+                        new Pair<View, String>(tvNickName, EditUserInfoActivity.VIEW_NAME_TITLE)};
+
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,  pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
+
                 break;
             case R.id.tv_collect:
                 //收藏

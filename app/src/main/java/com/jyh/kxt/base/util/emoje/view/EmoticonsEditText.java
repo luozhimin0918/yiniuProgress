@@ -124,17 +124,21 @@ public class EmoticonsEditText extends EditText {
             }
 
             if (!isEmoticonMatcher) {
-                ImageSpan[] oldSpans = getText().getSpans(start, end, ImageSpan.class);
-                if(oldSpans != null){
-                    for (int i = 0; i < oldSpans.length; i++) {
-                        int startOld = end;
-                        int endOld = after + getText().getSpanEnd(oldSpans[i]) - 1;
-                        if (startOld >= 0 && endOld > startOld) {
-                            ImageSpan imageSpan = new ImageSpan(oldSpans[i].getDrawable(), ImageSpan.ALIGN_BASELINE);
-                            getText().removeSpan(oldSpans[i]);
-                            getText().setSpan(imageSpan, startOld, endOld, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                try {
+                    ImageSpan[] oldSpans = getText().getSpans(start, end, ImageSpan.class);
+                    if(oldSpans != null){
+                        for (int i = 0; i < oldSpans.length; i++) {
+                            int startOld = end;
+                            int endOld = after + getText().getSpanEnd(oldSpans[i]) - 1;
+                            if (startOld >= 0 && endOld > startOld) {
+                                ImageSpan imageSpan = new ImageSpan(oldSpans[i].getDrawable(), ImageSpan.ALIGN_BASELINE);
+                                getText().removeSpan(oldSpans[i]);
+                                getText().setSpan(imageSpan, startOld, endOld, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

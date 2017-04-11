@@ -9,6 +9,9 @@ import com.jyh.kxt.index.presenter.WebPresenter;
 
 import butterknife.BindView;
 
+/**
+ * 公用WebActivity
+ */
 public class WebActivity extends BaseActivity {
 
     @BindView(R.id.activity_web) public LinearLayout llWebParent;

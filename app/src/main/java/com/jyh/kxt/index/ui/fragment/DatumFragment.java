@@ -2,18 +2,25 @@ package com.jyh.kxt.index.ui.fragment;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.FragmentTransaction;
 
+import com.flyco.tablayout.SegmentTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
+import com.jyh.kxt.datum.ui.fragment.DataFragment;
+
+import butterknife.BindView;
 
 /**
- * 数据
+ * 首页-数据
  */
-public class DatumFragment extends BaseFragment {
+public class DatumFragment extends BaseFragment implements OnTabSelectListener {
+
+    @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
+
+    private BaseFragment dataFragment, calendarFragment;
 
     public static DatumFragment newInstance() {
         DatumFragment fragment = new DatumFragment();
@@ -25,6 +32,33 @@ public class DatumFragment extends BaseFragment {
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_datum);
+
+        String[] mTitles = getResources().getStringArray(R.array.nav_datum);
+        stlNavigationBar.setTabData(mTitles);
+        stlNavigationBar.setOnTabSelectListener(this);
+
+        onTabSelect(0);
     }
 
+    @Override
+    public void onTabSelect(int position) {
+        BaseFragment currentFragment;
+        if (position == 0) {
+            currentFragment = calendarFragment = calendarFragment == null ? new CalendarFragment() : calendarFragment;
+        } else {
+            currentFragment = dataFragment = dataFragment == null ? new DataFragment() : dataFragment;
+        }
+        replaceFragment(currentFragment);
+    }
+
+    @Override
+    public void onTabReselect(int position) {
+
+    }
+
+    private void replaceFragment(BaseFragment toFragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_content, toFragment);
+        transaction.commitAllowingStateLoss();
+    }
 }

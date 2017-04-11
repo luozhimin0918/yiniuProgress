@@ -2,7 +2,6 @@ package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +16,9 @@ import com.jyh.kxt.base.BaseActivity;
 
 import butterknife.BindView;
 
+/**
+ * 启动-欢迎界面
+ */
 public class WelcomeActivity extends BaseActivity {
 
     @BindView(R.id.iv_welcome) ImageView ivWelcome;
@@ -26,7 +28,6 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        ivWelcome.setVisibility(View.VISIBLE);
         Glide.with(this).load(R.raw.qidong).listener(new RequestListener<Integer, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, Integer model, Target<GlideDrawable> target, boolean
@@ -37,7 +38,6 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public boolean onResourceReady(GlideDrawable resource, Integer model, Target<GlideDrawable> target,
                                            boolean isFromMemoryCache, boolean isFirstResource) {
-
                 int duration = 0;
                 GifDrawable drawable = (GifDrawable) resource;
                 GifDecoder decoder = drawable.getDecoder();
