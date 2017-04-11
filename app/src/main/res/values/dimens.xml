@@ -30,4 +30,18 @@
     <dimen name="editUserInfo_padding1">10dp</dimen>
     <dimen name="editUserInfo_padding2">5dp</dimen>
 
+    <!-- 视听首页 -->
+    <dimen name="videoItemDrawablePadding">6dp</dimen>
+    <dimen name="videoItemHeight">211dp</dimen>
+    <dimen name="videoItemTextSize">15sp</dimen>
+    <dimen name="videoItemTextSize2">12sp</dimen>
+    <dimen name="videoItemPlaySize">47dp</dimen>
+    <dimen name="videoItemTitleHeight">35dp</dimen>
+    <dimen name="videoItemTitlePaddingLeft">15dp</dimen>
+    <dimen name="videoItemContentHeight">40dp</dimen>
+    <dimen name="videoItemContentPaddingLeft">16dp</dimen>
+    <dimen name="videoItemContentPaddingRight">10dp</dimen>
+    <dimen name="videoItemMoreSize">14dp</dimen>
+    <dimen name="videoItemTextPadding">20dp</dimen>
+    <dimen name="videoItemLineHeight">6dp</dimen>
 </resources>

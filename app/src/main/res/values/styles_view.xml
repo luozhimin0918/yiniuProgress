@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="EditUserInfoItemStyle">
         <item name="android:layout_height">@dimen/item_height</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/editUserInfo_item_marginLeft</item>
+    </style>
+
+    <style name="VideoItemStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/videoItemDrawablePadding</item>
+        <item name="android:textColor">@color/font_color3</item>
+        <item name="android:textSize">@dimen/videoItemTextSize2</item>
     </style>
 </resources>

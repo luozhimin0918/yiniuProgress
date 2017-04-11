@@ -18,7 +18,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return dataList.size();
+        return dataList == null ? 0 : dataList.size();
     }
 
     @Override

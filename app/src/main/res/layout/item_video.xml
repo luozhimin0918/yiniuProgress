@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoItemHeight">
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/iv_playBtn"
+            android:layout_width="@dimen/videoItemPlaySize"
+            android:layout_height="@dimen/videoItemPlaySize"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_video_play_big"/>]
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/videoItemTitleHeight"
+            android:layout_gravity="bottom"
+            android:background="@color/translucent_color"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/videoItemTitlePaddingLeft"
+            android:text="防守打法复活吧富不过都是"
+            android:textColor="@color/font_color4"
+            android:textSize="@dimen/videoItemTextSize"/>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoItemContentHeight"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/videoItemContentPaddingLeft"
+        android:paddingRight="@dimen/videoItemContentPaddingRight"
+        >
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/VideoItemStyle"
+            android:drawableLeft="@mipmap/icon_video_time"
+            android:text="2017-1-1"/>
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_video_more"/>
+
+        <TextView
+            android:id="@+id/tv_playCount"
+            style="@style/VideoItemStyle"
+            android:layout_marginRight="@dimen/videoItemTextPadding"
+            android:layout_toLeftOf="@id/iv_more"
+            android:drawableLeft="@mipmap/icon_video_play_small"
+            android:text="3400"/>
+
+        <TextView
+            android:id="@+id/tv_commentCount"
+            style="@style/VideoItemStyle"
+            android:layout_marginRight="@dimen/videoItemTextPadding"
+            android:layout_toLeftOf="@id/tv_playCount"
+            android:drawableLeft="@mipmap/icon_video_comment"
+            android:text="3400"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoItemLineHeight"
+        android:background="@color/line_color2"/>
+</LinearLayout>
