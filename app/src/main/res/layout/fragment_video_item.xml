@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_test_txt"
+    <com.library.widget.handmark.PullToRefreshListView
+        android:id="@+id/plv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
+    </com.library.widget.handmark.PullToRefreshListView>
 </FrameLayout>

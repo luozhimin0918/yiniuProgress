@@ -13,14 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+
         <activity
-            android:name=".index.ui.MainActivity"
+            android:name=".index.ui.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".index.ui.MainActivity"
+            android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name=".user.ui.SettingActivity"
@@ -32,11 +38,9 @@
             android:screenOrientation="sensor"
             android:theme="@style/VideoTheme">
         </activity>
-
         <activity
             android:name=".user.ui.EditUserInfoActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".index.ui.WebActivity"
             android:screenOrientation="portrait">

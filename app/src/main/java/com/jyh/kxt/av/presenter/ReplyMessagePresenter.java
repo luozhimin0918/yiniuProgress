@@ -14,8 +14,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.util.emoje.bean.EmoticonBean;
@@ -36,6 +38,8 @@ import butterknife.OnClick;
  */
 
 public class ReplyMessagePresenter extends BasePresenter {
+
+    @BindObject VideoDetailActivity videoDetailActivity;
 
     @BindView(R.id.tv_publish) TextView tvPublish;
     @BindView(R.id.fl_emoje) FrameLayout flEmoJe;
@@ -90,8 +94,6 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     private void showOrHideEmoJiView() {
-        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-
         isShowEmoJiView = !isShowEmoJiView;
 
         if (emoJeContentView == null) {
@@ -118,6 +120,8 @@ public class ReplyMessagePresenter extends BasePresenter {
     }
 
     private void hideSoftInputFromWindow() {
+        videoDetailActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
@@ -230,5 +234,6 @@ public class ReplyMessagePresenter extends BasePresenter {
 
             flEmoJe.setLayoutParams(layoutParams);
         }
+
     }
 }

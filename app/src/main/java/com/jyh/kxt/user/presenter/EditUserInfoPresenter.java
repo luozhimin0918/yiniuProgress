@@ -6,7 +6,7 @@ import android.view.View;
 import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.annotation.BindActivity;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
@@ -32,7 +32,7 @@ import java.util.List;
 
 public class EditUserInfoPresenter extends BasePresenter {
 
-    @BindActivity
+    @BindObject
     EditUserInfoActivity activity;
 
     private OptionsPickerView cityPicker, genderPicker;

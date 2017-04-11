@@ -3,7 +3,7 @@ package com.jyh.kxt.base;
 import android.content.Context;
 
 import com.android.volley.RequestQueue;
-import com.jyh.kxt.base.annotation.BindActivity;
+import com.jyh.kxt.base.annotation.BindObject;
 
 import java.lang.reflect.Field;
 
@@ -40,7 +40,7 @@ public class BasePresenter {
         try {
             Field[] fields = this.getClass().getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
-                boolean fieldFlag = fields[i].isAnnotationPresent(BindActivity.class);
+                boolean fieldFlag = fields[i].isAnnotationPresent(BindObject.class);
                 if (fieldFlag) {
                     Field field = fields[i];
                     field.setAccessible(true);

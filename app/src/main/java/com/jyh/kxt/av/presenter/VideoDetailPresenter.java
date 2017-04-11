@@ -4,7 +4,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.annotation.BindActivity;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.superplayer.library.SuperPlayer;
 
 /**
@@ -12,7 +12,7 @@ import com.superplayer.library.SuperPlayer;
  */
 
 public class VideoDetailPresenter extends BasePresenter {
-    @BindActivity VideoDetailActivity videoDetailActivity;
+    @BindObject VideoDetailActivity videoDetailActivity;
 
     private String url = "http://baobab.wandoujia.com/api/v1/playUrl?vid=9502&editionType=normal";
 

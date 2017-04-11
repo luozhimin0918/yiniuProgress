@@ -87,13 +87,12 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
             replyMessagePopup.setConfig(config);
 
-
-            SoftKeyBoardListener.setListener(VideoDetailActivity.this, this, llDetailContent);
+            SoftKeyBoardListener.setListener(VideoDetailActivity.this, this);
         }
         replyMessagePresenter.isShowEmoJiView = false;
 
         replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-//        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+//        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
@@ -106,13 +105,13 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
                 replyMessagePresenter.goneEmoJeView();
             }
         });
-
-
     }
 
     @Override
     public void keyBoardShow(int height) {
+
         Utils.setDefKeyboardHeight(this, height);
+
         if (replyMessagePresenter != null) {
             replyMessagePresenter.adjustEmoJeView(height);
         }

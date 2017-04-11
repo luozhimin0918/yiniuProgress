@@ -11,7 +11,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.annotation.BindActivity;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.index.json.CjrlJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -27,7 +27,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MainPresenter extends BasePresenter {
 
-    @BindActivity MainActivity mMainActivity;
+    @BindObject MainActivity mMainActivity;
 
     public MainPresenter(IBaseView iBaseView) {
         super(iBaseView);
