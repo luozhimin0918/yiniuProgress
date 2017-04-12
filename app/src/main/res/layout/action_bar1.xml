@@ -31,7 +31,7 @@
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentRight="true"
-        android:padding="10dp"
+        android:padding="@dimen/actionbar_padding"
         android:textColor="@color/actionBar_textColor2"
         />
 

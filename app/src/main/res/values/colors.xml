@@ -7,6 +7,7 @@
     <color name="actionBar_textColor1">#333333</color>
     <color name="actionBar_textColor2">#3BA9F3</color>
 
+    <color name="white">#ffffff</color>
     <color name="blue">#2A87F0</color>
 
     <!-- 半透明 -->
@@ -29,9 +30,10 @@
     <color name="font_color2">#666666</color>
     <color name="font_color3">#858E94</color>
     <color name="font_color4">#ffffff</color>
-    <color name="font_color5">#A1ABB2</color>
-
-    <color name="font_color6">#1C9CF2</color>
+    <color name="font_color5">#2E3239</color>
+    <color name="font_color6">#A1ABB2</color>
+    <color name="font_color7">#7A8D99</color>
+    <color name="font_color8">#1C9CF2</color>
 
     <color name="tabSelColor">#000000</color>
     <color name="tabUnSelColor">#66000000</color>

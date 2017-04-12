@@ -6,35 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigationBar2Height"
         android:background="@color/line_color2">
 
         <com.library.widget.tablayout.SlidingTabLayout
             android:id="@+id/stl_navigation_bar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/navigationBar2Height"
-            android:layout_weight="1"
             tl:tl_indicator_color="@color/blue"
             tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
-            tl:tl_indicator_margin_bottom="5dp"
+            tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
             tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
             tl:tl_textSelectColor="@color/tabSelColor"
             tl:tl_textUnselectColor="@color/tabUnSelColor"
-            tl:tl_textsize="16sp"
+            tl:tl_textsize="@dimen/navigationBar2TextSize"
+            android:paddingRight="@dimen/navigationBar2ImageWidth"
             />
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="25dp"
-            android:layout_height="15dp"
+            android:layout_width="@dimen/navigationBar2ImageWidth"
+            android:layout_height="@dimen/navigationBar2ImageHeight"
             android:src="@mipmap/icon_more"
-            android:layout_gravity="center_vertical"
-            android:paddingRight="10dp"
+            android:layout_gravity="center_vertical|right"
+            android:paddingRight="@dimen/navigationBar2ImagePaddingLeft"
+            android:paddingLeft="@dimen/navigationBar2ImagePaddingRight"
             android:background="@drawable/bg_more"
             />
-    </LinearLayout>
+    </FrameLayout>
 
 
     <android.support.v4.view.ViewPager

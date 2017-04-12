@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="actionbar_height">48dp</dimen>
+    <dimen name="actionbar_padding">10dp</dimen>
 
     <!--公用-->
     <dimen name="font_title_max">20sp</dimen>
@@ -18,6 +19,13 @@
     <dimen name="navigationBar2Height">39dp</dimen>
     <dimen name="navigationBar2Radius">1.5dp</dimen>
     <dimen name="navigationBar2IndicatorWidth">8dp</dimen>
+    <dimen name="navigationBar2MarginBottom">5dp</dimen>
+    <dimen name="navigationBar2TextSize">15dp</dimen>
+    <dimen name="navigationBar2TextSize2">16dp</dimen>
+    <dimen name="navigationBar2ImageWidth">42dp</dimen>
+    <dimen name="navigationBar2ImageHeight">15dp</dimen>
+    <dimen name="navigationBar2ImagePaddingLeft">10dp</dimen>
+    <dimen name="navigationBar2ImagePaddingRight">17dp</dimen>
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>
@@ -54,4 +62,17 @@
     <dimen name="videoItemMoreSize">14dp</dimen>
     <dimen name="videoItemTextPadding">20dp</dimen>
     <dimen name="videoItemLineHeight">6dp</dimen>
+
+    <!-- 要闻item -->
+    <dimen name="newsItemHeight">84dp</dimen>
+    <dimen name="newsItemPaddingLeft">14dp</dimen>
+    <dimen name="newsItemPaddingRight">16dp</dimen>
+    <dimen name="newsItemPaddingVertical">10dp</dimen>
+    <dimen name="newsItemImageViewHeight">64dp</dimen>
+    <dimen name="newsItemImageViewWidth">114dp</dimen>
+    <dimen name="newsItemTitleMarginLeft">12dp</dimen>
+    <dimen name="newsItemTitleTextSize">16sp</dimen>
+    <dimen name="newsItemAuthorTextSize">12sp</dimen>
+    <dimen name="newsItemTimeTextSize">11sp</dimen>
+
 </resources>

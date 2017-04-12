@@ -3,7 +3,6 @@ package com.jyh.kxt.main.ui.fragment;
 import android.os.Bundle;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.presenter.VideoItemPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.main.presenter.NewsItemPresenter;

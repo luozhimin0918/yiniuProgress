@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/newsItemHeight"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/newsItemPaddingVertical"
+                android:paddingLeft="@dimen/newsItemPaddingLeft"
+                android:paddingRight="@dimen/newsItemPaddingRight"
+                android:paddingTop="@dimen/newsItemPaddingVertical"
+    >
+
+    <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="@dimen/newsItemImageViewWidth"
+        android:layout_height="@dimen/newsItemImageViewHeight"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/icon_test"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/newsItemTitleMarginLeft"
+        android:layout_toRightOf="@id/iv_photo"
+        android:lineSpacingMultiplier="1.2"
+        android:text="fdabfkaebfdbfabgewbdhjbdsjbhcdhaskdjsajdjsafba"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/newsItemTitleTextSize"/>
+
+    <TextView
+        android:id="@+id/tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_title"
+        android:layout_alignParentBottom="true"
+        android:text="文/快讯通"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/newsItemAuthorTextSize"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="18:18"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/newsItemTimeTextSize"/>
+</RelativeLayout>
