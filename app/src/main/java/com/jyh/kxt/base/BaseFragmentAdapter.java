@@ -30,10 +30,6 @@ public class BaseFragmentAdapter extends FragmentStatePagerAdapter {
         return listFragment.size();
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return super.getPageTitle(position);
-    }
 
     @Override
     public Parcelable saveState() {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.flyco.tablayout.SegmentTabLayout
+    <com.library.widget.tablayout.SegmentTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/navigationBarHeight"
@@ -17,7 +17,7 @@
         tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
         tl:tl_tab_padding="@dimen/navigationBarpadding">
 
-    </com.flyco.tablayout.SegmentTabLayout>
+    </com.library.widget.tablayout.SegmentTabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_audio_visual"

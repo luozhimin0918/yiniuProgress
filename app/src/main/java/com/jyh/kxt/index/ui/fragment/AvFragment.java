@@ -6,14 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
-import com.flyco.tablayout.SegmentTabLayout;
-import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.fragment.RankFragment;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.library.base.LibActivity;
+import com.library.widget.tablayout.SegmentTabLayout;
+import com.library.widget.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;

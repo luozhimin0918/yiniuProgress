@@ -5,11 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
-import com.flyco.tablayout.SlidingTabLayout;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.datum.presenter.CalendarPresenter;
+import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;

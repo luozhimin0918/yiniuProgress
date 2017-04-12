@@ -43,5 +43,4 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.1'
 
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.0.2@aar'
 }

@@ -8,6 +8,10 @@
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\fade_in_anim.xml"
     },
     {
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\pickerview_dialog_scale_in.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\pickerview_dialog_scale_in.xml"
+    },
+    {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\modal_out.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\modal_out.xml"
     },
@@ -46,6 +50,10 @@
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\pickerview_dialog_scale_out.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\pickerview_dialog_scale_out.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
@@ -92,6 +100,10 @@
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\success_mask_layout.xml"
     },
     {
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\pickerview_slide_out_bottom.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\pickerview_slide_out_bottom.xml"
+    },
+    {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\error_x_in.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\error_x_in.xml"
     },
@@ -114,5 +126,9 @@
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_bottom.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\slide_out_to_bottom.xml"
+    },
+    {
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\anim\\pickerview_slide_in_bottom.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\anim\\pickerview_slide_in_bottom.xml"
     }
 ]

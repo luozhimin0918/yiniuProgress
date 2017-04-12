@@ -2,7 +2,10 @@ package com.jyh.kxt.datum.presenter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.text.style.RelativeSizeSpan;
 
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.BasePresenter;
@@ -55,7 +58,7 @@ public class CalendarPresenter extends BasePresenter {
             mCalendar.setTimeInMillis(dataLongList.get(i));
             String dayOfWeek = DateTimeUtil.getWeekdays(mCalendar.get(Calendar.DAY_OF_WEEK));
 
-            navTitleList[i] = day + " " + dayOfWeek;
+            navTitleList[i] = day + "\n" + dayOfWeek;
         }
     }
 
@@ -64,14 +67,12 @@ public class CalendarPresenter extends BasePresenter {
             @Override
             public CharSequence getPageTitle(int position) {
                 String title = navTitleList[position];
-                String[] navTitleSplit = title.split(" ");
 
-                String day = navTitleSplit[0];
-                String dayOfWeek = navTitleSplit[1];
+                SpannableString msp = new SpannableString(title);
+                msp.setSpan(new RelativeSizeSpan(1.5f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                msp.setSpan(new RelativeSizeSpan(0.8f), 3, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
-
-                return title;
+                return msp;
             }
         };
         return baseFragmentAdapter;

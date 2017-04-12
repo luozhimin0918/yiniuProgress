@@ -2,18 +2,14 @@ package com.jyh.kxt.index.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.flyco.tablayout.SegmentTabLayout;
-import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.library.base.LibActivity;
+import com.library.widget.tablayout.SegmentTabLayout;
+import com.library.widget.tablayout.listener.OnTabSelectListener;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 首页-要闻

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.flyco.tablayout.SegmentTabLayout
+    <com.library.widget.tablayout.SegmentTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -17,7 +17,7 @@
         tl:tl_indicator_corner_radius="16dp"
         tl:tl_tab_padding="20dp">
 
-    </com.flyco.tablayout.SegmentTabLayout>
+    </com.library.widget.tablayout.SegmentTabLayout>
 
     <FrameLayout
         android:id="@+id/fl_content"
