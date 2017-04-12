@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.fragment.RankFragment;
@@ -19,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 首页-视听
@@ -34,6 +40,9 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
     @BindView(R.id.vp_audio_visual) ViewPager vpAudioVisual;
+    @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
+    @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
+    @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
 
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -60,5 +69,20 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
     @Override
     public void onTabReselect(int position) {
 
+    }
+
+    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon2, R.id.iv_right_icon1})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_left_icon:
+
+                break;
+            case R.id.iv_right_icon2:
+
+                break;
+            case R.id.iv_right_icon1:
+
+                break;
+        }
     }
 }
