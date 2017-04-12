@@ -2,17 +2,22 @@ package com.jyh.kxt.datum.presenter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.widget.TextView;
 
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.library.widget.datetimepicker.DateTimeUtil;
+import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +28,7 @@ import java.util.List;
  */
 
 public class CalendarPresenter extends BasePresenter {
-    final int generateItemCount = 31;
+    final public int generateItemCount = 31;
 
     @BindObject CalendarFragment calendarFragment;
 
@@ -67,14 +72,45 @@ public class CalendarPresenter extends BasePresenter {
             @Override
             public CharSequence getPageTitle(int position) {
                 String title = navTitleList[position];
-
-                SpannableString msp = new SpannableString(title);
-                msp.setSpan(new RelativeSizeSpan(1.5f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                msp.setSpan(new RelativeSizeSpan(0.8f), 3, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                return msp;
+                return getColorCharSequence(title, false);
             }
         };
         return baseFragmentAdapter;
+    }
+
+    private SpannableString getColorCharSequence(String title, boolean isSelect) {
+        SpannableString msp = new SpannableString(title);
+
+        int dayColor, weekColor;
+        if (!isSelect) {
+            dayColor = ContextCompat.getColor(mContext, R.color.font_color3);
+            weekColor = ContextCompat.getColor(mContext, R.color.font_color5);
+        } else {
+            dayColor = ContextCompat.getColor(mContext, R.color.font_color6);
+            weekColor = ContextCompat.getColor(mContext, R.color.font_color6);
+        }
+
+        msp.setSpan(new ForegroundColorSpan(dayColor), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp.setSpan(new RelativeSizeSpan(2f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp.setSpan(new ForegroundColorSpan(weekColor), 3, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return msp;
+    }
+
+    public void setSelectColor(TextView tvTitle) {
+        String title = tvTitle.getText().toString();
+        SpannableString colorCharSequence = getColorCharSequence(title, true);
+        tvTitle.setText(colorCharSequence);
+    }
+
+    public void setUnSelectColor(TextView tvTitle) {
+        String title = tvTitle.getText().toString();
+        SpannableString colorCharSequence = getColorCharSequence(title, true);
+        tvTitle.setText(colorCharSequence);
+    }
+
+    public void updateSelectedColor(int position) {
+        SlidingTabLayout stlNavigationBar = calendarFragment.stlNavigationBar;
+        TextView tvTitle = stlNavigationBar.getTitleView(position);
     }
 }

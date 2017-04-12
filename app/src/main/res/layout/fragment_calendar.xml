@@ -9,17 +9,14 @@
     <com.library.widget.tablayout.SlidingTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/gray_btn_bg_color"
+        android:layout_height="46dp"
+        android:background="@color/bg_color1"
         tl:tl_textAllCaps="false"
-
-        tl:tl_textSelectColor="@color/blue"
-        tl:tl_textUnselectColor="#66000000"
 
         tl:tl_indicator_corner_radius="1.5dp"
         tl:tl_indicator_width="10dp"
 
-        tl:tl_textsize="12sp"
+        tl:tl_textsize="9sp"
 
         tl:tl_indicator_color="@color/blue"
         />
