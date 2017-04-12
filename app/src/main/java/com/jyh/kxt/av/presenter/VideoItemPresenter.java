@@ -1,5 +1,6 @@
 package com.jyh.kxt.av.presenter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.utils.UmengShareTool;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class VideoItemPresenter extends BasePresenter {
                     @Override
                     public void onClick(View v) {
                         ToastView.makeText3(mContext, "分享");
+                        UmengShareTool.initUmengLayout((Activity) mContext,"","","","",null,holder.ivMore,null);
                     }
                 });
                 holder.iv.setOnClickListener(new View.OnClickListener() {
