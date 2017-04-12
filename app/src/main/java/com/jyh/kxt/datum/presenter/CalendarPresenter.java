@@ -32,6 +32,7 @@ public class CalendarPresenter extends BasePresenter {
 
     @BindObject CalendarFragment calendarFragment;
 
+    private TextView oldSelectTabView;
     public List<Long> dataLongList = new ArrayList<>();    //日期Long类型
     public String[] navTitleList = new String[generateItemCount];  //导航栏Title
 
@@ -84,10 +85,10 @@ public class CalendarPresenter extends BasePresenter {
         int dayColor, weekColor;
         if (!isSelect) {
             dayColor = ContextCompat.getColor(mContext, R.color.font_color3);
-            weekColor = ContextCompat.getColor(mContext, R.color.font_color5);
-        } else {
-            dayColor = ContextCompat.getColor(mContext, R.color.font_color6);
             weekColor = ContextCompat.getColor(mContext, R.color.font_color6);
+        } else {
+            dayColor = ContextCompat.getColor(mContext, R.color.font_color8);
+            weekColor = ContextCompat.getColor(mContext, R.color.font_color8);
         }
 
         msp.setSpan(new ForegroundColorSpan(dayColor), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -97,20 +98,19 @@ public class CalendarPresenter extends BasePresenter {
         return msp;
     }
 
-    public void setSelectColor(TextView tvTitle) {
-        String title = tvTitle.getText().toString();
-        SpannableString colorCharSequence = getColorCharSequence(title, true);
-        tvTitle.setText(colorCharSequence);
-    }
-
-    public void setUnSelectColor(TextView tvTitle) {
-        String title = tvTitle.getText().toString();
-        SpannableString colorCharSequence = getColorCharSequence(title, true);
-        tvTitle.setText(colorCharSequence);
-    }
-
     public void updateSelectedColor(int position) {
         SlidingTabLayout stlNavigationBar = calendarFragment.stlNavigationBar;
         TextView tvTitle = stlNavigationBar.getTitleView(position);
+        String title = tvTitle.getText().toString();
+
+        if (oldSelectTabView != null) {
+            String oldSelectTitle = oldSelectTabView.getText().toString();
+            SpannableString colorCharSequence = getColorCharSequence(oldSelectTitle, false);
+            oldSelectTabView.setText(colorCharSequence);
+        }
+
+        SpannableString colorCharSequence = getColorCharSequence(title, true);
+        tvTitle.setText(colorCharSequence);
+        oldSelectTabView = tvTitle;
     }
 }
