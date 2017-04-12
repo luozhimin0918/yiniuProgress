@@ -2,8 +2,9 @@ package com.jyh.kxt.index.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.widget.FrameLayout;
-import android.support.v4.view.ViewPager;
+import android.widget.ImageView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -14,6 +15,7 @@ import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 首页-要闻
@@ -22,6 +24,9 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener {
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
     @BindView(R.id.fl_content) FrameLayout flContent;
+    @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
+    @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
+    @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
 
     private BaseFragment lastFragment;
     private BaseFragment newsFragment;
@@ -41,6 +46,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener {
         String[] mTitles = getResources().getStringArray(R.array.nav_index);
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
+
+        ivRightIcon1.setImageResource(R.mipmap.icon_search);
 
         onTabSelect(0);
     }
@@ -78,4 +85,17 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener {
         transaction.commitAllowingStateLoss();
     }
 
+    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon2, R.id.iv_right_icon1})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_left_icon:
+                //个人中心
+                break;
+            case R.id.iv_right_icon2:
+                break;
+            case R.id.iv_right_icon1:
+                //搜索
+                break;
+        }
+    }
 }

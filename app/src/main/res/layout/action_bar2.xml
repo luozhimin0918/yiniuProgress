@@ -3,46 +3,48 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="44dp">
+    android:layout_height="@dimen/navigationBarHeight"
+    android:background="@color/theme1">
 
     <ImageView
         android:id="@+id/iv_left_icon"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="@dimen/navigationBarLeftImageViewSize"
+        android:layout_height="@dimen/navigationBarLeftImageViewSize"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        android:src="@color/calendar_header"/>
+        android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
+        android:src="@mipmap/icon_user_def_photo"
+        />
 
     <com.library.widget.tablayout.SegmentTabLayout
         android:id="@+id/stl_navigation_bar"
-        android:layout_width="148dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/navigationBarTabLayoutWidth"
+        android:layout_height="@dimen/navigationBarTabLayoutHeight"
         android:layout_centerInParent="true"
-        tl:tl_bar_color="#ffffff"
-        tl:tl_indicator_color="#2C97DE"
-        tl:tl_indicator_corner_radius="16dp"
-        tl:tl_tab_padding="20dp">
+        tl:tl_bar_color="@color/segmentTabLayout_bar_color"
+        tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
+        tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
+        tl:tl_tab_padding="@dimen/navigationBarPadding"
+        >
 
     </com.library.widget.tablayout.SegmentTabLayout>
 
     <ImageView
         android:id="@+id/iv_right_icon2"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/navigationBarRightImageViewSize"
+        android:layout_height="@dimen/navigationBarRightImageViewSize"
         android:layout_centerVertical="true"
-        android:layout_marginRight="22dp"
+        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight1"
         android:layout_toLeftOf="@+id/iv_right_icon1"
         android:src="@color/calendar_header"
         android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/iv_right_icon1"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/navigationBarRightImageViewSize"
+        android:layout_height="@dimen/navigationBarRightImageViewSize"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:src="@color/calendar_header"/>
+        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
+        android:src="@mipmap/icon_search"/>
 
 </RelativeLayout>

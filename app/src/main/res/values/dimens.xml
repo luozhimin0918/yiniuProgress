@@ -24,10 +24,19 @@
     <dimen name="min_font_size">11sp</dimen>
 
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
-    <dimen name="navigationBarHeight">30dp</dimen>
+
+    <dimen name="navigationBarHeight">50dp</dimen>
+    <dimen name="navigationBarTabLayoutWidth">148dp</dimen>
+    <dimen name="navigationBarTabLayoutHeight">30dp</dimen>
     <dimen name="navigationBarMargin">10dp</dimen>
     <dimen name="navigationBarRadius">16dp</dimen>
-    <dimen name="navigationBarpadding">20dp</dimen>
+    <dimen name="navigationBarPadding">20dp</dimen>
+
+    <dimen name="navigationBarLeftImageViewSize">22dp</dimen>
+    <dimen name="navigationBarLeftImageViewMarginLeft">15dp</dimen>
+    <dimen name="navigationBarRightImageViewSize">18dp</dimen>
+    <dimen name="navigationBarRightImageViewMarginRight1">22dp</dimen>
+    <dimen name="navigationBarRightImageViewMarginRight2">15dp</dimen>
     <!-- 第二级TabLayout -->
     <dimen name="navigationBar2Height">39dp</dimen>
     <dimen name="navigationBar2Radius">1.5dp</dimen>

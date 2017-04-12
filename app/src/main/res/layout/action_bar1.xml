@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/actionbar_height"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
     <ImageView
@@ -10,7 +11,7 @@
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentLeft="true"
-        android:padding="10dp"
+        android:padding="@dimen/actionbar_padding"
         android:src="@mipmap/ico_break"/>
 
     <TextView

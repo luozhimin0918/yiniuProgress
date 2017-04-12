@@ -4,20 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jyh.kxt.index.ui.fragment.HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.jyh.kxt.index.ui.fragment.HomeFragment">
 
-    <com.library.widget.tablayout.SegmentTabLayout
-        android:id="@+id/stl_navigation_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/navigationBarHeight"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/navigationBarMargin"
-        tl:tl_bar_color="@color/segmentTabLayout_bar_color"
-        tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
-        tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
-        tl:tl_tab_padding="@dimen/navigationBarpadding"
-        android:layout_marginBottom="@dimen/navigationBarMargin"/>
+    <include layout="@layout/action_bar2"/>
 
     <FrameLayout
         android:id="@+id/fl_content"
