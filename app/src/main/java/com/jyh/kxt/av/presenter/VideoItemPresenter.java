@@ -64,13 +64,13 @@ public class VideoItemPresenter extends BasePresenter {
                 holder.ivMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastView.makeText3(mContext, "播放");
+                        ToastView.makeText3(mContext, "分享");
                     }
                 });
                 holder.iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastView.makeText3(mContext, "分享");
+                        ToastView.makeText3(mContext, "播放");
                     }
                 });
 

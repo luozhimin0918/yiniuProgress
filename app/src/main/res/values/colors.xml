@@ -10,6 +10,9 @@
     <!-- 半透明 -->
     <color name="translucent_color">#66000000</color>
 
+    <color name="segmentTabLayout_bar_color">#ffffff</color>
+    <color name="segmentTabLayout_indicator_color">#2C97DE</color>
+
     <color name="line_color">#ff888888</color>
     <color name="line_color2">#fff7f7f7</color>
 

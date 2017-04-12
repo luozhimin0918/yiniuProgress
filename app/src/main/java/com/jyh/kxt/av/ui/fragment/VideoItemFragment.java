@@ -32,8 +32,6 @@ public class VideoItemFragment extends BaseFragment {
     private String name;
     private VideoItemPresenter videoItemPresenter;
 
-    public List<Object> list = new ArrayList<>();
-
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_video_item);

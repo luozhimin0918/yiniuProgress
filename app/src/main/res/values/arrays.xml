@@ -10,6 +10,10 @@
         <item>icon_camera</item>
     </string-array>
 
+    <string-array name="nav_index">
+        <item>要闻</item>
+        <item>快讯</item>
+    </string-array>
     <string-array name="nav_audio_visual">
         <item>视听</item>
         <item>排行</item>

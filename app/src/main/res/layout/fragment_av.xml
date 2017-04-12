@@ -9,13 +9,13 @@
     <com.flyco.tablayout.SegmentTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/navigationBarHeight"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        tl:tl_bar_color="#ffffff"
-        tl:tl_indicator_color="#2C97DE"
-        tl:tl_indicator_corner_radius="16dp"
-        tl:tl_tab_padding="20dp">
+        android:layout_marginTop="@dimen/navigationBarMarginTop"
+        tl:tl_bar_color="@color/segmentTabLayout_bar_color"
+        tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
+        tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
+        tl:tl_tab_padding="@dimen/navigationBarpadding">
 
     </com.flyco.tablayout.SegmentTabLayout>
 

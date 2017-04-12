@@ -1,15 +1,25 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.jyh.kxt.index.ui.fragment.HomeFragment">
 
-    <TextView
-        android:id="@+id/tv_show_dialog"
+    <com.flyco.tablayout.SegmentTabLayout
+        android:id="@+id/stl_navigation_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        tl:tl_bar_color="@color/segmentTabLayout_bar_color"
+        tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
+        tl:tl_indicator_corner_radius="16dp"
+        tl:tl_tab_padding="20dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

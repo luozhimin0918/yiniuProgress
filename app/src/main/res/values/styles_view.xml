@@ -7,6 +7,7 @@
         <item name="android:layout_marginLeft">@dimen/editUserInfo_item_marginLeft</item>
     </style>
 
+    <!-- 视听item -->
     <style name="VideoItemStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -14,4 +15,5 @@
         <item name="android:textColor">@color/font_color3</item>
         <item name="android:textSize">@dimen/videoItemTextSize2</item>
     </style>
+
 </resources>
