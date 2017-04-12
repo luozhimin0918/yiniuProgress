@@ -11,10 +11,13 @@
 
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
     <dimen name="navigationBarHeight">30dp</dimen>
-    <dimen name="navigationBarMarginTop">10dp</dimen>
+    <dimen name="navigationBarMargin">10dp</dimen>
     <dimen name="navigationBarRadius">16dp</dimen>
     <dimen name="navigationBarpadding">20dp</dimen>
-
+    <!-- 第二级TabLayout -->
+    <dimen name="navigationBar2Height">39dp</dimen>
+    <dimen name="navigationBar2Radius">1.5dp</dimen>
+    <dimen name="navigationBar2IndicatorWidth">8dp</dimen>
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>

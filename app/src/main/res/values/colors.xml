@@ -7,6 +7,8 @@
     <color name="actionBar_textColor1">#333333</color>
     <color name="actionBar_textColor2">#3BA9F3</color>
 
+    <color name="blue">#2A87F0</color>
+
     <!-- 半透明 -->
     <color name="translucent_color">#66000000</color>
 
@@ -25,4 +27,7 @@
     <color name="font_color2">#666666</color>
     <color name="font_color3">#858E94</color>
     <color name="font_color4">#ffffff</color>
+
+    <color name="tabSelColor">#000000</color>
+    <color name="tabUnSelColor">#66000000</color>
 </resources>
