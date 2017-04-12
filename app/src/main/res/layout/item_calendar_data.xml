@@ -1,11 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <TextView
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:id="@+id/ll_left_gq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_guoqi"
+            android:tint="@color/actionBar_textColor1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@color/ampm_text_color"/>
+
+        <com.jyh.kxt.base.widget.StarView
+            android:id="@+id/ll_star"
+            android:layout_width="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="10dp">
+
+        </com.jyh.kxt.base.widget.StarView>
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="测试"
-        android:gravity="center"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/ll_left_gq">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="38dp"
+            android:layout_toLeftOf="@+id/tv_time"
+            android:text="美国6月EIA WAT原油一年货币供应远期均价5000左右"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="14dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/date_describe"
+            android:textColor="@color/font_color3"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="04:00"
+            android:textSize="@dimen/describe_font_size1"/>
+
+        <LinearLayout
+            android:id="@+id/ll_publish"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/tv_describe"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/main_rg_home"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/ll_publish"
+            android:layout_marginTop="14dp"
+            android:background="@color/line_color"
+            android:orientation="vertical"/>
+    </RelativeLayout>
+
+</RelativeLayout>

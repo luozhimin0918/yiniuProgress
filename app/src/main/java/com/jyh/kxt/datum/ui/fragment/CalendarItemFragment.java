@@ -14,6 +14,7 @@ import butterknife.BindView;
 
 /**
  * Created by Mr'Dai on 2017/4/11.
+ * 数据-日历 - Item
  */
 
 public class CalendarItemFragment extends BaseFragment {
@@ -31,6 +32,7 @@ public class CalendarItemFragment extends BaseFragment {
         for (int i = 0; i < 10; i++) {
             list.add("xxx");
         }
+        ptrlvContent.getRefreshableView().setDividerHeight(0);
         ptrlvContent.setAdapter(new CalendarItemAdapter(getContext(), list));
     }
 }

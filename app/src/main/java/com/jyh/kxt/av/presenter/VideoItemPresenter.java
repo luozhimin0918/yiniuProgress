@@ -32,10 +32,9 @@ public class VideoItemPresenter extends BasePresenter {
     public void setAdapter() {
         List list = getVideoList();
         videoItemFragment.plvContent.setAdapter(new BaseListAdapter<String>(list) {
-            ViewHolder holder = null;
-
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
+                ViewHolder holder;
                 if (convertView == null) {
                     holder = new ViewHolder();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, null);

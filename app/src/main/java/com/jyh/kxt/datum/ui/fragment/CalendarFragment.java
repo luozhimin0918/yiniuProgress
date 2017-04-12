@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -52,9 +51,10 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         vpCalendarList.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpCalendarList);
 
-        vpCalendarList.setCurrentItem((calendarPresenter.generateItemCount + 1) / 2);
+        int itemPosition = (calendarPresenter.generateItemCount + 1) / 2;
+        vpCalendarList.setCurrentItem(itemPosition);
         vpCalendarList.addOnPageChangeListener(this);
-
+        calendarPresenter.updateSelectedColor(itemPosition);
     }
 
     @Override
@@ -64,7 +64,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        TextView tabView = stlNavigationBar.getTitleView(position);
         calendarPresenter.updateSelectedColor(position);
     }
 

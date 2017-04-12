@@ -24,6 +24,7 @@
     <color name="toolbar_btn_select">#D9D9D9</color>
     <color name="toolbar_btn_nomal">@color/white</color>
 
+    <color name="stroke_color1">#EDEDEF</color>
     <color name="bg_color1">#F2F5F8</color>
 
     <color name="font_color1">#333333</color>
@@ -34,7 +35,14 @@
     <color name="font_color6">#A1ABB2</color>
     <color name="font_color7">#7A8D99</color>
     <color name="font_color8">#1C9CF2</color>
+    <!--代瑶写的色值,6开头避免冲突-->
+    <color name="font_color60">#5E6C75</color>
 
     <color name="tabSelColor">#000000</color>
     <color name="tabUnSelColor">#66000000</color>
+
+    <!--星星的颜色-->
+    <color name="star_color1">#E4E4E4</color>
+    <color name="star_color2">#FFB700</color>
+    <color name="star_color3">#E74B31</color>
 </resources>

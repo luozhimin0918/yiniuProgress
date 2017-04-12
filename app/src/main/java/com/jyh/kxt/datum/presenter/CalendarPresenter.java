@@ -41,8 +41,6 @@ public class CalendarPresenter extends BasePresenter {
     }
 
     public void generateDateItem(long selectTimeMillis) {
-
-
         long oneDayLong = 1000 * 60 * 60 * 24;
 
         for (int i = (generateItemCount - 1) / 2; i >= 1; i--) {

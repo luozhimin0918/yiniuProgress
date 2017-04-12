@@ -7,7 +7,8 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:background="@color/bg_color1"
+        android:layout_height="46dp">
 
         <LinearLayout
             android:id="@+id/ll_data_nav"
@@ -34,6 +35,8 @@
 
         <ListView
             android:id="@+id/iv_right_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3">

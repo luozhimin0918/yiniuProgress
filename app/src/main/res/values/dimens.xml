@@ -10,6 +10,19 @@
     <dimen name="font_title_max">20sp</dimen>
     <dimen name="item_height">50dp</dimen>
 
+    <dimen name="max_max_font_size">22sp</dimen>
+    <dimen name="max_font_size">20sp</dimen>
+    <dimen name="title_font_size">18sp</dimen>
+    <dimen name="content_font_size">16sp</dimen>
+    <dimen name="content_font_size2">17sp</dimen>
+
+    <dimen name="describe_font_size4">15sp</dimen>
+    <dimen name="describe_font_size3">14sp</dimen>
+    <dimen name="describe_font_size2">13sp</dimen>
+    <dimen name="describe_font_size1">12sp</dimen>
+
+    <dimen name="min_font_size">11sp</dimen>
+
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
     <dimen name="navigationBarHeight">30dp</dimen>
     <dimen name="navigationBarMargin">10dp</dimen>
@@ -75,4 +88,7 @@
     <dimen name="newsItemAuthorTextSize">12sp</dimen>
     <dimen name="newsItemTimeTextSize">11sp</dimen>
 
+    <!--星星大小-->
+    <dimen name="star_size">9dp</dimen>
+    <dimen name="star_margins">1dp</dimen>
 </resources>

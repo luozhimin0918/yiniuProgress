@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">KxtProfessional</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -9,4 +9,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="date_describe">前值:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;预测:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;公布:<xliff:g id="yyy">%s</xliff:g></string>
 </resources>
