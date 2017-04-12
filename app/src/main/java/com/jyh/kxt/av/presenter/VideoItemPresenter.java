@@ -12,11 +12,7 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VolleyRequest;
 import com.library.widget.window.ToastView;
-
-import org.w3c.dom.ls.LSInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +38,7 @@ public class VideoItemPresenter extends BasePresenter {
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     holder = new ViewHolder();
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, videoItemFragment
-                            .plvContent, false);
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, null);
                     holder.iv = (ImageView) convertView.findViewById(R.id.iv_img);
                     holder.ivMore = (ImageView) convertView.findViewById(R.id.iv_more);
                     holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);

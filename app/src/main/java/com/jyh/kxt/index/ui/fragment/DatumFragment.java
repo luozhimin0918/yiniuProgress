@@ -10,6 +10,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.DataFragment;
+import com.library.base.LibActivity;
 
 import butterknife.BindView;
 
@@ -21,6 +22,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
 
     private BaseFragment dataFragment, calendarFragment;
+    private BaseFragment lastFragment;
 
     public static DatumFragment newInstance() {
         DatumFragment fragment = new DatumFragment();
@@ -31,7 +33,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_datum);
+        setContentView(R.layout.fragment_datum, LibActivity.StatusBarColor.THEME1);
 
         String[] mTitles = getResources().getStringArray(R.array.nav_datum);
         stlNavigationBar.setTabData(mTitles);
@@ -49,6 +51,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             currentFragment = dataFragment = dataFragment == null ? new DataFragment() : dataFragment;
         }
         replaceFragment(currentFragment);
+        lastFragment = currentFragment;
     }
 
     @Override
@@ -58,7 +61,17 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     private void replaceFragment(BaseFragment toFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_content, toFragment);
+
+        if (lastFragment != null) {
+            transaction.hide(lastFragment);
+        }
+
+        if (toFragment.isAdded()) {
+            transaction.show(toFragment);
+        } else {
+            transaction.add(R.id.fl_content, toFragment);
+        }
+
         transaction.commitAllowingStateLoss();
     }
 }

@@ -3,6 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/stl_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/gray_btn_bg_color"
+
+        tl:tl_textSelectColor="@color/blue"
+        tl:tl_textUnselectColor="#66000000"
+
+        tl:tl_indicator_corner_radius="1.5dp"
+        tl:tl_indicator_width="10dp"
+
+        tl:tl_indicator_color="@color/blue"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_calendar_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>
