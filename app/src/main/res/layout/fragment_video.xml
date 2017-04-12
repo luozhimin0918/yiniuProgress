@@ -9,16 +9,13 @@
     <com.library.widget.tablayout.SlidingTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/gray_btn_bg_color"
-
-        tl:tl_textSelectColor="#000000"
-        tl:tl_textUnselectColor="#66000000"
-
-        tl:tl_indicator_corner_radius="1.5dp"
-        tl:tl_indicator_width="10dp"
-
+        android:layout_height="@dimen/navigationBar2Height"
+        android:background="@color/line_color2"
         tl:tl_indicator_color="@color/blue"
+        tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+        tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+        tl:tl_textSelectColor="@color/tabSelColor"
+        tl:tl_textUnselectColor="@color/tabUnSelColor"
         />
 
     <android.support.v4.view.ViewPager

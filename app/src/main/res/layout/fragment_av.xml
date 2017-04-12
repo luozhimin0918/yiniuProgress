@@ -11,11 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/navigationBarHeight"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/navigationBarMarginTop"
+        android:layout_marginTop="@dimen/navigationBarMargin"
         tl:tl_bar_color="@color/segmentTabLayout_bar_color"
         tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
         tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
-        tl:tl_tab_padding="@dimen/navigationBarpadding">
+        tl:tl_tab_padding="@dimen/navigationBarpadding"
+        android:layout_marginBottom="@dimen/navigationBarMargin">
 
     </com.library.widget.tablayout.SegmentTabLayout>
 
