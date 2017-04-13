@@ -1,1 +1,1 @@
-include ':app', ':publiclibrary', ':superplayerlibrary', ':playerlibrary'
+include ':app', ':publiclibrary', ':superplayerlibrary', ':playerlibrary', ':Pushlib'
