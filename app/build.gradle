@@ -23,15 +23,19 @@ android {
         ndk {
             abiFilters "armeabi"
         }
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         debug {
             signingConfig signingConfigs.config
         }
+    }
+    productFlavors {
     }
 }
 
@@ -62,4 +66,6 @@ dependencies {
     compile files('libs/wechat-sdk-android-with-mta-1.1.6.jar')
     compile files('libs/weiboSDKCore_3.1.4.jar')
     compile project(':Pushlib')
+    compile files('libs/autobahn-0.5.0.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_datumhistory"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="数据走势"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:layout_marginTop="20dp">
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/bg_color2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="数据释义"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="公布机构: 美国劳工局"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="发布频率: 美国劳工局"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="数据影响: 公布值大于预期值，且利于经济"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <com.jyh.kxt.base.custom.DiscolorTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:text="更多信息"
+        android:textSize="@dimen/describe_font_size1"
+        app:defaultFontColor="@color/font_color8"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/bg_color2"/>
+
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.jyh.kxt.datum.presenter;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.datum.ui.fragment.DataFragment;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
@@ -93,7 +95,7 @@ public class DataPresenter extends BasePresenter {
         dataFragment.ivLeftContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToastView.makeText3(mContext,"位置"+position);
+                ToastView.makeText3(mContext, "位置" + position);
                 view.setPressed(true);
             }
         });
@@ -107,6 +109,12 @@ public class DataPresenter extends BasePresenter {
             public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_data_right, null);
                 return convertView;
+            }
+        });
+        dataFragment.ivRightContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mContext.startActivity(new Intent(mContext, DatumHistoryActivity.class));
             }
         });
     }

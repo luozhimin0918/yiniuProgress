@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
 
-
     <application
         android:name=".KXTApplication"
         android:allowBackup="false"
@@ -24,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-
         <activity
             android:name=".index.ui.WelcomeActivity"
             android:screenOrientation="portrait">
@@ -37,7 +35,6 @@
         <activity
             android:name=".index.ui.MainActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name=".user.ui.SettingActivity"
@@ -57,7 +54,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->
@@ -67,6 +63,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -79,7 +76,7 @@
 
         <service
             android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false"></service>
+            android:exported="false"/>
 
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -108,8 +105,7 @@
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.UMDefault"
-            />
+            android:theme="@style/Theme.UMDefault"/>
 
         <meta-data
             android:name="UMENG_APPKEY"
@@ -120,6 +116,8 @@
             android:value="9c522d551a83fbc3f6b9e5addcda8c24">
         </meta-data>
 
+        <activity android:name=".datum.ui.DatumHistoryActivity">
+        </activity>
     </application>
 
 </manifest>

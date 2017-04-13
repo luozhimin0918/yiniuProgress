@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="clickFontColor" format="color|reference"/>
+    <attr name="defaultFontColor" format="color|reference"/>
+
     <declare-styleable name="DiscolorButton">
         <attr name="clickBackground" format="color|reference"/>
         <attr name="defaultBackground" format="color|reference"/>
-        <attr name="clickFontColor" format="color|reference"/>
-        <attr name="defaultFontColor" format="color|reference"/>
+        <attr name="clickFontColor"/>
+        <attr name="defaultFontColor"/>
         <attr name="cornerRadius" format="dimension"/>
 
         <attr name="disabledBackground" format="color|reference"></attr>
         <attr name="disabledFontColor" format="color|reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="DiscolorTextView">
+        <attr name="defaultFontColor"/>
+        <attr name="clickFontColor"/>
     </declare-styleable>
 
     <declare-styleable name="RoundImageView">
