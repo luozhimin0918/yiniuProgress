@@ -52,6 +52,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener {
         onTabSelect(0);
     }
 
+
     @Override
     public void onTabSelect(int position) {
         BaseFragment currentFragment;

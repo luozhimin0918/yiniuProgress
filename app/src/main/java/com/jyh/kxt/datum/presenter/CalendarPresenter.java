@@ -1,5 +1,10 @@
 package com.jyh.kxt.datum.presenter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +21,8 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
+import com.jyh.kxt.index.ui.fragment.DatumFragment;
+import com.library.util.SystemUtil;
 import com.library.widget.datetimepicker.DateTimeUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -32,7 +39,9 @@ public class CalendarPresenter extends BasePresenter {
 
     @BindObject CalendarFragment calendarFragment;
 
+    private String currentMonth;
     private TextView oldSelectTabView;
+
     public List<Long> dataLongList = new ArrayList<>();    //日期Long类型
     public String[] navTitleList = new String[generateItemCount];  //导航栏Title
 
@@ -110,5 +119,39 @@ public class CalendarPresenter extends BasePresenter {
         SpannableString colorCharSequence = getColorCharSequence(title, true);
         tvTitle.setText(colorCharSequence);
         oldSelectTabView = tvTitle;
+
+        //改变右上角日期
+        String month = (String) DateFormat.format("MM", dataLongList.get(position));
+        if (!month.equals(currentMonth)) {
+            Bitmap txtBitmap = generateMonthBitmap(month);
+            DatumFragment datumFragment = (DatumFragment) calendarFragment.getParentFragment();
+            datumFragment.setMonthToImageView(txtBitmap);
+        }
+        currentMonth = month;
+    }
+
+    private Bitmap generateMonthBitmap(String month) {
+        Bitmap rqBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.icon_rili_rq);
+        android.graphics.Bitmap.Config bitmapConfig = rqBitmap.getConfig();
+        if (bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        int txtSize = SystemUtil.dp2px(mContext, 11);
+
+        int bitmapColor = mContext.getResources().getColor(R.color.font_color5);
+        int imageViewSize = mContext.getResources().getDimensionPixelSize(R.dimen.navigationBarRightImageViewSize);
+
+        Bitmap txtBitmap = rqBitmap.copy(bitmapConfig, true);
+        Canvas canvas = new Canvas(txtBitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(bitmapColor);
+        paint.setTextSize(txtSize);
+
+        Rect bounds = new Rect();
+        paint.getTextBounds(month, 0, month.length(), bounds);
+
+        //犹豫图片问题,Y得+10
+        canvas.drawText(month, imageViewSize / 2 - bounds.centerX(), imageViewSize / 2 - bounds.centerY() + 5, paint);
+        return txtBitmap;
     }
 }

@@ -13,7 +13,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/iv_guoqi"
             android:tint="@color/actionBar_textColor1"
             android:layout_width="30dp"

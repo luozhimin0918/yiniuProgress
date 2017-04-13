@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="状态"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <com.jyh.kxt.base.widget.OptionLayout
+                android:id="@+id/ol_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:array="@array/calendar_state"
+                app:columnSpace="36dp"
+                app:itemHeight="39dp"
+                app:rowSpace="15dp">
+
+            </com.jyh.kxt.base.widget.OptionLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="25dp"
+                android:text="重要性"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <com.jyh.kxt.base.widget.OptionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:array="@array/calendar_significance"
+                app:columnSpace="36dp"
+                app:itemHeight="39dp"
+                app:rowSpace="15dp">
+
+            </com.jyh.kxt.base.widget.OptionLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="25dp"
+                android:text="地区"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <com.jyh.kxt.base.widget.OptionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:array="@array/calendar_silver"
+                app:columnSpace="36dp"
+                app:itemHeight="39dp"
+                app:rowSpace="15dp">
+
+            </com.jyh.kxt.base.widget.OptionLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="25dp"
+                android:text="多空判断"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <com.jyh.kxt.base.widget.OptionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:array="@array/calendar_silver"
+                app:columnSpace="36dp"
+                app:itemHeight="39dp"
+                app:rowSpace="15dp">
+
+            </com.jyh.kxt.base.widget.OptionLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/view_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="重置"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/title_font_size"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/line_color"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/font_color8"
+            android:textSize="@dimen/title_font_size"/>
+    </LinearLayout>
+</LinearLayout>

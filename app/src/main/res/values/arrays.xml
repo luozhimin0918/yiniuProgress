@@ -31,4 +31,21 @@
         <item>财经狼眼</item>
         <item>新手日记</item>
     </string-array>
+
+    <string-array name="calendar_state">
+        <item>全部</item>
+        <item>已公布</item>
+        <item>未公布</item>
+    </string-array>
+    <string-array name="calendar_significance">
+        <item>全部</item>
+        <item>高</item>
+        <item>低</item>
+    </string-array>
+    <string-array name="calendar_silver">
+        <item>全部</item>
+        <item>金银</item>
+        <item>石油</item>
+        <item>外汇</item>
+    </string-array>
 </resources>
