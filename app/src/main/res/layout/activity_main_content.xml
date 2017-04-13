@@ -22,8 +22,6 @@
         <RadioButton
             android:id="@+id/rb_home"
             style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
             android:checked="true"
             android:drawableTop="@drawable/sel_index_home"
             android:onClick="clickSwitchFragment"
@@ -32,8 +30,6 @@
         <RadioButton
             android:id="@+id/rb_audio_visual"
             style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
             android:drawableTop="@drawable/sel_index_av"
             android:onClick="clickSwitchFragment"
             android:text="视听"/>
@@ -41,8 +37,6 @@
         <RadioButton
             android:id="@+id/rb_market"
             style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
             android:drawableTop="@drawable/sel_index_market"
             android:onClick="clickSwitchFragment"
             android:text="行情"/>
@@ -50,8 +44,6 @@
         <RadioButton
             android:id="@+id/rb_datum"
             style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
             android:drawableTop="@drawable/sel_index_data"
             android:onClick="clickSwitchFragment"
             android:text="数据"/>
@@ -59,8 +51,6 @@
         <RadioButton
             android:id="@+id/rb_probe"
             style="@style/Main_RB_Style"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
             android:drawableTop="@drawable/sel_index_explore"
             android:onClick="clickSwitchFragment"
             android:text="探索"/>

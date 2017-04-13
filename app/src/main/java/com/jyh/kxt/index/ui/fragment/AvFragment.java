@@ -29,7 +29,7 @@ import butterknife.OnClick;
 /**
  * 首页-视听
  */
-public class AvFragment extends BaseFragment implements OnTabSelectListener {
+public class AvFragment extends BaseFragment implements OnTabSelectListener, ViewPager.OnPageChangeListener {
 
     public static AvFragment newInstance() {
         AvFragment fragment = new AvFragment();
@@ -59,6 +59,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
 
         FragmentManager fm = getChildFragmentManager();
         vpAudioVisual.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
+
+        vpAudioVisual.addOnPageChangeListener(this);
     }
 
     @Override
@@ -84,5 +86,20 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
 
                 break;
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        stlNavigationBar.setCurrentTab(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

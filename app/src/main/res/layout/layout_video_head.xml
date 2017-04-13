@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/icon_video_line"
+            android:drawablePadding="@dimen/videoDrawablePadding"
+            android:gravity="center_vertical"
+            android:text="往期节目"
+            android:textSize="@dimen/videoTitleTextSize"
+            android:textColor="@color/font_color60"/>
+
+        <TextView
+            android:id="@+id/rv_history_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更多"
+            android:textSize="@dimen/videoTitleTextSize2"
+            android:textColor="@color/font_color9"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="@dimen/videoDrawablePadding"
+            android:gravity="center_vertical"
+            android:drawableRight="@mipmap/icon_comment_more"
+            android:layout_marginRight="@dimen/videoMoreMarginRight"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_history"
+        android:layout_marginTop="@dimen/videoHistoryMarginTop"
+        android:layout_marginLeft="@dimen/videoHistoryMarginLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/line_color2"
+        />
+</LinearLayout>

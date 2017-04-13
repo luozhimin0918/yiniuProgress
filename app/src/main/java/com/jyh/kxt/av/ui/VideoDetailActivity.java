@@ -3,10 +3,12 @@ package com.jyh.kxt.av.ui;
 import android.app.Service;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.jyh.kxt.base.util.emoje.utils.Utils;
 import com.superplayer.library.SuperPlayer;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,6 +35,14 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
     @BindView(R.id.activity_video_detail) LinearLayout llDetailContent;
+    @BindView(R.id.tv_title) TextView tvTitle;
+    @BindView(R.id.tv_playCount) TextView tvPlayCount;
+    @BindView(R.id.rv_message) RecyclerView rvMessage;
+    @BindView(R.id.iv_break) ImageView ivBreak;
+    @BindView(R.id.iv_comment) ImageView ivComment;
+    @BindView(R.id.iv_collect) ImageView ivCollect;
+    @BindView(R.id.iv_like) ImageView ivLike;
+    @BindView(R.id.iv_share) ImageView ivShare;
 
     private VideoDetailPresenter videoDetailPresenter;
 
@@ -56,11 +67,26 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
     }
 
 
-    @OnClick({R.id.tv_reply_message})
+    @OnClick({R.id.tv_reply_message,R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.tv_reply_message:
                 showReplyMessageView();
+                break;
+            case R.id.iv_break:
+                onBackPressed();
+                break;
+            case R.id.iv_comment:
+                //回复
+                break;
+            case R.id.iv_collect:
+                //收藏
+                break;
+            case R.id.iv_like:
+                //点赞
+                break;
+            case R.id.iv_share:
+                //分享
                 break;
         }
     }
@@ -172,4 +198,5 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
         }
         super.onBackPressed();
     }
+
 }

@@ -9,6 +9,7 @@
     <!--公用-->
     <dimen name="font_title_max">20sp</dimen>
     <dimen name="item_height">50dp</dimen>
+    <dimen name="line_height">6dp</dimen>
 
     <dimen name="max_max_font_size">22sp</dimen>
     <dimen name="max_font_size">20sp</dimen>
@@ -51,7 +52,7 @@
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>
-    <dimen name="av_video_height">210dp</dimen>
+    <dimen name="av_video_height">211dp</dimen>
 
 
     <dimen name="indicator_margin">10dp</dimen>
@@ -84,6 +85,27 @@
     <dimen name="videoItemMoreSize">14dp</dimen>
     <dimen name="videoItemTextPadding">20dp</dimen>
     <dimen name="videoItemLineHeight">6dp</dimen>
+
+    <!-- 视听详情页 -->
+    <dimen name="videoTitleHeight">38dp</dimen>
+    <dimen name="videoTitlePadding">15dp</dimen>
+    <dimen name="videoTitleTextSize">16sp</dimen>
+    <dimen name="videoTitleTextSize2">14sp</dimen>
+    <dimen name="videoTitlePlayCountPadding">7dp</dimen>
+    <dimen name="videoNavHeight">49dp</dimen>
+    <dimen name="videoNavPadding">15dp</dimen>
+
+    <dimen name="videoDrawablePadding">5dp</dimen>
+    <dimen name="videoMoreMarginRight">15dp</dimen>
+    <dimen name="videoHistoryMarginTop">10dp</dimen>
+    <dimen name="videoHistoryMarginLeft">11dp</dimen>
+    <dimen name="videoHistoryImageWidth">157dp</dimen>
+    <dimen name="videoHistoryImageHeight">83dp</dimen>
+    <dimen name="videoHistoryPadding">5dp</dimen>
+    <dimen name="videoHistoryPlaySize">30dp</dimen>
+    <dimen name="videoHistoryTextSize">13sp</dimen>
+    <dimen name="videoHistoryTextHeight">40dp</dimen>
+
 
     <!-- 要闻item -->
     <dimen name="newsItemHeight">84dp</dimen>

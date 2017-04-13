@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="@dimen/videoHistoryImageWidth"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/videoHistoryPadding"
+              android:paddingRight="@dimen/videoHistoryPadding">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoHistoryImageHeight">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/icon_test"
+            />
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="@dimen/videoHistoryPlaySize"
+            android:layout_height="@dimen/videoHistoryPlaySize"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_video_play_big"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoHistoryTextHeight"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingTop="1dp"
+        android:text="打算打算发到付的机会不可激发干部违规发言的改"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/videoHistoryTextSize"/>
+
+</LinearLayout>
