@@ -2,6 +2,7 @@ package com.jyh.kxt.base.utils;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -19,16 +20,19 @@ import android.widget.PopupWindow;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.VarConstant;
-import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
+import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMMin;
 import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.utils.SocializeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,16 +53,24 @@ public class UmengShareTool {
     /**
      * 初始化umeng
      */
-    public static void initUmeng() {
+    public static void initUmeng(Context context) {
         PlatformConfig.setWeixin(VarConstant.WX_APPID, VarConstant.WX_APPSECRET);
         PlatformConfig.setQQZone(VarConstant.QQ_APPID, VarConstant.QQ_APPKEY);
         PlatformConfig.setSinaWeibo(VarConstant.SINA_APPKEY, VarConstant.SINA_APPSECRET, VarConstant.SINA_CALLBACK);
+        Config.DEBUG = true;
+        UMShareConfig config = new UMShareConfig();
+        config.isNeedAuthOnGetUserInfo(false);
+        config.isOpenShareEditActivity(true);
+        config.setSinaAuthType(UMShareConfig.AUTH_TYPE_WEBVIEW);
+        UMShareAPI.get(context).setShareConfig(config);
     }
 
 
     private static Application application;
     private static PopupWindow screenPopWindow;
     private static PopupWindow shareLayout;
+
+    public static MyUMShareListener umShareListener;
 
     /**
      * @param activity
@@ -91,11 +103,95 @@ public class UmengShareTool {
                     break;
             }
         }
+        ProgressDialog dialog = new ProgressDialog(activity);
+        umShareListener = new MyUMShareListener(dialog) {
+            @Override
+            public void onStart(SHARE_MEDIA share_media) {
+                super.onStart(share_media);
+            }
 
+            @Override
+            public void onResult(SHARE_MEDIA platform) {
+                super.onResult(platform);
+                if (platform == null) {
+                    ToastView.makeText3(application, "分享失败");
+                    return;
+                }
+                String platformStr = "";
+                switch (platform) {
+                    case WEIXIN:
+                        platformStr = "微信";
+                        break;
+                    case WEIXIN_CIRCLE:
+                        platformStr = "微信朋友圈";
+                        break;
+                    case QQ:
+                        platformStr = "QQ";
+                        break;
+                    case QZONE:
+                        platformStr = "QQ空间";
+                        break;
+                    case SINA:
+                        platformStr = "新浪微博";
+                        break;
+                }
+                if (platform.name().equals("WEIXIN_FAVORITE")) {
+                    ToastView.makeText3(application, platformStr + " 收藏成功啦");
+                } else {
+                    ToastView.makeText3(application, platformStr + " 分享成功啦");
+                }
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA platform, Throwable t) {
+                super.onError(platform, t);
+                String platformStr = "";
+                switch (platform) {
+                    case WEIXIN:
+                        platformStr = "微信";
+                        break;
+                    case WEIXIN_CIRCLE:
+                        platformStr = "微信朋友圈";
+                        break;
+                    case QQ:
+                        platformStr = "QQ";
+                        break;
+                    case QZONE:
+                        platformStr = "QQ空间";
+                        break;
+                    case SINA:
+                        platformStr = "新浪微博";
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA platform) {
+                super.onCancel(platform);
+                String platformStr = "";
+                switch (platform) {
+                    case WEIXIN:
+                        platformStr = "微信";
+                        break;
+                    case WEIXIN_CIRCLE:
+                        platformStr = "微信朋友圈";
+                        break;
+                    case QQ:
+                        platformStr = "QQ";
+                        break;
+                    case QZONE:
+                        platformStr = "QQ空间";
+                        break;
+                    case SINA:
+                        platformStr = "新浪微博";
+                        break;
+                }
+            }
+        };
         DisplayMetrics metrics = SystemUtil.getScreenDisplay(activity);
         shareLayout = new PopupWindow(rootView, metrics.widthPixels, metrics.heightPixels);
         //设置分享按钮
-        setShareBtn(activity, title, weburl, discription, thumb, bitmap, isHq, rootView);
+        setShareBtn(activity, title, weburl, discription, thumb, bitmap, isHq, rootView, dialog);
         int statuBarHeight = SystemUtil.getStatuBarHeight(activity);
         rootView.setPadding(0, 0, 0, statuBarHeight);
         shareLayout.showAtLocation(view, Gravity.BOTTOM, 0, 0);
@@ -120,7 +216,7 @@ public class UmengShareTool {
      * @param share_media 分享平台
      */
     public static void setShareContent(Activity activity, String title, String weburl, String discription,
-                                       String thumb, SHARE_MEDIA share_media) {
+                                       String thumb, SHARE_MEDIA share_media, ProgressDialog dialog) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -132,15 +228,21 @@ public class UmengShareTool {
             if (discription == null || "".equals(discription.trim())) {
                 discription = title;
             }
+
+            UMWeb umWeb = new UMWeb(weburl);
+            umWeb.setThumb(urlImage);
+            umWeb.setDescription(discription);
+            umWeb.setTitle(title);
+
             new ShareAction(activity)
-                    .withText(discription)
-                    .withMedia(urlImage)
-                    .withMedia(new UMWeb(weburl))
+                    .withMedia(umWeb)
                     .setPlatform(share_media)
                     .setCallback(umShareListener)
                     .share();
+
         } catch (Exception e) {
             ToastView.makeText3(activity, "分享失败");
+            SocializeUtils.safeCloseDialog(dialog);
         }
     }
 
@@ -154,7 +256,7 @@ public class UmengShareTool {
      * @param share_media 分享平台
      */
     public static void setShareContent(Activity activity, String title, String contentText, String url, Bitmap
-            bitmap, SHARE_MEDIA share_media) {
+            bitmap, SHARE_MEDIA share_media, ProgressDialog dialog) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -169,21 +271,12 @@ public class UmengShareTool {
             if (TextUtils.isEmpty(contentText)) {
                 contentText = SystemUtil.getAppName(activity);
             }
-            if (share_media == SHARE_MEDIA.SINA) {
-                new ShareAction(activity)
-                        .withMedia(urlImage)
-                        .withText(contentText)
-                        .withMedia(new UMWeb(url))
-                        .setPlatform(share_media)
-                        .setCallback(umShareListener)
-                        .share();
-            } else {
-                new ShareAction(activity)
-                        .withMedia(urlImage)
-                        .setPlatform(share_media)
-                        .setCallback(umShareListener)
-                        .share();
-            }
+
+            new ShareAction(activity)
+                    .withMedia(urlImage)
+                    .setPlatform(share_media)
+                    .setCallback(umShareListener)
+                    .share();
 
         } catch (Exception e) {
             ToastView.makeText3(activity, "分享失败");
@@ -194,98 +287,6 @@ public class UmengShareTool {
         dismissWindow();
         UMShareAPI.get(context).onActivityResult(requestCode, resultCode, data);
     }
-
-    public static UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-
-        }
-
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            if (platform == null) {
-                ToastView.makeText3(application, "分享失败");
-                return;
-            }
-            String platformStr = "";
-            switch (platform) {
-                case WEIXIN:
-                    platformStr = "微信";
-                    break;
-                case WEIXIN_CIRCLE:
-                    platformStr = "微信朋友圈";
-                    break;
-                case QQ:
-                    platformStr = "QQ";
-                    break;
-                case QZONE:
-                    platformStr = "QQ空间";
-                    break;
-                case SINA:
-                    platformStr = "新浪微博";
-                    break;
-            }
-            if (platform.name().equals("WEIXIN_FAVORITE")) {
-                ToastView.makeText3(application, platformStr + " 收藏成功啦");
-            } else {
-                ToastView.makeText3(application, platformStr + " 分享成功啦");
-            }
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-
-            String platformStr = "";
-            switch (platform) {
-                case WEIXIN:
-                    platformStr = "微信";
-                    break;
-                case WEIXIN_CIRCLE:
-                    platformStr = "微信朋友圈";
-                    break;
-                case QQ:
-                    platformStr = "QQ";
-                    break;
-                case QZONE:
-                    platformStr = "QQ空间";
-                    break;
-                case SINA:
-                    platformStr = "新浪微博";
-                    break;
-            }
-
-            ToastView.makeText3(application, platformStr + " 分享失败啦");
-            if (t != null) {
-                LogUtil.d("throw", "throw:" + t.getMessage());
-            }
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-
-            String platformStr = "";
-            switch (platform) {
-                case WEIXIN:
-                    platformStr = "微信";
-                    break;
-                case WEIXIN_CIRCLE:
-                    platformStr = "微信朋友圈";
-                    break;
-                case QQ:
-                    platformStr = "QQ";
-                    break;
-                case QZONE:
-                    platformStr = "QQ空间";
-                    break;
-                case SINA:
-                    platformStr = "新浪微博";
-                    break;
-            }
-
-//            Toast.makeText(GoldApplication.application, platformStr + " 分享取消了", Toast.LENGTH_SHORT).upLoadPop();
-        }
-    };
-
 
     /**
      * 设置分享按钮
@@ -301,7 +302,7 @@ public class UmengShareTool {
      */
     private static void setShareBtn(final Activity activity, final String title, final String weburl, final String
             discription, final String thumb, final Bitmap bitmap, final boolean isHq, final
-                                    View rootView) {
+                                    View rootView, final ProgressDialog dialog) {
 
         final UMShareAPI umShareAPI = UMShareAPI.get(activity);
         RecyclerView rvShare = (RecyclerView) rootView.findViewById(R.id.rv_share);
@@ -342,9 +343,9 @@ public class UmengShareTool {
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN_CIRCLE)) {
                             if (isHq) {
                                 setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA
-                                        .WEIXIN_CIRCLE);
+                                        .WEIXIN_CIRCLE, dialog);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN_CIRCLE);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN_CIRCLE, dialog);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
@@ -354,9 +355,9 @@ public class UmengShareTool {
                         //微信
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.WEIXIN);
+                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.WEIXIN, dialog);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN, dialog);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
@@ -365,18 +366,18 @@ public class UmengShareTool {
                     case 2:
                         //新浪
                         if (isHq) {
-                            setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.SINA);
+                            setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.SINA, dialog);
                         } else {
-                            setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.SINA);
+                            setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.SINA, dialog);
                         }
                         break;
                     case 3:
                         //QQ
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QQ)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.QQ);
+                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.QQ, dialog);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QQ);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QQ, dialog);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装QQ");
@@ -384,6 +385,15 @@ public class UmengShareTool {
                         break;
                     case 4:
                         //QQ空间
+                        if (umShareAPI.isInstall(activity, SHARE_MEDIA.QZONE)) {
+                            if (isHq) {
+                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.QZONE, dialog);
+                            } else {
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QZONE, dialog);
+                            }
+                        } else {
+                            ToastView.makeText3(activity, "未安装QQ控件");
+                        }
                         break;
                 }
                 try {
@@ -447,4 +457,32 @@ public class UmengShareTool {
         }
     }
 
+    static class MyUMShareListener implements UMShareListener {
+
+        private ProgressDialog dialog;
+
+        public MyUMShareListener(ProgressDialog dialog) {
+            this.dialog = dialog;
+        }
+
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            SocializeUtils.safeShowDialog(dialog);
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            SocializeUtils.safeCloseDialog(dialog);
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            SocializeUtils.safeCloseDialog(dialog);
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            SocializeUtils.safeCloseDialog(dialog);
+        }
+    }
 }

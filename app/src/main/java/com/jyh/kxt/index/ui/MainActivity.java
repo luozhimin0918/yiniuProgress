@@ -18,6 +18,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
@@ -190,7 +191,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         new Pair<View, String>(rivAvatar, EditUserInfoActivity.VIEW_NAME_IMG),
                         new Pair<View, String>(tvNickName, EditUserInfoActivity.VIEW_NAME_TITLE)};
 
-                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,  pairs);
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
 
@@ -211,5 +212,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 //推荐
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
     }
 }

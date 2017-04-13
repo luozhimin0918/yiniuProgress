@@ -36,7 +36,7 @@ public class VideoItemPresenter extends BasePresenter {
         videoItemFragment.plvContent.setAdapter(new BaseListAdapter<String>(list) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                ViewHolder holder;
+                final ViewHolder holder;
                 if (convertView == null) {
                     holder = new ViewHolder();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, null);
@@ -61,7 +61,7 @@ public class VideoItemPresenter extends BasePresenter {
                     @Override
                     public void onClick(View v) {
                         ToastView.makeText3(mContext, "分享");
-                        UmengShareTool.initUmengLayout((Activity) mContext,"","","","",null,holder.ivMore,null);
+                        UmengShareTool.initUmengLayout((Activity) mContext,"标题标题","http://www.baidu.com","内容内容",null,null,holder.ivMore,null);
                     }
                 });
                 holder.iv.setOnClickListener(new View.OnClickListener() {
