@@ -1,32 +1,30 @@
-package com.jyh.kxt.main.presenter;
+package com.jyh.kxt.av.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
+import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
-import com.jyh.kxt.main.ui.fragment.NewsFragment;
 
 /**
  * 项目名:Kxt
- * 类描述:要闻
+ * 类描述:
  * 创建人:苟蒙蒙
- * 创建日期:2017/4/12.
+ * 创建日期:2017/4/14.
  */
 
-public class NewsPresenter extends BasePresenter {
+public class VideoPresenter extends BasePresenter {
 
-    @BindObject()
-    NewsFragment newsFragment;
+    @BindObject VideoFragment videoFragment;
 
     public int index = 0;
 
-    public NewsPresenter(IBaseView iBaseView) {
+    public VideoPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 

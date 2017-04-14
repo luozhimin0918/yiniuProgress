@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -37,6 +38,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     private List<Fragment> fragmentList = new ArrayList<>();
     private BaseFragment newsFragment;
     private BaseFragment flashFrament;
+    private BaseFragment currentFragment;
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -62,7 +64,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         fragmentList.add(flashFrament);
 
         vpContent.addOnPageChangeListener(this);
-        vpContent.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(),fragmentList));
+        vpContent.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(), fragmentList));
         onTabSelect(0);
     }
 
@@ -70,6 +72,10 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onTabSelect(int position) {
         vpContent.setCurrentItem(position);
+        if (position == 0) {
+            currentFragment = newsFragment;
+        } else
+            currentFragment = flashFrament;
     }
 
     @Override
@@ -104,5 +110,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(currentFragment!=null)
+            currentFragment.onActivityResult(requestCode,resultCode,data);
     }
 }

@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -101,5 +102,15 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : fragmentList) {
+            if (fragment != null) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
 }

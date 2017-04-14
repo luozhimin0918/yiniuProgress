@@ -138,6 +138,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (mClickFragment != null) {
             mainPresenter.switchToFragment(mClickFragment);
         }
+        currentFragment = mClickFragment;
     }
 
     /**
@@ -218,5 +219,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        if (currentFragment != null)
+            currentFragment.onActivityResult(requestCode, resultCode, data);
     }
 }

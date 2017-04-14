@@ -51,8 +51,11 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".index.ui.WebActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".index.ui.ClassifyActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
 
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>

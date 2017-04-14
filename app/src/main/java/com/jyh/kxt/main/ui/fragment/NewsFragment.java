@@ -1,13 +1,19 @@
 package com.jyh.kxt.main.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.main.presenter.NewsPresenter;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -15,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 项目名:Kxt
@@ -44,6 +52,7 @@ public class NewsFragment extends BaseFragment {
         vpNewsList.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(), fragmentList));
         stlNavigationBar.setViewPager(vpNewsList, tabs);
 
+        newsPresenter.addOnPageChangeListener(vpNewsList);
     }
 
     private void generateListFragment() {
@@ -59,4 +68,21 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
+    @OnClick(R.id.iv_more)
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_more:
+                newsPresenter.more();
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IntentConstant.REQUESTCODE1 && resultCode == Activity.RESULT_OK) {
+            newsPresenter.index = data.getIntExtra(IntentConstant.INDEX, 0);
+            stlNavigationBar.setCurrentTab(newsPresenter.index);
+        }
+    }
 }
