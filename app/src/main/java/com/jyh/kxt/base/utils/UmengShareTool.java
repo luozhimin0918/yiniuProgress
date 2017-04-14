@@ -2,7 +2,6 @@ package com.jyh.kxt.base.utils;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +16,7 @@ import android.view.View;
 import android.widget.PopupWindow;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.VarConstant;
 import com.library.util.SystemUtil;
@@ -30,9 +29,7 @@ import com.umeng.socialize.UMShareConfig;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMMin;
 import com.umeng.socialize.media.UMWeb;
-import com.umeng.socialize.utils.SocializeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +64,6 @@ public class UmengShareTool {
 
 
     private static Application application;
-    private static PopupWindow screenPopWindow;
     private static PopupWindow shareLayout;
 
     public static MyUMShareListener umShareListener;
@@ -82,11 +78,17 @@ public class UmengShareTool {
      * @param view
      * @param type
      */
-    public static void initUmengLayout(final Activity activity, final String title, final String weburl, final String
+    public static void initUmengLayout(final BaseActivity activity, final String title, final String weburl, final String
             discription,
                                        final String thumb, final Bitmap bitmap, View view, String type) {
 
         View rootView = LayoutInflater.from(activity).inflate(R.layout.dialog_umeng_share, null, false);
+        rootView.findViewById(R.id.ll_rootView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissShareWindow();
+            }
+        });
         boolean isHq = false;
         if (type == null) {
             isHq = false;
@@ -103,8 +105,7 @@ public class UmengShareTool {
                     break;
             }
         }
-        ProgressDialog dialog = new ProgressDialog(activity);
-        umShareListener = new MyUMShareListener(dialog) {
+        umShareListener = new MyUMShareListener(activity) {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
                 super.onStart(share_media);
@@ -191,18 +192,12 @@ public class UmengShareTool {
         DisplayMetrics metrics = SystemUtil.getScreenDisplay(activity);
         shareLayout = new PopupWindow(rootView, metrics.widthPixels, metrics.heightPixels);
         //设置分享按钮
-        setShareBtn(activity, title, weburl, discription, thumb, bitmap, isHq, rootView, dialog);
+        setShareBtn(activity, title, weburl, discription, thumb, bitmap, isHq, rootView);
+
         int statuBarHeight = SystemUtil.getStatuBarHeight(activity);
         rootView.setPadding(0, 0, 0, statuBarHeight);
         shareLayout.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
-    }
-
-    public static void dismissWindow() {
-        if (screenPopWindow != null && screenPopWindow.isShowing()) {
-            screenPopWindow.dismiss();
-            screenPopWindow = null;
-        }
     }
 
     /**
@@ -216,7 +211,7 @@ public class UmengShareTool {
      * @param share_media 分享平台
      */
     public static void setShareContent(Activity activity, String title, String weburl, String discription,
-                                       String thumb, SHARE_MEDIA share_media, ProgressDialog dialog) {
+                                       String thumb, SHARE_MEDIA share_media) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -242,7 +237,6 @@ public class UmengShareTool {
 
         } catch (Exception e) {
             ToastView.makeText3(activity, "分享失败");
-            SocializeUtils.safeCloseDialog(dialog);
         }
     }
 
@@ -250,13 +244,11 @@ public class UmengShareTool {
      * 纯图片分享
      *
      * @param activity
-     * @param title       分享标题
-     * @param url         分享地址
      * @param bitmap      分享图片
      * @param share_media 分享平台
      */
-    public static void setShareContent(Activity activity, String title, String contentText, String url, Bitmap
-            bitmap, SHARE_MEDIA share_media, ProgressDialog dialog) {
+    public static void setShareContent(Activity activity, Bitmap
+            bitmap, SHARE_MEDIA share_media) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -264,12 +256,6 @@ public class UmengShareTool {
                 urlImage = new UMImage(activity, bitmap);
             } else {
                 urlImage = new UMImage(activity, R.mipmap.ic_launcher);
-            }
-            if (TextUtils.isEmpty(title)) {
-                title = SystemUtil.getAppName(activity);
-            }
-            if (TextUtils.isEmpty(contentText)) {
-                contentText = SystemUtil.getAppName(activity);
             }
 
             new ShareAction(activity)
@@ -284,7 +270,7 @@ public class UmengShareTool {
     }
 
     public static void onActivityResult(Context context, int requestCode, int resultCode, Intent data) {
-        dismissWindow();
+        dismissLoadView((BaseActivity) context);
         UMShareAPI.get(context).onActivityResult(requestCode, resultCode, data);
     }
 
@@ -300,9 +286,9 @@ public class UmengShareTool {
      * @param isHq
      * @param rootView
      */
-    private static void setShareBtn(final Activity activity, final String title, final String weburl, final String
+    private static void setShareBtn(final BaseActivity activity, final String title, final String weburl, final String
             discription, final String thumb, final Bitmap bitmap, final boolean isHq, final
-                                    View rootView, final ProgressDialog dialog) {
+                                    View rootView) {
 
         final UMShareAPI umShareAPI = UMShareAPI.get(activity);
         RecyclerView rvShare = (RecyclerView) rootView.findViewById(R.id.rv_share);
@@ -342,10 +328,10 @@ public class UmengShareTool {
                         //朋友圈
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN_CIRCLE)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA
-                                        .WEIXIN_CIRCLE, dialog);
+                                setShareContent(activity, bitmap, SHARE_MEDIA
+                                        .WEIXIN_CIRCLE);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN_CIRCLE, dialog);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN_CIRCLE);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
@@ -355,9 +341,9 @@ public class UmengShareTool {
                         //微信
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.WEIXIN, dialog);
+                                setShareContent(activity,  bitmap, SHARE_MEDIA.WEIXIN);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN, dialog);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
@@ -366,18 +352,18 @@ public class UmengShareTool {
                     case 2:
                         //新浪
                         if (isHq) {
-                            setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.SINA, dialog);
+                            setShareContent(activity, bitmap, SHARE_MEDIA.SINA);
                         } else {
-                            setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.SINA, dialog);
+                            setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.SINA);
                         }
                         break;
                     case 3:
                         //QQ
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QQ)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.QQ, dialog);
+                                setShareContent(activity,  bitmap, SHARE_MEDIA.QQ);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QQ, dialog);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QQ);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装QQ");
@@ -387,9 +373,9 @@ public class UmengShareTool {
                         //QQ空间
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QZONE)) {
                             if (isHq) {
-                                setShareContent(activity, title, discription, weburl, bitmap, SHARE_MEDIA.QZONE, dialog);
+                                setShareContent(activity, bitmap, SHARE_MEDIA.QZONE);
                             } else {
-                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QZONE, dialog);
+                                setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QZONE);
                             }
                         } else {
                             ToastView.makeText3(activity, "未安装QQ控件");
@@ -457,32 +443,46 @@ public class UmengShareTool {
         }
     }
 
+    /**
+     * 显示加载动画
+     */
+    public static void showLoadView(BaseActivity activity) {
+        activity.showWaitDialog(null);
+    }
+
+    /**
+     * 隐藏加载动画
+     */
+    public static void dismissLoadView(BaseActivity activity) {
+        activity.dismissWaitDialog();
+    }
+
     static class MyUMShareListener implements UMShareListener {
 
-        private ProgressDialog dialog;
+        private BaseActivity baseActivity;
 
-        public MyUMShareListener(ProgressDialog dialog) {
-            this.dialog = dialog;
+        public MyUMShareListener(BaseActivity baseActivity) {
+            this.baseActivity = baseActivity;
         }
 
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-            SocializeUtils.safeShowDialog(dialog);
+            showLoadView(baseActivity);
         }
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            SocializeUtils.safeCloseDialog(dialog);
+            dismissLoadView(baseActivity);
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            SocializeUtils.safeCloseDialog(dialog);
+            dismissLoadView(baseActivity);
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            SocializeUtils.safeCloseDialog(dialog);
+            dismissLoadView(baseActivity);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.jyh.kxt.av.presenter;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.av.ui.fragment.VideoItemFragment;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.utils.UmengShareTool;
-import com.library.widget.window.ToastView;
+import com.tencent.smtt.sdk.VideoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +62,15 @@ public class VideoItemPresenter extends BasePresenter {
                 holder.ivMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastView.makeText3(mContext, "分享");
-                        UmengShareTool.initUmengLayout((Activity) mContext,"标题标题","http://www.baidu.com","内容内容",null,null,holder.ivMore,null);
+                        UmengShareTool.initUmengLayout((BaseActivity) mContext, "123", "http://www.baidu.com", "http://www.baidu.com",
+                                null, null, holder.ivMore, null);
                     }
                 });
                 holder.iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastView.makeText3(mContext, "播放");
+                        Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                        mContext.startActivity(intent);
                     }
                 });
 

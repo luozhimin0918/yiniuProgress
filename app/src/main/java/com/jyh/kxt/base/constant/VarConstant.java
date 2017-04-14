@@ -9,7 +9,13 @@ package com.jyh.kxt.base.constant;
 
 public class VarConstant {
 
-    //umeng 配置信息
+    /**
+     * umeng 配置信息
+     *
+     * umeng分享版本 6.4.3
+     * umeng推送版本 3.1.0a
+     *
+     */
     public static final String WX_APPID="wx93dccc483df30be4";
     public static final String WX_APPSECRET="0828a1e0f1dd2791050113a9adb715a4";
 

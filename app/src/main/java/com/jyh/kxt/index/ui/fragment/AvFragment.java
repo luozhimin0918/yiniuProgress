@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 /**
  * 首页-视听
  */
-public class AvFragment extends BaseFragment implements OnTabSelectListener {
+public class AvFragment extends BaseFragment implements OnTabSelectListener, ViewPager.OnPageChangeListener {
 
     public static AvFragment newInstance() {
         AvFragment fragment = new AvFragment();
@@ -59,6 +60,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
 
         FragmentManager fm = getChildFragmentManager();
         vpAudioVisual.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
+
+        vpAudioVisual.addOnPageChangeListener(this);
     }
 
     @Override
@@ -83,6 +86,31 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener {
             case R.id.iv_right_icon1:
 
                 break;
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        stlNavigationBar.setCurrentTab(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : fragmentList) {
+            if (fragment != null) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 }

@@ -2,10 +2,13 @@
 <resources>
     <attr name="clickFontColor" format="color|reference"/>
     <attr name="defaultFontColor" format="color|reference"/>
+    <attr name="defaultBackground" format="color|reference"/>
+    <attr name="selectedBackground" format="color|reference"/>
+    <attr name="selectedFontColor" format="color|reference"/>
 
     <declare-styleable name="DiscolorButton">
         <attr name="clickBackground" format="color|reference"/>
-        <attr name="defaultBackground" format="color|reference"/>
+        <attr name="defaultBackground"/>
         <attr name="clickFontColor"/>
         <attr name="defaultFontColor"/>
         <attr name="cornerRadius" format="dimension"/>
@@ -29,5 +32,9 @@
         <attr name="columnCount" format="integer"/>
         <attr name="itemHeight" format="dimension"/>
         <attr name="array" format="reference"/>
+        <attr name="selectedBackground"/>
+        <attr name="defaultBackground"/>
+        <attr name="selectedFontColor"/>
+        <attr name="defaultFontColor"/>
     </declare-styleable>
 </resources>

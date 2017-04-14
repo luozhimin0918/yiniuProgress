@@ -40,6 +40,8 @@
     <color name="font_color6">#A1ABB2</color>
     <color name="font_color7">#7A8D99</color>
     <color name="font_color8">#1C9CF2</color>
+    <color name="font_color9">#B8C4CC</color>
+    <color name="font_color10">#fefefe</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
 

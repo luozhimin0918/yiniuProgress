@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical"
+    >
+
+    <include layout="@layout/action_bar1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/statementPaddingHorizontal"
+        android:paddingRight="@dimen/statementPaddingHorizontal"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/statementImageSize"
+            android:layout_height="@dimen/statementImageSize"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:text="大俗防护达股份已施工费用为个人风格回复ID施工方式的更好ifhi度hi胡覅U盾回复的身份促使都会促使"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="@dimen/statementPaddingBottom"
+        android:text="上海快讯网络有限公司"
+        android:textColor="@color/font_color3"
+        android:textSize="@dimen/content_font_size"/>
+
+</LinearLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical"
+    >
+
+    <include layout="@layout/action_bar1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/feedbackImageWidth"
+            android:layout_height="@dimen/feedbackImageHeight"
+            android:layout_margin="@dimen/feedbackMarginTop"
+            android:src="@mipmap/ic_launcher"/>
+
+        <com.jyh.kxt.base.custom.DiscolorButton
+            android:id="@+id/btn_copy"
+            android:layout_width="@dimen/feedbackBtnWidth"
+            android:layout_height="@dimen/feedbackBtnHeight"
+            android:drawableLeft="@mipmap/ic_launcher"
+            android:drawablePadding="@dimen/feedbackDrawablePadding"
+            android:gravity="center_vertical"
+            android:text="kxt108"
+            app:clickBackground="@color/red_btn_bg_pressed_color"
+            app:clickFontColor="@color/white"
+            app:defaultBackground="@color/blue"
+            android:paddingLeft="@dimen/feedbackPaddingLeft"
+            app:defaultFontColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/feedbackMarginTop2"
+            android:text="(长按复制微信号,添加微信反馈意见)"
+            android:textSize="@dimen/describe_font_size3"
+            android:textColor="@color/font_color2"/>
+
+        <TextView
+            android:id="@+id/tv_jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="复制微信后,点击进入微信"
+            android:drawableRight="@mipmap/icon_comment_more"
+            android:drawablePadding="@dimen/feedbackDrawablePadding"
+            android:textSize="@dimen/describe_font_size3"
+            android:textColor="@color/font_color2"
+            android:layout_marginTop="@dimen/feedbackMarginTop3"
+            />
+    </LinearLayout>
+
+</LinearLayout>

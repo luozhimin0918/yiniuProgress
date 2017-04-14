@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -44,6 +45,11 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     //列间距
     private int columnSpace;
 
+    private Drawable defaultBackground;
+    private Drawable selectedBackground;
+    private int defaultFontColor;
+    private int selectedFontColor;
+
     //一列多少个按钮
     private int columnCount;
 
@@ -60,7 +66,6 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
      * 保存所有的CheckBox
      */
     private List<CheckBox> allCheckBox = new ArrayList<>();
-
 
     public void setOnItemCheckBoxClick(OnItemCheckBoxClick onItemCheckBoxClick) {
         this.onItemCheckBoxClick = onItemCheckBoxClick;
@@ -87,6 +92,15 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             columnSpace = a.getDimensionPixelSize(R.styleable.OptionLayout_columnSpace, 0);
             itemHeight = a.getDimensionPixelSize(R.styleable.OptionLayout_itemHeight, 0);
             columnCount = a.getDimensionPixelSize(R.styleable.OptionLayout_columnCount, 3);
+
+            defaultBackground = a.getDrawable(R.styleable.OptionLayout_defaultBackground);
+            selectedBackground = a.getDrawable(R.styleable.OptionLayout_selectedBackground);
+
+            defaultFontColor = a.getColor(R.styleable.OptionLayout_defaultFontColor, ContextCompat.getColor(getContext(), R.color
+                    .font_color5));
+            selectedFontColor = a.getColor(R.styleable.OptionLayout_selectedFontColor, ContextCompat.getColor(getContext(), R.color
+                    .font_color5));
+
             int arrayId = a.getResourceId(R.styleable.OptionLayout_array, 0);
             if (arrayId != 0) {
                 generateCheckBox(arrayId);
@@ -178,8 +192,14 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             CheckBox checkBox = (CheckBox) this.getChildAt(i);
             if (index == i) {
                 checkBox.setChecked(true);
+                if (selectedBackground != null)
+                    checkBox.setBackground(selectedBackground);
+                checkBox.setTextColor(selectedFontColor);
             } else {
                 checkBox.setChecked(false);
+                if (defaultBackground != null)
+                    checkBox.setBackground(defaultBackground);
+                checkBox.setTextColor(defaultFontColor);
             }
         }
     }
@@ -194,8 +214,14 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             CheckBox checkBox = (CheckBox) this.getChildAt(i);
             if (set.contains(radioTxtArray.get(i))) {
                 checkBox.setChecked(true);
+                if (selectedBackground != null)
+                    checkBox.setBackground(selectedBackground);
+                checkBox.setTextColor(selectedFontColor);
             } else {
                 checkBox.setChecked(false);
+                if (defaultBackground != null)
+                    checkBox.setBackground(defaultBackground);
+                checkBox.setTextColor(defaultFontColor);
             }
         }
     }
@@ -235,8 +261,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     private ColorStateList createColorStateList() {
         int[] colors = new int[]
                 {
-                        ContextCompat.getColor(getContext(), R.color.font_color2),
-                        ContextCompat.getColor(getContext(), R.color.font_color2)
+                        selectedFontColor,
+                        defaultFontColor
                 };
 
         int[][] states = new int[2][];

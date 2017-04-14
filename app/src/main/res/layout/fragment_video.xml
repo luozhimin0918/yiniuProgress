@@ -21,14 +21,14 @@
             tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
             tl:tl_textSelectColor="@color/tabSelColor"
             tl:tl_textUnselectColor="@color/tabUnSelColor"
-            tl:tl_textsize="@dimen/navigationBar2TextSize"
+            tl:tl_textsize="@dimen/describe_font_size4"
             android:paddingRight="@dimen/navigationBar2ImageWidth"
             />
 
         <ImageView
             android:id="@+id/iv_more"
             android:layout_width="@dimen/navigationBar2ImageWidth"
-            android:layout_height="@dimen/navigationBar2ImageHeight"
+            android:layout_height="match_parent"
             android:src="@mipmap/icon_more"
             android:layout_gravity="center_vertical|right"
             android:paddingRight="@dimen/navigationBar2ImagePaddingLeft"
