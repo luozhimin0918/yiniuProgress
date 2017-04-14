@@ -15,13 +15,11 @@ import com.jyh.kxt.R;
 
 public class StarView extends LinearLayout {
     public StarView(Context context) {
-        super(context);
-        initStar();
+        this(context, null);
     }
 
     public StarView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initStar();
+        this(context, attrs, 0);
     }
 
     public StarView(Context context, AttributeSet attrs, int defStyleAttr) {

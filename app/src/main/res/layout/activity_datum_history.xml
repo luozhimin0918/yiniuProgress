@@ -24,8 +24,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="154dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:visibility="visible">
 
+        <com.jyh.kxt.base.widget.TrendChartLayout
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:layout_height="154dp">
+
+        </com.jyh.kxt.base.widget.TrendChartLayout>
     </LinearLayout>
 
     <View
@@ -74,20 +81,78 @@
         android:textColor="@color/font_color60"
         android:textSize="@dimen/describe_font_size2"/>
 
-    <com.jyh.kxt.base.custom.DiscolorTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:text="更多信息"
-        android:textSize="@dimen/describe_font_size1"
-        app:defaultFontColor="@color/font_color8"/>
+        android:textSize="@dimen/describe_font_size1"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="6dp"
         android:background="@color/bg_color2"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="历史数据"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="9dp"
+        android:background="@color/bg_color2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="公布日期"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="前值"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="预测值"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="公布值"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+    <com.library.widget.handmark.PullToRefreshListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.library.widget.handmark.PullToRefreshListView>
 </LinearLayout>

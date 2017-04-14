@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.widget.StarView;
 
 import java.util.List;
 
@@ -40,14 +41,14 @@ public class CalendarItemAdapter extends BaseListAdapter<String> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-//        viewHolder.llStar.refreshConfig(2, false);
+        viewHolder.llStar.refreshConfig(2, false);
 
         return convertView;
     }
 
     class ViewHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoQi;
-        @BindView(R.id.ll_star) LinearLayout llStar;
+        @BindView(R.id.ll_star) StarView llStar;
         @BindView(R.id.ll_left_gq) LinearLayout llLeftGq;
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.tv_describe) TextView tvDescribe;
