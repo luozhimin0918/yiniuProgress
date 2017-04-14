@@ -35,6 +35,6 @@
         android:paddingTop="1dp"
         android:text="打算打算发到付的机会不可激发干部违规发言的改"
         android:textColor="@color/font_color5"
-        android:textSize="@dimen/videoHistoryTextSize"/>
+        android:textSize="@dimen/describe_font_size2"/>
 
 </LinearLayout>

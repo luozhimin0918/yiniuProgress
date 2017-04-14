@@ -46,9 +46,23 @@
             android:screenOrientation="sensor"
             android:theme="@style/VideoTheme">
         </activity>
+
         <activity
             android:name=".user.ui.EditUserInfoActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.ui.AboutActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.ui.FeedbackActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.ui.StatementActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".index.ui.WebActivity"
             android:screenOrientation="portrait"/>

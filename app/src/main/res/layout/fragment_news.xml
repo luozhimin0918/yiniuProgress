@@ -21,7 +21,7 @@
             tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
             tl:tl_textSelectColor="@color/tabSelColor"
             tl:tl_textUnselectColor="@color/tabUnSelColor"
-            tl:tl_textsize="@dimen/navigationBar2TextSize"
+            tl:tl_textsize="@dimen/describe_font_size4"
             android:paddingRight="@dimen/navigationBar2ImageWidth"
             />
 

@@ -32,7 +32,7 @@
             android:paddingLeft="@dimen/videoItemTitlePaddingLeft"
             android:text="防守打法复活吧富不过都是"
             android:textColor="@color/font_color4"
-            android:textSize="@dimen/videoItemTextSize"/>
+            android:textSize="@dimen/describe_font_size4"/>
     </FrameLayout>
 
     <RelativeLayout

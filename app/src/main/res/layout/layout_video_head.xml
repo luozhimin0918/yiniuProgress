@@ -16,7 +16,7 @@
             android:drawablePadding="@dimen/videoDrawablePadding"
             android:gravity="center_vertical"
             android:text="往期节目"
-            android:textSize="@dimen/videoTitleTextSize"
+            android:textSize="@dimen/content_font_size"
             android:textColor="@color/font_color60"/>
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="更多"
-            android:textSize="@dimen/videoTitleTextSize2"
+            android:textSize="@dimen/describe_font_size3"
             android:textColor="@color/font_color9"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

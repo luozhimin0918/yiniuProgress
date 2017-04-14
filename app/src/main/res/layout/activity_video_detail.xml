@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="2017 黄金开门红 新年新牛市"
             android:textColor="@color/font_color5"
-            android:textSize="@dimen/videoTitleTextSize"/>
+            android:textSize="@dimen/content_font_size"/>
 
         <TextView
             android:id="@+id/tv_playCount"
@@ -39,7 +39,7 @@
             android:drawablePadding="@dimen/videoTitlePlayCountPadding"
             android:text="1855"
             android:textColor="@color/font_color6"
-            android:textSize="@dimen/videoTitleTextSize2"/>
+            android:textSize="@dimen/describe_font_size3"/>
     </RelativeLayout>
 
     <View

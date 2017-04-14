@@ -43,8 +43,6 @@
     <dimen name="navigationBar2Radius">1.5dp</dimen>
     <dimen name="navigationBar2IndicatorWidth">8dp</dimen>
     <dimen name="navigationBar2MarginBottom">5dp</dimen>
-    <dimen name="navigationBar2TextSize">15dp</dimen>
-    <dimen name="navigationBar2TextSize2">16dp</dimen>
     <dimen name="navigationBar2ImageWidth">42dp</dimen>
     <dimen name="navigationBar2ImageHeight">15dp</dimen>
     <dimen name="navigationBar2ImagePaddingLeft">10dp</dimen>
@@ -74,8 +72,6 @@
     <!-- 视听首页 -->
     <dimen name="videoItemDrawablePadding">6dp</dimen>
     <dimen name="videoItemHeight">211dp</dimen>
-    <dimen name="videoItemTextSize">15sp</dimen>
-    <dimen name="videoItemTextSize2">12sp</dimen>
     <dimen name="videoItemPlaySize">47dp</dimen>
     <dimen name="videoItemTitleHeight">35dp</dimen>
     <dimen name="videoItemTitlePaddingLeft">15dp</dimen>
@@ -89,8 +85,6 @@
     <!-- 视听详情页 -->
     <dimen name="videoTitleHeight">38dp</dimen>
     <dimen name="videoTitlePadding">15dp</dimen>
-    <dimen name="videoTitleTextSize">16sp</dimen>
-    <dimen name="videoTitleTextSize2">14sp</dimen>
     <dimen name="videoTitlePlayCountPadding">7dp</dimen>
     <dimen name="videoNavHeight">49dp</dimen>
     <dimen name="videoNavPadding">15dp</dimen>
@@ -103,7 +97,6 @@
     <dimen name="videoHistoryImageHeight">83dp</dimen>
     <dimen name="videoHistoryPadding">5dp</dimen>
     <dimen name="videoHistoryPlaySize">30dp</dimen>
-    <dimen name="videoHistoryTextSize">13sp</dimen>
     <dimen name="videoHistoryTextHeight">40dp</dimen>
 
 
@@ -115,11 +108,27 @@
     <dimen name="newsItemImageViewHeight">64dp</dimen>
     <dimen name="newsItemImageViewWidth">114dp</dimen>
     <dimen name="newsItemTitleMarginLeft">12dp</dimen>
-    <dimen name="newsItemTitleTextSize">16sp</dimen>
-    <dimen name="newsItemAuthorTextSize">12sp</dimen>
-    <dimen name="newsItemTimeTextSize">11sp</dimen>
 
     <!--星星大小-->
     <dimen name="star_size">9dp</dimen>
     <dimen name="star_margins">1dp</dimen>
+
+    <!-- 关于 -->
+    <dimen name="itemPaddingLeft">20dp</dimen>
+    <dimen name="itemImageViewPaddingLeft">15dp</dimen>
+    <!-- 声明条款 -->
+    <dimen name="statementPaddingHorizontal">40dp</dimen>
+    <dimen name="statementPaddingBottom">20dp</dimen>
+    <dimen name="statementImageSize">200dp</dimen>
+    <!-- 意见反馈 -->
+    <dimen name="feedbackImageWidth">200dp</dimen>
+    <dimen name="feedbackImageHeight">200dp</dimen>
+    <dimen name="feedbackBtnWidth">200dp</dimen>
+    <dimen name="feedbackBtnHeight">40dp</dimen>
+    <dimen name="feedbackPaddingLeft">45dp</dimen>
+    <dimen name="feedbackMarginTop">40dp</dimen>
+    <dimen name="feedbackMarginTop2">20dp</dimen>
+    <dimen name="feedbackMarginTop3">30dp</dimen>
+    <dimen name="feedbackDrawablePadding">5dp</dimen>
+
 </resources>

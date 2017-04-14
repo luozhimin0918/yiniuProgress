@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_statement"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:paddingLeft="@dimen/itemPaddingLeft">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="声明条款"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:layout_width="@dimen/item_height"
+            android:layout_height="@dimen/item_height"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/itemImageViewPaddingLeft"
+            android:src="@mipmap/icon_comment_more"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color2"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_contact"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:paddingLeft="@dimen/itemPaddingLeft">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="联系我们"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:layout_width="@dimen/item_height"
+            android:layout_height="@dimen/item_height"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/itemImageViewPaddingLeft"
+            android:src="@mipmap/icon_comment_more"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color2"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:paddingLeft="@dimen/itemPaddingLeft">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="意见反馈"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:layout_width="@dimen/item_height"
+            android:layout_height="@dimen/item_height"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/itemImageViewPaddingLeft"
+            android:src="@mipmap/icon_comment_more"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color2"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_visit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:paddingLeft="@dimen/itemPaddingLeft">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="访问官网"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:layout_width="@dimen/item_height"
+            android:layout_height="@dimen/item_height"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/itemImageViewPaddingLeft"
+            android:src="@mipmap/icon_comment_more"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color2"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -5,6 +5,11 @@
         <item>拍照</item>
     </string-array>
 
+    <string-array name="nav_login">
+        <item>登录</item>
+        <item>注册</item>
+    </string-array>
+
     <string-array name="apps_func_icon">
         <item>icon_photo</item>
         <item>icon_camera</item>
