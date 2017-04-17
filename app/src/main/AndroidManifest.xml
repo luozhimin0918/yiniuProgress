@@ -46,7 +46,6 @@
             android:screenOrientation="sensor"
             android:theme="@style/VideoTheme">
         </activity>
-
         <activity
             android:name=".user.ui.EditUserInfoActivity"
             android:screenOrientation="portrait"/>
@@ -62,7 +61,6 @@
             android:name=".user.ui.StatementActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".index.ui.WebActivity"
             android:screenOrientation="portrait"/>
@@ -134,6 +132,8 @@
         </meta-data>
 
         <activity android:name=".datum.ui.DatumHistoryActivity">
+        </activity>
+        <activity android:name=".index.ui.SearchListActivity">
         </activity>
     </application>
 

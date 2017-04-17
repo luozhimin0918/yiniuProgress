@@ -16,6 +16,7 @@ import android.view.animation.AccelerateInterpolator;
 import com.jyh.kxt.R;
 import com.jyh.kxt.datum.bean.TrendBean;
 import com.library.util.SystemUtil;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class TrendChartView extends View {
     private int padding;
 
     private Paint pointPaint;
+    private Paint selectedPaint;
     private Rect frameRect;
 
     private List<TrendBean> trendList;
@@ -47,8 +49,10 @@ public class TrendChartView extends View {
 
     private Double differencePrice, minPrice, maxPrice;
     private int minPricePoint, maxPricePoint;
-    //触发等级   1 蓄势不触发  2 触发  3 触发完成
+    //触发等级   1 蓄势不触发  2 蓄势画背景横线  3 蓄势完成画折线动画 4 点击放大圆点
     private int triggerLevel = 1;
+    private int currentSelectedPosition = -1;
+
     private TrendChartTextView priceShowView;
 
     public TrendChartView(Context context) {
@@ -75,6 +79,12 @@ public class TrendChartView extends View {
         pointPaint.setColor(color);
         pointPaint.setStrokeWidth(5);
         pointPaint.setStyle(Paint.Style.FILL);
+
+        int selectedColor = getResources().getColor(R.color.selected_point);
+        selectedPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedPaint.setStyle(Paint.Style.STROKE);
+        selectedPaint.setColor(selectedColor);
+        selectedPaint.setStrokeWidth(5);
     }
 
 
@@ -159,6 +169,27 @@ public class TrendChartView extends View {
                 invalidate();
             }
         });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                triggerLevel = 4;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                triggerLevel = 4;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
         valueAnimator.start();
     }
 
@@ -187,12 +218,29 @@ public class TrendChartView extends View {
         }
     }
 
+    private void drawSelectedPoint(Canvas canvas) {
+        for (int i = 0; i < pointFinalList.size(); i++) {
+            if (i == currentSelectedPosition) {
+                canvas.drawCircle(pointFinalList.get(i).x, pointFinalList.get(i).y, 10, pointPaint);
+                canvas.drawCircle(pointFinalList.get(i).x, pointFinalList.get(i).y, 16, selectedPaint);
+            } else {
+                canvas.drawCircle(pointFinalList.get(i).x, pointFinalList.get(i).y, 10, pointPaint);
+            }
+        }
+        for (int i = 0; i < pointFinalList.size() - 1; i++) {
+            Point startPoint = pointFinalList.get(i);
+            Point endPoint = pointFinalList.get(i + 1);
+            canvas.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y, pointPaint);
+        }
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
 
         return super.dispatchTouchEvent(event);
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -208,6 +256,10 @@ public class TrendChartView extends View {
 
                     priceShowView.setPoint(point);
                     priceShowView.setText("etf:" + trendPriceArray[position]);
+                    if (currentSelectedPosition != position) {
+                        invalidate();
+                    }
+                    currentSelectedPosition = position;
                 }
                 break;
         }
@@ -283,6 +335,10 @@ public class TrendChartView extends View {
         //蓄势 背景技能发完毕,开始画点
         if (triggerLevel == 3) {
             drawLineChart(canvas);
+        }
+
+        if (triggerLevel == 4) {
+            drawSelectedPoint(canvas);
         }
     }
 

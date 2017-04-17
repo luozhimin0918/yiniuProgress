@@ -52,4 +52,6 @@
     <color name="star_color1">#E4E4E4</color>
     <color name="star_color2">#FFB700</color>
     <color name="star_color3">#E74B31</color>
+
+    <color name="selected_point">#C2DFFF</color>
 </resources>
