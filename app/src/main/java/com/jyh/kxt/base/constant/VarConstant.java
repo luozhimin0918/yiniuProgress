@@ -9,6 +9,8 @@ package com.jyh.kxt.base.constant;
 
 public class VarConstant {
 
+    public static final String KEY="kuaixun56pslui*!@~^jhk";
+
     /**
      * umeng 配置信息
      *

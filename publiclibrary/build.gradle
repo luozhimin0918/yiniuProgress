@@ -25,6 +25,10 @@ android {
     dataBinding {
         enabled = true;
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
@@ -37,6 +41,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
 
     compile 'com.pnikosis:materialish-progress:1.7'
+
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
 
     compile 'com.jakewharton:butterknife:8.4.0'
 

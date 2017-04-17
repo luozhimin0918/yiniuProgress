@@ -2,11 +2,11 @@ package com.jyh.kxt;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.jyh.kxt.base.constant.VarConstant;
+import com.library.util.EncryptionUtils;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -17,14 +17,11 @@ import java.util.regex.Pattern;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() throws Exception {
-        String testString = "第一回 风雪惊变\r\n  钱塘江浩浩江水，日日夜夜无穷无休的从临安牛家村边绕过，东流入海。";
-        Pattern p = Pattern.compile("(^\\s*第)(.{1,9})[章节卷集部篇回](\\s*)(.*)(\n|\r|\r\n)");
-        Matcher matcher = p.matcher(testString);
-        while (matcher.find()) {
-            for (int i = 0; i <= matcher.groupCount(); i++) {
-                System.out.println("group" + i + " : " + matcher.start(i) + " - " + matcher.end(i));
-                System.out.println(matcher.group(i));
-            }
-        }
+        String str = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
+                ".eyJhdWQiOiJodHRwOlwvXC93d3cua3h0LmNvbSIsInN0YXR1cyI6MCwi" +
+                "bXNnIjoiXHU1M2MyXHU2NTcwXHU5NTE5XHU4YmVmOmNvbnRlbnQiLCJkYXRhIjpbXX0" +
+                ".yz1NISOmAcDMaPZdHCy5Ujv5wQqStChluVoEV1huuls";
+
+        EncryptionUtils.parseJWT(str, VarConstant.KEY);
     }
 }

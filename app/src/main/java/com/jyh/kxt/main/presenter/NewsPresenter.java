@@ -98,12 +98,12 @@ public class NewsPresenter extends BasePresenter {
 //                            news:[]
 //                        },
 
-                        List<NewsNavJson> newsNavs = JSON.parseArray(data.optString("newsnav"), NewsNavJson.class);
-                        List<SlideJson> slides = JSON.parseArray(data.getString("slide"), SlideJson.class);
-                        List<SlideJson> shortcuts = JSON.parseArray(data.getString("shortcut"), SlideJson.class);
-                        List<QuotesJson> quotes = JSON.parseArray(data.getString("quotes"), QuotesJson.class);
-                        List<SlideJson> ads = JSON.parseArray(data.getString("ad"), SlideJson.class);
-                        List<NewsJson> news = JSON.parseArray(data.getString("news"), NewsJson.class);
+                        List<NewsNavJson> newsNavs = JSON.parseArray(data.optString("newsnav")+"", NewsNavJson.class);
+                        List<SlideJson> slides = JSON.parseArray(data.optString("slide")+"", SlideJson.class);
+                        List<SlideJson> shortcuts = JSON.parseArray(data.optString("shortcut")+"", SlideJson.class);
+                        List<QuotesJson> quotes = JSON.parseArray(data.optString("quotes")+"", QuotesJson.class);
+                        List<SlideJson> ads = JSON.parseArray(data.optString("ad")+"", SlideJson.class);
+                        List<NewsJson> news = JSON.parseArray(data.optString("news")+"", NewsJson.class);
 
                         newsFragment.initView(newsNavs, slides, shortcuts, quotes, ads, news);
 
