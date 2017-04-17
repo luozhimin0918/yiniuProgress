@@ -24,7 +24,6 @@ import com.jyh.kxt.base.util.emoje.utils.Utils;
 import com.superplayer.library.SuperPlayer;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -43,6 +42,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
     @BindView(R.id.iv_collect) ImageView ivCollect;
     @BindView(R.id.iv_like) ImageView ivLike;
     @BindView(R.id.iv_share) ImageView ivShare;
+    @BindView(R.id.ll_more_video) public LinearLayout llMoreVideo;
 
     private VideoDetailPresenter videoDetailPresenter;
 
@@ -64,6 +64,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
         videoDetailPresenter = new VideoDetailPresenter(this);
         videoDetailPresenter.initVideo();
+        videoDetailPresenter.requestMoreVideo();
     }
 
 

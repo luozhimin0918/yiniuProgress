@@ -21,7 +21,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -134,6 +133,11 @@ public class SuperPlayer extends RelativeLayout {
 
     public SuperPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        if(isInEditMode()){
+            return;
+        }
+
         this.context = context;
         activity = (Activity) this.context;
         //初始化view和其他相关的

@@ -1,8 +1,9 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.support.v7.widget.AppCompatImageView;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,26 +35,30 @@ public class StarView extends LinearLayout {
         int starMargins = (int) getResources().getDimension(R.dimen.star_margins);
 
         for (int i = 0; i < 3; i++) {
-            AppCompatImageView starView = new AppCompatImageView(getContext());
-            starView.setImageResource(R.mipmap.icon_star);
+            ImageView starView = new ImageView(getContext());
+
+            int color = ContextCompat.getColor(getContext(), R.color.star_color1);
+
+            Drawable drawable = getResources().getDrawable(R.mipmap.icon_star);
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            starView.setImageDrawable(drawable);
+
             LayoutParams starParams = new LayoutParams(starSize, starSize);
             starParams.setMargins(0, 0, starMargins, 0);
             addView(starView, starParams);
-
-            ColorStateList colorStateList = getResources().getColorStateList(R.color.star_color1);
-            starView.setImageTintList(colorStateList);
         }
     }
 
     public void refreshConfig(int selectCount, boolean isMatter) {
         for (int i = 0; i < selectCount; i++) {
             if (i < selectCount) {
-                ImageView childView = (ImageView) getChildAt(i);
+                ImageView starView = (ImageView) getChildAt(i);
 
-                ColorStateList colorStateList = getResources().getColorStateList
-                        (isMatter ? R.color.star_color3 : R.color.star_color2);
+                int color = ContextCompat.getColor(getContext(), R.color.star_color2);
 
-                childView.setImageTintList(colorStateList);
+                Drawable drawable = getResources().getDrawable(R.mipmap.icon_star);
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                starView.setImageDrawable(drawable);
             }
         }
     }

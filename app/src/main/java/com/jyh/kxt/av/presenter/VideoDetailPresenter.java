@@ -1,5 +1,7 @@
 package com.jyh.kxt.av.presenter;
 
+import android.view.LayoutInflater;
+
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
@@ -18,6 +20,16 @@ public class VideoDetailPresenter extends BasePresenter {
 
     public VideoDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
+    }
+
+    /**
+     * 请求更多视屏
+     */
+    public void requestMoreVideo() {
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        for (int i = 0; i < 5; i++) {
+            mInflater.inflate(R.layout.item_more_video, videoDetailActivity.llMoreVideo);
+        }
     }
 
     public void initVideo() {

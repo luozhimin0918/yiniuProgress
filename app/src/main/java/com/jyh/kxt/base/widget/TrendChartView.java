@@ -11,7 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.datum.bean.TrendBean;
@@ -140,7 +140,7 @@ public class TrendChartView extends View {
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(maxPricePoint, minPricePoint);
         valueAnimator.setDuration(500);
-        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        valueAnimator.setInterpolator(new AccelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
