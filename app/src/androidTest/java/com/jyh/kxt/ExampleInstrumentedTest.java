@@ -8,6 +8,8 @@ import com.library.util.EncryptionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.jsonwebtoken.Claims;
+
 /**
  * Instrumentation test, which will execute on an Android device.
  *
@@ -22,6 +24,7 @@ public class ExampleInstrumentedTest {
                 "bXNnIjoiXHU1M2MyXHU2NTcwXHU5NTE5XHU4YmVmOmNvbnRlbnQiLCJkYXRhIjpbXX0" +
                 ".yz1NISOmAcDMaPZdHCy5Ujv5wQqStChluVoEV1huuls";
 
-        EncryptionUtils.parseJWT(str, VarConstant.KEY);
+        Claims claims = EncryptionUtils.parseJWT(str, VarConstant.KEY);
+        System.out.println(claims);
     }
 }
