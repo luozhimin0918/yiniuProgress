@@ -10,4 +10,10 @@ public class IntentConstant {
 
     public static final String NAME = "name";
     public static final String INDEX = "index";
+
+    public static final String NEWS_SLIDE = "Slide";
+    public static final String NEWS_SHORTCUTS = "shortcuts";
+    public static final String NEWS_QUOTES = "quotes";
+    public static final String NEWS_ADS = "ads";
+    public static final String NEWS_NEWS = "news";
 }

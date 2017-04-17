@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.presenter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,10 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.json.QuotesJson;
+import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 
 import java.util.ArrayList;
@@ -27,6 +32,14 @@ public class NewsItemPresenter extends BasePresenter {
 
     @BindObject
     NewsItemFragment newsItemFragment;
+
+    private boolean isMain;//是否为首页
+
+    private List<SlideJson> slides;//幻灯片
+    private List<SlideJson> ads;//广告
+    private List<SlideJson> shortcuts;//按钮
+    private List<QuotesJson> quotes;//行情
+    private List<NewsJson> news;
 
     public NewsItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -72,5 +85,21 @@ public class NewsItemPresenter extends BasePresenter {
             list.add("");
         }
         return list;
+    }
+
+    public void setMain(boolean isMain) {
+        this.isMain = isMain;
+    }
+
+    public void init(Bundle arguments) {
+        if (isMain) {
+            slides = arguments.getParcelableArrayList(IntentConstant.NEWS_SLIDE);
+            shortcuts = arguments.getParcelableArrayList(IntentConstant.NEWS_SHORTCUTS);
+            quotes = arguments.getParcelableArrayList(IntentConstant.NEWS_QUOTES);
+            ads = arguments.getParcelableArrayList(IntentConstant.NEWS_ADS);
+            news = arguments.getParcelableArrayList(IntentConstant.NEWS_NEWS);
+        } else {
+
+        }
     }
 }

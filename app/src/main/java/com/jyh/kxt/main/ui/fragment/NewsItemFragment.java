@@ -23,6 +23,7 @@ public class NewsItemFragment extends BaseFragment {
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     private String name;
+    private boolean isMain;//是否为首页
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -32,6 +33,12 @@ public class NewsItemFragment extends BaseFragment {
 
         Bundle arguments = getArguments();
         name = arguments.getString(IntentConstant.NAME);
+        int index = arguments.getInt(IntentConstant.INDEX);
+        isMain = index == 0 ? true : false;
+
+        newsItemPresenter.setMain(isMain);
+
+        newsItemPresenter.init(arguments);
 
         newsItemPresenter.setAdapter();
     }
