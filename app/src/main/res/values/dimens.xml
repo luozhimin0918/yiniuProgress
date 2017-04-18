@@ -52,9 +52,20 @@
     <dimen name="drawer_image_height">165dp</dimen>
     <dimen name="av_video_height">211dp</dimen>
 
+    <dimen name="index_slide">150dp</dimen>
+    <dimen name="index_slide_indicator">3dp</dimen>
+    <dimen name="index_slide_indicatorSize">6dp</dimen>
+
+    <dimen name="index_ad_height">150dp</dimen>
+    <dimen name="index_ad_padding">10dp</dimen>
+    <dimen name="index_ad_imageTextMargin">8dp</dimen>
+
+    <dimen name="index_quotes_height">150dp</dimen>
+    <dimen name="index_btn_height">150dp</dimen>
 
     <dimen name="indicator_margin">10dp</dimen>
     <dimen name="bar_height">35dp</dimen>
+
     <!-- 修改个人信息 -->
     <dimen name="editUserInfo_line_height">8dp</dimen>
     <dimen name="editUserInfo_item_marginLeft">20dp</dimen>

@@ -1,6 +1,5 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,12 +7,18 @@
 
     <include layout="@layout/action_bar2"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_audio_visual"
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jyh.kxt.index.ui.fragment.AvFragment">
+        >
 
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_audio_visual"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.jyh.kxt.index.ui.fragment.AvFragment"/>
+
+    </com.library.widget.PageLoadLayout>
 
 </LinearLayout>

@@ -9,11 +9,13 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.VideoNavJson;
 import com.jyh.kxt.av.presenter.VideoPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.library.base.LibActivity;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -27,15 +29,16 @@ import butterknife.OnClick;
  * 视听-视听
  */
 
-public class VideoFragment extends BaseFragment {
+public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.vp_video_list) ViewPager vpVideoList;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private VideoPresenter videoPresenter;
 
-    private String[] mTitles;
     private List<Fragment> fragmentList;
+    private String[] tabs;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -43,35 +46,18 @@ public class VideoFragment extends BaseFragment {
 
         videoPresenter = new VideoPresenter(this);
 
-        mTitles = getResources().getStringArray(R.array.nav_video_test);
+        plRootView.setOnAfreshLoadListener(this);
 
-        generateListFragment();
-
-        FragmentManager fm = getChildFragmentManager();
-        vpVideoList.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
-        stlNavigationBar.setViewPager(vpVideoList, mTitles);
+        videoPresenter.init();
 
         videoPresenter.addOnPageChangeListener(vpVideoList);
-    }
-
-    private void generateListFragment() {
-        fragmentList = new ArrayList<>();
-
-        for (int i = 0; i < mTitles.length; i++) {
-            VideoItemFragment itemFragment = new VideoItemFragment();
-            Bundle args = new Bundle();
-            args.putString(IntentConstant.NAME, mTitles[i]);
-            itemFragment.setArguments(args);
-
-            fragmentList.add(itemFragment);
-        }
     }
 
     @OnClick(R.id.iv_more)
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_more:
-                videoPresenter.more();
+                videoPresenter.more(tabs);
                 break;
         }
     }
@@ -83,5 +69,40 @@ public class VideoFragment extends BaseFragment {
             videoPresenter.index = data.getIntExtra(IntentConstant.INDEX, 0);
             stlNavigationBar.setCurrentTab(videoPresenter.index);
         }
+    }
+
+    public void ininTab(List<VideoNavJson> videoNavJsons) {
+        int size = videoNavJsons.size();
+        tabs = new String[size];
+        generateListFragment(videoNavJsons);
+
+        stlNavigationBar.setViewPager(vpVideoList, tabs);
+
+        plRootView.loadOver();
+    }
+
+    private void generateListFragment(List<VideoNavJson> videoNavJsons) {
+        fragmentList = new ArrayList<>();
+
+        for (int i = 0; i < tabs.length; i++) {
+
+            VideoNavJson videoNav = videoNavJsons.get(i);
+            tabs[i] = videoNav.getName();
+            VideoItemFragment itemFragment = new VideoItemFragment();
+            Bundle args = new Bundle();
+            args.putString(IntentConstant.NAME, tabs[i]);
+            args.putString(IntentConstant.CODE, videoNav.getId());
+            itemFragment.setArguments(args);
+
+            fragmentList.add(itemFragment);
+        }
+
+        FragmentManager fm = getChildFragmentManager();
+        vpVideoList.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+
     }
 }

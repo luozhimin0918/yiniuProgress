@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.library.widget.viewpager.BannerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/index_slide"
+    android:background="@null"
+    app:autoPlayDuration="5000"
+    app:indicatorMargin="@dimen/index_slide_indicator"
+    app:indicatorPosition="centerBottom"
+    app:indicatorShape="oval"
+    app:indicatorSpace="@dimen/index_slide_indicator"
+    app:scrollDuration="1100"
+    app:selectedIndicatorColor="@color/selectedIndicatorColor"
+    app:selectedIndicatorHeight="@dimen/index_slide_indicatorSize"
+    app:selectedIndicatorWidth="@dimen/index_slide_indicatorSize"
+    app:unSelectedIndicatorColor="@color/unselectedIndicatorColor"
+    app:unSelectedIndicatorHeight="@dimen/index_slide_indicatorSize"
+    app:unSelectedIndicatorWidth="@dimen/index_slide_indicatorSize"/>

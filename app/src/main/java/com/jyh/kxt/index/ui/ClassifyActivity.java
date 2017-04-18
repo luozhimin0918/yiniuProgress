@@ -14,6 +14,8 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.widget.OptionLayout;
 import com.jyh.kxt.index.presenter.ClassifyPresenter;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,6 +36,7 @@ public class ClassifyActivity extends BaseActivity {
     private ClassifyPresenter classifyPresenter;
 
     private int index;
+    private String[] tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class ClassifyActivity extends BaseActivity {
         tvBarTitle.setText("分类");
 
         index = getIntent().getIntExtra(IntentConstant.INDEX, 0);
+        tabs = getIntent().getStringArrayExtra(IntentConstant.ACTIONNAV);
+
+        olContent.generateCheckBox(Arrays.asList(tabs));
+
         olContent.setSelectItemIndex(index);
 
         olContent.setOnItemCheckBoxClick(new OptionLayout.OnItemCheckBoxClick() {
@@ -64,6 +71,7 @@ public class ClassifyActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         index = intent.getIntExtra(IntentConstant.INDEX, 0);
+        tabs = getIntent().getStringArrayExtra(IntentConstant.ACTIONNAV);
         olContent.setSelectItemIndex(index);
     }
 

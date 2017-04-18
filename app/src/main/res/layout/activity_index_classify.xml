@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        app:array="@array/nav_video_test"
         app:columnSpace="25dp"
         app:defaultBackground="@drawable/bg_classify_default"
         app:defaultFontColor="@color/font_color5"

@@ -24,9 +24,7 @@
         tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
         tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
         tl:tl_tab_padding="@dimen/navigationBarPadding"
-        >
-
-    </com.library.widget.tablayout.SegmentTabLayout>
+        />
 
     <ImageView
         android:id="@+id/iv_right_icon2"

@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.library.widget.PageLoadLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigationBar2Height"
-        android:background="@color/line_color2">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.library.widget.tablayout.SlidingTabLayout
-            android:id="@+id/stl_navigation_bar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/navigationBar2Height"
-            tl:tl_indicator_color="@color/blue"
-            tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
-            tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
-            tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+            android:background="@color/line_color2">
 
-            tl:tl_tab_padding="10dp"
+            <com.library.widget.tablayout.SlidingTabLayout
+                android:id="@+id/stl_navigation_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navigationBar2Height"
+                android:paddingRight="@dimen/navigationBar2ImageWidth"
+                tl:tl_indicator_color="@color/blue"
+                tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+                tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
 
-            tl:tl_textSelectColor="@color/tabSelColor"
-            tl:tl_textUnselectColor="@color/tabUnSelColor"
-            tl:tl_textsize="@dimen/describe_font_size4"
-            android:paddingRight="@dimen/navigationBar2ImageWidth"
-            />
+                tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
 
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="@dimen/navigationBar2ImageWidth"
-            android:layout_height="match_parent"
-            android:src="@mipmap/icon_more"
-            android:layout_gravity="center_vertical|right"
-            android:paddingRight="@dimen/navigationBar2ImagePaddingLeft"
-            android:paddingLeft="@dimen/navigationBar2ImagePaddingRight"
-            android:background="@drawable/bg_more"
-            />
-    </FrameLayout>
+                tl:tl_tab_padding="10dp"
+                tl:tl_textSelectColor="@color/tabSelColor"
+                tl:tl_textUnselectColor="@color/tabUnSelColor"
+                tl:tl_textsize="@dimen/describe_font_size4"
+                />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_video_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="@dimen/navigationBar2ImageWidth"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|right"
+                android:background="@drawable/bg_more"
+                android:paddingLeft="@dimen/navigationBar2ImagePaddingRight"
+                android:paddingRight="@dimen/navigationBar2ImagePaddingLeft"
+                android:src="@mipmap/icon_more"
+                />
+        </FrameLayout>
 
-    </android.support.v4.view.ViewPager>
-</LinearLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_video_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+</com.library.widget.PageLoadLayout>

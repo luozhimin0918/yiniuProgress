@@ -1,17 +1,15 @@
 package com.library.base.http;
 
 import android.content.Context;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.library.util.EncryptionUtils;
+import com.library.util.ObserverToJson;
 import com.library.widget.window.ToastView;
 
 import java.lang.reflect.ParameterizedType;
@@ -74,7 +72,7 @@ public class VolleyRequest {
                              final Map<String, String> mParams, final HttpListener<T> mHttpListener) {
 
         this.superclassTypeParameter = getSuperclassTypeParameter(mHttpListener.getClass());
-
+        SsX509TrustManager.allowAllSSL();
         StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
 
             @Override
@@ -85,24 +83,33 @@ public class VolleyRequest {
                         return;
                     }
 
-                    JSONObject responseJson = JSONObject.parseObject(response);
-                    int status = responseJson.getInteger("status");
-                    String data = responseJson.getString("data");
+                    EncryptionUtils.parseToString(response, VarConstant.KEY, new ObserverToJson() {
+                        @Override
+                        protected void toJsonString(String json) {
+                            try {
+                                org.json.JSONObject object=new org.json.JSONObject(json);
+                                int status = object.getInt("status");
+                                String data = object.getString("data");
 
-                    if (status == 1) {
-                        T resultT = null;
-                        if (superclassTypeParameter.parseType == 1) {
-                            resultT = JSON.parseObject(data, superclassTypeParameter.classType);
-                        } else if (superclassTypeParameter.parseType == 2) {
+                                if (status == 1) {
+                                    T resultT = null;
+                                    if (superclassTypeParameter.parseType == 1) {
+                                        resultT = JSON.parseObject(data, superclassTypeParameter.classType);
+                                    } else if (superclassTypeParameter.parseType == 2) {
 
-                            Type classType = superclassTypeParameter.classType;
-                            resultT = (T) JSON.parseArray(data, (Class) classType);
+                                        Type classType = superclassTypeParameter.classType;
+                                        resultT = (T) JSON.parseArray(data, (Class) classType);
+                                    }
+                                    mHttpListener.onResponse(resultT);
+                                } else {
+                                    mHttpListener.onErrorResponse(null);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mHttpListener.onErrorResponse(null);
+                            }
                         }
-                        mHttpListener.onResponse(resultT);
-                    } else {
-                        mHttpListener.onErrorResponse(null);
-                    }
-
+                    });
                 } catch (Exception e) {
                     mHttpListener.onErrorResponse(null);
                     e.printStackTrace();

@@ -6,23 +6,28 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.presenter.NewsPresenter;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,11 +37,12 @@ import butterknife.OnClick;
  * 创建日期:2017/4/12.
  */
 
-public class NewsFragment extends BaseFragment {
+public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
 
     private NewsPresenter newsPresenter;
 
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
+    @BindView(R.id.pl_rootView)public PageLoadLayout plRootView;
     @BindView(R.id.vp_news_list) ViewPager vpNewsList;
 
     private List<Fragment> fragmentList;
@@ -48,13 +54,15 @@ public class NewsFragment extends BaseFragment {
         newsPresenter = new NewsPresenter(this);
 
         newsPresenter.init();
+
+        plRootView.setOnAfreshLoadListener(this);
     }
 
     @OnClick(R.id.iv_more)
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_more:
-                newsPresenter.more();
+                newsPresenter.more(tabs);
                 break;
         }
     }
@@ -70,16 +78,16 @@ public class NewsFragment extends BaseFragment {
 
     /**
      * 初始化首页内容
-     *
-     * @param newsNavs
+     *  @param newsNavs
      * @param slides
      * @param shortcuts
      * @param quotes
-     * @param ads
+     * @param ad
      * @param news
+     * @param list
      */
     public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts, List<QuotesJson> quotes,
-                         List<SlideJson> ads, List<NewsJson> news) {
+                         AdJson ad, List<NewsJson> news, ArrayList<String> list) {
         if (newsNavs == null) return;
         int size = newsNavs.size();
         tabs = new String[size];
@@ -90,14 +98,16 @@ public class NewsFragment extends BaseFragment {
             NewsItemFragment itemFragment = new NewsItemFragment();
             Bundle args = new Bundle();
             args.putString(IntentConstant.NAME, tabs[i]);
+            args.putString(IntentConstant.CODE, newsNavs.get(i).getCode());
             args.putInt(IntentConstant.INDEX, i);
             if (i == 0) {
                 //首页
                 args.putParcelableArrayList(IntentConstant.NEWS_SLIDE, (ArrayList<? extends Parcelable>) slides);
                 args.putParcelableArrayList(IntentConstant.NEWS_SHORTCUTS, (ArrayList<? extends Parcelable>) shortcuts);
                 args.putParcelableArrayList(IntentConstant.NEWS_QUOTES, (ArrayList<? extends Parcelable>) quotes);
-                args.putParcelableArrayList(IntentConstant.NEWS_ADS, (ArrayList<? extends Parcelable>) ads);
+                args.putParcelable(IntentConstant.NEWS_ADS, ad);
                 args.putParcelableArrayList(IntentConstant.NEWS_NEWS, (ArrayList<? extends Parcelable>) news);
+                args.putStringArrayList(IntentConstant.NEWS_LIST, list);
             }
             itemFragment.setArguments(args);
             fragmentList.add(itemFragment);
@@ -106,5 +116,11 @@ public class NewsFragment extends BaseFragment {
         vpNewsList.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(), fragmentList));
         stlNavigationBar.setViewPager(vpNewsList, tabs);
         newsPresenter.addOnPageChangeListener(vpNewsList);
+        plRootView.loadOver();
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+
     }
 }

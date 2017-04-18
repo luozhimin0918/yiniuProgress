@@ -4,12 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.VideoNavJson;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
+import com.library.widget.window.ToastView;
+
+import java.util.List;
 
 /**
  * 项目名:Kxt
@@ -23,6 +33,8 @@ public class VideoPresenter extends BasePresenter {
     @BindObject VideoFragment videoFragment;
 
     public int index = 0;
+    private RequestQueue queue;
+    private VolleyRequest request;
 
     public VideoPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -47,9 +59,38 @@ public class VideoPresenter extends BasePresenter {
         });
     }
 
-    public void more() {
+    public void more(String[] tabs) {
         Intent intent = new Intent(mContext, ClassifyActivity.class);
         intent.putExtra(IntentConstant.INDEX, index);
+        intent.putExtra(IntentConstant.ACTIONNAV, tabs);
         ((Activity) mContext).startActivityForResult(intent, IntentConstant.REQUESTCODE1);
+    }
+
+    public void init() {
+
+        videoFragment.plRootView.loadWait();
+
+        queue = videoFragment.getQueue();
+        request = new VolleyRequest(mContext, queue);
+        request.doGet(HttpConstant.VIDEO_NAV, new HttpListener<List<VideoNavJson>>() {
+            @Override
+            protected void onResponse(List<VideoNavJson> videoNavJsons) {
+                if (videoNavJsons != null)
+                    videoFragment.ininTab(videoNavJsons);
+                else
+                    onErrorResponse(null);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                try {
+                    videoFragment.plRootView.loadError();
+                    ToastView.makeText3(mContext, mContext.getString(R.string.toast_error_load));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

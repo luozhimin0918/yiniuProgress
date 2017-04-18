@@ -54,4 +54,8 @@
     <color name="star_color3">#E74B31</color>
 
     <color name="selected_point">#C2DFFF</color>
+
+    <!-- 下标点颜色 -->
+    <color name="selectedIndicatorColor">#ffffff</color>
+    <color name="unselectedIndicatorColor">#66ffffff</color>
 </resources>

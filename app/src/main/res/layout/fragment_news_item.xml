@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<com.library.widget.PageLoadLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,4 +14,4 @@
         android:divider="@null">
 
     </com.library.widget.handmark.PullToRefreshListView>
-</FrameLayout>
+</com.library.widget.PageLoadLayout>
