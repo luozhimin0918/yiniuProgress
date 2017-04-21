@@ -18,9 +18,9 @@ public class WebPresenter extends BasePresenter {
         super(iBaseView);
     }
 
-    public void addWebView() {
+    public void addWebView(String url) {
         WebBuild webBuild = new LoadX5WebView(mContext).build();
-        webBuild.loadUrl("http://www.17sucai.com/pins/demoshow/23876");
+        webBuild.loadUrl(url);
 
         webActivity.llWebParent.addView(webBuild.getWebParentView());
     }

@@ -68,6 +68,9 @@
             android:name=".index.ui.ClassifyActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".main.ui.activity.NewsContentActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>

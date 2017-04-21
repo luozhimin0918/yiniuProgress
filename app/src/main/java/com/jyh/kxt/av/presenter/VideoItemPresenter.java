@@ -1,39 +1,28 @@
 package com.jyh.kxt.av.presenter;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.text.TextUtils;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.adapter.VideoAdapter;
 import com.jyh.kxt.av.json.VideoListJson;
-import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.av.ui.fragment.VideoItemFragment;
-import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.utils.UmengShareTool;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.window.ToastView;
-import com.tencent.smtt.sdk.VideoActivity;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +36,11 @@ public class VideoItemPresenter extends BasePresenter {
     private String id;
     private VolleyRequest request;
 
+    private String lastId = "";
+
+    private VideoAdapter videoAdapter;
+    private boolean isMore;
+
     public VideoItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -56,79 +50,36 @@ public class VideoItemPresenter extends BasePresenter {
         id = arguments.getString(IntentConstant.CODE);
         queue = videoItemFragment.getQueue();
         request = new VolleyRequest(mContext, queue);
+        initLoad(null);
+    }
+
+    private void initLoad(final PullToRefreshBase refreshView) {
         request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
             @Override
             protected void onResponse(final List<VideoListJson> videoListJsons) {
                 if (videoListJsons != null) {
-                    videoItemFragment.plvContent.setAdapter(new BaseListAdapter<VideoListJson>(videoListJsons) {
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            final ViewHolder holder;
-                            if (convertView == null) {
-                                holder = new ViewHolder();
-                                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, null);
-                                holder.iv = (ImageView) convertView.findViewById(R.id.iv_img);
-                                holder.ivMore = (ImageView) convertView.findViewById(R.id.iv_more);
-                                holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-                                holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
-                                holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
-                                holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
-                                convertView.setTag(holder);
-                            } else {
-                                holder = (ViewHolder) convertView.getTag();
-                            }
-
-                            final VideoListJson video = videoListJsons.get(position);
-                            Glide.with(mContext).load(HttpConstant.IMG_URL + video.getPicture()).error(R.mipmap.ico_def_load).placeholder
-                                    (R.mipmap.ico_def_load).into
-                                    (holder.iv);
-                            holder.tvTitle.setText(video.getTitle());
-                            try {
-                                holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time())*1000));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                holder.tvTime.setText("00:00");
-                            }
-                            holder.tvCommentCount.setText(video.getNum_comment());
-                            holder.tvPlayCount.setText(video.getNum_play());
-
-                            holder.ivMore.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UmengShareTool.initUmengLayout((BaseActivity) mContext, video.getTitle(), "http://www.baidu.com",
-                                            "http://www.baidu" +
-                                                    ".com",
-                                            null, null, holder.ivMore, null);
-                                }
-                            });
-                            holder.iv.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(mContext, VideoDetailActivity.class);
-                                    mContext.startActivity(intent);
-                                }
-                            });
-
-                            return convertView;
-                        }
-
-                        class ViewHolder {
-                            public ImageView iv;
-                            public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount;
-                            public ImageView ivMore;
-                        }
-                    });
+                    checkList(videoListJsons);
+                    videoAdapter = new VideoAdapter(mContext, videoListJsons);
+                    videoItemFragment.plvContent.setAdapter(videoAdapter);
                     videoItemFragment.plRootView.loadOver();
-                } else
+                    if (refreshView != null)
+                        refreshView.onRefreshComplete();
+                } else {
                     onErrorResponse(null);
+                    if (refreshView != null)
+                        refreshView.onRefreshComplete();
+                }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 try {
+
+                    if (refreshView != null)
+                        refreshView.onRefreshComplete();
                     videoItemFragment.plRootView.loadError();
-                    ToastView.makeText3(mContext, mContext.getString(R.string.toast_error_load));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -143,12 +94,80 @@ public class VideoItemPresenter extends BasePresenter {
             object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION, com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION_VALUE);
             object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM, com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM_VALUE);
             object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_ID, id);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_LASTID, 1);
+            if (!TextUtils.isEmpty(lastId))
+                object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_LASTID, lastId);
             url = url + com.jyh.kxt.base.constant.VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
             url = "";
         }
         return url;
+    }
+
+    /**
+     * 刷新
+     *
+     * @param refreshView
+     */
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        lastId = "";
+        initLoad(refreshView);
+    }
+
+    /**
+     * 加载更多
+     *
+     * @param refreshView
+     */
+    public void onPullUpToRefresh(final PullToRefreshBase refreshView) {
+
+        if (isMore)
+
+            request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
+                @Override
+                protected void onResponse(List<VideoListJson> list) {
+                    if (list != null) {
+                        checkList(list);
+                        videoAdapter.addData(list);
+                        videoAdapter.notifyDataSetChanged();
+                    }
+                    refreshView.onRefreshComplete();
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    refreshView.onRefreshComplete();
+                }
+            });
+        else {
+            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+            refreshView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    refreshView.onRefreshComplete();
+                }
+            }, 500);
+        }
+    }
+
+    /**
+     * 更新lastId
+     *
+     * @param list
+     */
+    private void checkList(List<VideoListJson> list) {
+        if (list == null) {
+            lastId = "";
+            return;
+        }
+        int size = list.size();
+        lastId = list.get(size - 1).getId();
+        if (size <= com.jyh.kxt.base.constant.VarConstant.LIST_MAX_SIZE) {
+            isMore = false;
+        } else {
+            isMore = true;
+            list.remove(size - 1);
+        }
     }
 }

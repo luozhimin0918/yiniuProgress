@@ -11,14 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/navigationBar2Height"
-            android:background="@color/line_color2"
-            android:gravity="center"
-            android:text="2017-4-18 星期二"
-            android:textColor="@color/font_color3"/>
+        <include layout="@layout/layout_flash_time_bar"/>
 
         <com.library.widget.handmark.PullToRefreshListView
             android:id="@+id/lv_content"

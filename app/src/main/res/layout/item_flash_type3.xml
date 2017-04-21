@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/flash_type3_padding"
+                android:paddingRight="@dimen/flash_type3_padding"
+                android:paddingTop="@dimen/flash_type3_padding"
+    >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_left_gq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="@dimen/flash_type3_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="16:30"/>
+
+        <ImageView
+            android:id="@+id/iv_guoqi"
+            android:layout_width="@dimen/flash_type3_flagSize"
+            android:layout_height="@dimen/flash_type3_flagSize"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/flash_type3_flagTop"
+            android:src="@color/ampm_text_color"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ll_left_gq"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="美国6月EIA WAT原油一年货币供应远期均价5000左右"
+                android:textColor="@color/font_color5"
+                android:textSize="@dimen/describe_font_size2"/>
+
+            <TextView
+                android:id="@+id/tv_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_title"
+                android:layout_marginTop="@dimen/flash_type3_describeTop"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/date_describe"
+                android:textColor="@color/font_color3"/>
+
+            <RelativeLayout
+                android:id="@+id/ll_publish"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/flash_type3_publishHeight"
+                android:layout_below="@+id/tv_describe"
+                android:layout_marginTop="@dimen/flash_type3_publishTop"
+                android:orientation="horizontal">
+
+                <com.jyh.kxt.base.widget.StarView
+                    android:id="@+id/ll_star"
+                    android:layout_width="@dimen/flash_type3_starWidth"
+                    android:layout_height="@dimen/flash_type3_starHeight"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/flash_type3_starTop"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@id/ll_star"
+                    android:orientation="horizontal"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <include layout="@layout/layout_flash_bottom_bar"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_time_day"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/flash_timeBarHeight"
+    android:background="@color/line_color2"
+    android:gravity="center"
+    android:text="2017-4-18 星期二"
+    android:textColor="@color/font_color3"
+    android:textSize="@dimen/describe_font_size1"/>

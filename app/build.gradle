@@ -25,6 +25,9 @@ android {
         }
         signingConfig signingConfigs.config
     }
+
+    useLibrary 'org.apache.http.legacy'
+
     buildTypes {
         release {
             minifyEnabled false
@@ -57,7 +60,6 @@ dependencies {
     compile project(':playerlibrary')
     compile project(':superplayerlibrary')
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
@@ -74,6 +76,10 @@ dependencies {
     compile files('libs/wechat-sdk-android-with-mta-1.1.6.jar')
     compile files('libs/weiboSDKCore_3.1.4.jar')
     compile project(':Pushlib')
-    compile files('libs/autobahn-0.5.0.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
+    compile files('libs/autobahn.jar')
+
+    compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+    
 }

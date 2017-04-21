@@ -42,7 +42,7 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_video, LibActivity.StatusBarColor.THEME1);
+        setContentView(R.layout.fragment_video);
 
         videoPresenter = new VideoPresenter(this);
 

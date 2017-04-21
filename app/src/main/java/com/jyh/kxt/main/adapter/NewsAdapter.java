@@ -68,6 +68,14 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
         return convertView;
     }
 
+    public void addData(List<NewsJson> newsJsons) {
+        this.newsJsons.addAll(newsJsons);
+    }
+
+    public void setData(List<NewsJson> data) {
+        this.newsJsons = data;
+    }
+
     class ViewHolder {
         public TextView tvTitle, tvAuthor, tvTime;
         public ImageView ivPhoto;

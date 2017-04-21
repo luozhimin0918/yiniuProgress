@@ -7,6 +7,7 @@ import com.jyh.kxt.av.presenter.VideoItemPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import butterknife.BindView;
  * Created by Mr'Dai on 2017/4/10.
  * 视听-视听-视听Item栏目
  */
-public class VideoItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
+public class VideoItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshListView
+        .OnRefreshListener2 {
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
@@ -33,6 +35,10 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
         videoItemPresenter = new VideoItemPresenter(this);
 
         plRootView.setOnAfreshLoadListener(this);
+
+        plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+
+        plvContent.setOnRefreshListener(this);
 
         Bundle arguments = getArguments();
         name = arguments.getString(IntentConstant.NAME);
@@ -49,5 +55,15 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
     @Override
     public void OnAfreshLoad() {
 
+    }
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        videoItemPresenter.onPullDownToRefresh(refreshView);
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+        videoItemPresenter.onPullUpToRefresh(refreshView);
     }
 }

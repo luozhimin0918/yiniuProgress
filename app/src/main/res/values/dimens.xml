@@ -120,6 +120,37 @@
     <dimen name="newsItemImageViewWidth">114dp</dimen>
     <dimen name="newsItemTitleMarginLeft">12dp</dimen>
 
+    <!-- 快讯 -->
+    <dimen name="flash_timeBarHeight">28dp</dimen>
+
+    <dimen name="flash_bottom_height">18dp</dimen>
+    <dimen name="flash_bottom_width">56dp</dimen>
+    <dimen name="flash_bottom_padding">10dp</dimen>
+    <dimen name="flash_bottom_padding2">5dp</dimen>
+    <dimen name="flash_bottom_padding3">60dp</dimen>
+
+    <dimen name="flash_type1_padding">10dp</dimen>
+    <dimen name="flash_type1_marginRight">10dp</dimen>
+
+    <dimen name="flash_type2_padding">10dp</dimen>
+    <dimen name="flash_type2_margin">10dp</dimen>
+
+    <dimen name="flash_type3_padding">10dp</dimen>
+    <dimen name="flash_type3_margin">10dp</dimen>
+    <dimen name="flash_type3_flagSize">30dp</dimen>
+    <dimen name="flash_type3_flagTop">8dp</dimen>
+    <dimen name="flash_type3_describeTop">14dp</dimen>
+    <dimen name="flash_type3_publishHeight">30dp</dimen>
+    <dimen name="flash_type3_publishTop">14dp</dimen>
+    <dimen name="flash_type3_starWidth">30dp</dimen>
+    <dimen name="flash_type3_starHeight">10dp</dimen>
+    <dimen name="flash_type3_starTop">10dp</dimen>
+
+    <dimen name="flash_type4_padding">10dp</dimen>
+    <dimen name="flash_type4_marginRight">10dp</dimen>
+    <dimen name="flash_type4_imgHeight">100dp</dimen>
+    <dimen name="flash_type4_imgTop">10dp</dimen>
+
     <!--星星大小-->
     <dimen name="star_size">9dp</dimen>
     <dimen name="star_margins">1dp</dimen>

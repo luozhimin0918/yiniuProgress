@@ -19,12 +19,12 @@ import butterknife.BindView;
 
 public class FlashFragment extends BaseFragment {
 
-    @BindView(R.id.tv_time) TextView tvTime;
+    @BindView(R.id.tv_time_day) TextView tvTime;
     @BindView(R.id.lv_content) PullToRefreshListView lvContent;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_flash, LibActivity.StatusBarColor.THEME1);
+        setContentView(R.layout.fragment_flash);
     }
 
 }

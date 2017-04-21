@@ -24,6 +24,19 @@ public class VarConstant {
     public static final String HTTP_LASTID = "last_id";
     public static final String HTTP_CONTENT = "?content=";
 
+    /**
+     * 跳转
+     */
+    public static final String OCLASS_DATA = "data";//数据
+    public static final String OCLASS_FLASH = "kuaixun";//快讯
+    public static final String OCLASS_RL = "rili";//日历
+    public static final String OCLASS_QUOTES = "quotes";//行情
+    public static final String OCLASS_VIDEO = "video";//视听
+    public static final String OCLASS_NEWS = "news";//要闻
+
+    public static final String OACTION_LIST = "list";//列表
+    public static final String OACTION_INDEX = "index";//首页
+    public static final String OACTION_ETF = "etf";//ETF
 
     /**
      * umeng 配置信息
@@ -42,12 +55,22 @@ public class VarConstant {
     public static final String QQ_APPKEY = "ddd0261bbb4375911faf75d5be3d2e34";
 
     /**
+     * 列表最大数
+     */
+    public static final int LIST_MAX_SIZE = 30;
+
+    /**
      * 要闻首页类型
      */
-    public static final String NEWS_NAV = "newsNav";
-    public static final String NEWS_SLIDE = "slide";
-    public static final String NEWS_SHORTCUT = "shortcut";
-    public static final String NEWS_AD = "ad";
-    public static final String NEWS_QUOTES = "quotes";
-    public static final String NEWS_LIST = "news";
+    public static final String NEWS_NAV = "newsNav";//导航
+    public static final String NEWS_SLIDE = "slide";//轮播图
+    public static final String NEWS_SHORTCUT = "shortcut";//按钮
+    public static final String NEWS_AD = "ad";//广告
+    public static final String NEWS_QUOTES = "quotes";//行情
+    public static final String NEWS_LIST = "news";//要闻
+
+
+    public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
+    public static final String SOCKET_KEY = "android12345";
+
 }

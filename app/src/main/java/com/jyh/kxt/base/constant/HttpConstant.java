@@ -36,8 +36,10 @@ public class HttpConstant {
 
     public static final String INDEX_MAIN = BASE_URL + "index/main" + JWT;//首页
     public static final String NEWS_LIST = BASE_URL + "news/list";//要闻列表
+    public static final String NEWS_CONTENT = BASE_URL + "news/detail";//要闻详情
     public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//版本信息
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
 
     public static final String CJRL = BASE_URL + "cjrl/data" + JWT;
+
 }

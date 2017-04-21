@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -28,6 +29,7 @@ import com.jyh.kxt.index.ui.fragment.ProbeFragment;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 主界面
@@ -37,6 +39,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.rb_home)public RadioButton rbHome;
+    @BindView(R.id.rb_audio_visual)public RadioButton rbAudioVisual;
+    @BindView(R.id.rb_market)public RadioButton rbMarket;
+    @BindView(R.id.rb_datum)public RadioButton rbDatum;
+    @BindView(R.id.rb_probe)public RadioButton rbProbe;
 
     private MainPresenter mainPresenter;
 
@@ -54,11 +61,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     //Fragment相关
     public BaseFragment currentFragment;
-    private HomeFragment homeFragment;
-    private AvFragment avFragment;
-    private MarketFragment marketFragment;
-    private DatumFragment datumFragment;
-    private ProbeFragment probeFragment;
+    public HomeFragment homeFragment;
+    public AvFragment avFragment;
+    public MarketFragment marketFragment;
+    public DatumFragment datumFragment;
+    public ProbeFragment probeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

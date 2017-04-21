@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -42,7 +39,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     private NewsPresenter newsPresenter;
 
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
-    @BindView(R.id.pl_rootView)public PageLoadLayout plRootView;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.vp_news_list) ViewPager vpNewsList;
 
     private List<Fragment> fragmentList;
@@ -78,7 +75,8 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     /**
      * 初始化首页内容
-     *  @param newsNavs
+     *
+     * @param newsNavs
      * @param slides
      * @param shortcuts
      * @param quotes
@@ -122,5 +120,11 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void OnAfreshLoad() {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        newsPresenter.onDestroy();
     }
 }

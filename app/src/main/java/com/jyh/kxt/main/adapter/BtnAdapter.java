@@ -1,6 +1,7 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,9 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.cache.MemoryCache;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.VarConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.SlideJson;
 import com.library.util.SystemUtil;
 
@@ -64,7 +70,7 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                jump((MainActivity) context,slideJson);
             }
         });
 
@@ -86,6 +92,64 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.tv);
             imageView = (ImageView) itemView.findViewById(R.id.iv);
+        }
+    }
+
+    /**
+     * 跳转
+     *
+     * @param slideJson
+     */
+    public static void jump(final MainActivity context, SlideJson slideJson) {
+        if (slideJson == null || context == null) return;
+        if (TextUtils.isEmpty(slideJson.getHref())) {
+
+            String o_class = slideJson.getO_class();
+            String o_action = slideJson.getO_action();
+            String o_id = slideJson.getO_id();
+
+            try {
+                switch (o_class) {
+                    case VarConstant.OCLASS_DATA:
+                        //数据
+                        context.rbDatum.performClick();
+                        context.rbDatum.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                context.datumFragment.onTabSelect(1);
+                            }
+                        }, 500);
+                        break;
+                    case VarConstant.OCLASS_FLASH:
+                        //快讯
+                        context.rbHome.performClick();
+                        context.homeFragment.onTabSelect(1);
+                        break;
+                    case VarConstant.OCLASS_NEWS:
+                        //要闻
+                        context.rbHome.performClick();
+                        break;
+                    case VarConstant.OCLASS_QUOTES:
+                        //行情
+                        context.rbMarket.performClick();
+
+                        break;
+                    case VarConstant.OCLASS_RL:
+                        //日历
+                        context.rbDatum.performClick();
+
+                        break;
+                    case VarConstant.OCLASS_VIDEO:
+                        //视听
+                        context.rbAudioVisual.performClick();
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Intent intent = new Intent(context, WebActivity.class);
+            context.startActivity(intent);
         }
     }
 

@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoNavJson;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BasePresenter;
@@ -17,7 +16,6 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.widget.window.ToastView;
 
 import java.util.List;
 
@@ -86,7 +84,6 @@ public class VideoPresenter extends BasePresenter {
                 super.onErrorResponse(error);
                 try {
                     videoFragment.plRootView.loadError();
-                    ToastView.makeText3(mContext, mContext.getString(R.string.toast_error_load));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
