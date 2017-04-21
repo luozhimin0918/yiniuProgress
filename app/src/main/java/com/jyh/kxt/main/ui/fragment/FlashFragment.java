@@ -1,12 +1,14 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.library.base.LibActivity;
-import com.library.widget.handmark.PullToRefreshListView;
+import com.jyh.kxt.main.presenter.FlashPresenter;
+import com.jyh.kxt.main.widget.FastInfoPinnedListView;
+import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
+import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 
 import butterknife.BindView;
 
@@ -17,14 +19,31 @@ import butterknife.BindView;
  * 创建日期:2017/4/12.
  */
 
-public class FlashFragment extends BaseFragment {
+public class FlashFragment extends BaseFragment implements FastInfoPinnedListView.FooterListener {
 
-    @BindView(R.id.tv_time_day) TextView tvTime;
-    @BindView(R.id.lv_content) PullToRefreshListView lvContent;
+    @BindView(R.id.lv_content) public FastInfoPullPinnedListView lvContent;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
+    private FlashPresenter flashPresenter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_flash);
+
+        flashPresenter = new FlashPresenter(this);
+        FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
+        refreshableView.addFooterListener(flashPresenter);
+        lvContent.setOnRefreshListener(flashPresenter);
+        flashPresenter.init();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        flashPresenter.onDestroy();
+    }
+
+    @Override
+    public void startLoadMore() {
+
+    }
 }

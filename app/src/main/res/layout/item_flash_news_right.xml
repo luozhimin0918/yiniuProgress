@@ -28,20 +28,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ico_def_load"/>
 
             <TextView
                 android:id="@+id/tv_content"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:maxLines="2"
                 android:paddingLeft="@dimen/flash_type2_padding"
                 android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
                 android:textSize="@dimen/title_font_size"/>
+
+            <ImageView
+                android:id="@+id/iv_flash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ico_def_load"/>
         </LinearLayout>
 
         <include layout="@layout/layout_flash_bottom_bar"/>

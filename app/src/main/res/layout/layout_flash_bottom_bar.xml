@@ -5,11 +5,17 @@
                 android:paddingTop="@dimen/flash_bottom_padding"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/flash_bottom_height"
+        android:textSize="@dimen/content_font_size"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:id="@+id/tv_more"/>
     <ImageView
         android:id="@+id/iv_more"
         android:layout_width="@dimen/flash_bottom_width"
-        android:layout_height="@dimen/flash_bottom_height"
-        android:background="@drawable/sel_flash_item_more"/>
+        android:layout_height="@dimen/flash_bottom_height"/>
 
     <ImageView
         android:id="@+id/iv_share"

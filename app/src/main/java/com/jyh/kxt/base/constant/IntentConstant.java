@@ -37,4 +37,8 @@ public class IntentConstant {
     public static final String SOCKET_DOMAIN = "domain";
     public static final String SOCKET_REMOTE_ADDR = "remote_addr";
     public static final String SOCKET_ORIGIN = "origin";
+    public static final String SOCKET_CMD = "cmd";
+    public static final String SOCKET_STATUS = "status";
+    public static final String SOCKET_MSG = "msg";
+
 }

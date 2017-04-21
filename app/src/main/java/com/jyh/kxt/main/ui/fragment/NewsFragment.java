@@ -125,6 +125,5 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        newsPresenter.onDestroy();
     }
 }

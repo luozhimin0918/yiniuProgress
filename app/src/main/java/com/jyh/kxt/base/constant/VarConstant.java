@@ -73,4 +73,20 @@ public class VarConstant {
     public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
     public static final String SOCKET_KEY = "android12345";
 
+    public static final String SOCKET_CMD_HISTORY = "history";
+    public static final String SOCKET_CMD_TIMELY = "timely";
+    public static final String SOCKET_CMD_LOGIN = "login";
+
+    public static final String SOCKET_DO_DELETE = "delete";
+    public static final String SOCKET_DO_MODIFY = "modify";
+
+    public static final String SOCKET_FLASH_KUAIXUN = "KUAIXUN";
+    public static final String SOCKET_FLASH_CJRL = "CJRL";
+    public static final String SOCKET_FLASH_KXTNEWS = "KXTNEWS";
+
+    public static final String SOCKET_FLASH_LEFT = "l";
+    public static final String SOCKET_FLASH_RIGHT = "r";
+    public static final String SOCKET_FLASH_TOP = "u";
+    public static final String SOCKET_FLASH_BOTTOM = "b";
+
 }

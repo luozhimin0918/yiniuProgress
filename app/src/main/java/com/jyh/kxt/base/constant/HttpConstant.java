@@ -30,6 +30,7 @@ public class HttpConstant {
 
     public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
     public static final String IMG_URL = "http://img.kuaixun360.com/";
+    public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
     public static final String CONFIG = BASE_URL + "app/config" + JWT;//配置信息
     public static final String VERSION = BASE_URL + "version/android" + JWT;//版本信息

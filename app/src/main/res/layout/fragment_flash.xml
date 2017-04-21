@@ -6,17 +6,10 @@
 
     >
 
-    <LinearLayout
+    <com.jyh.kxt.main.widget.FastInfoPullPinnedListView
+        android:id="@+id/lv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/layout_flash_time_bar"/>
-
-        <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/lv_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+        android:divider="@null"/>
 
 </com.library.widget.PageLoadLayout>
