@@ -91,12 +91,12 @@ public class VideoItemPresenter extends BasePresenter {
         String url = HttpConstant.VIDEO_LIST;
         try {
             JSONObject object = new JSONObject();
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION, com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION_VALUE);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM, com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM_VALUE);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_ID, id);
+            object.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+            object.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+            object.put(VarConstant.HTTP_ID, id);
             if (!TextUtils.isEmpty(lastId))
-                object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_LASTID, lastId);
-            url = url + com.jyh.kxt.base.constant.VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
+                object.put(VarConstant.HTTP_LASTID, lastId);
+            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
             url = "";
@@ -163,7 +163,7 @@ public class VideoItemPresenter extends BasePresenter {
         }
         int size = list.size();
         lastId = list.get(size - 1).getId();
-        if (size <= com.jyh.kxt.base.constant.VarConstant.LIST_MAX_SIZE) {
+        if (size <= VarConstant.LIST_MAX_SIZE) {
             isMore = false;
         } else {
             isMore = true;

@@ -3,12 +3,14 @@ package com.library.base.http;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.library.util.EncryptionUtils;
+import com.library.util.LogUtil;
 import com.library.util.ObserverToJson;
 import com.library.widget.window.ToastView;
 
@@ -53,11 +55,20 @@ public class VolleyRequest {
     }
 
     public <T> void doGet(String url, HttpListener<T> mHttpListener) {
-        doGet(url, null, mHttpListener);
+        enqueue(Request.Method.GET, url, null, mHttpListener);
     }
 
     public <T> void doGet(String url, Map<String, String> mParams, HttpListener<T> mHttpListener) {
         enqueue(Request.Method.GET, url, mParams, mHttpListener);
+    }
+
+    public <T> void doGet(String url, JSONObject mParams, HttpListener<T> mHttpListener) {
+        try {
+            url = url + EncryptionUtils.createJWT(VarConstant.KEY, mParams.toString());
+            enqueue(Request.Method.GET, url, null, mHttpListener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public <T> void doPost(String url, HttpListener<T> mHttpListener) {
@@ -87,7 +98,9 @@ public class VolleyRequest {
                         @Override
                         protected void toJsonString(String json) {
                             try {
-                                org.json.JSONObject object=new org.json.JSONObject(json);
+                               LogUtil.e("toJsonString", "响应:" + json);
+
+                                org.json.JSONObject object = new org.json.JSONObject(json);
                                 int status = object.getInt("status");
                                 String data = object.getString("data");
 
@@ -120,7 +133,7 @@ public class VolleyRequest {
             public void onErrorResponse(VolleyError error) {
                 mHttpListener.onErrorResponse(error);
                 if (!isToastFailed) {
-                    ToastView.makeText3(mContext,"网络出错:"+error.getMessage());
+                    ToastView.makeText3(mContext, "网络出错:" + error.getMessage());
                 }
             }
         });
@@ -164,5 +177,12 @@ public class VolleyRequest {
 
         public Type classType;
         public int parseType;//解析类型1则直接转成Class   如果为2 则解析成List集合
+    }
+
+    public JSONObject getJsonParam() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+        jsonObject.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+        return jsonObject;
     }
 }

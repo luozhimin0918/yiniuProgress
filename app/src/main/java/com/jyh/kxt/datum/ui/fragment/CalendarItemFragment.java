@@ -5,9 +5,10 @@ import android.os.Bundle;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.datum.adapter.CalendarItemAdapter;
+import com.jyh.kxt.datum.bean.CalendarType;
+import com.jyh.kxt.datum.presenter.CalendarItemPresenter;
 import com.library.widget.handmark.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -20,6 +21,11 @@ import butterknife.BindView;
 public class CalendarItemFragment extends BaseFragment {
     @BindView(R.id.ptrlv_content) PullToRefreshListView ptrlvContent;
 
+    private CalendarItemPresenter mCalendarItemPresenter;
+    private CalendarItemAdapter calendarItemAdapter;
+
+    public String calendarDate;
+
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_calendar_item);
@@ -28,11 +34,21 @@ public class CalendarItemFragment extends BaseFragment {
     @Override
     public void userVisibleHint() {
         super.userVisibleHint();
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add("xxx");
-        }
+
+        calendarDate = getCalendarDate();
+        mCalendarItemPresenter = new CalendarItemPresenter(this);
+        mCalendarItemPresenter.requestPublishData();
+    }
+
+    public void setCalendarAdapter(List<CalendarType> calendarBeen) {
+        calendarItemAdapter = new CalendarItemAdapter(getContext(), calendarBeen);
         ptrlvContent.getRefreshableView().setDividerHeight(0);
-        ptrlvContent.setAdapter(new CalendarItemAdapter(getContext(), list));
+        ptrlvContent.setAdapter(calendarItemAdapter);
+    }
+
+    public String getCalendarDate() {
+        CalendarFragment parentFragment = (CalendarFragment) getParentFragment();
+        String calendarDate = parentFragment.getCalendarDate(this);
+        return calendarDate;
     }
 }

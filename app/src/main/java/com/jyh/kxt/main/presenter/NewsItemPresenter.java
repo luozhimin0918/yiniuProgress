@@ -26,14 +26,13 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsHomeHeaderJson;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
@@ -41,7 +40,6 @@ import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
-import com.library.util.ObserverCall;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
 
@@ -481,7 +479,7 @@ public class NewsItemPresenter extends BasePresenter {
                 object.put(VarConstant.HTTP_CODE, code);
             if (!TextUtils.isEmpty(lastId))
                 object.put(VarConstant.HTTP_LASTID, lastId);
-            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(com.library.base.http.VarConstant.KEY, object.toString());
+            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

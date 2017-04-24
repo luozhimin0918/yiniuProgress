@@ -171,8 +171,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
 
                 Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).error(R.mipmap
-                        .ico_def_load).placeholder(R.mipmap.ico_def_load).into(leftHolder
-                        .ivFlash);
+                        .ico_def_load).placeholder(R.mipmap.ico_def_load).into(rlHolder
+                        .ivFlag);
 
                 String time2 = "00:00";
                 try {

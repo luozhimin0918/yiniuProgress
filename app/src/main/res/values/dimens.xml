@@ -173,4 +173,6 @@
     <dimen name="feedbackMarginTop3">30dp</dimen>
     <dimen name="feedbackDrawablePadding">5dp</dimen>
 
+    <dimen name="btn_stroke_width1">0.7dp</dimen>
+    <dimen name="btn_corner_radius1">3dp</dimen>
 </resources>

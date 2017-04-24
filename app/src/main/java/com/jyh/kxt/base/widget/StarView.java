@@ -1,9 +1,6 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +12,11 @@ import com.jyh.kxt.R;
  */
 
 public class StarView extends LinearLayout {
+
+    private final int STAR_COUNT = 3;
+
+    private int starSize, starMargins;
+
     public StarView(Context context) {
         this(context, null);
     }
@@ -31,17 +33,13 @@ public class StarView extends LinearLayout {
     private void initStar() {
         setOrientation(LinearLayout.HORIZONTAL);
 
-        int starSize = (int) getResources().getDimension(R.dimen.star_size);
-        int starMargins = (int) getResources().getDimension(R.dimen.star_margins);
+        starSize = (int) getResources().getDimension(R.dimen.star_size);
+        starMargins = (int) getResources().getDimension(R.dimen.star_margins);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < STAR_COUNT; i++) {
             ImageView starView = new ImageView(getContext());
 
-            int color = ContextCompat.getColor(getContext(), R.color.star_color1);
-
-            Drawable drawable = getResources().getDrawable(R.mipmap.icon_star);
-            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            starView.setImageDrawable(drawable);
+            starView.setImageResource(R.mipmap.icon_star1);
 
             LayoutParams starParams = new LayoutParams(starSize, starSize);
             starParams.setMargins(0, 0, starMargins, 0);
@@ -49,16 +47,31 @@ public class StarView extends LinearLayout {
         }
     }
 
-    public void refreshConfig(int selectCount, boolean isMatter) {
-        for (int i = 0; i < selectCount; i++) {
+    public void setImportance(String importance) {
+
+        int selectCount = 0; //等级  高中低
+        boolean isHigh = false; //是否是 => 高
+        switch (importance) {
+            case "低":
+                selectCount = 1;
+                break;
+            case "中":
+                selectCount = 2;
+                break;
+            case "高":
+                selectCount = 3;
+                isHigh = true;
+                break;
+        }
+
+
+        for (int i = 0; i < STAR_COUNT; i++) {
+            ImageView starView = (ImageView) getChildAt(i);
+
             if (i < selectCount) {
-                ImageView starView = (ImageView) getChildAt(i);
-
-                int color = ContextCompat.getColor(getContext(), R.color.star_color2);
-
-                Drawable drawable = getResources().getDrawable(R.mipmap.icon_star);
-                drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-                starView.setImageDrawable(drawable);
+                starView.setImageResource(isHigh ? R.mipmap.icon_star3 : R.mipmap.icon_star2);
+            } else {
+                starView.setImageResource(R.mipmap.icon_star1);
             }
         }
     }

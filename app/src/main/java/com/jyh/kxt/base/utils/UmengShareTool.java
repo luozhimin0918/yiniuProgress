@@ -18,7 +18,7 @@ import android.widget.PopupWindow;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.Config;

@@ -3,7 +3,7 @@ package com.jyh.kxt.base.utils;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.SlideJson;

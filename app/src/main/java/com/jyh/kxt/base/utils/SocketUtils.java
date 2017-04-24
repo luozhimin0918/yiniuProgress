@@ -1,7 +1,7 @@
 package com.jyh.kxt.base.utils;
 
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 
 import org.json.JSONObject;

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.text.format.DateFormat;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -24,6 +25,10 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @BindView(R.id.stl_navigation_bar) public SlidingTabLayout stlNavigationBar;
     @BindView(R.id.vp_calendar_list) public ViewPager vpCalendarList;
+
+    public static enum AdapterType {
+        TITLE, CONTENT1, CONTENT2, CONTENT3, NO_DATA
+    }
 
     private CalendarPresenter calendarPresenter;
 
@@ -70,5 +75,18 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 得到Fragment 对应的时间
+     *
+     * @param fragment
+     * @return
+     */
+    public String getCalendarDate(Fragment fragment) {
+        int indexOf = fragmentList.indexOf(fragment);
+        Long aLong = calendarPresenter.dataLongList.get(indexOf);
+        String mCalendarDate = (String) DateFormat.format("yyyy-MM-dd", aLong);
+        return mCalendarDate;
     }
 }

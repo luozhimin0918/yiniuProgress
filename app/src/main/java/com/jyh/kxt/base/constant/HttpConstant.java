@@ -16,9 +16,12 @@ public class HttpConstant {
     static {
         try {
             JSONObject object = new JSONObject();
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION, com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION_VALUE);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM, com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM_VALUE);
-            JWT = com.jyh.kxt.base.constant.VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
+            object.put(VarConstant.HTTP_VERSION, VarConstant
+                    .HTTP_VERSION_VALUE);
+            object.put(VarConstant.HTTP_SYSTEM, VarConstant
+                    .HTTP_SYSTEM_VALUE);
+            JWT = VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY,
+                    object.toString());
         } catch (Exception e) {
             e.printStackTrace();
             JWT = "";
@@ -42,5 +45,7 @@ public class HttpConstant {
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
 
     public static final String CJRL = BASE_URL + "cjrl/data" + JWT;
+
+    public static final String RILI = BASE_URL + "data/rili" + VarConstant.HTTP_CONTENT;
 
 }

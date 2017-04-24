@@ -2,7 +2,7 @@ package com.jyh.kxt;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.library.util.EncryptionUtils;
 
 import org.junit.Test;

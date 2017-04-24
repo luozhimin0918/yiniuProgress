@@ -33,4 +33,5 @@ public interface IBaseView {
      * @return
      */
     RequestQueue getQueue();
+
 }

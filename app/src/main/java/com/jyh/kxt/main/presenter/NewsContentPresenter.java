@@ -62,10 +62,10 @@ public class NewsContentPresenter extends BasePresenter {
         String url = HttpConstant.NEWS_CONTENT;
         try {
             JSONObject object = new JSONObject();
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION, com.jyh.kxt.base.constant.VarConstant.HTTP_VERSION_VALUE);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM, com.jyh.kxt.base.constant.VarConstant.HTTP_SYSTEM_VALUE);
-            object.put(com.jyh.kxt.base.constant.VarConstant.HTTP_ID, newsContentActivity.id);
-            url = url + com.jyh.kxt.base.constant.VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
+            object.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+            object.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+            object.put(VarConstant.HTTP_ID, newsContentActivity.id);
+            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,10 +7,10 @@
     android:padding="15dp">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ll_left_gq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -19,7 +19,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
-            android:src="@color/ampm_text_color" />
+            android:src="@color/ampm_text_color"/>
 
         <com.jyh.kxt.base.widget.StarView
             android:id="@+id/ll_star"
@@ -31,6 +31,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -40,23 +41,12 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="50dp"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="38dp"
             android:layout_toLeftOf="@+id/tv_time"
-            android:text="美国6月EIA WAT原油一年货币供应远期均价5000左右"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/describe_font_size2"/>
-
-        <TextView
-            android:id="@+id/tv_describe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_marginTop="14dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/date_describe"
-            android:textColor="@color/font_color3"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -67,27 +57,14 @@
             android:text="04:00"
             android:textSize="@dimen/describe_font_size1"/>
 
-        <LinearLayout
-            android:id="@+id/ll_publish"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_below="@+id/tv_describe"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/main_rg_home"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/ll_publish"
-            android:layout_marginTop="14dp"
-            android:background="@color/line_color"
-            android:orientation="vertical"/>
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignLeft="@+id/rl_content"
+        android:layout_below="@+id/rl_content"
+        android:layout_marginTop="14dp"
+        android:background="@color/line_color"
+        android:orientation="vertical"/>
 </RelativeLayout>
