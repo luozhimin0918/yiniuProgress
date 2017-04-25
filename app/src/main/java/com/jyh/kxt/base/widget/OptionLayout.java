@@ -9,7 +9,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -31,8 +30,13 @@ import java.util.Set;
  */
 public class OptionLayout extends FrameLayout implements View.OnClickListener {
 
-    public interface OnItemCheckBoxClick {
-        void onItemClick(int position, CheckBox mCheckBox);
+    public static abstract class OnItemCheckBoxClick {
+        public abstract void onItemClick(int position, CheckBox mCheckBox);
+
+        //条件错误回调 0 低于最小限制   1 高出最大限制
+        public void onConditionError(int position, CheckBox mCheckBox, int errorType) {
+
+        }
     }
 
     //计算出来的宽度
@@ -45,8 +49,7 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     //列间距
     private int columnSpace;
 
-    private Drawable defaultBackground;
-    private Drawable selectedBackground;
+    private int checkBoxBackground;
     private int defaultFontColor;
     private int selectedFontColor;
 
@@ -56,6 +59,10 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     private List<String> radioTxtArray;
 
     private boolean disabledClick = false;
+
+    //最大最小的选择数量
+    private int minSelectCount = 0;
+    private int maxSelectCount = 0;
 
     /**
      * CheckBox 单击
@@ -93,13 +100,13 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             itemHeight = a.getDimensionPixelSize(R.styleable.OptionLayout_itemHeight, 0);
             columnCount = a.getDimensionPixelSize(R.styleable.OptionLayout_columnCount, 3);
 
-            defaultBackground = a.getDrawable(R.styleable.OptionLayout_defaultBackground);
-            selectedBackground = a.getDrawable(R.styleable.OptionLayout_selectedBackground);
+            checkBoxBackground = a.getResourceId(R.styleable.OptionLayout_checkBoxBackground, 0);
 
-            defaultFontColor = a.getColor(R.styleable.OptionLayout_defaultFontColor, ContextCompat.getColor(getContext(), R.color
-                    .font_color5));
-            selectedFontColor = a.getColor(R.styleable.OptionLayout_selectedFontColor, ContextCompat.getColor(getContext(), R.color
-                    .font_color5));
+            defaultFontColor = a.getColor(R.styleable.OptionLayout_defaultFontColor,
+                    ContextCompat.getColor(getContext(), R.color.font_color5));
+
+            selectedFontColor = a.getColor(R.styleable.OptionLayout_selectedFontColor,
+                    ContextCompat.getColor(getContext(), R.color.font_color5));
 
             int arrayId = a.getResourceId(R.styleable.OptionLayout_array, 0);
             if (arrayId != 0) {
@@ -192,14 +199,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             CheckBox checkBox = (CheckBox) this.getChildAt(i);
             if (index == i) {
                 checkBox.setChecked(true);
-                if (selectedBackground != null)
-                    checkBox.setBackground(selectedBackground);
-                checkBox.setTextColor(selectedFontColor);
             } else {
                 checkBox.setChecked(false);
-                if (defaultBackground != null)
-                    checkBox.setBackground(defaultBackground);
-                checkBox.setTextColor(defaultFontColor);
             }
         }
     }
@@ -214,14 +215,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             CheckBox checkBox = (CheckBox) this.getChildAt(i);
             if (set.contains(radioTxtArray.get(i))) {
                 checkBox.setChecked(true);
-                if (selectedBackground != null)
-                    checkBox.setBackground(selectedBackground);
-                checkBox.setTextColor(selectedFontColor);
             } else {
                 checkBox.setChecked(false);
-                if (defaultBackground != null)
-                    checkBox.setBackground(defaultBackground);
-                checkBox.setTextColor(defaultFontColor);
             }
         }
     }
@@ -238,7 +233,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
         for (int i = 0; i < radioTxtArray.size(); i++) {
             CheckBox checkBox = new CheckBox(getContext());
 
-            checkBox.setBackgroundResource(R.drawable.selector_option_layout);
+            checkBox.setBackgroundResource(checkBoxBackground);
+
             checkBox.setTextColor(colorStateList);
 
             checkBox.setButtonDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -293,10 +289,51 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
         this.disabledClick = disabledClick;
     }
 
+
     @Override
     public void onClick(View v) {
+        int selectCount = 0;
+        for (int index = 0; index < allCheckBox.size(); index++) {
+            CheckBox myCheckBox = (CheckBox) getChildAt(index);
+            if (myCheckBox.isChecked()) {
+                selectCount++;
+            }
+        }
+
+        CheckBox checkBox = (CheckBox) v;
+        if (selectCount < minSelectCount) {
+            checkBox.setChecked(true);
+
+            if (onItemCheckBoxClick != null) {
+                onItemCheckBoxClick.onConditionError(allCheckBox.indexOf(v), (CheckBox) v, 0);
+            }
+            return;
+        }
+
+        if (selectCount > maxSelectCount) {
+            checkBox.setChecked(false);
+
+            if (onItemCheckBoxClick != null) {
+                onItemCheckBoxClick.onConditionError(allCheckBox.indexOf(v), (CheckBox) v, 1);
+            }
+            return;
+        }
         if (onItemCheckBoxClick != null) {
             onItemCheckBoxClick.onItemClick(allCheckBox.indexOf(v), (CheckBox) v);
         }
+    }
+
+    public void simpleInitConfig() {
+        setSelectItemIndex(0);
+        setMinSelectCount(1);
+        setMaxSelectCount(1);
+    }
+
+    public void setMinSelectCount(int minSelectCount) {
+        this.minSelectCount = minSelectCount;
+    }
+
+    public void setMaxSelectCount(int maxSelectCount) {
+        this.maxSelectCount = maxSelectCount;
     }
 }

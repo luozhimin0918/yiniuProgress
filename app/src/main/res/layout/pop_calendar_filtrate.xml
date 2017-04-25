@@ -33,6 +33,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+                app:checkBoxBackground="@drawable/bg_classify_default1"
+                app:defaultFontColor="@color/font_color5"
+                app:selectedFontColor="@color/white"
+
                 app:array="@array/calendar_state"
                 app:columnSpace="36dp"
                 app:itemHeight="39dp"
@@ -50,8 +54,13 @@
                 android:textSize="@dimen/describe_font_size3"/>
 
             <com.jyh.kxt.base.widget.OptionLayout
+                android:id="@+id/ol_importance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                app:checkBoxBackground="@drawable/bg_classify_default1"
+                app:defaultFontColor="@color/font_color5"
+                app:selectedFontColor="@color/white"
 
                 app:array="@array/calendar_significance"
                 app:columnSpace="36dp"
@@ -70,8 +79,13 @@
                 android:textSize="@dimen/describe_font_size3"/>
 
             <com.jyh.kxt.base.widget.OptionLayout
+                android:id="@+id/ol_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                app:checkBoxBackground="@drawable/bg_classify_default1"
+                app:defaultFontColor="@color/font_color5"
+                app:selectedFontColor="@color/white"
 
                 app:array="@array/calendar_silver"
                 app:columnSpace="36dp"
@@ -90,8 +104,13 @@
                 android:textSize="@dimen/describe_font_size3"/>
 
             <com.jyh.kxt.base.widget.OptionLayout
+                android:id="@+id/ol_judge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                app:checkBoxBackground="@drawable/bg_classify_default1"
+                app:defaultFontColor="@color/font_color5"
+                app:selectedFontColor="@color/white"
 
                 app:array="@array/calendar_silver"
                 app:columnSpace="36dp"

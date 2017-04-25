@@ -1,6 +1,7 @@
 package com.jyh.kxt.datum.presenter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -37,14 +38,18 @@ public class CalendarItemPresenter extends BasePresenter {
 
 
     public void requestPublishData() {
+        calendarItemFragment.pllContent.loadWait();
+
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
 
         JSONObject json = volleyRequest.getJsonParam();
         json.put("date", calendarItemFragment.calendarDate);
+        volleyRequest.setTag(calendarItemFragment.calendarDate);
 
         volleyRequest.doGet(HttpConstant.RILI, json, new HttpListener<List<CalendarBean>>() {
             @Override
             protected void onResponse(List<CalendarBean> calendarBeen) {
+                calendarItemFragment.pllContent.loadOver();
 
                 for (CalendarBean calendarItemBean : calendarBeen) {
 
@@ -61,6 +66,12 @@ public class CalendarItemPresenter extends BasePresenter {
                 }
                 calendarItemFragment.setCalendarAdapter(calendarTypeList);
             }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                calendarItemFragment.pllContent.loadError();
+
+            }
         });
     }
 
@@ -69,6 +80,7 @@ public class CalendarItemPresenter extends BasePresenter {
         CalendarTitleBean titleBean = new CalendarTitleBean();
         titleBean.setAdapterType(CalendarFragment.AdapterType.TITLE);
         titleBean.setName("数据");
+        titleBean.setSpaceType(0);
         calendarTypeList.add(titleBean);
 
 
@@ -91,6 +103,7 @@ public class CalendarItemPresenter extends BasePresenter {
         CalendarTitleBean titleBean = new CalendarTitleBean();
         titleBean.setAdapterType(CalendarFragment.AdapterType.TITLE);
         titleBean.setName("事件");
+        titleBean.setSpaceType(1);
         calendarTypeList.add(titleBean);
 
         if (data == null || data.size() == 0) {
@@ -113,6 +126,7 @@ public class CalendarItemPresenter extends BasePresenter {
         CalendarTitleBean titleBean = new CalendarTitleBean();
         titleBean.setAdapterType(CalendarFragment.AdapterType.TITLE);
         titleBean.setName("假期");
+        titleBean.setSpaceType(1);
         calendarTypeList.add(titleBean);
 
         if (data == null || data.size() == 0) {

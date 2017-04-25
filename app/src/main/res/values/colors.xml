@@ -68,4 +68,13 @@
     <color name="rise_color">#EA4E2A</color>
     <color name="decline_color">#60B280</color>
     <color name="unaltered_color">#888887</color>
+
+    <color name="shape_bg1">#f1f2f6</color>
+
+    <!--控件颜色-->
+    <color name="check_box_color1">#EFF0F4</color>
+    <color name="check_box_color2">#1B9BF2</color>
+
+    <color name="check_box_color3">#f1f2f6</color>
+    <color name="check_box_color4">#d9e8ff</color>
 </resources>

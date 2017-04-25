@@ -5,11 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.library.widget.handmark.PullToRefreshListView
-        android:id="@+id/ptrlv_content"
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.library.widget.handmark.PullToRefreshListView>
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/ptrlv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </com.library.widget.handmark.PullToRefreshListView>
+    </com.library.widget.PageLoadLayout>
 </LinearLayout>

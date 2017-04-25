@@ -14,12 +14,11 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         app:columnSpace="25dp"
-        app:defaultBackground="@drawable/bg_classify_default"
+        app:checkBoxBackground="@drawable/bg_classify_default"
         app:defaultFontColor="@color/font_color5"
+        app:selectedFontColor="@color/font_color8"
         app:itemHeight="40dp"
         app:rowSpace="15dp"
-        app:selectedBackground="@drawable/bg_classify_selected"
-        app:selectedFontColor="@color/font_color8"
         />
 
 </LinearLayout>

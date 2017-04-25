@@ -117,6 +117,22 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 0:
                 CalendarTitleBean mCalendarTitleBean = (CalendarTitleBean) mCalendarType;
                 viewHolder0.tvTitle.setText(mCalendarTitleBean.getName());
+
+                if (mCalendarTitleBean.getSpaceType() == 1) {
+                    View mPaddingView = new View(mContext);
+                    mPaddingView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color2));
+
+                    int paddingHeight = SystemUtil.dp2px(mContext, 10);
+                    ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            paddingHeight);
+
+                    mPaddingView.setLayoutParams(lp);
+                    mCalendarTitleBean.setSpaceType(2);
+
+                    viewHolder0.llContent.addView(mPaddingView, 0);
+                }
+
                 break;
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
@@ -236,6 +252,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     }
 
     class ViewHolder0 {
+        @BindView(R.id.ll_title_content) LinearLayout llContent;
         @BindView(R.id.tv_title) TextView tvTitle;
 
         public ViewHolder0(View view) {

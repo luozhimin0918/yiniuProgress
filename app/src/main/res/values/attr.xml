@@ -32,8 +32,9 @@
         <attr name="columnCount" format="integer"/>
         <attr name="itemHeight" format="dimension"/>
         <attr name="array" format="reference"/>
-        <attr name="selectedBackground"/>
-        <attr name="defaultBackground"/>
+
+        <attr name="checkBoxBackground" format="reference"/>
+
         <attr name="selectedFontColor"/>
         <attr name="defaultFontColor"/>
     </declare-styleable>

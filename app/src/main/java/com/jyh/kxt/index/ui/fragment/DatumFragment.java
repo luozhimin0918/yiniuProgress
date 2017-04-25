@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -15,12 +17,14 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.DataFragment;
+import com.jyh.kxt.index.presenter.DatumPresenter;
 import com.library.base.LibActivity;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,6 +36,8 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     @BindView(R.id.iv_right_icon2) ImageView ivCalendar;
     @BindView(R.id.iv_right_icon1) ImageView ivFiltrate;
+
+    private DatumPresenter datumPresenter;
 
     private BaseFragment dataFragment, calendarFragment;
     private BaseFragment lastFragment;
@@ -47,6 +53,8 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_datum, LibActivity.StatusBarColor.THEME1);
 
+        datumPresenter = new DatumPresenter(this);
+
         ivCalendar.setVisibility(View.VISIBLE);
         ivFiltrate.setImageResource(R.mipmap.icon_rili_sx);
 
@@ -55,7 +63,6 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         stlNavigationBar.setOnTabSelectListener(this);
 
         onTabSelect(0);
-
     }
 
     @OnClick({R.id.iv_right_icon1})
@@ -65,7 +72,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
 
         PopupUtil filtratePopup = new PopupUtil(getActivity());
-        filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
+        View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
+        datumPresenter.registerFiltrateAgency(filtrateView);
+
         PopupUtil.Config config = new PopupUtil.Config();
 
         config.outsideTouchable = true;
@@ -127,5 +136,13 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
      */
     public void setMonthToImageView(Bitmap monthToImageView) {
         ivCalendar.setImageBitmap(monthToImageView);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
     }
 }
