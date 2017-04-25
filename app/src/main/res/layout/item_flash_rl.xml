@@ -79,12 +79,13 @@
                     android:layout_marginTop="@dimen/flash_type3_starTop"/>
 
                 <LinearLayout
-                    android:id="@+id/ll_data"
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_exponent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/ll_star"
-                    android:orientation="horizontal"
-                    />
+                    android:layout_alignParentLeft="true"
+                    android:minWidth="60dp"
+                    android:orientation="horizontal"/>
+
             </RelativeLayout>
 
         </RelativeLayout>

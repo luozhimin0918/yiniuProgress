@@ -63,6 +63,6 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
 
     @Override
     public void OnAfreshLoad() {
-
+        newsItemPresenter.init(getArguments());
     }
 }

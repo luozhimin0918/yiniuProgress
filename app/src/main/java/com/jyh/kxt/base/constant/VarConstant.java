@@ -15,6 +15,7 @@ public class VarConstant {
     /**
      * 网络请求参数
      */
+    public static final String HTTP_CLIENT = "android";
     public static final String HTTP_VERSION = "version";
     public static final String HTTP_VERSION_VALUE = "1.0";
     public static final String HTTP_SYSTEM = "system";
@@ -87,6 +88,8 @@ public class VarConstant {
     public static final String SOCKET_FLASH_LEFT = "l";
     public static final String SOCKET_FLASH_RIGHT = "r";
     public static final String SOCKET_FLASH_TOP = "u";
-    public static final String SOCKET_FLASH_BOTTOM = "b";
+    public static final String SOCKET_FLASH_BOTTOM = "d";
 
+    public static final String IMPORTANCE_HIGH = "高";
+    public static final String IMPORTANCE_LOW = "低";
 }

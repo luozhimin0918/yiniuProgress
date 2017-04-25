@@ -8,6 +8,14 @@ package com.library.bean;
  * @Description:
  */
 public class EventBusClass {
+
+    public static final int EVENT_FLASH_FILTRATE = 1;//快讯筛选
+
+    public EventBusClass(int fromCode, Object intentObj) {
+        this.fromCode = fromCode;
+        this.intentObj = intentObj;
+    }
+
     /**
      * 来自哪里Code值
      */

@@ -18,4 +18,7 @@ public class SpConstant {
      * 主题
      */
     public static final String THEME = "theme";
+
+    public static final String FLASH_FILTRATE = "flash_rl_filtrate";
+    public static final String FLASH_FILTRATE_HIGH = "flash_filtrate_high";
 }

@@ -60,8 +60,6 @@ public class NewsPresenter extends BasePresenter {
     public int index = 0;
     private RequestQueue queue;
     private VolleyRequest request;
-    private WebSocketConnection connection;
-    private String kx_server;
 
     public NewsPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -180,107 +178,6 @@ public class NewsPresenter extends BasePresenter {
             }
         });
 
-        initSocket();
-    }
-
-    /**
-     * 初始化Socket
-     */
-    private void initSocket() {
-        connection = new WebSocketConnection();
-
-        connect();
-    }
-
-    /**
-     * 连接Socket
-     */
-    private void connect() {
-        String configStr = SPUtils.getString(mContext, SpConstant.CONFIG);
-        if (configStr != null) {
-            ConfigJson config = JSONObject.parseObject(configStr, ConfigJson.class);
-            if (config != null) {
-                SocketJson kuaixun_ws = config.getKuaixun_ws();
-                if (kuaixun_ws != null) {
-                    kx_server = kuaixun_ws.getServer();
-                    WebSocketOptions options = new WebSocketOptions();
-                    options.setReceiveTextMessagesRaw(true);
-                    options.setSocketConnectTimeout(30000);
-                    options.setSocketReceiveTimeout(10000);
-                    List<BasicNameValuePair> headers = new ArrayList<>();
-                    headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
-                    try {
-                        connection.connect(kx_server + SocketUtils.getToken(), null, connectionHandler, options, headers);
-                    } catch (WebSocketException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-    private long nowdate;
-    private WebSocket.ConnectionHandler connectionHandler = new WebSocket.ConnectionHandler() {
-        @Override
-        public void onOpen() {
-            handler.removeCallbacksAndMessages(null);
-            //发送心跳包
-            handler.sendEmptyMessageDelayed(1, 10000);
-        }
-
-        @Override
-        public void onClose(int i, String s) {
-
-        }
-
-        @Override
-        public void onTextMessage(String s) {
-            nowdate = System.currentTimeMillis();
-            try {
-                org.json.JSONObject object = new org.json.JSONObject(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onRawTextMessage(byte[] bytes) {
-            try {
-                org.json.JSONObject object = new org.json.JSONObject(new String(bytes, "UTF-8"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onBinaryMessage(byte[] bytes) {
-
-        }
-    };
-
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            connection.sendTextMessage("");
-            if ((System.currentTimeMillis() - nowdate) > 5000 && nowdate != 0) {
-                if (connection != null) {
-                    if (connection.isConnected())
-                        connection.disconnect();
-                    else
-                        connect();
-                } else {
-                    initSocket();
-                }
-            }
-            handler.sendEmptyMessageDelayed(1, 10000);
-            return false;
-        }
-    });
-
-    public void onDestroy() {
-        if (connection != null && connection.isConnected())
-            connection.disconnect();
-        connection = null;
     }
 
 }

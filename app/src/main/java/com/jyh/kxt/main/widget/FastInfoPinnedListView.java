@@ -567,16 +567,6 @@ public class FastInfoPinnedListView extends ListView {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return super.onTouchEvent(ev);
-    }
-
-
     public void invalidatePinnedView() {
         try {
             if (mPinnedSection != null && mPinnedSection.view != null) {
@@ -591,8 +581,6 @@ public class FastInfoPinnedListView extends ListView {
             e.printStackTrace();
         }
     }
-
-    //-- touch handling methods
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

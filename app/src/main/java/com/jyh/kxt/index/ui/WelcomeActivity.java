@@ -33,8 +33,6 @@ public class WelcomeActivity extends BaseActivity {
 
         welcomePresenter = new WelcomePresenter(this);
 
-        welcomePresenter.initView();
-
         welcomePresenter.initConfig();
 
 //        Glide.with(this).load(R.raw.qidong).listener(new RequestListener<Integer, GlideDrawable>() {

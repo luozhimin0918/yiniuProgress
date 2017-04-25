@@ -13,6 +13,15 @@ public class FlashJson {
     private String code;//类型 ["CJRL" 日历,"KUAIXUN" 快讯,"KXTNEWS" 要闻]
     private Object content;
     private boolean isColloct;//是否收藏
+    private boolean isShowMore;//是否显示更多
+
+    public boolean isShowMore() {
+        return isShowMore;
+    }
+
+    public void setShowMore(boolean showMore) {
+        isShowMore = showMore;
+    }
 
     @Override
     public String toString() {

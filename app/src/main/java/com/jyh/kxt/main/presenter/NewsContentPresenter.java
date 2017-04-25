@@ -2,6 +2,7 @@ package com.jyh.kxt.main.presenter;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
@@ -14,7 +15,6 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 
-import org.json.JSONObject;
 
 /**
  * 项目名:Kxt
@@ -39,7 +39,7 @@ public class NewsContentPresenter extends BasePresenter {
 
         queue = newsContentActivity.getQueue();
         request = new VolleyRequest(mContext, queue);
-        request.doGet(getUrl(), new HttpListener<Object>() {
+        request.doGet(getUrl(request), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
                 Log.i("INFO", "");
@@ -57,15 +57,13 @@ public class NewsContentPresenter extends BasePresenter {
         });
     }
 
-    private String getUrl() {
+    private String getUrl(VolleyRequest volleyRequest) {
 
         String url = HttpConstant.NEWS_CONTENT;
         try {
-            JSONObject object = new JSONObject();
-            object.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
-            object.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+            JSONObject object = volleyRequest.getJsonParam();
             object.put(VarConstant.HTTP_ID, newsContentActivity.id);
-            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
+            url = url + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
