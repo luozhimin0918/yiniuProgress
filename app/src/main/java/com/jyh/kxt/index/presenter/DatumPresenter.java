@@ -39,8 +39,13 @@ public class DatumPresenter extends BasePresenter {
         ButterKnife.bind(this, filtrateView);
 
         olState.simpleInitConfig();
+        olState.setSelectMode(1);
+
         olImportance.simpleInitConfig();
+        olImportance.setSelectMode(1);
+
         olArea.simpleInitConfig();
+        olArea.setSelectMode(1);
 
         olJudge.simpleInitConfig();
         olJudge.setMaxSelectCount(2);

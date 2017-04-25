@@ -60,6 +60,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
 
     private boolean disabledClick = false;
 
+    //0 默认类型点击之后重选   1 替换类型选新的CheckBox 之后将旧的给移除
+    private int selectMode = 0;
     //最大最小的选择数量
     private int minSelectCount = 0;
     private int maxSelectCount = 0;
@@ -293,16 +295,29 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int selectCount = 0;
+
         for (int index = 0; index < allCheckBox.size(); index++) {
             CheckBox myCheckBox = (CheckBox) getChildAt(index);
             if (myCheckBox.isChecked()) {
-                selectCount++;
+                if (selectMode == 0) {
+                    selectCount++;
+                } else {
+                    selectCount = minSelectCount;
+                    myCheckBox.setChecked(false);
+                }
             }
         }
 
         CheckBox checkBox = (CheckBox) v;
-        if (selectCount < minSelectCount) {
+        if (selectMode == 1) {
             checkBox.setChecked(true);
+        }
+
+        if (selectCount < minSelectCount) {
+
+            if (selectMode == 0) {
+                checkBox.setChecked(true);
+            }
 
             if (onItemCheckBoxClick != null) {
                 onItemCheckBoxClick.onConditionError(allCheckBox.indexOf(v), (CheckBox) v, 0);
@@ -335,5 +350,9 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
 
     public void setMaxSelectCount(int maxSelectCount) {
         this.maxSelectCount = maxSelectCount;
+    }
+
+    public void setSelectMode(int selectMode) {
+        this.selectMode = selectMode;
     }
 }

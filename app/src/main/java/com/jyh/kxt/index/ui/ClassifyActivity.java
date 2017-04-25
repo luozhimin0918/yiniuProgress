@@ -17,7 +17,6 @@ import com.jyh.kxt.index.presenter.ClassifyPresenter;
 import java.util.Arrays;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -53,6 +52,9 @@ public class ClassifyActivity extends BaseActivity {
 
         olContent.generateCheckBox(Arrays.asList(tabs));
 
+        olContent.setMinSelectCount(1);
+        olContent.setMaxSelectCount(1);
+        olContent.setSelectMode(1);
         olContent.setSelectItemIndex(index);
 
         olContent.setOnItemCheckBoxClick(new OptionLayout.OnItemCheckBoxClick() {
