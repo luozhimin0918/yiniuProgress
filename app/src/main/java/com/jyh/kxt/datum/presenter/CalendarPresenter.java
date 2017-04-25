@@ -26,8 +26,11 @@ import com.library.util.SystemUtil;
 import com.library.widget.datetimepicker.DateTimeUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,6 +53,18 @@ public class CalendarPresenter extends BasePresenter {
     }
 
     public void generateDateItem(long selectTimeMillis) {
+        dataLongList.clear();
+
+        //保证只有年月日
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            Date date = new Date(selectTimeMillis);
+            String format = simpleDateFormat.format(date);
+            selectTimeMillis = simpleDateFormat.parse(format).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         long oneDayLong = 1000 * 60 * 60 * 24;
 
         for (int i = (generateItemCount - 1) / 2; i >= 1; i--) {

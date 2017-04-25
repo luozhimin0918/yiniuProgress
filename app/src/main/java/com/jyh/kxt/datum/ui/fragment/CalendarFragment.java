@@ -39,6 +39,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         setContentView(R.layout.fragment_calendar);
 
         calendarPresenter = new CalendarPresenter(this);
+
         calendarPresenter.generateDateItem(System.currentTimeMillis());
 
         createItemFragments();
@@ -57,8 +58,8 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         stlNavigationBar.setViewPager(vpCalendarList);
 
         int itemPosition = (calendarPresenter.generateItemCount + 1) / 2;
-        vpCalendarList.setCurrentItem(itemPosition);
         vpCalendarList.addOnPageChangeListener(this);
+        vpCalendarList.setCurrentItem(itemPosition);
         calendarPresenter.updateSelectedColor(itemPosition);
     }
 
@@ -88,5 +89,21 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         Long aLong = calendarPresenter.dataLongList.get(indexOf);
         String mCalendarDate = (String) DateFormat.format("yyyy-MM-dd", aLong);
         return mCalendarDate;
+    }
+
+    public void gotoCorrespondItem(long timeInMillis) {
+        int indexOf = calendarPresenter.dataLongList.indexOf(timeInMillis);
+        if (indexOf != -1) {
+
+            vpCalendarList.setCurrentItem(indexOf);
+            calendarPresenter.updateSelectedColor(indexOf);
+
+        } else {//重新所有数据
+            fragmentList.clear();
+            vpCalendarList.removeAllViews();
+
+            calendarPresenter.generateDateItem(System.currentTimeMillis());
+            createItemFragments();
+        }
     }
 }

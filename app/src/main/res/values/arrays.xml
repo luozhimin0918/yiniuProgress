@@ -23,6 +23,12 @@
         <item>视听</item>
         <item>排行</item>
     </string-array>
+
+    <string-array name="nav_market">
+        <item>行情</item>
+        <item>自选</item>
+    </string-array>
+
     <string-array name="nav_datum">
         <item>日历</item>
         <item>数据</item>

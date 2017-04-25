@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -24,7 +22,6 @@ import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -65,35 +62,44 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         onTabSelect(0);
     }
 
-    @OnClick({R.id.iv_right_icon1})
+    @OnClick({R.id.iv_right_icon1, R.id.iv_right_icon2})
     public void onNavClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_right_icon1:
 
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
-        int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
+                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
+                int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
 
-        PopupUtil filtratePopup = new PopupUtil(getActivity());
-        View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
-        datumPresenter.registerFiltrateAgency(filtrateView);
+                PopupUtil filtratePopup = new PopupUtil(getActivity());
+                View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
+                datumPresenter.registerFiltrateAgency(filtrateView);
 
-        PopupUtil.Config config = new PopupUtil.Config();
+                PopupUtil.Config config = new PopupUtil.Config();
 
-        config.outsideTouchable = true;
-        config.alpha = 0.5f;
-        config.bgColor = 0X00000000;
+                config.outsideTouchable = true;
+                config.alpha = 0.5f;
+                config.bgColor = 0X00000000;
 
-        config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = WindowManager.LayoutParams.MATCH_PARENT;
-        config.height = popHeight;
-        filtratePopup.setConfig(config);
+                config.animationStyle = R.style.PopupWindow_Style2;
+                config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                config.height = popHeight;
+                filtratePopup.setConfig(config);
 
-        filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
-        filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
-            @Override
-            public void onDismiss() {
+                filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
 
-            }
-        });
+                    }
+                });
+
+                break;
+            case R.id.iv_right_icon2:
+                datumPresenter.openCalendar();
+                break;
+        }
+
     }
 
     @Override
@@ -138,11 +144,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         ivCalendar.setImageBitmap(monthToImageView);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+    public void gotoCorrespondItem(long timeInMillis) {
+        if (calendarFragment != null) {
+            ((CalendarFragment) calendarFragment).gotoCorrespondItem(timeInMillis);
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class BaseFragmentAdapter extends FragmentStatePagerAdapter {
         return listFragment.size();
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
+    }
 
     @Override
     public Parcelable saveState() {
