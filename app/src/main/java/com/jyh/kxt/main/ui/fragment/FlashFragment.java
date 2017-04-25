@@ -1,14 +1,26 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.main.presenter.FlashPresenter;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
+import com.library.bean.EventBusClass;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
-import com.library.widget.handmark.PullToRefreshBase;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -19,7 +31,7 @@ import butterknife.BindView;
  * 创建日期:2017/4/12.
  */
 
-public class FlashFragment extends BaseFragment implements FastInfoPinnedListView.FooterListener {
+public class FlashFragment extends BaseFragment {
 
     @BindView(R.id.lv_content) public FastInfoPullPinnedListView lvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
@@ -29,21 +41,45 @@ public class FlashFragment extends BaseFragment implements FastInfoPinnedListVie
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_flash);
 
+    }
+
+    @Override
+    public void userVisibleHint() {
+        super.userVisibleHint();
         flashPresenter = new FlashPresenter(this);
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(flashPresenter);
+        plRootView.setOnAfreshLoadListener(flashPresenter);
         lvContent.setOnRefreshListener(flashPresenter);
         flashPresenter.init();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        if(eventBus!=null&&eventBus.fromCode==EventBusClass.EVENT_FLASH_FILTRATE){
+            flashPresenter.filtrate();
+        }
+    }
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         flashPresenter.onDestroy();
     }
 
-    @Override
-    public void startLoadMore() {
-
-    }
 }

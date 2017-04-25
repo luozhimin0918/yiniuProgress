@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -42,8 +43,6 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -472,14 +471,12 @@ public class NewsItemPresenter extends BasePresenter {
     private String getUrl(String code) {
         String url = HttpConstant.NEWS_LIST;
         try {
-            JSONObject object = new JSONObject();
-            object.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
-            object.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+            JSONObject object = request.getJsonParam();
             if (!TextUtils.isEmpty(code))
                 object.put(VarConstant.HTTP_CODE, code);
             if (!TextUtils.isEmpty(lastId))
                 object.put(VarConstant.HTTP_LASTID, lastId);
-            url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
+            url = url + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

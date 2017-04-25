@@ -45,16 +45,16 @@ public class VideoItemPresenter extends BasePresenter {
         super(iBaseView);
     }
 
-    public void init(Bundle arguments) {
+    public void init(String id) {
         videoItemFragment.plRootView.loadWait();
-        id = arguments.getString(IntentConstant.CODE);
+        this.id = id;
         queue = videoItemFragment.getQueue();
         request = new VolleyRequest(mContext, queue);
         initLoad(null);
     }
 
     private void initLoad(final PullToRefreshBase refreshView) {
-        request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
+        request.doGet(getUrl(request), new HttpListener<List<VideoListJson>>() {
             @Override
             protected void onResponse(final List<VideoListJson> videoListJsons) {
                 if (videoListJsons != null) {
@@ -87,12 +87,10 @@ public class VideoItemPresenter extends BasePresenter {
         });
     }
 
-    private String getUrl() {
+    private String getUrl(VolleyRequest volleyRequest) {
         String url = HttpConstant.VIDEO_LIST;
         try {
-            JSONObject object = new JSONObject();
-            object.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
-            object.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+            com.alibaba.fastjson.JSONObject object = volleyRequest.getJsonParam();
             object.put(VarConstant.HTTP_ID, id);
             if (!TextUtils.isEmpty(lastId))
                 object.put(VarConstant.HTTP_LASTID, lastId);
@@ -123,7 +121,7 @@ public class VideoItemPresenter extends BasePresenter {
 
         if (isMore)
 
-            request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
+            request.doGet(getUrl(request), new HttpListener<List<VideoListJson>>() {
                 @Override
                 protected void onResponse(List<VideoListJson> list) {
                     if (list != null) {

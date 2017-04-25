@@ -1,14 +1,18 @@
 package com.jyh.kxt.av.ui.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.presenter.VideoItemPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
 
     private String name;
     private VideoItemPresenter videoItemPresenter;
+    private String id;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -42,8 +47,9 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
 
         Bundle arguments = getArguments();
         name = arguments.getString(IntentConstant.NAME);
+        id = arguments.getString(IntentConstant.CODE);
 
-        videoItemPresenter.init(arguments);
+        videoItemPresenter.init(id);
 
     }
 
@@ -54,7 +60,7 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
 
     @Override
     public void OnAfreshLoad() {
-
+        videoItemPresenter.init(id);
     }
 
     @Override

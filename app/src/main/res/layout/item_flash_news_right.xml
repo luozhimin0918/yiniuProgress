@@ -33,17 +33,17 @@
                 android:id="@+id/tv_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:maxLines="2"
                 android:paddingLeft="@dimen/flash_type2_padding"
+                android:layout_gravity="center_vertical"
                 android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
                 android:textSize="@dimen/title_font_size"/>
 
             <ImageView
                 android:id="@+id/iv_flash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/flash_img_width"
+                android:layout_height="@dimen/flash_img_height"
                 android:src="@mipmap/ico_def_load"/>
         </LinearLayout>
 

@@ -1,31 +1,49 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.constant.VarConstant;
+import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.StarView;
+import com.jyh.kxt.index.json.ConfigJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
+import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +75,33 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
+
+    public void setData(List<FlashJson> flashJsons) {
+        this.flashJsons = flashJsons;
+        inspiritDateInfo(this.flashJsons);
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<FlashJson> flashJsons) {
+        inspiritDateInfo2(flashJsons);
+        this.flashJsons.addAll(flashJsons);
+        notifyDataSetChanged();
+    }
+
+    public void addData(FlashJson flashJson) {
+        this.flashJsons.add(1, flashJson);
+        notifyDataSetChanged();
+    }
+
+    public List<FlashJson> getData() {
+        List data = new ArrayList(flashJsons);
+        for (Object o : data) {
+            if (o instanceof String) {
+                data.remove(o);
+            }
+        }
+        return new ArrayList<FlashJson>(data);
+    }
 
     @Override
     public int getCount() {
@@ -164,11 +209,23 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 }
                 kxHolder.tvTime.setText(time);
                 kxHolder.tvContent.setText(getString(kx.getTitle()));
-                setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null);
+                kxHolder.tvMore.setVisibility(View.VISIBLE);
+                kxHolder.ivMore.setVisibility(View.VISIBLE);
+                setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
+                        null, TYPE_KX);
+
+                if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
+                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                } else {
+                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                }
+
                 break;
             case TYPE_RL:
                 FlashJson flash_rl = (FlashJson) flashJsons.get(position);
                 Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
+
+                boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
 
                 Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).error(R.mipmap
                         .ico_def_load).placeholder(R.mipmap.ico_def_load).into(rlHolder
@@ -185,7 +242,53 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 rlHolder.tvTitle.setText(getString(rl.getTitle()));
                 rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
                         .getReality()));
-                setOnclick(rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, null, null);
+                rlHolder.tvMore.setVisibility(View.GONE);
+                rlHolder.ivMore.setVisibility(View.GONE);
+
+                /**
+                 * 前值 后值 等
+                 */
+                String describe = context.getResources().getString(R.string.date_describe,
+                        rl.getBefore(),
+                        rl.getForecast(),
+                        rl.getReality());
+
+                String reality = rl.getReality();
+                setDescribeForegroundColor(rlHolder.tvContent, describe, reality);
+
+                /**
+                 *  重要程度
+                 */
+                rlHolder.star.setImportance(rl.getImportance());
+
+                /**
+                 * 公布状态, 已公布,未公布 利多 ,金银 , 石油   影响较小等
+                 */
+                setAlarmState(reality,
+                        Integer.parseInt(rl.getEffecttype()),
+                        rl.getEffect(),
+                        rlHolder.llExponent);
+
+
+                setOnclick(rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
+                        null, TYPE_RL);
+                /**
+                 * 重要性判断
+                 */
+                if (onlyShowHigh) {
+                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                    } else {
+                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                        return null;
+                    }
+                } else {
+                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                    } else {
+                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                    }
+                }
                 break;
             case TYPE_LEFT:
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
@@ -193,6 +296,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 Glide.with(context).load(left.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(leftHolder
                         .ivFlash);
+
+                Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
 
                 String time3 = "00:00";
                 try {
@@ -202,9 +307,17 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 }
                 leftHolder.tvTime.setText(time3);
                 leftHolder.tvContent.setText(getString(left.getTitle()));
+                leftHolder.tvMore.setVisibility(View.GONE);
+                leftHolder.ivMore.setVisibility(View.GONE);
+
+                if (VarConstant.IMPORTANCE_HIGH.equals(left.getImportance())) {
+                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                } else {
+                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                }
 
                 setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_LEFT);
+                        .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
                 break;
             case TYPE_RIGHT:
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
@@ -221,9 +334,17 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 }
                 rightHolder.tvTime.setText(time4);
                 rightHolder.tvContent.setText(getString(right.getTitle()));
+                rightHolder.tvMore.setVisibility(View.GONE);
+                rightHolder.ivMore.setVisibility(View.GONE);
+
+                if (VarConstant.IMPORTANCE_HIGH.equals(right.getImportance())) {
+                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                } else {
+                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                }
 
                 setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT);
+                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
                 break;
             case TYPE_TOP:
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
@@ -240,9 +361,18 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 }
                 topHolder.tvTime.setText(time5);
                 topHolder.tvContent.setText(getString(top.getTitle()));
+                topHolder.tvContent.setVisibility(View.GONE);
+                topHolder.tvMore.setVisibility(View.VISIBLE);
+                topHolder.ivMore.setVisibility(View.VISIBLE);
+
+                if (VarConstant.IMPORTANCE_HIGH.equals(top.getImportance())) {
+                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                } else {
+                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                }
 
                 setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
-                        VarConstant.SOCKET_FLASH_TOP);
+                        VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
                 break;
             case TYPE_BOTTOM:
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
@@ -261,8 +391,18 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 bottomHolder.tvTime.setText(time6);
                 bottomHolder.tvContent.setText(getString(bottom.getTitle()));
 
+                bottomHolder.ivFlash.setVisibility(View.GONE);
+                bottomHolder.tvMore.setVisibility(View.VISIBLE);
+                bottomHolder.ivMore.setVisibility(View.VISIBLE);
+
+                if (VarConstant.IMPORTANCE_HIGH.equals(bottom.getImportance())) {
+                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                } else {
+                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                }
+
                 setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM);
+                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
                 break;
         }
 
@@ -276,42 +416,275 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * @param ivMore
      * @param ivShare
      * @param ivCollect
+     * @param ivFlash
+     * @param type
      */
-    private void setOnclick(TextView tvMore, ImageView ivMore, ImageView ivShare, ImageView ivCollect, int position, TextView content,
-                            String weizhi) {
+    private void setOnclick(final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
+                            final TextView content,
+                            String weizhi, final ImageView ivFlash, final int type) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
-        switch (flash.getCode()) {
-            case VarConstant.SOCKET_FLASH_CJRL:
-                break;
-            case VarConstant.SOCKET_FLASH_KUAIXUN:
-                break;
-            case VarConstant.SOCKET_FLASH_KXTNEWS:
-                if (weizhi == null) break;
-                switch (weizhi) {
-                    case VarConstant.SOCKET_FLASH_LEFT:
-                        //左
-                        break;
-                    case VarConstant.SOCKET_FLASH_RIGHT:
-                        //右
-                        break;
-                    case VarConstant.SOCKET_FLASH_TOP:
-                        //顶部
-                        break;
-                    case VarConstant.SOCKET_FLASH_BOTTOM:
-                        //底部
-                        break;
-                }
-                break;
+
+        if (flash.isColloct()) {
+            ivCollect.setSelected(true);
+        } else {
+            ivCollect.setSelected(false);
         }
+        showMore(tvMore, ivMore, flash.isShowMore(), content, ivFlash, type);
+
+        tvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flash.isShowMore()) {
+                    flash.setShowMore(false);
+                    showMore(tvMore, ivMore, false, content, ivFlash, type);
+                } else {
+                    flash.setShowMore(true);
+                    showMore(tvMore, ivMore, true, content, ivFlash, type);
+                }
+            }
+        });
 
         ivCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(flash.isColloct()){
-//                    flash.setColloct();
+                if (flash.isColloct()) {
+                    flash.setColloct(false);
+                    ivCollect.setSelected(false);
+                } else {
+                    flash.setColloct(true);
+                    ivCollect.setSelected(true);
                 }
             }
         });
+
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String configStr = SPUtils.getString(context, SpConstant.CONFIG);
+                    ConfigJson config = JSON.parseObject(configStr, ConfigJson.class);
+                    String url_kx_share = config.getUrl_kx_share();
+
+                    String shareUrl = url_kx_share.replace("{id}", flash.getSocre());
+                    String code = flash.getCode();
+                    String title = "";
+                    String discription = "";
+                    String image = null;
+                    switch (code) {
+                        case VarConstant.SOCKET_FLASH_KUAIXUN:
+                            Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
+                            title = kx.getTitle();
+                            break;
+                        case VarConstant.SOCKET_FLASH_CJRL:
+                            Flash_RL rl = JSON.parseObject(flash.getContent().toString(), Flash_RL.class);
+                            title = rl.getTitle();
+                            discription = context.getResources().getString(R.string.date_describe,
+                                    rl.getBefore(),
+                                    rl.getForecast(),
+                                    rl.getReality());
+                            break;
+                        case VarConstant.SOCKET_FLASH_KXTNEWS:
+                            Flash_NEWS news = JSON.parseObject(flash.getContent().toString(), Flash_NEWS.class);
+                            title = news.getTitle();
+                            discription = news.getDescription();
+                            image = news.getImage();
+                            break;
+                    }
+
+                    UmengShareTool.initUmengLayout((BaseActivity) context, title, shareUrl,
+                            discription,
+                            image, null, ivShare, null);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastView.makeText3(context, "分享失败");
+                }
+            }
+        });
+    }
+
+    /**
+     * 展视或隐藏更多
+     *
+     * @param tvMore
+     * @param ivMore
+     * @param isShowMore
+     * @param content    内容
+     * @param ivFlash    图片
+     * @param type       位置
+     */
+    private void showMore(TextView tvMore, ImageView ivMore, boolean isShowMore, TextView content, ImageView ivFlash, int type) {
+        if (isShowMore) {
+            ivMore.setSelected(true);
+            tvMore.setText("收起");
+            if (content != null)
+                content.setMaxLines(Integer.MAX_VALUE);
+            switch (type) {
+                case TYPE_TOP:
+                    content.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE_BOTTOM:
+                    ivFlash.setVisibility(View.VISIBLE);
+                    break;
+            }
+        } else {
+            ivMore.setSelected(false);
+            tvMore.setText("展开");
+            if (content != null)
+                content.setMaxLines(3);
+            switch (type) {
+                case TYPE_TOP:
+                    content.setVisibility(View.GONE);
+                    break;
+                case TYPE_BOTTOM:
+                    ivFlash.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 设置前值、预期值等
+     *
+     * @param tvDescribe
+     * @param describe
+     * @param reality
+     */
+    private void setDescribeForegroundColor(TextView tvDescribe, String describe, String reality) {
+        try {
+            float realityFloat = Float.parseFloat(reality.replace("%", ""));
+            int index = describe.lastIndexOf(":") + 1;
+            SpannableString spannableString = new SpannableString(describe);
+            if (realityFloat > 0) {
+                spannableString.setSpan(
+                        new ForegroundColorSpan(ContextCompat.getColor(context, R.color.rise_color)),
+                        index,
+                        describe.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+            } else if (realityFloat < 0) {
+                spannableString.setSpan(
+                        new ForegroundColorSpan(ContextCompat.getColor(context, R.color.decline_color)),
+                        index,
+                        describe.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                tvDescribe.setTextColor(ContextCompat.getColor(context, R.color.unaltered_color));
+            }
+        } catch (NumberFormatException e) {
+        } finally {
+            tvDescribe.setText(describe);
+        }
+    }
+
+
+    private void setAlarmState(String reality, int effectType, String effect, LinearLayout llExponent) {
+
+        llExponent.removeAllViews();
+
+        RadianDrawable radianDrawable = new RadianDrawable(context);
+
+        try {
+            Float.parseFloat(reality.replace("%", ""));
+
+            radianDrawable.setStroke(R.color.line_color);
+
+            if (effectType != 2) {
+                String[] effectSplit = effect.split("\\|");
+                for (int i = 0; i < effectSplit.length; i++) {
+                    drawingShapeColor(i, effectType, effectSplit[i], llExponent);
+                }
+            } else {
+                drawingShapeColor(2, effectType, "影响较小", llExponent);
+            }
+
+        } catch (NumberFormatException e) {
+
+            RadianDrawable effectDrawable = new RadianDrawable(context);
+
+            TextView textView = generateTextView();
+            textView.setText("未公布");
+
+            effectDrawable.setStroke(R.color.line_color);
+            textView.setTextColor(ContextCompat.getColor(context, R.color.line_color));
+            textView.setBackground(effectDrawable);
+
+            llExponent.addView(textView);
+        }
+    }
+
+    private void drawingShapeColor(int type, int effectType, String effect, LinearLayout llExponent) {
+        int shapeColor = 0;
+        Drawable leftDrawable = null;
+
+        switch (type) {
+            case 0:
+                shapeColor = R.color.calendar_line0;
+                leftDrawable = ContextCompat.getDrawable(context, R.mipmap.icon_top_red);
+                break;
+            case 1:
+                shapeColor = R.color.calendar_line1;
+                leftDrawable = ContextCompat.getDrawable(context, R.mipmap.icon_decline_green);
+                break;
+            case 2:
+                shapeColor = R.color.calendar_line2;
+                leftDrawable = null;
+                break;
+        }
+
+        if (effectType != 2) {
+            if (effect != null && !"".equals(effect.trim())) {
+                String[] effect0Split = effect.split(" ");
+
+                for (int i = 0; i < effect0Split.length; i++) {
+                    RadianDrawable effectDrawable = new RadianDrawable(context);
+
+                    TextView textView = generateTextView();
+                    textView.setText(effect0Split[i]);
+
+                    effectDrawable.setStroke(shapeColor);
+                    textView.setTextColor(ContextCompat.getColor(context, shapeColor));
+
+                    textView.setBackground(effectDrawable);
+
+                    textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
+                    llExponent.addView(textView);
+                }
+            }
+        } else {
+            RadianDrawable effectDrawable = new RadianDrawable(context);
+
+            TextView textView = generateTextView();
+            textView.setText(effect);
+
+            effectDrawable.setStroke(shapeColor);
+            textView.setTextColor(ContextCompat.getColor(context, shapeColor));
+            textView.setBackground(effectDrawable);
+
+            llExponent.addView(textView);
+        }
+    }
+
+    private TextView generateTextView() {
+        int padding = SystemUtil.dp2px(context, 5);
+        int MarginsRight = SystemUtil.dp2px(context, 10);
+        int minWidth = SystemUtil.dp2px(context, 55);
+
+        TextView itemView = new TextView(context);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        itemView.setLayoutParams(layoutParams);
+
+        layoutParams.setMargins(0, 0, MarginsRight, 0);
+        itemView.setPadding(padding, padding, padding, padding);
+        itemView.setMinWidth(minWidth);
+
+        itemView.setTextSize(11);
+        itemView.setGravity(Gravity.CENTER);
+        return itemView;
     }
 
     @Override
@@ -327,20 +700,29 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 return TYPE_RL;
             case VarConstant.SOCKET_FLASH_KXTNEWS:
                 Flash_NEWS content = JSON.parseObject(flashJson.getContent().toString(), Flash_NEWS.class);
+                int type;
                 switch (content.getImage_pos()) {
                     case VarConstant.SOCKET_FLASH_LEFT:
                         //左
-                        return TYPE_LEFT;
+                        type = TYPE_LEFT;
+                        break;
                     case VarConstant.SOCKET_FLASH_RIGHT:
                         //右
-                        return TYPE_RIGHT;
+                        type = TYPE_RIGHT;
+                        break;
                     case VarConstant.SOCKET_FLASH_TOP:
                         //顶部
-                        return TYPE_TOP;
+                        type = TYPE_TOP;
+                        break;
                     case VarConstant.SOCKET_FLASH_BOTTOM:
                         //底部
-                        return TYPE_BOTTOM;
+                        type = TYPE_BOTTOM;
+                        break;
+                    default:
+                        type = TYPE_LEFT;
+                        break;
                 }
+                return type;
             default:
                 return TYPE_KX;
         }
@@ -352,7 +734,58 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     public void inspiritDateInfo(List flashJsons) {
+        int size = flashJsons.size();
 
+        for (int i = 0; i < size; i++) {
+            Object obj = flashJsons.get(i);
+            if (obj instanceof String)
+                flashJsons.remove(obj);
+        }
+
+        size = flashJsons.size();
+        timeMap.clear();
+        for (int i = 0; i < size; i++) {
+            Object obj = flashJsons.get(i);
+            FlashJson flashJson = (FlashJson) flashJsons.get(i);
+            Object content = flashJson.getContent();
+            String code = flashJson.getCode();
+            if (content == null) return;
+            String time = "";
+            switch (code) {
+                case VarConstant.SOCKET_FLASH_CJRL:
+                    //日历
+                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                    //快讯
+                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KXTNEWS:
+                    //图文
+                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
+                    break;
+            }
+
+            if (!TextUtils.isEmpty(time)) {
+                String[] splitTime = time.split(" ");
+                String month = splitTime[0].split("-")[1];
+                String day = splitTime[0].split("-")[2];
+
+                String MD = month + "月" + day + "日"; //显示用
+
+                if (!timeMap.containsKey(MD)) {
+                    timeMap.put(MD, i);
+                    if (i < size)
+                        flashJsons.add(i, MD);
+                    else
+                        flashJsons.add(MD);
+                }
+            }
+        }
+
+    }
+
+    public void inspiritDateInfo2(List flashJsons) {
         int size = flashJsons.size();
         for (int i = 0; i < size; i++) {
             FlashJson flashJson = (FlashJson) flashJsons.get(i);
@@ -380,17 +813,17 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 String month = splitTime[0].split("-")[1];
                 String day = splitTime[0].split("-")[2];
 
-                String MD = month + "月" + day; //显示用
+                String MD = month + "月" + day + "日"; //显示用
 
                 if (!timeMap.containsKey(MD)) {
-                    int position = i + timeMap.size();
-                    timeMap.put(MD, position);
-                    flashJsons.add(position, MD);
+                    timeMap.put(MD, i);
+                    if (i < size)
+                        flashJsons.add(i, MD);
+                    else
+                        flashJsons.add(MD);
                 }
             }
-
         }
-
     }
 
 
@@ -408,6 +841,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         String[] splitTime = time.split(" ");
         String[] splitTime2 = splitTime[1].split(":");
         return splitTime2[0] + ":" + splitTime2[1];
+    }
+
+    /**
+     * 筛选
+     */
+    public void filtrate() {
+        notifyDataSetChanged();
     }
 
     /**
@@ -454,7 +894,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         @BindView(R.id.iv_collect) ImageView ivCollect;
         @BindView(R.id.v_line) View vLine;
         @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.ll_publish) RelativeLayout llContent;
+        @BindView(R.id.ll_exponent) LinearLayout llExponent;
         @BindView(R.id.ll_star) StarView star;
         @BindView(R.id.iv_guoqi) ImageView ivFlag;
 

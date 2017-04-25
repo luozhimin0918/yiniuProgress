@@ -151,6 +151,9 @@
     <dimen name="flash_type4_imgHeight">100dp</dimen>
     <dimen name="flash_type4_imgTop">10dp</dimen>
 
+    <dimen name="flash_img_width">114dp</dimen>
+    <dimen name="flash_img_height">77dp</dimen>
+
     <!--星星大小-->
     <dimen name="star_size">9dp</dimen>
     <dimen name="star_margins">1dp</dimen>

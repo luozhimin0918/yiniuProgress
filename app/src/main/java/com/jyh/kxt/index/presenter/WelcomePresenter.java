@@ -43,6 +43,8 @@ public class WelcomePresenter extends BasePresenter {
     private RequestQueue queue;
     private VolleyRequest request;
 
+    private boolean isShowAd = false;
+
     public WelcomePresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -51,28 +53,43 @@ public class WelcomePresenter extends BasePresenter {
         queue = welcomeActivity.getQueue();
         request = new VolleyRequest(mContext, queue);
 
+        initView();
+
         request.doGet(HttpConstant.CONFIG, new HttpListener<String>() {
             @Override
             protected void onResponse(String configStr) {
                 if (configStr != null) {
                     SPUtils.save(mContext, SpConstant.CONFIG, configStr);
+                    if (!isShowAd)
+                        handler.sendEmptyMessage(1);
                 }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (!isShowAd)
+                    handler.sendEmptyMessage(1);
             }
         });
     }
 
     public void initView() {
         String configStr = SPUtils.getString(mContext, SpConstant.CONFIG);
-        if (TextUtils.isEmpty(configStr)) return;
+        if (TextUtils.isEmpty(configStr)) {
+            isShowAd = false;
+            return;
+        }
         ConfigJson config = JSONObject.parseObject(configStr, ConfigJson.class);
-        if (config == null) return;
+        if (config == null) {
+            isShowAd = false;
+            return;
+        }
         final LoadADJson load_ad = config.getLoad_ad();
-        if (load_ad == null) return;
+        if (load_ad == null) {
+            isShowAd = false;
+            return;
+        }
 
         String picture = load_ad.getPicture();
         final String href = load_ad.getHref();
@@ -81,7 +98,7 @@ public class WelcomePresenter extends BasePresenter {
         final String o_id = load_ad.getO_id();
 
         if (picture != null) {
-
+            isShowAd = true;
             int showTime = 5;
             try {
                 showTime = Integer.parseInt(load_ad.getShowTime());
@@ -119,7 +136,7 @@ public class WelcomePresenter extends BasePresenter {
                 }
             });
         } else {
-
+            isShowAd = false;
         }
     }
 
