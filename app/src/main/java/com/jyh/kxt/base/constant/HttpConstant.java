@@ -52,6 +52,7 @@ public class HttpConstant {
     public static final String RILI = BASE_URL + "data/rili" + VarConstant.HTTP_CONTENT;
 
     public static final String MARKET_NAV = BASE_URL + "/quotes/nav" + VarConstant.HTTP_CONTENT;
+    public static final String MARKET_INDEX = BASE_URL + "/quotes/index" + VarConstant.HTTP_CONTENT;
 
-
+    public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
 }

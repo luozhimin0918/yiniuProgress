@@ -17,6 +17,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.presenter.ReplyMessagePresenter;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
@@ -46,6 +47,9 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
     private VideoDetailPresenter videoDetailPresenter;
 
+    //视频ID
+    private String videoId;
+
     //评论相关
     private PopupUtil replyMessagePopup;
     private ReplyMessagePresenter replyMessagePresenter;
@@ -58,12 +62,15 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
 
         super.onCreate(savedInstanceState);
 
+        videoId = getIntent().getStringExtra(IntentConstant.ID);
+
         EmoticonsUtils.initEmoticonsDB(this);
 
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 
         videoDetailPresenter = new VideoDetailPresenter(this);
-        videoDetailPresenter.initVideo();
+
+        videoDetailPresenter.requestInitVideo();
         videoDetailPresenter.requestMoreVideo();
     }
 

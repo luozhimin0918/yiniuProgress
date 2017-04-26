@@ -2,12 +2,20 @@ package com.jyh.kxt.av.presenter;
 
 import android.view.LayoutInflater;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.market.bean.MarketNavBean;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.superplayer.library.SuperPlayer;
+
+import java.util.List;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -32,7 +40,27 @@ public class VideoDetailPresenter extends BasePresenter {
         }
     }
 
-    public void initVideo() {
+    /**
+     * 请求初始化Video
+     */
+    public void requestInitVideo() {
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<List<MarketNavBean>>() {
+            @Override
+            protected void onResponse(List<MarketNavBean> marketNavList) {
+
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+    }
+
+    public void playVideo() {
         videoDetailActivity.spVideo
                 .setNetChangeListener(true)//设置监听手机网络的变化
                 .setOnNetChangeListener(new SuperPlayer.OnNetChangeListener() {//实现网络变化的回调
@@ -97,7 +125,7 @@ public class VideoDetailPresenter extends BasePresenter {
 
         int avHeight = videoDetailActivity.getResources().getDimensionPixelSize(R.dimen.av_video_height);
         videoDetailActivity.spVideo.setVideoPortraitHeight(avHeight);
-
         videoDetailActivity.spVideo.setScaleType(SuperPlayer.SCALETYPE_FITXY);
     }
+
 }

@@ -180,7 +180,6 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                  */
                 setAlarmState(reality,
                         mCalendarFinanceBean.getEffecttype(),
-                        mCalendarFinanceBean.getEffect(),
                         viewHolder1.llExponent,
                         viewHolder1.tvAlarm);
 
@@ -308,10 +307,24 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     }
 
 
-    private void setAlarmState(String reality, int effectType, String effect, LinearLayout llExponent, TextView
+    private void setAlarmState(String reality, int effectType, LinearLayout llExponent, TextView
             tvAlarm) {
 
         llExponent.removeAllViews();
+
+
+        String effect = "||";
+        switch (effectType) {
+            case 0:
+                effect = "美元|金银 石油|";
+                break;
+            case 1:
+                effect = "金银 石油|美元|";
+                break;
+            case 2:
+                effect = "||";
+                break;
+        }
 
         RadianDrawable radianDrawable = new RadianDrawable(mContext);
 

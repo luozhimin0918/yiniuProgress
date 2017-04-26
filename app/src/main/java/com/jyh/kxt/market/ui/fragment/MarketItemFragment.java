@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketMainPresenter;
 import com.jyh.kxt.market.presenter.MarketOtherPresenter;
@@ -18,12 +17,13 @@ import butterknife.BindView;
  */
 public class MarketItemFragment extends BaseFragment {
 
-    @BindView(R.id.ptrlv_content) PullToRefreshListView ptrlvContent;
+    @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
 
     private MarketVPFragment marketVPFragment;
     private MarketNavBean navBean;
 
-    private BasePresenter marketMainPresenter, marketOtherPresenter;
+    private MarketMainPresenter marketMainPresenter;
+    private MarketOtherPresenter marketOtherPresenter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -35,10 +35,12 @@ public class MarketItemFragment extends BaseFragment {
         marketVPFragment = (MarketVPFragment) getParentFragment();
         navBean = marketVPFragment.getNavBean(this);
 
-        if ("zhuYe".equals(navBean.getCode())) {
+        if ("zhuYe".equals(navBean.getCode())) { //主页的P
             marketMainPresenter = new MarketMainPresenter(this);
+            marketMainPresenter.generateMainHeaderView();
         } else {
             marketOtherPresenter = new MarketOtherPresenter(this);
+
         }
     }
 }

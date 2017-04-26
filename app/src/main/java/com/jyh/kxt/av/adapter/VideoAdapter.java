@@ -15,6 +15,7 @@ import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.library.util.DateUtils;
 
@@ -82,6 +83,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                intent.putExtra(IntentConstant.ID, video.getId());
                 mContext.startActivity(intent);
             }
         });
