@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/explore_header_item3_height"
+              android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:id="@+id/iv_btn"
+        android:layout_width="@dimen/explore_header_item3_imgWidth"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ico_def_load"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/explore_header_item3_marginLeft">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/explore_header_item3_marginTop"
+            android:maxLines="2"
+            android:paddingTop="@dimen/explore_header_item3_padding"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size"
+            />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="@dimen/explore_header_item3_tvWidth"
+            android:layout_height="@dimen/explore_header_item3_tvHeight"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/explore_header_item3_padding"
+            android:background="@drawable/bg_explore_proceed"
+            android:gravity="center"
+            android:text="已结束"
+            android:textColor="@color/font_color6"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/explore_header_item3_padding"
+            android:drawableLeft="@mipmap/icon_video_time"
+            android:drawablePadding="@dimen/explore_header_item3_drawablePadding"
+            android:text="2017-01-01"
+            android:textColor="@color/font_color6"
+            android:textSize="@dimen/min_font_size"/>
+    </RelativeLayout>
+
+</LinearLayout>

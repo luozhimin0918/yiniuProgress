@@ -18,26 +18,14 @@ import butterknife.BindView;
  */
 public class SettingActivity extends BaseSwipeBackActivity {
 
-
-    @BindView(R.id.tet_username) TextInputEditText tetUsername;
-    @BindView(R.id.tet_password) TextInputEditText tetPassword;
-    @BindView(R.id.btn_exit_login) DiscolorButton btnExitLogin;
-
     private SettingPresenter settingPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting, StatusBarColor.THEME1);
+        setContentView(R.layout.activity_user_setting, StatusBarColor.THEME1);
 
         settingPresenter = new SettingPresenter(this);
-
-
-        EditTextValidator editTextValidator = new EditTextValidator(this)
-                .setButton(btnExitLogin)
-                .add(new ValidationModel(tetUsername, new UserNameValidation()))
-                .add(new ValidationModel(tetPassword, new UserNameValidation()))
-                .execute();
 
     }
 }

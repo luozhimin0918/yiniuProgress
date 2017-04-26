@@ -3,6 +3,8 @@ package com.jyh.kxt.main.json;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.jyh.kxt.base.json.JumpJson;
+
 /**
  * 项目名:Kxt
  * 类描述:要闻
@@ -10,16 +12,13 @@ import android.os.Parcelable;
  * 创建日期:2017/4/17.
  */
 
-public class NewsJson implements Parcelable {
+public class NewsJson extends JumpJson implements Parcelable {
     private String title;    //标题
     private String picture;  //图片
     private String author;   //作者
     private String datetime; //时间
     private String type;     //类型
     private String href;     //用于webview直接打开的链接
-    private String o_class;  //目标栏目
-    private String o_action; //index|list|detail
-    private String o_id;      //目标id
 
     @Override
     public String toString() {

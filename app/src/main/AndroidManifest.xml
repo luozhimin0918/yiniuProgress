@@ -62,6 +62,10 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".user.ui.LoginOrRegisterActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".index.ui.WebActivity"
             android:screenOrientation="portrait"/>
         <activity

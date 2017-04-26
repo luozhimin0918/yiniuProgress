@@ -27,8 +27,7 @@
             android:layout_width="@dimen/flash_type3_flagSize"
             android:layout_height="@dimen/flash_type3_flagSize"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/flash_type3_flagTop"
-            android:src="@color/ampm_text_color"/>
+            android:layout_marginTop="@dimen/flash_type3_flagTop"/>
 
     </LinearLayout>
 

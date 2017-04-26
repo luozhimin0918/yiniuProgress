@@ -2,6 +2,7 @@ package com.library.widget.viewpager;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.library.R;
@@ -30,6 +32,9 @@ import java.util.List;
  * Created by dongjunkun on 2015/8/9.
  */
 public class BannerLayout extends RelativeLayout {
+
+    private List<String> titles;
+    private TextView tvTitle;
 
     /**
      * 设置PageChange回调
@@ -234,9 +239,10 @@ public class BannerLayout extends RelativeLayout {
     }
 
     //添加网络图片路径
-    public void setViewUrls(List<String> urls, int defaultSelection) {
+    public void setViewUrls(List<String> urls, List<String> titles, int defaultSelection) {
         List<View> views = new ArrayList<>();
         itemCount = urls.size();
+        this.titles = titles;
         //主要是解决当item为小于3个的时候滑动有问题，这里将其拼凑成3个以上
         if (itemCount < 1) {//当item个数0
             throw new IllegalStateException("item count not equal zero");
@@ -313,7 +319,8 @@ public class BannerLayout extends RelativeLayout {
         //初始化indicatorContainer
         indicatorContainer = new LinearLayout(getContext());
         indicatorContainer.setGravity(Gravity.CENTER_VERTICAL);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        indicatorContainer.setBackgroundResource(R.color.transparent_black);
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
 
         switch (indicatorPosition) {
             case centerBottom:
@@ -342,10 +349,22 @@ public class BannerLayout extends RelativeLayout {
                 break;
         }
         //设置margin
-        params.setMargins(indicatorMargin, indicatorMargin, indicatorMargin, indicatorMargin);
+        params.setMargins(0, 0, 0, 0);
         //添加指示器容器布局到SliderLayout
         addView(indicatorContainer, params);
 
+        tvTitle = new TextView(getContext());
+        tvTitle.setTextSize(15);
+        tvTitle.setMaxLines(1);
+        tvTitle.setTextColor(Color.parseColor("#ffffff"));
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                .MATCH_PARENT);
+        params2.weight = 1;
+        params2.setMargins(30, 0, 30, 0);
+        tvTitle.setLayoutParams(params2);
+
+
+        indicatorContainer.addView(tvTitle);
         //初始化指示器，并添加到指示器容器布局
         for (int i = 0; i < itemCount; i++) {
             ImageView indicator = new ImageView(getContext());
@@ -446,9 +465,14 @@ public class BannerLayout extends RelativeLayout {
      * @param currentPosition 当前位置
      */
     private void switchIndicator(int currentPosition) {
-        for (int i = 0; i < indicatorContainer.getChildCount(); i++) {
-            ((ImageView) indicatorContainer.getChildAt(i)).setImageDrawable(i == currentPosition ? selectedDrawable :
+        for (int i = 1; i < indicatorContainer.getChildCount(); i++) {
+            ((ImageView) indicatorContainer.getChildAt(i)).setImageDrawable(i - 1 == currentPosition ? selectedDrawable :
                     unSelectedDrawable);
+            try {
+                tvTitle.setText(titles.get(i - 1));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

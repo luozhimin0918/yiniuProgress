@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/lr_padding_horizontal"
+              android:paddingRight="@dimen/lr_padding_horizontal">
+
+    <com.jyh.kxt.base.widget.LineEditText
+        android:id="@+id/edt_email"
+        android:layout_marginTop="@dimen/lr_content_marginTop"
+        android:hint="输入账号"
+        style="@style/LoginEditStyle"/>
+
+    <TextView
+        android:id="@+id/tv_error_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_error_height"
+        android:paddingLeft="@dimen/lr_error_paddingLeft"
+        android:textColor="@color/font_color11"
+        android:textSize="@dimen/describe_font_size2"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_edt_height">
+
+        <com.jyh.kxt.base.widget.LineEditText
+            android:id="@+id/edt_pwd"
+            android:hint="输入密码"
+            style="@style/LoginEditStyle"/>
+
+        <TextView
+            android:id="@+id/tv_forgetPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="center"
+            android:text="忘记密码"
+            android:textColor="@color/font_color9"
+            android:textSize="@dimen/describe_font_size3"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_error_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_error_height"
+        android:paddingLeft="@dimen/lr_error_paddingLeft"
+        android:textColor="@color/font_color11"
+        android:textSize="@dimen/describe_font_size2"
+        />
+
+    <com.jyh.kxt.base.custom.DiscolorButton
+        android:id="@+id/db_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_btn_height"
+        android:layout_marginTop="@dimen/login_marginTop"
+        android:gravity="center"
+        android:text="登录"
+        android:textSize="@dimen/content_font_size2"
+        app:clickBackground="@color/red_btn_bg_pressed_color"
+        app:clickFontColor="@color/white"
+        app:defaultBackground="@color/blue"
+        app:defaultFontColor="@color/white"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp">
+
+        <ImageView
+            android:id="@+id/iv_qq"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="left"
+            android:src="@mipmap/icon_user_login_qq"/>
+
+        <ImageView
+            android:id="@+id/iv_sina"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_user_login_sina"/>
+
+        <ImageView
+            android:id="@+id/iv_wx"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:src="@mipmap/icon_user_login_wx"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/login_marginTop2"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:text="社交账户登录"
+            android:textColor="@color/font_color8"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更快更简单"/>
+    </LinearLayout>
+</LinearLayout>

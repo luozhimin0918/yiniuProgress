@@ -19,6 +19,14 @@ public class SpConstant {
      */
     public static final String THEME = "theme";
 
+    /**
+     * 快讯筛选
+     */
     public static final String FLASH_FILTRATE = "flash_rl_filtrate";
     public static final String FLASH_FILTRATE_HIGH = "flash_filtrate_high";
+
+    /**
+     * 收藏
+     */
+    public static final String COLLECT_FLASH = "collect_flash";
 }

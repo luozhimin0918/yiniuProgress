@@ -230,11 +230,14 @@ public class NewsItemPresenter extends BasePresenter {
         carouseView.setLayoutParams(params);
 
         List<String> carouseList = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
         for (int i = 0; i < carouselList.size(); i++) {
-            String carouselItem = carouselList.get(i).getPicture();
+            SlideJson slideJson = carouselList.get(i);
+            String carouselItem = slideJson.getPicture();
             carouseList.add(HttpConstant.IMG_URL + carouselItem);
+            titles.add(slideJson.getTitile());
         }
-        carouseView.setViewUrls(carouseList, currentItem);
+        carouseView.setViewUrls(carouseList, titles, currentItem);
         homeHeadView.addView(carouseView);
 
         carouseView.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {

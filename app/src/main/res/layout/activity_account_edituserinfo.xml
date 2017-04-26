@@ -22,7 +22,9 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_photo"
-                    style="@style/EditUserInfoItemStyle">
+                    android:layout_height="@dimen/editUserInfo_item_height2"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/editUserInfo_item_marginLeft">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -31,20 +33,24 @@
                         android:gravity="center"
                         android:text="头像"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding4"
+                        android:paddingTop="@dimen/editUserInfo_padding4"
+                        android:src="@mipmap/icon_user_break"
+                        />
 
                     <com.jyh.kxt.base.custom.RoundImageView
                         android:id="@+id/iv_photo"
                         android:layout_width="@dimen/item_height"
                         android:layout_height="@dimen/item_height"
+                        android:layout_centerInParent="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
                         android:layout_marginRight="@dimen/item_height"
@@ -55,7 +61,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@color/line_color2"/>
+                        android:background="@color/line_color3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -69,15 +75,17 @@
                         android:gravity="center"
                         android:text="昵称"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                     <TextView
                         android:id="@+id/tv_nickname"
@@ -90,13 +98,13 @@
                         android:src="@mipmap/ic_launcher"
                         android:text="张三"
                         android:textColor="@color/font_color2"
-                        android:textSize="@dimen/editUserInfo_textSize2"/>
+                        android:textSize="@dimen/content_font_size"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@color/line_color2"/>
+                        android:background="@color/line_color3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -110,15 +118,17 @@
                         android:gravity="center"
                         android:text="性别"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                     <TextView
                         android:id="@+id/tv_gender"
@@ -131,13 +141,13 @@
                         android:src="@mipmap/ic_launcher"
                         android:text="未知"
                         android:textColor="@color/font_color2"
-                        android:textSize="@dimen/editUserInfo_textSize2"/>
+                        android:textSize="@dimen/content_font_size"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@color/line_color2"/>
+                        android:background="@color/line_color3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -151,15 +161,17 @@
                         android:gravity="center"
                         android:text="生日"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                     <TextView
                         android:id="@+id/tv_birthday"
@@ -172,13 +184,13 @@
                         android:src="@mipmap/ic_launcher"
                         android:text="1992-10-10"
                         android:textColor="@color/font_color2"
-                        android:textSize="@dimen/editUserInfo_textSize2"/>
+                        android:textSize="@dimen/content_font_size"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@color/line_color2"/>
+                        android:background="@color/line_color3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -193,15 +205,17 @@
                         android:gravity="center"
                         android:text="现居住地"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="1dp"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                     <TextView
                         android:id="@+id/tv_address"
@@ -215,13 +229,13 @@
                         android:src="@mipmap/ic_launcher"
                         android:text="上海-上海-浦东"
                         android:textColor="@color/font_color2"
-                        android:textSize="@dimen/editUserInfo_textSize2"/>
+                        android:textSize="@dimen/content_font_size"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
-                        android:background="@color/line_color2"/>
+                        android:background="@color/line_color3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -234,14 +248,16 @@
                         android:gravity="center"
                         android:text="行业"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                     <TextView
                         android:id="@+id/tv_work"
@@ -253,7 +269,7 @@
                         android:src="@mipmap/ic_launcher"
                         android:text="互联网"
                         android:textColor="@color/font_color2"
-                        android:textSize="@dimen/editUserInfo_textSize2"/>
+                        android:textSize="@dimen/content_font_size"/>
 
                 </RelativeLayout>
 
@@ -273,14 +289,16 @@
                         android:gravity="center"
                         android:text="修改密码"
                         android:textColor="@color/font_color1"
-                        android:textSize="@dimen/editUserInfo_textSize1"/>
+                        android:textSize="@dimen/content_font_size2"/>
 
                     <ImageView
                         android:layout_width="@dimen/item_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:padding="@dimen/editUserInfo_padding1"
-                        android:src="@mipmap/ico_break"/>
+                        android:paddingRight="@dimen/editUserInfo_padding3"
+                        android:paddingBottom="@dimen/editUserInfo_padding3"
+                        android:paddingTop="@dimen/editUserInfo_padding3"
+                        android:src="@mipmap/icon_user_break"/>
 
                 </RelativeLayout>
 
@@ -290,21 +308,6 @@
                     android:background="@color/line_color2"
                     />
 
-                <com.jyh.kxt.base.custom.DiscolorButton
-                    android:id="@+id/btn_exit_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/editUserInfo_btn_height"
-                    android:layout_marginLeft="@dimen/editUserInfo_btn_marginHorizontal"
-                    android:layout_marginRight="@dimen/editUserInfo_btn_marginHorizontal"
-                    android:layout_marginTop="@dimen/editUserInfo_btn_marginTop"
-                    android:gravity="center"
-                    android:text="退出登录"
-                    android:textSize="@dimen/editUserInfo_textSize2"
-                    app:clickFontColor="@color/red_btn_bg_pressed_color"
-                    app:cornerRadius="@dimen/editUserInfo_btn_cornerRadius"
-                    app:defaultBackground="@color/line_color2"
-                    app:defaultFontColor="@color/red_btn_bg_color"
-                    />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

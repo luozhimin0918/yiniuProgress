@@ -2,7 +2,7 @@
 <resources>
 
     <style name="EditUserInfoItemStyle">
-        <item name="android:layout_height">@dimen/item_height</item>
+        <item name="android:layout_height">@dimen/editUserInfo_item_height</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/editUserInfo_item_marginLeft</item>
     </style>
@@ -14,6 +14,14 @@
         <item name="android:drawablePadding">@dimen/videoItemDrawablePadding</item>
         <item name="android:textColor">@color/font_color3</item>
         <item name="android:textSize">@dimen/describe_font_size1</item>
+    </style>
+
+    <style name="LoginEditStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/lr_edt_height</item>
+        <item name="android:textColor">@color/font_color5</item>
+        <item name="android:textColorHint">@color/font_color9</item>
+        <item name="android:textSize">@dimen/content_font_size</item>
     </style>
 
 </resources>

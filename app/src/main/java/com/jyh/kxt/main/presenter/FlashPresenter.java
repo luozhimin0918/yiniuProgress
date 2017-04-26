@@ -152,8 +152,12 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                 flashFragment.lvContent.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        flashFragment.lvContent.onRefreshComplete();
-                        flashFragment.lvContent.getRefreshableView().goneFoot();
+                        try {
+                            flashFragment.lvContent.onRefreshComplete();
+                            flashFragment.lvContent.getRefreshableView().goneFoot();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, 500);
             } catch (Exception e) {

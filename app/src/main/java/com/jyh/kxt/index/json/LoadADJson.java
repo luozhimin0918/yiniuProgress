@@ -1,5 +1,7 @@
 package com.jyh.kxt.index.json;
 
+import com.jyh.kxt.base.json.JumpJson;
+
 import java.io.Serializable;
 
 /**
@@ -9,12 +11,9 @@ import java.io.Serializable;
  * 创建日期:2017/4/20.
  */
 
-public class LoadADJson implements Serializable {
+public class LoadADJson extends JumpJson implements Serializable {
 
     private String href;
-    private String o_action;
-    private String o_class;
-    private String o_id;
     private String picture;
     private String showTime;
     private String title;

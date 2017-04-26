@@ -3,6 +3,8 @@ package com.jyh.kxt.main.json;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.jyh.kxt.base.json.JumpJson;
+
 /**
  * 项目名:Kxt
  * 类描述:幻灯片、index_ad、首页按钮
@@ -10,15 +12,12 @@ import android.os.Parcelable;
  * 创建日期:2017/4/17.
  */
 
-public class SlideJson implements Parcelable {
+public class SlideJson extends JumpJson implements Parcelable {
 
     private String name;     //名称,暂无用到
     private String title;   //标题
     private String picture;  //图片完整地址
     private String href;     //若href不为空，则使用webview打开该链接
-    private String o_class;  //目标栏目   news|video|blog
-    private String o_action; //index|list|detail
-    private String o_id;     //目标id
 
     public String getName() {
         return name;
