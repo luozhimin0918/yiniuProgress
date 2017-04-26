@@ -13,7 +13,7 @@
         android:gravity="left|center_vertical"
         android:paddingLeft="@dimen/pickerview_topbar_padding"
         android:text="@string/pickerview_cancel"
-        android:textColor="@drawable/selector_pickerview_btn"
+        android:textColor="@color/pickerview_timebtn_nor"
         android:textSize="@dimen/pickerview_topbar_btn_textsize" />
 
     <TextView
@@ -36,6 +36,6 @@
         android:gravity="right|center_vertical"
         android:paddingRight="@dimen/pickerview_topbar_padding"
         android:text="@string/pickerview_submit"
-        android:textColor="@drawable/selector_pickerview_btn"
+        android:textColor="@color/pickerview_timebtn_pre"
         android:textSize="@dimen/pickerview_topbar_btn_textsize" />
 </RelativeLayout>

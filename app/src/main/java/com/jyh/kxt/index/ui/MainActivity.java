@@ -25,11 +25,10 @@ import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
-import com.jyh.kxt.index.ui.fragment.ProbeFragment;
+import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 主界面
@@ -65,7 +64,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public AvFragment avFragment;
     public MarketFragment marketFragment;
     public DatumFragment datumFragment;
-    public ProbeFragment probeFragment;
+    public ExploreFragment exploreFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +137,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 mClickFragment = datumFragment;
                 break;
             case R.id.rb_probe:
-                probeFragment = probeFragment == null ? ProbeFragment.newInstance() : probeFragment;
-                mClickFragment = probeFragment;
+                exploreFragment = exploreFragment == null ? ExploreFragment.newInstance() : exploreFragment;
+                mClickFragment = exploreFragment;
                 break;
         }
         if (mClickFragment != null) {

@@ -70,7 +70,11 @@
     <color name="decline_color">#60B280</color>
     <color name="unaltered_color">#888887</color>
 
-    <color name="shape_bg1">#f1f2f6</color>
+    <color name="shape_bg1">#f1f2f6 </color>
+    <!-- 探索 -->
+    <color name="explore_notstarted_color">#A1ABB2</color>
+    <color name="explore_proceed_color">#1C9CF2</color>
+
 
     <!--控件颜色-->
     <color name="check_box_color1">#EFF0F4</color>

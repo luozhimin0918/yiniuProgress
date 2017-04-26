@@ -52,7 +52,7 @@
     <dimen name="drawer_image_height">165dp</dimen>
     <dimen name="av_video_height">211dp</dimen>
 
-    <dimen name="index_slide">150dp</dimen>
+    <dimen name="index_slide">180dp</dimen>
     <dimen name="index_slide_indicator">3dp</dimen>
     <dimen name="index_slide_indicatorSize">6dp</dimen>
 
@@ -67,18 +67,21 @@
     <dimen name="bar_height">35dp</dimen>
 
     <!-- 修改个人信息 -->
+
+    <dimen name="editUserInfo_item_height">56dp</dimen>
+    <dimen name="editUserInfo_item_height2">66dp</dimen>
+
     <dimen name="editUserInfo_line_height">8dp</dimen>
-    <dimen name="editUserInfo_item_marginLeft">20dp</dimen>
+    <dimen name="editUserInfo_item_marginLeft">24dp</dimen>
 
     <dimen name="editUserInfo_btn_height">40dp</dimen>
     <dimen name="editUserInfo_btn_marginTop">40dp</dimen>
     <dimen name="editUserInfo_btn_marginHorizontal">20dp</dimen>
     <dimen name="editUserInfo_btn_cornerRadius">3dp</dimen>
 
-    <dimen name="editUserInfo_textSize1">20dp</dimen>
-    <dimen name="editUserInfo_textSize2">18dp</dimen>
-    <dimen name="editUserInfo_padding1">10dp</dimen>
-    <dimen name="editUserInfo_padding2">5dp</dimen>
+    <dimen name="editUserInfo_padding2">8dp</dimen>
+    <dimen name="editUserInfo_padding3">20dp</dimen>
+    <dimen name="editUserInfo_padding4">25dp</dimen>
 
     <!-- 视听首页 -->
     <dimen name="videoItemDrawablePadding">6dp</dimen>
@@ -154,6 +157,42 @@
     <dimen name="flash_img_width">114dp</dimen>
     <dimen name="flash_img_height">77dp</dimen>
 
+    <!-- 探索首页 -->
+    <dimen name="explore_header_title_height">25dp</dimen>
+    <dimen name="explore_header_marginTop">15dp</dimen>
+    <dimen name="explore_header_title_padding">5dp</dimen>
+    <dimen name="explore_header_title_more_MarginRight">25dp</dimen>
+    <dimen name="explore_header_content_padding">15dp</dimen>
+
+    <dimen name="explore_header_item1_height">79dp</dimen>
+    <dimen name="explore_header_item1_ImgSize">35dp</dimen>
+    <dimen name="explore_header_item1_marginTop">5dp</dimen>
+
+    <dimen name="explore_header_item2_width">160dp</dimen>
+    <dimen name="explore_header_item2_height">142.5dp</dimen>
+    <dimen name="explore_header_item2_imgHeight">90dp</dimen>
+    <dimen name="explore_header_item2_padding">8dp</dimen>
+    <dimen name="explore_header_item2_margin">5dp</dimen>
+
+    <dimen name="explore_header_item3_height">90dp</dimen>
+    <dimen name="explore_header_item3_imgWidth">160dp</dimen>
+    <dimen name="explore_header_item3_tvWidth">55dp</dimen>
+    <dimen name="explore_header_item3_tvHeight">20dp</dimen>
+    <dimen name="explore_header_item3_padding">2dp</dimen>
+    <dimen name="explore_header_item3_drawablePadding">5dp</dimen>
+    <dimen name="explore_header_item3_marginLeft">15dp</dimen>
+    <dimen name="explore_header_item3_marginTop">5dp</dimen>
+
+    <dimen name="explore_header_item4_width">117.5dp</dimen>
+    <dimen name="explore_header_item4_height">135dp</dimen>
+    <dimen name="explore_header_item4_imgSize">50dp</dimen>
+    <dimen name="explore_header_item4_rlSize">15dp</dimen>
+    <dimen name="explore_header_item4_lineMargin">5dp</dimen>
+    <dimen name="explore_header_item4_textSize">10dp</dimen>
+    <dimen name="explore_header_item4_marginTop">10dp</dimen>
+    <dimen name="explore_header_item4_marginBottom">7dp</dimen>
+
+
     <!--星星大小-->
     <dimen name="star_size">9dp</dimen>
     <dimen name="star_margins">1dp</dimen>
@@ -162,9 +201,9 @@
     <dimen name="itemPaddingLeft">20dp</dimen>
     <dimen name="itemImageViewPaddingLeft">15dp</dimen>
     <!-- 声明条款 -->
-    <dimen name="statementPaddingHorizontal">40dp</dimen>
+    <dimen name="statementPaddingHorizontal">43dp</dimen>
     <dimen name="statementPaddingBottom">20dp</dimen>
-    <dimen name="statementImageSize">200dp</dimen>
+    <dimen name="statementImageSize">235dp</dimen>
     <!-- 意见反馈 -->
     <dimen name="feedbackImageWidth">200dp</dimen>
     <dimen name="feedbackImageHeight">200dp</dimen>
@@ -172,10 +211,29 @@
     <dimen name="feedbackBtnHeight">40dp</dimen>
     <dimen name="feedbackPaddingLeft">45dp</dimen>
     <dimen name="feedbackMarginTop">40dp</dimen>
-    <dimen name="feedbackMarginTop2">20dp</dimen>
-    <dimen name="feedbackMarginTop3">30dp</dimen>
+    <dimen name="feedbackMarginTop2">17dp</dimen>
+    <dimen name="feedbackMarginTop3">31dp</dimen>
     <dimen name="feedbackDrawablePadding">5dp</dimen>
 
     <dimen name="btn_stroke_width1">0.7dp</dimen>
     <dimen name="btn_corner_radius1">3dp</dimen>
+
+    <!-- 设置 -->
+    <dimen name="setting_paddingLeft">24dp</dimen>
+    <dimen name="setting_item_height">61dp</dimen>
+    <dimen name="setting_toggle_width">50dp</dimen>
+    <dimen name="setting_toggle_height">25dp</dimen>
+    <dimen name="setting_paddingRight">20dp</dimen>
+    <dimen name="setting_img_size">15dp</dimen>
+
+    <!-- 登录注册 -->
+    <dimen name="lr_padding_horizontal">54dp</dimen>
+    <dimen name="lr_error_paddingLeft">6dp</dimen>
+    <dimen name="lr_error_height">20dp</dimen>
+    <dimen name="lr_edt_height">40dp</dimen>
+    <dimen name="lr_btn_height">45dp</dimen>
+    <dimen name="lr_content_marginTop">45dp</dimen>
+
+    <dimen name="login_marginTop">10dp</dimen>
+    <dimen name="login_marginTop2">45dp</dimen>
 </resources>

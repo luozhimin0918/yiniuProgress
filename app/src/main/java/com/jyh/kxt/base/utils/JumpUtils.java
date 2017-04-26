@@ -1,12 +1,8 @@
 package com.jyh.kxt.base.utils;
 
-import android.content.Intent;
-import android.text.TextUtils;
-
-import com.library.base.http.VarConstant;
-import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.WebActivity;
-import com.jyh.kxt.main.json.SlideJson;
+import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.VarConstant;
+import com.jyh.kxt.base.json.JumpJson;
 
 /**
  * 项目名:Kxt
@@ -17,54 +13,53 @@ import com.jyh.kxt.main.json.SlideJson;
 
 public class JumpUtils {
 
+
+    public static void jump(BaseActivity activity, String o_class, String o_action, String o_id, String url) {
+        JumpJson jumpJson = new JumpJson(o_action, o_class, o_id);
+        jump(activity, jumpJson, url);
+    }
+
     /**
      * 跳转
      *
-     * @param slideJson
+     * @param context
+     * @param jumpJson
+     * @param url
      */
-    public static void jump(final MainActivity context, SlideJson slideJson) {
-        if (slideJson == null || context == null) return;
-        if (TextUtils.isEmpty(slideJson.getHref())) {
-
-            String o_class = slideJson.getO_class();
-            String o_action = slideJson.getO_action();
-            String o_id = slideJson.getO_id();
-
+    public static void jump(final BaseActivity context, JumpJson jumpJson, String url) {
+        if (context == null) return;
+        if (url == null) {
+            if (jumpJson == null) return;
+            String o_class = jumpJson.o_class;
+            if (o_class == null) return;
             switch (o_class) {
                 case VarConstant.OCLASS_DATA:
-                    //数据
-                    context.rbDatum.performClick();
-                    context.rbDatum.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            context.datumFragment.onTabSelect(1);
-                        }
-                    }, 500);
+                    break;
+                case VarConstant.OCLASS_ARTICLE:
+                    break;
+                case VarConstant.OCLASS_DATING:
+                    break;
+                case VarConstant.OCLASS_DIANPING:
                     break;
                 case VarConstant.OCLASS_FLASH:
-                    //快讯
-                    context.rbHome.performClick();
+                    break;
+                case VarConstant.OCLASS_INDEX:
                     break;
                 case VarConstant.OCLASS_NEWS:
-                    //要闻
-                    context.rbHome.performClick();
                     break;
                 case VarConstant.OCLASS_QUOTES:
-                    //行情
-                    context.rbMarket.performClick();
                     break;
                 case VarConstant.OCLASS_RL:
-                    //日历
-                    context.rbDatum.performClick();
+                    break;
+                case VarConstant.OCLASS_SCHOOL:
+                    break;
+                case VarConstant.OCLASS_SEARCH:
                     break;
                 case VarConstant.OCLASS_VIDEO:
-                    //视听
-                    context.rbAudioVisual.performClick();
                     break;
             }
         } else {
-            Intent intent = new Intent(context, WebActivity.class);
-            context.startActivity(intent);
+            //网页跳转
         }
     }
 }

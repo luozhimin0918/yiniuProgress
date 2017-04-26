@@ -70,8 +70,6 @@ public class EditUserInfoActivity extends BaseActivity {
     RelativeLayout rlWork;
     @BindView(R.id.rl_changePwd)
     RelativeLayout rlChangePwd;
-    @BindView(R.id.btn_exit_login)
-    DiscolorButton btnExitLogin;
     @BindView(R.id.fl_picker)
     public FrameLayout fl_picker;
 
@@ -143,7 +141,7 @@ public class EditUserInfoActivity extends BaseActivity {
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.rl_photo, R.id.rl_nickname, R.id.rl_gender, R.id.rl_birthday, R.id
             .rl_address, R.id.rl_work, R
-            .id.rl_changePwd, R.id.btn_exit_login})
+            .id.rl_changePwd})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -186,9 +184,6 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_changePwd:
                 //修改密码
-                break;
-            case R.id.btn_exit_login:
-                //退出登录
                 break;
         }
     }

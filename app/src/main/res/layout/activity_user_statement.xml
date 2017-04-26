@@ -21,15 +21,15 @@
         <ImageView
             android:layout_width="@dimen/statementImageSize"
             android:layout_height="@dimen/statementImageSize"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/icon_user_logo"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingMultiplier="1.1"
-            android:text="大俗防护达股份已施工费用为个人风格回复ID施工方式的更好ifhi度hi胡覅U盾回复的身份促使都会促使"
-            android:textColor="@color/font_color1"
-            android:textSize="@dimen/content_font_size"/>
+            android:text="@string/statement1"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size4"/>
 
 
     </LinearLayout>
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingBottom="@dimen/statementPaddingBottom"
-        android:text="上海快讯网络有限公司"
+        android:text="@string/statement2"
         android:textColor="@color/font_color3"
         android:textSize="@dimen/content_font_size"/>
 

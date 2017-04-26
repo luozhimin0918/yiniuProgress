@@ -1,9 +1,11 @@
 package com.jyh.kxt.user.presenter;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -64,9 +66,9 @@ public class EditUserInfoPresenter extends BasePresenter {
                 }
             })
 
-                    .setTitleText("选择居住地")
-                    .setDividerColor(Color.BLACK)
-                    .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                    .setTitleText("")
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
@@ -95,9 +97,9 @@ public class EditUserInfoPresenter extends BasePresenter {
                 }
             })
 
-                    .setTitleText("选择性别")
-                    .setDividerColor(Color.BLACK)
-                    .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                    .setTitleText("")
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
                     .setSelectOptions(2)
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true

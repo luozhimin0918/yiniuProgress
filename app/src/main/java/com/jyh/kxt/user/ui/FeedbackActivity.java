@@ -26,7 +26,7 @@ public class FeedbackActivity extends BaseActivity {
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-    @BindView(R.id.btn_copy) DiscolorButton btnCopy;
+    @BindView(R.id.btn_copy) ImageView btnCopy;
     @BindView(R.id.tv_jump) TextView tvJump;
 
     private String copyedText;
@@ -43,7 +43,7 @@ public class FeedbackActivity extends BaseActivity {
         btnCopy.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                copyedText = btnCopy.getText().toString();
+                copyedText = "kxt108";
                 ToastView.makeText3(FeedbackActivity.this, "复制成功");
                 return false;
             }

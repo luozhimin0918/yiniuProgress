@@ -7,7 +7,7 @@
     android:background="@null"
     app:autoPlayDuration="5000"
     app:indicatorMargin="@dimen/index_slide_indicator"
-    app:indicatorPosition="centerBottom"
+    app:indicatorPosition="rightBottom"
     app:indicatorShape="oval"
     app:indicatorSpace="@dimen/index_slide_indicator"
     app:scrollDuration="1100"

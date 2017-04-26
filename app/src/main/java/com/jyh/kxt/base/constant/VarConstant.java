@@ -34,10 +34,19 @@ public class VarConstant {
     public static final String OCLASS_QUOTES = "quotes";//行情
     public static final String OCLASS_VIDEO = "video";//视听
     public static final String OCLASS_NEWS = "news";//要闻
+    public static final String OCLASS_INDEX = "index";//首页
+    public static final String OCLASS_DIANPING = "dianping";//点评
+    public static final String OCLASS_SCHOOL = "school";//投资入门
+    public static final String OCLASS_SEARCH = "search";//搜索
+    public static final String OCLASS_DATING = "dating";//大厅
+    public static final String OCLASS_ARTICLE = "article";//文章
 
     public static final String OACTION_LIST = "list";//列表
     public static final String OACTION_INDEX = "index";//首页
     public static final String OACTION_ETF = "etf";//ETF
+    public static final String OACTION_DETAIL = "detail";//ETF
+    public static final String OACTION_ARTICLE = "article";//文章
+    public static final String OACTION_CFTC = "cftc";
 
     /**
      * umeng 配置信息

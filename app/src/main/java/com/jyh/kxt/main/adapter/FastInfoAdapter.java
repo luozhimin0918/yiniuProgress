@@ -26,6 +26,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.constant.VarConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
+import com.jyh.kxt.base.utils.CollectUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.StarView;
@@ -71,6 +72,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
         this.flashJsons = flashJsons;
         inspiritDateInfo(this.flashJsons);
+        initCollectStatus(1);
         this.context = context;
     }
 
@@ -79,18 +81,30 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     public void setData(List<FlashJson> flashJsons) {
         this.flashJsons = flashJsons;
         inspiritDateInfo(this.flashJsons);
+        initCollectStatus(1);
+        notifyDataSetChanged();
+    }
+
+
+    public void addData(FlashJson flashJson) {
+        this.flashJsons.add(1, flashJson);
+        initCollectStatus(2);
         notifyDataSetChanged();
     }
 
     public void addData(List<FlashJson> flashJsons) {
         inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
+        initCollectStatus(1);
         notifyDataSetChanged();
     }
 
-    public void addData(FlashJson flashJson) {
-        this.flashJsons.add(1, flashJson);
-        notifyDataSetChanged();
+    /**
+     * 初始化收藏状态
+     *
+     * @param type
+     */
+    private void initCollectStatus(int type) {
     }
 
     public List<FlashJson> getData() {
@@ -169,28 +183,69 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     break;
             }
         } else {
-            switch (type) {
-                case TYPE_TIME:
-                    timeHolder = (TimeViewHolder) convertView.getTag();
-                    break;
-                case TYPE_KX:
-                    kxHolder = (KXViewHolder) convertView.getTag();
-                    break;
-                case TYPE_RL:
-                    rlHolder = (RLViewHolder) convertView.getTag();
-                    break;
-                case TYPE_LEFT:
-                    leftHolder = (NEWViewHolder) convertView.getTag();
-                    break;
-                case TYPE_RIGHT:
-                    rightHolder = (NEWViewHolder) convertView.getTag();
-                    break;
-                case TYPE_TOP:
-                    topHolder = (NEWViewHolder) convertView.getTag();
-                    break;
-                case TYPE_BOTTOM:
-                    bottomHolder = (NEWViewHolder) convertView.getTag();
-                    break;
+            try {
+                switch (type) {
+                    case TYPE_TIME:
+                        timeHolder = (TimeViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_KX:
+                        kxHolder = (KXViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_RL:
+                        rlHolder = (RLViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_LEFT:
+                        leftHolder = (NEWViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_RIGHT:
+                        rightHolder = (NEWViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_TOP:
+                        topHolder = (NEWViewHolder) convertView.getTag();
+                        break;
+                    case TYPE_BOTTOM:
+                        bottomHolder = (NEWViewHolder) convertView.getTag();
+                        break;
+                }
+            } catch (Exception e) {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                switch (type) {
+                    case TYPE_TIME:
+                        convertView = inflater.inflate(R.layout.layout_flash_time_bar, parent, false);
+                        timeHolder = new TimeViewHolder(convertView);
+                        convertView.setTag(timeHolder);
+                        break;
+                    case TYPE_KX:
+                        convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
+                        kxHolder = new KXViewHolder(convertView);
+                        convertView.setTag(kxHolder);
+                        break;
+                    case TYPE_RL:
+                        convertView = inflater.inflate(R.layout.item_flash_rl, parent, false);
+                        rlHolder = new RLViewHolder(convertView);
+                        convertView.setTag(rlHolder);
+                        break;
+                    case TYPE_LEFT:
+                        convertView = inflater.inflate(R.layout.item_flash_news_left, parent, false);
+                        leftHolder = new NEWViewHolder(convertView);
+                        convertView.setTag(leftHolder);
+                        break;
+                    case TYPE_RIGHT:
+                        convertView = inflater.inflate(R.layout.item_flash_news_right, parent, false);
+                        rightHolder = new NEWViewHolder(convertView);
+                        convertView.setTag(rightHolder);
+                        break;
+                    case TYPE_TOP:
+                        convertView = inflater.inflate(R.layout.item_flash_news_top, parent, false);
+                        topHolder = new NEWViewHolder(convertView);
+                        convertView.setTag(topHolder);
+                        break;
+                    case TYPE_BOTTOM:
+                        convertView = inflater.inflate(R.layout.item_flash_news_bottom, parent, false);
+                        bottomHolder = new NEWViewHolder(convertView);
+                        convertView.setTag(bottomHolder);
+                        break;
+                }
             }
         }
 
@@ -227,8 +282,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
 
-                Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).error(R.mipmap
-                        .ico_def_load).placeholder(R.mipmap.ico_def_load).into(rlHolder
+                Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
                         .ivFlag);
 
                 String time2 = "00:00";
@@ -265,7 +319,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                  * 公布状态, 已公布,未公布 利多 ,金银 , 石油   影响较小等
                  */
                 setAlarmState(reality,
-                        Integer.parseInt(rl.getEffecttype()),
+                        Integer.parseInt(rl.getEffecttype()),//0 利多美元  1 利多金银石油 2 影响较小
                         rl.getEffect(),
                         rlHolder.llExponent);
 

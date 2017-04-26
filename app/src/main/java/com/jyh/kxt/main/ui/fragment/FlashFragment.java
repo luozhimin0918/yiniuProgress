@@ -40,13 +40,12 @@ public class FlashFragment extends BaseFragment {
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_flash);
-
+        flashPresenter = new FlashPresenter(this);
     }
 
     @Override
     public void userVisibleHint() {
         super.userVisibleHint();
-        flashPresenter = new FlashPresenter(this);
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(flashPresenter);
         plRootView.setOnAfreshLoadListener(flashPresenter);
@@ -73,13 +72,13 @@ public class FlashFragment extends BaseFragment {
 
     @Override
     public void onDestroyView() {
+        flashPresenter.onDestroy();
         super.onDestroyView();
         try {
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        flashPresenter.onDestroy();
     }
 
 }
