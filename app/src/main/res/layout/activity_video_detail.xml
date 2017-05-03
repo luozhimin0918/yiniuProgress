@@ -129,27 +129,27 @@
         <ImageView
             android:id="@+id/iv_break"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_nav_break"/>
+            android:src="@mipmap/icon_nav_break"/>
 
         <ImageView
             android:id="@+id/iv_comment"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_nav_commend"/>
+            android:src="@mipmap/icon_nav_commend"/>
 
         <ImageView
             android:id="@+id/iv_collect"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_nav_collect"/>
+            android:src="@mipmap/icon_nav_collect_unsel"/>
 
         <ImageView
             android:id="@+id/iv_like"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_nav_like"/>
+            android:src="@mipmap/icon_nav_like_unsel"/>
 
         <ImageView
             android:id="@+id/iv_share"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_nav_share"/>
+            android:src="@mipmap/icon_nav_share"/>
 
     </LinearLayout>
 

@@ -19,16 +19,19 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="jauhdkjhdkjahkdhaskdakas"
                 android:padding="@dimen/newsContentPadding"
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/xxx_font_size"/>
 
             <RelativeLayout
+                android:id="@+id/rl_dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/newsAuthorLayoutHeight"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/newsContentPadding"
-                android:paddingRight="@dimen/newsContentPadding">
+                android:paddingRight="@dimen/newsContentPadding"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_photo"
@@ -51,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_name"
-                    android:layout_marginRight="13dp"
+                    android:layout_marginRight="@dimen/nav_padding"
                     android:layout_toRightOf="@id/iv_photo"
                     android:textColor="@color/font_color6"
                     android:textSize="@dimen/describe_font_size1"/>
@@ -68,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_name"
-                    android:layout_marginLeft="13dp"
+                    android:layout_marginLeft="@dimen/nav_padding"
                     android:layout_toRightOf="@id/tv_type"
                     android:textColor="@color/font_color6"
                     android:textSize="@dimen/describe_font_size1"/>
@@ -80,6 +83,32 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/sel_news_attention"
                     />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/newsContentPadding"
+                android:paddingRight="@dimen/newsContentPadding"
+                android:layout_marginBottom="@dimen/newsContentPadding">
+
+                <TextView
+                    android:id="@+id/tv_type2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_color6"
+                    android:textSize="@dimen/describe_font_size1"/>
+
+                <TextView
+                    android:id="@+id/tv_time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/font_color6"
+                    android:textSize="@dimen/describe_font_size1"/>
+
             </RelativeLayout>
 
         </LinearLayout>
@@ -106,7 +135,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/actionbar_height"
                 android:orientation="horizontal">
-
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/nav_padding"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_nav_break"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/nav_padding"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_nav_commend"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/nav_padding"
+                    android:layout_weight="1"
+                    android:src="@drawable/sel_nav_collect"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/nav_padding"
+                    android:layout_weight="1"
+                    android:src="@drawable/sel_nav_like"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/nav_padding"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_nav_more"/>
             </LinearLayout>
         </LinearLayout>
 

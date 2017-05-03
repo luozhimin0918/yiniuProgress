@@ -14,6 +14,7 @@
     <dimen name="xxx_font_size">24sp</dimen>
     <dimen name="max_max_font_size">22sp</dimen>
     <dimen name="max_font_size">20sp</dimen>
+    <dimen name="title_font_size2">19sp</dimen>
     <dimen name="title_font_size">18sp</dimen>
     <dimen name="content_font_size">16sp</dimen>
     <dimen name="content_font_size2">17sp</dimen>
@@ -26,6 +27,8 @@
     <dimen name="min_font_size">11sp</dimen>
 
     <dimen name="btn_cornerRadius">5dp</dimen>
+
+    <dimen name="nav_padding">13dp</dimen>
 
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
 
@@ -172,6 +175,13 @@
     <dimen name="newsAuthorPhotoPaddingRight">10dp</dimen>
     <dimen name="newsAuthorAttentionWidth">60dp</dimen>
     <dimen name="newsAuthorAttentionHeight">30dp</dimen>
+
+    <!-- 作者 -->
+    <dimen name="authorMarginTop">20dp</dimen>
+    <dimen name="authorPadding">20dp</dimen>
+    <dimen name="authorPhotoSize">60dp</dimen>
+    <dimen name="authorViewHeight">15dp</dimen>
+
 
     <!-- 快讯 -->
     <dimen name="flash_timeBarHeight">28dp</dimen>

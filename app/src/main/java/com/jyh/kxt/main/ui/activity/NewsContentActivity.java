@@ -8,6 +8,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,12 +35,18 @@ public class NewsContentActivity extends BaseActivity {
 
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.tv_title) TextView tvTitle;
+    @BindView(R.id.rl_news) RelativeLayout rlNews;
+    @BindView(R.id.rl_dp) RelativeLayout rlDp;
     @BindView(R.id.iv_photo) ImageView ivPhoto;
     @BindView(R.id.tv_name) TextView tvName;
     @BindView(R.id.tv_type) TextView tvType;
     @BindView(R.id.tv_time) TextView tvTime;
     @BindView(R.id.iv_like) ImageView ivLike;
+    @BindView(R.id.tv_type2) TextView tvType2;
+    @BindView(R.id.tv_time2) TextView tvTime2;
+
     @BindView(R.id.lv_content) ListView lvContent;
+
 
     private NewsContentPresenter newsContentPresenter;
 

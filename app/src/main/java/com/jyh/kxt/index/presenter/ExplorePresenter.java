@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.presenter;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -35,6 +36,11 @@ public class ExplorePresenter extends BasePresenter {
             @Override
             protected void onResponse(Object o) {
 
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
             }
         });
     }

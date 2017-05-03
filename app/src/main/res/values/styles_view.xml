@@ -65,4 +65,12 @@
         <item name="textColor">@color/font_color5</item>
         <item name="textSize">@dimen/content_font_size2</item>
     </style>
+
+    <!-- 作者界面 -->
+    <style name="AuthorTextViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/font_color13</item>
+    </style>
 </resources>

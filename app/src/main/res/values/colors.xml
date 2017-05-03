@@ -44,6 +44,7 @@
     <color name="font_color10">#fefefe</color>
     <color name="font_color11">#EA492A</color>
     <color name="font_color12">#464c56</color>
+    <color name="font_color13">#99ffffff</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
 
