@@ -111,6 +111,11 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         wvContent.loadUrl(url);
     }
 
+    @Override
+    public void loadData(String data) {
+        wvContent.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+    }
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

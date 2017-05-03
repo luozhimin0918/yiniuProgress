@@ -161,6 +161,18 @@
     <dimen name="newsItemImageViewWidth">114dp</dimen>
     <dimen name="newsItemTitleMarginLeft">12dp</dimen>
 
+    <!-- 要闻详情 -->
+    <dimen name="newsContentPadding">15dp</dimen>
+    <dimen name="newsSourcePadding">37dp</dimen>
+    <dimen name="newsFunctionBtnSize">30dp</dimen>
+    <dimen name="newsDingPadding1">10dp</dimen>
+    <dimen name="newsDingPadding2">20dp</dimen>
+    <dimen name="newsAuthorLayoutHeight">80dp</dimen>
+    <dimen name="newsAuthorPhotoSize">40dp</dimen>
+    <dimen name="newsAuthorPhotoPaddingRight">10dp</dimen>
+    <dimen name="newsAuthorAttentionWidth">60dp</dimen>
+    <dimen name="newsAuthorAttentionHeight">30dp</dimen>
+
     <!-- 快讯 -->
     <dimen name="flash_timeBarHeight">28dp</dimen>
 
