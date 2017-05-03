@@ -38,6 +38,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
 
         plvContent.setOnRefreshListener(this);
+        plvContent.setDividerNull();
         plRootView.setOnAfreshLoadListener(this);
 
         Bundle arguments = getArguments();

@@ -17,7 +17,11 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
+import com.library.util.SPUtils;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 
 import java.text.SimpleDateFormat;
@@ -38,6 +42,8 @@ public class EditUserInfoActivity extends BaseActivity {
 
     private EditUserInfoPresenter editUserInfoPresenter;
 
+    @BindView(R.id.pl_rootView)
+    public PageLoadLayout plRootView;
     @BindView(R.id.iv_bar_break)
     ImageView btnBreak;
     @BindView(R.id.tv_bar_title)
@@ -73,8 +79,8 @@ public class EditUserInfoActivity extends BaseActivity {
     @BindView(R.id.fl_picker)
     public FrameLayout fl_picker;
 
-    public static final String VIEW_NAME_IMG="view_name_img";
-    public static final String VIEW_NAME_TITLE="view_name_title";
+    public static final String VIEW_NAME_IMG = "view_name_img";
+    public static final String VIEW_NAME_TITLE = "view_name_title";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,26 +89,19 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter = new EditUserInfoPresenter(this);
 
+        editUserInfoPresenter.initData();
+
         editUserInfoPresenter.loadCitis();
 
-        ViewCompat.setTransitionName(ivPhoto,VIEW_NAME_IMG);
-        ViewCompat.setTransitionName(tvNickname,VIEW_NAME_TITLE);
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        tvNickname.setText(userInfo.getNickname());
+        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap.icon_user_def_photo).into(ivPhoto);
+
+        ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
+        ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
 
         tvTitle.setText("个人中心");
         btnSubmit.setText("完成");
-
-        String imgUrl = "http://img.kuaixun360.com//Uploads/Editor/2016-12-27/5861d5137548e.jpg";
-
-        Glide.with(this)
-                .load(imgUrl)
-                .asBitmap()
-                .override(50, 50)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ivPhoto.setImageBitmap(resource);
-                    }
-                });
 
     }
 
@@ -150,6 +149,8 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.iv_bar_function:
                 //提交更改
+                showWaitDialog(null);
+                editUserInfoPresenter.postChangedInfo();
                 break;
             case R.id.rl_photo:
                 //修改头像

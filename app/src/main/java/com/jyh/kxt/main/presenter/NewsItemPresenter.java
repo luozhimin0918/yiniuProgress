@@ -27,7 +27,6 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.library.base.http.VarConstant;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
@@ -39,6 +38,7 @@ import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -94,6 +94,26 @@ public class NewsItemPresenter extends BasePresenter {
         if (isMain) {
             ininMain(arguments);
         } else {
+
+            newsItemFragment.plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    NewsJson newsJson = news.get(position-1);
+
+                    Intent intent = null;
+                    if (TextUtils.isEmpty(newsJson.getHref())) {
+                        intent = new Intent(mContext, NewsContentActivity.class);
+                        intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
+                    } else {
+                        intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
+                    }
+
+                    mContext.startActivity(intent);
+                }
+            });
+
             request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
 
                 @Override
@@ -151,7 +171,7 @@ public class NewsItemPresenter extends BasePresenter {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                NewsJson newsJson = news.get(position);
+                NewsJson newsJson = news.get(position-2);
 
                 Intent intent = null;
                 if (TextUtils.isEmpty(newsJson.getHref())) {
@@ -420,7 +440,6 @@ public class NewsItemPresenter extends BasePresenter {
                         newsItemFragment.plvContent.setAdapter(newsAdapter);
                     } else {
                         newsAdapter.setData(newsJsons);
-                        newsAdapter.notifyDataSetChanged();
                     }
                     refreshView.onRefreshComplete();
                 }
@@ -447,7 +466,6 @@ public class NewsItemPresenter extends BasePresenter {
                 protected void onResponse(List<NewsJson> newsJsons) {
                     checkNews(newsJsons);
                     newsAdapter.addData(newsJsons);
-                    newsAdapter.notifyDataSetChanged();
                     news.addAll(newsJsons);
                     refreshView.onRefreshComplete();
                 }

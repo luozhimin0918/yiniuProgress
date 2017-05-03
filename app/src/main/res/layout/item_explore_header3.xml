@@ -28,17 +28,14 @@
             android:textSize="@dimen/content_font_size"
             />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_start"
             android:layout_width="@dimen/explore_header_item3_tvWidth"
             android:layout_height="@dimen/explore_header_item3_tvHeight"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/explore_header_item3_padding"
-            android:background="@drawable/bg_explore_proceed"
-            android:gravity="center"
-            android:text="已结束"
-            android:textColor="@color/font_color6"
-            android:textSize="@dimen/describe_font_size2"/>
+            android:background="@drawable/sel_explore_time"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/tv_time"

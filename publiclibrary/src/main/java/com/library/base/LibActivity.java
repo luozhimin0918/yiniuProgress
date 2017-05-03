@@ -68,11 +68,9 @@ public abstract class LibActivity extends AppCompatActivity {
 
     protected void setBindingView(int layoutResID, StatusBarColor statusBarColor) {
         mQueue = RequestQueueUtil.newRequestQueue(this);
-
         DataBindingUtil.setContentView(this, layoutResID);
-        ButterKnife.bind(this);
-
         StatusBarCompat.compat(this, statusBarColor.color);
+        ButterKnife.bind(this);
     }
 
     RequestQueue.RequestFilter mRequestFilter = new RequestQueue.RequestFilter() {

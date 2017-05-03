@@ -27,6 +27,15 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     private Context mContext;
     private List<NewsJson> newsJsons;
+    private boolean isShowTitle = false;
+
+    public boolean isShowTitle() {
+        return isShowTitle;
+    }
+
+    public void setShowTitle(boolean showTitle) {
+        isShowTitle = showTitle;
+    }
 
     public NewsAdapter(Context context, List<NewsJson> dataList) {
         super(dataList);
@@ -45,10 +54,15 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
             holder.tvAuthor = (TextView) convertView.findViewById(R.id.tv_author);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            holder.tv = (TextView) convertView.findViewById(R.id.tv1);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        if (isShowTitle)
+            if (position == 0) holder.tv.setVisibility(View.VISIBLE);
+            else holder.tv.setVisibility(View.GONE);
 
         final NewsJson news = dataList.get(position);
 
@@ -57,7 +71,10 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                         (holder.ivPhoto);
 
         holder.tvTitle.setText(news.getTitle());
-        holder.tvAuthor.setText(news.getAuthor());
+        String author = news.getAuthor();
+        if (author != null)
+            author = "文/" + author;
+        holder.tvAuthor.setText(author);
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));
         } catch (Exception e) {
@@ -70,14 +87,16 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     public void addData(List<NewsJson> newsJsons) {
         this.newsJsons.addAll(newsJsons);
+        notifyDataSetChanged();
     }
 
     public void setData(List<NewsJson> data) {
         this.newsJsons = data;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {
-        public TextView tvTitle, tvAuthor, tvTime;
+        public TextView tv, tvTitle, tvAuthor, tvTime;
         public ImageView ivPhoto;
     }
 }

@@ -29,7 +29,7 @@ public class HttpConstant {
 
     }
 
-    public static final String OFFICIAL = "https//www.kxt.com";//官网
+    public static final String OFFICIAL = "https://www.kxt.com";//官网
 
     public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
     public static final String IMG_URL = "http://img.kuaixun360.com/";
@@ -44,6 +44,9 @@ public class HttpConstant {
     public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
     public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//版本信息
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
+    public static final String VIDEO_MOST_PLAY = BASE_URL + "video/list";//视听排行 最多播放
+    public static final String VIDEO_MOST_COMMENT = BASE_URL + "video/list";//视听排行 最多评论
+    public static final String VIDEO_MOST_COLLECT = BASE_URL + "video/list";//视听排行 最多收藏
 
     public static final String SOCKET_TOKEN_KX = BASE_URL + "kuaixun/ws" + VarConstant.HTTP_CONTENT;//快讯socketToken
     public static final String SOCKET_TOKEN_HQ = BASE_URL + "quotes/ws";//行情socketToken
@@ -56,4 +59,17 @@ public class HttpConstant {
     public static final String MARKET_INDEX = BASE_URL + "/quotes/index" + VarConstant.HTTP_CONTENT;
 
     public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
+
+    /**
+     * 用户接口
+     */
+    public static final String USER_LOGIN = BASE_URL + "user/login_from";//第三方登录
+    public static final String USER_LOGIN2 = BASE_URL + "user/login";//登录
+    public static final String USER_REGISTER = BASE_URL + "user/register";//注册
+    public static final String USER_FORGET = BASE_URL + "user/login_from";//忘记密码
+    public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
+
+    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏-文章 ?uid={uid}&token={token}&lastid={lastid}
+    public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏-视听
+    public static final String COLLECT_DEL = BASE_URL + "member/favor_delete";//收藏-删除 ?uid={uid}&token={token}&type={type:1,2}&id={1,2,3,4}
 }

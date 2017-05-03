@@ -62,8 +62,10 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
         mSettings.setLoadWithOverviewMode(true);
         mSettings.setBlockNetworkImage(false);
-        mSettings.setUseWideViewPort(false);
-        mSettings.setSupportZoom(true);
+        mSettings.setUseWideViewPort(true);
+        mSettings.setSupportZoom(false);
+
+        mSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
         mSettings.setJavaScriptEnabled(true);
         mSettings.setAppCacheEnabled(true);
@@ -89,7 +91,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     }
 
     @Override
-    public View getWebView() {
+    public WebView getWebView() {
         return wvContent;
     }
 
@@ -191,5 +193,28 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
         this.addView(failureView);
         failureView.bringToFront();
+    }
+
+    /**
+     * 更改文字大小
+     */
+    private void changeTextSize(int type) {
+        switch (type) {
+            case 0:
+                mSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+                break;
+            case 1:
+                mSettings.setTextSize(WebSettings.TextSize.SMALLER);
+                break;
+            case 2:
+                mSettings.setTextSize(WebSettings.TextSize.NORMAL);
+                break;
+            case 3:
+                mSettings.setTextSize(WebSettings.TextSize.LARGER);
+                break;
+            case 4:
+                mSettings.setTextSize(WebSettings.TextSize.LARGEST);
+                break;
+        }
     }
 }

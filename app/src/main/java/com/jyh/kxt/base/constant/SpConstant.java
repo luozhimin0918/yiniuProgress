@@ -19,6 +19,8 @@ public class SpConstant {
      */
     public static final String THEME = "theme";
 
+    public static final String USERINFO="userinfo";
+
     /**
      * 快讯筛选
      */

@@ -1,7 +1,8 @@
 package com.jyh.kxt.index.impl;
 
-import android.view.View;
 import android.view.ViewGroup;
+
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by Mr'Dai on 2017/4/7.
@@ -15,7 +16,7 @@ public interface WebBuild {
 
     void loadUrl(String url);
 
-    View getWebView();
+    WebView getWebView();
 
     ViewGroup getWebParentView();
 }

@@ -11,6 +11,7 @@
     <dimen name="item_height">50dp</dimen>
     <dimen name="line_height">6dp</dimen>
 
+    <dimen name="xxx_font_size">24sp</dimen>
     <dimen name="max_max_font_size">22sp</dimen>
     <dimen name="max_font_size">20sp</dimen>
     <dimen name="title_font_size">18sp</dimen>
@@ -23,6 +24,8 @@
     <dimen name="describe_font_size1">12sp</dimen>
 
     <dimen name="min_font_size">11sp</dimen>
+
+    <dimen name="btn_cornerRadius">5dp</dimen>
 
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
 
@@ -42,6 +45,7 @@
     <dimen name="navigationBar2Height">39dp</dimen>
     <dimen name="navigationBar2Radius">1.5dp</dimen>
     <dimen name="navigationBar2IndicatorWidth">8dp</dimen>
+    <dimen name="navigationBar2IndicatorWidth2">35dp</dimen>
     <dimen name="navigationBar2MarginBottom">5dp</dimen>
     <dimen name="navigationBar2ImageWidth">42dp</dimen>
     <dimen name="navigationBar2ImageHeight">15dp</dimen>
@@ -57,14 +61,32 @@
     <dimen name="index_slide_indicatorSize">6dp</dimen>
 
     <dimen name="index_ad_height">150dp</dimen>
-    <dimen name="index_ad_padding">10dp</dimen>
+    <dimen name="index_ad_imgHeight">77dp</dimen>
+    <dimen name="index_ad_padding">14dp</dimen>
     <dimen name="index_ad_imageTextMargin">8dp</dimen>
+
+    <dimen name="index_btn_imgSize">30dp</dimen>
+    <dimen name="index_btn_marginTop">10dp</dimen>
+    <dimen name="index_btn_padding">10dp</dimen>
 
     <dimen name="index_quotes_height">150dp</dimen>
     <dimen name="index_btn_height">150dp</dimen>
 
     <dimen name="indicator_margin">10dp</dimen>
     <dimen name="bar_height">35dp</dimen>
+
+    <!-- 侧滑菜单 -->
+    <dimen name="drawer_head_bottom">15dp</dimen>
+    <dimen name="drawer_head_login_avatarSize">90dp</dimen>
+    <dimen name="drawer_head_login_name_marginTop">8dp</dimen>
+    <dimen name="drawer_head_unlogin_imgMarginTop">50dp</dimen>
+    <dimen name="drawer_head_unlogin_imgSize">40dp</dimen>
+    <dimen name="drawer_head_unlogin_imgMarginRight">34dp</dimen>
+    <dimen name="drawer_head_unlogin_imgMarginLeft">25dp</dimen>
+    <dimen name="drawer_head_unlogin_tvMarginRight">16dp</dimen>
+
+    <dimen name="drawer_imgPadding">10dp</dimen>
+    <dimen name="drawer_edtPadding">20dp</dimen>
 
     <!-- 修改个人信息 -->
 
@@ -113,10 +135,26 @@
     <dimen name="videoHistoryPlaySize">30dp</dimen>
     <dimen name="videoHistoryTextHeight">40dp</dimen>
 
+    <!-- 视听排行 -->
+    <dimen name="rankItemHeight">103dp</dimen>
+    <dimen name="rankItemPaddingVertical">10dp</dimen>
+    <dimen name="rankItemPaddingRight">16dp</dimen>
+    <dimen name="rankItemPhotoWidth">147dp</dimen>
+    <dimen name="rankItemPhotoHeight">83dp</dimen>
+    <dimen name="rankItemPhotoMarginRight">10dp</dimen>
+    <dimen name="rankItemPlaySize">30dp</dimen>
+    <dimen name="rankItemTitleLineSpacingExtra">4dp</dimen>
+    <dimen name="rankItemTitlePaddingTop">4dp</dimen>
+    <dimen name="rankItemTimeMarginBottom">4dp</dimen>
+    <dimen name="rankItemTimeDrawablePadding">4dp</dimen>
+    <dimen name="rankItemRankImgWidth">18dp</dimen>
+    <dimen name="rankItemRankImgHeight">20dp</dimen>
+    <dimen name="rankItemRankImgMarginBottom">2dp</dimen>
 
     <!-- 要闻item -->
     <dimen name="newsItemHeight">84dp</dimen>
     <dimen name="newsItemPaddingLeft">14dp</dimen>
+    <dimen name="newsItemDrawablePadding">4dp</dimen>
     <dimen name="newsItemPaddingRight">16dp</dimen>
     <dimen name="newsItemPaddingVertical">10dp</dimen>
     <dimen name="newsItemImageViewHeight">64dp</dimen>
@@ -233,7 +271,19 @@
     <dimen name="lr_edt_height">40dp</dimen>
     <dimen name="lr_btn_height">45dp</dimen>
     <dimen name="lr_content_marginTop">45dp</dimen>
+    <dimen name="lr_umengImgSize">50dp</dimen>
 
     <dimen name="login_marginTop">10dp</dimen>
     <dimen name="login_marginTop2">45dp</dimen>
+
+    <!-- 忘记密码、修改密码 -->
+    <dimen name="forget_margin1">26dp</dimen>
+    <dimen name="forget_margin2">24dp</dimen>
+    <dimen name="forget_margin3">20dp</dimen>
+    <dimen name="forget_margin4">10dp</dimen>
+    <dimen name="forget_margin5">40dp</dimen>
+    <dimen name="forget_padding1">24dp</dimen>
+
+    <dimen name="forget_edtHeight">49dp</dimen>
+    <dimen name="forget_imgSize">20dp</dimen>
 </resources>

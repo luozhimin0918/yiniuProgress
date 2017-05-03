@@ -256,6 +256,11 @@
         <attr name="tl_textUnselectColor"/>
         <attr name="tl_textBold"/>
         <attr name="tl_textAllCaps"/>
+        
+        <attr name="tl_mode_scrollable"  format="enum">
+            <enum name="MODE_SCROLLABLE" value="0"/>
+            <enum name="MODE_FIXED" value="1"/>
+        </attr>
 
     </declare-styleable>
 

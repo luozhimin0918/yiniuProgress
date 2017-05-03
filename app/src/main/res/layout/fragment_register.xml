@@ -15,9 +15,7 @@
 
     <TextView
         android:id="@+id/tv_error_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lr_error_height"
-        android:paddingLeft="@dimen/lr_error_paddingLeft"/>
+        style="@style/errorTvStyle"/>
 
     <com.jyh.kxt.base.widget.LineEditText
         android:id="@+id/edt_email"
@@ -26,9 +24,7 @@
 
     <TextView
         android:id="@+id/tv_error_email"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lr_error_height"
-        android:paddingLeft="@dimen/lr_error_paddingLeft"/>
+        style="@style/errorTvStyle"/>
 
     <com.jyh.kxt.base.widget.LineEditText
         android:id="@+id/edt_pwd"
@@ -37,50 +33,41 @@
 
     <TextView
         android:id="@+id/tv_error_pwd"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lr_error_height"
-        android:paddingLeft="@dimen/lr_error_paddingLeft"/>
+        style="@style/errorTvStyle"/>
 
 
     <com.jyh.kxt.base.custom.DiscolorButton
         android:id="@+id/db_login"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lr_btn_height"
         android:layout_marginTop="@dimen/login_marginTop"
-        android:gravity="center"
         android:text="注册"
-        android:textSize="@dimen/content_font_size2"
-        app:clickBackground="@color/red_btn_bg_pressed_color"
-        app:clickFontColor="@color/white"
-        app:defaultBackground="@color/blue"
-        app:defaultFontColor="@color/white"
+        style="@style/BtnStyle1"
         />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp">
+        android:layout_marginTop="@dimen/lr_content_marginTop">
 
         <ImageView
             android:id="@+id/iv_qq"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/lr_umengImgSize"
+            android:layout_height="@dimen/lr_umengImgSize"
             android:layout_alignParentRight="true"
             android:layout_gravity="left"
             android:src="@mipmap/icon_user_login_qq"/>
 
         <ImageView
             android:id="@+id/iv_sina"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/lr_umengImgSize"
+            android:layout_height="@dimen/lr_umengImgSize"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:src="@mipmap/icon_user_login_sina"/>
 
         <ImageView
             android:id="@+id/iv_wx"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/lr_umengImgSize"
+            android:layout_height="@dimen/lr_umengImgSize"
             android:layout_gravity="right"
             android:src="@mipmap/icon_user_login_wx"/>
     </RelativeLayout>

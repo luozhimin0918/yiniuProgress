@@ -2,15 +2,19 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.widget.LoadX5WebView;
+import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.library.widget.PageLoadLayout;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 项目名:Kxt
@@ -21,7 +25,8 @@ import butterknife.ButterKnife;
 
 public class NewsContentActivity extends BaseActivity {
 
-    @BindView(R.id.pl_rootView)public PageLoadLayout plRootView;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
+    @BindView(R.id.lwv_content) LoadX5WebView wv_content;
 
     private NewsContentPresenter newsContentPresenter;
 
@@ -47,4 +52,14 @@ public class NewsContentActivity extends BaseActivity {
         id = intent.getStringExtra(IntentConstant.O_ID);
         newsContentPresenter.init();
     }
+
+    public void setView(NewsContentJson news) {
+
+        String content = news.getContent();
+        final WebView webView = wv_content.build().getWebView();
+        webView.loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
+
+
+    }
+
 }

@@ -10,6 +10,8 @@ package com.library.bean;
 public class EventBusClass {
 
     public static final int EVENT_FLASH_FILTRATE = 1;//快讯筛选
+    public static final int EVENT_LOGIN = 2;//登录
+    public static final int EVENT_LOGOUT = 3;//退出登录
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

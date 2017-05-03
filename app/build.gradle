@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     signingConfigs {
         config {
             keyAlias 'jyh_kxt'
@@ -25,8 +26,9 @@ android {
         }
         signingConfig signingConfigs.config
     }
-
-    useLibrary 'org.apache.http.legacy'
+    dataBinding {
+        enabled = true;
+    }
 
     buildTypes {
         release {

@@ -2,8 +2,6 @@ package com.jyh.kxt.main.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 
 import com.alibaba.fastjson.JSON;
@@ -17,11 +15,6 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.SpConstant;
-import com.library.base.http.VarConstant;
-import com.jyh.kxt.base.utils.SocketUtils;
-import com.jyh.kxt.index.json.ConfigJson;
-import com.jyh.kxt.index.json.SocketJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsHomeHeaderJson;
@@ -31,19 +24,11 @@ import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.util.SPUtils;
-
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.tavendo.autobahn.WebSocket;
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketException;
-import de.tavendo.autobahn.WebSocketOptions;
 
 /**
  * 项目名:Kxt

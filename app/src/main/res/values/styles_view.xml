@@ -17,6 +17,9 @@
     </style>
 
     <style name="LoginEditStyle">
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:background">@null</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/lr_edt_height</item>
         <item name="android:textColor">@color/font_color5</item>
@@ -24,4 +27,42 @@
         <item name="android:textSize">@dimen/content_font_size</item>
     </style>
 
+    <style name="BtnStyle1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/lr_btn_height</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/content_font_size2</item>
+        <item name="clickBackground">@color/blue</item>
+        <item name="clickFontColor">@color/white</item>
+        <item name="cornerRadius">@dimen/btn_cornerRadius</item>
+        <item name="defaultBackground">@color/blue</item>
+        <item name="defaultFontColor">@color/white</item>
+    </style>
+
+    <style name="BtnStyle2">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/lr_btn_height</item>
+        <item name="android:layout_marginLeft">@dimen/forget_margin2</item>
+        <item name="android:layout_marginRight">@dimen/forget_margin2</item>
+        <item name="android:layout_marginTop">@dimen/forget_margin2</item>
+        <item name="android:background">@drawable/sel_btn</item>
+        <item name="android:textSize">@dimen/content_font_size2</item>
+        <item name="android:textColor">@color/font_color3</item>
+    </style>
+
+    <style name="errorTvStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/lr_error_height</item>
+        <item name="android:paddingLeft">@dimen/lr_error_paddingLeft</item>
+        <item name="android:textColor">@color/font_color11</item>
+        <item name="android:textSize">@dimen/describe_font_size2</item>
+    </style>
+
+    <style name="PWDEditTextSize">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="hintColor">@color/font_color9</item>
+        <item name="textColor">@color/font_color5</item>
+        <item name="textSize">@dimen/content_font_size2</item>
+    </style>
 </resources>

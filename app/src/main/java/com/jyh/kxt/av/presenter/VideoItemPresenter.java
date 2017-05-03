@@ -1,6 +1,5 @@
 package com.jyh.kxt.av.presenter;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.android.volley.RequestQueue;
@@ -13,15 +12,12 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.window.ToastView;
-
-import org.json.JSONObject;
 
 import java.util.List;
 

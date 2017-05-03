@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
+import com.jyh.kxt.base.json.ShareBtnJson;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
@@ -302,21 +303,22 @@ public class UmengShareTool {
         rvShare.setLayoutManager(manager);
         rvFunction.setLayoutManager(manager2);
 
-        final List<String> list = new ArrayList<>();
-        list.add("朋友圈");
-        list.add("微信好友");
-        list.add("新浪");
-        list.add("QQ");
-        list.add("QQ空间");
+        final List<ShareBtnJson> list = new ArrayList<>();
+        list.add(new ShareBtnJson(R.mipmap.icon_share_qyq, "朋友圈"));
+        list.add(new ShareBtnJson(R.mipmap.icon_share_wx, "微信好友"));
+        list.add(new ShareBtnJson(R.mipmap.icon_share_sina, "新浪"));
+        list.add(new ShareBtnJson(R.mipmap.icon_share_qq, "QQ"));
+        list.add(new ShareBtnJson(R.mipmap.icon_share_zone, "QQ空间"));
 
         FunctionAdapter functionAdapter = new FunctionAdapter(list, activity);
         rvShare.setAdapter(functionAdapter);
 
-        List<String> list2 = new ArrayList();
-        list2.add("复制链接");
-        list2.add("收藏");
-        list2.add("赞");
-        list2.add("取消");
+        List<ShareBtnJson> list2 = new ArrayList();
+        list2.add(new ShareBtnJson(R.mipmap.icon_share_link, "复制链接"));
+        list2.add(new ShareBtnJson(R.drawable.sel_share_collect, "收藏"));
+        list2.add(new ShareBtnJson(R.drawable.sel_share_ding, "赞"));
+        list2.add(new ShareBtnJson(R.mipmap.icon_share_close, "取消"));
+
         FunctionAdapter functionAdapter2 = new FunctionAdapter(list2, activity);
         rvFunction.setAdapter(functionAdapter2);
 
@@ -341,7 +343,7 @@ public class UmengShareTool {
                         //微信
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
                             if (isHq) {
-                                setShareContent(activity,  bitmap, SHARE_MEDIA.WEIXIN);
+                                setShareContent(activity, bitmap, SHARE_MEDIA.WEIXIN);
                             } else {
                                 setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.WEIXIN);
                             }
@@ -361,7 +363,7 @@ public class UmengShareTool {
                         //QQ
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QQ)) {
                             if (isHq) {
-                                setShareContent(activity,  bitmap, SHARE_MEDIA.QQ);
+                                setShareContent(activity, bitmap, SHARE_MEDIA.QQ);
                             } else {
                                 setShareContent(activity, title, weburl, discription, thumb, SHARE_MEDIA.QQ);
                             }

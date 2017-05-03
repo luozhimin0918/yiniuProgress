@@ -29,7 +29,7 @@ public class StatusBarCompat {
             parent.removeView(contentView);
 
             LinearLayout replaceLayout = new LinearLayout(activity);
-            replaceLayout.setId(com.library.R.id.contents);
+            replaceLayout.setId(android.R.id.content);
 
             replaceLayout.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

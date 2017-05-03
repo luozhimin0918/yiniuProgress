@@ -32,6 +32,10 @@ public class IntentConstant {
     public static final String NEWS_NEWS = "news";//要闻列表
     public static final String NEWS_LIST = "list";//用于首页头部排序
 
+    /**
+     * 视听排行
+     */
+    public static final String RANK_TYPE = "rank_type";//视听排行类型
 
     /**
      * socket

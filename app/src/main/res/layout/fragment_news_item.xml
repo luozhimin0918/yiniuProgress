@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.library.widget.handmark.PullToRefreshListView
+        android:showDividers="none"
         android:id="@+id/plv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

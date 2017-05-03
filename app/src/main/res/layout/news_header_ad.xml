@@ -3,12 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/index_ad_height"
               android:orientation="vertical"
-              android:padding="@dimen/index_ad_padding">
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="@dimen/index_ad_imgHeight">
 
         <ImageView
             android:id="@+id/iv_ad"
@@ -27,8 +26,9 @@
     <LinearLayout
         android:id="@+id/ll_ad"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/index_ad_padding"
+        android:layout_marginRight="@dimen/index_ad_padding"
         android:gravity="center_vertical"
         android:orientation="vertical"/>
 </LinearLayout>

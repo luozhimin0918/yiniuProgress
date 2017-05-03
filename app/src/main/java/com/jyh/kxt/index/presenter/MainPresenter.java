@@ -43,15 +43,9 @@ public class MainPresenter extends BasePresenter {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        mMainActivity.rivAvatar.setImageBitmap(resource);
+                        mMainActivity.loginPhoto.setImageBitmap(resource);
                     }
                 });
-
-        Glide.with(mContext)
-                .load(imgUrl)
-                .override(50, 50)
-                .bitmapTransform(new BlurTransformation(mContext, 10, 10))//高斯模糊
-                .into(mMainActivity.ivBlurAvatar);
     }
 
     /**

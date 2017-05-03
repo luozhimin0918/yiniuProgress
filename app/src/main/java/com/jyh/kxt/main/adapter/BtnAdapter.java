@@ -13,11 +13,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.constant.HttpConstant;
-import com.library.base.http.VarConstant;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.SlideJson;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 
 import java.util.List;
@@ -59,13 +58,12 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
     public void onBindViewHolder(BtnViewHolder holder, int position) {
         final SlideJson slideJson = slideJsons.get(position);
         holder.textView.setText(slideJson.getName());
-        Glide.with(context).load(HttpConstant.IMG_URL + slideJson.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                .ico_def_load).into(holder.imageView);
+        Glide.with(context).load(slideJson.getPicture()).into(holder.imageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump((MainActivity) context,slideJson);
+                jump((MainActivity) context, slideJson);
             }
         });
 

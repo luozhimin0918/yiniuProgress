@@ -13,6 +13,7 @@ import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
+import com.library.base.http.VolleyRequest;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 
@@ -243,4 +244,10 @@ public class EditUserInfoPresenter extends BasePresenter {
         return detail;
     }
 
+    public void initData() {
+    }
+
+    public void postChangedInfo() {
+        activity.dismissWaitDialog();
+    }
 }

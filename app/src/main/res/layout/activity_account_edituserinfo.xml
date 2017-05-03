@@ -1,319 +1,326 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.library.widget.PageLoadLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:id="@+id/pl_rootView"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/action_bar1"/>
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/action_bar1"/>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/rl_photo"
-                    android:layout_height="@dimen/editUserInfo_item_height2"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="@dimen/editUserInfo_item_marginLeft">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="头像"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
+                    <RelativeLayout
+                        android:id="@+id/rl_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editUserInfo_item_height2"
+                        android:layout_marginLeft="@dimen/editUserInfo_item_marginLeft">
 
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding4"
-                        android:paddingTop="@dimen/editUserInfo_padding4"
-                        android:src="@mipmap/icon_user_break"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center"
+                            android:text="头像"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:paddingBottom="@dimen/editUserInfo_padding4"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding4"
+                            android:src="@mipmap/icon_user_break"
+                            />
+
+                        <com.jyh.kxt.base.custom.RoundImageView
+                            android:id="@+id/iv_photo"
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="@dimen/item_height"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:padding="@dimen/editUserInfo_padding2"
+                            app:outsideRound="true"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_nickname"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center"
+                            android:text="昵称"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                        <TextView
+                            android:id="@+id/tv_nickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="张三"
+                            android:textColor="@color/font_color2"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_gender"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center"
+                            android:text="性别"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                        <TextView
+                            android:id="@+id/tv_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="未知"
+                            android:textColor="@color/font_color2"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_birthday"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center"
+                            android:text="生日"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                        <TextView
+                            android:id="@+id/tv_birthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="1992-10-10"
+                            android:textColor="@color/font_color2"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_address"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:id="@+id/tv_address_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center"
+                            android:text="现居住地"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:layout_toRightOf="@id/tv_address_title"
+                            android:gravity="center_vertical|right"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="上海-上海-浦东"
+                            android:textColor="@color/font_color2"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_work"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="行业"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                        <TextView
+                            android:id="@+id/tv_work"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="互联网"
+                            android:textColor="@color/font_color2"
+                            android:textSize="@dimen/content_font_size"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editUserInfo_line_height"
+                        android:background="@color/line_color2"
                         />
 
-                    <com.jyh.kxt.base.custom.RoundImageView
-                        android:id="@+id/iv_photo"
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="@dimen/item_height"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="@dimen/item_height"
-                        app:outsideRound="true"
-                        android:padding="@dimen/editUserInfo_padding2"/>
+                    <RelativeLayout
+                        android:id="@+id/rl_changePwd"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="修改密码"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/item_height"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:paddingBottom="@dimen/editUserInfo_padding3"
+                            android:paddingRight="@dimen/editUserInfo_padding3"
+                            android:paddingTop="@dimen/editUserInfo_padding3"
+                            android:src="@mipmap/icon_user_break"/>
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/line_color3"/>
-                </RelativeLayout>
+                        android:layout_height="@dimen/editUserInfo_line_height"
+                        android:background="@color/line_color2"
+                        />
 
-                <RelativeLayout
-                    android:id="@+id/rl_nickname"
-                    style="@style/EditUserInfoItemStyle">
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="昵称"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
+        <FrameLayout
+            android:id="@+id/fl_picker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                    <TextView
-                        android:id="@+id/tv_nickname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="@dimen/item_height"
-                        android:gravity="center"
-                        android:src="@mipmap/ic_launcher"
-                        android:text="张三"
-                        android:textColor="@color/font_color2"
-                        android:textSize="@dimen/content_font_size"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/line_color3"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_gender"
-                    style="@style/EditUserInfoItemStyle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="性别"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                    <TextView
-                        android:id="@+id/tv_gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="@dimen/item_height"
-                        android:gravity="center"
-                        android:src="@mipmap/ic_launcher"
-                        android:text="未知"
-                        android:textColor="@color/font_color2"
-                        android:textSize="@dimen/content_font_size"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/line_color3"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_birthday"
-                    style="@style/EditUserInfoItemStyle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="生日"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                    <TextView
-                        android:id="@+id/tv_birthday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="@dimen/item_height"
-                        android:gravity="center"
-                        android:src="@mipmap/ic_launcher"
-                        android:text="1992-10-10"
-                        android:textColor="@color/font_color2"
-                        android:textSize="@dimen/content_font_size"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/line_color3"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_address"
-                    style="@style/EditUserInfoItemStyle">
-
-                    <TextView
-                        android:id="@+id/tv_address_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:text="现居住地"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                    <TextView
-                        android:id="@+id/tv_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="@dimen/item_height"
-                        android:layout_toRightOf="@id/tv_address_title"
-                        android:gravity="center_vertical|right"
-                        android:src="@mipmap/ic_launcher"
-                        android:text="上海-上海-浦东"
-                        android:textColor="@color/font_color2"
-                        android:textSize="@dimen/content_font_size"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/line_color3"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_work"
-                    style="@style/EditUserInfoItemStyle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="行业"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                    <TextView
-                        android:id="@+id/tv_work"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/item_height"
-                        android:gravity="center"
-                        android:src="@mipmap/ic_launcher"
-                        android:text="互联网"
-                        android:textColor="@color/font_color2"
-                        android:textSize="@dimen/content_font_size"/>
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/editUserInfo_line_height"
-                    android:background="@color/line_color2"
-                    />
-
-                <RelativeLayout
-                    android:id="@+id/rl_changePwd"
-                    style="@style/EditUserInfoItemStyle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="修改密码"
-                        android:textColor="@color/font_color1"
-                        android:textSize="@dimen/content_font_size2"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/item_height"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="@dimen/editUserInfo_padding3"
-                        android:paddingBottom="@dimen/editUserInfo_padding3"
-                        android:paddingTop="@dimen/editUserInfo_padding3"
-                        android:src="@mipmap/icon_user_break"/>
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/editUserInfo_line_height"
-                    android:background="@color/line_color2"
-                    />
-
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fl_picker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+</com.library.widget.PageLoadLayout>

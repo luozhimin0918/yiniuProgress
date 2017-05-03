@@ -29,7 +29,7 @@ public class BaseSwipeBackActivity extends BaseActivity {
         SlidingBackLayout slidingBackLayout = new SlidingBackLayout(getContext());
         slidingBackLayout.setLayoutParams(new ViewGroup.LayoutParams(matchParent, matchParent));
 
-        ViewGroup replaceLayout = (ViewGroup) findViewById(com.library.R.id.contents);
+        ViewGroup replaceLayout = (ViewGroup) findViewById(android.R.id.content);
         ViewGroup parent = (ViewGroup) replaceLayout.getParent();
         parent.removeView(replaceLayout);
         slidingBackLayout.addView(replaceLayout);

@@ -38,4 +38,16 @@
         <attr name="selectedFontColor"/>
         <attr name="defaultFontColor"/>
     </declare-styleable>
+
+    <declare-styleable name="PwdEditText">
+        <attr name="showPwd" format="boolean|reference"/>
+        <attr name="lineColor" format="color|reference"/>
+        <attr name="background" format="reference"/>
+        <attr name="eye" format="boolean|reference"/>
+        <attr name="hint" format="string|reference"/>
+        <attr name="text" format="string|reference"/>
+        <attr name="hintColor" format="color|reference"/>
+        <attr name="textColor" format="color|reference"/>
+        <attr name="textSize" format="dimension|reference"/>
+    </declare-styleable>
 </resources>

@@ -17,4 +17,31 @@ public class SettingPresenter extends BasePresenter {
         super(iBaseView);
     }
 
+    /**
+     * 推送
+     */
+    public void push() {
+        mSettingActivity.changeBtnStatus(true, SettingActivity.TYPE_PUSH);
+    }
+
+    /**
+     * 声音
+     */
+    public void sound() {
+        mSettingActivity.changeBtnStatus(true, SettingActivity.TYPE_SOUND);
+    }
+
+    /**
+     * 清理缓存
+     */
+    public void clear() {
+
+    }
+
+    /**
+     * 检测版本
+     */
+    public void version() {
+
+    }
 }

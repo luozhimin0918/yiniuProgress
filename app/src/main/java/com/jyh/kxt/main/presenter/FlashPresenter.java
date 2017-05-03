@@ -13,7 +13,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.constant.VarConstant;
+import com.library.base.http.VarConstant;
 import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;

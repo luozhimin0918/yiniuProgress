@@ -9,6 +9,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -39,10 +40,12 @@ public class NewsContentPresenter extends BasePresenter {
 
         queue = newsContentActivity.getQueue();
         request = new VolleyRequest(mContext, queue);
-        request.doGet(getUrl(request), new HttpListener<Object>() {
+        request.doGet(getUrl(request), new HttpListener<NewsContentJson>() {
             @Override
-            protected void onResponse(Object o) {
+            protected void onResponse(NewsContentJson news) {
                 Log.i("INFO", "");
+                newsContentActivity.setView(news);
+                newsContentActivity.plRootView.loadOver();
             }
 
             @Override

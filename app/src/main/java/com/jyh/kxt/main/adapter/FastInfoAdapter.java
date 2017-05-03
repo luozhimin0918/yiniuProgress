@@ -14,19 +14,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.constant.VarConstant;
-import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.utils.CollectUtils;
+import com.library.base.http.VarConstant;
+import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.StarView;
@@ -70,6 +69,15 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private Context context;
 
     public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
+
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
+
         this.flashJsons = flashJsons;
         inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
@@ -79,6 +87,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private Map<String, Integer> timeMap = new HashMap<>();
 
     public void setData(List<FlashJson> flashJsons) {
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
         this.flashJsons = flashJsons;
         inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
@@ -87,12 +102,28 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
 
     public void addData(FlashJson flashJson) {
+
+        if (CollectUtils.flashIsCollect(context, flashJson.toString())) {
+            flashJson.setColloct(true);
+        } else {
+            flashJson.setColloct(false);
+        }
+
         this.flashJsons.add(1, flashJson);
         initCollectStatus(2);
         notifyDataSetChanged();
     }
 
     public void addData(List<FlashJson> flashJsons) {
+
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
+
         inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
         initCollectStatus(1);
@@ -275,6 +306,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
                 }
 
+                kxHolder.ivCollect.setSelected(flash.isColloct());
+
                 break;
             case TYPE_RL:
                 FlashJson flash_rl = (FlashJson) flashJsons.get(position);
@@ -320,7 +353,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                  */
                 setAlarmState(reality,
                         Integer.parseInt(rl.getEffecttype()),//0 利多美元  1 利多金银石油 2 影响较小
-                        rl.getEffect(),
                         rlHolder.llExponent);
 
 
@@ -343,6 +375,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
                     }
                 }
+
+                rlHolder.ivCollect.setSelected(flash_rl.isColloct());
+
                 break;
             case TYPE_LEFT:
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
@@ -372,6 +407,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
+
+                leftHolder.ivCollect.setSelected(flash_left.isColloct());
                 break;
             case TYPE_RIGHT:
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
@@ -399,6 +436,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
+
+                rightHolder.ivCollect.setSelected(flash_right.isColloct());
+
                 break;
             case TYPE_TOP:
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
@@ -427,6 +467,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
+
+                topHolder.ivCollect.setSelected(flash_top.isColloct());
+
                 break;
             case TYPE_BOTTOM:
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
@@ -457,6 +500,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
+
+                bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
+
                 break;
         }
 
@@ -502,11 +548,31 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             @Override
             public void onClick(View v) {
                 if (flash.isColloct()) {
-                    flash.setColloct(false);
-                    ivCollect.setSelected(false);
+                    CollectUtils.flashUnCollect(context, flash.toString(), new ObserverData() {
+                        @Override
+                        public void callback(Object o) {
+                            flash.setColloct(false);
+                            ivCollect.setSelected(false);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ToastView.makeText3(context, "取消收藏失败");
+                        }
+                    });
                 } else {
-                    flash.setColloct(true);
-                    ivCollect.setSelected(true);
+                    CollectUtils.flashCollect(context, flash.toString(), new ObserverData() {
+                        @Override
+                        public void callback(Object o) {
+                            flash.setColloct(true);
+                            ivCollect.setSelected(true);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ToastView.makeText3(context, "收藏失败");
+                        }
+                    });
                 }
             }
         });
@@ -632,10 +698,24 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
     }
 
-
-    private void setAlarmState(String reality, int effectType, String effect, LinearLayout llExponent) {
+    private void setAlarmState(String reality, int effectType, LinearLayout llExponent) {
 
         llExponent.removeAllViews();
+
+
+        String effect = "||";
+        switch (effectType) {
+            case 0:
+                effect = "美元|金银 石油|";
+                break;
+            case 1:
+                effect = "金银 石油|美元|";
+                break;
+            case 2:
+                effect = "||";
+                break;
+        }
+
 
         RadianDrawable radianDrawable = new RadianDrawable(context);
 

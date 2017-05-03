@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.json.ShareBtnJson;
 
 import java.util.List;
 
@@ -21,11 +22,11 @@ import java.util.List;
 
 public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.FunctionViewHolder> {
 
-    private List<String> list;
+    private List<ShareBtnJson> list;
     private Context context;
     private OnClickListener onClickListener;
 
-    public FunctionAdapter(List<String> list, Context context) {
+    public FunctionAdapter(List<ShareBtnJson> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -38,7 +39,9 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
 
     @Override
     public void onBindViewHolder(FunctionViewHolder holder, final int position) {
-        holder.textView.setText(list.get(position));
+        ShareBtnJson shareBtnJson = list.get(position);
+        holder.textView.setText(shareBtnJson.getText());
+        holder.imageView.setBackgroundResource(shareBtnJson.getId());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

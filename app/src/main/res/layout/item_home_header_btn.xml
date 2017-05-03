@@ -4,19 +4,20 @@
               android:layout_height="match_parent"
               android:gravity="center"
               android:orientation="vertical"
-              android:padding="10dp">
+              android:padding="@dimen/index_btn_padding">
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_width="@dimen/index_btn_imgSize"
+        android:layout_height="@dimen/index_btn_imgSize"
+        />
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/index_btn_marginTop"
         android:gravity="center"
-        android:text="111"
-        android:textSize="16sp"/>
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
 </LinearLayout>

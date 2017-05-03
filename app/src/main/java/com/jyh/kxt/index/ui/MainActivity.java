@@ -10,23 +10,40 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
+import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
-import com.jyh.kxt.index.ui.fragment.ExploreFragment;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.AboutActivity;
+import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.SettingActivity;
+import com.library.bean.EventBusClass;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -38,25 +55,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
-    @BindView(R.id.rb_home)public RadioButton rbHome;
-    @BindView(R.id.rb_audio_visual)public RadioButton rbAudioVisual;
-    @BindView(R.id.rb_market)public RadioButton rbMarket;
-    @BindView(R.id.rb_datum)public RadioButton rbDatum;
-    @BindView(R.id.rb_probe)public RadioButton rbProbe;
+    @BindView(R.id.rb_home) public RadioButton rbHome;
+    @BindView(R.id.rb_audio_visual) public RadioButton rbAudioVisual;
+    @BindView(R.id.rb_market) public RadioButton rbMarket;
+    @BindView(R.id.rb_datum) public RadioButton rbDatum;
+    @BindView(R.id.rb_probe) public RadioButton rbProbe;
 
     private MainPresenter mainPresenter;
-
-    //侧边栏控件
-    public LinearLayout llHeaderLayout;
-    public ImageView ivBlurAvatar;
-    public RoundImageView rivAvatar;
-    public TextView tvNickName;
-    public TextView tvCollect;//收藏
-    public TextView tvShare;//分享
-    public TextView tvComment;//评论
-    public TextView tvReply;//回复
-    public TextView tvActivity;//活动
-
 
     //Fragment相关
     public BaseFragment currentFragment;
@@ -65,6 +70,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public MarketFragment marketFragment;
     public DatumFragment datumFragment;
     public ExploreFragment exploreFragment;
+    //侧边栏控件
+    public LinearLayout llHeaderLayout;
+    private RelativeLayout unLoginView, loginView;
+    public RoundImageView loginPhoto;
+    public TextView loginName;
+    private ImageView ivQQ, ivSina, ivWx;
+    private EditText searchEdt;
+    private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn, themeBtn, loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +88,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         //侧边栏相关控件
         initDrawer();
+
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mainPresenter.initHeaderLayout();
 
@@ -90,21 +109,46 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         llHeaderLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.nav_header_main, null);
         navigationView.addView(llHeaderLayout);
 
-        ivBlurAvatar = (ImageView) llHeaderLayout.findViewById(R.id.iv_blur_avatar);
-        rivAvatar = (RoundImageView) llHeaderLayout.findViewById(R.id.riv_avatar);
-        tvNickName = (TextView) llHeaderLayout.findViewById(R.id.tv_nickname);
-        tvCollect = (TextView) llHeaderLayout.findViewById(R.id.tv_collect);
-        tvComment = (TextView) llHeaderLayout.findViewById(R.id.tv_comment);
-        tvReply = (TextView) llHeaderLayout.findViewById(R.id.tv_reply);
-        tvActivity = (TextView) llHeaderLayout.findViewById(R.id.tv_activity);
-        tvShare = (TextView) llHeaderLayout.findViewById(R.id.tv_share);
+        unLoginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_unlogin);
+        loginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_login);
 
-        rivAvatar.setOnClickListener(this);
-        tvCollect.setOnClickListener(this);
-        tvComment.setOnClickListener(this);
-        tvReply.setOnClickListener(this);
-        tvActivity.setOnClickListener(this);
-        tvShare.setOnClickListener(this);
+        loginPhoto = (RoundImageView) llHeaderLayout.findViewById(R.id.riv_avatar);
+        loginName = (TextView) llHeaderLayout.findViewById(R.id.tv_nickname);
+
+        loginBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_login);
+        ivQQ = (ImageView) llHeaderLayout.findViewById(R.id.iv_qq);
+        ivSina = (ImageView) llHeaderLayout.findViewById(R.id.iv_sina);
+        ivWx = (ImageView) llHeaderLayout.findViewById(R.id.iv_wx);
+
+        searchEdt = (EditText) llHeaderLayout.findViewById(R.id.edt_search);
+        collectBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_collect);
+        focusBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_focus);
+        historyBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_history);
+        plBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_pl);
+        activityBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_activity);
+        shareBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_share);
+        settingBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_setting);
+        aboutBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_about);
+        themeBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_theme);
+
+        loginPhoto.setOnClickListener(this);
+        ivQQ.setOnClickListener(this);
+        ivSina.setOnClickListener(this);
+        ivWx.setOnClickListener(this);
+
+        loginBtn.setOnClickListener(this);
+        collectBtn.setOnClickListener(this);
+        focusBtn.setOnClickListener(this);
+        historyBtn.setOnClickListener(this);
+        plBtn.setOnClickListener(this);
+        activityBtn.setOnClickListener(this);
+        shareBtn.setOnClickListener(this);
+        settingBtn.setOnClickListener(this);
+        aboutBtn.setOnClickListener(this);
+        themeBtn.setOnClickListener(this);
+
+        //用户登录信息
+        changeUserStatus(LoginUtils.getUserInfo(this));
 
     }
 
@@ -182,42 +226,103 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (currentFragment != null) {
-
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
                 Pair[] pairs = {
-                        new Pair<View, String>(rivAvatar, EditUserInfoActivity.VIEW_NAME_IMG),
-                        new Pair<View, String>(tvNickName, EditUserInfoActivity.VIEW_NAME_TITLE)};
+                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
+                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
 
                 ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
-
                 break;
-            case R.id.tv_collect:
+            case R.id.ll_collect:
                 //收藏
+                Intent collectIntent = new Intent(this, CollectActivity.class);
+                startActivity(collectIntent);
                 break;
-            case R.id.tv_comment:
+            case R.id.ll_pl:
                 //评论
                 break;
-            case R.id.tv_reply:
-                //回复
-                break;
-            case R.id.tv_activity:
+            case R.id.ll_activity:
                 //活动
                 break;
-            case R.id.tv_share:
+            case R.id.ll_share:
                 //推荐
+                UmengShareTool.initUmengLayout(this, "快讯通财经", HttpConstant.OFFICIAL, "详情", "", null, shareBtn, "");
                 break;
+            case R.id.ll_about:
+                //关于
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
+                break;
+            case R.id.ll_focus:
+                //我的关注
+                break;
+            case R.id.ll_history:
+                //浏览历史
+                break;
+            case R.id.ll_theme:
+                //夜间模式
+                break;
+            case R.id.ll_setting:
+                //设置
+                Intent settingIntent = new Intent(this, SettingActivity.class);
+                startActivity(settingIntent);
+                break;
+            case R.id.iv_qq:
+                //QQ
+                UmengLoginTool.umenglogin(this, SHARE_MEDIA.QQ);
+                break;
+            case R.id.iv_sina:
+                //新浪
+                UmengLoginTool.umenglogin(this, SHARE_MEDIA.SINA);
+                break;
+            case R.id.iv_wx:
+                //微信
+                UmengLoginTool.umenglogin(this, SHARE_MEDIA.WEIXIN);
+                break;
+            case R.id.ll_login:
+                //登录
+                Intent loginIntent = new Intent(this, LoginOrRegisterActivity.class);
+                startActivity(loginIntent);
+                break;
+
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_LOGIN:
+                UserJson userJson = (UserJson) eventBus.intentObj;
+                changeUserStatus(userJson);
+                break;
+        }
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param userJson
+     */
+    private void changeUserStatus(UserJson userJson) {
+        if (userJson != null) {
+            loginView.setVisibility(View.VISIBLE);
+            unLoginView.setVisibility(View.GONE);
+
+            Glide.with(getContext()).load(userJson.getPicture()).error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                    .icon_user_def_photo).into(loginPhoto);
+            loginName.setText(userJson.getNickname());
+
+        } else {
+            loginView.setVisibility(View.GONE);
+            unLoginView.setVisibility(View.VISIBLE);
+
+            Glide.with(getContext()).load(R.mipmap.icon_user_def_photo).into(loginPhoto);
+            loginName.setText("");
         }
     }
 
@@ -227,5 +332,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
         if (currentFragment != null)
             currentFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

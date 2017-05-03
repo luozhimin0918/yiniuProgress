@@ -32,6 +32,8 @@ public class VolleyRequest {
     private Context mContext;
     private RequestQueue mQueue;
 
+    private String msg;
+
     //反射得到要解析的数据
     private MyType superclassTypeParameter;
 
@@ -98,11 +100,12 @@ public class VolleyRequest {
                         @Override
                         protected void toJsonString(String json) {
                             try {
-                               LogUtil.e("toJsonString", "响应:" + json);
+                                LogUtil.e("toJsonString", "响应:" + json);
 
                                 org.json.JSONObject object = new org.json.JSONObject(json);
                                 int status = object.getInt("status");
                                 String data = object.getString("data");
+                                msg = object.optString("msg");
 
                                 if (status == 1) {
                                     T resultT = null;
@@ -115,7 +118,7 @@ public class VolleyRequest {
                                     }
                                     mHttpListener.onResponse(resultT);
                                 } else {
-                                    mHttpListener.onErrorResponse(null);
+                                    mHttpListener.onErrorResponse(new VolleyError(msg));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -141,6 +144,10 @@ public class VolleyRequest {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(OUT_TIME, 1, 1.0f));
         stringRequest.setTag(httpTag);
         mQueue.add(stringRequest);
+    }
+
+    public String getMag() {
+        return msg;
     }
 
     /**

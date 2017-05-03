@@ -19,8 +19,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.library.R;
 import com.library.widget.handmark.internal.EmptyViewMethodAccessor;
@@ -46,28 +47,33 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
     public PullToRefreshListView(Context context) {
         super(context);
-        initView();
+        initView(null);
     }
 
     public PullToRefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        initView(attrs);
     }
 
     public PullToRefreshListView(Context context, Mode mode) {
         super(context, mode);
-        initView();
+        initView(null);
     }
 
     public PullToRefreshListView(Context context, Mode mode, AnimationStyle style) {
         super(context, mode, style);
-        initView();
+        initView(null);
     }
 
 
-    private void initView() {
+    private void initView(AttributeSet attrs) {
         mRefreshableView.setDivider(new ColorDrawable(0XFFD9D9D9));
         mRefreshableView.setDividerHeight(1);
+    }
+
+    public void setDividerNull() {
+        mRefreshableView.setDivider(new ColorDrawable(0XFFD9D9D9));
+        mRefreshableView.setDividerHeight(0);
     }
 
     @Override
