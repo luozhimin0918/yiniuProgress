@@ -42,6 +42,9 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
         ShareBtnJson shareBtnJson = list.get(position);
         holder.textView.setText(shareBtnJson.getText());
         holder.imageView.setBackgroundResource(shareBtnJson.getId());
+
+        holder.imageView.setSelected(shareBtnJson.isStatus());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +57,18 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
+    }
+
+    /**
+     * 更改按钮状态
+     *
+     * @param position
+     * @param o
+     */
+    public void changeStatus(int position, Boolean o) {
+        ShareBtnJson shareBtnJson = list.get(position);
+        shareBtnJson.setStatus(o);
+        notifyDataSetChanged();
     }
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {

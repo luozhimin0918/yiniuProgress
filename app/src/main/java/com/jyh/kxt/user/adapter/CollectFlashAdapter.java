@@ -1,4 +1,4 @@
-package com.jyh.kxt.main.adapter;
+package com.jyh.kxt.user.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -56,20 +56,19 @@ import butterknife.ButterKnife;
  * 创建日期:2017/4/21.
  */
 
-public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListView.PinnedSectionListAdapter {
+public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedListView.PinnedSectionListAdapter {
 
-    private static final int TYPE_TIME = 0;
-    private static final int TYPE_KX = 1;
-    private static final int TYPE_RL = 2;
-    private static final int TYPE_LEFT = 3;
-    private static final int TYPE_RIGHT = 4;
-    private static final int TYPE_TOP = 5;
-    private static final int TYPE_BOTTOM = 6;
+    private static final int TYPE_KX = 0;
+    private static final int TYPE_RL = 1;
+    private static final int TYPE_LEFT = 2;
+    private static final int TYPE_RIGHT = 3;
+    private static final int TYPE_TOP = 4;
+    private static final int TYPE_BOTTOM = 5;
 
     private List flashJsons;
     private Context context;
 
-    public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
+    public CollectFlashAdapter(List<FlashJson> flashJsons, Context context) {
 
         for (FlashJson flash : flashJsons) {
             if (CollectUtils.flashIsCollect(context, flash.toString())) {
@@ -80,12 +79,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         this.flashJsons = flashJsons;
-        inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
         this.context = context;
     }
-
-    private Map<String, Integer> timeMap = new HashMap<>();
 
     public void setData(List<FlashJson> flashJsons) {
         for (FlashJson flash : flashJsons) {
@@ -96,7 +92,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
         }
         this.flashJsons = flashJsons;
-        inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
         notifyDataSetChanged();
     }
@@ -125,7 +120,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
         }
 
-        inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
         initCollectStatus(1);
         notifyDataSetChanged();
@@ -167,7 +161,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TimeViewHolder timeHolder = null;
         KXViewHolder kxHolder = null;
         NEWViewHolder topHolder = null;
         NEWViewHolder bottomHolder = null;
@@ -178,11 +171,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             switch (type) {
-                case TYPE_TIME:
-                    convertView = inflater.inflate(R.layout.layout_flash_time_bar, parent, false);
-                    timeHolder = new TimeViewHolder(convertView);
-                    convertView.setTag(timeHolder);
-                    break;
                 case TYPE_KX:
                     convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
                     kxHolder = new KXViewHolder(convertView);
@@ -217,9 +205,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         } else {
             try {
                 switch (type) {
-                    case TYPE_TIME:
-                        timeHolder = (TimeViewHolder) convertView.getTag();
-                        break;
                     case TYPE_KX:
                         kxHolder = (KXViewHolder) convertView.getTag();
                         break;
@@ -242,11 +227,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             } catch (Exception e) {
                 LayoutInflater inflater = LayoutInflater.from(context);
                 switch (type) {
-                    case TYPE_TIME:
-                        convertView = inflater.inflate(R.layout.layout_flash_time_bar, parent, false);
-                        timeHolder = new TimeViewHolder(convertView);
-                        convertView.setTag(timeHolder);
-                        break;
                     case TYPE_KX:
                         convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
                         kxHolder = new KXViewHolder(convertView);
@@ -282,9 +262,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         switch (type) {
-            case TYPE_TIME:
-                timeHolder.tvTime.setText(flashJsons.get(position).toString());
-                break;
             case TYPE_KX:
                 FlashJson flash = (FlashJson) flashJsons.get(position);
                 Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
@@ -614,7 +591,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     }
 
                     UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl, discription, image, null,
-                            UmengShareTool.TYPE_VIDEO, null, null,null,false,false), ivShare, null);
+                            UmengShareTool.TYPE_DEFAULT,null,null,null,false,false),ivShare, null);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -824,9 +801,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     @Override
     public int getItemViewType(int position) {
-        Object obj = flashJsons.get(position);
-        if (obj instanceof String) return TYPE_TIME;
-        FlashJson flashJson = (FlashJson) obj;
+        FlashJson flashJson = (FlashJson) flashJsons.get(position);
         String code = flashJson.getCode();
         switch (code) {
             case VarConstant.SOCKET_FLASH_KUAIXUN:
@@ -865,106 +840,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     @Override
     public int getViewTypeCount() {
-        return 7;
-    }
-
-    public void inspiritDateInfo(List flashJsons) {
-        int size = flashJsons.size();
-
-        for (int i = 0; i < size; i++) {
-            Object obj = flashJsons.get(i);
-            if (obj instanceof String)
-                flashJsons.remove(obj);
-        }
-
-        size = flashJsons.size();
-        timeMap.clear();
-        for (int i = 0; i < size; i++) {
-            Object obj = flashJsons.get(i);
-            FlashJson flashJson = (FlashJson) flashJsons.get(i);
-            Object content = flashJson.getContent();
-            String code = flashJson.getCode();
-            if (content == null) return;
-            String time = "";
-            switch (code) {
-                case VarConstant.SOCKET_FLASH_CJRL:
-                    //日历
-                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KUAIXUN:
-                    //快讯
-                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KXTNEWS:
-                    //图文
-                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
-                    break;
-            }
-
-            if (!TextUtils.isEmpty(time)) {
-                String[] splitTime = time.split(" ");
-                String month = splitTime[0].split("-")[1];
-                String day = splitTime[0].split("-")[2];
-
-                String MD = month + "月" + day + "日"; //显示用
-
-                if (!timeMap.containsKey(MD)) {
-                    timeMap.put(MD, i);
-                    if (i < size)
-                        flashJsons.add(i, MD);
-                    else
-                        flashJsons.add(MD);
-                }
-            }
-        }
-
-    }
-
-    public void inspiritDateInfo2(List flashJsons) {
-        int size = flashJsons.size();
-        for (int i = 0; i < size; i++) {
-            FlashJson flashJson = (FlashJson) flashJsons.get(i);
-            Object content = flashJson.getContent();
-            String code = flashJson.getCode();
-            if (content == null) return;
-            String time = "";
-            switch (code) {
-                case VarConstant.SOCKET_FLASH_CJRL:
-                    //日历
-                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KUAIXUN:
-                    //快讯
-                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KXTNEWS:
-                    //图文
-                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
-                    break;
-            }
-
-            if (!TextUtils.isEmpty(time)) {
-                String[] splitTime = time.split(" ");
-                String month = splitTime[0].split("-")[1];
-                String day = splitTime[0].split("-")[2];
-
-                String MD = month + "月" + day + "日"; //显示用
-
-                if (!timeMap.containsKey(MD)) {
-                    timeMap.put(MD, i);
-                    if (i < size)
-                        flashJsons.add(i, MD);
-                    else
-                        flashJsons.add(MD);
-                }
-            }
-        }
-    }
-
-
-    @Override
-    public boolean isItemViewTypePinned(int viewType) {
-        return viewType == 0;
+        return 6;
     }
 
     private String getString(String str) {
@@ -978,22 +854,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         return splitTime2[0] + ":" + splitTime2[1];
     }
 
-    /**
-     * 筛选
-     */
-    public void filtrate() {
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 时间
-     */
-    class TimeViewHolder {
-        @BindView(R.id.tv_time_day) TextView tvTime;
-
-        TimeViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+    @Override
+    public boolean isItemViewTypePinned(int viewType) {
+        return false;
     }
 
     /**

@@ -75,7 +75,7 @@ public class VarConstant {
     public static final String WX_APPID = "wxf6f6e8a2f5f3af5e";
     public static final String WX_APPSECRET = "3545273eea982cc0a424dcf6845e9200";
 
-//    public static final String SINA_APPKEY = "3864596803";
+    //    public static final String SINA_APPKEY = "3864596803";
 //    public static final String SINA_APPSECRET = "cff54ddbc22d70c65f4dd548611e524a";
 //    public static final String SINA_CALLBACK = "http://sns.whalecloud.com";
     public static final String SINA_APPKEY = "2798094812";
@@ -108,18 +108,49 @@ public class VarConstant {
     public static final String SOCKET_CMD_TIMELY = "timely";
     public static final String SOCKET_CMD_LOGIN = "login";
 
+    /**
+     * Socket返回信息类型
+     */
     public static final String SOCKET_DO_DELETE = "delete";
     public static final String SOCKET_DO_MODIFY = "modify";
 
+    /**
+     * 快讯类型
+     */
     public static final String SOCKET_FLASH_KUAIXUN = "KUAIXUN";
     public static final String SOCKET_FLASH_CJRL = "CJRL";
     public static final String SOCKET_FLASH_KXTNEWS = "KXTNEWS";
 
+    /**
+     * 快讯图片位置
+     */
     public static final String SOCKET_FLASH_LEFT = "l";
     public static final String SOCKET_FLASH_RIGHT = "r";
     public static final String SOCKET_FLASH_TOP = "u";
     public static final String SOCKET_FLASH_BOTTOM = "d";
 
+    /**
+     * 重要性
+     */
     public static final String IMPORTANCE_HIGH = "高";
     public static final String IMPORTANCE_LOW = "低";
+
+    /**
+     * 收藏类型
+     */
+    public static final String COLLECT_TYPE_VIDEO = "video";//视听
+    public static final String COLLECT_TYPE_ARTICLE = "article";//文章
+
+    /**
+     * 点赞状态
+     */
+    public static final String GOOD_TYPE_NEWS = "news";//文章
+    public static final String GOOD_TYPE_VIDEO = "video";//视听
+
+    /**
+     * 分享面板操作类型
+     */
+    public static final String FUNCTION_TYPE_COLLECT = "function_type_collect";//收藏
+    public static final String FUNCTION_TYPE_GOOD = "function_type_good";//点赞
+
 }

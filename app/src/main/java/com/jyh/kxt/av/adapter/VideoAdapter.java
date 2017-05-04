@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +15,25 @@ import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.CollectUtils;
+import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
+import com.library.widget.window.ToastView;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 项目名:Kxt
- * 类描述:
+ * 类描述:视听Adapter
  * 创建人:苟蒙蒙
  * 创建日期:2017/4/19.
  */
@@ -73,10 +83,37 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UmengShareTool.initUmengLayout((BaseActivity) mContext, video.getTitle(), "http://www.baidu.com",
-                        "http://www.baidu" +
-                                ".com",
-                        null, null, holder.ivMore, null);
+                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www.baidu.com",
+                        "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
+                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, true, false), holder.ivMore, new
+                        ObserverData<Map<String,
+                                Boolean>>() {
+                            @Override
+                            public void callback(Map<String, Boolean> o) {
+                                Set<String> set = o.keySet();
+                                Iterator<String> iterator = set.iterator();
+                                while (iterator.hasNext()) {
+                                    String key = iterator.next();
+                                    Boolean b = o.get(key);
+                                    switch (key) {
+                                        case VarConstant.FUNCTION_TYPE_COLLECT:
+                                            // TODO: 2017/5/4 更改video 收藏状态
+                                            break;
+                                        case VarConstant.FUNCTION_TYPE_GOOD:
+                                            // TODO: 2017/5/4 更改video 点赞状态
+                                            break;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                //失败
+                                if (e != null && e.getMessage() != null) {
+                                    ToastView.makeText3(mContext, e.getMessage());
+                                }
+                            }
+                        });
             }
         });
         holder.iv.setOnClickListener(new View.OnClickListener() {

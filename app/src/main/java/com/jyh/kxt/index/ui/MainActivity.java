@@ -23,6 +23,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -39,6 +40,7 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.bean.EventBusClass;
+import com.library.widget.window.ToastView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
@@ -240,18 +242,27 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_collect:
                 //收藏
-                Intent collectIntent = new Intent(this, CollectActivity.class);
-                startActivity(collectIntent);
+                if (LoginUtils.isLogined(this)) {
+                    Intent collectIntent = new Intent(this, CollectActivity.class);
+                    startActivity(collectIntent);
+                } else {
+                    ToastView.makeText3(this, "请先登录");
+                }
                 break;
             case R.id.ll_pl:
                 //评论
+                if (LoginUtils.isLogined(this)) {
+                } else {
+                    ToastView.makeText3(this, "请先登录");
+                }
                 break;
             case R.id.ll_activity:
                 //活动
                 break;
             case R.id.ll_share:
                 //推荐
-                UmengShareTool.initUmengLayout(this, "快讯通财经", HttpConstant.OFFICIAL, "详情", "", null, shareBtn, "");
+                UmengShareTool.initUmengLayout(this, new ShareJson("快讯通财经", HttpConstant.OFFICIAL, "详情", null, null, UmengShareTool
+                        .TYPE_DEFAULT, null, null,null,false,false), shareBtn, null);
                 break;
             case R.id.ll_about:
                 //关于
@@ -260,6 +271,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_focus:
                 //我的关注
+                if (LoginUtils.isLogined(this)) {
+                } else {
+                    ToastView.makeText3(this, "请先登录");
+                }
                 break;
             case R.id.ll_history:
                 //浏览历史

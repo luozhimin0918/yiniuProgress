@@ -1,5 +1,7 @@
 package com.jyh.kxt.main.json.flash;
 
+import java.io.Serializable;
+
 /**
  * 项目名:Kxt
  * 类描述:快讯
@@ -7,7 +9,7 @@ package com.jyh.kxt.main.json.flash;
  * 创建日期:2017/4/21.
  */
 
-public class FlashJson {
+public class FlashJson implements Serializable {
     private String id;
     private String socre;//真正用到的id
     private String code;//类型 ["CJRL" 日历,"KUAIXUN" 快讯,"KXTNEWS" 要闻]
@@ -21,16 +23,6 @@ public class FlashJson {
 
     public void setShowMore(boolean showMore) {
         isShowMore = showMore;
-    }
-
-    @Override
-    public String toString() {
-        return "FlashJson{" +
-                "content=" + content +
-                ", code='" + code + '\'' +
-                ", socre='" + socre + '\'' +
-                ", id='" + id + '\'' +
-                '}';
     }
 
     public boolean isColloct() {
