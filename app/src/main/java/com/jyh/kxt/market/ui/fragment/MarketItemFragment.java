@@ -40,7 +40,6 @@ public class MarketItemFragment extends BaseFragment {
             marketMainPresenter.generateMainHeaderView();
         } else {
             marketOtherPresenter = new MarketOtherPresenter(this);
-
         }
     }
 }
