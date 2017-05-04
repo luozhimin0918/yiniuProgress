@@ -90,9 +90,4 @@ public class HttpConstant {
     public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点评状态-文章 ?id={}
     public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点评状态-视听 ?id={}
 
-    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏-文章
-    // ?uid={uid}&token={token}&lastid={lastid}
-    public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏-视听
-    public static final String COLLECT_DEL = BASE_URL + "member/favor_delete";//收藏-删除
-    // ?uid={uid}&token={token}&type={type:1,2}&id={1,2,3,4}
 }
