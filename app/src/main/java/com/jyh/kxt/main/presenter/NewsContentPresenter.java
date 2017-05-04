@@ -44,7 +44,7 @@ public class NewsContentPresenter extends BasePresenter {
             @Override
             protected void onResponse(NewsContentJson news) {
                 Log.i("INFO", "");
-                newsContentActivity.initView(news);
+                newsContentActivity.setView(news);
                 newsContentActivity.plRootView.loadOver();
             }
 

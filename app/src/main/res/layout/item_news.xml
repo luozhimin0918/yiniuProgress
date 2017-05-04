@@ -34,7 +34,7 @@
             android:layout_width="@dimen/newsItemImageViewWidth"
             android:layout_height="@dimen/newsItemImageViewHeight"
             android:layout_centerVertical="true"
-            android:scaleType="fitXY"/>
+            android:src="@mipmap/icon_test"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -43,7 +43,7 @@
             android:layout_marginLeft="@dimen/newsItemTitleMarginLeft"
             android:layout_toRightOf="@id/iv_photo"
             android:lineSpacingMultiplier="1.2"
-            android:maxLines="2"
+            android:text="fdabfkaebfdbfabgewbdhjbdsjbhcdhaskdjsajdjsafba"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/content_font_size"/>
 
@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/tv_title"
             android:layout_alignParentBottom="true"
+            android:text="文/快讯通"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/describe_font_size1"/>
 
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:text="18:18"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/min_font_size"/>
     </RelativeLayout>

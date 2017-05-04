@@ -34,7 +34,6 @@ import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
-import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
@@ -230,6 +229,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
+//                Pair[] pairs = {
+//                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
+//                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
+//
+//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
+//                Intent intent = new Intent(this, EditUserInfoActivity.class);
+//                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
+                break;
+            case R.id.ll_collect:
+                //收藏
+//                Intent collectIntent = new Intent(this, CollectActivity.class);
+//                startActivity(collectIntent);
+
                 Pair[] pairs = {
                         new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
                         new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
@@ -237,11 +249,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
-                break;
-            case R.id.ll_collect:
-                //收藏
-                Intent collectIntent = new Intent(this, CollectActivity.class);
-                startActivity(collectIntent);
                 break;
             case R.id.ll_pl:
                 //评论

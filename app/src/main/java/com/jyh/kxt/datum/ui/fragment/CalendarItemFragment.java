@@ -6,8 +6,11 @@ import com.android.volley.RequestQueue;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.datum.adapter.CalendarItemAdapter;
+import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarType;
 import com.jyh.kxt.datum.presenter.CalendarItemPresenter;
+import com.jyh.kxt.index.ui.fragment.DatumFragment;
+import com.library.util.ObserverCall;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -45,6 +48,7 @@ public class CalendarItemFragment extends BaseFragment {
 
     public void setCalendarAdapter(List<CalendarType> calendarBeen) {
         calendarItemAdapter = new CalendarItemAdapter(getContext(), calendarBeen);
+        calendarItemAdapter.setParentFragment(this);
         ptrlvContent.getRefreshableView().setDividerHeight(0);
         ptrlvContent.setAdapter(calendarItemAdapter);
     }
@@ -54,6 +58,17 @@ public class CalendarItemFragment extends BaseFragment {
         String calendarDate = parentFragment.getCalendarDate(this);
         return calendarDate;
     }
+
+    public void showTimingWindow(CalendarType mCalendarType, ObserverCall<Integer> observerCall) {
+        if (mCalendarType instanceof CalendarFinanceBean) {
+            CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+            String time = mCalendarFinanceBean.getTime();
+
+            DatumFragment parentFragment = (DatumFragment) getParentFragment().getParentFragment();
+            parentFragment.showTimingWindow(time,observerCall);
+        }
+    }
+
 
     @Override
     public void onDestroyView() {

@@ -47,6 +47,7 @@
     <color name="font_color13">#99ffffff</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
+    <color name="font_color61">#F9FAFB</color>
 
     <color name="tabSelColor">#000000</color>
     <color name="tabUnSelColor">#66000000</color>
@@ -72,7 +73,7 @@
     <color name="decline_color">#60B280</color>
     <color name="unaltered_color">#888887</color>
 
-    <color name="shape_bg1">#f1f2f6 </color>
+    <color name="shape_bg1">#f1f2f6</color>
     <!-- 探索 -->
     <color name="explore_notstarted_color">#A1ABB2</color>
     <color name="explore_proceed_color">#1C9CF2</color>

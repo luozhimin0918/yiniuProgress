@@ -48,7 +48,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
     private VideoDetailPresenter videoDetailPresenter;
 
     //视频ID
-    private String videoId;
+    public String videoId;
 
     //评论相关
     private PopupUtil replyMessagePopup;
@@ -75,7 +75,7 @@ public class VideoDetailActivity extends BaseActivity implements SoftKeyBoardLis
     }
 
 
-    @OnClick({R.id.tv_reply_message,R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
+    @OnClick({R.id.tv_reply_message, R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.tv_reply_message:

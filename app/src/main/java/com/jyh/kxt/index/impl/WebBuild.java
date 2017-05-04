@@ -16,8 +16,6 @@ public interface WebBuild {
 
     void loadUrl(String url);
 
-    void loadData(String data);
-
     WebView getWebView();
 
     ViewGroup getWebParentView();

@@ -57,7 +57,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         vpCalendarList.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpCalendarList);
 
-        int itemPosition = (calendarPresenter.generateItemCount + 1) / 2;
+        int itemPosition = calendarPresenter.generateItemCount / 2;
         vpCalendarList.addOnPageChangeListener(this);
         vpCalendarList.setCurrentItem(itemPosition);
         calendarPresenter.updateSelectedColor(itemPosition);
@@ -102,8 +102,9 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             fragmentList.clear();
             vpCalendarList.removeAllViews();
 
-            calendarPresenter.generateDateItem(System.currentTimeMillis());
+            calendarPresenter.generateDateItem(timeInMillis);
             createItemFragments();
         }
     }
+
 }

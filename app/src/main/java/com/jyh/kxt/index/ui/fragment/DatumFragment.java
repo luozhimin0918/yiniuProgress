@@ -4,10 +4,12 @@ package com.jyh.kxt.index.ui.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.jyh.kxt.R;
@@ -17,9 +19,13 @@ import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.DataFragment;
 import com.jyh.kxt.index.presenter.DatumPresenter;
 import com.library.base.LibActivity;
+import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
+import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,6 +39,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     @BindView(R.id.iv_right_icon2) ImageView ivCalendar;
     @BindView(R.id.iv_right_icon1) ImageView ivFiltrate;
+    @BindView(R.id.fl_root_content) FrameLayout flRootContent;
 
     private DatumPresenter datumPresenter;
 
@@ -148,5 +155,30 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         if (calendarFragment != null) {
             ((CalendarFragment) calendarFragment).gotoCorrespondItem(timeInMillis);
         }
+    }
+
+    public void showTimingWindow(String time, final ObserverCall<Integer> observerCall) {
+        final ArrayList<String> timeList = new ArrayList<>();
+        timeList.add("提前5分钟");
+        timeList.add("提前10分钟");
+        timeList.add("提前15分钟");
+        timeList.add("提前30分钟");
+        timeList.add("提前一个小时");
+        OptionsPickerView timePickerView = new OptionsPickerView
+                .Builder(getContext(),
+                new OptionsPickerView.OnOptionsSelectListener() {
+                    @Override
+                    public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                        observerCall.onComplete(options1);
+                    }
+                })
+                .setDividerColor(ContextCompat.getColor(getContext(), R.color.line_color3))
+                .setTextColorCenter(ContextCompat.getColor(getContext(), R.color.font_color5)) //设置选中项文字颜色
+                .setSelectOptions(0)
+                .setContentTextSize(20)
+                .setDecorView(flRootContent)
+                .build();
+        timePickerView.setPicker(timeList);
+        timePickerView.show();
     }
 }

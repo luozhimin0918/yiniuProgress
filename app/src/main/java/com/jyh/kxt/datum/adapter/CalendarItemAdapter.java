@@ -28,8 +28,13 @@ import com.jyh.kxt.datum.bean.CalendarImportantBean;
 import com.jyh.kxt.datum.bean.CalendarNotBean;
 import com.jyh.kxt.datum.bean.CalendarTitleBean;
 import com.jyh.kxt.datum.bean.CalendarType;
+import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
+import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,11 +49,16 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
     private Context mContext;
     private LayoutInflater layoutInflater;
+    private CalendarItemFragment parentFragment;
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
         this.mContext = mContext;
         layoutInflater = LayoutInflater.from(mContext);
+    }
+
+    public void setParentFragment(CalendarItemFragment parentFragment) {
+        this.parentFragment = parentFragment;
     }
 
     @Override
@@ -178,7 +188,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 /**
                  * 公布状态, 已公布,未公布 利多 ,金银 , 石油   影响较小等
                  */
-                setAlarmState(reality,
+                setAlarmState(mCalendarFinanceBean,
+                        reality,
                         mCalendarFinanceBean.getEffecttype(),
                         viewHolder1.llExponent,
                         viewHolder1.tvAlarm);
@@ -246,6 +257,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
         return view;
     }
 
+
     class ViewBaseHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoqi;
     }
@@ -307,8 +319,11 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     }
 
 
-    private void setAlarmState(String reality, int effectType, LinearLayout llExponent, TextView
-            tvAlarm) {
+    private void setAlarmState(final CalendarType mCalendarType,
+                               String reality,
+                               int effectType,
+                               LinearLayout llExponent,
+                               final TextView tvAlarm) {
 
         llExponent.removeAllViews();
 
@@ -333,6 +348,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
             radianDrawable.setStroke(R.color.line_color);
 
+            int alarmColor = ContextCompat.getColor(mContext, R.color.font_color6);
+            tvAlarm.setTextColor(alarmColor);
             tvAlarm.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             tvAlarm.setText("已公布");
 
@@ -350,9 +367,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
             Drawable alarmDrawable = mContext.getResources().getDrawable(R.mipmap.icon_alarm);
             tvAlarm.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
-
             tvAlarm.setText("定时");
-
 
             RadianDrawable effectDrawable = new RadianDrawable(mContext);
 
@@ -364,6 +379,65 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             textView.setBackground(effectDrawable);
 
             llExponent.addView(textView);
+
+            tvAlarm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {//设置时间
+                    parentFragment.showTimingWindow(mCalendarType, new ObserverCall<Integer>() {
+                        @Override
+                        public void onComplete(Integer time) {
+//                            timeList.add("提前5分钟");
+//                            timeList.add("提前10分钟");
+//                            timeList.add("提前15分钟");
+//                            timeList.add("提前30分钟");
+//                            timeList.add("提前一个小时");
+                            try {
+                                long baseTime = 0L;
+
+
+                                CalendarFinanceBean calendarFinanceBean;
+
+                                if (mCalendarType instanceof CalendarFinanceBean) {
+                                    calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+                                    String financeTime = calendarFinanceBean.getTime();
+
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    Date parseDate = simpleDateFormat.parse(financeTime);
+                                    baseTime = parseDate.getTime();
+                                }
+
+                                int oneMinute = 60 * 1000;
+                                switch (time) {
+                                    case 0:
+                                        baseTime -= 5 * oneMinute;
+                                        break;
+                                    case 1:
+                                        baseTime -= 10 * oneMinute;
+                                        break;
+                                    case 2:
+                                        baseTime -= 15 * oneMinute;
+                                        break;
+                                    case 3:
+                                        baseTime -= 30 * oneMinute;
+                                        break;
+                                    case 4:
+                                        baseTime -= 60 * oneMinute;
+                                        break;
+                                }
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                                Date baseDate = new Date(baseTime);
+                                String formatDate = simpleDateFormat.format(baseDate);
+
+                                int alarmColor = ContextCompat.getColor(mContext, R.color.font_color8);
+                                tvAlarm.setText(formatDate);
+                                tvAlarm.setTextColor(alarmColor);
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
         }
         tvAlarm.setBackground(radianDrawable);
     }

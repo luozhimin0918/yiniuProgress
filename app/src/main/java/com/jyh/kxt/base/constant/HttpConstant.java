@@ -57,6 +57,7 @@ public class HttpConstant {
 
     public static final String MARKET_NAV = BASE_URL + "/quotes/nav" + VarConstant.HTTP_CONTENT;
     public static final String MARKET_INDEX = BASE_URL + "/quotes/index" + VarConstant.HTTP_CONTENT;
+    public static final String MARKET_LIST = BASE_URL + "/quotes/list"+ VarConstant.HTTP_CONTENT;
 
     public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
 
@@ -69,7 +70,9 @@ public class HttpConstant {
     public static final String USER_FORGET = BASE_URL + "user/login_from";//忘记密码
     public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
 
-    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏-文章 ?uid={uid}&token={token}&lastid={lastid}
+    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏-文章
+    // ?uid={uid}&token={token}&lastid={lastid}
     public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏-视听
-    public static final String COLLECT_DEL = BASE_URL + "member/favor_delete";//收藏-删除 ?uid={uid}&token={token}&type={type:1,2}&id={1,2,3,4}
+    public static final String COLLECT_DEL = BASE_URL + "member/favor_delete";//收藏-删除
+    // ?uid={uid}&token={token}&type={type:1,2}&id={1,2,3,4}
 }

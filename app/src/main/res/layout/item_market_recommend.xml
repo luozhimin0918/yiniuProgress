@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <data>
+
+        <variable
+            name="bean"
+            type="com.jyh.kxt.market.bean.MarketItemBean"/>
+    </data>
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="21dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{bean.name}"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv_new_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="11dp"
+            android:text="@{bean.price}"
+            android:textSize="@dimen/describe_font_size4"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_change_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_new_price"
+            android:layout_marginTop="9dp"
+            android:text="@{bean.change}"
+            android:textSize="@dimen/min_font_size"/>
+
+        <TextView
+            android:id="@+id/tv_change_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_change_val"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@+id/tv_change_val"
+            android:text="@{bean.range}"
+            android:textSize="@dimen/min_font_size"/>
+    </RelativeLayout>
+</layout>

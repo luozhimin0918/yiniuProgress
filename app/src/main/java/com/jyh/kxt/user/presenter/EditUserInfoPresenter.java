@@ -13,7 +13,6 @@ import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
-import com.library.base.http.VolleyRequest;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 
@@ -62,7 +61,8 @@ public class EditUserInfoPresenter extends BasePresenter {
                 @Override
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     //返回的分别是三个级别的选中位置
-                    activity.setAddress(options1Items.get(options1).getPickerViewText(), options2Items.get(options1).get(options2),
+                    activity.setAddress(options1Items.get(options1).getPickerViewText(), options2Items.get(options1)
+                                    .get(options2),
                             options3Items.get(options1).get(options2).get(options3));
                 }
             })
@@ -76,8 +76,9 @@ public class EditUserInfoPresenter extends BasePresenter {
                     .build();
             cityPicker.setPicker(options1Items, options2Items, options3Items);//三级选择器
         }
-        if (cityPicker.isShowing())
+        if (cityPicker.isShowing()) {
             return;
+        }
         cityPicker.show();
     }
 
@@ -109,8 +110,9 @@ public class EditUserInfoPresenter extends BasePresenter {
 
             genderPicker.setPicker(genders);//一级选择器
         }
-        if (genderPicker.isShowing())
+        if (genderPicker.isShowing()) {
             return;
+        }
         genderPicker.show();
     }
 
@@ -140,8 +142,9 @@ public class EditUserInfoPresenter extends BasePresenter {
                     .setDecorView(activity.fl_picker)
                     .build();
         }
-        if (birthdayPicker.isShowing())
+        if (birthdayPicker.isShowing()) {
             return;
+        }
         birthdayPicker.show();
     }
 
@@ -149,8 +152,9 @@ public class EditUserInfoPresenter extends BasePresenter {
      * 加载省市县信息
      */
     public void loadCitis() {
-        if (!thread.isAlive())
+        if (!thread.isAlive()) {
             thread.start();
+        }
     }
 
     private Thread thread = new Thread(new Runnable() {
@@ -188,7 +192,8 @@ public class EditUserInfoPresenter extends BasePresenter {
                             City_AreaList.add("");
                         } else {
 
-                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
+                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++)
+                            {//该城市对应地区所有数据
                                 String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
 
                                 City_AreaList.add(AreaName);//添加该城市所有地区数据

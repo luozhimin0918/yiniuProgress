@@ -1,7 +1,6 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,14 +72,9 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         holder.tvTitle.setText(news.getTitle());
         String author = news.getAuthor();
-        if (!TextUtils.isEmpty(author)) {
-            holder.tvAuthor.setVisibility(View.VISIBLE);
+        if (author != null)
             author = "文/" + author;
-            holder.tvAuthor.setText(author);
-        } else {
-            holder.tvAuthor.setVisibility(View.GONE);
-        }
-
+        holder.tvAuthor.setText(author);
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));
         } catch (Exception e) {

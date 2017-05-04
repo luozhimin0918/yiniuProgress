@@ -1,13 +1,15 @@
 package com.jyh.kxt.market.presenter;
 
-import android.graphics.Color;
+import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -17,11 +19,16 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
+import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.adapter.MarketRecommendAdapter;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketMainBean;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SystemUtil;
+import com.library.widget.recycler.DividerGridItemDecoration;
 
 import java.util.List;
 
@@ -72,6 +79,7 @@ public class MarketMainPresenter extends BasePresenter {
                             break;
                     }
                 }
+                marketItemFragment.refreshableView.addHeaderView(mainHeaderView);
             }
 
             @Override
@@ -79,37 +87,92 @@ public class MarketMainPresenter extends BasePresenter {
                 super.onErrorResponse(error);
             }
         });
-
-        mainHeaderView.setBackgroundColor(Color.RED);
-
-        ListView refreshableView = marketItemFragment.ptrlvContent.getRefreshableView();
-        refreshableView.addHeaderView(mainHeaderView);
     }
 
     /*
      * 创建MainHeaderView
      */
     private void createMainView(MarketMainBean marketBean) {
+        createPaddingView(1);
         RecyclerView recommendView = new RecyclerView(mContext);
         recommendView.setLayoutManager(new GridLayoutManager(mContext, 3));
+        recommendView.addItemDecoration(new DividerGridItemDecoration(mContext));
 
         MarketRecommendAdapter adapter = new MarketRecommendAdapter(mContext, marketBean.getData());
         recommendView.setAdapter(adapter);
 
-        mainHeaderView.addView(recommendView);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mainHeaderView.addView(recommendView, lp);
     }
 
     private void createFavorView(MarketMainBean marketBean) {
+        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+            return;
+        }
+        createPaddingView(6);
+
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, mainHeaderView);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("我的自选");
 
+        HorizontalScrollView horizontalScrollView = new HorizontalScrollView(mContext);
+        int horizontalHeight = SystemUtil.dp2px(mContext, 80);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                horizontalHeight);
+
+        mainHeaderView.addView(horizontalScrollView, lp);
+
+        LinearLayout hqLayout = new LinearLayout(mContext);
+        ViewGroup.LayoutParams hqParams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                horizontalHeight);
+        hqLayout.setLayoutParams(hqParams);
+
+        LayoutInflater mInflate = LayoutInflater.from(mContext);
+
+        for (MarketItemBean marketItemBean : marketBean.getData()) {
+
+            ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
+                    R.layout.item_market_recommend,
+                    hqLayout,
+                    false);
+            dataBinding.setBean(marketItemBean);
+
+        }
+
+        horizontalScrollView.addView(hqLayout);
     }
 
     private void createHotView(MarketMainBean marketBean) {
+        createPaddingView(6);
+
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, mainHeaderView);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("热门行情");
 
+        View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);
+        navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
+        navigationView.findViewById(R.id.view_line).setVisibility(View.GONE);
+
+        mainHeaderView.addView(navigationView);
+
+        MarketMainItemAdapter marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketBean.getData());
+        marketItemFragment.refreshableView.setAdapter(marketMainItemAdapter);
+    }
+
+    private void createPaddingView(int heightPx) {
+        View view = new View(mContext);
+        int height = SystemUtil.dp2px(mContext, heightPx);
+
+        int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
+
+        view.setBackgroundColor(paddingColor);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
+        mainHeaderView.addView(view, lp);
     }
 }

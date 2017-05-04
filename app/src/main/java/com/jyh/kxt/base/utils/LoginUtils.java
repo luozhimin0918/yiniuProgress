@@ -28,7 +28,7 @@ public class LoginUtils {
      * @param userInfo
      */
     public static void login(Context context, UserJson userInfo) {
-        SPUtils.save(context, SpConstant.USERINFO, userInfo.toString());
+        SPUtils.save(context, SpConstant.USERINFO, userInfo);
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
     }
 
@@ -39,7 +39,7 @@ public class LoginUtils {
      * @param userInfo
      */
     public static void changeUserInfo(Context context, UserJson userInfo) {
-        SPUtils.save(context, SpConstant.USERINFO, userInfo.toString());
+        SPUtils.save(context, SpConstant.USERINFO, userInfo);
     }
 
     /**

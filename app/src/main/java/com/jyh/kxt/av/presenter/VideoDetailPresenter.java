@@ -1,5 +1,6 @@
 package com.jyh.kxt.av.presenter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.alibaba.fastjson.JSONObject;
@@ -46,10 +47,11 @@ public class VideoDetailPresenter extends BasePresenter {
     public void requestInitVideo() {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("id", videoDetailActivity.videoId);
         volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<List<MarketNavBean>>() {
             @Override
             protected void onResponse(List<MarketNavBean> marketNavList) {
-
+                Log.e("ceshi", "onResponse: "+marketNavList );
             }
 
             @Override

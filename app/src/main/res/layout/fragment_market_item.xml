@@ -4,10 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.library.widget.handmark.PullToRefreshListView
-        android:id="@+id/ptrlv_content"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.library.widget.handmark.PullToRefreshListView>
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/ptrlv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.library.widget.handmark.PullToRefreshListView>
+
+        <include layout="@layout/view_market_navigation"/>
+
+    </RelativeLayout>
 </com.library.widget.PageLoadLayout>

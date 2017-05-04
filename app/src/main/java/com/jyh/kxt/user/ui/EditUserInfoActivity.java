@@ -1,7 +1,5 @@
 package com.jyh.kxt.user.ui;
 
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
@@ -10,17 +8,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
-import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 
@@ -29,7 +20,6 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 项目名:Kxt
@@ -93,9 +83,9 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter.loadCitis();
 
-        UserJson userInfo = LoginUtils.getUserInfo(this);
-        tvNickname.setText(userInfo.getNickname());
-        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap.icon_user_def_photo).into(ivPhoto);
+//        UserJson userInfo = LoginUtils.getUserInfo(this);
+//        tvNickname.setText(userInfo.getNickname());
+//        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap.icon_user_def_photo).into(ivPhoto);
 
         ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
         ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);

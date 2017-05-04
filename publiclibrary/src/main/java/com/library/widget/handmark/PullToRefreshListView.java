@@ -20,9 +20,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.library.R;
 import com.library.widget.handmark.internal.EmptyViewMethodAccessor;
@@ -67,12 +66,12 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 
     private void initView(AttributeSet attrs) {
-        mRefreshableView.setDivider(new ColorDrawable(0XFFD9D9D9));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
         mRefreshableView.setDividerHeight(1);
     }
 
     public void setDividerNull() {
-        mRefreshableView.setDivider(new ColorDrawable(0XFFD9D9D9));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
         mRefreshableView.setDividerHeight(0);
     }
 
