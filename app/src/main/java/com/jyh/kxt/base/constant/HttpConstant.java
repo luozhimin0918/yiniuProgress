@@ -41,6 +41,8 @@ public class HttpConstant {
     public static final String INDEX_MAIN = BASE_URL + "index/main" + JWT;//首页
     public static final String EXPLORE = BASE_URL + "discover/index" + JWT;//探索
     public static final String NEWS_LIST = BASE_URL + "news/list" + VarConstant.HTTP_CONTENT;//要闻列表
+    public static final String DP_CODE = BASE_URL + "news/dp_nav";//点评CODE
+    public static final String DP_LIST = BASE_URL + "news/dianping";//点评列表 ?code={}&last_id={}
     public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
     public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//版本信息
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
@@ -69,6 +71,24 @@ public class HttpConstant {
     public static final String USER_REGISTER = BASE_URL + "user/register";//注册
     public static final String USER_FORGET = BASE_URL + "user/login_from";//忘记密码
     public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
+
+    /**
+     * 收藏
+     */
+    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏列表-文章 ?uid={uid}&token={token}&lastid={lastid}
+    public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏列表-视听
+    public static final String COLLECT_LIST_DEL = BASE_URL + "member/favor_delete";//收藏列表-删除 ?uid={uid}&token={token}&type={type:1,
+    // 2}&id={1,2,3,4}
+    public static final String COLLECT_ADD = BASE_URL + "favor/addFavor";//收藏-添加 ?uid={}?id={}?type={} type: video | article
+    public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video | article
+
+    /**
+     * 点评
+     */
+    public static final String GOOD_NEWS = BASE_URL + "news/addGood";//点评-文章 ?id={}
+    public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点评-视听 ?id={}
+    public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点评状态-文章 ?id={}
+    public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点评状态-视听 ?id={}
 
     public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏-文章
     // ?uid={uid}&token={token}&lastid={lastid}

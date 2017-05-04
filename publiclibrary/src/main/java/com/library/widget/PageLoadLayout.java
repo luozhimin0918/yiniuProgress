@@ -2,6 +2,7 @@ package com.library.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,9 +85,23 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         updateView();
     }
 
+    private int nullImgId = 0;
+    private String nullText = "";
+
     public void loadEmptyData() {
         removeLoading();
         llLoadView = mInflater.inflate(R.layout.volley_load_nodata, null);
+
+        ImageView imageView = (ImageView) llLoadView.findViewById(R.id.id_volley_load_nodata_img);
+        TextView textView = (TextView) llLoadView.findViewById(R.id.id_volley_load_nodata);
+
+        if (nullImgId != 0) {
+            imageView.setImageResource(nullImgId);
+        }
+        if (!TextUtils.isEmpty(nullText)) {
+            textView.setText(nullText);
+        }
+
         llLoadView.setOnClickListener(this);
         updateView();
     }
@@ -123,5 +138,21 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         if (onAfreshLoadListener != null) {
             onAfreshLoadListener.OnAfreshLoad();
         }
+    }
+
+    public int getNullImgId() {
+        return nullImgId;
+    }
+
+    public void setNullImgId(int nullImgId) {
+        this.nullImgId = nullImgId;
+    }
+
+    public String getNullText() {
+        return nullText;
+    }
+
+    public void setNullText(String nullText) {
+        this.nullText = nullText;
     }
 }

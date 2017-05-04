@@ -23,6 +23,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -34,6 +35,7 @@ import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
+import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
@@ -229,19 +231,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
-//                Pair[] pairs = {
-//                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
-//                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
-//
-//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
-//                Intent intent = new Intent(this, EditUserInfoActivity.class);
-//                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
-                break;
-            case R.id.ll_collect:
-                //收藏
-//                Intent collectIntent = new Intent(this, CollectActivity.class);
-//                startActivity(collectIntent);
-
                 Pair[] pairs = {
                         new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
                         new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
@@ -249,6 +238,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
+                break;
+            case R.id.ll_collect:
+                //收藏
+                if (LoginUtils.isLogined(this)) {
+                    Intent collectIntent = new Intent(this, CollectActivity.class);
+                    startActivity(collectIntent);
+                } else {
+                    ToastView.makeText3(this, "请先登录");
+                }
                 break;
             case R.id.ll_pl:
                 //评论
@@ -258,7 +256,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_share:
                 //推荐
-                UmengShareTool.initUmengLayout(this, "快讯通财经", HttpConstant.OFFICIAL, "详情", "", null, shareBtn, "");
+                UmengShareTool.initUmengLayout(this, new ShareJson("快讯通财经", HttpConstant.OFFICIAL, "详情", null, null, UmengShareTool
+                        .TYPE_DEFAULT, null, null,null,false,false), shareBtn, null);
                 break;
             case R.id.ll_about:
                 //关于

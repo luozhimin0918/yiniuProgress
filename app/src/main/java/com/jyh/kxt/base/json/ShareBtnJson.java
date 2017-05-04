@@ -11,14 +11,30 @@ public class ShareBtnJson {
 
     private int id;
     private String text;
+    private boolean status;
 
-    public ShareBtnJson() {
+    public ShareBtnJson(int id, String text, boolean status) {
+        this.id = id;
+        this.text = text;
+        this.status = status;
     }
 
     public ShareBtnJson(int id, String text) {
-
         this.id = id;
         this.text = text;
+        status = false;
+    }
+
+    public boolean isStatus() {
+
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public ShareBtnJson() {
     }
 
     public int getId() {
