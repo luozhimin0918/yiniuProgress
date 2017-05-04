@@ -1,22 +1,18 @@
 package com.jyh.kxt.av.presenter;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.adapter.CommentAdapter;
+import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.market.bean.MarketNavBean;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.superplayer.library.SuperPlayer;
-
-import java.util.List;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -25,20 +21,10 @@ import java.util.List;
 public class VideoDetailPresenter extends BasePresenter {
     @BindObject VideoDetailActivity videoDetailActivity;
 
-    private String url = "http://baobab.wandoujia.com/api/v1/playUrl?vid=9502&editionType=normal";
+    private VideoDetailBean videoDetailBean;
 
     public VideoDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
-    }
-
-    /**
-     * 请求更多视屏
-     */
-    public void requestMoreVideo() {
-        LayoutInflater mInflater = LayoutInflater.from(mContext);
-        for (int i = 0; i < 5; i++) {
-            mInflater.inflate(R.layout.item_more_video, videoDetailActivity.llMoreVideo);
-        }
     }
 
     /**
@@ -48,18 +34,24 @@ public class VideoDetailPresenter extends BasePresenter {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("id", videoDetailActivity.videoId);
-        volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<List<MarketNavBean>>() {
+        volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<VideoDetailBean>() {
             @Override
-            protected void onResponse(List<MarketNavBean> marketNavList) {
-                Log.e("ceshi", "onResponse: "+marketNavList );
+            protected void onResponse(VideoDetailBean videoDetailBean) {
+                VideoDetailPresenter.this.videoDetailBean = videoDetailBean;
+                playVideo();
+
+                CommentAdapter commentAdapter = new CommentAdapter(mContext, videoDetailBean.getComment());
+                videoDetailActivity.rvMessage.setAdapter(commentAdapter);
+
+                videoDetailActivity.commentPresenter.createHeadView(videoDetailActivity.rvMessage);
+                videoDetailActivity.commentPresenter.createMoreVideoView(videoDetailBean.getVideo());
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
-
+                super.onErrorResponse(error);
             }
         });
-
     }
 
     public void playVideo() {
@@ -121,9 +113,9 @@ public class VideoDetailPresenter extends BasePresenter {
 
                     }
                 })
-                .setTitle(url)
+                .setTitle(videoDetailBean.getTitle())
                 .showCenterControl(true)
-                .play(url);
+                .play(videoDetailBean.getUrl());
 
         int avHeight = videoDetailActivity.getResources().getDimensionPixelSize(R.dimen.av_video_height);
         videoDetailActivity.spVideo.setVideoPortraitHeight(avHeight);

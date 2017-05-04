@@ -43,78 +43,7 @@
             android:textSize="@dimen/describe_font_size3"/>
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/line_color2"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:drawableLeft="@mipmap/icon_video_line"
-            android:gravity="center"
-            android:text="往期节目"
-            android:textSize="@dimen/content_font_size"/>
-
-        <TextView
-            android:id="@+id/tv_more_video"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:drawablePadding="5dp"
-            android:drawableRight="@mipmap/icon_comment_more"
-            android:gravity="center"
-            android:text="更多"
-            android:textColor="@color/font_color9"
-            android:textSize="@dimen/describe_font_size3"/>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="136dp"
-            android:layout_below="@+id/tv_more_video">
-
-            <LinearLayout
-                android:id="@+id/ll_more_video"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/line_color2"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:visibility="visible">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"/>
-
-        <TextView
-            android:id="@+id/tv_reply_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="我来说两句"/>
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
+    <com.library.widget.handmark.PullToRefreshListView
         android:id="@+id/rv_message"
         android:layout_width="match_parent"
         android:layout_height="0dp"

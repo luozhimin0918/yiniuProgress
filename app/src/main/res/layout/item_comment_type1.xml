@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="18dp">
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/riv_user_avatar"
+        android:layout_width="27dp"
+        android:layout_height="27dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_je_sao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@+id/riv_user_avatar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_color62"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/font_color9"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+
+        <com.jyh.kxt.base.widget.ThumbView
+            android:id="@+id/tv_thumb"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:drawableLeft="@mipmap/icon_comment_unlike"
+            android:drawablePadding="5dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_comment_reply"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:textColor="@color/font_color9"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ll_je_sao"
+        android:layout_below="@+id/ll_je_sao"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/describe_font_size4"/>
+
+</RelativeLayout>

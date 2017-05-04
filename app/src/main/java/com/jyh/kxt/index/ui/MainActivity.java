@@ -40,6 +40,7 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.bean.EventBusClass;
+import com.library.widget.window.ToastView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;

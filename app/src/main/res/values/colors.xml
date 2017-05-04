@@ -48,6 +48,7 @@
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
     <color name="font_color61">#F9FAFB</color>
+    <color name="font_color62">#1384ED</color>
 
     <color name="tabSelColor">#000000</color>
     <color name="tabUnSelColor">#66000000</color>
