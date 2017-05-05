@@ -5,7 +5,7 @@
     android:id="@+id/activity_web"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_btn_bg_color"
+    android:background="@color/theme1"
     android:orientation="vertical"
     tools:context="com.jyh.kxt.index.ui.WebActivity">
 

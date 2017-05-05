@@ -1,6 +1,7 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.DateUtils;
 
@@ -26,7 +28,6 @@ import java.util.List;
 public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     private Context mContext;
-    private List<NewsJson> newsJsons;
     private boolean isShowTitle = false;
 
     public boolean isShowTitle() {
@@ -40,7 +41,6 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     public NewsAdapter(Context context, List<NewsJson> dataList) {
         super(dataList);
         this.mContext = context;
-        this.newsJsons = dataList;
     }
 
     @Override
@@ -70,6 +70,12 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 .into
                         (holder.ivPhoto);
 
+        if (BrowerHistoryUtils.isBrowered(mContext, news)) {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        } else {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+        }
+
         holder.tvTitle.setText(news.getTitle());
         String author = news.getAuthor();
         if (author != null)
@@ -86,12 +92,12 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     }
 
     public void addData(List<NewsJson> newsJsons) {
-        this.newsJsons.addAll(newsJsons);
+        dataList.addAll(newsJsons);
         notifyDataSetChanged();
     }
 
     public void setData(List<NewsJson> data) {
-        this.newsJsons = data;
+        dataList = data;
         notifyDataSetChanged();
     }
 

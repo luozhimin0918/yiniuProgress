@@ -268,4 +268,15 @@ public class DateUtils {
         return (int) (Math.abs(currentStartTimeMillis - selStartTimeMillis) / oneDayLong);
     }
 
+    /**
+     * 获取当前时间字符串
+     *
+     * @param type
+     * @return
+     */
+    public static String getTodayString(String type) throws Exception {
+        long currentTimeMillis = System.currentTimeMillis();
+        return transformTime(currentTimeMillis, type);
+    }
+
 }

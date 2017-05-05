@@ -43,7 +43,7 @@
             android:layout_marginLeft="@dimen/newsItemTitleMarginLeft"
             android:layout_toRightOf="@id/iv_photo"
             android:lineSpacingMultiplier="1.2"
-            android:text="fdabfkaebfdbfabgewbdhjbdsjbhcdhaskdjsajdjsafba"
+            android:maxLines="2"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/content_font_size"/>
 

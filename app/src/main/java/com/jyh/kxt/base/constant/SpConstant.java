@@ -19,7 +19,7 @@ public class SpConstant {
      */
     public static final String THEME = "theme";
 
-    public static final String USERINFO="userinfo";
+    public static final String USERINFO = "userinfo";
 
     /**
      * 快讯筛选
@@ -31,4 +31,14 @@ public class SpConstant {
      * 收藏
      */
     public static final String COLLECT_FLASH = "collect_flash";
+
+    /**
+     * 搜索历史
+     */
+    public static final String SEARCH_HISTORY = "search_history";
+
+    /**
+     * 浏览历史
+     */
+    public static final String BROWER_HISTORY = "brower_history";
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:zhy="http://schemas.android.com/tools"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/newsContentPadding"
+            android:layout_marginRight="@dimen/newsContentPadding"
+            android:layout_marginTop="@dimen/searchMargin">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/searchDelImgSize"
+                android:gravity="center_vertical"
+                android:text="最近搜索"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <ImageView
+                android:id="@+id/iv_clear_history"
+                android:layout_width="@dimen/searchDelImgSize"
+                android:layout_height="@dimen/searchDelImgSize"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/searchPadding2"
+                android:src="@mipmap/icon_search_del"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line_color2"/>
+
+
+        <com.library.widget.flowlayout.TagFlowLayout
+            android:id="@+id/fl_hot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/searchMargin2"
+            android:paddingLeft="@dimen/newsContentPadding"
+            android:paddingRight="@dimen/newsContentPadding"
+            android:paddingTop="@dimen/searchPadding3"
+            zhy:max_select="-1"
+            zhy:auto_select_effect="false"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/newsContentPadding"
+            android:paddingRight="@dimen/newsContentPadding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/searchDelImgSize"
+                android:text="浏览历史"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <TextView
+                android:id="@+id/tv_history_more"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/searchDelImgSize"
+                android:layout_alignParentRight="true"
+                android:text="更多"
+                android:textColor="@color/font_color8"
+                android:textSize="@dimen/describe_font_size1"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line_color2"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

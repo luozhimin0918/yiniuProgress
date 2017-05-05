@@ -88,12 +88,13 @@
                 android:textSize="@dimen/content_font_size2"/>
 
             <ImageView
-                android:layout_width="@dimen/setting_img_size"
-                android:layout_height="@dimen/setting_img_size"
+                android:layout_width="@dimen/arrow_right_width"
+                android:layout_height="@dimen/arrow_right_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/setting_paddingLeft"
-                android:src="@mipmap/icon_user_break"/>
+                android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                android:src="@mipmap/icon_user_break"
+                />
 
         </RelativeLayout>
 
@@ -116,12 +117,13 @@
                 android:textSize="@dimen/content_font_size2"/>
 
             <ImageView
-                android:layout_width="@dimen/setting_img_size"
-                android:layout_height="@dimen/setting_img_size"
+                android:layout_width="@dimen/arrow_right_width"
+                android:layout_height="@dimen/arrow_right_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/setting_paddingLeft"
-                android:src="@mipmap/icon_user_break"/>
+                android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                android:src="@mipmap/icon_user_break"
+                />
 
         </RelativeLayout>
 

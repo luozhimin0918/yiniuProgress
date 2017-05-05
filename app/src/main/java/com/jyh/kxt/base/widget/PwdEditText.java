@@ -3,6 +3,8 @@ package com.jyh.kxt.base.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -117,6 +119,7 @@ public class PwdEditText extends RelativeLayout {
     /**
      * 输入框
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void setEditText() {
         editText = new EditText(getContext());
         editText.setSingleLine(true);

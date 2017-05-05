@@ -1,9 +1,13 @@
 package com.jyh.kxt.main.json;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 
 import com.jyh.kxt.base.json.JumpJson;
+
+import java.util.Objects;
 
 /**
  * 项目名:Kxt
@@ -166,4 +170,17 @@ public class NewsJson extends JumpJson implements Parcelable {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj instanceof NewsJson) {
+            NewsJson newsJson = (NewsJson) obj;
+            return Objects.equals(title, newsJson.title) && Objects.equals(picture, newsJson.getPicture()) && Objects.equals(author,
+                    newsJson.getAuthor()) && Objects.equals(datetime, newsJson.getDatetime()) && Objects.equals(type, newsJson.getType())
+                    && Objects.equals(href, newsJson.getHref()) && Objects.equals(o_class, newsJson.getO_class()) && Objects.equals
+                    (o_action, newsJson.getO_action()) && Objects.equals(o_id, newsJson.getO_id());
+        } else
+            return false;
+    }
 }

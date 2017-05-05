@@ -11,6 +11,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -78,7 +79,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public RoundImageView loginPhoto;
     public TextView loginName;
     private ImageView ivQQ, ivSina, ivWx;
-    private EditText searchEdt;
+    private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn, themeBtn, loginBtn;
 
     @Override
@@ -122,7 +123,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         ivSina = (ImageView) llHeaderLayout.findViewById(R.id.iv_sina);
         ivWx = (ImageView) llHeaderLayout.findViewById(R.id.iv_wx);
 
-        searchEdt = (EditText) llHeaderLayout.findViewById(R.id.edt_search);
+        searchEdt = (FrameLayout) llHeaderLayout.findViewById(R.id.fl_search);
         collectBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_collect);
         focusBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_focus);
         historyBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_history);
@@ -148,15 +149,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         settingBtn.setOnClickListener(this);
         aboutBtn.setOnClickListener(this);
         themeBtn.setOnClickListener(this);
+        searchEdt.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
 
-    }
-
-    public void clickHeaderItem(View view) {
-        switch (view.getId()) {
-        }
     }
 
     public void clickSwitchFragment(View view) {
@@ -243,11 +240,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.ll_collect:
                 //收藏
                 if (LoginUtils.isLogined(this)) {
-                    Intent collectIntent = new Intent(this, CollectActivity.class);
-                    startActivity(collectIntent);
+                    startActivity(new Intent(this, CollectActivity.class));
                 } else {
                     ToastView.makeText3(this, "请先登录");
                 }
+                break;
+            case R.id.fl_search:
+                //搜索
+                startActivity(new Intent(this, SearchActivity.class));
                 break;
             case R.id.ll_pl:
                 //评论
@@ -257,27 +257,25 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_share:
                 //推荐
-                UmengShareTool.initUmengLayout(this, new ShareJson("快讯通财经", HttpConstant.OFFICIAL, "详情", null, null, UmengShareTool
-                        .TYPE_DEFAULT, null, null,null,false,false), shareBtn, null);
+                startActivity(new Intent(this, ShareActivity.class));
                 break;
             case R.id.ll_about:
                 //关于
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.ll_focus:
                 //我的关注
                 break;
             case R.id.ll_history:
                 //浏览历史
+                startActivity(new Intent(this, BrowerHistoryActivity.class));
                 break;
             case R.id.ll_theme:
                 //夜间模式
                 break;
             case R.id.ll_setting:
                 //设置
-                Intent settingIntent = new Intent(this, SettingActivity.class);
-                startActivity(settingIntent);
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
             case R.id.iv_qq:
                 //QQ
@@ -293,8 +291,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_login:
                 //登录
-                Intent loginIntent = new Intent(this, LoginOrRegisterActivity.class);
-                startActivity(loginIntent);
+                startActivity(new Intent(this, LoginOrRegisterActivity.class));
                 break;
 
         }

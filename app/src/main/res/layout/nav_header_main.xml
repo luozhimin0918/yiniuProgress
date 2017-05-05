@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_image_height"
         android:layout_marginBottom="@dimen/drawer_head_bottom"
-        android:visibility="gone"
-        android:background="@mipmap/icon_user_login_bg_login">
+        android:background="@mipmap/icon_user_login_bg_login"
+        android:visibility="gone">
 
         <com.jyh.kxt.base.custom.RoundImageView
             android:id="@+id/riv_avatar"
@@ -94,20 +94,22 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:id="@+id/fl_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
         android:paddingLeft="@dimen/drawer_edtPadding"
         android:paddingRight="@dimen/drawer_edtPadding"
         >
 
-        <EditText
-            android:id="@+id/edt_search"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_edt"
             android:drawableLeft="@mipmap/icon_drawer_search"
             android:drawablePadding="5dp"
+            android:gravity="center_vertical"
             android:hint="搜索文章、视频"
+            android:paddingLeft="@dimen/newsContentPadding"
             android:textColorHint="@color/font_color6"
             android:textSize="@dimen/content_font_size"/>
     </FrameLayout>
@@ -129,7 +131,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="我的收藏"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -152,7 +153,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="我的关注"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -175,7 +175,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="浏览历史"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -198,7 +197,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="评论查询"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -221,7 +219,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="我的活动"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -244,7 +241,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:onClick="clickHeaderItem"
             android:text="推荐给好友"
             android:textColor="@color/font_color1"/>
     </LinearLayout>
@@ -290,7 +286,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center"
-                    android:onClick="clickHeaderItem"
                     android:text="设置"
                     android:textColor="@color/font_color1"/>
             </LinearLayout>
@@ -314,7 +309,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center"
-                    android:onClick="clickHeaderItem"
                     android:text="关于"
                     android:textColor="@color/font_color1"/>
             </LinearLayout>
@@ -338,7 +332,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center"
-                    android:onClick="clickHeaderItem"
                     android:text="夜间"
                     android:textColor="@color/font_color1"/>
             </LinearLayout>

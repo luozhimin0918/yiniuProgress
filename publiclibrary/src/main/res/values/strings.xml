@@ -1,6 +1,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">PublicLibrary</string>
 
+    <string name="gravity_left">left</string>
+    <string name="gravity_center">center</string>
+    <string name="gravity_right">right</string>
+
     <string name="volley_load_no_data">暂无数据~</string>
     <string name="volley_load_error">加载错误~</string>
 

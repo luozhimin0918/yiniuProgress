@@ -16,7 +16,6 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.widget.PwdEditText;
 import com.library.base.http.HttpListener;
-import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**

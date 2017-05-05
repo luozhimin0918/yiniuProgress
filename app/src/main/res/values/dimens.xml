@@ -30,6 +30,10 @@
 
     <dimen name="nav_padding">13dp</dimen>
 
+    <!-- 设置右边箭头尺寸 -->
+    <dimen name="arrow_right_width">10dp</dimen>
+    <dimen name="arrow_right_height">15dp</dimen>
+
     <!-- 第一级TabLayout(首页的要闻快讯、视听的视听排行等) -->
 
     <dimen name="navigationBarHeight">50dp</dimen>
@@ -107,6 +111,22 @@
     <dimen name="editUserInfo_padding2">8dp</dimen>
     <dimen name="editUserInfo_padding3">20dp</dimen>
     <dimen name="editUserInfo_padding4">25dp</dimen>
+
+    <!-- 搜索界面 -->
+    <dimen name="searchEditTextHeight">31dp</dimen>
+    <dimen name="searchDrawablePadding">5dp</dimen>
+    <dimen name="searchDelImgSize">30dp</dimen>
+    <dimen name="searchPadding1">7dp</dimen>
+    <dimen name="searchPadding2">5dp</dimen>
+    <dimen name="searchPadding3">14dp</dimen>
+    <dimen name="searchMargin">23dp</dimen>
+    <dimen name="searchMargin2">25dp</dimen>
+    <dimen name="searchItemPadding">12.5dp</dimen>
+    <dimen name="searchItemPadding2">10dp</dimen>
+
+    <!-- 浏览历史 -->
+    <dimen name="browerHistoryContentPadding">17dp</dimen>
+    <dimen name="browerHistoryTimeHeight">34dp</dimen>
 
     <!-- 视听首页 -->
     <dimen name="videoItemDrawablePadding">6dp</dimen>

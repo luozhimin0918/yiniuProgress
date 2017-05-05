@@ -1,14 +1,26 @@
 package com.jyh.kxt;
 
+import android.app.Application;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
-import android.support.multidex.MultiDexApplication;
+import android.support.multidex.MultiDex;
+import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.push.KXTPushIntentService;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.common.UmLog;
+import com.umeng.message.entity.UMessage;
 
 /**
  * 项目名:Kxt
@@ -17,7 +29,7 @@ import com.umeng.message.common.UmLog;
  * 创建日期:2017/4/12.
  */
 
-public class KXTApplication extends MultiDexApplication {
+public class KXTApplication extends Application {
 
     private String TAG="KXTApplication";
 
@@ -54,5 +66,11 @@ public class KXTApplication extends MultiDexApplication {
         });
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

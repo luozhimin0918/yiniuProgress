@@ -44,7 +44,7 @@ public class ClassifyActivity extends BaseActivity {
         classifyPresenter = new ClassifyPresenter(this);
 
         ivBarBreak.setVisibility(View.INVISIBLE);
-        ivBarFunction.setImageResource(R.mipmap.ico_break);
+        ivBarFunction.setImageResource(R.mipmap.icon_share_close);
         tvBarTitle.setText("分类");
 
         index = getIntent().getIntExtra(IntentConstant.INDEX, 0);

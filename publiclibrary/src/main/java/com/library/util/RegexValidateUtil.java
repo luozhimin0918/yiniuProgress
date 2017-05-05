@@ -130,4 +130,11 @@ public class RegexValidateUtil {
         errorInfo = "QQ号不合法";
         return check(QQ, regex);
     }
+
+    public static boolean isEmpty(String str) {
+        if (TextUtils.isEmpty(str) || TextUtils.isEmpty(str.trim()))
+            return true;
+        else
+            return false;
+    }
 }

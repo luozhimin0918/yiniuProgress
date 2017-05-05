@@ -3,6 +3,7 @@
                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                    android:id="@+id/pl_rootView"
                                    android:layout_width="match_parent"
+                                   android:background="@color/theme1"
                                    android:layout_height="match_parent">
 
     <RelativeLayout
@@ -41,13 +42,12 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="1dp"
-                            android:paddingBottom="@dimen/editUserInfo_padding4"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding4"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
                             android:src="@mipmap/icon_user_break"
                             />
 
@@ -83,14 +83,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="1dp"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
 
                         <TextView
                             android:id="@+id/tv_nickname"
@@ -126,14 +126,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="1dp"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
 
                         <TextView
                             android:id="@+id/tv_gender"
@@ -169,14 +169,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="1dp"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
 
                         <TextView
                             android:id="@+id/tv_birthday"
@@ -213,15 +213,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="1dp"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
-
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
                         <TextView
                             android:id="@+id/tv_address"
                             android:layout_width="wrap_content"
@@ -256,14 +255,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
-
+                            android:layout_marginBottom="1dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
                         <TextView
                             android:id="@+id/tv_work"
                             android:layout_width="wrap_content"
@@ -297,13 +296,14 @@
                             android:textSize="@dimen/content_font_size2"/>
 
                         <ImageView
-                            android:layout_width="@dimen/item_height"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
                             android:layout_alignParentRight="true"
-                            android:paddingBottom="@dimen/editUserInfo_padding3"
-                            android:paddingRight="@dimen/editUserInfo_padding3"
-                            android:paddingTop="@dimen/editUserInfo_padding3"
-                            android:src="@mipmap/icon_user_break"/>
+                            android:layout_marginBottom="1dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_user_break"
+                            />
 
                     </RelativeLayout>
 

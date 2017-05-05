@@ -48,7 +48,6 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
     }
 }
 
@@ -67,21 +66,9 @@ dependencies {
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile files('libs/open_sdk_r5781.jar')
-    compile files('libs/SocialSDK_QQ_Full.jar')
-    compile files('libs/SocialSDK_Sina_Full.jar')
-    compile files('libs/SocialSDK_WeiXin_Full.jar')
-    compile files('libs/umeng_shareboard_widget.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_shareboard.jar')
-    compile files('libs/umeng_social_tool.jar')
-    compile files('libs/wechat-sdk-android-with-mta-1.1.6.jar')
-    compile files('libs/weiboSDKCore_3.1.4.jar')
     compile project(':Pushlib')
-    compile files('libs/nineoldandroids-2.4.0.jar')
-    compile files('libs/autobahn.jar')
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile 'org.apache.httpcomponents:httpclient:4.5'
-    compile files('libs/pinyin4j-2.5.0.jar')
+
+    compile 'com.android.support:multidex:1.0.1'
 }

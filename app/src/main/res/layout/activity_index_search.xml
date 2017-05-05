@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/searchPadding1"
+        android:paddingLeft="@dimen/newsContentPadding"
+        android:paddingRight="@dimen/newsContentPadding"
+        android:paddingTop="@dimen/searchPadding1"
+        >
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/searchEditTextHeight"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edt"
+            android:drawableLeft="@mipmap/icon_drawer_search"
+            android:drawablePadding="@dimen/searchDrawablePadding"
+            android:hint="搜索文章、视频"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textColor="@color/font_color1"
+            android:textColorHint="@color/font_color6"
+            android:textSize="@dimen/describe_font_size4"/>
+
+        <TextView
+            android:id="@+id/tv_break"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/newsContentPadding"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/font_color8"
+            android:textSize="@dimen/content_font_size"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/view_line"/>
+
+    <include
+        android:id="@+id/layout_search_end"
+        layout="@layout/layout_search_end"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/layout_search_start"
+        layout="@layout/layout_search_default"
+        android:visibility="visible"/>
+</LinearLayout>

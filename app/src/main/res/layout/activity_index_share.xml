@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_wx"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView
+            android:id="@+id/iv_wx"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_share_wx"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/iv_wx"
+            android:gravity="center_vertical"
+            android:text="微信好友"
+            android:textColor="@color/font_color5"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_user_break"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="24dp"
+        android:background="@color/line_color3"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_pyq"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView
+            android:id="@+id/iv_pyq"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_share_qyq"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/iv_pyq"
+            android:gravity="center_vertical"
+            android:text="微信朋友圈"
+            android:textColor="@color/font_color5"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_user_break"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="24dp"
+        android:background="@color/line_color3"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_sina"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView
+            android:id="@+id/iv_sina"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_share_sina"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/iv_sina"
+            android:gravity="center_vertical"
+            android:text="新浪微博"
+            android:textColor="@color/font_color5"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_user_break"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="24dp"
+        android:background="@color/line_color3"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_qq"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView
+            android:id="@+id/iv_qq"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_share_qq"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/iv_qq"
+            android:gravity="center_vertical"
+            android:text="QQ好友"
+            android:textColor="@color/font_color5"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_user_break"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="24dp"
+        android:background="@color/line_color3"/>
+</LinearLayout>
