@@ -287,7 +287,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 break;
             case TYPE_KX:
                 FlashJson flash = (FlashJson) flashJsons.get(position);
-                Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
+                final Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
                 String time = "00:00";
                 try {
                     time = getTime(kx.getTime());
@@ -306,6 +306,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 } else {
                     kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
                 }
+
+                setShowMoreBtn(kxHolder);
 
                 kxHolder.ivCollect.setSelected(flash.isColloct());
 
@@ -378,7 +380,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 }
 
                 rlHolder.ivCollect.setSelected(flash_rl.isColloct());
-
                 break;
             case TYPE_LEFT:
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
@@ -410,6 +411,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
 
                 leftHolder.ivCollect.setSelected(flash_left.isColloct());
+
+                setShowMoreBtn(leftHolder);
                 break;
             case TYPE_RIGHT:
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
@@ -439,7 +442,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
 
                 rightHolder.ivCollect.setSelected(flash_right.isColloct());
-
+                setShowMoreBtn(rightHolder);
                 break;
             case TYPE_TOP:
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
@@ -470,6 +473,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
 
                 topHolder.ivCollect.setSelected(flash_top.isColloct());
+
+                setShowMoreBtn(topHolder);
 
                 break;
             case TYPE_BOTTOM:
@@ -503,11 +508,34 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
 
                 bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
-
+                setShowMoreBtn(bottomHolder);
                 break;
         }
 
         return convertView;
+    }
+
+    /**
+     * 显示或隐藏显示更多按钮
+     *
+     * @param kxHolder
+     */
+    private void setShowMoreBtn(BaseViewHolder kxHolder) {
+        final BaseViewHolder finalKxHolder = kxHolder;
+        kxHolder.tvContent.post(new Runnable() {
+            @Override
+            public void run() {
+                //获取textView的行数
+                int txtPart = finalKxHolder.tvContent.getLineCount();
+                if (txtPart < 3) {
+                    finalKxHolder.ivMore.setVisibility(View.GONE);
+                    finalKxHolder.tvMore.setVisibility(View.GONE);
+                } else {
+                    finalKxHolder.ivMore.setVisibility(View.VISIBLE);
+                    finalKxHolder.tvMore.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     /**
@@ -614,7 +642,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     }
 
                     UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl, discription, image, null,
-                            UmengShareTool.TYPE_VIDEO, null, null,null,false,false), ivShare, null);
+                            UmengShareTool.TYPE_VIDEO, null, null, null, false, false), ivShare, null);
 
                 } catch (Exception e) {
                     e.printStackTrace();

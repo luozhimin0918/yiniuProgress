@@ -1,8 +1,5 @@
 package com.jyh.kxt.user.ui.fragment;
 
-import android.databinding.repacked.google.common.collect.MapConstraint;
-import android.databinding.repacked.google.common.collect.ObjectArrays;
-import android.databinding.repacked.org.antlr.v4.parse.ToolANTLRLexer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,17 +14,13 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.LineEditText;
-import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.bean.EventBusClass;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;

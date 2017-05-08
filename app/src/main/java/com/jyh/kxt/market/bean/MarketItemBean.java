@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 
 import com.jyh.kxt.BR;
 
+
 /**
  * Created by Mr'Dai on 2017/4/26.
  */

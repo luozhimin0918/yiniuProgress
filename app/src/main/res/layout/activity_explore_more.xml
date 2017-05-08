@@ -1,23 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.jyh.kxt.index.ui.fragment.ExploreFragment">
-
+              android:orientation="vertical">
 
     <include layout="@layout/action_bar1"/>
 
     <com.library.widget.PageLoadLayout
-        android:id="@id/pl_rootView"
+        android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/plv_content"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent"/>
     </com.library.widget.PageLoadLayout>
-
 </LinearLayout>

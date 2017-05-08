@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="@dimen/newsContentPadding">
+
+    <TextView
+        android:id="@+id/tv_rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/flash_info_margin1"
+        android:lineSpacingExtra="@dimen/flash_info_lineSpacingExtra1"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/content_font_size2"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="重要性:"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <com.jyh.kxt.base.widget.StarView
+            android:id="@+id/sv_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/flash_info_margin1"
+            android:layout_toRightOf="@id/tv1"/>
+
+        <ImageView
+            android:id="@+id/iv_flag"
+            android:layout_width="@dimen/flash_info_flagSize"
+            android:layout_height="@dimen/flash_info_flagSize"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/flash_info_margin3"
+        android:layout_marginTop="@dimen/flash_info_margin2">
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="影响:"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <LinearLayout
+            android:id="@+id/ll_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/flash_info_minWidth"
+            android:orientation="horizontal"/>
+    </LinearLayout>
+</LinearLayout>

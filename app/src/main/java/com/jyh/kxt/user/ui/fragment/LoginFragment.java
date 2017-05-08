@@ -19,6 +19,7 @@ import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.LineEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.ChangePwdActivity;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * 项目名:Kxt
@@ -46,6 +48,7 @@ public class LoginFragment extends BaseFragment {
     @BindView(R.id.tv_error_email) TextView tvErrorEmail;
     @BindView(R.id.edt_pwd) LineEditText edtPwd;
     @BindView(R.id.tv_error_pwd) TextView tvErrorPwd;
+
     private VolleyRequest request;
 
     private boolean isEmailError = false;
@@ -143,7 +146,7 @@ public class LoginFragment extends BaseFragment {
             @Override
             protected void onResponse(UserJson user) {
                 dismissWaitDialog();
-                LoginUtils.login(getContext(),user);
+                LoginUtils.login(getContext(), user);
             }
 
             @Override

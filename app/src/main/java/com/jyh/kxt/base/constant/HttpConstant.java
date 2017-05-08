@@ -39,17 +39,34 @@ public class HttpConstant {
     public static final String VERSION = BASE_URL + "version/android" + JWT;//版本信息
 
     public static final String INDEX_MAIN = BASE_URL + "index/main" + JWT;//首页
-    public static final String EXPLORE = BASE_URL + "discover/index" + JWT;//探索
+
+    /**
+     * 要闻点评
+     */
     public static final String NEWS_LIST = BASE_URL + "news/list" + VarConstant.HTTP_CONTENT;//要闻列表
+    public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
     public static final String DP_CODE = BASE_URL + "news/dp_nav";//点评CODE
     public static final String DP_LIST = BASE_URL + "news/dianping";//点评列表 ?code={}&last_id={}
-    public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
-    public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//版本信息
+
+    /**
+     * 视听
+     */
+    public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//视听导航
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
     public static final String VIDEO_MOST_PLAY = BASE_URL + "video/list";//视听排行 最多播放
     public static final String VIDEO_MOST_COMMENT = BASE_URL + "video/list";//视听排行 最多评论
     public static final String VIDEO_MOST_COLLECT = BASE_URL + "video/list";//视听排行 最多收藏
 
+    /**
+     * 探索
+     */
+    public static final String EXPLORE = BASE_URL + "discover/index" + JWT;//探索
+    public static final String EXPLORE_LOAD_MORE = BASE_URL + "discover/load_more";//探索首页加载更多
+    public static final String EXPLORE_AUTHOR = BASE_URL + "/discover/list";//作者专栏 ?id={writer_id}&last_id={0}
+
+    /**
+     * socket
+     */
     public static final String SOCKET_TOKEN_KX = BASE_URL + "kuaixun/ws" + VarConstant.HTTP_CONTENT;//快讯socketToken
     public static final String SOCKET_TOKEN_HQ = BASE_URL + "quotes/ws";//行情socketToken
 
@@ -59,7 +76,7 @@ public class HttpConstant {
 
     public static final String MARKET_NAV = BASE_URL + "/quotes/nav" + VarConstant.HTTP_CONTENT;
     public static final String MARKET_INDEX = BASE_URL + "/quotes/index" + VarConstant.HTTP_CONTENT;
-    public static final String MARKET_LIST = BASE_URL + "/quotes/list"+ VarConstant.HTTP_CONTENT;
+    public static final String MARKET_LIST = BASE_URL + "/quotes/list" + VarConstant.HTTP_CONTENT;
 
     public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
 
@@ -85,8 +102,8 @@ public class HttpConstant {
     /**
      * 点评
      */
-    public static final String GOOD_NEWS = BASE_URL + "news/addGood";//点评-文章 ?id={}
-    public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点评-视听 ?id={}
-    public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点评状态-文章 ?id={}
-    public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点评状态-视听 ?id={}
+    public static final String GOOD_NEWS = BASE_URL + "news/addGood";//点赞-文章 ?id={}
+    public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点赞-视听 ?id={}
+    public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点赞状态-文章 ?id={}
+    public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点赞状态-视听 ?id={}
 }

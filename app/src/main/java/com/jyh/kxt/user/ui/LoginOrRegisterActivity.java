@@ -1,6 +1,7 @@
 package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -8,10 +9,12 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.user.ui.fragment.LoginFragment;
 import com.jyh.kxt.user.ui.fragment.RegisterFragment;
 import com.library.bean.EventBusClass;
@@ -37,6 +40,7 @@ import butterknife.OnClick;
 
 public class LoginOrRegisterActivity extends BaseActivity {
 
+    @BindView(R.id.sv_rootView) ScrollView rootView;
     @BindView(R.id.iv_close) ImageView ivClose;
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.fl_bg) FrameLayout flBg;

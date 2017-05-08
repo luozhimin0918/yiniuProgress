@@ -100,6 +100,15 @@ public class VarConstant {
     public static final String NEWS_QUOTES = "quotes";//行情
     public static final String NEWS_LIST = "news";//要闻
 
+    /**
+     * 探索首页类型
+     */
+    public static final String EXPLORE_SLIDE = "slide";//轮播图
+    public static final String EXPLORE_SHORTCUT = "shortcut";//按钮
+    public static final String EXPLORE_TOPIC = "topic";//专题
+    public static final String EXPLORE_ACTIVITY = "activity";//活动
+    public static final String EXPLORE_BLOG_WRITER = "blog_writer";//作者
+    public static final String EXPLORE_BLOG_ARTICLE = "blog_article";//文章
 
     public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
     public static final String SOCKET_KEY = "android12345";

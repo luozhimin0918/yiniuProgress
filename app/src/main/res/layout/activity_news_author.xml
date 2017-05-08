@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.library.widget.PageLoadLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
-    android:background="@color/theme1"
     android:layout_height="match_parent"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,9 +14,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/authorHeaderViewHeight"
             android:background="@mipmap/icon_news_author_bg"
             android:orientation="vertical"
+            android:paddingTop="@dimen/authorActionBarHeight"
             >
 
             <RelativeLayout
@@ -51,24 +51,22 @@
                 android:paddingLeft="@dimen/newsContentPadding"
                 android:paddingRight="@dimen/newsContentPadding">
 
-                <ImageView
+                <com.jyh.kxt.base.custom.RoundImageView
                     android:id="@+id/iv_photo"
                     android:layout_width="@dimen/authorPhotoSize"
                     android:layout_height="@dimen/authorPhotoSize"
-                    android:layout_marginRight="@dimen/newsContentPadding"
-                    android:src="@mipmap/icon_user_def_photo"/>
+                    android:layout_marginRight="@dimen/newsContentPadding"/>
 
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/iv_photo"
-                    android:text="马克"
                     android:textColor="@color/white"
                     android:textSize="@dimen/title_font_size2"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_name"
                     android:layout_marginTop="@dimen/newsContentPadding"
@@ -77,58 +75,27 @@
 
                     <TextView
                         android:id="@+id/tv_fans"
-                        style="@style/AuthorTextViewStyle"
-                        android:text="粉丝 110"/>
+                        style="@style/AuthorTextViewStyle"/>
 
                     <View
                         android:layout_width="2px"
                         android:layout_height="@dimen/authorViewHeight"
-                        android:background="@color/line_color3"/>
-
-                    <TextView
-                        android:id="@+id/tv_ding"
-                        style="@style/AuthorTextViewStyle"
-                        android:paddingLeft="@dimen/authorPadding"
-                        android:text="赞 33"/>
-
-                    <View
-                        android:layout_width="2px"
-                        android:layout_height="@dimen/authorViewHeight"
+                        android:layout_marginLeft="@dimen/authorPadding2"
+                        android:layout_marginRight="@dimen/authorPadding2"
                         android:background="@color/line_color3"/>
 
                     <TextView
                         android:id="@+id/tv_article"
                         style="@style/AuthorTextViewStyle"
-                        android:paddingLeft="@dimen/authorPadding"
-                        android:text="文章 360"/>
+                        />
                 </LinearLayout>
 
 
             </RelativeLayout>
-
-            <com.library.widget.tablayout.SlidingTabLayout
-                android:id="@+id/stl_navigation_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/navigationBarHeight"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/authorMarginTop"
-                android:paddingRight="@dimen/navigationBar2ImageWidth"
-                tl:tl_indicator_color="@color/white"
-                tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
-                tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
-
-                tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth2"
-                tl:tl_mode_scrollable="MODE_FIXED"
-                tl:tl_tab_padding="10dp"
-                tl:tl_textSelectColor="@color/white"
-                tl:tl_textUnselectColor="@color/font_color13"
-                tl:tl_textsize="@dimen/describe_font_size2"
-                />
-
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_content"
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/pl_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

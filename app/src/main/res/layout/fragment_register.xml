@@ -38,9 +38,9 @@
 
     <com.jyh.kxt.base.custom.DiscolorButton
         android:id="@+id/db_login"
+        style="@style/BtnStyle1"
         android:layout_marginTop="@dimen/login_marginTop"
         android:text="注册"
-        style="@style/BtnStyle1"
         />
 
     <RelativeLayout
@@ -75,7 +75,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/login_marginTop2"
+        android:layout_marginBottom="@dimen/newsContentPadding"
+        android:layout_marginTop="@dimen/newsContentPadding"
         android:gravity="center"
         android:orientation="horizontal">
 

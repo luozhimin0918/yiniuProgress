@@ -17,7 +17,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.main.json.AdJson;
-import com.jyh.kxt.main.json.NewsHomeHeaderJson;
+import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.QuotesJson;
@@ -86,10 +86,10 @@ public class NewsPresenter extends BasePresenter {
 
         request = new VolleyRequest(mContext, queue);
 
-        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<NewsHomeHeaderJson>>() {
+        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
 
             @Override
-            protected void onResponse(List<NewsHomeHeaderJson> newsHomeHeaderJsons) {
+            protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
 
                 List<NewsNavJson> newsNavs = null;
                 List<SlideJson> slide = null;
@@ -100,52 +100,76 @@ public class NewsPresenter extends BasePresenter {
 
                 ArrayList<String> list = new ArrayList<>();
 
-                for (NewsHomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
                     switch (headerJson.getType()) {
                         case VarConstant.NEWS_NAV:
-                            JSONArray newsNavArray = (JSONArray) headerJson.getData();
-                            if (newsNavArray == null)
-                                break;
-                            newsNavs = JSON.parseArray(newsNavArray.toString(), NewsNavJson.class);
+                            try {
+                                JSONArray newsNavArray = (JSONArray) headerJson.getData();
+                                if (newsNavArray == null)
+                                    break;
+                                newsNavs = JSON.parseArray(newsNavArray.toString(), NewsNavJson.class);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case VarConstant.NEWS_SLIDE:
-                            JSONArray slideArray = (JSONArray) headerJson.getData();
-                            if (slideArray == null) break;
-                            slide = JSON.parseArray(slideArray.toString(), SlideJson.class);
-                            if (slide.size() > 0)
-                                list.add(VarConstant.NEWS_SLIDE);
+                            try {
+                                JSONArray slideArray = (JSONArray) headerJson.getData();
+                                if (slideArray == null) break;
+                                slide = JSON.parseArray(slideArray.toString(), SlideJson.class);
+                                if (slide.size() > 0)
+                                    list.add(VarConstant.NEWS_SLIDE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case VarConstant.NEWS_SHORTCUT:
-                            JSONArray shortcutArray = (JSONArray) headerJson.getData();
-                            if (shortcutArray == null) break;
-                            shortcut = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
-                            if (shortcut.size() > 0)
-                                list.add(VarConstant.NEWS_SHORTCUT);
+                            try {
+                                JSONArray shortcutArray = (JSONArray) headerJson.getData();
+                                if (shortcutArray == null) break;
+                                shortcut = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
+                                if (shortcut.size() > 0)
+                                    list.add(VarConstant.NEWS_SHORTCUT);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case VarConstant.NEWS_LIST:
-                            JSONArray newsArray = (JSONArray) headerJson.getData();
-                            if (newsArray == null) break;
-                            news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                            try {
+                                JSONArray newsArray = (JSONArray) headerJson.getData();
+                                if (newsArray == null) break;
+                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case VarConstant.NEWS_QUOTES:
-                            JSONArray quotesArray = (JSONArray) headerJson.getData();
-                            if (quotesArray == null) break;
-                            quotes = JSON.parseArray(quotesArray.toString(), QuotesJson.class);
-                            if (quotes.size() > 0)
-                                list.add(VarConstant.NEWS_QUOTES);
+                            try {
+                                JSONArray quotesArray = (JSONArray) headerJson.getData();
+                                if (quotesArray == null) break;
+                                quotes = JSON.parseArray(quotesArray.toString(), QuotesJson.class);
+                                if (quotes.size() > 0)
+                                    list.add(VarConstant.NEWS_QUOTES);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case VarConstant.NEWS_AD:
-                            JSONObject adObj = (JSONObject) headerJson.getData();
-                            if (adObj == null) break;
+                            try {
+                                JSONObject adObj = (JSONObject) headerJson.getData();
+                                if (adObj == null) break;
 
-                            SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
+                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
 
-                            List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString(), SlideJson
-                                    .class);
-                            SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
+                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString(), SlideJson
+                                        .class);
+                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
 
-                            ad = new AdJson(ad_img, ad_text);
-                            list.add(VarConstant.NEWS_AD);
+                                ad = new AdJson(ad_img, ad_text);
+                                list.add(VarConstant.NEWS_AD);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                     }
                 }

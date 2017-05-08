@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/explore_header_item3_height"
+              android:layout_marginBottom="@dimen/newsContentPadding"
               android:orientation="horizontal"
     >
 
@@ -9,8 +10,8 @@
         android:id="@+id/iv_btn"
         android:layout_width="@dimen/explore_header_item3_imgWidth"
         android:layout_height="match_parent"
-        android:src="@mipmap/ico_def_load"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@mipmap/ico_def_load"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -96,6 +96,13 @@
             android:name=".main.ui.activity.NewsContentActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".explore.ui.AuthorActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".explore.ui.MoreActivity"
+            android:screenOrientation="portrait"/>
+
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->

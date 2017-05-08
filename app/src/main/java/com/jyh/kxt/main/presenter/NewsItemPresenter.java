@@ -32,7 +32,7 @@ import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
-import com.jyh.kxt.main.json.NewsHomeHeaderJson;
+import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -367,14 +367,14 @@ public class NewsItemPresenter extends BasePresenter {
     public void onPullDownToRefresh(final PullToRefreshBase refreshView) {
         lastId = "";
         if (isMain) {
-            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<NewsHomeHeaderJson>>() {
+            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
 
                 @Override
-                protected void onResponse(List<NewsHomeHeaderJson> newsHomeHeaderJsons) {
+                protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
 
-                    for (NewsHomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                    for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
                                 JSONArray slideArray = (JSONArray) headerJson.getData();

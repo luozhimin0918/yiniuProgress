@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="@dimen/explore_header_item2_width"
               android:layout_height="@dimen/explore_header_item2_height"
-    android:gravity="center"
-    android:padding="1px"
-    android:background="@drawable/bg_contour">
+              android:layout_marginBottom="@dimen/newsContentPadding"
+              android:layout_marginRight="@dimen/searchItemPadding2"
+              android:background="@drawable/bg_contour"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="1px">
 
     <ImageView
         android:id="@+id/iv_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/explore_header_item2_imgHeight"
-        android:src="@mipmap/ico_def_load"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@mipmap/ico_def_load"/>
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/explore_header_item2_padding"
-        android:maxLines="2"
-        android:textSize="@dimen/describe_font_size3"
-        android:textColor="@color/font_color5"
         android:layout_marginTop="@dimen/explore_header_item2_margin"
+        android:maxLines="2"
+        android:padding="@dimen/explore_header_item2_padding"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/describe_font_size3"
         />
 </LinearLayout>

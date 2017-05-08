@@ -56,8 +56,8 @@ public class BannerLayout extends RelativeLayout {
 
     private int itemCount;
 
-    private int selectedIndicatorColor = 0xffff0000;
-    private int unSelectedIndicatorColor = 0x88888888;
+    private int selectedIndicatorColor = 0xffffffff;
+    private int unSelectedIndicatorColor = 0xff1c9cf2;
 
     private Shape indicatorShape = Shape.oval;
     private int selectedIndicatorHeight = 6;

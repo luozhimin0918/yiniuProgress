@@ -449,11 +449,11 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
         switch (type) {
             case 0:
                 shapeColor = R.color.calendar_line0;
-                leftDrawable = mContext.getDrawable(R.mipmap.icon_top_red);
+                leftDrawable = ContextCompat.getDrawable(mContext, R.mipmap.icon_top_red);
                 break;
             case 1:
                 shapeColor = R.color.calendar_line1;
-                leftDrawable = mContext.getDrawable(R.mipmap.icon_decline_green);
+                leftDrawable = ContextCompat.getDrawable(mContext, R.mipmap.icon_decline_green);
                 break;
             case 2:
                 shapeColor = R.color.calendar_line2;

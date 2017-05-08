@@ -199,8 +199,11 @@
     <!-- 作者 -->
     <dimen name="authorMarginTop">20dp</dimen>
     <dimen name="authorPadding">20dp</dimen>
+    <dimen name="authorPadding2">15dp</dimen>
     <dimen name="authorPhotoSize">60dp</dimen>
     <dimen name="authorViewHeight">15dp</dimen>
+    <dimen name="authorActionBarHeight">30dp</dimen>
+    <dimen name="authorHeaderViewHeight">180dp</dimen>
 
 
     <!-- 快讯 -->
@@ -237,6 +240,15 @@
     <dimen name="flash_img_width">114dp</dimen>
     <dimen name="flash_img_height">77dp</dimen>
 
+    <!-- 快讯详情 -->
+    <dimen name="flash_info_lineSpacingExtra1">13dp</dimen>
+    <dimen name="flash_info_lineSpacingExtra2">11dp</dimen>
+    <dimen name="flash_info_minWidth">60dp</dimen>
+    <dimen name="flash_info_flagSize">25dp</dimen>
+    <dimen name="flash_info_margin1">8dp</dimen>
+    <dimen name="flash_info_margin2">10dp</dimen>
+    <dimen name="flash_info_margin3">15dp</dimen>
+
     <!-- 探索首页 -->
     <dimen name="explore_header_title_height">25dp</dimen>
     <dimen name="explore_header_marginTop">15dp</dimen>
@@ -272,6 +284,11 @@
     <dimen name="explore_header_item4_marginTop">10dp</dimen>
     <dimen name="explore_header_item4_marginBottom">7dp</dimen>
 
+    <dimen name="explore_more_activity_img_height">193dp</dimen>
+    <dimen name="explore_more_padding1">10dp</dimen>
+    <dimen name="explore_more_padding2">15dp</dimen>
+    <dimen name="explore_more_padding3">13dp</dimen>
+    <dimen name="explore_more_padding4">14dp</dimen>
 
     <!--星星大小-->
     <dimen name="star_size">9dp</dimen>

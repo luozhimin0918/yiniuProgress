@@ -1,4 +1,4 @@
-package com.jyh.kxt.main.json;
+package com.jyh.kxt.index.json;
 
 /**
  * 项目名:Kxt
@@ -7,7 +7,7 @@ package com.jyh.kxt.main.json;
  * 创建日期:2017/4/17.
  */
 
-public class NewsHomeHeaderJson {
+public class HomeHeaderJson {
     private String type;
     private Object data;
 
@@ -25,5 +25,13 @@ public class NewsHomeHeaderJson {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "HomeHeaderJson{" +
+                "type='" + type + '\'' +
+                ", data=" + data +
+                '}';
     }
 }
