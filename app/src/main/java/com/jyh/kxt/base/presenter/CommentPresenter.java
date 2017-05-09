@@ -21,7 +21,6 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
-import com.jyh.kxt.base.util.emoje.utils.Utils;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import java.util.List;
@@ -133,7 +132,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
     @Override
     public void keyBoardShow(int height) {
-        Utils.setDefKeyboardHeight(mBaseActivity, height);
         if (replyMessagePresenter != null) {
             replyMessagePresenter.adjustEmoJeView(height);
         }

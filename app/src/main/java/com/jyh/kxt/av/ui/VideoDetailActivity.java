@@ -13,7 +13,6 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
-import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.superplayer.library.SuperPlayer;
 
@@ -52,8 +51,6 @@ public class VideoDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         videoId = getIntent().getStringExtra(IntentConstant.ID);
-
-        EmoticonsUtils.initEmoticonsDB(this);
 
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 

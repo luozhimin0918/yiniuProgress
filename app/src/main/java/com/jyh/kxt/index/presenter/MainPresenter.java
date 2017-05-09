@@ -3,7 +3,6 @@ package com.jyh.kxt.index.presenter;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -12,17 +11,8 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
-import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.index.json.CjrlJson;
+import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VolleyRequest;
-import com.library.widget.PageLoadLayout;
-
-import java.util.HashMap;
-import java.util.List;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
 public class MainPresenter extends BasePresenter {
@@ -78,24 +68,33 @@ public class MainPresenter extends BasePresenter {
         }
     }
 
-    public void requestTipInfo(final PageLoadLayout pllLoad) {
-        pllLoad.loadWait(PageLoadLayout.BgColor.TRANSPARENT8, null);
+    /**
+     * 发送一个延迟请求, 放一些不重要的 但是必须要请求的网络信息
+     */
+    public void postDelayRequest() {
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("date", "2016-12-23");
-
-        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-        volleyRequest.doGet(HttpConstant.CJRL, map, new HttpListener<List<CjrlJson>>() {
+        new Thread(new Runnable() {
             @Override
-            protected void onResponse(List<CjrlJson> result) {
-                pllLoad.loadOver();
-            }
+            public void run() {
+                try {
+                    Thread.sleep(1000);
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                pllLoad.loadError();
+
+                    EmoticonsUtils.initEmoticonsDB(mContext);
+//                    for (String emoJeItem : result) {
+//                        String[] emoJeItemSplit = emoJeItem
+//                                .subSequence(1, emoJeItem.length() - 1)
+//                                .toString()
+//                                .split(",");
+//                        String name = emoJeItemSplit[0];
+//                        String url = emoJeItemSplit[1];
+//                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }).start();
+
+
     }
-
 }

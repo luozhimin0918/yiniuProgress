@@ -4,16 +4,16 @@
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\year_label_text_view.xml"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\layout_tab_left.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\layout_tab_left.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\layout_tab.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\layout_tab.xml"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\layout_tab_left.xml",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\layout_tab_left.xml"
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_time.xml",
@@ -32,16 +32,16 @@
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\web_load_error.xml"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\widget_toast.xml",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\widget_toast.xml"
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\notification_template_lines.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_toolbar.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_screen_toolbar.xml"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\notification_template_lines.xml"
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\widget_toast.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\layout\\widget_toast.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_big_media.xml",
@@ -52,12 +52,12 @@
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_list_menu_item_icon.xml"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_checkbox.xml",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_list_menu_item_checkbox.xml"
-    },
-    {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_view.xml",
         "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_search_view.xml"
+    },
+    {
+        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_list_menu_item_checkbox.xml"
     },
     {
         "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_status.xml",

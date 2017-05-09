@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.jyh.kxt.base.util.emoje.EmoticonLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <com.jyh.kxt.base.util.emoje.view.EmoticonsPageView
-        android:id="@+id/view_epv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/view_eiv"
-        android:orientation="vertical"/>
-
-    <com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView
+    <com.jyh.kxt.base.util.emoje.EmoticonViewPager
         android:id="@+id/view_eiv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/view_etv"
+        android:tag="evp_emoje"
+        android:layout_height="170dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+    </com.jyh.kxt.base.util.emoje.EmoticonViewPager>
+
+    <!--圆圈 ○●○○○-->
+    <LinearLayout
+        android:id="@+id/ll_circle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/indicator_margin">
-    </com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView>
+        android:tag="ll_circle">
 
+    </LinearLayout>
 
-    <com.jyh.kxt.base.util.emoje.view.EmoticonsToolBarView
-        android:id="@+id/view_etv"
+    <include layout="@layout/view_line"></include>
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bar_height"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" />
-</RelativeLayout>
+        android:layout_height="40dp">
+        <!--表情包导航栏 -->
+        <LinearLayout
+            android:id="@+id/ll_emoje_nav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:tag="ll_label">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</com.jyh.kxt.base.util.emoje.EmoticonLinearLayout>

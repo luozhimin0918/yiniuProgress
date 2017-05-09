@@ -2,8 +2,6 @@ package com.jyh.kxt.av.presenter;
 
 import android.app.Service;
 import android.content.Context;
-import android.text.Editable;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,16 +15,10 @@ import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.dao.EmojeBean;
 import com.jyh.kxt.base.util.PopupUtil;
-import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
-import com.jyh.kxt.base.util.emoje.bean.EmoticonBean;
-import com.jyh.kxt.base.util.emoje.utils.EmoticonsKeyboardBuilder;
-import com.jyh.kxt.base.util.emoje.utils.Utils;
-import com.jyh.kxt.base.util.emoje.view.EmoticonsEditText;
-import com.jyh.kxt.base.util.emoje.view.EmoticonsIndicatorView;
-import com.jyh.kxt.base.util.emoje.view.EmoticonsPageView;
-import com.jyh.kxt.base.util.emoje.view.EmoticonsToolBarView;
-import com.jyh.kxt.base.util.emoje.view.I.IView;
+import com.jyh.kxt.base.util.emoje.EmoticonLinearLayout;
+import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,11 +39,11 @@ public class ReplyMessagePresenter extends BasePresenter {
     public boolean isShowEmoJiView = false;
 
     private View replyMessageView;
-    private View emoJeContentView;
+    private EmoticonLinearLayout emoJeContentView;
 
-    private EmoticonsPageView mEmoticonsPageView;
-    private EmoticonsIndicatorView mEmoticonsIndicatorView;
-    private EmoticonsToolBarView mEmoticonsToolBarView;
+//    private EmoticonsPageView mEmoticonsPageView;
+//    private EmoticonsIndicatorView mEmoticonsIndicatorView;
+//    private EmoticonsToolBarView mEmoticonsToolBarView;
 
     private PopupUtil replyMessagePopup;
 
@@ -72,7 +64,7 @@ public class ReplyMessagePresenter extends BasePresenter {
                     flEmoJe.removeView(emoJeContentView);
                     hideSoftInputFromWindow();
 
-                    return true;
+                    return false;
                 }
                 return false;
             }
@@ -102,11 +94,26 @@ public class ReplyMessagePresenter extends BasePresenter {
                     ViewGroup.LayoutParams.MATCH_PARENT);
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            emoJeContentView = inflater.inflate(R.layout.view_emoje_content, null);
+            emoJeContentView = (EmoticonLinearLayout) inflater.inflate(R.layout.view_emoje_content, null);
             emoJeContentView.setLayoutParams(emoJeParams);
 
-            addViewListener(emoJeContentView);
 
+            emoJeContentView.setOnItemClick(new EmoticonLinearLayout.OnItemClick() {
+                @Override
+                public void itemEmoJeClick(EmojeBean emojeBean) {
+//                    String currentContent = eetContent.getText().toString();
+//                    String name = "[" + emojeBean.getName() + "]";
+//
+//                    eetContent.setText(currentContent + name);
+
+                    eetContent.itemEmoJeClick(emojeBean);
+                }
+
+                @Override
+                public void deleteEmoJeClick() {
+                    eetContent.deleteEmoJeClick( );
+                }
+            });
         }
 
         if (isShowEmoJiView) {
@@ -123,93 +130,6 @@ public class ReplyMessagePresenter extends BasePresenter {
     }
 
 
-    private void addViewListener(View view) {
-        mEmoticonsPageView = (EmoticonsPageView) view.findViewById(R.id.view_epv);
-        mEmoticonsIndicatorView = (EmoticonsIndicatorView) view.findViewById(R.id.view_eiv);
-        mEmoticonsToolBarView = (EmoticonsToolBarView) view.findViewById(R.id.view_etv);
-
-        setBuilder(EmoticonsUtils.getSimpleBuilder(mContext));
-
-        mEmoticonsPageView.setOnIndicatorListener(new EmoticonsPageView.OnEmoticonsPageViewListener() {
-            @Override
-            public void emoticonsPageViewInitFinish(int count) {
-                mEmoticonsIndicatorView.init(count);
-            }
-
-            @Override
-            public void emoticonsPageViewCountChanged(int count) {
-                mEmoticonsIndicatorView.setIndicatorCount(count);
-            }
-
-            @Override
-            public void playTo(int position) {
-                mEmoticonsIndicatorView.playTo(position);
-            }
-
-            @Override
-            public void playBy(int oldPosition, int newPosition) {
-                mEmoticonsIndicatorView.playBy(oldPosition, newPosition);
-            }
-        });
-
-        mEmoticonsPageView.setIViewListener(new IView() {
-            @Override
-            public void onItemClick(EmoticonBean bean) {
-                if (eetContent != null) {
-                    eetContent.setFocusable(true);
-                    eetContent.setFocusableInTouchMode(true);
-                    eetContent.requestFocus();
-
-                    // 删除
-                    if (bean.getEventType() == EmoticonBean.FACE_TYPE_DEL) {
-                        int action = KeyEvent.ACTION_DOWN;
-                        int code = KeyEvent.KEYCODE_DEL;
-                        KeyEvent event = new KeyEvent(action, code);
-                        eetContent.onKeyDown(KeyEvent.KEYCODE_DEL, event);
-                        return;
-                    }
-                    // 用户自定义
-                    else if (bean.getEventType() == EmoticonBean.FACE_TYPE_USERDEF) {
-                        return;
-                    }
-
-                    int index = eetContent.getSelectionStart();
-                    Editable editable = eetContent.getEditableText();
-                    if (index < 0) {
-                        editable.append(bean.getContent());
-                    } else {
-                        editable.insert(index, bean.getContent());
-                    }
-                }
-            }
-
-            @Override
-            public void onItemDisplay(EmoticonBean bean) {
-            }
-
-            @Override
-            public void onPageChangeTo(int position) {
-                mEmoticonsToolBarView.setToolBtnSelect(position);
-            }
-        });
-
-        mEmoticonsToolBarView.setOnToolBarItemClickListener(new EmoticonsToolBarView.OnToolBarItemClickListener() {
-            @Override
-            public void onToolBarItemClick(int position) {
-                mEmoticonsPageView.setPageSelect(position);
-            }
-        });
-    }
-
-    public void setBuilder(EmoticonsKeyboardBuilder builder) {
-        if (mEmoticonsPageView != null) {
-            mEmoticonsPageView.setBuilder(builder);
-        }
-        if (mEmoticonsToolBarView != null) {
-            mEmoticonsToolBarView.setBuilder(builder);
-        }
-    }
-
     public void goneEmoJeView() {
         if (emoJeContentView != null) {
             flEmoJe.removeView(emoJeContentView);
@@ -217,16 +137,14 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
     }
 
-    private int lastKeyboardHeight = 0;
 
     public void adjustEmoJeView(int height) {
-        if (flEmoJe != null && height != lastKeyboardHeight) {
+        if (flEmoJe != null) {
             int emoJeWidth = replyMessageView.getWidth();
-            lastKeyboardHeight = Utils.getDefKeyboardHeight(mContext);
 
             ViewGroup.LayoutParams layoutParams = flEmoJe.getLayoutParams();
             layoutParams.width = emoJeWidth;
-            layoutParams.height = lastKeyboardHeight;
+            layoutParams.height = height;
 
             flEmoJe.setLayoutParams(layoutParams);
         }

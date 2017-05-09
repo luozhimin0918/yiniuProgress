@@ -82,6 +82,7 @@
     <dimen name="indicator_margin">10dp</dimen>
     <dimen name="bar_height">35dp</dimen>
 
+
     <!-- 侧滑菜单 -->
     <dimen name="drawer_head_bottom">15dp</dimen>
     <dimen name="drawer_head_login_avatarSize">90dp</dimen>
@@ -352,4 +353,6 @@
 
     <dimen name="forget_edtHeight">49dp</dimen>
     <dimen name="forget_imgSize">20dp</dimen>
+
+    <dimen name="emoJe_item_size">30dp</dimen>
 </resources>

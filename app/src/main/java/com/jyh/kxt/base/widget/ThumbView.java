@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.utils.NativeStore;
 import com.library.util.SystemUtil;
 
 /**
@@ -24,6 +25,9 @@ public class ThumbView extends RelativeLayout {
      * 是否赞过
      */
     private boolean isThumb = false;
+    //点赞的ID值
+    private int thumbId = 0;
+
     private ImageView ivThumb;
     private TextView tvThumbCount;
     private TextView tvThumbAddCount;
@@ -51,7 +55,6 @@ public class ThumbView extends RelativeLayout {
 
         //点赞的图片
         ivThumb = new ImageView(getContext());
-        ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
         ivThumb.setId(R.id.iv_thumb);
 
         LayoutParams thumbImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -92,8 +95,10 @@ public class ThumbView extends RelativeLayout {
             public void onClick(View v) {
                 isThumb = !isThumb;
 
-
                 if (isThumb) {
+                    NativeStore.getInstance(getContext()).addThumbID(getContext(), thumbId);
+
+
                     changerCount(1);
                     ivThumb.setImageResource(R.mipmap.icon_comment_like);
 
@@ -108,7 +113,10 @@ public class ThumbView extends RelativeLayout {
                             tvThumbAddCount.setVisibility(View.GONE);
                         }
                     }, mAnimation.getDuration());
+
                 } else {
+                    NativeStore.getInstance(getContext()).removeThumbId(getContext(), thumbId);
+
                     changerCount(-1);
                     ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
                 }
@@ -116,12 +124,23 @@ public class ThumbView extends RelativeLayout {
         });
     }
 
-    public void setThumb(boolean thumb) {
-        isThumb = thumb;
+    /**
+     * @param thumbId
+     */
+    public void updateThumbState(int thumbId) {
+        this.thumbId = thumbId;
+
+        isThumb = NativeStore.getInstance(getContext()).isThumbSucceed(thumbId);
+
+        if (isThumb) {
+            ivThumb.setImageResource(R.mipmap.icon_comment_like);
+        } else {
+            ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
+        }
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
         if (tvThumbAddCount != null && tvThumbAddCount.isShown()) {
@@ -137,7 +156,7 @@ public class ThumbView extends RelativeLayout {
 
     private void changerCount(int count) {
         CharSequence currentCount = tvThumbCount.getText();
-        String updateCountValue = String.valueOf(Integer.parseInt(currentCount.toString()) +count);
+        String updateCountValue = String.valueOf(Integer.parseInt(currentCount.toString()) + count);
         tvThumbCount.setText(updateCountValue);
     }
 }

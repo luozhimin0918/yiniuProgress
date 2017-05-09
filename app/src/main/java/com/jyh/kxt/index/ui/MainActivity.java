@@ -90,7 +90,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         mainPresenter = new MainPresenter(this);
 
-        //侧边栏相关控件
         initDrawer();
 
         try {
@@ -100,8 +99,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
 
         mainPresenter.initHeaderLayout();
+        mainPresenter.postDelayRequest();
 
         clickSwitchFragment(R.id.rb_home);
+
+//        DBUtils.toSDWriteFile(this, DBManager.dbName);
     }
 
     /**

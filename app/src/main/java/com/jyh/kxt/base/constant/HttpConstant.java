@@ -106,4 +106,6 @@ public class HttpConstant {
     public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点赞-视听 ?id={}
     public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点赞状态-文章 ?id={}
     public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点赞状态-视听 ?id={}
+
+
 }
