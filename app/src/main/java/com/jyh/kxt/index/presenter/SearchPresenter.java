@@ -77,8 +77,13 @@ public class SearchPresenter extends BasePresenter {
             ToastView.makeText3(mContext, "搜索关键字不能为空");
             return;
         }
+        searchActivity.hideHistory();
+        searchActivity.plRootView.loadWait();
+
         upDataSearchHistory(searchKey);
         initSearchHistory();
+
+        searchActivity.plRootView.loadOver();
     }
 
     /**

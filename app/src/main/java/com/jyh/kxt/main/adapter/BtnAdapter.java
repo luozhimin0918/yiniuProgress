@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.SlideJson;
@@ -96,50 +97,10 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
     public static void jump(final MainActivity context, SlideJson slideJson) {
         if (slideJson == null || context == null) return;
         if (TextUtils.isEmpty(slideJson.getHref())) {
-
             String o_class = slideJson.getO_class();
             String o_action = slideJson.getO_action();
             String o_id = slideJson.getO_id();
-
-            try {
-                switch (o_class) {
-                    case VarConstant.OCLASS_DATA:
-                        //数据
-                        context.rbDatum.performClick();
-                        context.rbDatum.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                context.datumFragment.onTabSelect(1);
-                            }
-                        }, 500);
-                        break;
-                    case VarConstant.OCLASS_FLASH:
-                        //快讯
-                        context.rbHome.performClick();
-                        context.homeFragment.onTabSelect(1);
-                        break;
-                    case VarConstant.OCLASS_NEWS:
-                        //要闻
-                        context.rbHome.performClick();
-                        break;
-                    case VarConstant.OCLASS_QUOTES:
-                        //行情
-                        context.rbMarket.performClick();
-
-                        break;
-                    case VarConstant.OCLASS_RL:
-                        //日历
-                        context.rbDatum.performClick();
-
-                        break;
-                    case VarConstant.OCLASS_VIDEO:
-                        //视听
-                        context.rbAudioVisual.performClick();
-                        break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            JumpUtils.jump(context, o_class, o_action, o_id, null);
         } else {
             Intent intent = new Intent(context, WebActivity.class);
             context.startActivity(intent);

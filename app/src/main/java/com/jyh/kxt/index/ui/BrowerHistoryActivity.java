@@ -50,7 +50,6 @@ public class BrowerHistoryActivity extends BaseActivity {
         setContentView(R.layout.activity_index_browerhistory, StatusBarColor.THEME1);
         tvBarTitle.setText("浏览记录");
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_brower_clear));
-        ivBarFunction.setPadding(20, 20, 20, 20);
 
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(browerHistoryPresenter);

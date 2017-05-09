@@ -3,6 +3,8 @@ package com.jyh.kxt.index.ui;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,10 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.presenter.SearchPresenter;
+import com.library.util.RegexValidateUtil;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.flowlayout.TagAdapter;
 import com.library.widget.flowlayout.TagFlowLayout;
@@ -41,6 +46,9 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.rv_content) RecyclerView rvContent;
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.vp_content) ViewPager vpContent;
+    @BindView(R.id.layout_search_start) View rootSearchStart;
+    @BindView(R.id.layout_search_end) View rootSearchEnd;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private final String[] tabs = new String[]{"文章", "视听"};
     private SearchPresenter searchPresenter;
@@ -54,12 +62,20 @@ public class SearchActivity extends BaseActivity {
 
         searchPresenter = new SearchPresenter(this);
 
+        String searchKey = getIntent().getStringExtra(IntentConstant.SEARCH_KEY);
+
         initView();
 
-        //初始化搜索历史
-        searchPresenter.initSearchHistory();
-        //初始化浏览历史
-        searchPresenter.initBrowseHistory();
+        if (RegexValidateUtil.isEmpty(searchKey)) {
+            //初始化搜索历史
+            searchPresenter.initSearchHistory();
+            //初始化浏览历史
+            searchPresenter.initBrowseHistory();
+        } else {
+            rootSearchStart.setVisibility(View.GONE);
+            rootSearchEnd.setVisibility(View.VISIBLE);
+            searchPresenter.search(searchKey);
+        }
     }
 
     private void initView() {
@@ -74,6 +90,29 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (RegexValidateUtil.isEmpty(s.toString())) {
+                    //初始化搜索历史
+                    searchPresenter.initSearchHistory();
+                    //初始化浏览历史
+                    searchPresenter.initBrowseHistory();
+                }
+            }
+        });
+
         flHot.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
@@ -149,7 +188,11 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
-    @OnClick()
-    public void onClick() {
+    /**
+     * 隐藏历史记录，显示搜索内容
+     */
+    public void hideHistory() {
+        rootSearchStart.setVisibility(View.GONE);
+        rootSearchEnd.setVisibility(View.VISIBLE);
     }
 }

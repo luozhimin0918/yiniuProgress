@@ -44,6 +44,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
+import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -479,6 +480,7 @@ public class NewsItemPresenter extends BasePresenter {
                 @Override
                 public void run() {
                     refreshView.onRefreshComplete();
+                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
             }, 500);
         }
@@ -519,6 +521,95 @@ public class NewsItemPresenter extends BasePresenter {
             isMore = true;
         } else {
             isMore = false;
+        }
+    }
+
+    /**
+     * 错误后 重新加载
+     */
+    public void reLoad() {
+        lastId = "";
+        if (isMain) {
+            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
+
+                @Override
+                protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
+
+                    ArrayList<String> list = new ArrayList<>();
+
+                    for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                        switch (headerJson.getType()) {
+                            case VarConstant.NEWS_SLIDE:
+                                JSONArray slideArray = (JSONArray) headerJson.getData();
+                                if (slideArray == null) break;
+                                slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
+                                if (slides.size() > 0)
+                                    list.add(VarConstant.NEWS_SLIDE);
+                                break;
+                            case VarConstant.NEWS_SHORTCUT:
+                                JSONArray shortcutArray = (JSONArray) headerJson.getData();
+                                if (shortcutArray == null) break;
+                                shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
+                                if (shortcuts.size() > 0)
+                                    list.add(VarConstant.NEWS_SHORTCUT);
+                                break;
+                            case VarConstant.NEWS_LIST:
+                                JSONArray newsArray = (JSONArray) headerJson.getData();
+                                if (newsArray == null) break;
+                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                break;
+                            case VarConstant.NEWS_QUOTES:
+                                JSONArray quotesArray = (JSONArray) headerJson.getData();
+                                if (quotesArray == null) break;
+                                quotes = JSON.parseArray(quotesArray.toString(), QuotesJson.class);
+                                if (quotes.size() > 0)
+                                    list.add(VarConstant.NEWS_QUOTES);
+                                break;
+                            case VarConstant.NEWS_AD:
+                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson.getData();
+                                if (adObj == null) break;
+
+                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
+
+                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString(), SlideJson
+                                        .class);
+                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
+
+                                ads = new AdJson(ad_img, ad_text);
+                                list.add(VarConstant.NEWS_AD);
+                                break;
+                        }
+                    }
+                    initMain();
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    newsItemFragment.plRootView.loadError();
+                }
+            });
+        } else {
+            request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
+                @Override
+                protected void onResponse(List<NewsJson> newsJsons) {
+                    checkNews(newsJsons);
+                    news = newsJsons;
+                    if (newsAdapter == null) {
+                        newsAdapter = new NewsAdapter(mContext, newsJsons);
+                        newsItemFragment.plvContent.setAdapter(newsAdapter);
+                    } else {
+                        newsAdapter.setData(newsJsons);
+                    }
+                    newsItemFragment.plRootView.loadOver();
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    newsItemFragment.plRootView.loadError();
+                }
+            });
         }
     }
 }

@@ -254,6 +254,13 @@ public class CollectUtils {
         }
     }
 
+    /**
+     * 收藏数据同步
+     */
+    public static void localAndNetSynchronization() {
+
+    }
+
     private static Map<String, String> getMap(Context context, VolleyRequest request, String id, String type) {
         Map<String, String> map = new HashMap<>();
         JSONObject jsonParam = request.getJsonParam();

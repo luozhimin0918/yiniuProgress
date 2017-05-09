@@ -25,6 +25,7 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -220,8 +221,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (DoubleClickUtils.isFastDoubleClick(500))
+                super.onBackPressed();
+            else
+                ToastView.makeText3(this, "双击退出应用");
         }
+
     }
 
     @Override

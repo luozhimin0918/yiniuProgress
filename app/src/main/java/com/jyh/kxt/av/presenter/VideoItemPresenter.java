@@ -135,11 +135,11 @@ public class VideoItemPresenter extends BasePresenter {
                 }
             });
         else {
-            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
             refreshView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     refreshView.onRefreshComplete();
+                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
             }, 500);
         }

@@ -28,7 +28,7 @@ public class LoginUtils {
      * @param userInfo
      */
     public static void login(Context context, UserJson userInfo) {
-        SPUtils.save(context, SpConstant.USERINFO, userInfo);
+        SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
     }
 

@@ -112,6 +112,11 @@
     <dimen name="editUserInfo_padding3">20dp</dimen>
     <dimen name="editUserInfo_padding4">25dp</dimen>
 
+    <dimen name="editUserInfo_EditHeight">58dp</dimen>
+    <dimen name="editUserInfo_EditPadding1">25dp</dimen>
+    <dimen name="editUserInfo_EditPadding2">31dp</dimen>
+    <dimen name="editUserInfo_EditPadding3">33dp</dimen>
+
     <!-- 搜索界面 -->
     <dimen name="searchEditTextHeight">31dp</dimen>
     <dimen name="searchDrawablePadding">5dp</dimen>
@@ -209,6 +214,8 @@
     <!-- 快讯 -->
     <dimen name="flash_timeBarHeight">28dp</dimen>
 
+    <dimen name="flash_bottom_imgWidth">12dp</dimen>
+    <dimen name="flash_bottom_imgHeight">7dp</dimen>
     <dimen name="flash_bottom_height">18dp</dimen>
     <dimen name="flash_bottom_width">56dp</dimen>
     <dimen name="flash_bottom_padding">10dp</dimen>

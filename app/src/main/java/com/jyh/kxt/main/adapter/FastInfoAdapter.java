@@ -527,7 +527,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             public void run() {
                 //获取textView的行数
                 int txtPart = finalKxHolder.tvContent.getLineCount();
-                if (txtPart < 3) {
+                if (txtPart <= 3) {
                     finalKxHolder.ivMore.setVisibility(View.GONE);
                     finalKxHolder.tvMore.setVisibility(View.GONE);
                 } else {

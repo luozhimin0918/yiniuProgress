@@ -5,6 +5,7 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
+              android:id="@+id/ll_rootView"
               android:paddingLeft="@dimen/lr_padding_horizontal"
               android:paddingRight="@dimen/lr_padding_horizontal">
 

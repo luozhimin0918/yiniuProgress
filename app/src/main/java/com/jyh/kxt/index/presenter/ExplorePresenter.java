@@ -1,12 +1,8 @@
 package com.jyh.kxt.index.presenter;
 
-import android.support.v4.view.NestedScrollingChild;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -40,6 +36,7 @@ public class ExplorePresenter extends BasePresenter {
     private VolleyRequest request;
 
     private String lastId = "";
+    private boolean isMore;//是否拥有更多数据
 
     public ExplorePresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -144,15 +141,20 @@ public class ExplorePresenter extends BasePresenter {
      * 加载更多
      */
     public void loadMore() {
-        if (request == null)
-            request = new VolleyRequest(mContext, mQueue);
-        request.doGet(getLoadMoreUrl(request), new HttpListener<List<NewsJson>>() {
-            @Override
-            protected void onResponse(List<NewsJson> newsJsons) {
-                exploreFragment.loadMore(newsJsons);
-                getLastId(newsJsons);
-            }
-        });
+
+        if (isMore) {
+            if (request == null)
+                request = new VolleyRequest(mContext, mQueue);
+            request.doGet(getLoadMoreUrl(request), new HttpListener<List<NewsJson>>() {
+                @Override
+                protected void onResponse(List<NewsJson> newsJsons) {
+                    exploreFragment.loadMore(newsJsons);
+                    getLastId(newsJsons);
+                }
+            });
+        }else{
+            exploreFragment.noMoreData();
+        }
     }
 
     private String getLoadMoreUrl(VolleyRequest request) {
@@ -179,7 +181,14 @@ public class ExplorePresenter extends BasePresenter {
         if (article == null)
             return lastId = "";
         try {
-            return lastId = article.get(article.size() - 1).getO_id();
+            int size = article.size();
+            if (size > VarConstant.LIST_MAX_SIZE) {
+                isMore = true;
+            } else {
+                isMore = false;
+            }
+            lastId = article.get(size - 1).getO_id();
+            return lastId;
         } catch (Exception e) {
             e.printStackTrace();
             return lastId = "";

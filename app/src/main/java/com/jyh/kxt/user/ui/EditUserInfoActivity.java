@@ -1,17 +1,34 @@
 package com.jyh.kxt.user.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
+import com.library.util.SystemUtil;
+import com.library.util.softinputkeyboard.KeyboardChangeListener;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 
@@ -71,6 +88,8 @@ public class EditUserInfoActivity extends BaseActivity {
 
     public static final String VIEW_NAME_IMG = "view_name_img";
     public static final String VIEW_NAME_TITLE = "view_name_title";
+    private PopupWindow popupWindow;
+    private EditText edtName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +102,10 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter.loadCitis();
 
-//        UserJson userInfo = LoginUtils.getUserInfo(this);
-//        tvNickname.setText(userInfo.getNickname());
-//        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap.icon_user_def_photo).into(ivPhoto);
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        tvNickname.setText(userInfo.getNickname());
+        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap
+                .icon_user_def_photo).into(ivPhoto);
 
         ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
         ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
@@ -147,6 +167,20 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_nickname:
                 //修改昵称
+                DisplayMetrics metrics = SystemUtil.getScreenDisplay(this);
+                if (popupWindow == null) {
+                    initNameChangePop(metrics);
+                } else {
+                    backgroundAlpha(0.5f);
+                    popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                    //让编辑框弹出来，并显示对谁进行评论
+                    edtName.setFocusable(true);
+                    edtName.setFocusableInTouchMode(true);
+                    edtName.requestFocus();
+                    //打开软键盘
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 break;
             case R.id.rl_gender:
                 //修改性别
@@ -175,8 +209,85 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_changePwd:
                 //修改密码
+                Intent changPwdIntent = new Intent(this, ChangePwdActivity.class);
+                startActivity(changPwdIntent);
                 break;
         }
     }
 
+    /**
+     * 初始化修改昵称的popuwindow
+     *
+     * @param metrics
+     */
+    private void initNameChangePop(DisplayMetrics metrics) {
+        View rootView = LayoutInflater.from(this).inflate(R.layout.dialog_edittext, null, false);
+
+        edtName = (EditText) rootView.findViewById(R.id.edt_name);
+        final TextView tvNum = (TextView) rootView.findViewById(R.id.tv_num);
+        TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
+
+        edtName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvNum.setText(s.length() + "/10");
+            }
+        });
+
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Editable text = edtName.getText();
+                if (text == null || text.toString().trim().equals("")) {
+                    ToastView.makeText3(getContext(), "昵称不能为空");
+                    return;
+                }
+
+                int textLength = text.toString().length();
+                if (textLength > 10) {
+                    ToastView.makeText3(getContext(), "昵称字符不能大于10");
+                    return;
+                }
+                tvNickname.setText(text.toString().trim());
+            }
+        });
+
+        popupWindow = new PopupWindow();
+        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x7F000000));
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(metrics.widthPixels);
+        popupWindow.setHeight((int) getResources().getDimension(R.dimen.editUserInfo_EditHeight));
+        popupWindow.setContentView(rootView);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1f);
+            }
+        });
+    }
+
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
 }

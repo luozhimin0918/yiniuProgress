@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout_edit"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/editUserInfo_EditHeight"
+              android:background="@color/theme1"
+              android:gravity="bottom"
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/editUserInfo_EditPadding1"
+    >
+
+
+    <EditText
+        android:id="@+id/edt_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:maxLength="10"
+        android:singleLine="true"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/content_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="0/10"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <TextView
+        android:id="@+id/tv_sure"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/editUserInfo_EditPadding2"
+        android:paddingRight="@dimen/editUserInfo_EditPadding3"
+        android:text="确认"
+        android:textColor="@color/font_color8"
+        android:textSize="@dimen/content_font_size"
+        />
+
+</LinearLayout>

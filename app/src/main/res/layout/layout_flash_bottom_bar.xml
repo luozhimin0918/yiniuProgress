@@ -6,16 +6,23 @@
     >
 
     <TextView
+        android:id="@+id/tv_more"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/flash_bottom_height"
-        android:textSize="@dimen/content_font_size"
-        android:gravity="center"
         android:layout_centerVertical="true"
-        android:id="@+id/tv_more"/>
+        android:text="展开"
+        android:gravity="center"
+        android:textSize="@dimen/content_font_size"/>
+
     <ImageView
         android:id="@+id/iv_more"
-        android:layout_width="@dimen/flash_bottom_width"
-        android:layout_height="@dimen/flash_bottom_height"/>
+        android:layout_width="@dimen/flash_bottom_imgWidth"
+        android:layout_height="@dimen/flash_bottom_imgHeight"
+        android:layout_marginTop="4dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/flash_bottom_padding"
+        android:layout_toRightOf="@id/tv_more"
+        android:background="@drawable/bg_flash_show_hide"/>
 
     <ImageView
         android:id="@+id/iv_share"
@@ -37,7 +44,7 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/iv_more"
+        android:layout_below="@id/iv_collect"
         android:layout_marginTop="@dimen/flash_bottom_padding"
         android:background="@color/line_color2"
         />

@@ -119,7 +119,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     @Override
     public void OnAfreshLoad() {
-        newsPresenter.init();
+        newsPresenter.reLoad();
     }
 
     @Override

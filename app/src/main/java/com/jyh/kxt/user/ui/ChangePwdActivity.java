@@ -14,10 +14,14 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.util.validation.PwdValidation;
+import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.PwdEditText;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
+import com.library.util.avalidations.EditTextValidator;
+import com.library.util.avalidations.ValidationModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +46,8 @@ public class ChangePwdActivity extends BaseActivity {
     @BindView(R.id.btn_sure) Button changeBtn;
 
     private EditText pwdOld, pwdNew, pwdRe;
-    private boolean isOldError, isNewError, isReError;
     private VolleyRequest request;
+    private EditTextValidator editTextValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +56,17 @@ public class ChangePwdActivity extends BaseActivity {
 
         tvBarTitle.setText("修改密码");
 
-        changeBtnStatus();
-
         pwdOld = getEditText(edtPwdOld);
         pwdNew = getEditText(edtPwdNew);
         pwdRe = getEditText(edtPwdRe);
 
-        setEditTextListener(pwdOld, pwdNew, pwdRe);
+        editTextValidator = new EditTextValidator(getContext())
+                .setButton(changeBtn)
+                .add(new ValidationModel(getEditText(edtPwdOld), null, new UserNameValidation()))
+                .add(new ValidationModel(getEditText(edtPwdNew), null, new PwdValidation()))
+                .add(new ValidationModel(getEditText(edtPwdRe), null, new PwdValidation()))
+                .execute();
+
     }
 
     @OnClick({R.id.iv_bar_break, R.id.btn_sure})
@@ -68,27 +76,14 @@ public class ChangePwdActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.btn_sure:
-                changePwd(pwdOld.getText().toString(), pwdNew.getText().toString(), pwdRe.getText().toString());
+                if (editTextValidator.validate())
+                    changePwd(pwdOld.getText().toString(), pwdNew.getText().toString(), pwdRe.getText().toString());
                 break;
         }
     }
 
     private void changePwd(String oldPwd, String newPwd, String rePwd) {
-        if (RegexValidateUtil.checkPwd(oldPwd)) {
-            isOldError = true;
-            setErrorInfo(0, RegexValidateUtil.errorInfo);
-            return;
-        }
-        if (RegexValidateUtil.checkPwd(newPwd)) {
-            isNewError = true;
-            setErrorInfo(1, RegexValidateUtil.errorInfo);
-            return;
-        }
-        if (RegexValidateUtil.checkPwd(rePwd)) {
-            isReError = true;
-            setErrorInfo(2, RegexValidateUtil.errorInfo);
-            return;
-        }
+
         if (request == null)
             request = new VolleyRequest(this, getQueue());
 
@@ -111,95 +106,6 @@ public class ChangePwdActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         JSONObject jsonParam = request.getJsonParam();
         return map;
-    }
-
-
-    private void setEditTextListener(EditText pwdOld, EditText pwdNew, EditText pwdRe) {
-        pwdOld.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                changeBtnStatus();
-            }
-        });
-        pwdNew.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                changeBtnStatus();
-            }
-        });
-        pwdRe.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                changeBtnStatus();
-            }
-        });
-    }
-
-    /**
-     * 改变按钮状态
-     */
-    private void changeBtnStatus() {
-        if (!isReError && !isNewError && !isOldError) {
-            changeBtn.setSelected(true);
-            changeBtn.setClickable(true);
-        } else {
-            changeBtn.setSelected(false);
-            changeBtn.setClickable(false);
-        }
-    }
-
-    private void setErrorInfo(int type, String info) {
-        switch (type) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
-    }
-
-    private void clearError(int type) {
-        switch (type) {
-            case -1:
-                break;
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
     }
 
     private EditText getEditText(PwdEditText edt) {

@@ -13,8 +13,13 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.util.validation.EmailValidation;
+import com.jyh.kxt.base.util.validation.PwdValidation;
+import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
 import com.library.util.RegexValidateUtil;
+import com.library.util.avalidations.EditTextValidator;
+import com.library.util.avalidations.ValidationModel;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,9 +43,8 @@ public class ForgetPwdActivity extends BaseActivity {
 
     private ForgetPwdPresenter forgetPwdPresenter;
 
-    public boolean isError;
-
     public static final String EMAIL = "email";
+    private EditTextValidator editTextValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,30 +55,13 @@ public class ForgetPwdActivity extends BaseActivity {
 
         tvBarTitle.setText("忘记密码");
 
+        editTextValidator = new EditTextValidator(getContext())
+                .setButton(btnSend)
+                .add(new ValidationModel(edtEmail, null, new EmailValidation()))
+                .execute();
+
         String emailStr = getIntent().getStringExtra(EMAIL);
-        setBtnStatus(emailStr);
         edtEmail.setText(emailStr);
-
-        edtEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (isError) {
-                    isError = false;
-                    showError("");
-                }
-                setBtnStatus(s.toString());
-            }
-        });
 
     }
 
@@ -88,38 +75,12 @@ public class ForgetPwdActivity extends BaseActivity {
                 edtEmail.setText("");
                 break;
             case R.id.btn_send:
-                showWaitDialog(null);
-                forgetPwdPresenter.sendInfo(edtEmail.getText().toString());
+                if (editTextValidator.validate()) {
+                    showWaitDialog(null);
+                    forgetPwdPresenter.sendInfo(edtEmail.getText().toString());
+                }
                 break;
         }
-    }
-
-    /**
-     * 显示错误信息
-     *
-     * @param info
-     */
-    public void showError(String info) {
-        try {
-            tvError.setText(info);
-        } catch (Exception e) {
-            tvError.setText("");
-        }
-    }
-
-    /**
-     * 设置按钮状态
-     *
-     * @param emailStr
-     */
-    private void setBtnStatus(String emailStr) {
-        boolean b = RegexValidateUtil.checkEmail(emailStr);
-        btnSend.setSelected(b);
-        btnSend.setClickable(b);
-        if (b)
-            btnSend.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        else
-            btnSend.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color3));
     }
 
 }

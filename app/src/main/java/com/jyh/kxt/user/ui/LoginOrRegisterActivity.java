@@ -40,7 +40,7 @@ import butterknife.OnClick;
 
 public class LoginOrRegisterActivity extends BaseActivity {
 
-    @BindView(R.id.sv_rootView) ScrollView rootView;
+    @BindView(R.id.sv_rootView)public ScrollView rootView;
     @BindView(R.id.iv_close) ImageView ivClose;
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.fl_bg) FrameLayout flBg;

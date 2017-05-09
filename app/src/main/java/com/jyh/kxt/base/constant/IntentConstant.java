@@ -23,6 +23,8 @@ public class IntentConstant {
     public static final String O_CLASS = "o_class";
     public static final String O_ACTION = "o_action";
 
+    public static final String SEARCH_KEY="search_key";//搜索关键字
+
     /**
      * 要闻首页
      */

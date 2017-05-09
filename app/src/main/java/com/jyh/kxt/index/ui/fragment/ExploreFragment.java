@@ -355,4 +355,17 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         }
         plvContent.onRefreshComplete();
     }
+
+    /**
+     * 无更多数据
+     */
+    public void noMoreData() {
+        plvContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                plvContent.onRefreshComplete();
+                ToastView.makeText3(getContext(), getContext().getString(R.string.no_data));
+            }
+        }, 500);
+    }
 }
