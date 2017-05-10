@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -10,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,12 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.util.emoje.DBUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
@@ -90,6 +92,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         mainPresenter = new MainPresenter(this);
 
+        //侧边栏相关控件
         initDrawer();
 
         try {
@@ -98,12 +101,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             e.printStackTrace();
         }
 
-        mainPresenter.initHeaderLayout();
         mainPresenter.postDelayRequest();
 
         clickSwitchFragment(R.id.rb_home);
 
-//        DBUtils.toSDWriteFile(this, DBManager.dbName);
+        DBUtils.toSDWriteFile(this, DBManager.dbName);
     }
 
     /**
@@ -320,19 +322,36 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * @param userJson
      */
     private void changeUserStatus(UserJson userJson) {
+
+        int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
+
         if (userJson != null) {
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
 
-            Glide.with(getContext()).load(userJson.getPicture()).error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
-                    .icon_user_def_photo).into(loginPhoto);
+            Glide.with(getContext())
+                    .load(userJson.getPicture())
+                    .asBitmap()
+                    .override(imgSize, imgSize)
+
+                    .error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap.icon_user_def_photo)
+
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            loginPhoto.setImageBitmap(resource);
+                        }
+                    });
+
             loginName.setText(userJson.getNickname());
 
         } else {
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
 
-            Glide.with(getContext()).load(R.mipmap.icon_user_def_photo).into(loginPhoto);
+            loginPhoto.setImageResource(R.mipmap.icon_user_def_photo);
+
             loginName.setText("");
         }
     }

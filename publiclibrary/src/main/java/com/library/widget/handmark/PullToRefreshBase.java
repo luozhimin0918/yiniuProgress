@@ -127,6 +127,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         init(context, null);
     }
 
+    public PullToRefreshBase(Context context, AttributeSet attrs,Mode mode, int defStyleAttr) {
+        super(context,attrs,defStyleAttr);
+        mMode = mode;
+        init(context, null);
+    }
+
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (DEBUG) {

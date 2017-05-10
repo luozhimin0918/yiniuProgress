@@ -21,4 +21,28 @@ public class JumpJson {
         this.o_class = o_class;
         this.o_id = o_id;
     }
+
+    public String getO_action() {
+        return o_action;
+    }
+
+    public void setO_action(String o_action) {
+        this.o_action = o_action;
+    }
+
+    public String getO_class() {
+        return o_class;
+    }
+
+    public void setO_class(String o_class) {
+        this.o_class = o_class;
+    }
+
+    public String getO_id() {
+        return o_id;
+    }
+
+    public void setO_id(String o_id) {
+        this.o_id = o_id;
+    }
 }

@@ -51,4 +51,56 @@
         <attr name="textSize" format="dimension|reference"/>
     </declare-styleable>
 
+    <!--夜间模式-->
+    <declare-styleable name="SkinnableView">
+        <attr name="android:background"/>
+        <attr name="android:backgroundTint"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableTextView">
+        <attr name="android:textColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableButton">
+        <attr name="android:textColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableImageView">
+        <attr name="android:src"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableRoundImageView">
+        <attr name="android:src"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableEditText">
+        <attr name="android:textColorHint"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableRadioButton">
+        <attr name="android:drawableTop"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableTabLayout">
+        <attr name="android:background"/>
+        <attr name="tabIndicatorColor"/>
+        <attr name="tabSelectedTextColor"/>
+        <attr name="tabTextColor"/>
+        <attr name="tabBackground"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableToggleButton">
+        <attr name="android:button"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableGeneralBannerLayout">
+        <attr name="selectedIndicatorColor"/>
+        <attr name="unSelectedIndicatorColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="SkinnableBannerLayout">
+        <attr name="selectedIndicatorColor"/>
+        <attr name="unSelectedIndicatorColor"/>
+    </declare-styleable>
+
 </resources>

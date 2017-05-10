@@ -22,11 +22,13 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         EmojeBeanDao.createTable(db, ifNotExists);
+        NewsJsonDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         EmojeBeanDao.dropTable(db, ifExists);
+        NewsJsonDao.dropTable(db, ifExists);
     }
 
     /**
@@ -46,6 +48,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(EmojeBeanDao.class);
+        registerDaoClass(NewsJsonDao.class);
     }
 
     public DaoSession newSession() {

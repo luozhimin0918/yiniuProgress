@@ -5,7 +5,50 @@
               android:background="@color/theme1"
               android:orientation="vertical">
 
-    <include layout="@layout/action_bar3"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/theme1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_bar_break"
+            android:layout_width="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/actionbar_padding"
+            android:src="@mipmap/ico_break"/>
+
+        <TextView
+            android:id="@+id/tv_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/iv_bar_function"
+            android:layout_toRightOf="@+id/iv_bar_break"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/actionBar_textColor1"
+            android:textSize="@dimen/font_title_max"/>
+
+        <ImageView
+            android:id="@+id/iv_bar_function"
+            android:layout_width="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentRight="true"
+            android:padding="15dp"
+            android:src="@mipmap/icon_brower_clear"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color3"/>
+
+    </RelativeLayout>
 
     <com.library.widget.PageLoadLayout
         android:id="@+id/pl_rootView"

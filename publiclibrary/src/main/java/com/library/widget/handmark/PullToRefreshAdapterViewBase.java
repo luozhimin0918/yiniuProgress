@@ -86,6 +86,11 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 		mRefreshableView.setOnScrollListener(this);
 	}
 
+	public PullToRefreshAdapterViewBase(Context context, AttributeSet attrs, Mode mode,int defStyleAttr) {
+		super(context,attrs,mode,defStyleAttr);
+		mRefreshableView.setOnScrollListener(this);
+	}
+
 	/**
 	 * Gets whether an indicator graphic should be displayed when the View is in
 	 * a state where a Pull-to-Refresh can happen. An example of this state is

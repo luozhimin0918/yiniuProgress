@@ -118,6 +118,11 @@
     <dimen name="editUserInfo_EditPadding2">31dp</dimen>
     <dimen name="editUserInfo_EditPadding3">33dp</dimen>
 
+    <!-- 上传图片PopuWindow -->
+    <dimen name="photo_padding1">15dp</dimen>
+    <dimen name="photo_margin1">12dp</dimen>
+    <dimen name="photo_height1">120dp</dimen>
+    <dimen name="photo_height2">60dp</dimen>
     <!-- 搜索界面 -->
     <dimen name="searchEditTextHeight">31dp</dimen>
     <dimen name="searchDrawablePadding">5dp</dimen>
@@ -133,6 +138,9 @@
     <!-- 浏览历史 -->
     <dimen name="browerHistoryContentPadding">17dp</dimen>
     <dimen name="browerHistoryTimeHeight">34dp</dimen>
+    <dimen name="browerHistoryClearPopWidth">280dp</dimen>
+    <dimen name="browerHistoryClearPopHeight">103dp</dimen>
+    <dimen name="browerHistoryClearPopBtnHeight">42dp</dimen>
 
     <!-- 视听首页 -->
     <dimen name="videoItemDrawablePadding">6dp</dimen>

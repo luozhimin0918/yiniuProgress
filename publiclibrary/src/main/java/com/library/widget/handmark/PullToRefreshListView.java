@@ -63,7 +63,10 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         super(context, mode, style);
         initView(null);
     }
-
+    public PullToRefreshListView(Context context, AttributeSet attrs,Mode mode, int defStyleAttr) {
+        super(context,attrs,mode,defStyleAttr);
+        initView(null);
+    }
 
     private void initView(AttributeSet attrs) {
         mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));

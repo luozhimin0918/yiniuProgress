@@ -52,4 +52,8 @@ public class SpConstant {
      * 浏览历史
      */
     public static final String BROWER_HISTORY = "brower_history";
+    /**
+     *  夜间模式
+     */
+    public static final String SETTING_DAY_NIGHT = "setting_day_night";
 }

@@ -2,8 +2,11 @@ package com.jyh.kxt.user.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,17 +24,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
+import com.library.util.CommonUtil;
 import com.library.util.SystemUtil;
 import com.library.util.softinputkeyboard.KeyboardChangeListener;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -91,6 +98,13 @@ public class EditUserInfoActivity extends BaseActivity {
     private PopupWindow popupWindow;
     private EditText edtName;
 
+    /**
+     * 图片相关
+     */
+    private Bitmap lastBmp;
+    private byte[] lastByte;
+    private String photoFolderAddress;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,14 +112,35 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter = new EditUserInfoPresenter(this);
 
+        if (getIntent().getStringExtra("folderName") == null) {
+            photoFolderAddress = CommonUtil.getSDPath() + File.separator + "test_photo";
+        } else {
+            photoFolderAddress = getIntent().getStringExtra("folderName");
+        }
+
         editUserInfoPresenter.initData();
 
         editUserInfoPresenter.loadCitis();
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         tvNickname.setText(userInfo.getNickname());
-        Glide.with(this).load(userInfo.getPicture()).override(50, 50).error(R.mipmap.icon_user_def_photo).error(R.mipmap
-                .icon_user_def_photo).into(ivPhoto);
+
+        int imgSize = (int) getResources().getDimension(R.dimen.item_height);
+        Glide.with(getContext())
+                .load(userInfo.getPicture())
+                .asBitmap()
+                .override(imgSize, imgSize)
+
+                .error(R.mipmap.icon_user_def_photo)
+                .placeholder(R.mipmap.icon_user_def_photo)
+
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ivPhoto.setImageBitmap(resource);
+                    }
+                });
+
 
         ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
         ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
@@ -164,6 +199,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_photo:
                 //修改头像
+                editUserInfoPresenter.showPop(getContext(), rlPhoto);
                 break;
             case R.id.rl_nickname:
                 //修改昵称
@@ -289,5 +325,35 @@ public class EditUserInfoActivity extends BaseActivity {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 100:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    editUserInfoPresenter.takePicture();
+                } else {
+                    ToastView.makeText3(this, "不开启权限无法拍照喔");
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        editUserInfoPresenter.onActivityResult(this, requestCode, resultCode, data, ivPhoto, lastBmp, lastByte,
+                photoFolderAddress);
+    }
+
+    public void setBitmapAndByte(Bitmap bitmap, byte[] bitmapByte) {
+        lastBmp = bitmap;
+        lastByte = bitmapByte;
+        ivPhoto.setImageBitmap(bitmap);
     }
 }

@@ -234,6 +234,13 @@ public class FastInfoPinnedListView extends ListView {
             timeOutHandler.removeCallbacksAndMessages(null);
         }
     }
+    public void goneFoot2() {
+        currentPullStatus = 0;
+        if (footView.isShown()) {
+            footView.setVisibility(View.GONE);
+            timeOutHandler.removeCallbacksAndMessages(null);
+        }
+    }
 
     public boolean isFootShow() {
         return footView.isShown();

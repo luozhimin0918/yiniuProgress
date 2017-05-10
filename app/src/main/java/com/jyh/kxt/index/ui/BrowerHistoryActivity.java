@@ -50,7 +50,7 @@ public class BrowerHistoryActivity extends BaseActivity {
         setContentView(R.layout.activity_index_browerhistory, StatusBarColor.THEME1);
         tvBarTitle.setText("浏览记录");
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_brower_clear));
-
+        browerHistoryPresenter = new BrowerHistoryPresenter(this);
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(browerHistoryPresenter);
         plRootView.setOnAfreshLoadListener(browerHistoryPresenter);
@@ -79,8 +79,6 @@ public class BrowerHistoryActivity extends BaseActivity {
             }
         });
 
-        browerHistoryPresenter = new BrowerHistoryPresenter(this);
-
         browerHistoryPresenter.initData();
     }
 
@@ -92,7 +90,7 @@ public class BrowerHistoryActivity extends BaseActivity {
                 break;
             case R.id.iv_bar_function:
                 //清除浏览记录
-                browerHistoryPresenter.clear();
+                browerHistoryPresenter.clear(lvContent);
                 break;
         }
     }
@@ -101,7 +99,6 @@ public class BrowerHistoryActivity extends BaseActivity {
      * 加载为空
      */
     public void loadEmptyData() {
-
         plRootView.loadEmptyData();
     }
 }

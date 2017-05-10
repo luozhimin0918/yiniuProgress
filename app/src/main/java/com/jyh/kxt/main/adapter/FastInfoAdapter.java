@@ -897,6 +897,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     public void inspiritDateInfo(List flashJsons) {
+        timeMap.clear();
+        if (flashJsons == null) return;
+
         int size = flashJsons.size();
 
         for (int i = 0; i < size; i++) {
@@ -906,7 +909,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         size = flashJsons.size();
-        timeMap.clear();
+
         for (int i = 0; i < size; i++) {
             Object obj = flashJsons.get(i);
             FlashJson flashJson = (FlashJson) flashJsons.get(i);
@@ -949,6 +952,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     public void inspiritDateInfo2(List flashJsons) {
+
+        if (flashJsons == null) return;
+
         int size = flashJsons.size();
         for (int i = 0; i < size; i++) {
             FlashJson flashJson = (FlashJson) flashJsons.get(i);

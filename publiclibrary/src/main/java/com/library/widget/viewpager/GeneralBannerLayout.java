@@ -429,6 +429,37 @@ public class GeneralBannerLayout extends RelativeLayout {
             container.removeView(views.get(position));
         }
     }
+
+    public void setColors(int selectedIndicatorColor, int unSelectedIndicatorColor) {
+        this.selectedIndicatorColor = selectedIndicatorColor;
+        this.unSelectedIndicatorColor = unSelectedIndicatorColor;
+//        invalidate();
+
+        GradientDrawable selectedGradientDrawable = new GradientDrawable();
+        GradientDrawable unSelectedGradientDrawable = new GradientDrawable();
+
+        selectedGradientDrawable.setShape(GradientDrawable.OVAL);
+        unSelectedGradientDrawable.setShape(GradientDrawable.OVAL);
+
+        selectedGradientDrawable.setColor(selectedIndicatorColor);
+        unSelectedGradientDrawable.setColor(unSelectedIndicatorColor);
+
+        selectedGradientDrawable.setSize(selectedIndicatorWidth, selectedIndicatorHeight);
+        unSelectedGradientDrawable.setSize(selectedIndicatorWidth, selectedIndicatorHeight);
+
+        LayerDrawable unSelectedLayerDrawable = new LayerDrawable(new Drawable[]{unSelectedGradientDrawable});
+        unSelectedDrawable = unSelectedLayerDrawable;
+
+        LayerDrawable selectedLayerDrawable = new LayerDrawable(new Drawable[]{selectedGradientDrawable});
+        selectedDrawable = selectedLayerDrawable;
+
+        for (int i = 0; i < indicatorContainer.getChildCount(); i++) {
+            ImageView childAt = (ImageView) indicatorContainer.getChildAt(i);
+            childAt.setImageDrawable(unSelectedGradientDrawable);
+        }
+        int currentItem = pager.getCurrentItem();
+        ((ImageView) indicatorContainer.getChildAt(currentItem)).setImageDrawable(selectedGradientDrawable);
+    }
 }
 
 

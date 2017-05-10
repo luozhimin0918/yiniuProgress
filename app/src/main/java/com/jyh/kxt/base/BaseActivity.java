@@ -5,10 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.VectorEnabledTintResources;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -16,6 +22,8 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.base.widget.night.skinnable.SkinnableViewInflater;
 import com.library.base.LibActivity;
 import com.library.util.SystemUtil;
 
@@ -32,6 +40,37 @@ public class BaseActivity extends LibActivity implements IBaseView {
     private boolean isAnimationFinish;
 
     private PopupWindow waitPopup;
+    private SkinnableViewInflater mSkinnableViewInflater;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ThemeUtil.addActivityToThemeCache(this);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        if (mSkinnableViewInflater == null) {
+            mSkinnableViewInflater = new SkinnableViewInflater();
+        }
+        final boolean isPre21 = Build.VERSION.SDK_INT < 21;
+        final boolean inheritContext = isPre21 && shouldInheritContext((ViewParent) parent);
+        return mSkinnableViewInflater.createView(parent,
+                name,
+                context,
+                attrs,
+                inheritContext,
+                isPre21, /* Only read android:theme pre-L (L+ handles this anyway) */
+                true, /* Read read app:theme as a fallback at all times for legacy reasons */
+                VectorEnabledTintResources.shouldBeUsed() /* Only tint wrap the context if enabled */
+        );
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ThemeUtil.removeActivityFromThemeCache(this);
+    }
 
     @Override
     public RequestQueue getQueue() {
@@ -131,5 +170,32 @@ public class BaseActivity extends LibActivity implements IBaseView {
 
                 break;
         }
+    }
+
+    private boolean shouldInheritContext(ViewParent parent) {
+        if (parent == null) {
+            // The initial parent is null so just return false
+            return false;
+        }
+        final View windowDecor = getWindow().getDecorView();
+        while (true) {
+            if (parent == null) {
+                return true;
+            } else if (parent == windowDecor ||
+                    !(parent instanceof View) ||
+                    ViewCompat.isAttachedToWindow((View) parent)) {
+                return false;
+            }
+            parent = parent.getParent();
+        }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }

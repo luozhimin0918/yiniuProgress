@@ -4,13 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 
-import com.alibaba.fastjson.JSON;
-import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.dao.DaoSession;
 import com.jyh.kxt.main.json.NewsJson;
-import com.library.util.RegexValidateUtil;
-import com.library.util.SPUtils;
+import com.library.base.http.VarConstant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,28 +27,13 @@ public class BrowerHistoryUtils {
      * @param news
      */
     public static void save(Context context, NewsJson news) {
-        String history = "";
         try {
-            history = JSON.toJSONString(news);
+            news.setDataType(VarConstant.DB_NEWS_TYPE_BROWER);
+            DaoSession daoSessionWrit = DBManager.getInstance(context).getDaoSessionWrit();
+            daoSessionWrit.getNewsJsonDao().insertOrReplace(news);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (!RegexValidateUtil.isEmpty(history)) {
-            String historyStr = SPUtils.getString(context, SpConstant.BROWER_HISTORY);
-            if (RegexValidateUtil.isEmpty(historyStr)) {
-                historyStr = history;
-            } else {
-                String[] splitHistory = historyStr.split(",,..,,..");
-                for (String s : splitHistory) {
-                    if (s.equals(history)) {
-                        return;
-                    }
-                }
-                historyStr += ",,..,,.." + history;
-            }
-            SPUtils.save(context, SpConstant.BROWER_HISTORY, historyStr);
-        }
-
     }
 
     /**
@@ -59,7 +42,7 @@ public class BrowerHistoryUtils {
      * @param context
      */
     public static void clear(Context context) {
-        SPUtils.save(context, SpConstant.BROWER_HISTORY, "");
+        DBManager.getInstance(context).getDaoSessionWrit().getNewsJsonDao().deleteAll();
     }
 
     /**
@@ -69,28 +52,8 @@ public class BrowerHistoryUtils {
      * @return
      */
     public static List<NewsJson> getHistory(Context context) {
-        String historyStr = SPUtils.getString(context, SpConstant.BROWER_HISTORY);
-        if (RegexValidateUtil.isEmpty(historyStr)) {
-            return null;
-        } else {
-            String[] splitHistory = historyStr.split(",,..,,..");
-            if (splitHistory == null || splitHistory.length == 0) {
-                return null;
-            }
-
-            List<NewsJson> newsJsons = new ArrayList<>();
-            for (String s : splitHistory) {
-                try {
-                    NewsJson newsJson = JSON.parseObject(s, NewsJson.class);
-                    if (newsJson != null) {
-                        newsJsons.add(newsJson);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return newsJsons;
-        }
+        List<NewsJson> list = DBManager.getInstance(context).getDaoSessionRead().getNewsJsonDao().loadAll();
+        return list;
     }
 
     /**
@@ -102,14 +65,13 @@ public class BrowerHistoryUtils {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static boolean isBrowered(Context context, NewsJson newsJson) {
-        List<NewsJson> history = getHistory(context);
-        if (history == null) return false;
-        for (NewsJson news : history) {
-            if (news.equals(newsJson)) {
-                return true;
-            }
-        }
-        return false;
+
+        List<NewsJson> newsJsons = DBManager.getInstance(context)
+                .getDaoSessionRead()
+                .getNewsJsonDao()
+                .queryRaw("WHERE O_ID = ?", newsJson.getO_id());
+
+        return newsJsons.size() == 0 ? false : true;
     }
 
 }

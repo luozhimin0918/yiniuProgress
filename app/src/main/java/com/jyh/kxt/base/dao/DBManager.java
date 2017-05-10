@@ -11,7 +11,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
  */
 
 public class DBManager {
-    public final static String dbName = "kxt_emoje_db";
+    public final static String dbName = "kxt_db";
     private static DBManager mInstance;
     private MyDevOpenHelper openHelper;
     private Context context;

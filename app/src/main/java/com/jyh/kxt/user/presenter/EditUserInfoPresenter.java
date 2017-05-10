@@ -1,18 +1,32 @@
 package com.jyh.kxt.user.presenter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
+import com.library.util.SystemUtil;
+import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 
@@ -20,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,7 +47,7 @@ import java.util.List;
  * 创建日期:2017/4/6.
  */
 
-public class EditUserInfoPresenter extends BasePresenter {
+public class EditUserInfoPresenter extends BasePresenter implements View.OnClickListener, PhotoTailorUtil.OnCompleteListener {
 
     @BindObject
     EditUserInfoActivity activity;
@@ -48,8 +63,20 @@ public class EditUserInfoPresenter extends BasePresenter {
     public boolean isLoadCityInfoError = false;//加载省市县信息是否失败
     public boolean isLoadCityInfoOver = false;//加载省市县信息是否完毕
 
+    /**
+     * 图片相关
+     */
+    private TextView openTake;
+    private TextView openDiffer;
+    private TextView cancelWindow;
+    private PopupWindow popupWindow;
+    private PhotoTailorUtil photoTailorUtil;
+
     public EditUserInfoPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        photoTailorUtil = new PhotoTailorUtil();
+        photoTailorUtil.initPath((Activity) iBaseView);
+        photoTailorUtil.setOnCompleteListener(this);
     }
 
     /**
@@ -192,8 +219,7 @@ public class EditUserInfoPresenter extends BasePresenter {
                             City_AreaList.add("");
                         } else {
 
-                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++)
-                            {//该城市对应地区所有数据
+                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
                                 String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
 
                                 City_AreaList.add(AreaName);//添加该城市所有地区数据
@@ -254,5 +280,90 @@ public class EditUserInfoPresenter extends BasePresenter {
 
     public void postChangedInfo() {
         activity.dismissWaitDialog();
+    }
+
+    /**
+     * 显示图片选择器
+     *
+     * @param context
+     * @param rlPhoto
+     */
+    public void showPop(Context context, RelativeLayout rlPhoto) {
+        View view = LayoutInflater.from(context).inflate(R.layout.popup_selectimg_view, null, false);
+
+        SystemUtil.closeSoftInputWindow((Activity) context);
+
+        openTake = (TextView) view.findViewById(R.id.selectimg_open_take);
+        openDiffer = (TextView) view.findViewById(R.id.selectimg_open_differ);
+        cancelWindow = (TextView) view.findViewById(R.id.selectimg_open_cancel);
+
+        View spaceView = view.findViewById(R.id.selectimg_open_space);
+
+        openTake.setOnClickListener(this);
+        openDiffer.setOnClickListener(this);
+        cancelWindow.setOnClickListener(this);
+
+
+        if (SystemUtil.navigationBar(context) > 10) {
+            ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
+            layoutParams.height = SystemUtil.navigationBar(context);
+            spaceView.setLayoutParams(layoutParams);
+        }
+
+        popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams
+                .MATCH_PARENT);
+        ColorDrawable dw = new ColorDrawable(Color.TRANSPARENT);
+        popupWindow.setFocusable(true); // 可以聚焦
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setTouchable(true);
+        popupWindow.setBackgroundDrawable(dw);
+        popupWindow.showAtLocation(rlPhoto, Gravity.BOTTOM, 0, 0);
+
+        view.setOnClickListener(this);
+    }
+
+    /**
+     * 拍照
+     */
+    public void takePicture() {
+        photoTailorUtil.startToCamera();
+    }
+
+    public void onActivityResult(EditUserInfoActivity editUserInfoActivity, int requestCode, int resultCode, Intent data, RoundImageView
+            ivPhoto, Bitmap lastBmp, byte[] lastByte, String photoFolderAddress) {
+        photoTailorUtil.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.selectimg_open_take://拍照
+                photoTailorUtil.startToCamera();
+                break;
+            case R.id.selectimg_open_differ://相册选择
+                photoTailorUtil.selectFromPhotos();
+                break;
+            case R.id.selectimg_open_cancel://取消
+                dismiss();
+                break;
+            case R.id.selectimg_open_layout:
+                dismiss();
+                break;
+        }
+    }
+
+    //取消popupWindow()
+    public void dismiss() {
+        if (popupWindow != null && popupWindow.isShowing()) { //不为null,并且正在显示中
+            popupWindow.dismiss();
+        }
+    }
+
+    @Override
+    public void onPhotoComplete(Bitmap bitmap) {
+        ByteArrayOutputStream mOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, mOutputStream);
+        byte[] bitmapByte = mOutputStream.toByteArray();
+        activity.setBitmapAndByte(bitmap, bitmapByte);
     }
 }

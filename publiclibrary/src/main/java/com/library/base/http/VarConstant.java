@@ -162,4 +162,12 @@ public class VarConstant {
     public static final String FUNCTION_TYPE_COLLECT = "function_type_collect";//收藏
     public static final String FUNCTION_TYPE_GOOD = "function_type_good";//点赞
 
+    /**
+     * 要闻数据库类型
+     */
+    public static final int DB_NEWS_TYPE_BROWER = 1;
+    public static final int DB_NEWS_TYPE_COLLECT_LOCAL = 2;
+    public static final int DB_NEWS_TYPE_COLLECT_NETTOBROWER = 3;
+
+
 }

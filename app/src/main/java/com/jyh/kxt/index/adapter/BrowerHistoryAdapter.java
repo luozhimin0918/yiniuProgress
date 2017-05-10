@@ -16,6 +16,7 @@ import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.library.util.DateUtils;
+import com.library.util.RegexValidateUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,16 +84,24 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
             case TYPE_NEWS:
                 NewsJson newsBean = (NewsJson) dataList.get(position);
 
-                Glide.with(context).load(HttpConstant.IMG_URL +newsBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + newsBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
+                        .ico_def_load).into
                         (newsHolder.ivPhoto);
 
                 newsHolder.tv1.setVisibility(View.GONE);
                 newsHolder.tvTitle.setText(newsBean.getTitle());
-                newsHolder.tvAuthor.setText(newsBean.getAuthor());
+
+                String author = newsBean.getAuthor();
+                if (RegexValidateUtil.isEmpty(author)) {
+                    newsHolder.tvAuthor.setVisibility(View.GONE);
+                } else {
+                    newsHolder.tvAuthor.setVisibility(View.VISIBLE);
+                    newsHolder.tvAuthor.setText("文/" + author);
+                }
 
                 String time = "00:00";
                 try {
-                    time = DateUtils.transformTime(Long.parseLong(newsBean.getDatetime()) * 1000);
+                    time = DateUtils.transformTime(Long.parseLong(newsBean.getDatetime()) * 1000, DateUtils.TYPE_HM);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -116,6 +125,11 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
     @Override
     public int getViewTypeCount() {
         return 2;
+    }
+
+    @Override
+    public int getCount() {
+        return dataList == null ? 0 : dataList.size();
     }
 
     @Override
@@ -143,6 +157,8 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
      * @param newsJsons
      */
     public void inspiritDateInfo(List newsJsons) {
+        timeMap.clear();
+        if (newsJsons == null) return;
         int size = newsJsons.size();
 
         for (int i = 0; i < size; i++) {
@@ -152,7 +168,6 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
         }
 
         size = newsJsons.size();
-        timeMap.clear();
         for (int i = 0; i < size; i++) {
             NewsJson flashJson = (NewsJson) newsJsons.get(i);
             String time = null;
@@ -204,6 +219,7 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
      * @param flashJsons
      */
     public void inspiritDateInfo2(List flashJsons) {
+        if (flashJsons == null) return;
         int size = flashJsons.size();
         for (int i = 0; i < size; i++) {
             NewsJson flashJson = (NewsJson) flashJsons.get(i);

@@ -23,21 +23,6 @@ public class MainPresenter extends BasePresenter {
         super(iBaseView);
     }
 
-    public void initHeaderLayout() {
-        String imgUrl = "http://img.kuaixun360.com//Uploads/Editor/2016-12-27/5861d5137548e.jpg";
-
-        Glide.with(mContext)
-                .load(imgUrl)
-                .asBitmap()
-                .override(50, 50)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        mMainActivity.loginPhoto.setImageBitmap(resource);
-                    }
-                });
-    }
-
     /**
      * 切换Fragment
      *
