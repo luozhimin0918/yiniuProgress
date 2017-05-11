@@ -74,7 +74,8 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
     }
 
     public void setData(List<VideoListJson> list) {
-        dataList = list;
+        dataList.clear();
+        dataList.addAll(list);
         notifyDataSetChanged();
     }
 

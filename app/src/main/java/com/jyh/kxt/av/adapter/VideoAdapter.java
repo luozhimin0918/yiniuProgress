@@ -85,7 +85,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             public void onClick(View v) {
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www.baidu.com",
                         "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
-                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, true, false), holder.ivMore, new
+                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, true, false), video, holder.ivMore, new
                         ObserverData<Map<String,
                                 Boolean>>() {
                             @Override
@@ -129,11 +129,15 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     }
 
     public void setData(List<VideoListJson> videoListJsons) {
+        list.clear();
+        list.addAll(videoListJsons);
         list = videoListJsons;
+        notifyDataSetChanged();
     }
 
     public void addData(List<VideoListJson> videoListJsons) {
         list.addAll(videoListJsons);
+        notifyDataSetChanged();
     }
 
     class ViewHolder {
