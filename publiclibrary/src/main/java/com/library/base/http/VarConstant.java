@@ -34,6 +34,11 @@ public class VarConstant {
     public static final String HTTP_AVATAR = "avatar";
     public static final String HTTP_PROVINCE = "province";
     public static final String HTTP_CITY = "city";
+    public static final String HTTP_ADDRESS = "address";
+    public static final String HTTP_PICTURE = "picture";
+    public static final String HTTP_WORK = "work";
+    public static final String HTTP_NICKNAME = "nickname";
+    public static final String HTTP_BIRTHDAY = "birthday";
     public static final String HTTP_ACCESS_TOKEN = "access_token";
     public static final String HTTP_TOKEN = "token";
     public static final String HTTP_TYPE = "type";  //1:QQ|2:微信|3:微博
@@ -147,6 +152,7 @@ public class VarConstant {
     /**
      * 收藏类型
      */
+    public static final String COLLECT_TYPE_FLASH = "flash";//快讯
     public static final String COLLECT_TYPE_VIDEO = "video";//视听
     public static final String COLLECT_TYPE_ARTICLE = "article";//文章
 
@@ -165,9 +171,9 @@ public class VarConstant {
     /**
      * 要闻数据库类型
      */
-    public static final int DB_NEWS_TYPE_BROWER = 1;
-    public static final int DB_NEWS_TYPE_COLLECT_LOCAL = 2;
-    public static final int DB_NEWS_TYPE_COLLECT_NETTOBROWER = 3;
+    public static final int DB_TYPE_BROWER = 1;
+    public static final int DB_TYPE_COLLECT_LOCAL = 2;
+    public static final int DB_TYPE_COLLECT_NETTOLOCAL = 3;
 
 
 }
