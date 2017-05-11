@@ -2,6 +2,8 @@ package com.jyh.kxt.user.ui.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -12,6 +14,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.presenter.CollectNewsPresenter;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -33,104 +36,74 @@ import butterknife.BindView;
 
 public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
 
-    @BindView(R.id.plv_content) PullToRefreshListView plvContent;
-    @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
-    private VolleyRequest request;
-    private String lastId;
+    private CollectNewsPresenter collectNewsPresenter;
+
     private NewsAdapter newsAdapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_news_item);
 
+        collectNewsPresenter = new CollectNewsPresenter(this);
+
         plRootView.setOnAfreshLoadListener(this);
         plvContent.setOnRefreshListener(this);
+        plvContent.setDividerNull();
+        plvContent.setMode(PullToRefreshBase.Mode.BOTH);
 
-        if (request == null)
-            request = new VolleyRequest(getContext(), getQueue());
-
-        plRootView.loadWait();
-        request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
+        plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            protected void onResponse(List<NewsJson> newsList) {
-                newsAdapter=new NewsAdapter(getContext(),newsList);
-                plvContent.setAdapter(newsAdapter);
-                plRootView.loadOver();
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                plRootView.loadError();
             }
         });
+
+        collectNewsPresenter.initData();
+    }
+
+    /**
+     * 初始化数据
+     *
+     * @param adapterSourceList
+     */
+    public void initData(List<NewsJson> adapterSourceList) {
+
+    }
+
+    /**
+     * 刷新
+     *
+     * @param adapterSourceList
+     */
+    public void refresh(List<NewsJson> adapterSourceList) {
+
+    }
+
+    /**
+     * 加载更多
+     *
+     * @param newsMore
+     */
+    public void loadMore(List<NewsJson> newsMore) {
 
     }
 
     @Override
     public void onPullDownToRefresh(final PullToRefreshBase refreshView) {
-        lastId = "";
-        request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
-            @Override
-            protected void onResponse(List<NewsJson> newsList) {
-                newsAdapter.setData(newsList);
-                refreshView.onRefreshComplete();
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                refreshView.onRefreshComplete();
-            }
-        });
+        collectNewsPresenter.refresh();
     }
 
     @Override
     public void onPullUpToRefresh(final PullToRefreshBase refreshView) {
-        getLastId();
-        request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
-            @Override
-            protected void onResponse(List<NewsJson> newsList) {
-                newsAdapter.addData(newsList);
-                refreshView.onRefreshComplete();
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                refreshView.onRefreshComplete();
-            }
-        });
+        collectNewsPresenter.loadMore();
     }
 
     @Override
     public void OnAfreshLoad() {
-
+        collectNewsPresenter.initData();
     }
 
-    public String getUrl() {
-        JSONObject jsonParam = request.getJsonParam();
-        UserJson userInfo = LoginUtils.getUserInfo(getContext());
-        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-        jsonParam.put(VarConstant.HTTP_TOKEN, userInfo.getAccessToken());
-        if (!TextUtils.isEmpty(lastId))
-            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
-
-        try {
-            return HttpConstant.COLLECT_NEWS + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return HttpConstant.COLLECT_NEWS;
-        }
-    }
-
-    /**
-     * 获取lastId
-     */
-    private void getLastId() {
-        List<NewsJson> dataList = newsAdapter.dataList;
-        int lastPosition = dataList.size() - 1;
-        lastId = dataList.get(lastPosition).getTitle();
-    }
 }
