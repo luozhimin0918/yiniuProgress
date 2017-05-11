@@ -69,57 +69,26 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     private Context context;
 
     public CollectFlashAdapter(List<FlashJson> flashJsons, Context context) {
-
-        for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
-                flash.setColloct(true);
-            } else {
-                flash.setColloct(false);
-            }
-        }
-
         this.flashJsons = flashJsons;
         initCollectStatus(1);
         this.context = context;
     }
 
     public void setData(List<FlashJson> flashJsons) {
-        for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
-                flash.setColloct(true);
-            } else {
-                flash.setColloct(false);
-            }
-        }
-        this.flashJsons = flashJsons;
+        this.flashJsons.clear();
+        this.flashJsons.addAll(flashJsons);
         initCollectStatus(1);
         notifyDataSetChanged();
     }
 
 
     public void addData(FlashJson flashJson) {
-
-        if (CollectUtils.flashIsCollect(context, flashJson.toString())) {
-            flashJson.setColloct(true);
-        } else {
-            flashJson.setColloct(false);
-        }
-
         this.flashJsons.add(1, flashJson);
         initCollectStatus(2);
         notifyDataSetChanged();
     }
 
     public void addData(List<FlashJson> flashJsons) {
-
-        for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
-                flash.setColloct(true);
-            } else {
-                flash.setColloct(false);
-            }
-        }
-
         this.flashJsons.addAll(flashJsons);
         initCollectStatus(1);
         notifyDataSetChanged();
@@ -502,11 +471,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                             String weizhi, final ImageView ivFlash, final int type) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
 
-        if (flash.isColloct()) {
-            ivCollect.setSelected(true);
-        } else {
-            ivCollect.setSelected(false);
-        }
+        ivCollect.setVisibility(View.GONE);
+
         showMore(tvMore, ivMore, flash.isShowMore(), content, ivFlash, type);
 
         tvMore.setOnClickListener(new View.OnClickListener() {
@@ -518,39 +484,6 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 } else {
                     flash.setShowMore(true);
                     showMore(tvMore, ivMore, true, content, ivFlash, type);
-                }
-            }
-        });
-
-        ivCollect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (flash.isColloct()) {
-                    CollectUtils.flashUnCollect(context, JSON.toJSONString(flash), new ObserverData() {
-                        @Override
-                        public void callback(Object o) {
-                            flash.setColloct(false);
-                            ivCollect.setSelected(false);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            ToastView.makeText3(context, "取消收藏失败");
-                        }
-                    });
-                } else {
-                    CollectUtils.flashCollect(context, JSON.toJSONString(flash), new ObserverData() {
-                        @Override
-                        public void callback(Object o) {
-                            flash.setColloct(true);
-                            ivCollect.setSelected(true);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            ToastView.makeText3(context, "收藏失败");
-                        }
-                    });
                 }
             }
         });
@@ -591,7 +524,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                     }
 
                     UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl, discription, image, null,
-                            UmengShareTool.TYPE_DEFAULT,null,null,null,false,false),ivShare, null);
+                            UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flash, ivShare, null);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -711,7 +644,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 drawingShapeColor(2, effectType, "影响较小", llExponent);
             }
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
 
             RadianDrawable effectDrawable = new RadianDrawable(context);
 

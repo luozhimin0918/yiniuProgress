@@ -8,42 +8,50 @@ package com.jyh.kxt.user.json;
  */
 
 public class UserJson {
-    //{"accessToken":"3ab5a1f1025af3b996031360c28388eb",
-    // "nickname":"Win-Win",
-    // "picture":"http://q.qlogo.cn/qqapp/1101487761/34C8BB98F38FA67C3BEC0F1BA1C7FBCB/100",
-    // "uid":55887}
+//    uid:1,
+//    nickname:"",
+//    picture:"",
+//    token:""   // accessToken
+//    sex:1 ,   //性别：0：保密 1：男 2：女
+//    email:"",
+//    address:"", //province-city
+//    work:"",
+//    birthday:""
 
-    private String accessToken;
+    private String token;
     private String nickname;
     private String picture;
     private String uid;
+    private int sex;
+    private String email;
+    private String address;
+    private String work;
+    private String birthday;
 
     public UserJson() {
     }
 
-    public UserJson(String accessToken, String nickname, String picture, String uid) {
+    public UserJson(String token, String nickname, String picture, String uid, int sex, String email, String address, String work, String
+            birthday) {
 
-        this.accessToken = accessToken;
+        this.token = token;
         this.nickname = nickname;
         this.picture = picture;
         this.uid = uid;
+        this.sex = sex;
+        this.email = email;
+        this.address = address;
+        this.work = work;
+        this.birthday = birthday;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "\"accessToken\":\"" + accessToken +
-                "\",\"nickname\":\"" + nickname +
-                "\",\"picture\":\"" + picture +
-                "\",\"uid\":\"" + uid + "\"}";
+    public String getToken() {
+
+        return token;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getNickname() {
@@ -68,5 +76,45 @@ public class UserJson {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWork() {
+        return work;
+    }
+
+    public void setWork(String work) {
+        this.work = work;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }

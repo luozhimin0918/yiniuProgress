@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +18,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
+import com.library.util.DateUtils;
+import com.library.util.EncryptionUtils;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
+import com.library.widget.window.ToastView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +51,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名:Kxt
@@ -63,6 +78,14 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     public boolean isLoadCityInfoError = false;//加载省市县信息是否失败
     public boolean isLoadCityInfoOver = false;//加载省市县信息是否完毕
 
+    private String province;//省
+    private String city;//市
+    private String address;//地区
+    private int sexInt;//性别 0 保密 1 男 2 女
+    private String birthdayStr;//年龄 1999-11-01
+
+    private VolleyRequest request;
+
     /**
      * 图片相关
      */
@@ -84,13 +107,35 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      */
     public void showPickerCitisView() {
         if (cityPicker == null) {
+
+            int provinceSel = 0;
+            int citySel = 0;
+
+            if (!RegexValidateUtil.isEmpty(province) && !RegexValidateUtil.isEmpty(city)) {
+                int size = options1Items.size();
+                for (int i = 0; i < size; i++) {
+                    ProvinceJson provinceJson = options1Items.get(i);
+                    if (province.equals(provinceJson.getName())) {
+                        provinceSel = i;
+                    }
+                    List<CityBean> cityList = provinceJson.getCityList();
+                    int size1 = cityList.size();
+                    for (int j = 0; j < size1; j++) {
+                        if (city.equals(cityList.get(j).getName())) {
+                            citySel = j;
+                        }
+                    }
+                }
+            }
+
             cityPicker = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     //返回的分别是三个级别的选中位置
-                    activity.setAddress(options1Items.get(options1).getPickerViewText(), options2Items.get(options1)
-                                    .get(options2),
-                            options3Items.get(options1).get(options2).get(options3));
+                    String province = options1Items.get(options1).getPickerViewText();
+                    String city = options2Items.get(options1).get(options2);
+                    activity.setAddress(province, city);
+                    address = province + "-" + city;
                 }
             })
 
@@ -100,8 +145,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
+                    .setSelectOptions(provinceSel, citySel)
                     .build();
-            cityPicker.setPicker(options1Items, options2Items, options3Items);//三级选择器
+            cityPicker.setPicker(options1Items, options2Items);
         }
         if (cityPicker.isShowing()) {
             return;
@@ -115,21 +161,22 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     public void showPickerGenderView() {
         if (genderPicker == null) {
             final ArrayList<String> genders = new ArrayList<>();
+            genders.add("保密");
             genders.add("男");
             genders.add("女");
-            genders.add("保密");
             genderPicker = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     //返回的分别是三个级别的选中位置
                     activity.setGender(genders.get(options1));
+                    sexInt = options1;
                 }
             })
 
                     .setTitleText("")
                     .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
                     .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
-                    .setSelectOptions(2)
+                    .setSelectOptions(sexInt)
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
@@ -149,7 +196,12 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     public void showPickerBirthdayView() {
         if (birthdayPicker == null) {
             Calendar selectedDate = Calendar.getInstance();
-            selectedDate.set(1990, 0, 1);
+            try {
+                selectedDate = DateUtils.stringToCalendar(birthdayStr, DateUtils.TYPE_YMD);
+            } catch (Exception e) {
+                e.printStackTrace();
+                selectedDate.set(1990, 0, 1);
+            }
             Calendar startDate = Calendar.getInstance();
             startDate.set(1900, 0, 1);
             Calendar endDate = Calendar.getInstance();
@@ -157,6 +209,12 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     activity.setBirthday(date);
+                    try {
+                        birthdayStr = DateUtils.dateToString(date, DateUtils.TYPE_YMD);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        birthdayStr = null;
+                    }
                 }
             })
                     .setTitleText("选择生日")
@@ -276,10 +334,90 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     }
 
     public void initData() {
+        try {
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            //初始化地址
+            String address = userInfo.getAddress();
+            if (address != null) {
+                String[] split = address.split("-");
+                if (split != null && split.length >= 2) {
+                    province = split[0];
+                    city = split[1];
+                }
+            }
+            //初始化性别
+            sexInt = userInfo.getSex();
+            switch (sexInt) {
+                case 0:
+                    activity.setGender("保密");
+                    break;
+                case 1:
+                    activity.setGender("男");
+                    break;
+                case 2:
+                    activity.setGender("女");
+                    break;
+            }
+            //初始化年龄
+            birthdayStr = userInfo.getBirthday();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void postChangedInfo() {
-        activity.dismissWaitDialog();
+    public void postChangedInfo(String photo, String nickname, String work) {
+        if (request == null)
+            request = new VolleyRequest(mContext, mQueue);
+
+        request.doPost(HttpConstant.USER_CHANEINFO, getPostInfo(request, photo, nickname, work), new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                try {
+                    activity.dismissWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                try {
+                    activity.dismissWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ToastView.makeText3(mContext, "信息提交失败");
+            }
+        });
+
+    }
+
+    /**
+     * 获取提交信息
+     *
+     * @param request
+     * @param photo
+     * @return
+     */
+    private Map<String, String> getPostInfo(VolleyRequest request, String photo, String nickname, String work) {
+        com.alibaba.fastjson.JSONObject jsonParam = request.getJsonParam();
+        UserJson userJson = LoginUtils.getUserInfo(mContext);
+        jsonParam.put(VarConstant.HTTP_UID, userJson.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userJson.getToken());
+        jsonParam.put(VarConstant.HTTP_PICTURE, photo);
+        jsonParam.put(VarConstant.HTTP_ADDRESS, address);
+        jsonParam.put(VarConstant.HTTP_SEX, sexInt);
+        jsonParam.put(VarConstant.HTTP_BIRTHDAY, birthdayStr);
+        jsonParam.put(VarConstant.HTTP_NICKNAME, nickname);
+        jsonParam.put(VarConstant.HTTP_WORK, work);
+        Map<String, String> map = new HashMap();
+        try {
+            map.put(VarConstant.HTTP_CONTENT2, EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
     /**
@@ -332,6 +470,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     public void onActivityResult(EditUserInfoActivity editUserInfoActivity, int requestCode, int resultCode, Intent data, RoundImageView
             ivPhoto, Bitmap lastBmp, byte[] lastByte, String photoFolderAddress) {
         photoTailorUtil.onActivityResult(requestCode, resultCode, data);
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
     }
 
     @Override
@@ -366,4 +507,13 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         byte[] bitmapByte = mOutputStream.toByteArray();
         activity.setBitmapAndByte(bitmap, bitmapByte);
     }
+
+    public String drawableToByte(byte[] bytes) {
+        if (null != bytes) {
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
+        } else {
+            return null;
+        }
+    }
+
 }

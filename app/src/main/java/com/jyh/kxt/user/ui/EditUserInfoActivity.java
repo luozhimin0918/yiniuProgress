@@ -122,8 +122,27 @@ public class EditUserInfoActivity extends BaseActivity {
 
         editUserInfoPresenter.loadCitis();
 
+        initView();
+
+    }
+
+    private void initView() {
         UserJson userInfo = LoginUtils.getUserInfo(this);
         tvNickname.setText(userInfo.getNickname());
+        tvAddress.setText(userInfo.getAddress());
+        tvBirthday.setText(userInfo.getBirthday());
+        tvWork.setText(userInfo.getWork());
+        switch (userInfo.getSex()) {
+            case 0:
+                tvGender.setText("保密");
+                break;
+            case 1:
+                tvGender.setText("男");
+                break;
+            case 2:
+                tvGender.setText("女");
+                break;
+        }
 
         int imgSize = (int) getResources().getDimension(R.dimen.item_height);
         Glide.with(getContext())
@@ -147,7 +166,6 @@ public class EditUserInfoActivity extends BaseActivity {
 
         tvTitle.setText("个人中心");
         btnSubmit.setText("完成");
-
     }
 
     /**
@@ -155,10 +173,9 @@ public class EditUserInfoActivity extends BaseActivity {
      *
      * @param province
      * @param city
-     * @param area
      */
-    public void setAddress(String province, String city, String area) {
-        tvAddress.setText(province + "-" + city + "-" + area);
+    public void setAddress(String province, String city) {
+        tvAddress.setText(province + "-" + city);
     }
 
     /**
@@ -195,7 +212,8 @@ public class EditUserInfoActivity extends BaseActivity {
             case R.id.iv_bar_function:
                 //提交更改
                 showWaitDialog(null);
-                editUserInfoPresenter.postChangedInfo();
+                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString(),
+                        tvWork.getText().toString());
                 break;
             case R.id.rl_photo:
                 //修改头像
