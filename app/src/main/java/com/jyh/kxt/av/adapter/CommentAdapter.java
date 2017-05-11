@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoDetailCommentBean;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.widget.ThumbView;
 
 import java.util.List;
@@ -118,7 +119,10 @@ public class CommentAdapter extends BaseAdapter {
 
                 mViewHolder2.tvPrimaryMessage.setText(String.valueOf(videoDetailCommentBean.getParent_num_reply()));
                 mViewHolder2.tvPrimaryTime.setText(getSimpleTime(videoDetailCommentBean.getParent_create_time()));
-                mViewHolder2.tvPrimaryContent.setText(videoDetailCommentBean.getParent_content());
+
+//                mViewHolder2.tvPrimaryContent.setText(videoDetailCommentBean.getParent_content());
+                mViewHolder2.tvPrimaryContent.convertToGif(videoDetailCommentBean.getParent_content());
+
                 break;
         }
 
@@ -146,8 +150,8 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvThumb.updateThumbState(videoDetailCommentBean.getId());
 
         baseViewHolder.tvMessage.setText(String.valueOf(videoDetailCommentBean.getNum_reply()));
-        baseViewHolder.tvContent.setText(videoDetailCommentBean.getContent());
-
+//        baseViewHolder.tvContent.setText(videoDetailCommentBean.getContent());
+        baseViewHolder.tvContent.convertToGif(videoDetailCommentBean.getContent());
         return convertView;
     }
 
@@ -158,7 +162,7 @@ public class CommentAdapter extends BaseAdapter {
         @BindView(R.id.ll_je_sao) LinearLayout llJeSao;
         @BindView(R.id.tv_thumb) ThumbView tvThumb;
         @BindView(R.id.tv_message) TextView tvMessage;
-        @BindView(R.id.tv_content) TextView tvContent;
+        @BindView(R.id.tv_content) EmoticonTextView tvContent;
 
     }
 
@@ -171,7 +175,7 @@ public class CommentAdapter extends BaseAdapter {
     }
 
     class ViewHolder2 extends BaseViewHolder {
-        @BindView(R.id.tv_primary_content) TextView tvPrimaryContent;
+        @BindView(R.id.tv_primary_content) EmoticonTextView tvPrimaryContent;
         @BindView(R.id.tv_primary_time) TextView tvPrimaryTime;
         @BindView(R.id.tv_primary_thumb) ThumbView tvPrimaryThumb;
         @BindView(R.id.tv_primary_message) TextView tvPrimaryMessage;

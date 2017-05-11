@@ -24,12 +24,15 @@ import java.util.List;
 public class EmoticonGridAdapter extends BaseAdapter {
 
     private Context mContext;
+    private int itemSize;
     private LayoutInflater mInflater;
     private List<EmojeBean> emoJeBeanList;
     private EmoticonViewPager emoticonViewPager;
 
-    public EmoticonGridAdapter(Context mContext, List<EmojeBean> emoJeBeanList, EmoticonViewPager emoticonViewPager) {
+    public EmoticonGridAdapter(Context mContext, int itemSize, List<EmojeBean> emoJeBeanList, EmoticonViewPager
+            emoticonViewPager) {
         this.mContext = mContext;
+        this.itemSize = itemSize;
         this.emoJeBeanList = emoJeBeanList;
         this.emoticonViewPager = emoticonViewPager;
 
@@ -70,7 +73,7 @@ public class EmoticonGridAdapter extends BaseAdapter {
 
         Glide
                 .with(mContext)
-                .load(Uri.parse(emojeBean.getUrl()))
+                .load(Uri.parse(emojeBean.getPngUrl()))
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -78,6 +81,12 @@ public class EmoticonGridAdapter extends BaseAdapter {
                         mViewHolder.ivEmoticon.setImageBitmap(resource);
                     }
                 });
+
+        ViewGroup.LayoutParams layoutParams = convertView.getLayoutParams();
+        layoutParams.width = itemSize;
+        layoutParams.height = itemSize;
+        convertView.setLayoutParams(layoutParams);
+
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

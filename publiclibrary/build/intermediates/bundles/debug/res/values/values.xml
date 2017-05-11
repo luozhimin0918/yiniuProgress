@@ -137,6 +137,11 @@
             <enum name="bottom" value="1"/>
             <enum name="both" value="2"/>
         </attr></declare-styleable>
+    <declare-styleable name="TagFlowLayout"><attr format="boolean" name="auto_select_effect"/><attr format="integer" name="max_select"/><attr name="gravity">
+            <enum name="left" value="-1"/>
+            <enum name="center" value="0"/>
+            <enum name="right" value="1"/>
+        </attr></declare-styleable>
     <declare-styleable name="pickerview"><attr name="pickerview_gravity">
             <enum name="center" value="17"/>
             <enum name="left" value="3"/>
@@ -209,6 +214,9 @@
     <string name="dialog_default_title">Here\'s a message!</string>
     <string name="dialog_ok">确定</string>
     <string name="done_label">确定</string>
+    <string name="gravity_center">center</string>
+    <string name="gravity_left">left</string>
+    <string name="gravity_right">right</string>
     <string name="hour_picker_description">Hours circular slider</string>
     <string name="item_is_selected">%1$s selected</string>
     <string name="minute_picker_description">Minutes circular slider</string>

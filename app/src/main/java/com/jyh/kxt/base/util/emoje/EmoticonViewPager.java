@@ -48,33 +48,39 @@ public class EmoticonViewPager extends ViewPager {
 
         emoticonLinearLayout = (EmoticonLinearLayout) getParent();
 
-        mHorizontalSpacing = SystemUtil.dp2px(getContext(), 10);
-        mVerticalSpacing = SystemUtil.dp2px(getContext(), 12);
-
         gridViewPadding = SystemUtil.dp2px(getContext(), 10);
 
         DaoSession daoSessionRead = DBManager.getInstance(getContext()).getDaoSessionRead();
 
         for (String groupName : mGroupNameList) {
+            int maxItemCount;
+            if (roleJudge(groupName) == 1) {
+                maxItemCount = 9;
+            } else {
+                maxItemCount = 20;
+            }
+
+
             List<EmojeBean> emoJeBeen = daoSessionRead
                     .getEmojeBeanDao()
                     .queryRaw("WHERE GROUP_CHINESE_NAME = ?", groupName);
 
             int extendedCount = 0;
-            if (emoJeBeen.size() % 20 != 0) {
+            if (emoJeBeen.size() % maxItemCount != 0) {
                 extendedCount = 1;
             }
-            int itemGroupViewPagerCount = (emoJeBeen.size() / 20) + extendedCount;
+            int itemGroupViewPagerCount = (emoJeBeen.size() / maxItemCount) + extendedCount;
 
             //增加分割ViewPager
             final List<View> groupViewList = new ArrayList<>();
 
             for (int i = 0; i < itemGroupViewPagerCount; i++) {
-                int startCount = i * 20;
-                int endCount = (i * 20 + 20) > emoJeBeen.size() ? emoJeBeen.size() : (i * 20 + 20);
+                int startCount = i * maxItemCount;
+                int endCount = (i * maxItemCount + maxItemCount) > emoJeBeen.size() ? emoJeBeen.size() : (i *
+                        maxItemCount + maxItemCount);
 
                 List<EmojeBean> emoJeSubBeen = emoJeBeen.subList(startCount, endCount);
-                RelativeLayout relativeLayout = generateGridView(emoJeSubBeen);
+                RelativeLayout relativeLayout = generateGridView(groupName, emoJeSubBeen);
                 groupViewList.add(relativeLayout);
 
             }
@@ -134,13 +140,29 @@ public class EmoticonViewPager extends ViewPager {
     }
 
 
-    private RelativeLayout generateGridView(List<EmojeBean> emoJeSubBeen) {
+    private RelativeLayout generateGridView(String groupName, List<EmojeBean> emoJeSubBeen) {
+        int numColumns;
+        int itemSize;
+
+        if (roleJudge(groupName) == 1) {
+            numColumns = 5;
+            itemSize = SystemUtil.dp2px(getContext(), 70);
+            mHorizontalSpacing = SystemUtil.dp2px(getContext(), 0);
+            mVerticalSpacing = SystemUtil.dp2px(getContext(), 0);
+        } else {
+            numColumns = 7;
+            itemSize = SystemUtil.dp2px(getContext(), 40);
+            mHorizontalSpacing = SystemUtil.dp2px(getContext(), 10);
+            mVerticalSpacing = SystemUtil.dp2px(getContext(), 12);
+        }
+
+
         RelativeLayout relativeLayout = new RelativeLayout(getContext());
         //GridView 增加
         GridView itemPageGridView = new GridView(getContext());
 
         itemPageGridView.setMotionEventSplittingEnabled(false);
-        itemPageGridView.setNumColumns(7);
+        itemPageGridView.setNumColumns(numColumns);
         itemPageGridView.setBackgroundColor(Color.TRANSPARENT);
         itemPageGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         itemPageGridView.setCacheColorHint(0);
@@ -150,7 +172,7 @@ public class EmoticonViewPager extends ViewPager {
         itemPageGridView.setGravity(Gravity.CENTER);
         itemPageGridView.setVerticalScrollBarEnabled(false);
 
-        EmoticonGridAdapter mEmoticonGridAdapter = new EmoticonGridAdapter(getContext(), emoJeSubBeen,this);
+        EmoticonGridAdapter mEmoticonGridAdapter = new EmoticonGridAdapter(getContext(), itemSize, emoJeSubBeen, this);
         itemPageGridView.setAdapter(mEmoticonGridAdapter);
 
         RelativeLayout.LayoutParams gridParentLayout = new RelativeLayout.LayoutParams(
@@ -167,7 +189,7 @@ public class EmoticonViewPager extends ViewPager {
                 SystemUtil.dp2px(getContext(), 45),
                 SystemUtil.dp2px(getContext(), 40));
 
-        delParentLayout.setMargins(0,0,0,SystemUtil.dp2px(getContext(),5));
+        delParentLayout.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
         delImageView.setBackgroundResource(R.drawable.iv_face);
 
         delParentLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
@@ -190,6 +212,15 @@ public class EmoticonViewPager extends ViewPager {
 
     public void itemEmoJeClick(EmojeBean emojeBean) {
         emoticonLinearLayout.itemEmoJeClick(emojeBean);
+    }
+
+
+    private int roleJudge(String groupName) {
+        if ("可可".equals(groupName) || "米亚".equals(groupName) || "茉晗".equals(groupName)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     /**

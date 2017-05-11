@@ -13,6 +13,7 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.superplayer.library.SuperPlayer;
 
@@ -58,10 +59,14 @@ public class VideoDetailActivity extends BaseActivity {
         commentPresenter = new CommentPresenter(this);
 
         videoDetailPresenter.requestInitVideo();
+
+        EmoJeUtil.getInstance().loadAllEmoJe(this);
+
+//        videoDetailPresenter.requestInitVideoTest();
     }
 
 
-    @OnClick({ R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
+    @OnClick({R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -69,6 +74,7 @@ public class VideoDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_comment:
                 //回复
+                commentPresenter.showReplyMessageView(tvTitle);
                 break;
             case R.id.iv_collect:
                 //收藏
@@ -104,6 +110,10 @@ public class VideoDetailActivity extends BaseActivity {
         if (spVideo != null) {
             spVideo.onDestroy();
         }
+
+        System.gc();
+        Runtime.getRuntime().gc();
+        System.runFinalization();
     }
 
     @Override

@@ -25,16 +25,16 @@ public class EmoticonsUtils {
         if (!isInitEmoJe) {
             try {
                 String[] assetsFileList = new String[]{
-                        "paobing",
                         "default",
+                        "paobing",
                         "keke",
                         "miya",
                         "mohan",
                         "baolixiong"
                 };
                 String[] groupChineseNameArray = new String[]{
-                        "炮兵",
                         "默认",
+                        "炮兵",
                         "可可",
                         "米亚",
                         "茉晗",
@@ -47,15 +47,26 @@ public class EmoticonsUtils {
                     String[] list = context.getAssets().list(assetsFileList[i]);
                     for (String itemName : list) {
                         EmojeBean emojeBean = new EmojeBean();
-
                         String[] splitItemName = itemName.split("\\.");
-                        emojeBean.setName(splitItemName[0]);
-                        emojeBean.setSuffixName(splitItemName[1]);
 
-                        emojeBean.setGroupName(assetsFileList[i]);
-                        emojeBean.setGroupChineseName(groupChineseNameArray[i]);
-                        emojeBean.setUrl("file:///android_asset/" + assetsFileList[i] + "/" + itemName);
-                        allEmoJeList.add(emojeBean);
+                        String suffixName = splitItemName[1];
+                        if ("gif".equals(suffixName)) {
+                            emojeBean.setName(splitItemName[0]);
+                            emojeBean.setSuffixName(suffixName);
+
+                            emojeBean.setGroupName(assetsFileList[i]);
+                            emojeBean.setGroupChineseName(groupChineseNameArray[i]);
+
+                            emojeBean.setGifUrl("file:///android_asset/" + assetsFileList[i] + "/" +
+                                    splitItemName[0]
+                                    + ".gif");
+
+                            emojeBean.setPngUrl("file:///android_asset/" + assetsFileList[i] + "/" +
+                                    splitItemName[0]
+                                    + ".png");
+
+                            allEmoJeList.add(emojeBean);
+                        }
                     }
                 }
 

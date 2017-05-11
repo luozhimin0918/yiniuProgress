@@ -122,4 +122,25 @@ public class VideoDetailPresenter extends BasePresenter {
         videoDetailActivity.spVideo.setScaleType(SuperPlayer.SCALETYPE_FITXY);
     }
 
+//    public void requestInitVideoTest() {
+//        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+//        JSONObject jsonParam = volleyRequest.getJsonParam();
+//        jsonParam.put("accessToken", "6e9f6daaaf34779b1b875134a393bbdc");
+//        jsonParam.put("content", "[df_给力][df_围观][df_威武][df_呵呵][df_嘻嘻][df_哈哈]");
+//        jsonParam.put("object_id", "547");
+//        jsonParam.put("type", "video");
+//        jsonParam.put("uid", "55896");
+//
+//        volleyRequest.doGet(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<String>() {
+//            @Override
+//            protected void onResponse(String str) {
+//                Log.e("String", "onResponse: " + str);
+//            }
+//
+//            @Override
+//            protected void onErrorResponse(VolleyError error) {
+//                super.onErrorResponse(error);
+//            }
+//        });
+//    }
 }

@@ -61,7 +61,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         tvReplyMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showReplyMessageView();
+                showReplyMessageView(tvReplyMessage);
             }
         });
     }
@@ -90,7 +90,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     /**
      * 弹出回复的PopWindow
      */
-    private void showReplyMessageView() {
+    public void showReplyMessageView(View showAtLocation) {
         if (replyMessagePopup == null) {
             replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
 
@@ -120,7 +120,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         InputMethodManager imm = (InputMethodManager) mBaseActivity.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
-        replyMessagePopup.showAtLocation(tvReplyMessage, Gravity.BOTTOM, 0, 0);
+        replyMessagePopup.showAtLocation(showAtLocation, Gravity.BOTTOM, 0, 0);
 
         replyMessagePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
             @Override

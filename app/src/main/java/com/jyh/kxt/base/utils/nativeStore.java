@@ -15,7 +15,6 @@ import java.util.Set;
 
 public class NativeStore {
     private static NativeStore nativeStore;
-
     public static NativeStore getInstance(Context mContext) {
         if (nativeStore == null) {
             nativeStore = new NativeStore(mContext);
@@ -23,13 +22,12 @@ public class NativeStore {
         return nativeStore;
     }
 
-
     public NativeStore(Context mContext) {
         initThumbItemSet(mContext);
     }
 
     /**
-     * 视屏列表点赞, 详细内容点赞等
+     * 视屏列表点赞, 详细内容点赞等s
      * 点赞的ID
      */
     private Set<String> thumbItemSet;

@@ -79,7 +79,7 @@ public class HttpConstant {
     public static final String MARKET_LIST = BASE_URL + "/quotes/list" + VarConstant.HTTP_CONTENT;
 
     public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
-
+    public static final String COMMENT_PUBLISH = BASE_URL + "/comment/publish" + VarConstant.HTTP_CONTENT;
     /**
      * 用户接口
      */
@@ -92,12 +92,16 @@ public class HttpConstant {
     /**
      * 收藏
      */
-    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏列表-文章 ?uid={uid}&token={token}&lastid={lastid}
+    public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏列表-文章
+    // ?uid={uid}&token={token}&lastid={lastid}
     public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏列表-视听
-    public static final String COLLECT_LIST_DEL = BASE_URL + "member/favor_delete";//收藏列表-删除 ?uid={uid}&token={token}&type={type:1,
+    public static final String COLLECT_LIST_DEL = BASE_URL + "member/favor_delete";//收藏列表-删除
+    // ?uid={uid}&token={token}&type={type:1,
     // 2}&id={1,2,3,4}
-    public static final String COLLECT_ADD = BASE_URL + "favor/addFavor";//收藏-添加 ?uid={}?id={}?type={} type: video | article
-    public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video | article
+    public static final String COLLECT_ADD = BASE_URL + "favor/addFavor";//收藏-添加 ?uid={}?id={}?type={} type: video |
+    // article
+    public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video
+    // | article
 
     /**
      * 点评
@@ -106,6 +110,11 @@ public class HttpConstant {
     public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点赞-视听 ?id={}
     public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点赞状态-文章 ?id={}
     public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点赞状态-视听 ?id={}
+
+
+    public static final String DATA_HOT = BASE_URL + "data/hot" + VarConstant.HTTP_CONTENT;
+    public static final String DATA_GROUP = BASE_URL + "data/group" + VarConstant.HTTP_CONTENT;
+    public static final String DATA_LIST = BASE_URL + "data/list" + VarConstant.HTTP_CONTENT;
 
 
 }

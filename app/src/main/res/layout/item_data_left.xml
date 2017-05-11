@@ -3,12 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="@drawable/shape_data_left_item"
     android:orientation="vertical">
 
-    <TextView
+    <RadioButton
+        android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="52dp"
+        android:background="@drawable/shape_data_left_item"
+        android:button="@null"
         android:gravity="center"
         android:text="测试"
         android:textColor="@color/font_color60"

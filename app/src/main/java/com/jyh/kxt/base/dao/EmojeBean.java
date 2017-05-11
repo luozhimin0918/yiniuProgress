@@ -24,7 +24,7 @@ public class EmojeBean {
     /**
      * 匹配网络URL
      */
-    private String url;
+    private String gifUrl;
     /**
      * 分组名称
      */
@@ -35,20 +35,28 @@ public class EmojeBean {
      */
     private String groupChineseName;
 
-    @Generated(hash = 1726053207)
-    public EmojeBean(Long id, String name, String suffixName, String url,
-            String groupName, String groupChineseName) {
+    /**
+     * 预览的Url 指定的一个PNG图片
+     */
+    private String pngUrl;
+
+
+    @Generated(hash = 176986286)
+    public EmojeBean(Long id, String name, String suffixName, String gifUrl,
+            String groupName, String groupChineseName, String pngUrl) {
         this.id = id;
         this.name = name;
         this.suffixName = suffixName;
-        this.url = url;
+        this.gifUrl = gifUrl;
         this.groupName = groupName;
         this.groupChineseName = groupChineseName;
+        this.pngUrl = pngUrl;
     }
 
     @Generated(hash = 1551917151)
     public EmojeBean() {
     }
+
 
     public Long getId() {
         return id;
@@ -74,12 +82,12 @@ public class EmojeBean {
         this.suffixName = suffixName;
     }
 
-    public String getUrl() {
-        return url;
+    public String getGifUrl() {
+        return gifUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setGifUrl(String gifUrl) {
+        this.gifUrl = gifUrl;
     }
 
     public String getGroupName() {
@@ -92,6 +100,14 @@ public class EmojeBean {
 
     public String getGroupChineseName() {
         return groupChineseName;
+    }
+
+    public String getPngUrl() {
+        return pngUrl;
+    }
+
+    public void setPngUrl(String pngUrl) {
+        this.pngUrl = pngUrl;
     }
 
     public void setGroupChineseName(String groupChineseName) {

@@ -41,10 +41,6 @@ public class ReplyMessagePresenter extends BasePresenter {
     private View replyMessageView;
     private EmoticonLinearLayout emoJeContentView;
 
-//    private EmoticonsPageView mEmoticonsPageView;
-//    private EmoticonsIndicatorView mEmoticonsIndicatorView;
-//    private EmoticonsToolBarView mEmoticonsToolBarView;
-
     private PopupUtil replyMessagePopup;
 
     public ReplyMessagePresenter(IBaseView iBaseView) {
@@ -101,11 +97,6 @@ public class ReplyMessagePresenter extends BasePresenter {
             emoJeContentView.setOnItemClick(new EmoticonLinearLayout.OnItemClick() {
                 @Override
                 public void itemEmoJeClick(EmojeBean emojeBean) {
-//                    String currentContent = eetContent.getText().toString();
-//                    String name = "[" + emojeBean.getName() + "]";
-//
-//                    eetContent.setText(currentContent + name);
-
                     eetContent.itemEmoJeClick(emojeBean);
                 }
 

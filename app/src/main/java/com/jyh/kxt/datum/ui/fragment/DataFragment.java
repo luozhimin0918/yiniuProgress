@@ -1,13 +1,14 @@
 package com.jyh.kxt.datum.ui.fragment;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.datum.presenter.DataPresenter;
-import com.library.util.ObserverCall;
 
 import butterknife.BindView;
 
@@ -30,12 +31,18 @@ public class DataFragment extends BaseFragment implements DataPresenter.TopTabVi
         dataPresenter = new DataPresenter(this);
         dataPresenter.setTopTabViewClick(this);
 
-        dataPresenter.requestTopNavigationData(new ObserverCall() {
-            @Override
-            public void onComplete(Object o) {
+        //初始化左侧List
+        int leftLineColor = ContextCompat.getColor(getContext(), R.color.white);
+        ivLeftContent.setDivider(new ColorDrawable(leftLineColor));
+        ivLeftContent.setDividerHeight(1);
 
-            }
-        });
+        //初始化右侧List
+        int rightLineColor = ContextCompat.getColor(getContext(), R.color.line_color);
+        ivRightContent.setDivider(new ColorDrawable(rightLineColor));
+        ivRightContent.setDividerHeight(0);
+
+        //网络请求
+        dataPresenter.requestTopNavigationData();
         dataPresenter.requestLeftNavigationData();
     }
 

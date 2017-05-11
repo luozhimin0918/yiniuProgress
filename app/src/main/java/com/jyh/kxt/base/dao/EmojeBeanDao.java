@@ -25,9 +25,10 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property SuffixName = new Property(2, String.class, "suffixName", false, "SUFFIX_NAME");
-        public final static Property Url = new Property(3, String.class, "url", false, "URL");
+        public final static Property GifUrl = new Property(3, String.class, "gifUrl", false, "GIF_URL");
         public final static Property GroupName = new Property(4, String.class, "groupName", false, "GROUP_NAME");
         public final static Property GroupChineseName = new Property(5, String.class, "groupChineseName", false, "GROUP_CHINESE_NAME");
+        public final static Property PngUrl = new Property(6, String.class, "pngUrl", false, "PNG_URL");
     }
 
 
@@ -46,9 +47,10 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT UNIQUE ," + // 1: name
                 "\"SUFFIX_NAME\" TEXT," + // 2: suffixName
-                "\"URL\" TEXT," + // 3: url
+                "\"GIF_URL\" TEXT," + // 3: gifUrl
                 "\"GROUP_NAME\" TEXT," + // 4: groupName
-                "\"GROUP_CHINESE_NAME\" TEXT);"); // 5: groupChineseName
+                "\"GROUP_CHINESE_NAME\" TEXT," + // 5: groupChineseName
+                "\"PNG_URL\" TEXT);"); // 6: pngUrl
     }
 
     /** Drops the underlying database table. */
@@ -76,9 +78,9 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
             stmt.bindString(3, suffixName);
         }
  
-        String url = entity.getUrl();
-        if (url != null) {
-            stmt.bindString(4, url);
+        String gifUrl = entity.getGifUrl();
+        if (gifUrl != null) {
+            stmt.bindString(4, gifUrl);
         }
  
         String groupName = entity.getGroupName();
@@ -89,6 +91,11 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
         String groupChineseName = entity.getGroupChineseName();
         if (groupChineseName != null) {
             stmt.bindString(6, groupChineseName);
+        }
+ 
+        String pngUrl = entity.getPngUrl();
+        if (pngUrl != null) {
+            stmt.bindString(7, pngUrl);
         }
     }
 
@@ -111,9 +118,9 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
             stmt.bindString(3, suffixName);
         }
  
-        String url = entity.getUrl();
-        if (url != null) {
-            stmt.bindString(4, url);
+        String gifUrl = entity.getGifUrl();
+        if (gifUrl != null) {
+            stmt.bindString(4, gifUrl);
         }
  
         String groupName = entity.getGroupName();
@@ -124,6 +131,11 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
         String groupChineseName = entity.getGroupChineseName();
         if (groupChineseName != null) {
             stmt.bindString(6, groupChineseName);
+        }
+ 
+        String pngUrl = entity.getPngUrl();
+        if (pngUrl != null) {
+            stmt.bindString(7, pngUrl);
         }
     }
 
@@ -138,9 +150,10 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // suffixName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // url
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // gifUrl
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // groupName
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // groupChineseName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // groupChineseName
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // pngUrl
         );
         return entity;
     }
@@ -150,9 +163,10 @@ public class EmojeBeanDao extends AbstractDao<EmojeBean, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSuffixName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setGifUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setGroupName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setGroupChineseName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPngUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

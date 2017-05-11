@@ -76,6 +76,10 @@ public class EmoticonsEditText extends EditText {
                         count + "], after = [" + after + "]");
 
 
+                if (s == null || s.toString().length() == 0) {
+                    return;
+                }
+
                 textDeleteStart = -1;
                 textDeleteEnd = -1;
 
@@ -141,8 +145,13 @@ public class EmoticonsEditText extends EditText {
 
     public void deleteEmoJeClick() {
 
+        Editable text = getText();
+        if (text == null || text.toString().length() == 0) {
+            return;
+        }
+
         int selectionPosition = getSelectionStart();
-        getText().delete(selectionPosition - 1, selectionPosition);
+        text.delete(selectionPosition - 1, selectionPosition);
 
 
 //        isAddChart = true;
