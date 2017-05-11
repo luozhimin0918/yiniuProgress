@@ -50,7 +50,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -66,7 +66,13 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         final VideoListJson video = list.get(position);
+        boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
+        video.setCollect(collect);
+        boolean good = GoodUtils.isGood(mContext, video.getId(), VarConstant.GOOD_TYPE_VIDEO);
+        video.setGood(good);
+
         Glide.with(mContext).load(HttpConstant.IMG_URL + video.getPicture()).error(R.mipmap.ico_def_load).placeholder
                 (R.mipmap.ico_def_load).into
                 (holder.iv);
@@ -84,36 +90,40 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www.baidu.com",
-                        "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
-                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, true, false), video, holder.ivMore, new
-                        ObserverData<Map<String,
-                                Boolean>>() {
-                            @Override
-                            public void callback(Map<String, Boolean> o) {
-                                Set<String> set = o.keySet();
-                                Iterator<String> iterator = set.iterator();
-                                while (iterator.hasNext()) {
-                                    String key = iterator.next();
-                                    Boolean b = o.get(key);
-                                    switch (key) {
-                                        case VarConstant.FUNCTION_TYPE_COLLECT:
-                                            // TODO: 2017/5/4 更改video 收藏状态
-                                            break;
-                                        case VarConstant.FUNCTION_TYPE_GOOD:
-                                            // TODO: 2017/5/4 更改video 点赞状态
-                                            break;
+                                "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
+                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, video.isGood(), video
+                                .isCollect()),
+                        video, holder.ivMore, new
+                                ObserverData<Map<String,
+                                        Boolean>>() {
+                                    @Override
+                                    public void callback(Map<String, Boolean> o) {
+                                        Set<String> set = o.keySet();
+                                        Iterator<String> iterator = set.iterator();
+                                        while (iterator.hasNext()) {
+                                            String key = iterator.next();
+                                            Boolean b = o.get(key);
+                                            switch (key) {
+                                                case VarConstant.FUNCTION_TYPE_COLLECT:
+                                                    //更改video 收藏状态
+                                                    video.setCollect(b);
+                                                    break;
+                                                case VarConstant.FUNCTION_TYPE_GOOD:
+                                                    //更改video 点赞状态
+                                                    video.setGood(b);
+                                                    break;
+                                            }
+                                        }
                                     }
-                                }
-                            }
 
-                            @Override
-                            public void onError(Exception e) {
-                                //失败
-                                if (e != null && e.getMessage() != null) {
-                                    ToastView.makeText3(mContext, e.getMessage());
-                                }
-                            }
-                        });
+                                    @Override
+                                    public void onError(Exception e) {
+                                        //失败
+                                        if (e != null && e.getMessage() != null) {
+                                            ToastView.makeText3(mContext, e.getMessage());
+                                        }
+                                    }
+                                });
             }
         });
         holder.iv.setOnClickListener(new View.OnClickListener() {

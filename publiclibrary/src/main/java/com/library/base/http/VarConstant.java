@@ -171,9 +171,10 @@ public class VarConstant {
     /**
      * 要闻数据库类型
      */
-    public static final int DB_TYPE_BROWER = 1;
-    public static final int DB_TYPE_COLLECT_LOCAL = 2;
-    public static final int DB_TYPE_COLLECT_NETTOLOCAL = 3;
+    public static final int DB_TYPE_BROWER = 1;//浏览记录
+    public static final int DB_TYPE_COLLECT_LOCAL = 2;//本地收藏
+    public static final int DB_TYPE_COLLECT_NETTOLOCAL = 3;//本地网络收藏
+    public static final int DB_TYPE_GOOD = 4;//点赞
 
 
 }

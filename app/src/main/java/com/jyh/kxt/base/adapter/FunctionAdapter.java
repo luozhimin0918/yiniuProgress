@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.json.ShareBtnJson;
 
@@ -69,6 +70,17 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
         ShareBtnJson shareBtnJson = list.get(position);
         shareBtnJson.setStatus(o);
         notifyDataSetChanged();
+    }
+
+    /**
+     * 按钮是否为选中状态
+     *
+     * @param position
+     * @return
+     */
+    public boolean getBtnStatus(int position) {
+        ShareBtnJson shareBtnJson = list.get(position);
+        return shareBtnJson.isStatus();
     }
 
     class FunctionViewHolder extends RecyclerView.ViewHolder {

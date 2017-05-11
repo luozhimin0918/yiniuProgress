@@ -19,7 +19,7 @@ import java.util.List;
 
 public class VideoDetailBean {
     private String category_id;
-    private List<VideoDetailCommentBean> comment;
+    private List<CommentBean> comment;
     private String create_time;
     private String id;
     private String num_comment;
@@ -38,11 +38,11 @@ public class VideoDetailBean {
         this.category_id = category_id;
     }
 
-    public List<VideoDetailCommentBean> getComment() {
+    public List<CommentBean> getComment() {
         return comment;
     }
 
-    public void setComment(List<VideoDetailCommentBean> comment) {
+    public void setComment(List<CommentBean> comment) {
         this.comment = comment;
     }
 

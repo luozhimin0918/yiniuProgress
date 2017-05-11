@@ -145,7 +145,10 @@ public class CollectUtils {
                     if (flashJsons.size() == 0) {
                         flashJsonWrit.insert(flash);
                     } else {
-                        flashJsonWrit.delete(flash);
+                        QueryBuilder qb = instance.getDaoSessionRead().getFlashJsonDao().queryBuilder();
+                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), FlashJsonDao
+                                .Properties.Socre.eq(flash.getSocre())).buildDelete();
+                        bd.executeDeleteWithoutDetachingEntities();
                         flashJsonWrit.insert(flash);
                     }
                     break;
@@ -159,7 +162,10 @@ public class CollectUtils {
                     if (newsJsons.size() == 0) {
                         newsJsonWrite.insert(news);
                     } else {
-                        newsJsonWrite.delete(news);
+                        QueryBuilder qb = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder();
+                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), NewsJsonDao
+                                .Properties.O_id.eq(news.getO_id())).buildDelete();
+                        bd.executeDeleteWithoutDetachingEntities();
                         newsJsonWrite.insert(news);
                     }
                     break;
@@ -173,7 +179,11 @@ public class CollectUtils {
                     if (videoJsons.size() == 0) {
                         videoDaoWrite.insert(video);
                     } else {
-                        videoDaoWrite.delete(video);
+                        QueryBuilder qb = instance.getDaoSessionRead().getVideoListJsonDao().queryBuilder();
+                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL),
+                                VideoListJsonDao
+                                        .Properties.Uid.eq(video.getId())).buildDelete();
+                        bd.executeDeleteWithoutDetachingEntities();
                         videoDaoRead.insert(video);
                     }
                     break;
@@ -429,10 +439,9 @@ public class CollectUtils {
      * @param observerData
      * @param umengObserver
      */
-    private static void unCollectNet(Context context, String type, Object obj, final ObserverData observerData, final ObserverData<Boolean>
+    private static void unCollectNet(final Context context, final String type, final Object obj, final ObserverData observerData, final
+    ObserverData<Boolean>
             umengObserver) {
-        unCollectLocal(context, type, obj, null, null);
-
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         String collectType = "";
@@ -460,6 +469,7 @@ public class CollectUtils {
                     observerData.callback(map);
                 if (umengObserver != null)
                     umengObserver.callback(false);
+                unCollectLocal(context, type, obj, null, null);
             }
 
             @Override

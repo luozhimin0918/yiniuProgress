@@ -43,9 +43,8 @@ public class NewsContentPresenter extends BasePresenter {
         request.doGet(getUrl(request), new HttpListener<NewsContentJson>() {
             @Override
             protected void onResponse(NewsContentJson news) {
-                Log.i("INFO", "");
-                newsContentActivity.setView(news);
-                newsContentActivity.plRootView.loadOver();
+                if (news != null)
+                    newsContentActivity.setView(news);
             }
 
             @Override

@@ -34,7 +34,7 @@ public class GoodUtils {
      * @param observerData 用以改变list数据
      * @param umengOb      用以改变umeng面板按钮状态
      */
-    public static void addGood(Context context, String id, String type, final ObserverData observerData, ObserverData<Boolean> umengOb) {
+    public static void addGood(Context context, String id, String type, final ObserverData observerData, final ObserverData<Boolean> umengOb) {
         String url = "";
         switch (type) {
             case VarConstant.GOOD_TYPE_NEWS:
@@ -48,9 +48,16 @@ public class GoodUtils {
         request.doGet(getUrl(request, url, id), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                Map<String, Boolean> map = new HashMap<>();
-                map.put(VarConstant.FUNCTION_TYPE_GOOD, true);
-                observerData.callback(map);
+
+                if (observerData != null) {
+                    Map<String, Boolean> map = new HashMap<>();
+                    map.put(VarConstant.FUNCTION_TYPE_GOOD, true);
+                    observerData.callback(map);
+                }
+                if (umengOb != null) {
+                    umengOb.callback(true);
+                }
+
             }
 
             @Override
@@ -87,15 +94,12 @@ public class GoodUtils {
 
     /**
      * 取消点赞
-     *
-     * @param context
+     *  @param context
      * @param id
      * @param type
-     * @param observerData
+     * @param data
+     * @param umeng
      */
-    public static void delGood(Context context, String id, String type, ObserverData observerData) {
-        Map<String, Boolean> map = new HashMap<>();
-        map.put(VarConstant.FUNCTION_TYPE_GOOD, false);
-        observerData.callback(map);
+    public static void delGood(Context context, String id, String type, ObserverData data, ObserverData umeng) {
     }
 }

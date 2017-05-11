@@ -430,36 +430,57 @@ public class UmengShareTool {
                         break;
                     case 1:
                         //收藏
-                        CollectUtils.collect(activity, VarConstant.COLLECT_TYPE_VIDEO, o,
-                                observerData, new
-                                        ObserverData<Boolean>() {
-                                            @Override
-                                            public void callback(Boolean o) {
-                                                //改变umeng面板收藏按钮状态
-                                                functionAdapter2.changeStatus(position, o);
-                                            }
+                        if (functionAdapter2.getBtnStatus(position)) {
+                            CollectUtils.unCollect(activity, VarConstant.COLLECT_TYPE_VIDEO, o,
+                                    observerData, new
+                                            ObserverData<Boolean>() {
+                                                @Override
+                                                public void callback(Boolean o) {
+                                                    //改变umeng面板收藏按钮状态
+                                                    functionAdapter2.changeStatus(position, o);
+                                                }
 
-                                            @Override
-                                            public void onError(Exception e) {
-                                                ToastView.makeText3(activity, "收藏失败");
-                                            }
-                                        });
+                                                @Override
+                                                public void onError(Exception e) {
+                                                    ToastView.makeText3(activity, "收藏失败");
+                                                }
+                                            });
+                        } else
+                            CollectUtils.collect(activity, VarConstant.COLLECT_TYPE_VIDEO, o,
+                                    observerData, new
+                                            ObserverData<Boolean>() {
+                                                @Override
+                                                public void callback(Boolean o) {
+                                                    //改变umeng面板收藏按钮状态
+                                                    functionAdapter2.changeStatus(position, o);
+                                                }
+
+                                                @Override
+                                                public void onError(Exception e) {
+                                                    ToastView.makeText3(activity, "收藏失败");
+                                                }
+                                            });
                         break;
                     case 2:
                         //赞
-                        GoodUtils.addGood(activity, shareBean.getId(), shareBean.getGoodType(), observerData, new ObserverData<Boolean>() {
+                        if (functionAdapter2.getBtnStatus(position)) {
+                            ToastView.makeText3(activity, "已点赞");
+                            return;
+                        } else
+                            GoodUtils.addGood(activity, shareBean.getId(), shareBean.getGoodType(), observerData, new
+                                    ObserverData<Boolean>() {
 
-                            @Override
-                            public void callback(Boolean aBoolean) {
-                                //改变umeng面板点赞按钮状态
-                                functionAdapter2.changeStatus(position, aBoolean);
-                            }
+                                        @Override
+                                        public void callback(Boolean aBoolean) {
+                                            //改变umeng面板点赞按钮状态
+                                            functionAdapter2.changeStatus(position, aBoolean);
+                                        }
 
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText3(activity, "点赞失败");
-                            }
-                        });
+                                        @Override
+                                        public void onError(Exception e) {
+                                            ToastView.makeText3(activity, "点赞失败");
+                                        }
+                                    });
                         break;
                     case 3:
                         //取消

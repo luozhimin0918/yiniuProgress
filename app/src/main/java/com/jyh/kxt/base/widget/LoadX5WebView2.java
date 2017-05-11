@@ -2,7 +2,6 @@ package com.jyh.kxt.base.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 /**
  * Created by Mr'Dai on 2016/11/22.
  */
-public class LoadX5WebView extends FrameLayout implements WebBuild {
+public class LoadX5WebView2 extends FrameLayout implements WebBuild {
 
     private View failureView;
     private WebView wvContent;
@@ -34,15 +33,15 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
     private String webUrl;
 
-    public LoadX5WebView(Context context) {
+    public LoadX5WebView2(Context context) {
         super(context);
     }
 
-    public LoadX5WebView(Context context, AttributeSet attrs) {
+    public LoadX5WebView2(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public LoadX5WebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LoadX5WebView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -56,19 +55,12 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         wvContent.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mSettings = wvContent.getSettings();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mSettings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
 
         mSettings.setLoadWithOverviewMode(true);
         mSettings.setBlockNetworkImage(false);
-        mSettings.setUseWideViewPort(true);
-        mSettings.setSupportZoom(false);
-
-//        mSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-
+//        mSettings.setUseWideViewPort(true);
+        mSettings.setSupportZoom(true);
         mSettings.setJavaScriptEnabled(true);
-        mSettings.setAppCacheEnabled(true);
 
         wvContent.setWebViewClient(new MyWebViewClient());
         wvContent.setWebChromeClient(new MyWebChromeClient());

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.VideoDetailCommentBean;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.widget.ThumbView;
@@ -33,9 +33,9 @@ public class CommentAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<VideoDetailCommentBean> videoDetailList;
+    private List<CommentBean> videoDetailList;
 
-    public CommentAdapter(Context mContext, List<VideoDetailCommentBean> videoDetailList) {
+    public CommentAdapter(Context mContext, List<CommentBean> videoDetailList) {
         mInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.videoDetailList = videoDetailList;
@@ -76,7 +76,7 @@ public class CommentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int itemViewType = getItemViewType(position);
-        VideoDetailCommentBean videoDetailCommentBean = videoDetailList.get(position);
+        CommentBean commentBean = videoDetailList.get(position);
 
         ViewHolder1 mViewHolder1 = null;
         ViewHolder2 mViewHolder2 = null;
@@ -114,14 +114,14 @@ public class CommentAdapter extends BaseAdapter {
             case 1:
                 baseViewHolder = mViewHolder2;
 
-                mViewHolder2.tvPrimaryThumb.setThumbCount(videoDetailCommentBean.getParent_num_good());
-                mViewHolder2.tvPrimaryThumb.updateThumbState(videoDetailCommentBean.getParent_id());
+                mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean.getParent_num_good());
+                mViewHolder2.tvPrimaryThumb.updateThumbState(commentBean.getParent_id());
 
-                mViewHolder2.tvPrimaryMessage.setText(String.valueOf(videoDetailCommentBean.getParent_num_reply()));
-                mViewHolder2.tvPrimaryTime.setText(getSimpleTime(videoDetailCommentBean.getParent_create_time()));
+                mViewHolder2.tvPrimaryMessage.setText(String.valueOf(commentBean.getParent_num_reply()));
+                mViewHolder2.tvPrimaryTime.setText(getSimpleTime(commentBean.getParent_create_time()));
 
 //                mViewHolder2.tvPrimaryContent.setText(videoDetailCommentBean.getParent_content());
-                mViewHolder2.tvPrimaryContent.convertToGif(videoDetailCommentBean.getParent_content());
+                mViewHolder2.tvPrimaryContent.convertToGif(commentBean.getParent_content());
 
                 break;
         }
@@ -129,7 +129,7 @@ public class CommentAdapter extends BaseAdapter {
         /**
          * 设置头像
          */
-        String memberPicture = videoDetailCommentBean.getMember_picture();
+        String memberPicture = commentBean.getMember_picture();
 
         final BaseViewHolder finalBaseViewHolder = baseViewHolder;
         Glide.with(mContext)
@@ -143,15 +143,15 @@ public class CommentAdapter extends BaseAdapter {
                     }
                 });
 
-        baseViewHolder.tvNickName.setText(videoDetailCommentBean.getMember_nickname());
-        baseViewHolder.tvTime.setText(getSimpleTime(videoDetailCommentBean.getCreate_time()));
+        baseViewHolder.tvNickName.setText(commentBean.getMember_nickname());
+        baseViewHolder.tvTime.setText(getSimpleTime(commentBean.getCreate_time()));
 
-        baseViewHolder.tvThumb.setThumbCount(videoDetailCommentBean.getNum_good());
-        baseViewHolder.tvThumb.updateThumbState(videoDetailCommentBean.getId());
+        baseViewHolder.tvThumb.setThumbCount(commentBean.getNum_good());
+        baseViewHolder.tvThumb.updateThumbState(commentBean.getId());
 
-        baseViewHolder.tvMessage.setText(String.valueOf(videoDetailCommentBean.getNum_reply()));
+        baseViewHolder.tvMessage.setText(String.valueOf(commentBean.getNum_reply()));
 //        baseViewHolder.tvContent.setText(videoDetailCommentBean.getContent());
-        baseViewHolder.tvContent.convertToGif(videoDetailCommentBean.getContent());
+        baseViewHolder.tvContent.convertToGif(commentBean.getContent());
         return convertView;
     }
 

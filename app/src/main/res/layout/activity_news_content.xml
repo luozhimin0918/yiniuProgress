@@ -1,114 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.library.widget.PageLoadLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme1"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_nav"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/videoNavHeight"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/iv_break"
+            style="@style/Audio_RB_Style"
+            android:src="@mipmap/icon_nav_break"/>
+
+        <ImageView
+            android:id="@+id/iv_comment"
+            style="@style/Audio_RB_Style"
+            android:src="@mipmap/icon_nav_commend"/>
+
+        <ImageView
+            android:id="@+id/iv_collect"
+            style="@style/Audio_RB_Style"
+            android:src="@mipmap/icon_nav_collect_unsel"/>
+
+        <ImageView
+            android:id="@+id/iv_ding"
+            style="@style/Audio_RB_Style"
+            android:src="@mipmap/icon_nav_like_unsel"/>
+
+        <ImageView
+            android:id="@+id/iv_share"
+            style="@style/Audio_RB_Style"
+            android:src="@mipmap/icon_nav_more"/>
+
+    </LinearLayout>
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="哈哈哈哈哈阿哈哈哈啊哈啊哈哈哈哈哈啊哈哈哈哈哈"
-                android:textColor="@color/font_color5"
-                android:textSize="@dimen/xxx_font_size"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:gravity="center_vertical"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <ImageView
-                    android:id="@+id/iv_photo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@mipmap/icon_user_def_photo"/>
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_toRightOf="@id/iv_photo"
-                    android:text="马克"
-                    android:textColor="@color/font_color5"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/tv_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
-                    android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/iv_photo"
-                    android:text="财经日历"
-                    android:textColor="@color/font_color6"
-                    android:textSize="12sp"/>
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="14dp"
-                    android:layout_below="@id/tv_name"
-                    android:layout_toRightOf="@id/tv_type"
-                    android:background="@color/line_color3"/>
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@id/tv_type"
-                    android:text="2017-1-1 11:11"
-                    android:textColor="@color/font_color6"
-                    android:textSize="12sp"/>
-
-                <ImageView
-                    android:id="@+id/iv_like"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@mipmap/icon_user_def_photo"
-                    />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/line_color3"/>
+        android:layout_above="@id/ll_nav"
+        >
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textColor="@color/font_color5"
+                        android:textSize="@dimen/xxx_font_size"/>
+
+                    <RelativeLayout
+                        android:id="@+id/ll_dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
+
+                        <com.jyh.kxt.base.custom.RoundImageView
+                            android:id="@+id/iv_photo"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="8dp"
+                            android:scaleType="fitXY"/>
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_toRightOf="@id/iv_photo"
+                            android:textColor="@color/font_color5"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:id="@+id/tv_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_name"
+                            android:layout_marginRight="8dp"
+                            android:layout_toRightOf="@id/iv_photo"
+                            android:textColor="@color/font_color6"
+                            android:textSize="12sp"/>
+
+                        <View
+                            android:layout_width="1px"
+                            android:layout_height="14dp"
+                            android:layout_below="@id/tv_name"
+                            android:layout_toRightOf="@id/tv_type"
+                            android:background="@color/line_color3"/>
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_name"
+                            android:layout_marginLeft="8dp"
+                            android:layout_toRightOf="@id/tv_type"
+                            android:textColor="@color/font_color6"
+                            android:textSize="12sp"/>
+
+                        <ImageView
+                            android:id="@+id/iv_like"
+                            android:layout_width="60dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/sel_news_attention"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ll_news"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="25dp">
+
+                        <TextView
+                            android:id="@+id/tv_news_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_color6"
+                            android:textSize="@dimen/describe_font_size1"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_news_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/font_color6"
+                            android:textSize="@dimen/describe_font_size1"
+                            />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/line_color3"/>
+
+                <com.jyh.kxt.base.widget.LoadX5WebView2
+                    android:id="@+id/web_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="文章来源:快讯通"/>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+    </com.library.widget.PageLoadLayout>
 
-</com.library.widget.PageLoadLayout>
+</RelativeLayout>

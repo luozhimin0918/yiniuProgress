@@ -4,7 +4,7 @@ package com.jyh.kxt.av.json;
  * Created by Mr'Dai on 2017/5/4.
  */
 
-public class VideoDetailCommentBean {
+public class CommentBean {
 
     /**
      * content : 有呀

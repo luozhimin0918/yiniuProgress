@@ -1,5 +1,7 @@
 package com.jyh.kxt.main.json;
 
+import com.jyh.kxt.av.json.CommentBean;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,16 @@ import java.util.List;
  */
 
 public class NewsContentJson {
+
+//            "font_big":"<style> body p {font-size: 16px;}</style>",
+//            "font_mid":"<style> body p {font-size: 14px;}</style>",
+//            "font_small":"<style> body p {font-size: 12px;}</style>",
+//            "night_style":"<head><style> body p {color:#575757!important;} body {background:rgba(0,0,0,.7);}</style></head>",
+
     private String id;
+    private String category_id;
+    private String type;//类型
+    private String typeName;//类型名
     private String title;
     private String picture;
     private String content;
@@ -25,17 +36,31 @@ public class NewsContentJson {
     private String is_good;         // 1:Y | 0:N 点赞状态
     private String is_favor;        // 1:Y | 0:N 收藏状态
     private String source;          //文章来源
-//    private String comment:[],    //评论列表  格式和评论接口单条格式一致
+    private List<CommentBean> comment;    //评论列表  格式和评论接口单条格式一致
     private List<NewsJson> article; //相关文章 格式和list格式一致
+    private String is_follow;
+
+    /**
+     * 内容样式js
+     */
+    private String font_big;//最大字体
+    private String font_mid;//中等字体
+    private String font_small;//最小字体
+    private String night_style;//夜间模式
 
     public NewsContentJson() {
     }
 
-    public NewsContentJson(String id, String title, String picture, String content, String create_time, String num_good, String
-            num_comment, String url_share, String author_id, String author_name, String author_image, String author_profile, String
-            is_good, String is_favor, String source, List<NewsJson> article) {
+    public NewsContentJson(String id, String category_id, String type, String typeName, String title, String picture, String content,
+                           String create_time, String num_good, String num_comment, String url_share, String author_id, String
+                                   author_name, String author_image, String author_profile, String is_good, String is_favor, String
+                                   source, List<CommentBean> comment, List<NewsJson> article, String is_follow, String font_big, String
+                                   font_mid, String font_small, String night_style) {
 
         this.id = id;
+        this.category_id = category_id;
+        this.type = type;
+        this.typeName = typeName;
         this.title = title;
         this.picture = picture;
         this.content = content;
@@ -50,7 +75,13 @@ public class NewsContentJson {
         this.is_good = is_good;
         this.is_favor = is_favor;
         this.source = source;
+        this.comment = comment;
         this.article = article;
+        this.is_follow = is_follow;
+        this.font_big = font_big;
+        this.font_mid = font_mid;
+        this.font_small = font_small;
+        this.night_style = night_style;
     }
 
     public String getId() {
@@ -60,6 +91,30 @@ public class NewsContentJson {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(String category_id) {
+        this.category_id = category_id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getTitle() {
@@ -174,11 +229,59 @@ public class NewsContentJson {
         this.source = source;
     }
 
+    public List<CommentBean> getComment() {
+        return comment;
+    }
+
+    public void setComment(List<CommentBean> comment) {
+        this.comment = comment;
+    }
+
     public List<NewsJson> getArticle() {
         return article;
     }
 
     public void setArticle(List<NewsJson> article) {
         this.article = article;
+    }
+
+    public String getIs_follow() {
+        return is_follow;
+    }
+
+    public void setIs_follow(String is_follow) {
+        this.is_follow = is_follow;
+    }
+
+    public String getFont_big() {
+        return font_big;
+    }
+
+    public void setFont_big(String font_big) {
+        this.font_big = font_big;
+    }
+
+    public String getFont_mid() {
+        return font_mid;
+    }
+
+    public void setFont_mid(String font_mid) {
+        this.font_mid = font_mid;
+    }
+
+    public String getFont_small() {
+        return font_small;
+    }
+
+    public void setFont_small(String font_small) {
+        this.font_small = font_small;
+    }
+
+    public String getNight_style() {
+        return night_style;
+    }
+
+    public void setNight_style(String night_style) {
+        this.night_style = night_style;
     }
 }

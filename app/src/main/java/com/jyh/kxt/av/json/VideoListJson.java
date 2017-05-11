@@ -27,11 +27,15 @@ public class VideoListJson implements Parcelable {
     private String num_play;
     private String create_time;
 
+    private boolean isCollect;
+    private boolean isGood;
+
     /**
      * 数据库存储类型
      * DB_TYPE_BROWER 代表浏览记录
      * DB_TYPE_COLLECT_LOCAL 未登录本地收藏
      * DB_TYPE_COLLECT_NETTOLOCAL 登录之后本地收藏
+     *
      */
     private int dataType;
 
@@ -107,6 +111,31 @@ public class VideoListJson implements Parcelable {
         this.create_time = create_time;
     }
 
+    public String getUid() {
+        return this.uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public boolean isCollect() {
+        return isCollect;
+    }
+
+    public void setCollect(boolean collect) {
+        isCollect = collect;
+    }
+
+    public boolean isGood() {
+        return isGood;
+    }
+
+    public void setGood(boolean good) {
+        isGood = good;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -122,15 +151,25 @@ public class VideoListJson implements Parcelable {
         dest.writeString(this.num_good);
         dest.writeString(this.num_play);
         dest.writeString(this.create_time);
+        dest.writeByte(this.isCollect ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isGood ? (byte) 1 : (byte) 0);
         dest.writeInt(this.dataType);
     }
 
-    public String getUid() {
-        return this.uid;
+    public boolean getIsCollect() {
+        return this.isCollect;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setIsCollect(boolean isCollect) {
+        this.isCollect = isCollect;
+    }
+
+    public boolean getIsGood() {
+        return this.isGood;
+    }
+
+    public void setIsGood(boolean isGood) {
+        this.isGood = isGood;
     }
 
     public VideoListJson() {
@@ -145,12 +184,14 @@ public class VideoListJson implements Parcelable {
         this.num_good = in.readString();
         this.num_play = in.readString();
         this.create_time = in.readString();
+        this.isCollect = in.readByte() != 0;
+        this.isGood = in.readByte() != 0;
         this.dataType = in.readInt();
     }
 
-    @Generated(hash = 1293184428)
-    public VideoListJson(String uid, String category_id, String title, String picture,
-            String num_comment, String num_good, String num_play, String create_time,
+    @Generated(hash = 813080119)
+    public VideoListJson(String uid, String category_id, String title, String picture, String num_comment,
+            String num_good, String num_play, String create_time, boolean isCollect, boolean isGood,
             int dataType) {
         this.uid = uid;
         this.category_id = category_id;
@@ -160,10 +201,12 @@ public class VideoListJson implements Parcelable {
         this.num_good = num_good;
         this.num_play = num_play;
         this.create_time = create_time;
+        this.isCollect = isCollect;
+        this.isGood = isGood;
         this.dataType = dataType;
     }
 
-    public static final Creator<VideoListJson> CREATOR = new Creator<VideoListJson>() {
+    public static final Parcelable.Creator<VideoListJson> CREATOR = new Parcelable.Creator<VideoListJson>() {
         @Override
         public VideoListJson createFromParcel(Parcel source) {
             return new VideoListJson(source);
