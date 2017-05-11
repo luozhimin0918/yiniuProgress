@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/collect_video_height"
+                android:paddingBottom="@dimen/collect_padding1"
+                android:paddingLeft="@dimen/newsContentPadding"
+                android:paddingRight="@dimen/newsContentPadding"
+                android:paddingTop="@dimen/collect_padding1">
+
+    <FrameLayout
+        android:id="@+id/fl_photo"
+        android:layout_width="@dimen/collect_video_imgWidth"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/newsContentPadding">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_test"/>
+
+        <ImageView
+            android:layout_width="@dimen/collect_video_playImgSize"
+            android:layout_height="@dimen/collect_video_playImgSize"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_video_play_big"/>
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/fl_photo"
+        android:maxLines="3"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/describe_font_size4"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/fl_photo"
+        android:drawableLeft="@mipmap/icon_explore_time"
+        android:drawablePadding="@dimen/collect_padding2"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/describe_font_size1"/>
+
+    <TextView
+        android:id="@+id/tv_playCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/collect_padding3"
+        android:drawableLeft="@mipmap/icon_collect_play_smail"
+        android:drawablePadding="@dimen/collect_padding2"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/describe_font_size1"/>
+</RelativeLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/collect_news_height"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/collect_padding1"
+                android:paddingLeft="@dimen/newsContentPadding"
+                android:paddingRight="@dimen/newsContentPadding"
+                android:paddingTop="@dimen/collect_padding1">
+
+    <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="@dimen/newsItemImageViewWidth"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ico_def_load"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/newsItemTitleMarginLeft"
+        android:layout_toRightOf="@id/iv_photo"
+        android:lineSpacingMultiplier="1.2"
+        android:maxLines="2"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/content_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_title"
+        android:layout_alignParentBottom="true"
+        android:text="文/快讯通"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size1"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/min_font_size"/>
+</RelativeLayout>
