@@ -612,4 +612,12 @@ public class NewsItemPresenter extends BasePresenter {
             });
         }
     }
+
+    public void clearBrowerHistory() {
+        try {
+            newsAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -7,7 +7,6 @@ import android.support.annotation.RequiresApi;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
 
 import java.util.Objects;
 
@@ -28,14 +27,13 @@ public class NewsJson implements Parcelable {
     private String href;     //用于webview直接打开的链接
     private String o_action;
     private String o_class;
-    @Id
     private String o_id;
 
     /**
      * 数据库存储类型
-     * DB_NEWS_TYPE_BROWER 代表浏览记录
-     * DB_NEWS_TYPE_COLLECT_LOCAL 未登录本地收藏
-     * DB_NEWS_TYPE_COLLECT_NETTOBROWER 登录之后本地收藏
+     * DB_TYPE_BROWER 代表浏览记录
+     * DB_TYPE_COLLECT_LOCAL 未登录本地收藏
+     * DB_TYPE_COLLECT_NETTOLOCAL 登录之后本地收藏
      */
     private int dataType;
 
@@ -149,9 +147,9 @@ public class NewsJson implements Parcelable {
         o_id = parcel.readString();
     }
 
-    @Generated(hash = 1168465312)
+    @Generated(hash = 196233574)
     public NewsJson(String title, String picture, String author, String datetime, String type, String href, String o_action, String o_class,
-                    String o_id) {
+            String o_id, int dataType) {
         this.title = title;
         this.picture = picture;
         this.author = author;
@@ -161,6 +159,7 @@ public class NewsJson implements Parcelable {
         this.o_action = o_action;
         this.o_class = o_class;
         this.o_id = o_id;
+        this.dataType = dataType;
     }
 
     @Generated(hash = 1974929583)

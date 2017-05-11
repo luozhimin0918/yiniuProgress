@@ -1,16 +1,25 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.main.presenter.NewsItemPresenter;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
+
+import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 /**
  * 项目名:Kxt
@@ -51,6 +60,16 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
 
     }
 
+    @Subscribe(threadMode = MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_CLEAR_BROWER:
+                //清理浏览记录
+                newsItemPresenter.clearBrowerHistory();
+                break;
+        }
+    }
+
     @Override
     public void onPullDownToRefresh(PullToRefreshBase refreshView) {
         newsItemPresenter.onPullDownToRefresh(refreshView);
@@ -65,5 +84,25 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     public void OnAfreshLoad() {
         plRootView.loadWait();
         newsItemPresenter.reLoad();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
