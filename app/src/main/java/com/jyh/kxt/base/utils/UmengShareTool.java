@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -75,8 +76,9 @@ public class UmengShareTool {
      * @param activity
      * @param shareBean
      * @param view
+     * @param observerData
      */
-    public static void initUmengLayout(final BaseActivity activity, ShareJson shareBean, View view, ObserverData observerData) {
+    public static void initUmengLayout(final BaseActivity activity, ShareJson shareBean, Object o, View view, ObserverData observerData) {
 
         View rootView = LayoutInflater.from(activity).inflate(R.layout.dialog_umeng_share, null, false);
         rootView.findViewById(R.id.ll_rootView).setOnClickListener(new View.OnClickListener() {
@@ -172,8 +174,12 @@ public class UmengShareTool {
         };
         DisplayMetrics metrics = SystemUtil.getScreenDisplay(activity);
         shareLayout = new PopupWindow(rootView, metrics.widthPixels, metrics.heightPixels);
+
+        shareLayout.setFocusable(true);
+        ColorDrawable dw = new ColorDrawable(0x00000000);
+        shareLayout.setBackgroundDrawable(dw);
         //设置分享按钮
-        setShareBtn(activity, shareBean, rootView, observerData);
+        setShareBtn(activity, shareBean, o, rootView, observerData);
 
         int statuBarHeight = SystemUtil.getStatuBarHeight(activity);
         rootView.setPadding(0, 0, 0, statuBarHeight);
@@ -260,9 +266,10 @@ public class UmengShareTool {
      *
      * @param activity
      * @param shareBean
+     * @param o
      * @param rootView
      */
-    private static void setShareBtn(final BaseActivity activity, final ShareJson shareBean, final
+    private static void setShareBtn(final BaseActivity activity, final ShareJson shareBean, final Object o, final
     View rootView, final ObserverData observerData) {
 
         final UMShareAPI umShareAPI = UMShareAPI.get(activity);
@@ -423,19 +430,20 @@ public class UmengShareTool {
                         break;
                     case 1:
                         //收藏
-                        CollectUtils.collect(activity, shareBean.getId(), shareBean.getCollectType(), observerData, new
-                                ObserverData<Boolean>() {
-                                    @Override
-                                    public void callback(Boolean o) {
-                                        //改变umeng面板收藏按钮状态
-                                        functionAdapter2.changeStatus(position, o);
-                                    }
+                        CollectUtils.collect(activity, VarConstant.COLLECT_TYPE_VIDEO, o,
+                                observerData, new
+                                        ObserverData<Boolean>() {
+                                            @Override
+                                            public void callback(Boolean o) {
+                                                //改变umeng面板收藏按钮状态
+                                                functionAdapter2.changeStatus(position, o);
+                                            }
 
-                                    @Override
-                                    public void onError(Exception e) {
-
-                                    }
-                                });
+                                            @Override
+                                            public void onError(Exception e) {
+                                                ToastView.makeText3(activity, "收藏失败");
+                                            }
+                                        });
                         break;
                     case 2:
                         //赞
@@ -449,7 +457,7 @@ public class UmengShareTool {
 
                             @Override
                             public void onError(Exception e) {
-
+                                ToastView.makeText3(activity, "点赞失败");
                             }
                         });
                         break;

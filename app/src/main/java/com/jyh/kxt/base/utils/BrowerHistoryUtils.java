@@ -6,8 +6,15 @@ import android.os.Build;
 
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
+import com.jyh.kxt.base.dao.NewsJsonDao;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
+import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.greendao.query.DeleteQuery;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
@@ -28,12 +35,18 @@ public class BrowerHistoryUtils {
      */
     public static void save(Context context, NewsJson news) {
         try {
-            news.setDataType(VarConstant.DB_NEWS_TYPE_BROWER);
-            DaoSession daoSessionWrit = DBManager.getInstance(context).getDaoSessionWrit();
-            daoSessionWrit.getNewsJsonDao().insertOrReplace(news);
+            news.setDataType(VarConstant.DB_TYPE_BROWER);
+            DBManager instance = DBManager.getInstance(context);
+            List<NewsJson> newsJsons = instance.getDaoSessionRead().getNewsJsonDao().queryRaw("WHERE O_ID=? AND DATA_TYPE=?", new
+                    String[]{news.getO_id(), "" + VarConstant.DB_TYPE_BROWER});
+            if (newsJsons.size() == 0) {
+                DaoSession daoSessionWrit = instance.getDaoSessionWrit();
+                daoSessionWrit.getNewsJsonDao().insert(news);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -42,7 +55,16 @@ public class BrowerHistoryUtils {
      * @param context
      */
     public static void clear(Context context) {
-        DBManager.getInstance(context).getDaoSessionWrit().getNewsJsonDao().deleteAll();
+        try {
+            DBManager instance = DBManager.getInstance(context);
+            QueryBuilder qb = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder();
+            DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_BROWER)).buildDelete();
+            bd.executeDeleteWithoutDetachingEntities();
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CLEAR_BROWER, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastView.makeText3(context, "浏览记录,删除失败");
+        }
     }
 
     /**
@@ -52,7 +74,9 @@ public class BrowerHistoryUtils {
      * @return
      */
     public static List<NewsJson> getHistory(Context context) {
-        List<NewsJson> list = DBManager.getInstance(context).getDaoSessionRead().getNewsJsonDao().loadAll();
+        List<NewsJson> list = DBManager.getInstance(context).getDaoSessionRead().getNewsJsonDao().queryRaw("WHERE DATA_TYPE=?",
+                VarConstant.DB_TYPE_BROWER
+                        + "");
         return list;
     }
 
@@ -69,7 +93,7 @@ public class BrowerHistoryUtils {
         List<NewsJson> newsJsons = DBManager.getInstance(context)
                 .getDaoSessionRead()
                 .getNewsJsonDao()
-                .queryRaw("WHERE O_ID = ?", newsJson.getO_id());
+                .queryRaw("WHERE O_ID = ? AND DATA_TYPE=?", new String[]{newsJson.getO_id(), VarConstant.DB_TYPE_BROWER + ""});
 
         return newsJsons.size() == 0 ? false : true;
     }
