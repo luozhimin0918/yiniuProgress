@@ -34,6 +34,7 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
@@ -43,12 +44,14 @@ import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 import com.library.widget.window.ToastView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,7 +70,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     @BindObject
     EditUserInfoActivity activity;
 
-    private OptionsPickerView cityPicker, genderPicker;
+    private OptionsPickerView cityPicker, genderPicker, workPicker;
     private TimePickerView birthdayPicker;
 
     private ArrayList<ProvinceJson> options1Items = new ArrayList<>();//省
@@ -83,6 +86,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     private String address;//地区
     private int sexInt;//性别 0 保密 1 男 2 女
     private String birthdayStr;//年龄 1999-11-01
+    private String work;//工作
 
     private VolleyRequest request;
 
@@ -188,6 +192,39 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             return;
         }
         genderPicker.show();
+    }
+
+    /**
+     * 显示工作选择器
+     */
+    public void showWork() {
+        if (workPicker == null) {
+            String[] works = mContext.getResources().getStringArray(R.array.work);
+            final List<String> worksList = Arrays.asList(works);
+            workPicker = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
+                @Override
+                public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                    //返回的分别是三个级别的选中位置
+                    work = worksList.get(options1);
+                    activity.setWork(work);
+                }
+            })
+
+                    .setTitleText("")
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
+                    .setSelectOptions(sexInt)
+                    .setContentTextSize(pickerTextSize)
+                    .setOutSideCancelable(true)// default is true
+                    .setDecorView(activity.fl_picker)
+                    .build();
+
+            workPicker.setPicker(worksList);//一级选择器
+        }
+        if (workPicker.isShowing()) {
+            return;
+        }
+        workPicker.show();
     }
 
     /**
@@ -365,7 +402,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         }
     }
 
-    public void postChangedInfo(String photo, String nickname, String work) {
+    public void postChangedInfo(String photo, final String nickname) {
         if (request == null)
             request = new VolleyRequest(mContext, mQueue);
 
@@ -374,6 +411,11 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             protected void onResponse(Object o) {
                 try {
                     activity.dismissWaitDialog();
+                    UserJson oldUser = LoginUtils.getUserInfo(mContext);
+                    UserJson newUser = new UserJson(oldUser.getToken(), nickname, "", oldUser.getUid(), sexInt, oldUser.getEmail(),
+                            address, work, birthdayStr);
+                    LoginUtils.changeUserInfo(mContext, newUser);
+                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

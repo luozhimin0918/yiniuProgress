@@ -13,6 +13,7 @@ public class EventBusClass {
     public static final int EVENT_LOGIN = 2;//登录
     public static final int EVENT_LOGOUT = 3;//退出登录
     public static final int EVENT_CLEAR_BROWER = 4;//删除浏览记录
+    public static final int EVENT_CHANGEUSERINFO = 5;//更新用户信息
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

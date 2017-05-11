@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/actionbar_height"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/newsContentPadding"
+            android:paddingLeft="@dimen/newsContentPadding3"
             android:text="2017-1-1 星期一"/>
 
         <View
@@ -71,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginTop="@dimen/newsContentPadding"
+                        android:layout_marginTop="@dimen/newsContentPadding3"
                         android:drawableLeft="@mipmap/icon_video_line"
                         android:gravity="center_vertical"
                         android:text="推荐要闻"

@@ -10,16 +10,16 @@
         android:id="@+id/wv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/newsContentPadding"
-        android:paddingRight="@dimen/newsContentPadding"/>
+        android:paddingLeft="@dimen/newsContentPadding3"
+        android:paddingRight="@dimen/newsContentPadding3"/>
 
     <TextView
         android:id="@+id/tv_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/newsSourcePadding"
-        android:layout_marginTop="@dimen/newsSourcePadding"
-        android:paddingLeft="@dimen/newsContentPadding"
+        android:layout_marginBottom="@dimen/newsContentPadding4"
+        android:layout_marginTop="@dimen/newsContentPadding4"
+        android:paddingLeft="@dimen/newsContentPadding3"
         android:textSize="@dimen/describe_font_size3"
         android:text="文章来源:快讯通财经"
         />
@@ -28,8 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/newsContentPadding"
-        android:paddingRight="@dimen/newsContentPadding">
+        android:paddingLeft="@dimen/newsContentPadding3"
+        android:paddingRight="@dimen/newsContentPadding3">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -48,8 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingLeft="@dimen/newsDingPadding1"
-                android:paddingRight="@dimen/newsDingPadding2"
+                android:paddingLeft="@dimen/newsContentPadding1"
+                android:paddingRight="@dimen/newsContentPadding2"
                 android:textColor="@color/font_color6"
                 android:textSize="@dimen/min_font_size"
                 android:text="111"

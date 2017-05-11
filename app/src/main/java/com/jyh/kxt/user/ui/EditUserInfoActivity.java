@@ -192,6 +192,14 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     /**
+     * 设置工作
+     * @param work
+     */
+    public void setWork(String work) {
+        tvWork.setText(work);
+    }
+
+    /**
      * 设置性别
      *
      * @param gender
@@ -260,6 +268,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.rl_work:
                 //修改工作
+                editUserInfoPresenter.showWork();
                 break;
             case R.id.rl_changePwd:
                 //修改密码
@@ -374,4 +383,5 @@ public class EditUserInfoActivity extends BaseActivity {
         lastByte = bitmapByte;
         ivPhoto.setImageBitmap(bitmap);
     }
+
 }

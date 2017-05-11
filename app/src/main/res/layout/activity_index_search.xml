@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/searchPadding1"
-        android:paddingLeft="@dimen/newsContentPadding"
-        android:paddingRight="@dimen/newsContentPadding"
+        android:paddingLeft="@dimen/newsContentPadding3"
+        android:paddingRight="@dimen/newsContentPadding3"
         android:paddingTop="@dimen/searchPadding1"
         >
 
@@ -33,7 +33,7 @@
             android:id="@+id/tv_break"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/newsContentPadding"
+            android:layout_marginLeft="@dimen/newsContentPadding3"
             android:gravity="center"
             android:text="取消"
             android:textColor="@color/font_color8"

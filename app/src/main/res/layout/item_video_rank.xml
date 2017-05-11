@@ -19,7 +19,7 @@
             android:id="@+id/iv_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/icon_test"/>
+            android:scaleType="fitXY"/>
 
         <ImageView
             android:layout_width="@dimen/rankItemPlaySize"
@@ -38,7 +38,6 @@
         android:lineSpacingExtra="@dimen/rankItemTitleLineSpacingExtra"
         android:maxLines="2"
         android:paddingTop="@dimen/rankItemTitlePaddingTop"
-        android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈都会撒谎发快递或发哦地方"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/describe_font_size4"
         />
@@ -52,7 +51,6 @@
         android:layout_toRightOf="@id/fl_photo"
         android:drawableLeft="@mipmap/icon_video_time"
         android:drawablePadding="@dimen/rankItemTimeDrawablePadding"
-        android:text="2017-1-1"
         android:textColor="@color/font_color3"/>
 
     <ImageView
@@ -62,6 +60,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/rankItemRankImgMarginBottom"
-        android:src="@mipmap/icon_rank1"
         />
 </RelativeLayout>

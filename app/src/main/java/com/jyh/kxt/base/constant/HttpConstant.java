@@ -88,7 +88,8 @@ public class HttpConstant {
     public static final String USER_REGISTER = BASE_URL + "user/register";//注册
     public static final String USER_FORGET = BASE_URL + "user/login_from";//忘记密码
     public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
-    public static final String USER_CHANEINFO = BASE_URL + "member/modify_profile";//修改资料 picture、uid、token、address、sex、work、nickname、birthday
+    public static final String USER_CHANEINFO = BASE_URL + "member/modify_profile";//修改资料
+    // picture、uid、token、address、sex、work、nickname、birthday
 
     /**
      * 收藏
@@ -101,6 +102,8 @@ public class HttpConstant {
     // 2}&id={1,2,3,4}
     public static final String COLLECT_ADD = BASE_URL + "favor/addFavor";//收藏-添加 ?uid={}?id={}?type={} type: video |
     // article
+    public static final String COLLECT_ADDS = BASE_URL + "favor/batchAddFavor";//收藏-批量添加 ?uid={}?id={}?type={}
+
     public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video
     // | article
 

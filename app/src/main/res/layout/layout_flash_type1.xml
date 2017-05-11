@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="@dimen/flash_info_lineSpacingExtra1"
-        android:padding="@dimen/newsContentPadding"
+        android:padding="@dimen/newsContentPadding3"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/content_font_size2"/>
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="@dimen/flash_info_lineSpacingExtra2"
-        android:padding="@dimen/newsContentPadding"
+        android:padding="@dimen/newsContentPadding3"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/content_font_size2"/>
 

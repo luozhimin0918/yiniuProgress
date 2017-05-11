@@ -13,7 +13,7 @@
             android:id="@+id/iv_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"/>
+            android:scaleType="fitXY"/>
 
         <ImageView
             android:id="@+id/iv_playBtn"
@@ -30,7 +30,6 @@
             android:background="@color/translucent_color"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/videoItemTitlePaddingLeft"
-            android:text="防守打法复活吧富不过都是"
             android:textColor="@color/font_color4"
             android:textSize="@dimen/describe_font_size4"/>
     </FrameLayout>
@@ -46,8 +45,7 @@
         <TextView
             android:id="@+id/tv_time"
             style="@style/VideoItemStyle"
-            android:drawableLeft="@mipmap/icon_video_time"
-            android:text="2017-1-1"/>
+            android:drawableLeft="@mipmap/icon_video_time"/>
 
         <ImageView
             android:id="@+id/iv_more"
@@ -61,16 +59,14 @@
             style="@style/VideoItemStyle"
             android:layout_marginRight="@dimen/videoItemTextPadding"
             android:layout_toLeftOf="@id/iv_more"
-            android:drawableLeft="@mipmap/icon_video_play_small"
-            android:text="3400"/>
+            android:drawableLeft="@mipmap/icon_video_play_small"/>
 
         <TextView
             android:id="@+id/tv_commentCount"
             style="@style/VideoItemStyle"
             android:layout_marginRight="@dimen/videoItemTextPadding"
             android:layout_toLeftOf="@id/tv_playCount"
-            android:drawableLeft="@mipmap/icon_video_comment"
-            android:text="3400"/>
+            android:drawableLeft="@mipmap/icon_video_comment"/>
 
     </RelativeLayout>
 

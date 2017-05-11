@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/newsContentPadding"
-            android:layout_marginRight="@dimen/newsContentPadding"
+            android:layout_marginLeft="@dimen/newsContentPadding3"
+            android:layout_marginRight="@dimen/newsContentPadding3"
             android:layout_marginTop="@dimen/searchMargin">
 
             <TextView
@@ -47,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/searchMargin2"
-            android:paddingLeft="@dimen/newsContentPadding"
-            android:paddingRight="@dimen/newsContentPadding"
+            android:paddingLeft="@dimen/newsContentPadding3"
+            android:paddingRight="@dimen/newsContentPadding3"
             android:paddingTop="@dimen/searchPadding3"
             zhy:max_select="-1"
             zhy:auto_select_effect="false"
@@ -64,8 +64,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/newsContentPadding"
-            android:paddingRight="@dimen/newsContentPadding">
+            android:paddingLeft="@dimen/newsContentPadding3"
+            android:paddingRight="@dimen/newsContentPadding3">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -15,7 +15,7 @@
             android:id="@+id/iv_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/icon_test"
+            android:scaleType="fitXY"
             />
 
         <ImageView
@@ -33,7 +33,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:paddingTop="1dp"
-        android:text="打算打算发到付的机会不可激发干部违规发言的改"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/describe_font_size2"/>
 

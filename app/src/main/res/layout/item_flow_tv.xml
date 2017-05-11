@@ -5,8 +5,8 @@
           android:layout_margin="5dp"
           android:background="@drawable/bg_edt"
           android:paddingBottom="@dimen/searchItemPadding2"
-          android:paddingLeft="@dimen/newsContentPadding"
-          android:paddingRight="@dimen/newsContentPadding"
+          android:paddingLeft="@dimen/newsContentPadding3"
+          android:paddingRight="@dimen/newsContentPadding3"
           android:paddingTop="@dimen/searchItemPadding2"
           android:textColor="@color/font_color1">
 

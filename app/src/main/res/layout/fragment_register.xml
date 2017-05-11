@@ -75,8 +75,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/newsContentPadding"
-        android:layout_marginTop="@dimen/newsContentPadding"
+        android:layout_marginBottom="@dimen/newsContentPadding3"
+        android:layout_marginTop="@dimen/newsContentPadding3"
         android:gravity="center"
         android:orientation="horizontal">
 

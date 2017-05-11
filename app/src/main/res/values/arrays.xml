@@ -64,4 +64,16 @@
         <item>石油</item>
         <item>外汇</item>
     </string-array>
+
+    <string-array name="work">
+        <item>金融</item>
+        <item>教育</item>
+        <item>IT</item>
+        <item>媒体</item>
+        <item>零售</item>
+        <item>农业</item>
+        <item>律师</item>
+        <item>医疗服务</item>
+        <item>其他</item>
+    </string-array>
 </resources>

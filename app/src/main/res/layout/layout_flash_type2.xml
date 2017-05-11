@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:padding="@dimen/newsContentPadding">
+              android:padding="@dimen/newsContentPadding3">
 
     <TextView
         android:id="@+id/tv_rl_title"
