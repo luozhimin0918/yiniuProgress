@@ -97,7 +97,8 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     }
 
     public void setData(List<NewsJson> data) {
-        dataList = data;
+        dataList.clear();
+        dataList.addAll(data);
         notifyDataSetChanged();
     }
 

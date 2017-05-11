@@ -72,7 +72,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
 
         for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
                 flash.setColloct(true);
             } else {
                 flash.setColloct(false);
@@ -89,13 +89,14 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     public void setData(List<FlashJson> flashJsons) {
         for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
                 flash.setColloct(true);
             } else {
                 flash.setColloct(false);
             }
         }
-        this.flashJsons = flashJsons;
+        this.flashJsons.clear();
+        this.flashJsons.addAll(flashJsons);
         inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
         notifyDataSetChanged();
@@ -104,7 +105,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     public void addData(FlashJson flashJson) {
 
-        if (CollectUtils.flashIsCollect(context, flashJson.toString())) {
+        if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flashJson)) {
             flashJson.setColloct(true);
         } else {
             flashJson.setColloct(false);
@@ -118,7 +119,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     public void addData(List<FlashJson> flashJsons) {
 
         for (FlashJson flash : flashJsons) {
-            if (CollectUtils.flashIsCollect(context, flash.toString())) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
                 flash.setColloct(true);
             } else {
                 flash.setColloct(false);
@@ -577,7 +578,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             @Override
             public void onClick(View v) {
                 if (flash.isColloct()) {
-                    CollectUtils.flashUnCollect(context, JSON.toJSONString(flash), new ObserverData() {
+                    CollectUtils.unCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash, new ObserverData() {
                         @Override
                         public void callback(Object o) {
                             flash.setColloct(false);
@@ -588,9 +589,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         public void onError(Exception e) {
                             ToastView.makeText3(context, "取消收藏失败");
                         }
-                    });
+                    }, null);
                 } else {
-                    CollectUtils.flashCollect(context, JSON.toJSONString(flash), new ObserverData() {
+                    CollectUtils.collect(context, VarConstant.COLLECT_TYPE_FLASH, flash, new ObserverData() {
                         @Override
                         public void callback(Object o) {
                             flash.setColloct(true);
@@ -601,7 +602,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         public void onError(Exception e) {
                             ToastView.makeText3(context, "收藏失败");
                         }
-                    });
+                    }, null);
                 }
             }
         });
@@ -642,7 +643,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     }
 
                     UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl, discription, image, null,
-                            UmengShareTool.TYPE_VIDEO, null, null, null, false, false), ivShare, null);
+                            UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flash, ivShare, null);
 
                 } catch (Exception e) {
                     e.printStackTrace();
