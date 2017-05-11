@@ -363,4 +363,16 @@
     <dimen name="forget_imgSize">20dp</dimen>
 
     <dimen name="emoJe_item_size">30dp</dimen>
+
+    <!-- 收藏 -->
+    <dimen name="collect_padding1">7.5dp</dimen>
+    <dimen name="collect_padding2">8dp</dimen>
+    <dimen name="collect_padding3">10dp</dimen>
+
+    <dimen name="collect_video_height">93dp</dimen>
+    <dimen name="collect_video_imgWidth">140dp</dimen>
+    <dimen name="collect_video_playImgSize">50dp</dimen>
+
+    <dimen name="collect_news_height">79dp</dimen>
+
 </resources>
