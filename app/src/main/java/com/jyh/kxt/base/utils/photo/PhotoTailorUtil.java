@@ -161,6 +161,7 @@ public class PhotoTailorUtil {
                 }
                 break;
         }
+
     }
 
     private PopupWindow wait;
