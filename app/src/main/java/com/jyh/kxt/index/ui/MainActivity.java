@@ -248,11 +248,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_collect:
                 //收藏
-                if (LoginUtils.isLogined(this)) {
-                    startActivity(new Intent(this, CollectActivity.class));
-                } else {
-                    ToastView.makeText3(this, "请先登录");
-                }
+                startActivity(new Intent(this, CollectActivity.class));
                 break;
             case R.id.fl_search:
                 //搜索
