@@ -123,7 +123,6 @@ public class VideoItemPresenter extends BasePresenter {
                     if (list != null) {
                         checkList(list);
                         videoAdapter.addData(list);
-                        videoAdapter.notifyDataSetChanged();
                     }
                     refreshView.onRefreshComplete();
                 }
