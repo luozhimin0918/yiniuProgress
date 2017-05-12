@@ -43,7 +43,7 @@ public class VideoDetailPresenter extends BasePresenter {
                 CommentAdapter commentAdapter = new CommentAdapter(mContext, videoDetailBean.getComment());
                 videoDetailActivity.rvMessage.setAdapter(commentAdapter);
 
-                videoDetailActivity.commentPresenter.createHeadView(videoDetailActivity.rvMessage);
+                videoDetailActivity.commentPresenter.bindListView(videoDetailActivity.rvMessage);
                 videoDetailActivity.commentPresenter.createMoreVideoView(videoDetailBean.getVideo());
             }
 

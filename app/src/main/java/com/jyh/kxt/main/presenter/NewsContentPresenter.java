@@ -1,10 +1,8 @@
 package com.jyh.kxt.main.presenter;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.av.adapter.CommentAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -12,9 +10,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.library.base.http.HttpListener;
-import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.util.EncryptionUtils;
 
 
 /**
@@ -27,48 +23,40 @@ import com.library.util.EncryptionUtils;
 public class NewsContentPresenter extends BasePresenter {
 
     @BindObject NewsContentActivity newsContentActivity;
-    private RequestQueue queue;
-    private VolleyRequest request;
 
     public NewsContentPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 
-    public void init() {
+    /**
+     * 请求初始化评论
+     */
+    public void requestInitComment() {
 
-        newsContentActivity.plRootView.loadWait();
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("id", newsContentActivity.id);
 
-        queue = newsContentActivity.getQueue();
-        request = new VolleyRequest(mContext, queue);
-        request.doGet(getUrl(request), new HttpListener<NewsContentJson>() {
+        volleyRequest.doGet(HttpConstant.NEWS_CONTENT, jsonParam, new HttpListener<NewsContentJson>() {
             @Override
-            protected void onResponse(NewsContentJson news) {
-                if (news != null)
-                    newsContentActivity.setView(news);
+            protected void onResponse(NewsContentJson newsContentJson) {
+                //创建相关文章
+                newsContentActivity.commentPresenter.createMoreView(newsContentJson.getArticle());
+
+                CommentAdapter commentAdapter = new CommentAdapter(mContext, newsContentJson.getComment());
+                newsContentActivity.ptrLvMessage.setAdapter(commentAdapter);
+
+                if (newsContentJson.getComment() == null || newsContentJson.getComment().size() == 0) {
+                    newsContentActivity.commentPresenter.createNoneComment();
+                }
+
+                newsContentActivity.createWebViewAndHead(newsContentJson);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                try {
-                    newsContentActivity.plRootView.loadError();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
-    }
-
-    private String getUrl(VolleyRequest volleyRequest) {
-
-        String url = HttpConstant.NEWS_CONTENT;
-        try {
-            JSONObject object = volleyRequest.getJsonParam();
-            object.put(VarConstant.HTTP_ID, newsContentActivity.id);
-            url = url + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return url;
     }
 }

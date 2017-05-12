@@ -6,16 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.bean.MarketItemBean;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Mr'Dai on 2017/4/26.
@@ -43,12 +40,28 @@ public class MarketRecommendAdapter extends RecyclerView.Adapter<MarketRecommend
 
         MyViewHolder mh = new MyViewHolder(v);
         mh.setBinding(dataBinding);
+
         return mh;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         MarketItemBean marketItemBean = marketItemBeanList.get(position);
+
+        int highsOrLows = MarketUtil.isHighsOrLows(marketItemBean.getRange());
+        switch (highsOrLows) {
+            case 1:
+                marketItemBean.setPrice(marketItemBean.getPrice() + " ↑");
+                break;
+            case -1:
+                marketItemBean.setPrice(marketItemBean.getPrice() + " ↓");
+                break;
+            case 0:
+                break;
+        }
+
+        String range = marketItemBean.getRange();
+
 
         ItemMarketRecommendBinding binding = holder.getBinding();
         binding.setBean(marketItemBean);
@@ -60,17 +73,10 @@ public class MarketRecommendAdapter extends RecyclerView.Adapter<MarketRecommend
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tv_name) TextView tvName;
-        @BindView(R.id.tv_new_price) TextView tvNewPrice;
-        @BindView(R.id.tv_change_val) TextView tvChangeVal;
-        @BindView(R.id.tv_change_range) TextView tvChangeRange;
-
         private ItemMarketRecommendBinding binding;
 
         public MyViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
         }
 
         public ItemMarketRecommendBinding getBinding() {

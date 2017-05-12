@@ -66,6 +66,7 @@ public class VolleyRequest {
 
     public <T> void doGet(String url, JSONObject mParams, HttpListener<T> mHttpListener) {
         try {
+            LogUtil.e("参数:", "" + mParams);
             url = url + EncryptionUtils.createJWT(VarConstant.KEY, mParams.toString());
             enqueue(Request.Method.GET, url, null, mHttpListener);
         } catch (Exception e) {

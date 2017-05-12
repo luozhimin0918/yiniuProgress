@@ -95,7 +95,18 @@ public class MarketMainPresenter extends BasePresenter {
     private void createMainView(MarketMainBean marketBean) {
         createPaddingView(1);
         RecyclerView recommendView = new RecyclerView(mContext);
-        recommendView.setLayoutManager(new GridLayoutManager(mContext, 3));
+        GridLayoutManager layout = new GridLayoutManager(mContext, 3){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recommendView.setLayoutManager(layout);
         recommendView.addItemDecoration(new DividerGridItemDecoration(mContext));
 
         MarketRecommendAdapter adapter = new MarketRecommendAdapter(mContext, marketBean.getData());

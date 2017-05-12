@@ -11,10 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.dao.EmojeBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonLinearLayout;
@@ -29,8 +27,6 @@ import butterknife.OnClick;
  */
 
 public class ReplyMessagePresenter extends BasePresenter {
-
-    @BindObject VideoDetailActivity videoDetailActivity;
 
     @BindView(R.id.tv_publish) TextView tvPublish;
     @BindView(R.id.fl_emoje) FrameLayout flEmoJe;

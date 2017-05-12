@@ -34,7 +34,6 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
 import com.library.util.CommonUtil;
 import com.library.util.SystemUtil;
-import com.library.util.softinputkeyboard.KeyboardChangeListener;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 
@@ -220,8 +219,7 @@ public class EditUserInfoActivity extends BaseActivity {
             case R.id.iv_bar_function:
                 //提交更改
                 showWaitDialog(null);
-                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString(),
-                        tvWork.getText().toString());
+                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString());
                 break;
             case R.id.rl_photo:
                 //修改头像

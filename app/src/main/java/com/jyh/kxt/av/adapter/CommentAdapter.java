@@ -119,8 +119,6 @@ public class CommentAdapter extends BaseAdapter {
 
                 mViewHolder2.tvPrimaryMessage.setText(String.valueOf(commentBean.getParent_num_reply()));
                 mViewHolder2.tvPrimaryTime.setText(getSimpleTime(commentBean.getParent_create_time()));
-
-//                mViewHolder2.tvPrimaryContent.setText(videoDetailCommentBean.getParent_content());
                 mViewHolder2.tvPrimaryContent.convertToGif(commentBean.getParent_content());
 
                 break;
@@ -150,7 +148,6 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvThumb.updateThumbState(commentBean.getId());
 
         baseViewHolder.tvMessage.setText(String.valueOf(commentBean.getNum_reply()));
-//        baseViewHolder.tvContent.setText(videoDetailCommentBean.getContent());
         baseViewHolder.tvContent.convertToGif(commentBean.getContent());
         return convertView;
     }

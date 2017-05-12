@@ -2,6 +2,7 @@ package com.jyh.kxt.base.presenter;
 
 import android.app.Activity;
 import android.app.Service;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
+import com.jyh.kxt.main.json.NewsJson;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import java.util.List;
@@ -46,24 +49,28 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
     @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
 
+
+    private LinearLayout headView;
     private PopupUtil replyMessagePopup;
     private ReplyMessagePresenter replyMessagePresenter;
 
-    public void createHeadView(PullToRefreshListView listView) {
+    public void bindListView(PullToRefreshListView listView) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        LinearLayout headView = (LinearLayout) mInflater.inflate(R.layout.view_comment_list, null);
+        headView = (LinearLayout) mInflater.inflate(R.layout.view_comment_list, null);
 
         ButterKnife.bind(this, headView);
 
-
         listView.getRefreshableView().addHeaderView(headView);
-
         tvReplyMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showReplyMessageView(tvReplyMessage);
             }
         });
+    }
+
+    public LinearLayout getHeadView() {
+        return headView;
     }
 
     /**
@@ -86,6 +93,44 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         }
     }
 
+    /**
+     * 创建  填充更多的视图
+     */
+    public void createMoreView(List<NewsJson> articleList) {
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        for (NewsJson mArticleJson : articleList) {
+
+            String imageUrl = HttpConstant.IMG_URL + mArticleJson.getPicture();
+
+            View moreVideoView = mInflater.inflate(R.layout.item_more_video, llMoreVideo, false);
+            ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
+            TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
+
+            Glide.with(mContext).load(imageUrl).override(100, 100).into(ivVideoCover);
+            ivVideoName.setText(mArticleJson.getTitle());
+
+            llMoreVideo.addView(moreVideoView);
+        }
+    }
+
+    public void createNoneComment() {
+        int noneCommentHeight = SystemUtil.dp2px(mContext, 100);
+        LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, noneCommentHeight);
+
+        commentParams.gravity = Gravity.CENTER;
+
+        TextView tvNoneComment = new TextView(mContext);
+        tvNoneComment.setLayoutParams(commentParams);
+        tvNoneComment.setText("暂无评论,点击抢沙发");
+
+        tvNoneComment.setGravity(Gravity.CENTER);
+
+        int color = ContextCompat.getColor(mContext, R.color.blue);
+        tvNoneComment.setTextColor(color);
+
+        headView.addView(tvNoneComment);
+    }
 
     /**
      * 弹出回复的PopWindow

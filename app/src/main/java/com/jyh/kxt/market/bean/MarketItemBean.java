@@ -30,13 +30,13 @@ public class MarketItemBean extends BaseObservable {
     @Bindable
     private String range;
 
-    public String getChange() {
-        return change;
-    }
-
     public void setChange(String change) {
         this.change = change;
         notifyPropertyChanged(BR.change);
+    }
+
+    public String getChange() {
+        return change;
     }
 
     public String getCode() {

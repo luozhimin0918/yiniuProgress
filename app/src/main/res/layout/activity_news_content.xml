@@ -6,6 +6,13 @@
     android:background="@color/theme1"
     android:orientation="vertical">
 
+    <com.library.widget.handmark.PullToRefreshListView
+        android:id="@+id/rv_message"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/ll_nav"
+        android:layout_height="match_parent" />
+
+
     <LinearLayout
         android:id="@+id/ll_nav"
         android:layout_width="match_parent"
@@ -41,26 +48,5 @@
 
     </LinearLayout>
 
-    <com.library.widget.PageLoadLayout
-        android:id="@+id/pl_rootView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ll_nav"
-        >
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-            </LinearLayout>
-        </ScrollView>
-    </com.library.widget.PageLoadLayout>
 
 </RelativeLayout>

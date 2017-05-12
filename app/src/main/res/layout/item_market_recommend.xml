@@ -34,6 +34,8 @@
             android:layout_marginTop="11dp"
             android:text="@{bean.price}"
             android:textSize="@dimen/describe_font_size4"
+            android:tag="arrows"
+            app:bindingRange="@{bean.range}"
             android:textStyle="bold"/>
 
         <TextView
@@ -43,7 +45,8 @@
             android:layout_below="@+id/tv_new_price"
             android:layout_marginTop="9dp"
             android:text="@{bean.change}"
-            android:textSize="@dimen/min_font_size"/>
+            android:textSize="@dimen/min_font_size"
+            app:bindingRange="@{bean.range}"/>
 
         <TextView
             android:id="@+id/tv_change_range"
@@ -53,6 +56,7 @@
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/tv_change_val"
             android:text="@{bean.range}"
-            android:textSize="@dimen/min_font_size"/>
+            android:textSize="@dimen/min_font_size"
+            app:bindingRange="@{bean.range}"/>
     </RelativeLayout>
 </layout>

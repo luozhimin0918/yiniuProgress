@@ -6,8 +6,8 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.market.adapter.MarketOtherItemAdapter;
-import com.jyh.kxt.market.bean.MarketOtherBean;
+import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -22,7 +22,7 @@ public class MarketOtherPresenter extends BasePresenter {
 
     @BindObject MarketItemFragment marketItemFragment;
 
-    private MarketOtherItemAdapter marketOtherItemAdapter;
+    private MarketMainItemAdapter marketMainItemAdapter;
 
     public MarketOtherPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -34,11 +34,11 @@ public class MarketOtherPresenter extends BasePresenter {
 
         json.put("code", marketItemFragment.navBean.getCode());
 
-        volleyRequest.doGet(HttpConstant.MARKET_LIST, json, new HttpListener<List<MarketOtherBean>>() {
+        volleyRequest.doGet(HttpConstant.MARKET_LIST, json, new HttpListener<List<MarketItemBean>>() {
             @Override
-            protected void onResponse(List<MarketOtherBean> marketOtherBeanList) {
-                marketOtherItemAdapter = new MarketOtherItemAdapter(mContext, marketOtherBeanList);
-                marketItemFragment.ptrlvContent.setAdapter(marketOtherItemAdapter);
+            protected void onResponse(List<MarketItemBean> marketMainList) {
+                marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketMainList);
+                marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
             }
 
             @Override

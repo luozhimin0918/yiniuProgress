@@ -21,13 +21,17 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        VideoListJsonDao.createTable(db, ifNotExists);
         EmojeBeanDao.createTable(db, ifNotExists);
+        FlashJsonDao.createTable(db, ifNotExists);
         NewsJsonDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        VideoListJsonDao.dropTable(db, ifExists);
         EmojeBeanDao.dropTable(db, ifExists);
+        FlashJsonDao.dropTable(db, ifExists);
         NewsJsonDao.dropTable(db, ifExists);
     }
 
@@ -47,7 +51,9 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(VideoListJsonDao.class);
         registerDaoClass(EmojeBeanDao.class);
+        registerDaoClass(FlashJsonDao.class);
         registerDaoClass(NewsJsonDao.class);
     }
 

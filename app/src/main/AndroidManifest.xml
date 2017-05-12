@@ -60,8 +60,8 @@
             android:theme="@style/TranslucentBgTheme"/>
         <activity
             android:name=".av.ui.VideoDetailActivity"
+            android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
             android:theme="@style/VideoTheme">
         </activity>
         <activity
@@ -123,6 +123,7 @@
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
 
@@ -138,6 +139,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
+            android:screenOrientation="portrait"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -156,6 +158,7 @@
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.UMDefault"/>
 
         <meta-data
