@@ -5,6 +5,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -97,6 +98,7 @@ public class EmoticonTextView extends TextView {
                             matcher.end(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
+                    isFindMatcher = false;
                     startDownloadGif(currentSpannable, matcher.start(), matcher.end(), emoJeUrl);
                 }
             }
@@ -165,6 +167,10 @@ public class EmoticonTextView extends TextView {
 
 
                             setText(currentSpannable);
+
+                            isLoopInvalidate = true;
+                            startLoopInvalidate();
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -180,7 +186,7 @@ public class EmoticonTextView extends TextView {
         }
 
         isLoopInvalidate = true;
-        postDelayed(actionTextRunnable, 150);
+        postDelayed(actionTextRunnable, postInvalidateDelayed);
 
     }
 
@@ -201,9 +207,10 @@ public class EmoticonTextView extends TextView {
         @Override
         public void run() {
 
-//            Log.e("刷新", "run: "+getText() );
             CharSequence text = getText();
             setText(text);
+
+            Log.e("刷新", "run: " + getText());
 //            invalidate();
 
             startLoopInvalidate();

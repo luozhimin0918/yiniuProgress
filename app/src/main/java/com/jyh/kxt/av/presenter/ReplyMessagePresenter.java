@@ -14,6 +14,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.dao.EmojeBean;
+import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonLinearLayout;
 import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
@@ -38,15 +39,20 @@ public class ReplyMessagePresenter extends BasePresenter {
     private EmoticonLinearLayout emoJeContentView;
 
     private PopupUtil replyMessagePopup;
+    private CommentPresenter.OnCommentPublishListener onCommentPublishListener;
 
     public ReplyMessagePresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 
-    public void initView(View replyMessageView, PopupUtil replyMessagePopup) {
+    public void initView(View replyMessageView,
+                         PopupUtil replyMessagePopup,
+                         CommentPresenter.OnCommentPublishListener onCommentPublishListener) {
         ButterKnife.bind(this, replyMessageView);
         this.replyMessageView = replyMessageView;
         this.replyMessagePopup = replyMessagePopup;
+        this.onCommentPublishListener = onCommentPublishListener;
+
         this.eetContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -70,7 +76,9 @@ public class ReplyMessagePresenter extends BasePresenter {
                 showOrHideEmoJiView();
                 break;
             case R.id.tv_publish:
-                replyMessagePopup.dismiss();
+                if (onCommentPublishListener != null) {
+                    onCommentPublishListener.onPublish(replyMessagePopup, eetContent);
+                }
                 break;
         }
     }
@@ -98,7 +106,7 @@ public class ReplyMessagePresenter extends BasePresenter {
 
                 @Override
                 public void deleteEmoJeClick() {
-                    eetContent.deleteEmoJeClick( );
+                    eetContent.deleteEmoJeClick();
                 }
             });
         }
@@ -137,4 +145,6 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
 
     }
+
+
 }

@@ -66,9 +66,11 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         final NewsJson news = dataList.get(position);
 
-        Glide.with(mContext).load(HttpConstant.IMG_URL + news.getPicture()).placeholder(R.mipmap.ico_def_load).error(R.mipmap.ico_def_load)
-                .into
-                        (holder.ivPhoto);
+        Glide.with(mContext).load(HttpConstant.IMG_URL + news.getPicture())
+                .placeholder(R.mipmap.ico_def_load)
+                .override(100,100)
+                .error(R.mipmap.ico_def_load)
+                .into(holder.ivPhoto);
 
         if (BrowerHistoryUtils.isBrowered(mContext, news)) {
             holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));

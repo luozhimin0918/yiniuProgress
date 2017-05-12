@@ -79,7 +79,7 @@ public class HttpConstant {
     public static final String MARKET_LIST = BASE_URL + "/quotes/list" + VarConstant.HTTP_CONTENT;
 
     public static final String VIDEO_DETAIL = BASE_URL + "/video/detail" + VarConstant.HTTP_CONTENT;
-    public static final String COMMENT_PUBLISH = BASE_URL + "/comment/publish" + VarConstant.HTTP_CONTENT;
+    public static final String COMMENT_PUBLISH = BASE_URL + "/comment/publish";
     /**
      * 用户接口
      */

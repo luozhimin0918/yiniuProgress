@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -36,6 +37,36 @@ import butterknife.ButterKnife;
  */
 
 public class CommentPresenter extends BasePresenter implements SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
+    public enum ClickName {
+        MORE_VIEW_ITEM,//更多视图
+        NONE_COMMENT//暂无评论
+    }
+
+    public interface OnCommentClickListener {
+        void onClickView(ClickName clickName);
+    }
+
+
+    private OnCommentClickListener onCommentClickListener;
+
+    public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
+        this.onCommentClickListener = onCommentClickListener;
+    }
+
+
+    /**
+     * 评论的
+     */
+    private OnCommentPublishListener onCommentPublishListener;
+
+    public interface OnCommentPublishListener {
+        void onPublish(PopupWindow popupWindow, EditText etContent);
+    }
+
+    public void setOnCommentPublishListener(OnCommentPublishListener onCommentPublishListener) {
+        this.onCommentPublishListener = onCommentPublishListener;
+    }
+
     /**
      * 这个地方直接传递Activity 方便调用生命周期
      */
@@ -48,7 +79,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
     @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
-
 
     private LinearLayout headView;
     private PopupUtil replyMessagePopup;
@@ -113,6 +143,9 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         }
     }
 
+    /**
+     * 暂无评论
+     */
     public void createNoneComment() {
         int noneCommentHeight = SystemUtil.dp2px(mContext, 100);
         LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
@@ -130,6 +163,15 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         tvNoneComment.setTextColor(color);
 
         headView.addView(tvNoneComment);
+
+        tvNoneComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onCommentClickListener != null) {
+                    onCommentClickListener.onClickView(ClickName.NONE_COMMENT);
+                }
+            }
+        });
     }
 
     /**
@@ -137,12 +179,13 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      */
     public void showReplyMessageView(View showAtLocation) {
         if (replyMessagePopup == null) {
-            replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
 
             replyMessagePopup = new PopupUtil((Activity) mContext);
+
+            replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
             View replyMessageView = replyMessagePopup.createPopupView(R.layout.view_reply_message);
 
-            replyMessagePresenter.initView(replyMessageView, replyMessagePopup);
+            replyMessagePresenter.initView(replyMessageView, replyMessagePopup,onCommentPublishListener);
 
             PopupUtil.Config config = new PopupUtil.Config();
 

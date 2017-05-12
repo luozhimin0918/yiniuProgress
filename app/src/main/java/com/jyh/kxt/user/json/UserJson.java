@@ -1,5 +1,7 @@
 package com.jyh.kxt.user.json;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 项目名:Kxt
  * 类描述:用户信息
@@ -18,6 +20,7 @@ public class UserJson {
 //    work:"",
 //    birthday:""
 
+    @JSONField(name = "accessToken")
     private String token;
     private String nickname;
     private String picture;

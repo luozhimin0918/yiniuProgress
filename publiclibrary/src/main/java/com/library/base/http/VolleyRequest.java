@@ -16,6 +16,7 @@ import com.library.widget.window.ToastView;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -75,12 +76,27 @@ public class VolleyRequest {
     }
 
     public <T> void doPost(String url, HttpListener<T> mHttpListener) {
-        doPost(url, null, mHttpListener);
+        enqueue(Request.Method.POST, url, null, mHttpListener);
     }
 
     public <T> void doPost(String url, Map<String, String> mParams, HttpListener<T> mHttpListener) {
         enqueue(Request.Method.POST, url, mParams, mHttpListener);
     }
+
+    public <T> void doPost(String url, JSONObject mParams, HttpListener<T> mHttpListener) {
+        try {
+
+            LogUtil.e("参数:", "" + mParams);
+            String jwt = EncryptionUtils.createJWT(VarConstant.KEY, mParams.toString());
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("content", jwt);
+
+            doPost(url, hashMap, mHttpListener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private <T> void enqueue(int method, final String url,
                              final Map<String, String> mParams, final HttpListener<T> mHttpListener) {

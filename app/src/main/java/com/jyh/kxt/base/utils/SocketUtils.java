@@ -6,10 +6,6 @@ import com.library.util.SystemUtil;
 
 import org.json.JSONObject;
 
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketConnectionHandler;
-import de.tavendo.autobahn.WebSocketException;
-
 /**
  * 项目名:Kxt
  * 类描述:Socket 工具类
@@ -48,45 +44,5 @@ public class SocketUtils {
         }
 
         return token;
-    }
-
-
-    interface OnMarketListener {
-        void onCall(String result);
-    }
-
-    private OnMarketListener onMarketListener;
-    private WebSocketConnection mConnection;
-
-
-    private void connectMarketSocket(OnMarketListener onMarketListener) {
-        this.onMarketListener = onMarketListener;
-
-
-
-        try {
-            String url = "";
-            mConnection = new WebSocketConnection();
-            mConnection.connect(url, new WebSocketConnectionHandler() {
-                @Override
-                public void onOpen() {
-
-                }
-
-                @Override
-                public void onTextMessage(String payload) {
-                    if (SocketUtils.this.onMarketListener != null) {
-                        SocketUtils.this.onMarketListener.onCall(payload);
-                    }
-                }
-
-                @Override
-                public void onClose(int code, String reason) {
-
-                }
-            });
-        } catch (WebSocketException e) {
-            e.printStackTrace();
-        }
     }
 }

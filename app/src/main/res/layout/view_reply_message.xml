@@ -10,6 +10,7 @@
     <com.jyh.kxt.base.util.emoje.EmoticonsEditText
         android:id="@+id/eet_content"
         style="@style/EmoJe_EditText"
+        android:tag="issueCommentEdit"
         android:hint="请输入回复">
 
     </com.jyh.kxt.base.util.emoje.EmoticonsEditText>
@@ -44,6 +45,7 @@
             android:layout_width="50dp"
             android:layout_height="25dp"
 
+            android:tag="issueCommentBtn"
             android:layout_alignParentRight="true"
 
             android:layout_marginRight="8dp"

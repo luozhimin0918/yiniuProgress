@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,9 +72,12 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         boolean good = GoodUtils.isGood(mContext, video.getId(), VarConstant.GOOD_TYPE_VIDEO);
         video.setGood(good);
 
-        Glide.with(mContext).load(HttpConstant.IMG_URL + video.getPicture()).error(R.mipmap.ico_def_load).placeholder
-                (R.mipmap.ico_def_load).into
-                (holder.iv);
+        Glide.with(mContext)
+                .load(HttpConstant.IMG_URL + video.getPicture())
+                .error(R.mipmap.ico_def_load)
+                .thumbnail(0.6f)
+                .placeholder(R.mipmap.ico_def_load)
+                .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000));
@@ -89,9 +91,11 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www.baidu.com",
+                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www" +
+                                ".baidu.com",
                                 "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
-                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, video.isGood(), video
+                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, video
+                                .isGood(), video
                                 .isCollect()),
                         video, holder.ivMore, new
                                 ObserverData<Map<String,

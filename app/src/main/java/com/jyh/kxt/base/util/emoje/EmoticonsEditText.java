@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.jyh.kxt.base.dao.DBManager;
@@ -71,11 +70,6 @@ public class EmoticonsEditText extends EditText {
              */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.e("beforeTextChanged", "beforeTextChanged() called with: s = [" + s + "], start = [" + start +
-                        "], count = [" +
-                        count + "], after = [" + after + "]");
-
-
                 if (s == null || s.toString().length() == 0) {
                     return;
                 }
@@ -115,10 +109,6 @@ public class EmoticonsEditText extends EditText {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e("onTextChanged", "onTextChanged() called with: s = [" + s + "], start = [" + start + "], before" +
-                        " = [" +
-                        before + "], count = [" + count + "]");
-
             }
 
             @Override

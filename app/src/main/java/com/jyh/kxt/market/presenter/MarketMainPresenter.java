@@ -19,6 +19,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.adapter.MarketRecommendAdapter;
@@ -30,6 +31,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.recycler.DividerGridItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,7 +67,11 @@ public class MarketMainPresenter extends BasePresenter {
         volleyRequest.doGet(HttpConstant.MARKET_INDEX, json, new HttpListener<List<MarketMainBean>>() {
             @Override
             protected void onResponse(List<MarketMainBean> marketMainList) {
+                List<MarketItemBean> marketItemList = new ArrayList<>();
+
                 for (MarketMainBean marketBean : marketMainList) {
+                    marketItemList.addAll(marketBean.getData());
+
                     String name = marketBean.getType();
                     switch (name) {
                         case "main":
@@ -79,6 +85,9 @@ public class MarketMainPresenter extends BasePresenter {
                             break;
                     }
                 }
+
+                MarketConnectUtil.getInstance().sendSocketParams(iBaseView, marketItemList);
+
                 marketItemFragment.refreshableView.addHeaderView(mainHeaderView);
             }
 
@@ -95,7 +104,7 @@ public class MarketMainPresenter extends BasePresenter {
     private void createMainView(MarketMainBean marketBean) {
         createPaddingView(1);
         RecyclerView recommendView = new RecyclerView(mContext);
-        GridLayoutManager layout = new GridLayoutManager(mContext, 3){
+        GridLayoutManager layout = new GridLayoutManager(mContext, 3) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
