@@ -9,7 +9,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.CollectUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.json.UserJson;
@@ -33,9 +33,9 @@ import java.util.List;
 public class CollectNewsPresenter extends BasePresenter {
     @BindObject CollectNewsFragment collectNewsFragment;
     private VolleyRequest request;
-    private String lastId = "";
     private List<NewsJson> newsJsons;//当前填充的数据
     private List<NewsJson> newsAll;//所有数据
+    private String lastId = "";
     private boolean isMore;//是否拥有更多数据
     private int pageCount = 1;
     private int currentPage = 1;//当前页码
@@ -52,6 +52,7 @@ public class CollectNewsPresenter extends BasePresenter {
         lastId = "";
         collectNewsFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
+            CollectUtils.localAndNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
             initNetData();
         } else {
             initLocalData();

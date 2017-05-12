@@ -201,6 +201,12 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         if (workPicker == null) {
             String[] works = mContext.getResources().getStringArray(R.array.work);
             final List<String> worksList = Arrays.asList(works);
+
+            int selPosition=0;
+            if(!RegexValidateUtil.isEmpty(work)&&worksList.contains(work)){
+                selPosition=worksList.indexOf(work);
+            }
+
             workPicker = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -213,7 +219,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     .setTitleText("")
                     .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
                     .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
-                    .setSelectOptions(sexInt)
+                    .setSelectOptions(selPosition)
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
@@ -397,6 +403,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             }
             //初始化年龄
             birthdayStr = userInfo.getBirthday();
+            //初始化工作
+            work=userInfo.getWork();
         } catch (Exception e) {
             e.printStackTrace();
         }

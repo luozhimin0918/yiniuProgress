@@ -34,7 +34,7 @@ public class VideoItemPresenter extends BasePresenter {
 
     private String lastId = "";
 
-    private VideoAdapter videoAdapter;
+    public VideoAdapter videoAdapter;
     private boolean isMore;
 
     public VideoItemPresenter(IBaseView iBaseView) {

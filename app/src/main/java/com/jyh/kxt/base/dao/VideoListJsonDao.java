@@ -34,7 +34,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         public final static Property Create_time = new Property(7, String.class, "create_time", false, "CREATE_TIME");
         public final static Property IsCollect = new Property(8, boolean.class, "isCollect", false, "IS_COLLECT");
         public final static Property IsGood = new Property(9, boolean.class, "isGood", false, "IS_GOOD");
-        public final static Property DataType = new Property(10, int.class, "dataType", false, "DATA_TYPE");
+        public final static Property IsSel = new Property(10, boolean.class, "isSel", false, "IS_SEL");
+        public final static Property DataType = new Property(11, int.class, "dataType", false, "DATA_TYPE");
     }
 
 
@@ -60,7 +61,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
                 "\"CREATE_TIME\" TEXT," + // 7: create_time
                 "\"IS_COLLECT\" INTEGER NOT NULL ," + // 8: isCollect
                 "\"IS_GOOD\" INTEGER NOT NULL ," + // 9: isGood
-                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 10: dataType
+                "\"IS_SEL\" INTEGER NOT NULL ," + // 10: isSel
+                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 11: dataType
     }
 
     /** Drops the underlying database table. */
@@ -114,7 +116,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         }
         stmt.bindLong(9, entity.getIsCollect() ? 1L: 0L);
         stmt.bindLong(10, entity.getIsGood() ? 1L: 0L);
-        stmt.bindLong(11, entity.getDataType());
+        stmt.bindLong(11, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(12, entity.getDataType());
     }
 
     @Override
@@ -162,7 +165,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         }
         stmt.bindLong(9, entity.getIsCollect() ? 1L: 0L);
         stmt.bindLong(10, entity.getIsGood() ? 1L: 0L);
-        stmt.bindLong(11, entity.getDataType());
+        stmt.bindLong(11, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(12, entity.getDataType());
     }
 
     @Override
@@ -183,7 +187,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // create_time
             cursor.getShort(offset + 8) != 0, // isCollect
             cursor.getShort(offset + 9) != 0, // isGood
-            cursor.getInt(offset + 10) // dataType
+            cursor.getShort(offset + 10) != 0, // isSel
+            cursor.getInt(offset + 11) // dataType
         );
         return entity;
     }
@@ -200,7 +205,8 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         entity.setCreate_time(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setIsCollect(cursor.getShort(offset + 8) != 0);
         entity.setIsGood(cursor.getShort(offset + 9) != 0);
-        entity.setDataType(cursor.getInt(offset + 10));
+        entity.setIsSel(cursor.getShort(offset + 10) != 0);
+        entity.setDataType(cursor.getInt(offset + 11));
      }
     
     @Override

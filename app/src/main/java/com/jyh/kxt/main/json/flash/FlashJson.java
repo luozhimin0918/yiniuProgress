@@ -27,6 +27,16 @@ public class FlashJson implements Parcelable {
     private boolean isShowMore;//是否显示更多
     private String time;
 
+    private boolean isSel;
+
+    public boolean isSel() {
+        return isSel;
+    }
+
+    public void setSel(boolean sel) {
+        isSel = sel;
+    }
+
     public String getTime() {
         return time;
     }
@@ -134,6 +144,14 @@ public class FlashJson implements Parcelable {
         this.isShowMore = isShowMore;
     }
 
+    public boolean getIsSel() {
+        return this.isSel;
+    }
+
+    public void setIsSel(boolean isSel) {
+        this.isSel = isSel;
+    }
+
     protected FlashJson(Parcel in) {
         this.uid = in.readString();
         this.socre = in.readString();
@@ -144,9 +162,9 @@ public class FlashJson implements Parcelable {
         this.dataType = in.readInt();
     }
 
-    @Generated(hash = 860074553)
-    public FlashJson(String uid, String socre, String code, String content,
-            boolean isColloct, boolean isShowMore, String time, int dataType) {
+    @Generated(hash = 595772489)
+    public FlashJson(String uid, String socre, String code, String content, boolean isColloct,
+            boolean isShowMore, String time, boolean isSel, int dataType) {
         this.uid = uid;
         this.socre = socre;
         this.code = code;
@@ -154,6 +172,7 @@ public class FlashJson implements Parcelable {
         this.isColloct = isColloct;
         this.isShowMore = isShowMore;
         this.time = time;
+        this.isSel = isSel;
         this.dataType = dataType;
     }
 

@@ -1,22 +1,32 @@
 package com.jyh.kxt.user.adapter;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.util.DateUtils;
+import com.library.util.RegexValidateUtil;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +41,8 @@ import butterknife.ButterKnife;
 public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
 
     private Context context;
+    private boolean isEdit = false;
+    private Set<String> delIds = new HashSet<>();
 
     public CollectNewsAdapter(List<NewsJson> dataList, Context context) {
         super(dataList);
@@ -49,7 +61,15 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        NewsJson news = dataList.get(position);
+        if (isEdit) {
+            holder.flDel.setVisibility(View.VISIBLE);
+        } else {
+            holder.flDel.setVisibility(View.GONE);
+        }
+
+        final NewsJson news = dataList.get(position);
+        holder.ivDel.setSelected(news.isSel());
+
         Glide.with(context).load(HttpConstant.IMG_URL + news.getPicture()).placeholder(R.mipmap.ico_def_load).error(R.mipmap.ico_def_load)
                 .into
                         (holder.ivPhoto);
@@ -72,6 +92,33 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
             holder.tvTime.setText("00:00");
         }
 
+        final ViewHolder finalHolder = holder;
+        holder.flDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //添加或移除选中状态
+                if (finalHolder.ivDel.isSelected()) {
+                    finalHolder.ivDel.setSelected(false);
+                    try {
+                        delIds.remove(news.getO_id());
+                        news.setSel(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    finalHolder.ivDel.setSelected(true);
+                    try {
+                        delIds.add(news.getO_id());
+                        news.setSel(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (observerData != null)
+                    observerData.callback(delIds.size());
+            }
+        });
+
         return convertView;
     }
 
@@ -86,11 +133,64 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
         notifyDataSetChanged();
     }
 
+    public Set<String> getDelIds() {
+        return delIds;
+    }
+
+    public void setDelIds(Set<String> delIds) {
+        this.delIds = delIds;
+    }
+
+    private CollectActivity.DelNumListener observerData;
+
+    public void setSelListener(CollectActivity.DelNumListener selListener) {
+        this.observerData = selListener;
+    }
+
+    public boolean isEdit() {
+        return isEdit;
+    }
+
+    public void setEdit(boolean edit) {
+        isEdit = edit;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    public void removeById(String ids) {
+        if (RegexValidateUtil.isEmpty(ids))
+            return;
+        List<String> list = Arrays.asList(ids.split(","));
+
+        Iterator<NewsJson> iterator = dataList.iterator();
+        while (iterator.hasNext()) {
+            NewsJson next = iterator.next();
+            for (String id : list) {
+                if (id.equals(next.getO_id())) {
+                    iterator.remove();
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public List<NewsJson> getData() {
+        return dataList;
+    }
+
     static class ViewHolder {
         @BindView(R.id.iv_photo) ImageView ivPhoto;
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.tv_author) TextView tvAuthor;
         @BindView(R.id.tv_time) TextView tvTime;
+        @BindView(R.id.iv_del) ImageView ivDel;
+        @BindView(R.id.fl_del) FrameLayout flDel;
+        @BindView(R.id.rl_content) RelativeLayout rlContent;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -28,6 +28,15 @@ public class NewsJson implements Parcelable {
     private String o_action;
     private String o_class;
     private String o_id;
+    private boolean isSel;
+
+    public boolean isSel() {
+        return isSel;
+    }
+
+    public void setSel(boolean sel) {
+        isSel = sel;
+    }
 
     /**
      * 数据库存储类型
@@ -117,39 +126,9 @@ public class NewsJson implements Parcelable {
         this.dataType = dataType;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(picture);
-        dest.writeString(author);
-        dest.writeString(datetime);
-        dest.writeString(type);
-        dest.writeString(href);
-        dest.writeString(o_class);
-        dest.writeString(o_action);
-        dest.writeString(o_id);
-    }
-
-    private NewsJson(Parcel parcel) {
-        title = parcel.readString();
-        picture = parcel.readString();
-        author = parcel.readString();
-        datetime = parcel.readString();
-        type = parcel.readString();
-        href = parcel.readString();
-        o_class = parcel.readString();
-        o_action = parcel.readString();
-        o_id = parcel.readString();
-    }
-
-    @Generated(hash = 196233574)
+    @Generated(hash = 1690725197)
     public NewsJson(String title, String picture, String author, String datetime, String type, String href, String o_action, String o_class,
-            String o_id, int dataType) {
+            String o_id, boolean isSel, int dataType) {
         this.title = title;
         this.picture = picture;
         this.author = author;
@@ -159,6 +138,7 @@ public class NewsJson implements Parcelable {
         this.o_action = o_action;
         this.o_class = o_class;
         this.o_id = o_id;
+        this.isSel = isSel;
         this.dataType = dataType;
     }
 
@@ -166,19 +146,6 @@ public class NewsJson implements Parcelable {
     public NewsJson() {
     }
 
-
-    public static final Parcelable.Creator<NewsJson> CREATOR = new Parcelable.Creator<NewsJson>() {
-
-        @Override
-        public NewsJson createFromParcel(Parcel source) {
-            return new NewsJson(source);
-        }
-
-        @Override
-        public NewsJson[] newArray(int size) {
-            return new NewsJson[size];
-        }
-    };
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -193,4 +160,58 @@ public class NewsJson implements Parcelable {
         } else
             return false;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.picture);
+        dest.writeString(this.author);
+        dest.writeString(this.datetime);
+        dest.writeString(this.type);
+        dest.writeString(this.href);
+        dest.writeString(this.o_action);
+        dest.writeString(this.o_class);
+        dest.writeString(this.o_id);
+        dest.writeByte(this.isSel ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.dataType);
+    }
+
+    public boolean getIsSel() {
+        return this.isSel;
+    }
+
+    public void setIsSel(boolean isSel) {
+        this.isSel = isSel;
+    }
+
+    protected NewsJson(Parcel in) {
+        this.title = in.readString();
+        this.picture = in.readString();
+        this.author = in.readString();
+        this.datetime = in.readString();
+        this.type = in.readString();
+        this.href = in.readString();
+        this.o_action = in.readString();
+        this.o_class = in.readString();
+        this.o_id = in.readString();
+        this.isSel = in.readByte() != 0;
+        this.dataType = in.readInt();
+    }
+
+    public static final Parcelable.Creator<NewsJson> CREATOR = new Parcelable.Creator<NewsJson>() {
+        @Override
+        public NewsJson createFromParcel(Parcel source) {
+            return new NewsJson(source);
+        }
+
+        @Override
+        public NewsJson[] newArray(int size) {
+            return new NewsJson[size];
+        }
+    };
 }

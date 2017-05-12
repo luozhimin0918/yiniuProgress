@@ -39,7 +39,7 @@ public class LoginUtils {
      * @param userInfo
      */
     public static void changeUserInfo(Context context, UserJson userInfo) {
-        SPUtils.save(context, SpConstant.USERINFO, userInfo);
+        SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
     }
 
     /**

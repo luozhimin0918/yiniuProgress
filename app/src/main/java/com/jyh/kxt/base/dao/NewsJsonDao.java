@@ -33,7 +33,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
         public final static Property O_action = new Property(6, String.class, "o_action", false, "O_ACTION");
         public final static Property O_class = new Property(7, String.class, "o_class", false, "O_CLASS");
         public final static Property O_id = new Property(8, String.class, "o_id", false, "O_ID");
-        public final static Property DataType = new Property(9, int.class, "dataType", false, "DATA_TYPE");
+        public final static Property IsSel = new Property(9, boolean.class, "isSel", false, "IS_SEL");
+        public final static Property DataType = new Property(10, int.class, "dataType", false, "DATA_TYPE");
     }
 
 
@@ -58,7 +59,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
                 "\"O_ACTION\" TEXT," + // 6: o_action
                 "\"O_CLASS\" TEXT," + // 7: o_class
                 "\"O_ID\" TEXT," + // 8: o_id
-                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 9: dataType
+                "\"IS_SEL\" INTEGER NOT NULL ," + // 9: isSel
+                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 10: dataType
     }
 
     /** Drops the underlying database table. */
@@ -115,7 +117,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
         if (o_id != null) {
             stmt.bindString(9, o_id);
         }
-        stmt.bindLong(10, entity.getDataType());
+        stmt.bindLong(10, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(11, entity.getDataType());
     }
 
     @Override
@@ -166,7 +169,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
         if (o_id != null) {
             stmt.bindString(9, o_id);
         }
-        stmt.bindLong(10, entity.getDataType());
+        stmt.bindLong(10, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(11, entity.getDataType());
     }
 
     @Override
@@ -186,7 +190,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // o_action
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // o_class
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // o_id
-            cursor.getInt(offset + 9) // dataType
+            cursor.getShort(offset + 9) != 0, // isSel
+            cursor.getInt(offset + 10) // dataType
         );
         return entity;
     }
@@ -202,7 +207,8 @@ public class NewsJsonDao extends AbstractDao<NewsJson, Void> {
         entity.setO_action(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setO_class(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setO_id(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setDataType(cursor.getInt(offset + 9));
+        entity.setIsSel(cursor.getShort(offset + 9) != 0);
+        entity.setDataType(cursor.getInt(offset + 10));
      }
     
     @Override

@@ -11,6 +11,10 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.presenter.MorePresenter;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.handmark.PullToRefreshListView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,11 +26,11 @@ import butterknife.OnClick;
  * 创建日期:2017/5/8.
  */
 
-public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener {
+public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
 
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
-    @BindView(R.id.rv_content) RecyclerView rvContent;
-    @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.pl_content) PullToRefreshListView plContent;
+    @BindView(R.id.pl_rootView)public PageLoadLayout plRootView;
 
     private MorePresenter morePresenter;
     private String type;
@@ -38,6 +42,9 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
 
         morePresenter = new MorePresenter(this);
 
+        plContent.setDividerNull();
+        plContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plContent.setOnRefreshListener(this);
         plRootView.setOnAfreshLoadListener(this);
         type = getIntent().getStringExtra(IntentConstant.TYPE);
 
@@ -45,9 +52,6 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
         switch (type) {
             case VarConstant.EXPLORE_ACTIVITY:
                 name = "活动";
-                break;
-            case VarConstant.EXPLORE_BLOG_WRITER:
-                name = "名家";
                 break;
             case VarConstant.EXPLORE_TOPIC:
                 name = "专题";
@@ -57,6 +61,15 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
 
         plRootView.loadWait();
         morePresenter.init(type);
+    }
+
+    public void init(List data) {
+
+    }
+
+
+    public void refresh(List list) {
+
     }
 
     @OnClick(R.id.iv_bar_break)
@@ -78,4 +91,19 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
             plRootView.loadError();
         }
     }
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        morePresenter.refresh();
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+        morePresenter.loadMore();
+    }
+
+    public void loadError() {
+
+    }
+
 }

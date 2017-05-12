@@ -53,7 +53,16 @@ public class SpConstant {
      */
     public static final String BROWER_HISTORY = "brower_history";
     /**
-     *  夜间模式
+     * 夜间模式
      */
     public static final String SETTING_DAY_NIGHT = "setting_day_night";
+
+
+    /**
+     * 点赞
+     */
+    public static final String GOOD_NEWS = "good_news";
+    public static final String GOOD_VIDEO = "good_video";
+
+
 }

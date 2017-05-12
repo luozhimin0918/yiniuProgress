@@ -22,6 +22,7 @@ import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;

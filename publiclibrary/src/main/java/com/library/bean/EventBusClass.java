@@ -14,6 +14,8 @@ public class EventBusClass {
     public static final int EVENT_LOGOUT = 3;//退出登录
     public static final int EVENT_CLEAR_BROWER = 4;//删除浏览记录
     public static final int EVENT_CHANGEUSERINFO = 5;//更新用户信息
+    public static final int EVENT_COLLECT_VIDEO = 6;//视听收藏状态改变
+    public static final int EVENT_COLLECT_FLASH = 7;//快讯收藏状态改变
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

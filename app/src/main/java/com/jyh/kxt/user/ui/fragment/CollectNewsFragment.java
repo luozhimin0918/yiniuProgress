@@ -2,23 +2,30 @@ package com.jyh.kxt.user.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.user.adapter.CollectNewsAdapter;
 import com.jyh.kxt.user.presenter.CollectNewsPresenter;
+import com.jyh.kxt.user.ui.CollectActivity;
+import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -38,7 +45,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
 
     private CollectNewsPresenter collectNewsPresenter;
 
-    private CollectNewsAdapter adapter;
+    public CollectNewsAdapter adapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -73,6 +80,9 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
 //                adapter.getView(position, view, parent);
             }
         });
+
+        if (adapter != null)
+            plvContent.setAdapter(adapter);
 
         collectNewsPresenter.initData();
     }
@@ -136,4 +146,114 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         collectNewsPresenter.initData();
     }
 
+    /**
+     * 编辑
+     *
+     * @param observerData
+     */
+    public void edit(CollectActivity.DelNumListener observerData) {
+        try {
+            adapter.setEdit(true);
+            adapter.setSelListener(observerData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 全选
+     *
+     * @param selected
+     * @param observerData
+     */
+    public void selAll(boolean selected, CollectActivity.DelNumListener observerData) {
+        if (selected) {
+            //全选
+            List<NewsJson> data = adapter.getData();
+            for (NewsJson newsJson : data) {
+                newsJson.setSel(true);
+            }
+            try {
+                //设置选中数量
+                observerData.callback(data.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+                observerData.callback(0);
+            }
+        } else {
+            //取消全选
+            List<NewsJson> data = adapter.getData();
+            for (NewsJson newsJson : data) {
+                newsJson.setSel(false);
+            }
+            //还原选中数量
+            observerData.callback(0);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 删除
+     *
+     * @param observerData
+     */
+    public void del(final CollectActivity.DelNumListener observerData) {
+        //获取选中的id
+        List<NewsJson> data = adapter.getData();
+        String ids = "";
+        for (NewsJson newsJson : data) {
+            if (newsJson.isSel()) {
+                String id = newsJson.getO_id();
+                if (ids.equals("")) {
+                    ids = id;
+                } else {
+                    ids += "," + id;
+                }
+            }
+        }
+        //选中非空判断
+        if ("".equals(ids)) {
+            ToastView.makeText3(getContext(), "请选中至少一项");
+            return;
+        }
+
+        final String finalIds = ids;
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, ids, new ObserverData() {
+            @Override
+            public void callback(Object o) {
+                //删除取消收藏的数据
+                adapter.removeById(finalIds);
+                //退出编辑状态
+                quitEdit(observerData);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                //退出编辑状态
+                quitEdit(observerData);
+            }
+        });
+    }
+
+    /**
+     * 退出编辑
+     *
+     * @param observerData
+     */
+    public void quitEdit(CollectActivity.DelNumListener observerData) {
+        adapter.setEdit(false);
+        List<NewsJson> data = adapter.getData();
+        //还原删除按钮数字
+        if (observerData != null)
+            observerData.callback(0);
+        //空数据处理
+        if (data == null || data.size() == 0) {
+            plRootView.loadEmptyData();
+            return;
+        }
+        //还原选中状态
+        for (NewsJson newsJson : data) {
+            newsJson.setSel(false);
+        }
+    }
 }

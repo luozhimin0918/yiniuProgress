@@ -369,6 +369,7 @@
     <dimen name="collect_padding1">7.5dp</dimen>
     <dimen name="collect_padding2">8dp</dimen>
     <dimen name="collect_padding3">10dp</dimen>
+    <dimen name="collect_del_width">35dp</dimen>
 
     <dimen name="collect_video_height">93dp</dimen>
     <dimen name="collect_video_imgWidth">140dp</dimen>

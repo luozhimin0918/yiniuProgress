@@ -2,8 +2,12 @@ package com.jyh.kxt.av.ui.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.adapter.VideoAdapter;
 import com.jyh.kxt.av.presenter.VideoItemPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
@@ -13,6 +17,8 @@ import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,16 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_VIDEO) {
+            VideoAdapter videoAdapter = videoItemPresenter.videoAdapter;
+            if (videoAdapter != null) {
+                videoAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     public void userVisibleHint() {
         super.userVisibleHint();
@@ -71,5 +87,25 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
         videoItemPresenter.onPullUpToRefresh(refreshView);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

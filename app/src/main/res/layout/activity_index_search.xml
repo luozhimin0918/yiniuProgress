@@ -43,13 +43,19 @@
 
     <include layout="@layout/view_line"/>
 
-    <include
-        android:id="@+id/layout_search_end"
-        layout="@layout/layout_search_end"
-        android:visibility="gone"/>
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/layout_search_end"
+            layout="@layout/layout_search_end"
+            android:visibility="gone"/>
 
-    <include
-        android:id="@+id/layout_search_start"
-        layout="@layout/layout_search_default"
-        android:visibility="visible"/>
+        <include
+            android:id="@+id/layout_search_start"
+            layout="@layout/layout_search_default"
+            android:visibility="visible"/>
+    </com.library.widget.PageLoadLayout>
+
 </LinearLayout>

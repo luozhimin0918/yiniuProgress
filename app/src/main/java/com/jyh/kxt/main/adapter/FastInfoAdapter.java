@@ -24,7 +24,7 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.CollectUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.base.http.VarConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.utils.PingYinUtil;
@@ -142,7 +142,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     public List<FlashJson> getData() {
         List data = new ArrayList(flashJsons);
-        for (Object o : data) {
+        for (Object o : flashJsons) {
             if (o instanceof String) {
                 data.remove(o);
             }

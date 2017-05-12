@@ -8,13 +8,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.SPUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 项目名:Kxt
@@ -34,7 +38,8 @@ public class GoodUtils {
      * @param observerData 用以改变list数据
      * @param umengOb      用以改变umeng面板按钮状态
      */
-    public static void addGood(Context context, String id, String type, final ObserverData observerData, final ObserverData<Boolean> umengOb) {
+    public static void addGood(final Context context, final String id, final String type, final ObserverData observerData, final
+    ObserverData<Boolean> umengOb) {
         String url = "";
         switch (type) {
             case VarConstant.GOOD_TYPE_NEWS:
@@ -57,6 +62,21 @@ public class GoodUtils {
                 if (umengOb != null) {
                     umengOb.callback(true);
                 }
+
+                Set<String> set = new HashSet<String>();
+                switch (type) {
+                    case VarConstant.GOOD_TYPE_NEWS:
+                        set = SPUtils.getStringSet(context, SpConstant.GOOD_NEWS);
+                        set.add(id);
+                        SPUtils.save(context, SpConstant.GOOD_NEWS, set);
+                        break;
+                    case VarConstant.GOOD_TYPE_VIDEO:
+                        set = SPUtils.getStringSet(context, SpConstant.GOOD_VIDEO);
+                        set.add(id);
+                        SPUtils.save(context, SpConstant.GOOD_VIDEO, set);
+                        break;
+                }
+
 
             }
 
@@ -88,13 +108,29 @@ public class GoodUtils {
      * @return
      */
     public static boolean isGood(Context context, String id, String type) {
+        Set<String> set = new HashSet<>();
+        switch (type) {
+            case VarConstant.GOOD_TYPE_NEWS:
+                set = SPUtils.getStringSet(context, SpConstant.GOOD_NEWS);
+                break;
+            case VarConstant.GOOD_TYPE_VIDEO:
+                set = SPUtils.getStringSet(context, SpConstant.GOOD_VIDEO);
+                break;
+        }
 
+        if (set == null) return false;
+        for (String s : set) {
+            if (s.equals(id)) {
+                return true;
+            }
+        }
         return false;
     }
 
     /**
      * 取消点赞
-     *  @param context
+     *
+     * @param context
      * @param id
      * @param type
      * @param data

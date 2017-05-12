@@ -18,7 +18,7 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.CollectUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.library.base.http.VarConstant;

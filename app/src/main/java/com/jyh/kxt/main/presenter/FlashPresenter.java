@@ -48,7 +48,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
     @BindObject FlashFragment flashFragment;
 
     private WebSocketConnection connection;
-    private FastInfoAdapter adapter;
+    public FastInfoAdapter adapter;
     private RequestQueue queue;
     private VolleyRequest request;
     private String lastId;

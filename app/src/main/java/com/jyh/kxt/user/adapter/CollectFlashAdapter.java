@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,25 +24,31 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.CollectUtils;
-import com.library.base.http.VarConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
+import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.ConfigJson;
+import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
+import com.jyh.kxt.user.ui.CollectActivity;
+import com.library.base.http.VarConstant;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,58 +65,92 @@ import butterknife.ButterKnife;
 
 public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedListView.PinnedSectionListAdapter {
 
-    private static final int TYPE_KX = 0;
-    private static final int TYPE_RL = 1;
-    private static final int TYPE_LEFT = 2;
-    private static final int TYPE_RIGHT = 3;
-    private static final int TYPE_TOP = 4;
-    private static final int TYPE_BOTTOM = 5;
+    private static final int TYPE_TIME = 0;
+    private static final int TYPE_KX = 1;
+    private static final int TYPE_RL = 2;
+    private static final int TYPE_LEFT = 3;
+    private static final int TYPE_RIGHT = 4;
+    private static final int TYPE_TOP = 5;
+    private static final int TYPE_BOTTOM = 6;
 
     private List flashJsons;
     private Context context;
 
+    private boolean isEdit = false;
+    private Set<String> delIds = new HashSet<>();
+
     public CollectFlashAdapter(List<FlashJson> flashJsons, Context context) {
+
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
+
         this.flashJsons = flashJsons;
-        initCollectStatus(1);
+        inspiritDateInfo(this.flashJsons);
         this.context = context;
     }
 
+    private Map<String, Integer> timeMap = new HashMap<>();
+
     public void setData(List<FlashJson> flashJsons) {
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
         this.flashJsons.clear();
         this.flashJsons.addAll(flashJsons);
-        initCollectStatus(1);
+        inspiritDateInfo(this.flashJsons);
         notifyDataSetChanged();
     }
 
 
     public void addData(FlashJson flashJson) {
+
+        if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flashJson)) {
+            flashJson.setColloct(true);
+        } else {
+            flashJson.setColloct(false);
+        }
+
         this.flashJsons.add(1, flashJson);
-        initCollectStatus(2);
         notifyDataSetChanged();
     }
 
     public void addData(List<FlashJson> flashJsons) {
+
+        for (FlashJson flash : flashJsons) {
+            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
+                flash.setColloct(true);
+            } else {
+                flash.setColloct(false);
+            }
+        }
+
+        inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
-        initCollectStatus(1);
         notifyDataSetChanged();
     }
 
-    /**
-     * 初始化收藏状态
-     *
-     * @param type
-     */
-    private void initCollectStatus(int type) {
-    }
-
     public List<FlashJson> getData() {
+
         List data = new ArrayList(flashJsons);
-        for (Object o : data) {
+        for (Object o : flashJsons) {
             if (o instanceof String) {
                 data.remove(o);
             }
         }
-        return new ArrayList<FlashJson>(data);
+        return new ArrayList<>(data);
+    }
+
+    public List getSoucesData() {
+        return flashJsons;
     }
 
     @Override
@@ -130,6 +171,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        TimeViewHolder timeHolder = null;
         KXViewHolder kxHolder = null;
         NEWViewHolder topHolder = null;
         NEWViewHolder bottomHolder = null;
@@ -140,33 +182,38 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             switch (type) {
+                case TYPE_TIME:
+                    convertView = inflater.inflate(R.layout.layout_flash_time_bar, parent, false);
+                    timeHolder = new TimeViewHolder(convertView);
+                    convertView.setTag(timeHolder);
+                    break;
                 case TYPE_KX:
-                    convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_news, parent, false);
                     kxHolder = new KXViewHolder(convertView);
                     convertView.setTag(kxHolder);
                     break;
                 case TYPE_RL:
-                    convertView = inflater.inflate(R.layout.item_flash_rl, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_rl, parent, false);
                     rlHolder = new RLViewHolder(convertView);
                     convertView.setTag(rlHolder);
                     break;
                 case TYPE_LEFT:
-                    convertView = inflater.inflate(R.layout.item_flash_news_left, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_news_left, parent, false);
                     leftHolder = new NEWViewHolder(convertView);
                     convertView.setTag(leftHolder);
                     break;
                 case TYPE_RIGHT:
-                    convertView = inflater.inflate(R.layout.item_flash_news_right, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_news_right, parent, false);
                     rightHolder = new NEWViewHolder(convertView);
                     convertView.setTag(rightHolder);
                     break;
                 case TYPE_TOP:
-                    convertView = inflater.inflate(R.layout.item_flash_news_top, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_news_top, parent, false);
                     topHolder = new NEWViewHolder(convertView);
                     convertView.setTag(topHolder);
                     break;
                 case TYPE_BOTTOM:
-                    convertView = inflater.inflate(R.layout.item_flash_news_bottom, parent, false);
+                    convertView = inflater.inflate(R.layout.item_collect_flash_news_bottom, parent, false);
                     bottomHolder = new NEWViewHolder(convertView);
                     convertView.setTag(bottomHolder);
                     break;
@@ -174,6 +221,9 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         } else {
             try {
                 switch (type) {
+                    case TYPE_TIME:
+                        timeHolder = (TimeViewHolder) convertView.getTag();
+                        break;
                     case TYPE_KX:
                         kxHolder = (KXViewHolder) convertView.getTag();
                         break;
@@ -196,6 +246,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             } catch (Exception e) {
                 LayoutInflater inflater = LayoutInflater.from(context);
                 switch (type) {
+                    case TYPE_TIME:
+                        convertView = inflater.inflate(R.layout.layout_flash_time_bar, parent, false);
+                        timeHolder = new TimeViewHolder(convertView);
+                        convertView.setTag(timeHolder);
+                        break;
                     case TYPE_KX:
                         convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
                         kxHolder = new KXViewHolder(convertView);
@@ -231,9 +286,12 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         }
 
         switch (type) {
+            case TYPE_TIME:
+                timeHolder.tvTime.setText(flashJsons.get(position).toString());
+                break;
             case TYPE_KX:
                 FlashJson flash = (FlashJson) flashJsons.get(position);
-                Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
+                final Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
                 String time = "00:00";
                 try {
                     time = getTime(kx.getTime());
@@ -245,13 +303,15 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 kxHolder.tvMore.setVisibility(View.VISIBLE);
                 kxHolder.ivMore.setVisibility(View.VISIBLE);
                 setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
-                        null, TYPE_KX);
+                        null, TYPE_KX, kxHolder.flDel, kxHolder.ivDel);
 
                 if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
                     kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
                 } else {
                     kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
                 }
+
+                setShowMoreBtn(kxHolder);
 
                 kxHolder.ivCollect.setSelected(flash.isColloct());
 
@@ -304,7 +364,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
 
                 setOnclick(rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
-                        null, TYPE_RL);
+                        null, TYPE_RL, rlHolder.flDel, rlHolder.ivDel);
                 /**
                  * 重要性判断
                  */
@@ -324,7 +384,6 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 }
 
                 rlHolder.ivCollect.setSelected(flash_rl.isColloct());
-
                 break;
             case TYPE_LEFT:
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
@@ -332,9 +391,6 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 Glide.with(context).load(left.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(leftHolder
                         .ivFlash);
-
-                Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
-
                 String time3 = "00:00";
                 try {
                     time3 = getTime(left.getTime());
@@ -353,9 +409,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 }
 
                 setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
+                        .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
 
                 leftHolder.ivCollect.setSelected(flash_left.isColloct());
+
+                setShowMoreBtn(leftHolder);
                 break;
             case TYPE_RIGHT:
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
@@ -382,10 +440,10 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 }
 
                 setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
+                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
 
                 rightHolder.ivCollect.setSelected(flash_right.isColloct());
-
+                setShowMoreBtn(rightHolder);
                 break;
             case TYPE_TOP:
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
@@ -413,9 +471,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 }
 
                 setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
-                        VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
+                        VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP, topHolder.flDel, topHolder.ivDel);
 
                 topHolder.ivCollect.setSelected(flash_top.isColloct());
+
+                setShowMoreBtn(topHolder);
 
                 break;
             case TYPE_BOTTOM:
@@ -446,14 +506,64 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 }
 
                 setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
+                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel, bottomHolder
+                        .ivDel);
 
                 bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
-
+                setShowMoreBtn(bottomHolder);
                 break;
         }
 
         return convertView;
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    public void removeById(String ids) {
+        if (RegexValidateUtil.isEmpty(ids))
+            return;
+        List<String> list = Arrays.asList(ids.split(","));
+
+        Iterator iterator = flashJsons.iterator();
+        while (iterator.hasNext()) {
+            Object next = iterator.next();
+            if (next instanceof String)
+                continue;
+            FlashJson flash = (FlashJson) next;
+            for (String id : list) {
+                if (id.equals(flash.getSocre())) {
+                    iterator.remove();
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 显示或隐藏显示更多按钮
+     *
+     * @param kxHolder
+     */
+    private void setShowMoreBtn(BaseViewHolder kxHolder) {
+        final BaseViewHolder finalKxHolder = kxHolder;
+        kxHolder.tvContent.post(new Runnable() {
+            @Override
+            public void run() {
+                //获取textView的行数
+                int txtPart = finalKxHolder.tvContent.getLineCount();
+                if (txtPart <= 3) {
+                    finalKxHolder.ivMore.setVisibility(View.GONE);
+                    finalKxHolder.tvMore.setVisibility(View.GONE);
+                } else {
+                    finalKxHolder.ivMore.setVisibility(View.VISIBLE);
+                    finalKxHolder.tvMore.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     /**
@@ -468,7 +578,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
      */
     private void setOnclick(final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
                             final TextView content,
-                            String weizhi, final ImageView ivFlash, final int type) {
+                            String weizhi, final ImageView ivFlash, final int type, FrameLayout flDel, final ImageView ivDel) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
 
         ivCollect.setVisibility(View.GONE);
@@ -530,6 +640,38 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                     e.printStackTrace();
                     ToastView.makeText3(context, "分享失败");
                 }
+            }
+        });
+
+        if (isEdit) {
+            flDel.setVisibility(View.VISIBLE);
+        } else {
+            flDel.setVisibility(View.GONE);
+        }
+        ivDel.setSelected(flash.isSel());
+        flDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //添加或移除选中状态
+                if (ivDel.isSelected()) {
+                    ivDel.setSelected(false);
+                    try {
+                        delIds.remove(flash.getSocre());
+                        flash.setSel(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ivDel.setSelected(true);
+                    try {
+                        delIds.add(flash.getSocre());
+                        flash.setSel(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (observerData != null)
+                    observerData.callback(delIds.size());
             }
         });
     }
@@ -644,7 +786,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 drawingShapeColor(2, effectType, "影响较小", llExponent);
             }
 
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
 
             RadianDrawable effectDrawable = new RadianDrawable(context);
 
@@ -734,7 +876,9 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
     @Override
     public int getItemViewType(int position) {
-        FlashJson flashJson = (FlashJson) flashJsons.get(position);
+        Object obj = flashJsons.get(position);
+        if (obj instanceof String) return TYPE_TIME;
+        FlashJson flashJson = (FlashJson) obj;
         String code = flashJson.getCode();
         switch (code) {
             case VarConstant.SOCKET_FLASH_KUAIXUN:
@@ -773,7 +917,112 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
     @Override
     public int getViewTypeCount() {
-        return 6;
+        return 7;
+    }
+
+    public void inspiritDateInfo(List flashJsons) {
+        timeMap.clear();
+        if (flashJsons == null) return;
+
+        int size = flashJsons.size();
+
+        for (int i = 0; i < size; i++) {
+            Object obj = flashJsons.get(i);
+            if (obj instanceof String)
+                flashJsons.remove(obj);
+        }
+
+        size = flashJsons.size();
+
+        for (int i = 0; i < size; i++) {
+            Object obj = flashJsons.get(i);
+            FlashJson flashJson = (FlashJson) flashJsons.get(i);
+            Object content = flashJson.getContent();
+            String code = flashJson.getCode();
+            if (content == null) return;
+            String time = "";
+            switch (code) {
+                case VarConstant.SOCKET_FLASH_CJRL:
+                    //日历
+                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                    //快讯
+                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KXTNEWS:
+                    //图文
+                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
+                    break;
+            }
+
+            if (!TextUtils.isEmpty(time)) {
+                String[] splitTime = time.split(" ");
+                String month = splitTime[0].split("-")[1];
+                String day = splitTime[0].split("-")[2];
+
+                String MD = month + "月" + day + "日"; //显示用
+
+                if (!timeMap.containsKey(MD)) {
+                    timeMap.put(MD, i);
+                    if (i < size)
+                        flashJsons.add(i, MD);
+                    else
+                        flashJsons.add(MD);
+                }
+            }
+        }
+
+    }
+
+    public void inspiritDateInfo2(List flashJsons) {
+
+        if (flashJsons == null) return;
+
+        int size = flashJsons.size();
+        for (int i = 0; i < size; i++) {
+            FlashJson flashJson = (FlashJson) flashJsons.get(i);
+            Object content = flashJson.getContent();
+            String code = flashJson.getCode();
+            if (content == null) return;
+            String time = "";
+            switch (code) {
+                case VarConstant.SOCKET_FLASH_CJRL:
+                    //日历
+                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                    //快讯
+                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
+                    break;
+                case VarConstant.SOCKET_FLASH_KXTNEWS:
+                    //图文
+                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
+                    break;
+            }
+
+            if (!TextUtils.isEmpty(time)) {
+                String[] splitTime = time.split(" ");
+                String month = splitTime[0].split("-")[1];
+                String day = splitTime[0].split("-")[2];
+
+                String MD = month + "月" + day + "日"; //显示用
+
+                if (!timeMap.containsKey(MD)) {
+                    timeMap.put(MD, i);
+                    if (i < size)
+                        flashJsons.add(i, MD);
+                    else
+                        flashJsons.add(MD);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public boolean isItemViewTypePinned(int viewType) {
+        return viewType == 0;
     }
 
     private String getString(String str) {
@@ -787,9 +1036,42 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         return splitTime2[0] + ":" + splitTime2[1];
     }
 
-    @Override
-    public boolean isItemViewTypePinned(int viewType) {
-        return false;
+    public boolean isEdit() {
+        return isEdit;
+    }
+
+    public void setEdit(boolean edit) {
+        isEdit = edit;
+        notifyDataSetChanged();
+    }
+
+    public Set<String> getDelIds() {
+        return delIds;
+    }
+
+    public void setDelIds(Set<String> delIds) {
+        this.delIds = delIds;
+    }
+
+    private CollectActivity.DelNumListener observerData;
+
+    public CollectActivity.DelNumListener getObserverData() {
+        return observerData;
+    }
+
+    public void setObserverData(CollectActivity.DelNumListener observerData) {
+        this.observerData = observerData;
+    }
+
+    /**
+     * 时间
+     */
+    class TimeViewHolder {
+        @BindView(R.id.tv_time_day) TextView tvTime;
+
+        TimeViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     /**
@@ -828,6 +1110,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.ll_exponent) LinearLayout llExponent;
         @BindView(R.id.ll_star) StarView star;
         @BindView(R.id.iv_guoqi) ImageView ivFlag;
+        @BindView(R.id.fl_del) FrameLayout flDel;
+        @BindView(R.id.iv_del) ImageView ivDel;
 
         public RLViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -842,6 +1126,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.iv_share) ImageView ivShare;
         @BindView(R.id.iv_collect) ImageView ivCollect;
         @BindView(R.id.v_line) View vLine;
+        @BindView(R.id.fl_del) FrameLayout flDel;
+        @BindView(R.id.iv_del) ImageView ivDel;
     }
 
 

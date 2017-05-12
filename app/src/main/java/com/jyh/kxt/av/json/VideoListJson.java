@@ -30,12 +30,13 @@ public class VideoListJson implements Parcelable {
     private boolean isCollect;
     private boolean isGood;
 
+    private boolean isSel;//是否被选中
+
     /**
      * 数据库存储类型
      * DB_TYPE_BROWER 代表浏览记录
      * DB_TYPE_COLLECT_LOCAL 未登录本地收藏
      * DB_TYPE_COLLECT_NETTOLOCAL 登录之后本地收藏
-     *
      */
     private int dataType;
 
@@ -135,26 +136,14 @@ public class VideoListJson implements Parcelable {
         isGood = good;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public boolean isSel() {
+        return isSel;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.uid);
-        dest.writeString(this.category_id);
-        dest.writeString(this.title);
-        dest.writeString(this.picture);
-        dest.writeString(this.num_comment);
-        dest.writeString(this.num_good);
-        dest.writeString(this.num_play);
-        dest.writeString(this.create_time);
-        dest.writeByte(this.isCollect ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isGood ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.dataType);
+    public void setSel(boolean sel) {
+        isSel = sel;
     }
+
 
     public boolean getIsCollect() {
         return this.isCollect;
@@ -175,6 +164,53 @@ public class VideoListJson implements Parcelable {
     public VideoListJson() {
     }
 
+    @Generated(hash = 1806680125)
+    public VideoListJson(String uid, String category_id, String title, String picture, String num_comment,
+            String num_good, String num_play, String create_time, boolean isCollect, boolean isGood,
+            boolean isSel, int dataType) {
+        this.uid = uid;
+        this.category_id = category_id;
+        this.title = title;
+        this.picture = picture;
+        this.num_comment = num_comment;
+        this.num_good = num_good;
+        this.num_play = num_play;
+        this.create_time = create_time;
+        this.isCollect = isCollect;
+        this.isGood = isGood;
+        this.isSel = isSel;
+        this.dataType = dataType;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uid);
+        dest.writeString(this.category_id);
+        dest.writeString(this.title);
+        dest.writeString(this.picture);
+        dest.writeString(this.num_comment);
+        dest.writeString(this.num_good);
+        dest.writeString(this.num_play);
+        dest.writeString(this.create_time);
+        dest.writeByte(this.isCollect ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isGood ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSel ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.dataType);
+    }
+
+    public boolean getIsSel() {
+        return this.isSel;
+    }
+
+    public void setIsSel(boolean isSel) {
+        this.isSel = isSel;
+    }
+
     protected VideoListJson(Parcel in) {
         this.uid = in.readString();
         this.category_id = in.readString();
@@ -186,24 +222,8 @@ public class VideoListJson implements Parcelable {
         this.create_time = in.readString();
         this.isCollect = in.readByte() != 0;
         this.isGood = in.readByte() != 0;
+        this.isSel = in.readByte() != 0;
         this.dataType = in.readInt();
-    }
-
-    @Generated(hash = 813080119)
-    public VideoListJson(String uid, String category_id, String title, String picture, String num_comment,
-            String num_good, String num_play, String create_time, boolean isCollect, boolean isGood,
-            int dataType) {
-        this.uid = uid;
-        this.category_id = category_id;
-        this.title = title;
-        this.picture = picture;
-        this.num_comment = num_comment;
-        this.num_good = num_good;
-        this.num_play = num_play;
-        this.create_time = create_time;
-        this.isCollect = isCollect;
-        this.isGood = isGood;
-        this.dataType = dataType;
     }
 
     public static final Parcelable.Creator<VideoListJson> CREATOR = new Parcelable.Creator<VideoListJson>() {

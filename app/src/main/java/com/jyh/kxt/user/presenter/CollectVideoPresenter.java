@@ -9,7 +9,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.CollectUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
@@ -52,6 +52,7 @@ public class CollectVideoPresenter extends BasePresenter {
         lastId = "";
         collectVideoFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
+            CollectUtils.localAndNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
             initNetData();
         } else {
             initLocalData();
@@ -130,27 +131,35 @@ public class CollectVideoPresenter extends BasePresenter {
         request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
             @Override
             protected void onResponse(List<VideoListJson> o) {
-                if (o == null || o.size() == 0) {
-                    collectVideoFragment.plRootView.loadEmptyData();
-                } else {
-                    if (o.size() > VarConstant.LIST_MAX_SIZE) {
-                        o = o.subList(0, VarConstant.LIST_MAX_SIZE);
-                        isMore = true;
-                        int index = o.size() - 1;
-                        lastId = o.get(index).getId();
+                try {
+                    if (o == null || o.size() == 0) {
+                        collectVideoFragment.plRootView.loadEmptyData();
                     } else {
-                        isMore = false;
-                        lastId = "";
+                        if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                            o = o.subList(0, VarConstant.LIST_MAX_SIZE);
+                            isMore = true;
+                            int index = o.size() - 1;
+                            lastId = o.get(index).getId();
+                        } else {
+                            isMore = false;
+                            lastId = "";
+                        }
+                        collectVideoFragment.initData(o);
+                        collectVideoFragment.plRootView.loadOver();
                     }
-                    collectVideoFragment.initData(o);
-                    collectVideoFragment.plRootView.loadOver();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                collectVideoFragment.plRootView.loadError();
+                try {
+                    collectVideoFragment.plRootView.loadError();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -255,34 +264,44 @@ public class CollectVideoPresenter extends BasePresenter {
      * 加载网络更多收藏信息
      */
     private void loadNetMore() {
-        request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
-            @Override
-            protected void onResponse(List<VideoListJson> o) {
-                if (o == null || o.size() == 0) {
-                } else {
-                    if (o.size() > VarConstant.LIST_MAX_SIZE) {
-                        o = o.subList(0, VarConstant.LIST_MAX_SIZE);
-                        isMore = true;
-                        lastId = o.get(o.size() - 1).getId();
+        if (isMore)
+            request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
+                @Override
+                protected void onResponse(List<VideoListJson> o) {
+                    if (o == null || o.size() == 0) {
                     } else {
-                        isMore = false;
-                        lastId = "";
+                        if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                            o = o.subList(0, VarConstant.LIST_MAX_SIZE);
+                            isMore = true;
+                            lastId = o.get(o.size() - 1).getId();
+                        } else {
+                            isMore = false;
+                            lastId = "";
+                        }
+                        collectVideoFragment.loadMore(o);
                     }
-                    collectVideoFragment.loadMore(o);
                 }
-            }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                collectVideoFragment.plvContent.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        collectVideoFragment.plvContent.onRefreshComplete();
-                    }
-                }, 500);
-            }
-        });
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    collectVideoFragment.plvContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            collectVideoFragment.plvContent.onRefreshComplete();
+                        }
+                    }, 500);
+                }
+            });
+        else {
+            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+            collectVideoFragment.plvContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    collectVideoFragment.plvContent.onRefreshComplete();
+                }
+            }, 500);
+        }
     }
 
     private String getUrl() {

@@ -2,27 +2,31 @@ package com.jyh.kxt.user.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.user.adapter.CollectVideoAdapter;
 import com.jyh.kxt.user.presenter.CollectVideoPresenter;
+import com.jyh.kxt.user.ui.CollectActivity;
+import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 项目名:Kxt
@@ -39,7 +43,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
 
     private CollectVideoPresenter collectVideoPresenter;
 
-    private CollectVideoAdapter adapter;
+    public CollectVideoAdapter adapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -61,6 +65,9 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
                 startActivity(videoIntent);
             }
         });
+
+        if (adapter != null)
+            plvContent.setAdapter(adapter);
 
         collectVideoPresenter.initData();
     }
@@ -124,4 +131,113 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         collectVideoPresenter.loadMore();
     }
 
+    /**
+     * 编辑
+     *
+     * @param observerData
+     */
+    public void edit(CollectActivity.DelNumListener observerData) {
+        try {
+            adapter.setEdit(true);
+            adapter.setSelListener(observerData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 全选
+     *
+     * @param selected
+     */
+    public void selAll(boolean selected, CollectActivity.DelNumListener observerData) {
+        if (selected) {
+            //全选
+            List<VideoListJson> data = adapter.getData();
+            for (VideoListJson videoListJson : data) {
+                videoListJson.setSel(true);
+            }
+            try {
+                //设置选中数量
+                observerData.callback(data.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+                observerData.callback(0);
+            }
+        } else {
+            //取消全选
+            List<VideoListJson> data = adapter.getData();
+            for (VideoListJson videoListJson : data) {
+                videoListJson.setSel(false);
+            }
+            //还原选中数量
+            observerData.callback(0);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 删除
+     *
+     * @param observerData
+     */
+    public void del(final CollectActivity.DelNumListener observerData) {
+        //获取选中的id
+        List<VideoListJson> data = adapter.getData();
+        String ids = "";
+        for (VideoListJson videoListJson : data) {
+            if (videoListJson.isSel()) {
+                String id = videoListJson.getId();
+                if (ids.equals("")) {
+                    ids = id;
+                } else {
+                    ids += "," + id;
+                }
+            }
+        }
+        //选中非空判断
+        if ("".equals(ids)) {
+            ToastView.makeText3(getContext(), "请选中至少一项");
+            return;
+        }
+
+        final String finalIds = ids;
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_VIDEO, ids, new ObserverData() {
+            @Override
+            public void callback(Object o) {
+                //删除取消收藏的数据
+                adapter.removeById(finalIds);
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_VIDEO, null));
+                //退出编辑状态
+                quitEdit(observerData);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                //退出编辑状态
+                quitEdit(observerData);
+            }
+        });
+
+    }
+
+    /**
+     * 退出编辑
+     */
+    public void quitEdit(CollectActivity.DelNumListener observerData) {
+        adapter.setEdit(false);
+        List<VideoListJson> data = adapter.getData();
+        //还原删除按钮数字
+        if (observerData != null)
+            observerData.callback(0);
+        //空数据处理
+        if (data == null || data.size() == 0) {
+            plRootView.loadEmptyData();
+            return;
+        }
+        //还原选中状态
+        for (VideoListJson videoListJson : data) {
+            videoListJson.setSel(false);
+        }
+    }
 }

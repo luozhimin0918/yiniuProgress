@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.presenter.FlashPresenter;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
@@ -55,8 +56,15 @@ public class FlashFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusClass eventBus) {
-        if(eventBus!=null&&eventBus.fromCode==EventBusClass.EVENT_FLASH_FILTRATE){
-            flashPresenter.filtrate();
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_FLASH_FILTRATE:
+                flashPresenter.filtrate();
+                break;
+            case EventBusClass.EVENT_COLLECT_FLASH:
+                FastInfoAdapter adapter = flashPresenter.adapter;
+                if (adapter != null)
+                    adapter.notifyDataSetChanged();
+                break;
         }
     }
 
