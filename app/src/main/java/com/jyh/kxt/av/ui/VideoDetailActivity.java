@@ -13,7 +13,6 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
-import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.superplayer.library.SuperPlayer;
 
@@ -59,8 +58,6 @@ public class VideoDetailActivity extends BaseActivity {
         commentPresenter = new CommentPresenter(this);
 
         videoDetailPresenter.requestInitVideo();
-
-        EmoJeUtil.getInstance().loadAllEmoJe(this);
 
 //        videoDetailPresenter.requestInitVideoTest();
     }

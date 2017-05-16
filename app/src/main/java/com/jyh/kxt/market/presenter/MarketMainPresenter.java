@@ -1,6 +1,7 @@
 package com.jyh.kxt.market.presenter;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,6 +104,7 @@ public class MarketMainPresenter extends BasePresenter {
      */
     private void createMainView(MarketMainBean marketBean) {
         createPaddingView(1);
+
         RecyclerView recommendView = new RecyclerView(mContext);
         GridLayoutManager layout = new GridLayoutManager(mContext, 3) {
             @Override
@@ -116,7 +118,9 @@ public class MarketMainPresenter extends BasePresenter {
             }
         };
         recommendView.setLayoutManager(layout);
-        recommendView.addItemDecoration(new DividerGridItemDecoration(mContext));
+        DividerGridItemDecoration decor = new DividerGridItemDecoration(mContext);
+        decor.setSpanCount(3);
+        recommendView.addItemDecoration(decor);
 
         MarketRecommendAdapter adapter = new MarketRecommendAdapter(mContext, marketBean.getData());
         recommendView.setAdapter(adapter);
@@ -134,22 +138,23 @@ public class MarketMainPresenter extends BasePresenter {
         }
         createPaddingView(6);
 
-        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, mainHeaderView);
+        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("我的自选");
+        mainHeaderView.addView(titleBlue);
 
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(mContext);
-        int horizontalHeight = SystemUtil.dp2px(mContext, 80);
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                horizontalHeight);
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
         mainHeaderView.addView(horizontalScrollView, lp);
 
         LinearLayout hqLayout = new LinearLayout(mContext);
         ViewGroup.LayoutParams hqParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                horizontalHeight);
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         hqLayout.setLayoutParams(hqParams);
 
         LayoutInflater mInflate = LayoutInflater.from(mContext);
@@ -158,21 +163,23 @@ public class MarketMainPresenter extends BasePresenter {
 
             ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
                     R.layout.item_market_recommend,
-                    hqLayout,
+                    null,
                     false);
+
             dataBinding.setBean(marketItemBean);
-
+            View v = dataBinding.getRoot();
+            hqLayout.addView(v);
         }
-
         horizontalScrollView.addView(hqLayout);
     }
 
     private void createHotView(MarketMainBean marketBean) {
         createPaddingView(6);
 
-        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, mainHeaderView);
+        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue,null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("热门行情");
+        mainHeaderView.addView(titleBlue);
 
         View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);
         navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
@@ -187,11 +194,8 @@ public class MarketMainPresenter extends BasePresenter {
     private void createPaddingView(int heightPx) {
         View view = new View(mContext);
         int height = SystemUtil.dp2px(mContext, heightPx);
-
         int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
-
         view.setBackgroundColor(paddingColor);
-
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
         mainHeaderView.addView(view, lp);
     }

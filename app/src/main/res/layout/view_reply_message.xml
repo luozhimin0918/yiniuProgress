@@ -4,20 +4,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/line_color3"
     android:orientation="vertical">
 
     <com.jyh.kxt.base.util.emoje.EmoticonsEditText
         android:id="@+id/eet_content"
         style="@style/EmoJe_EditText"
+        android:background="@color/white"
+        android:layout_margin="10dp"
         android:tag="issueCommentEdit"
-        android:hint="请输入回复">
+        android:maxLength="140"
+        android:hint="来发表你的伟大言论吧">
 
     </com.jyh.kxt.base.util.emoje.EmoticonsEditText>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
         android:background="@color/line_color3"
         android:gravity="center_vertical">
@@ -27,18 +32,17 @@
             android:layout_width="23dp"
             android:layout_height="23dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:src="@mipmap/ico_keybor"/>
+            android:src="@mipmap/icon_emoje"/>
 
         <TextView
             android:id="@+id/tv_max_length"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_publish"
             android:gravity="center"
             android:layout_marginRight="18dp"
-            android:text="0/144"/>
+            android:text="0/140"/>
 
         <com.jyh.kxt.base.custom.DiscolorButton
             android:id="@+id/tv_publish"
@@ -48,11 +52,9 @@
             android:tag="issueCommentBtn"
             android:layout_alignParentRight="true"
 
-            android:layout_marginRight="8dp"
-
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="发布"
+            android:text="发送"
 
             app:clickFontColor="@color/white"
 
@@ -67,6 +69,7 @@
     <FrameLayout
         android:id="@+id/fl_emoje"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content">
     </FrameLayout>
 </LinearLayout>

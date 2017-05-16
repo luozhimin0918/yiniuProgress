@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -23,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jyh.kxt.R.id.iv_emoji;
+
 /**
  * Created by Mr'Dai on 2017/4/5.
  */
@@ -31,6 +34,9 @@ public class ReplyMessagePresenter extends BasePresenter {
 
     @BindView(R.id.tv_publish) TextView tvPublish;
     @BindView(R.id.fl_emoje) FrameLayout flEmoJe;
+    @BindView(R.id.iv_emoji) ImageView ivEmoJeState;
+    @BindView(R.id.tv_max_length) TextView tvMaxLength;
+
     @BindView(R.id.eet_content) EmoticonsEditText eetContent;
 
     public boolean isShowEmoJiView = false;
@@ -58,7 +64,7 @@ public class ReplyMessagePresenter extends BasePresenter {
             public boolean onTouch(View v, MotionEvent event) {
                 if (isShowEmoJiView) {
                     isShowEmoJiView = false;
-
+                    ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
                     flEmoJe.removeView(emoJeContentView);
                     hideSoftInputFromWindow();
 
@@ -67,12 +73,20 @@ public class ReplyMessagePresenter extends BasePresenter {
                 return false;
             }
         });
+
+        eetContent.setOnTextChangedListener(new EmoticonsEditText.OnTextChangedListener() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int currentCount = start + count;
+                tvMaxLength.setText(currentCount+"/140");
+            }
+        });
     }
 
-    @OnClick({R.id.iv_emoji, R.id.tv_publish})
+    @OnClick({iv_emoji, R.id.tv_publish})
     public void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_emoji:
+            case iv_emoji:
                 showOrHideEmoJiView();
                 break;
             case R.id.tv_publish:
@@ -113,7 +127,9 @@ public class ReplyMessagePresenter extends BasePresenter {
 
         if (isShowEmoJiView) {
             flEmoJe.addView(emoJeContentView);
+            ivEmoJeState.setImageResource(R.mipmap.ico_keybor);
         } else {
+            ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
             flEmoJe.removeView(emoJeContentView);
         }
         hideSoftInputFromWindow();
@@ -128,6 +144,7 @@ public class ReplyMessagePresenter extends BasePresenter {
     public void goneEmoJeView() {
         if (emoJeContentView != null) {
             flEmoJe.removeView(emoJeContentView);
+            ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
             isShowEmoJiView = false;
         }
     }

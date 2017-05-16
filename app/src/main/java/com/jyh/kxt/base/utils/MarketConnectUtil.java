@@ -34,13 +34,13 @@ public class MarketConnectUtil {
     private WebSocketConnection mConnection = new WebSocketConnection();
 
     public void sendSocketParams(IBaseView iBaseView, List<MarketItemBean> list) {
-        JSONArray jsonArray = new JSONArray();
-
-        for (MarketItemBean marketItemBean : list) {
-            jsonArray.add(marketItemBean.getCode());
-        }
-
-        sendSocketParams(iBaseView, jsonArray);
+//        JSONArray jsonArray = new JSONArray();
+//
+//        for (MarketItemBean marketItemBean : list) {
+//            jsonArray.add(marketItemBean.getCode());
+//        }
+//
+//        sendSocketParams(iBaseView, jsonArray);
     }
 
     public void sendSocketParams(IBaseView iBaseView, JSONArray jsonArray) {

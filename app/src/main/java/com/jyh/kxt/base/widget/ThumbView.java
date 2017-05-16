@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -11,9 +12,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.NativeStore;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 /**
  * Created by Mr'Dai on 2017/5/4.
@@ -93,50 +102,63 @@ public class ThumbView extends RelativeLayout {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                isThumb = !isThumb;
-
-                if (isThumb) {
-                    NativeStore.getInstance(getContext()).addThumbID(getContext(), thumbId);
-
-
-                    changerCount(1);
-                    ivThumb.setImageResource(R.mipmap.icon_comment_like);
-
-                    tvThumbAddCount.setVisibility(View.VISIBLE);
-
-                    mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.thumb_anim);
-                    tvThumbAddCount.startAnimation(mAnimation);
-
-                    tvThumbAddCount.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            tvThumbAddCount.setVisibility(View.GONE);
-                        }
-                    }, mAnimation.getDuration());
-
+                if (!isThumb) {
+                    requestClickThumb();
                 } else {
-                    NativeStore.getInstance(getContext()).removeThumbId(getContext(), thumbId);
+                    TSnackbar tSnackbar = TSnackbar.make(v, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
+                            .APPEAR_FROM_TOP_TO_DOWN);
 
-                    changerCount(-1);
-                    ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
+                    int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
+                    tSnackbar.setBackgroundColor(color);
+                    tSnackbar.setPromptThemBackground(Prompt.WARNING);
+                    tSnackbar.show();
                 }
             }
         });
     }
 
     /**
-     * @param thumbId
+     * 请求点赞
      */
-    public void updateThumbState(int thumbId) {
-        this.thumbId = thumbId;
+    private void requestClickThumb() {
 
-        isThumb = NativeStore.getInstance(getContext()).isThumbSucceed(thumbId);
+        NativeStore.getInstance(getContext()).addThumbID(getContext(), thumbId);
 
-        if (isThumb) {
-            ivThumb.setImageResource(R.mipmap.icon_comment_like);
-        } else {
-            ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
-        }
+        changerCount(1);
+        ivThumb.setImageResource(R.mipmap.icon_comment_like);
+
+        tvThumbAddCount.setVisibility(View.VISIBLE);
+
+        mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.thumb_anim);
+        tvThumbAddCount.startAnimation(mAnimation);
+
+        tvThumbAddCount.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tvThumbAddCount.setVisibility(View.GONE);
+            }
+        }, mAnimation.getDuration());
+        isThumb = true;
+
+
+
+        IBaseView iBaseView = (IBaseView) getContext();
+
+        VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("id", thumbId);
+
+        volleyRequest.doPost(HttpConstant.GOOD_NEWS, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String data) {
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
+
     }
 
     @Override
@@ -148,7 +170,18 @@ public class ThumbView extends RelativeLayout {
         }
     }
 
-    public void setThumbCount(int count) {
+    public void setThumbCount(int count, int thumbId) {
+        this.thumbId = thumbId;
+
+        isThumb = NativeStore.getInstance(getContext()).isThumbSucceed(thumbId);
+
+        if (isThumb) {
+            ivThumb.setImageResource(R.mipmap.icon_comment_like);
+            count = count + 1;
+        } else {
+            ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
+        }
+
         if (tvThumbCount != null) {
             tvThumbCount.setText(String.valueOf(count));
         }

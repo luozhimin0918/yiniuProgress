@@ -12,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.library.R;
+import com.library.util.SystemUtil;
 
 /**
  * Created by Mr'Dai on 2017/5/3.
@@ -20,9 +21,12 @@ import com.library.R;
 public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
+    private Context mContext;
+    private int spanCount = -1;
 
-    public DividerGridItemDecoration(Context context) {
-        int color = ContextCompat.getColor(context, R.color.line_background1);
+    public DividerGridItemDecoration(Context mContext) {
+        this.mContext = mContext;
+        int color = ContextCompat.getColor(mContext, R.color.line_background1);
         mDivider = new ColorDrawable(color);
     }
 
@@ -51,17 +55,42 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     public void drawHorizontal(Canvas c, RecyclerView parent) {
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
+
+            int dividerWidth = 0;
+
+            if (spanCount != -1) {
+                int remainder = childCount % spanCount;
+                if (remainder == 0) {
+                    if (i >= childCount - spanCount) {
+                        dividerWidth = 0;
+                    } else {
+                        dividerWidth = 1;
+                    }
+                } else {
+                    if (i >= childCount - remainder) {
+                        dividerWidth = 0;
+                    } else {
+                        dividerWidth = 1;
+                    }
+                }
+            } else {
+                dividerWidth = 1;
+            }
+
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
-            final int right = child.getRight() + params.rightMargin
-                    + mDivider.getIntrinsicWidth();
+
+            final int right = child.getRight() + params.rightMargin + SystemUtil.dp2px(mContext, dividerWidth);
             final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mDivider.getIntrinsicHeight();
+
+            final int bottom = top + SystemUtil.dp2px(mContext, dividerWidth);
+
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }
+
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
@@ -74,7 +103,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
-            final int right = left + mDivider.getIntrinsicWidth();
+            final int right = left + SystemUtil.dp2px(mContext, 1f);
 
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
@@ -146,13 +175,16 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         int childCount = parent.getAdapter().getItemCount();
         if (isLastRaw(parent, itemPosition, spanCount, childCount))// 如果是最后一行，则不需要绘制底部
         {
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+            outRect.set(0, 0, SystemUtil.dp2px(mContext, 1f), 0);
         } else if (isLastColum(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
         {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+            outRect.set(0, 0, 0, SystemUtil.dp2px(mContext, 1f));
         } else {
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(),
-                    mDivider.getIntrinsicHeight());
+            outRect.set(0, 0, SystemUtil.dp2px(mContext, 1f), SystemUtil.dp2px(mContext, 1f));
         }
+    }
+
+    public void setSpanCount(int spanCount) {
+        this.spanCount = spanCount;
     }
 }

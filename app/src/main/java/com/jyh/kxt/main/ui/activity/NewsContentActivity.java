@@ -1,13 +1,14 @@
 package com.jyh.kxt.main.ui.activity;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
@@ -36,9 +38,6 @@ import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,9 +76,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.bindListView(ptrLvMessage);
         webViewAndHead = new WebViewAndHead();
-        newsContentPresenter.requestInitComment();
+        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START);
 
-        pllContent.setForeground(new ColorDrawable(Color.WHITE));
+        pllContent.loadWait();
+
         commentPresenter.setOnCommentClickListener(this);
         commentPresenter.setOnCommentPublishListener(this);
     }
@@ -92,6 +92,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.iv_comment:
                 //回复
+                ptrLvMessage.getRefreshableView().setSelection(2);
                 break;
             case R.id.iv_collect:
                 //收藏
@@ -195,22 +196,36 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             String webContent = newsContentJson.getContent();
 
             WebSettings settings = wvContent.getSettings();
-            settings.setDefaultTextEncodingName("utf-8");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
 
             settings.setLoadWithOverviewMode(true);
+            settings.setBlockNetworkImage(false);
 
+            settings.setJavaScriptEnabled(true);
+            settings.setAppCacheEnabled(true);
+
+            settings.setDefaultTextEncodingName("utf-8");
+            settings.setLoadWithOverviewMode(true);
             wvContent.loadDataWithBaseURL("", webContent, "text/html", "utf-8", "");
 
             wvContent.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-
-                    pllContent.setForeground(null);
+                    pllContent.loadOver();
                 }
             });
-
             headView.addView(llFullContent, 0);
+
+
+            /**
+             * 创建分享的
+             */
+            LinearLayout llShareContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
+                    inflate(R.layout.layout_news_content_head_share, headView, false);
+            headView.addView(llShareContent, 1);
         }
 
         public void setTextZoom(int zoom) {
@@ -239,6 +254,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 return;
             }
 
+            pllContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT8,"提交中...");
+
             VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
             JSONObject jsonParam = volleyRequest.getJsonParam();
             jsonParam.put("type", "article");
@@ -247,12 +264,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             jsonParam.put("accessToken", userInfo.getToken());
             jsonParam.put("content", commentContent);
 
-            volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<NewsContentJson>() {
+            volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
                 @Override
-                protected void onResponse(NewsContentJson mNewsContentJson) {
+                protected void onResponse(CommentBean mCommentBean) {
                     popupWindow.dismiss();
                     commentEdit.setText("");
-                    Log.e(TAG, "onResponse: " + mNewsContentJson);
+
+                    newsContentPresenter.commentFirstCommit(mCommentBean);
+
+                    pllContent.loadOver();
                 }
 
                 @Override

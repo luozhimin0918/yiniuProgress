@@ -125,8 +125,8 @@
         android:background="@color/line_color3"/>
 
 
-    <com.tencent.smtt.sdk.WebView
+    <WebView
         android:id="@+id/wv_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.tencent.smtt.sdk.WebView>
+        android:layout_height="wrap_content"></WebView>
 </LinearLayout>

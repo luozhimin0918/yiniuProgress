@@ -17,8 +17,8 @@
         android:id="@+id/tv_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/newsContentPadding4"
-        android:layout_marginTop="@dimen/newsContentPadding4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="25dp"
         android:paddingLeft="@dimen/newsContentPadding3"
         android:textSize="@dimen/describe_font_size3"
         android:text="文章来源:快讯通财经"
@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/newsContentPadding3"
+        android:layout_marginBottom="30dp"
         android:paddingRight="@dimen/newsContentPadding3">
 
         <LinearLayout
@@ -39,8 +40,8 @@
 
             <ImageView
                 android:id="@+id/iv_ding"
-                android:layout_width="@dimen/newsFunctionBtnSize"
-                android:layout_height="@dimen/newsFunctionBtnSize"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/sel_share_ding"/>
 
             <TextView
@@ -71,8 +72,8 @@
 
             <ImageView
                 android:id="@+id/iv_pyq"
-                android:layout_width="@dimen/newsFunctionBtnSize"
-                android:layout_height="@dimen/newsFunctionBtnSize"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/icon_share_qyq"/>
 
             <TextView
@@ -100,8 +101,8 @@
 
             <ImageView
                 android:id="@+id/iv_wx"
-                android:layout_width="@dimen/newsFunctionBtnSize"
-                android:layout_height="@dimen/newsFunctionBtnSize"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/icon_share_wx"/>
 
             <TextView
@@ -129,8 +130,8 @@
 
             <ImageView
                 android:id="@+id/iv_sina"
-                android:layout_width="@dimen/newsFunctionBtnSize"
-                android:layout_height="@dimen/newsFunctionBtnSize"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/icon_share_sina"/>
 
             <TextView

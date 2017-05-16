@@ -13,6 +13,7 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketMainPresenter;
 import com.jyh.kxt.market.presenter.MarketOtherPresenter;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import butterknife.BindView;
@@ -65,6 +66,7 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
             marketOtherPresenter.generateAdapter();
 
         }
+        ptrlvContent.setMode(PullToRefreshBase.Mode.DISABLED);
         ptrlvContent.setOnScrollListener(this);
     }
 

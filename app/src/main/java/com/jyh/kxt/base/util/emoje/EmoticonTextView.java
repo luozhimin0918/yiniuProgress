@@ -5,7 +5,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -68,6 +67,9 @@ public class EmoticonTextView extends TextView {
                 String group = matcher.group(1);
 
                 String[] splitGroup = group.split(",");
+                if (splitGroup.length < 2) {
+                    continue;
+                }
                 String emoJeName = splitGroup[0];
                 String emoJeUrl = splitGroup[1];
 
@@ -103,7 +105,6 @@ public class EmoticonTextView extends TextView {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         setText(currentSpannable);
 
@@ -210,8 +211,7 @@ public class EmoticonTextView extends TextView {
             CharSequence text = getText();
             setText(text);
 
-            Log.e("刷新", "run: " + getText());
-//            invalidate();
+//            invalidate(); //避免刷新导致的EmoJe白屏没问题
 
             startLoopInvalidate();
         }

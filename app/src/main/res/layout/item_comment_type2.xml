@@ -80,8 +80,11 @@
 
         <com.jyh.kxt.base.util.emoje.EmoticonTextView
             android:id="@+id/tv_primary_content"
-            android:layout_width="wrap_content"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/describe_font_size4"/>
 
@@ -128,8 +131,11 @@
 
     <com.jyh.kxt.base.util.emoje.EmoticonTextView
         android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:gravity="center_vertical"
         android:layout_alignLeft="@+id/ll_je_sao"
         android:layout_below="@+id/ll_primary_info"
         android:layout_marginTop="10dp"

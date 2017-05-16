@@ -114,8 +114,7 @@ public class CommentAdapter extends BaseAdapter {
             case 1:
                 baseViewHolder = mViewHolder2;
 
-                mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean.getParent_num_good());
-                mViewHolder2.tvPrimaryThumb.updateThumbState(commentBean.getParent_id());
+                mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean.getParent_num_good(),commentBean.getParent_id());
 
                 mViewHolder2.tvPrimaryMessage.setText(String.valueOf(commentBean.getParent_num_reply()));
                 mViewHolder2.tvPrimaryTime.setText(getSimpleTime(commentBean.getParent_create_time()));
@@ -144,8 +143,7 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvNickName.setText(commentBean.getMember_nickname());
         baseViewHolder.tvTime.setText(getSimpleTime(commentBean.getCreate_time()));
 
-        baseViewHolder.tvThumb.setThumbCount(commentBean.getNum_good());
-        baseViewHolder.tvThumb.updateThumbState(commentBean.getId());
+        baseViewHolder.tvThumb.setThumbCount(commentBean.getNum_good(),commentBean.getId());
 
         baseViewHolder.tvMessage.setText(String.valueOf(commentBean.getNum_reply()));
         baseViewHolder.tvContent.convertToGif(commentBean.getContent());
@@ -184,6 +182,7 @@ public class CommentAdapter extends BaseAdapter {
     }
 
     private String getSimpleTime(long time) {
+        time = time * 1000;//PHP的时间
         String simpleTime = (String) DateFormat.format("MM-dd HH:mm", time);
         return simpleTime;
     }

@@ -60,8 +60,8 @@
             android:theme="@style/TranslucentBgTheme"/>
         <activity
             android:name=".av.ui.VideoDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/VideoTheme">
         </activity>
         <activity
@@ -97,14 +97,11 @@
 
         <activity
             android:name=".main.ui.activity.NewsContentActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".explore.ui.AuthorActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".explore.ui.AuthorListActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".explore.ui.MoreActivity"
@@ -143,8 +140,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -176,7 +173,7 @@
 
         <meta-data
             android:name="com.jyh.kxt.base.utils.MyGlideModule"
-            android:value="GlideModule"/>
+            android:value="GlideModule" />
 
         <activity android:name=".datum.ui.DatumHistoryActivity">
         </activity>

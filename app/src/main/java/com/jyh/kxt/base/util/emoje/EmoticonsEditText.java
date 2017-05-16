@@ -22,6 +22,16 @@ import java.util.List;
 
 public class EmoticonsEditText extends EditText {
 
+    public interface OnTextChangedListener {
+        void onTextChanged(CharSequence s, int start, int before, int count);
+    }
+
+    private OnTextChangedListener onTextChangedListener;
+
+    public void setOnTextChangedListener(OnTextChangedListener onTextChangedListener) {
+        this.onTextChangedListener = onTextChangedListener;
+    }
+
     private List mEmoJeNameList = new ArrayList<>();
 
     public EmoticonsEditText(Context context) {
@@ -109,6 +119,9 @@ public class EmoticonsEditText extends EditText {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (onTextChangedListener != null) {
+                    onTextChangedListener.onTextChanged(s, start, before, count);
+                }
             }
 
             @Override
@@ -142,42 +155,5 @@ public class EmoticonsEditText extends EditText {
 
         int selectionPosition = getSelectionStart();
         text.delete(selectionPosition - 1, selectionPosition);
-
-
-//        isAddChart = true;
-//        changedState = 1;
-//
-//        String currentContent = getText().toString();
-//
-//        String cursorFront = currentContent.substring(0, getSelectionStart());
-//        int lastIndexPosition = cursorFront.length() - 1;
-//        char lastChart = cursorFront.charAt(lastIndexPosition);
-//
-//        int startIndex = 0;
-//        if (']' == lastChart) {
-//
-//            for (int indexPosition = lastIndexPosition - 1; indexPosition > 0; indexPosition--) {
-//                char singleChart = cursorFront.charAt(indexPosition);
-//                if (']' == singleChart) {//错误的 ] 括号 //只删除这一个值
-//                    startIndex = lastIndexPosition;
-//                    currentContent = getText().delete(lastIndexPosition - 1, lastIndexPosition).toString();
-//                    break;
-//                }
-//                if ('[' == singleChart) {
-//                    startIndex = indexPosition;
-//                    currentContent = getText().delete(startIndex, lastIndexPosition + 1).toString();
-//                    break;
-//                }
-//            }
-//        } else {
-//            int selectionStart = getSelectionStart();
-//            currentContent = getText().delete(selectionStart - 1, selectionStart).toString();
-//            startIndex = selectionStart - 1;
-//        }
-//
-//        setText(currentContent);
-//        setSelection(startIndex);
-
-
     }
 }

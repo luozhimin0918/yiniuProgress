@@ -49,7 +49,7 @@ public class CommentBean {
     private int parent_num_good;
     private int parent_num_reply;
     private int status;
-    private int type;
+    private String type;
 
     public String getContent() {
         return content;
@@ -203,11 +203,11 @@ public class CommentBean {
         this.status = status;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

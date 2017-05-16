@@ -64,8 +64,11 @@
 
     <com.jyh.kxt.base.util.emoje.EmoticonTextView
         android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_alignLeft="@+id/ll_je_sao"
         android:layout_below="@+id/ll_je_sao"
         android:layout_marginTop="10dp"

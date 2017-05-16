@@ -162,6 +162,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         int color = ContextCompat.getColor(mContext, R.color.blue);
         tvNoneComment.setTextColor(color);
 
+        tvNoneComment.setTag("noneComment");
+
         headView.addView(tvNoneComment);
 
         tvNoneComment.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +187,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
             View replyMessageView = replyMessagePopup.createPopupView(R.layout.view_reply_message);
 
-            replyMessagePresenter.initView(replyMessageView, replyMessagePopup,onCommentPublishListener);
+            replyMessagePresenter.initView(replyMessageView, replyMessagePopup, onCommentPublishListener);
 
             PopupUtil.Config config = new PopupUtil.Config();
 

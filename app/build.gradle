@@ -85,4 +85,5 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
+    compile 'com.trycatch.android:mysnackbar:1.2.2'
 }
