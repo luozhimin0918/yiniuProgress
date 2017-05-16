@@ -1,7 +1,9 @@
 package com.jyh.kxt.index.presenter;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -12,12 +14,14 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 
 
 public class MainPresenter extends BasePresenter {
 
     @BindObject MainActivity mMainActivity;
+    private AlertDialog logoutDialog;
 
     public MainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -81,5 +85,28 @@ public class MainPresenter extends BasePresenter {
         }).start();
 
 
+    }
+
+    /**
+     * 退出弹窗
+     */
+    public void showQuitDialog() {
+        if (logoutDialog == null)
+            logoutDialog = new AlertDialog.Builder(mContext).setTitle("提醒").setMessage("确认退出当前账号?").setNegativeButton("确认", new
+                    DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoginUtils.logout(mContext);
+                        }
+                    }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            }).create();
+        if (logoutDialog.isShowing()) {
+            logoutDialog.dismiss();
+        }
+        logoutDialog.show();
     }
 }

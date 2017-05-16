@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,12 +21,15 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.explore.adapter.ActivityAdapter;
 import com.jyh.kxt.explore.adapter.AuthorAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
 import com.jyh.kxt.explore.ui.AuthorActivity;
+import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
@@ -32,6 +37,7 @@ import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.explore.json.TopicJson;
+import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
@@ -50,7 +56,7 @@ import butterknife.OnClick;
 /**
  * 首页-探索
  */
-public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2 {
+public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -80,6 +86,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         plvContent.setDividerNull();
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
         plvContent.setOnRefreshListener(this);
+
+        plvContent.setOnItemClickListener(this);
 
         explorePresenter.init();
 
@@ -287,8 +295,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             @Override
             public void onClick(View v) {
                 //更多名家
-                Intent authorIntent = new Intent(getContext(), MoreActivity.class);
-                authorIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_BLOG_WRITER);
+                Intent authorIntent = new Intent(getContext(), AuthorListActivity.class);
                 startActivity(authorIntent);
             }
         });
@@ -367,5 +374,27 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
                 ToastView.makeText3(getContext(), getContext().getString(R.string.no_data));
             }
         }, 500);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        NewsJson newsJson = newsAdapter.dataList.get(position - 1);
+
+        Intent intent = null;
+        if (TextUtils.isEmpty(newsJson.getHref())) {
+            intent = new Intent(getContext(), NewsContentActivity.class);
+            intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
+        } else {
+            intent = new Intent(getContext(), WebActivity.class);
+            intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
+        }
+
+        startActivity(intent);
+
+        //保存浏览记录
+        BrowerHistoryUtils.save(getContext(), newsJson);
+
+        //单条刷新,改变浏览状态
+        newsAdapter.getView(position, view, parent);
     }
 }

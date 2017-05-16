@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.explore.adapter.MoreAdapter;
+import com.jyh.kxt.explore.json.ActivityJson;
+import com.jyh.kxt.explore.json.TopicJson;
 import com.jyh.kxt.explore.presenter.MorePresenter;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
@@ -29,11 +32,13 @@ import butterknife.OnClick;
 public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
 
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
-    @BindView(R.id.pl_content) PullToRefreshListView plContent;
-    @BindView(R.id.pl_rootView)public PageLoadLayout plRootView;
+    @BindView(R.id.pl_content) public PullToRefreshListView plContent;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private MorePresenter morePresenter;
     private String type;
+
+    public MoreAdapter moreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +69,35 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
     }
 
     public void init(List data) {
-
+        if (moreAdapter == null) {
+            moreAdapter = new MoreAdapter(data, this, type);
+            plContent.setAdapter(moreAdapter);
+        } else {
+            moreAdapter.setData(data);
+        }
+        plRootView.loadOver();
     }
 
 
     public void refresh(List list) {
+        if (list != null)
+            moreAdapter.setData(list);
+        plContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                plContent.onRefreshComplete();
+            }
+        }, 500);
+    }
 
+    public void loadMore(List data) {
+        moreAdapter.addData(data);
+        plContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                plContent.onRefreshComplete();
+            }
+        }, 500);
     }
 
     @OnClick(R.id.iv_bar_break)
@@ -100,10 +128,6 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
         morePresenter.loadMore();
-    }
-
-    public void loadError() {
-
     }
 
 }

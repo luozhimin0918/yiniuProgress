@@ -1,7 +1,10 @@
 package com.jyh.kxt.explore.presenter;
 
+import android.widget.LinearLayout;
+
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -11,7 +14,9 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.widget.window.ToastView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +33,9 @@ public class MorePresenter extends BasePresenter {
     private String type;
     private VolleyRequest request;
 
+    private String lastId = "";
+    private boolean isMore = false;
+
     public MorePresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -36,41 +44,115 @@ public class MorePresenter extends BasePresenter {
         this.type = type;
         if (request == null)
             request = new VolleyRequest(mContext, mQueue);
+        lastId="";
         request.doGet(getUrl(request), new HttpListener<List>() {
             @Override
             protected void onResponse(List o) {
-                moreActivity.init(o);
+                if (o == null || o.size() == 0) {
+                    moreActivity.plRootView.loadEmptyData();
+                    return;
+                }
+                if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                    isMore = true;
+                    moreActivity.init(new ArrayList(o.subList(0, VarConstant.LIST_MAX_SIZE)));
+                    lastId = moreActivity.moreAdapter.getLastId();
+                } else {
+                    isMore = false;
+                    moreActivity.init(o);
+                }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                moreActivity.loadError();
+                moreActivity.plRootView.loadError();
             }
         });
     }
 
     public void refresh() {
+        lastId = "";
         request.doGet(getUrl(request), new HttpListener<List>() {
             @Override
             protected void onResponse(List o) {
-                moreActivity.refresh(o);
+                if (o == null || o.size() == 0) {
+                    moreActivity.refresh(o);
+                    return;
+                }
+                if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                    isMore = true;
+                    moreActivity.refresh(new ArrayList(o.subList(0, VarConstant.LIST_MAX_SIZE)));
+                    lastId = moreActivity.moreAdapter.getLastId();
+                } else {
+                    isMore = false;
+                    moreActivity.refresh(o);
+                }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                moreActivity.plRootView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        moreActivity.plContent.onRefreshComplete();
+                    }
+                }, 500);
             }
         });
     }
 
     public void loadMore() {
+        if (isMore)
+            request.doGet(getUrl(request), new HttpListener<List>() {
+                @Override
+                protected void onResponse(List o) {
+                    if (o == null || o.size() == 0) {
+                        moreActivity.plContent.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                moreActivity.plContent.onRefreshComplete();
+                            }
+                        }, 500);
+                        return;
+                    }
+                    if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                        isMore = true;
+                        moreActivity.loadMore(new ArrayList(o.subList(0, VarConstant.LIST_MAX_SIZE)));
+                        lastId = moreActivity.moreAdapter.getLastId();
+                    } else {
+                        isMore = false;
+                        moreActivity.loadMore(o);
+                    }
+                }
 
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    moreActivity.plRootView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            moreActivity.plContent.onRefreshComplete();
+                        }
+                    }, 500);
+                }
+            });
+        else {
+            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+            moreActivity.plContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    moreActivity.plContent.onRefreshComplete();
+                }
+            }, 500);
+        }
     }
 
     private String getUrl(VolleyRequest request) {
         String url = "";
         JSONObject jsonParam = request.getJsonParam();
+        if (lastId != null && !"".equals(lastId))
+            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
         String param = "";
         try {
             param = VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam

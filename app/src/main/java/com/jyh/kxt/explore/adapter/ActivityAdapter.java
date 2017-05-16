@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.explore.json.ActivityJson;
+import com.library.util.DateUtils;
 
 import java.util.List;
 
@@ -51,7 +52,12 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         } else {
             holder.tvStart.setSelected(true);
         }
-
+        try {
+            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(activity.getStart_time()) * 1000));
+        } catch (Exception e) {
+            e.printStackTrace();
+            holder.tvTime.setText("00:00");
+        }
         Glide.with(mContext).load(activity.getUrl()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(holder.ivBtn);
 
     }

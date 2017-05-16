@@ -45,7 +45,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/explore_header_item3_padding"
-            android:drawableLeft="@mipmap/icon_video_time"
+            android:drawableLeft="@mipmap/icon_explore_time"
             android:drawablePadding="@dimen/explore_header_item3_drawablePadding"
             android:text="2017-01-01"
             android:textColor="@color/font_color6"

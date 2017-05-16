@@ -1,5 +1,6 @@
 package com.jyh.kxt.explore.json;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.jyh.kxt.main.json.NewsJson;
 
 import java.util.List;
@@ -26,20 +27,17 @@ public class AuthorDetailsJson {
     private String introduce;//简介
     private String num_fans;//粉丝数
     private String article_num;//文章数
+    private String is_follow;//是否关注
 
+    @JSONField(name = "article")
     private List<NewsJson> list;
 
-    @Override
-    public String toString() {
-        return "AuthorDetailsJson{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", picture='" + picture + '\'' +
-                ", introduce='" + introduce + '\'' +
-                ", num_fans='" + num_fans + '\'' +
-                ", article_num='" + article_num + '\'' +
-                ", list=" + list +
-                '}';
+    public String getIs_follow() {
+        return is_follow;
+    }
+
+    public void setIs_follow(String is_follow) {
+        this.is_follow = is_follow;
     }
 
     public String getId() {

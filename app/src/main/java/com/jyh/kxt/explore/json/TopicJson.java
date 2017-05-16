@@ -14,27 +14,28 @@ public class TopicJson {
 //            "title":"意大利修宪公投",
 //            "url":"http://img.kuaixun360.com/Uploads/Picture/2016-12-07/5847a91a947d7.png"
 
+    private String id;
     private String background;
     private String title;
     private String url;
 
-    @Override
-    public String toString() {
-        return "TopicJson{" +
-                "background='" + background + '\'' +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                '}';
-    }
-
     public TopicJson() {
     }
 
-    public TopicJson(String background, String title, String url) {
-
+    public TopicJson(String id, String background, String title, String url) {
+        this.id = id;
         this.background = background;
         this.title = title;
         this.url = url;
+    }
+
+    public String getId() {
+
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getBackground() {

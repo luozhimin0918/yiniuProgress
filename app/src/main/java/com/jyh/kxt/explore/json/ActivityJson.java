@@ -14,28 +14,28 @@ public class ActivityJson {
 //            "title":"同样年轻人，你用手机聊天，他却用手机炒金赚钱！",
 //            "url":"http://img.kuaixun360.com/Uploads/Picture/2017-03-30/58dcbfa3512a1.jpg"
 
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String remark;
     private String start_time;
     private String status;
     private String title;
     private String url;
 
-    @Override
-    public String toString() {
-        return "ActivityJson{" +
-                "remark='" + remark + '\'' +
-                ", start_time='" + start_time + '\'' +
-                ", status='" + status + '\'' +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                '}';
-    }
 
     public ActivityJson() {
     }
 
-    public ActivityJson(String remark, String start_time, String status, String title, String url) {
-
+    public ActivityJson(String id, String remark, String start_time, String status, String title, String url) {
+        this.id = id;
         this.remark = remark;
         this.start_time = start_time;
         this.status = status;

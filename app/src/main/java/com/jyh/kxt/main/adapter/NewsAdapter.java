@@ -68,7 +68,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         Glide.with(mContext).load(HttpConstant.IMG_URL + news.getPicture())
                 .placeholder(R.mipmap.ico_def_load)
-                .override(100,100)
+                .override(100, 100)
                 .error(R.mipmap.ico_def_load)
                 .into(holder.ivPhoto);
 
@@ -102,6 +102,10 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
         dataList.clear();
         dataList.addAll(data);
         notifyDataSetChanged();
+    }
+
+    public String getLastId() {
+        return dataList.get(dataList.size() - 1).getO_id();
     }
 
     class ViewHolder {

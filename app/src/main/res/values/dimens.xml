@@ -25,6 +25,7 @@
     <dimen name="describe_font_size1">12sp</dimen>
 
     <dimen name="min_font_size">11sp</dimen>
+    <dimen name="min_min_font_size">10sp</dimen>
 
     <dimen name="btn_cornerRadius">5dp</dimen>
 

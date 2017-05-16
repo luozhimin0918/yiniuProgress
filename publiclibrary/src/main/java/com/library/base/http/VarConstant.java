@@ -42,6 +42,7 @@ public class VarConstant {
     public static final String HTTP_ACCESS_TOKEN = "access_token";
     public static final String HTTP_TOKEN = "token";
     public static final String HTTP_TYPE = "type";  //1:QQ|2:微信|3:微博
+    public static final String HTTP_LIST_TYPE = "list_type";
     public static final String HTTP_OPENID = "openid";
     public static final String HTTP_UNIONID = "unionid";
 
@@ -114,10 +115,15 @@ public class VarConstant {
     public static final String EXPLORE_ACTIVITY = "activity";//活动
     public static final String EXPLORE_BLOG_WRITER = "blog_writer";//作者
     public static final String EXPLORE_BLOG_ARTICLE = "blog_article";//文章
+    //名家专栏
+    public static final String EXPLORE_AUTHOR_LIST_TYPE_WRITER_LIST = "writer_list";
+    public static final String EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND_LIST = "recommend_list";
+    public static final String EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND = "recommend";
+    public static final String EXPLORE_AUTHOR_LIST_TYPE_WRITER = "writer_id";
 
     public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
-    public static final String SOCKET_KEY = "android12345";
 
+    public static final String SOCKET_KEY = "android12345";
     public static final String SOCKET_CMD_HISTORY = "history";
     public static final String SOCKET_CMD_TIMELY = "timely";
     public static final String SOCKET_CMD_LOGIN = "login";

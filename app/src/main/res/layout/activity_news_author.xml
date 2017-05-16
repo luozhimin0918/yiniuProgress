@@ -13,8 +13,9 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_content"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/authorHeaderViewHeight"
+            android:layout_height="wrap_content"
             android:background="@mipmap/icon_news_author_bg"
             android:orientation="vertical"
             android:paddingTop="@dimen/authorActionBarHeight"
@@ -28,8 +29,8 @@
                     android:id="@+id/iv_break"
                     android:layout_width="@dimen/actionbar_height"
                     android:layout_height="match_parent"
-                    android:paddingBottom="@dimen/actionbar_padding"
-                    android:paddingTop="@dimen/actionbar_padding"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
                     android:src="@mipmap/icon_news_author_break"
                     />
 
@@ -55,13 +56,15 @@
                     android:id="@+id/iv_photo"
                     android:layout_width="@dimen/authorPhotoSize"
                     android:layout_height="@dimen/authorPhotoSize"
-                    android:layout_marginRight="@dimen/newsContentPadding3"/>
+                    android:layout_marginRight="@dimen/newsContentPadding3"
+                    android:src="@mipmap/ico_def_load"/>
 
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/iv_photo"
+                    android:text="马克.dsadas"
                     android:textColor="@color/white"
                     android:textSize="@dimen/title_font_size2"/>
 
@@ -75,29 +78,67 @@
 
                     <TextView
                         android:id="@+id/tv_fans"
-                        style="@style/AuthorTextViewStyle"/>
+                        style="@style/AuthorTextViewStyle"
+                        android:text="粉丝 111"/>
 
                     <View
                         android:layout_width="2px"
-                        android:layout_height="@dimen/authorViewHeight"
-                        android:layout_marginLeft="@dimen/authorPadding2"
-                        android:layout_marginRight="@dimen/authorPadding2"
-                        android:background="@color/line_color3"/>
+                        android:layout_height="12dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/font_color14"/>
 
                     <TextView
                         android:id="@+id/tv_article"
                         style="@style/AuthorTextViewStyle"
+                        android:text="文章 222"
                         />
                 </LinearLayout>
 
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="23dp"
+                android:layout_marginLeft="@dimen/newsContentPadding3"
+                android:layout_marginRight="@dimen/newsContentPadding3"
+                android:layout_marginTop="16dp"
+                android:text="简介:哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈"
+                android:textColor="@color/font_color15"/>
         </LinearLayout>
 
-        <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/pl_content"
+        <LinearLayout
+            android:id="@+id/ll_error"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="78dp"
+            android:orientation="horizontal"
+            android:background="@mipmap/icon_news_author_bg"
+            android:paddingTop="@dimen/authorActionBarHeight">
+
+            <ImageView
+                android:id="@+id/iv_break2"
+                android:layout_width="@dimen/actionbar_height"
+                android:layout_height="match_parent"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:src="@mipmap/icon_news_author_break"
+                />
+        </LinearLayout>
+
+        <com.library.widget.PageLoadLayout
+            android:id="@+id/pl_list_rootView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.library.widget.handmark.PullToRefreshListView
+                android:id="@+id/pl_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.library.widget.PageLoadLayout>
+
     </LinearLayout>
 
 </com.library.widget.PageLoadLayout>

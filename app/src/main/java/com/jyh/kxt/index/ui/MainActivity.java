@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TextView loginName;
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
-    private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn, themeBtn, loginBtn;
+    private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn, themeBtn, loginBtn, quitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +138,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         settingBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_setting);
         aboutBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_about);
         themeBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_theme);
+        quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
 
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
@@ -155,6 +156,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         aboutBtn.setOnClickListener(this);
         themeBtn.setOnClickListener(this);
         searchEdt.setOnClickListener(this);
+        quitBtn.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -298,6 +300,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 //登录
                 startActivity(new Intent(this, LoginOrRegisterActivity.class));
                 break;
+            case R.id.ll_quit:
+                mainPresenter.showQuitDialog();
+                break;
 
         }
     }
@@ -308,6 +313,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case EventBusClass.EVENT_LOGIN:
                 UserJson userJson = (UserJson) eventBus.intentObj;
                 changeUserStatus(userJson);
+                break;
+            case EventBusClass.EVENT_LOGOUT:
+                changeUserStatus(null);
                 break;
         }
     }
@@ -324,6 +332,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (userJson != null) {
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
+            quitBtn.setVisibility(View.VISIBLE);
 
             Glide.with(getContext())
                     .load(userJson.getPicture())
@@ -341,10 +350,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     });
 
             loginName.setText(userJson.getNickname());
-
         } else {
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
+            quitBtn.setVisibility(View.GONE);
 
             loginPhoto.setImageResource(R.mipmap.icon_user_def_photo);
 

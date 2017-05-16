@@ -63,9 +63,11 @@ public class HttpConstant {
     public static final String EXPLORE = BASE_URL + "discover/index" + JWT;//探索
     public static final String EXPLORE_LOAD_MORE = BASE_URL + "discover/load_more";//探索首页加载更多
     public static final String EXPLORE_AUTHOR = BASE_URL + "discover/list";//作者专栏 ?id={writer_id}&last_id={0}
-    public static final String EXPLORE_BLOG_INDEX = BASE_URL + "blog/index";//作者专栏首页
+    public static final String EXPLORE_BLOG_INDEX = BASE_URL + "blog/index"+JWT;//作者专栏首页
     public static final String EXPLORE_BLOG_LIST = BASE_URL + "blog/list";//专栏列表 list_type={writer_id | recommend }&last_id={0}
     public static final String EXPLORE_BLOG_PROFILE = BASE_URL + "blog/profile";//专栏作者 ?id={writer_id}
+    public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor";//关注作者 ?id={writer_id}
+    public static final String EXPLORE_BLOG_DELETEFAVOR = BASE_URL + "blog/deleteFavor";//取消关注作者 ?id={writer_id}
     public static final String EXPLORE_TOPIC = BASE_URL + "topic/list";//专题
     public static final String EXPLORE_ACTIVITY = BASE_URL + "activity/list";//活动
 

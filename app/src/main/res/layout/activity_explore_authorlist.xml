@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/theme1"
               android:orientation="vertical">
 
     <include layout="@layout/action_bar1"/>
@@ -13,9 +12,8 @@
         android:layout_height="match_parent">
 
         <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/pl_content"
+            android:id="@+id/plv_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/newsContentPadding3"/>
+            android:layout_height="match_parent"/>
     </com.library.widget.PageLoadLayout>
 </LinearLayout>
