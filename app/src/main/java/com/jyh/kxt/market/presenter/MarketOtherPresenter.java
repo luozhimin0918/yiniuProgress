@@ -93,9 +93,17 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         if (marketItemBean != null) {
             marketItemBean.setPrice(price);
             marketItemBean.setChange(reserveDecimals(change, 4));
-            marketItemBean.setRange(reserveDecimals(range, 2));
+
+            //设置涨跌幅
+            String rangeReserve = reserveDecimals(range, 2);
+            marketItemBean.setRange(rangeReserve);
 
 
+            if (rangeReserve.contains("-")) {
+                marketItemBean.setBgGlint(2);
+            } else {
+                marketItemBean.setBgGlint(1);
+            }
         }
     }
 
