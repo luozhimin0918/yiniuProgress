@@ -20,7 +20,6 @@ import java.util.Comparator;
 @Entity(nameInDb = "FLASH_BEAN")
 public class FlashJson implements Parcelable {
     @JSONField(name = "id") private String uid;
-    @JSONField(name = "source")
     private String socre;//真正用到的id
     private String code;//类型 ["CJRL" 日历,"KUAIXUN" 快讯,"KXTNEWS" 要闻]
     private String content;

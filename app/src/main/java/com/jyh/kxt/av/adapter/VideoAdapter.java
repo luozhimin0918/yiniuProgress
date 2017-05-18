@@ -134,7 +134,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, VideoDetailActivity.class);
-                intent.putExtra(IntentConstant.ID, video.getId());
+                intent.putExtra(IntentConstant.O_ID, video.getId());
                 mContext.startActivity(intent);
             }
         });

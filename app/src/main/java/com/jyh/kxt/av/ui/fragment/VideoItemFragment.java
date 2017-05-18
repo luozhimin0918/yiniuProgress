@@ -103,6 +103,7 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
     public void onDestroyView() {
         super.onDestroyView();
         try {
+            getQueue().cancelAll(videoItemPresenter.getClass().getName());
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();

@@ -39,7 +39,7 @@ public class VarConstant {
     public static final String HTTP_WORK = "work";
     public static final String HTTP_NICKNAME = "nickname";
     public static final String HTTP_BIRTHDAY = "birthday";
-    public static final String HTTP_ACCESS_TOKEN = "access_token";
+    public static final String HTTP_ACCESS_TOKEN = "accessToken";
     public static final String HTTP_TOKEN = "token";
     public static final String HTTP_TYPE = "type";  //1:QQ|2:微信|3:微博
     public static final String HTTP_LIST_TYPE = "list_type";
@@ -69,6 +69,9 @@ public class VarConstant {
     public static final String OACTION_DETAIL = "detail";//ETF
     public static final String OACTION_ARTICLE = "article";//文章
     public static final String OACTION_CFTC = "cftc";
+
+    public static final String OID_GOLD="gold";
+    public static final String OID_SILVER="silver";
 
     /**
      * umeng 配置信息

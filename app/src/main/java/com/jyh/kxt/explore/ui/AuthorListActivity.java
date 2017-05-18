@@ -225,7 +225,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
             public void onItemClick(int position, View view) {
                 String authorId = adapter.getData().get(position).getId();
                 Intent authorIntent = new Intent(getContext(), AuthorActivity.class);
-                authorIntent.putExtra(IntentConstant.ID, authorId);
+                authorIntent.putExtra(IntentConstant.O_ID, authorId);
                 startActivity(authorIntent);
             }
         });

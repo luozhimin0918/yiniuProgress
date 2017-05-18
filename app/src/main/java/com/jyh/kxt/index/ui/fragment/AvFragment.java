@@ -37,7 +37,7 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     }
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
-    @BindView(R.id.vp_audio_visual) ViewPager vpAudioVisual;
+    @BindView(R.id.vp_audio_visual)public ViewPager vpAudioVisual;
     @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;

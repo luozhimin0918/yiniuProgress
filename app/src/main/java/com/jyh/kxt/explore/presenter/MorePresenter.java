@@ -42,9 +42,11 @@ public class MorePresenter extends BasePresenter {
 
     public void init(String type) {
         this.type = type;
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
-        lastId="";
+            request.setTag(getClass().getName());
+        }
+        lastId = "";
         request.doGet(getUrl(request), new HttpListener<List>() {
             @Override
             protected void onResponse(List o) {

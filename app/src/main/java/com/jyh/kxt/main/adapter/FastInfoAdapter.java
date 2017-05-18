@@ -1,29 +1,38 @@
 package com.jyh.kxt.main.adapter;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.deserializer.IntegerFieldDeserializer;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.base.http.VarConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
@@ -36,6 +45,7 @@ import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
@@ -65,6 +75,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private static final int TYPE_RIGHT = 4;
     private static final int TYPE_TOP = 5;
     private static final int TYPE_BOTTOM = 6;
+    private PopupUtil.Config config;
+    private ImageView ivPop;
+    private PopupUtil popupUtil;
+    private int imgMaxWidth;
+    private int imgMaxHeight;
 
     private List flashJsons;
     private Context context;
@@ -80,9 +95,23 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         this.flashJsons = flashJsons;
+        this.context = context;
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+        imgMaxHeight = screenDisplay.heightPixels / 3;
+
+        popupUtil = new PopupUtil((Activity) context);
+        View inflate = popupUtil.createPopupView(R.layout.pop_img);
+        ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+        config = new PopupUtil.Config();
+
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+
         inspiritDateInfo(this.flashJsons);
         initCollectStatus(1);
-        this.context = context;
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -140,6 +169,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private void initCollectStatus(int type) {
     }
 
+    /**
+     * 获取非时间数据
+     *
+     * @return
+     */
     public List<FlashJson> getData() {
         List data = new ArrayList(flashJsons);
         for (Object o : flashJsons) {
@@ -148,6 +182,15 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
         }
         return new ArrayList<FlashJson>(data);
+    }
+
+    /**
+     * 获取未处理的数据
+     *
+     * @return
+     */
+    public List getSource() {
+        return flashJsons;
     }
 
     @Override
@@ -166,7 +209,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         TimeViewHolder timeHolder = null;
         KXViewHolder kxHolder = null;
@@ -299,6 +342,78 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 kxHolder.tvContent.setText(getString(kx.getTitle()));
                 kxHolder.tvMore.setVisibility(View.VISIBLE);
                 kxHolder.ivMore.setVisibility(View.VISIBLE);
+
+                imgMaxWidth = kxHolder.llContent.getWidth();
+
+                if (RegexValidateUtil.isEmpty(kx.getImage())) {
+                    kxHolder.imageView.setVisibility(View.GONE);
+                } else {
+                    kxHolder.imageView.setVisibility(View.VISIBLE);
+                    //点击查看大图
+                    kxHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Glide.with(context)
+                                    .load(kx.getImage())
+                                    .asBitmap()
+                                    .error(R.mipmap.ico_def_load)
+                                    .placeholder(R.mipmap.ico_def_load)
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                            if (popupUtil.isShowing())
+                                                popupUtil.dismiss();
+
+                                            ivPop.setImageBitmap(resource);
+
+                                            int width = resource.getWidth();
+                                            int height = resource.getHeight();
+                                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+
+                                            int widthPixels = screenDisplay.widthPixels;
+                                            width = width > widthPixels ? widthPixels : width;
+                                            int heightPixels = screenDisplay.heightPixels;
+                                            height = height > heightPixels ? heightPixels : height;
+                                            config.width = width;
+                                            config.height = height;
+                                            popupUtil.setConfig(config);
+                                            popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
+                                        }
+                                    });
+                        }
+                    });
+
+                    final KXViewHolder finalKxHolder = kxHolder;
+                    Glide.with(context)
+                            .load(kx.getImage())
+                            .asBitmap()
+                            .error(R.mipmap.ico_def_load)
+                            .placeholder(R.mipmap.ico_def_load)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();//px
+                                    int height = resource.getHeight();
+                                    ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+                                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                    //等比例缩放
+                                    finalKxHolder.imageView.setAdjustViewBounds(true);
+                                    finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                    if (width > imgMaxWidth) {
+                                        layoutParams.width = imgMaxWidth;
+                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+                                        finalKxHolder.imageView.setImageBitmap(resource);
+                                    }
+                                    if (height > imgMaxHeight) {
+                                        layoutParams.height = imgMaxHeight;
+                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+                                        finalKxHolder.imageView.setImageBitmap(resource);
+                                    }
+                                }
+                            });
+                }
+
                 setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
                         null, TYPE_KX);
 
@@ -669,28 +784,32 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             tvMore.setText("收起");
             if (content != null)
                 content.setMaxLines(Integer.MAX_VALUE);
-            switch (type) {
-                case TYPE_TOP:
-                    content.setVisibility(View.VISIBLE);
-                    break;
-                case TYPE_BOTTOM:
-                    ivFlash.setVisibility(View.VISIBLE);
-                    break;
-            }
+//            switch (type) {
+//                case TYPE_TOP:
+//                    content.setVisibility(View.VISIBLE);
+//                    break;
+//                case TYPE_BOTTOM:
+//                    ivFlash.setVisibility(View.VISIBLE);
+//                    break;
+//            }
         } else {
             ivMore.setSelected(false);
             tvMore.setText("展开");
             if (content != null)
                 content.setMaxLines(3);
-            switch (type) {
-                case TYPE_TOP:
-                    content.setVisibility(View.GONE);
-                    break;
-                case TYPE_BOTTOM:
-                    ivFlash.setVisibility(View.GONE);
-                    break;
-            }
+//            switch (type) {
+//                case TYPE_TOP:
+//                    content.setVisibility(View.GONE);
+//                    break;
+//                case TYPE_BOTTOM:
+//                    ivFlash.setVisibility(View.GONE);
+//                    break;
+//            }
         }
+
+        if (ivFlash != null)
+            ivFlash.setVisibility(View.VISIBLE);
+
     }
 
     /**
@@ -1035,6 +1154,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * 普通快讯
      */
     class KXViewHolder extends BaseViewHolder {
+
+        @BindView(R.id.iv_flash) ImageView imageView;
+        @BindView(R.id.ll_content) LinearLayout llContent;
+
         public KXViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

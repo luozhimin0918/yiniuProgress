@@ -1,31 +1,25 @@
 package com.jyh.kxt.user.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.VideoListJson;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.ui.activity.NewsContentActivity;
-import com.jyh.kxt.user.adapter.CollectNewsAdapter;
+import com.jyh.kxt.user.adapter.EditNewsAdapter;
 import com.jyh.kxt.user.presenter.CollectNewsPresenter;
 import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.base.http.VarConstant;
-import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -45,7 +39,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
 
     private CollectNewsPresenter collectNewsPresenter;
 
-    public CollectNewsAdapter adapter;
+    public EditNewsAdapter adapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -63,16 +57,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsJson newsJson = adapter.dataList.get(position - 1);
 
-                Intent intent = null;
-                if (TextUtils.isEmpty(newsJson.getHref())) {
-                    intent = new Intent(getContext(), NewsContentActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
-                } else {
-                    intent = new Intent(getContext(), WebActivity.class);
-                    intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
-                }
-
-                startActivity(intent);
+                JumpUtils.jump((BaseActivity) getActivity(),newsJson.getO_class(),newsJson.getO_action(),newsJson.getO_id(),newsJson.getHref());
 //                //保存浏览记录
 //                BrowerHistoryUtils.save(getContext(), newsJson);
 //
@@ -94,7 +79,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      */
     public void initData(List<NewsJson> adapterSourceList) {
         if (adapter == null) {
-            adapter = new CollectNewsAdapter(adapterSourceList, getContext());
+            adapter = new EditNewsAdapter(adapterSourceList, getContext());
             plvContent.setAdapter(adapter);
         } else {
             adapter.setData(adapterSourceList);
@@ -151,7 +136,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      *
      * @param observerData
      */
-    public void edit(CollectActivity.DelNumListener observerData) {
+    public void edit(DelNumListener observerData) {
         try {
             adapter.setEdit(true);
             adapter.setSelListener(observerData);
@@ -166,7 +151,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      * @param selected
      * @param observerData
      */
-    public void selAll(boolean selected, CollectActivity.DelNumListener observerData) {
+    public void selAll(boolean selected,DelNumListener observerData) {
         if (selected) {
             //全选
             List<NewsJson> data = adapter.getData();
@@ -175,10 +160,10 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             }
             try {
                 //设置选中数量
-                observerData.callback(data.size());
+                observerData.delItem(data.size());
             } catch (Exception e) {
                 e.printStackTrace();
-                observerData.callback(0);
+                observerData.delItem(0);
             }
         } else {
             //取消全选
@@ -187,7 +172,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
                 newsJson.setSel(false);
             }
             //还原选中数量
-            observerData.callback(0);
+            observerData.delItem(0);
         }
         adapter.notifyDataSetChanged();
     }
@@ -197,7 +182,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      *
      * @param observerData
      */
-    public void del(final CollectActivity.DelNumListener observerData) {
+    public void del(final DelNumListener observerData) {
         //获取选中的id
         List<NewsJson> data = adapter.getData();
         String ids = "";
@@ -240,14 +225,16 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      *
      * @param observerData
      */
-    public void quitEdit(CollectActivity.DelNumListener observerData) {
+    public void quitEdit(DelNumListener observerData) {
         adapter.setEdit(false);
         List<NewsJson> data = adapter.getData();
         //还原删除按钮数字
         if (observerData != null)
-            observerData.callback(0);
+            observerData.delItem(0);
         //空数据处理
         if (data == null || data.size() == 0) {
+            plRootView.setNullImgId(R.mipmap.icon_collect_null);
+            plRootView.setNullText("");
             plRootView.loadEmptyData();
             return;
         }
@@ -255,5 +242,11 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         for (NewsJson newsJson : data) {
             newsJson.setSel(false);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(collectNewsPresenter.getClass().getName());
     }
 }

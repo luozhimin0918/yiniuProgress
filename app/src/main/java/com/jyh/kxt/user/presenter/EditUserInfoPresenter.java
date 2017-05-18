@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +42,8 @@ import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 import com.library.widget.window.ToastView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -104,6 +105,10 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         photoTailorUtil = new PhotoTailorUtil();
         photoTailorUtil.initPath((Activity) iBaseView);
         photoTailorUtil.setOnCompleteListener(this);
+        if (request == null) {
+            request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
     }
 
     /**
@@ -138,7 +143,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     //返回的分别是三个级别的选中位置
                     String province = options1Items.get(options1).getPickerViewText();
                     String city = options2Items.get(options1).get(options2);
-                    activity.setAddress(province, city);
+                    activity.changeAddress(province, city);
                     address = province + "-" + city;
                 }
             })
@@ -172,7 +177,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                 @Override
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     //返回的分别是三个级别的选中位置
-                    activity.setGender(genders.get(options1));
+                    activity.changeGender(genders.get(options1));
                     sexInt = options1;
                 }
             })
@@ -202,9 +207,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             String[] works = mContext.getResources().getStringArray(R.array.work);
             final List<String> worksList = Arrays.asList(works);
 
-            int selPosition=0;
-            if(!RegexValidateUtil.isEmpty(work)&&worksList.contains(work)){
-                selPosition=worksList.indexOf(work);
+            int selPosition = 0;
+            if (!RegexValidateUtil.isEmpty(work) && worksList.contains(work)) {
+                selPosition = worksList.indexOf(work);
             }
 
             workPicker = new OptionsPickerView.Builder(mContext, new OptionsPickerView.OnOptionsSelectListener() {
@@ -212,7 +217,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     //返回的分别是三个级别的选中位置
                     work = worksList.get(options1);
-                    activity.setWork(work);
+                    activity.changeWork(work);
                 }
             })
 
@@ -251,7 +256,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             birthdayPicker = new TimePickerView.Builder(activity, new TimePickerView.OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    activity.setBirthday(date);
+                    activity.changeBirthday(date);
                     try {
                         birthdayStr = DateUtils.dateToString(date, DateUtils.TYPE_YMD);
                     } catch (Exception e) {
@@ -387,80 +392,127 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     province = split[0];
                     city = split[1];
                 }
+            } else {
+                activity.restoreAddress("上海-浦东新区");
             }
             //初始化性别
             sexInt = userInfo.getSex();
             switch (sexInt) {
                 case 0:
-                    activity.setGender("保密");
+                    activity.restoreGender("保密");
                     break;
                 case 1:
-                    activity.setGender("男");
+                    activity.restoreGender("男");
                     break;
                 case 2:
-                    activity.setGender("女");
+                    activity.restoreGender("女");
+                    break;
+                default:
+                    activity.restoreGender("保密");
                     break;
             }
             //初始化年龄
             birthdayStr = userInfo.getBirthday();
+            birthdayStr = RegexValidateUtil.isEmpty(birthdayStr) ? "1980-01-01" : birthdayStr;
             //初始化工作
-            work=userInfo.getWork();
+            work = userInfo.getWork();
+            work = RegexValidateUtil.isEmpty(work) ? "金融" : work;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void postChangedInfo(String photo, final String nickname) {
-        if (request == null)
-            request = new VolleyRequest(mContext, mQueue);
+    private TSnackbar snackBar;
 
-        request.doPost(HttpConstant.USER_CHANEINFO, getPostInfo(request, photo, nickname, work), new HttpListener<Object>() {
+    public void postChangedInfo(final String newValue, final String oldValue, final String type) {
+        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
+
+        request.doPost(HttpConstant.USER_CHANEINFO, getPostInfo(request, newValue, type), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
                 try {
-                    activity.dismissWaitDialog();
                     UserJson oldUser = LoginUtils.getUserInfo(mContext);
-                    UserJson newUser = new UserJson(oldUser.getToken(), nickname, "", oldUser.getUid(), sexInt, oldUser.getEmail(),
-                            address, work, birthdayStr);
+                    UserJson newUser = oldUser;
+                    switch (type) {
+                        case VarConstant.HTTP_NICKNAME:
+                            newUser.setNickname(newValue);
+                            break;
+                        case VarConstant.HTTP_SEX:
+                            newUser.setSex(sexInt);
+                            break;
+                        case VarConstant.HTTP_BIRTHDAY:
+                            newUser.setBirthday(birthdayStr);
+                            break;
+                        case VarConstant.HTTP_ADDRESS:
+                            newUser.setAddress(address);
+                            break;
+                        case VarConstant.HTTP_WORK:
+                            newUser.setWork(work);
+                            break;
+                    }
                     LoginUtils.changeUserInfo(mContext, newUser);
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("信息更改成功").setDuration(TSnackbar.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    postError(type, oldValue);
+                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败").setDuration(TSnackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                try {
-                    activity.dismissWaitDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                ToastView.makeText3(mContext, "信息提交失败");
+                postError(type, oldValue);
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败").setDuration(TSnackbar.LENGTH_LONG).show();
             }
         });
 
     }
 
     /**
+     * 提交失败
+     *
+     * @param type
+     */
+    private void postError(String type, String oldValue) {
+        ToastView.makeText3(mContext, "信息提交失败");
+        switch (type) {
+            case VarConstant.HTTP_NICKNAME:
+                activity.restoreNickName(oldValue);
+                break;
+            case VarConstant.HTTP_SEX:
+                activity.restoreGender(oldValue);
+                break;
+            case VarConstant.HTTP_BIRTHDAY:
+                activity.restoreBirthday(oldValue);
+                break;
+            case VarConstant.HTTP_ADDRESS:
+                activity.restoreAddress(oldValue);
+                break;
+            case VarConstant.HTTP_WORK:
+                activity.restoreWork(oldValue);
+                break;
+        }
+    }
+
+    /**
      * 获取提交信息
      *
      * @param request
-     * @param photo
+     * @param newValue
+     * @param type
      * @return
      */
-    private Map<String, String> getPostInfo(VolleyRequest request, String photo, String nickname, String work) {
+    private Map<String, String> getPostInfo(VolleyRequest request, String newValue, String type) {
         com.alibaba.fastjson.JSONObject jsonParam = request.getJsonParam();
         UserJson userJson = LoginUtils.getUserInfo(mContext);
         jsonParam.put(VarConstant.HTTP_UID, userJson.getUid());
         jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userJson.getToken());
-        jsonParam.put(VarConstant.HTTP_PICTURE, photo);
-        jsonParam.put(VarConstant.HTTP_ADDRESS, address);
-        jsonParam.put(VarConstant.HTTP_SEX, sexInt);
-        jsonParam.put(VarConstant.HTTP_BIRTHDAY, birthdayStr);
-        jsonParam.put(VarConstant.HTTP_NICKNAME, nickname);
-        jsonParam.put(VarConstant.HTTP_WORK, work);
+        jsonParam.put(type, newValue);
         Map<String, String> map = new HashMap();
         try {
             map.put(VarConstant.HTTP_CONTENT2, EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString()));
@@ -566,4 +618,37 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         }
     }
 
+    /**
+     * 提交头像
+     *
+     * @param lastByte
+     */
+    public void postBitmap(byte[] lastByte) {
+        String bitmapStr = drawableToByte(lastByte);
+        request.doPost(HttpConstant.USER_UPLOAD_AVATAR, getPhotoMap(bitmapStr), new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
+    }
+
+    private Map<String, String> getPhotoMap(String bitmapStr) {
+        Map<String, String> map = new HashMap<>();
+        com.alibaba.fastjson.JSONObject jsonParam = request.getJsonParam();
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
+        jsonParam.put(VarConstant.HTTP_PICTURE, bitmapStr);
+        try {
+            map.put(VarConstant.HTTP_CONTENT2, EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 }

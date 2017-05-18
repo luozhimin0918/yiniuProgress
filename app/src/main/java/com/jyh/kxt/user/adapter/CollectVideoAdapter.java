@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.library.util.DateUtils;
@@ -100,7 +101,7 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
                     }
                 }
                 if (observerData != null)
-                    observerData.callback(delIds.size());
+                    observerData.delItem(delIds.size());
             }
         });
 
@@ -152,9 +153,9 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         return dataList;
     }
 
-    private ObserverData<Integer> observerData;
+    private DelNumListener observerData;
 
-    public void setSelListener(ObserverData<Integer> observerData) {
+    public void setSelListener(DelNumListener observerData) {
         this.observerData = observerData;
     }
 

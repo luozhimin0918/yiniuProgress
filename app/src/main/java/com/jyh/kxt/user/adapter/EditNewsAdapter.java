@@ -1,7 +1,6 @@
 package com.jyh.kxt.user.adapter;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 
@@ -38,13 +36,13 @@ import butterknife.ButterKnife;
  * 创建日期:2017/5/11.
  */
 
-public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
+public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
 
     private Context context;
     private boolean isEdit = false;
     private Set<String> delIds = new HashSet<>();
 
-    public CollectNewsAdapter(List<NewsJson> dataList, Context context) {
+    public EditNewsAdapter(List<NewsJson> dataList, Context context) {
         super(dataList);
         this.context = context;
     }
@@ -115,7 +113,7 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
                     }
                 }
                 if (observerData != null)
-                    observerData.callback(delIds.size());
+                    observerData.delItem(delIds.size());
             }
         });
 
@@ -141,9 +139,9 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
         this.delIds = delIds;
     }
 
-    private CollectActivity.DelNumListener observerData;
+    private DelNumListener observerData;
 
-    public void setSelListener(CollectActivity.DelNumListener selListener) {
+    public void setSelListener(DelNumListener selListener) {
         this.observerData = selListener;
     }
 
@@ -190,7 +188,7 @@ public class CollectNewsAdapter extends BaseListAdapter<NewsJson> {
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.iv_del) ImageView ivDel;
         @BindView(R.id.fl_del) FrameLayout flDel;
-        @BindView(R.id.rl_content) RelativeLayout rlContent;
+        @BindView(R.id.rl_contact) RelativeLayout rlContent;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

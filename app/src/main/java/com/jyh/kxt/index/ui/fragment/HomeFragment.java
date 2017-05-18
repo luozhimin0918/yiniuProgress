@@ -47,7 +47,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
-    @BindView(R.id.vp_content) ViewPager vpContent;
+    @BindView(R.id.vp_content)public ViewPager vpContent;
 
     private List<Fragment> fragmentList = new ArrayList<>();
     private BaseFragment newsFragment;

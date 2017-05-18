@@ -32,8 +32,10 @@ public class ForgetPwdPresenter extends BasePresenter {
 
     public void sendInfo(String email) {
         //判断email是否合法
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
         Map map = new HashMap();
         request.doPost(HttpConstant.USER_FORGET, map, new HttpListener<Object>() {
             @Override

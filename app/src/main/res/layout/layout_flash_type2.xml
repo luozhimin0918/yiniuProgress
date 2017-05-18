@@ -43,41 +43,23 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_describe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_marginBottom="@dimen/flash_info_margin3"
-        android:layout_marginTop="@dimen/flash_info_margin2">
-
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size3"/>
-
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size3"/>
-
-        <TextView
-            android:id="@+id/tv4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size3"/>
-    </LinearLayout>
+        android:layout_marginTop="@dimen/flash_info_margin2"
+        android:text="@string/date_describe"
+        android:textColor="@color/font_color3"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,4 +76,10 @@
             android:minWidth="@dimen/flash_info_minWidth"
             android:orientation="horizontal"/>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_adRL"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.index.ui.WebActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,12 +54,17 @@ public class AboutActivity extends BaseActivity {
                 break;
             case R.id.rl_contact:
                 //联系我们
+                Intent contactIntent = new Intent(this, WebActivity.class);
+                contactIntent.putExtra(IntentConstant.NAME, "联系我们");
+                contactIntent.putExtra(IntentConstant.WEBURL, HttpConstant.CONTACT_US_URL);
+                startActivity(contactIntent);
                 break;
             case R.id.rl_feedback:
                 //意见反馈
-                Intent intent2 = new Intent(this, FeedbackActivity.class);
-                intent2.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent2);
+                Intent feedbackIntent = new Intent(this, WebActivity.class);
+                feedbackIntent.putExtra(IntentConstant.NAME, "意见反馈");
+                feedbackIntent.putExtra(IntentConstant.WEBURL, HttpConstant.FEEDBACK_URL);
+                startActivity(feedbackIntent);
                 break;
             case R.id.rl_visit:
                 //访问官网

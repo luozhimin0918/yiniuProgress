@@ -43,7 +43,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     private DatumPresenter datumPresenter;
 
-    private BaseFragment dataFragment, calendarFragment;
+    public BaseFragment dataFragment, calendarFragment;
     private BaseFragment lastFragment;
 
     public static DatumFragment newInstance() {

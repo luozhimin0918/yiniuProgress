@@ -28,7 +28,6 @@ import java.util.List;
 public class VideoItemPresenter extends BasePresenter {
 
     @BindObject VideoItemFragment videoItemFragment;
-    private RequestQueue queue;
     private String id;
     private VolleyRequest request;
 
@@ -44,8 +43,10 @@ public class VideoItemPresenter extends BasePresenter {
     public void init(String id) {
         videoItemFragment.plRootView.loadWait();
         this.id = id;
-        queue = videoItemFragment.getQueue();
-        request = new VolleyRequest(mContext, queue);
+        if (request == null) {
+            request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
         initLoad(null);
     }
 

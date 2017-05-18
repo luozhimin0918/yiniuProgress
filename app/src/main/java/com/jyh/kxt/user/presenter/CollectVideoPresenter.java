@@ -43,6 +43,7 @@ public class CollectVideoPresenter extends BasePresenter {
     public CollectVideoPresenter(IBaseView iBaseView) {
         super(iBaseView);
         request = new VolleyRequest(mContext, mQueue);
+        request.setTag(getClass().getName());
     }
 
     /**
@@ -91,6 +92,8 @@ public class CollectVideoPresenter extends BasePresenter {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
+                    collectVideoFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                    collectVideoFragment.plRootView.setNullText("");
                     collectVideoFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();
@@ -133,6 +136,8 @@ public class CollectVideoPresenter extends BasePresenter {
             protected void onResponse(List<VideoListJson> o) {
                 try {
                     if (o == null || o.size() == 0) {
+                        collectVideoFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        collectVideoFragment.plRootView.setNullText("");
                         collectVideoFragment.plRootView.loadEmptyData();
                     } else {
                         if (o.size() > VarConstant.LIST_MAX_SIZE) {

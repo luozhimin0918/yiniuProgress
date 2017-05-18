@@ -80,7 +80,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         llContent.setVisibility(View.VISIBLE);
         llError.setVisibility(View.GONE);
 
-        authorId = getIntent().getStringExtra(IntentConstant.ID);
+        authorId = getIntent().getStringExtra(IntentConstant.O_ID);
 
         loadWait();
         authorPresenter.init(authorId);
@@ -125,7 +125,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 List<NewsJson> data;
                 if (list.size() > VarConstant.LIST_MAX_SIZE) {
                     authorPresenter.setMore(true);
-                    authorPresenter.setLastId(newsAdapter.getLastId());
+                    authorPresenter.setLastId(list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id());
                     data = new ArrayList<>(list.subList(0, VarConstant.LIST_MAX_SIZE));
                 } else {
                     authorPresenter.setMore(false);

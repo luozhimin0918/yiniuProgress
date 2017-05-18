@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme1"
@@ -10,88 +9,94 @@
 
     <include layout="@layout/action_bar1"/>
 
-    <LinearLayout
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/actionbar_height"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/newsContentPadding3"
-            android:text="2017-1-1 星期一"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/line_color2"/>
-
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionbar_height"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/newsContentPadding3"
+                android:text="2017-1-1 星期一"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_color2"/>
+
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/layout_flash"
-                        layout="@layout/layout_flash_type1"/>
-
-                    <include
-                        android:id="@+id/layout_rl"
-                        layout="@layout/layout_flash_type2"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_tj"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <View
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/line_height"
-                        android:background="@color/line_color2"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <TextView
+                        <include
+                            android:id="@+id/layout_flash"
+                            layout="@layout/layout_flash_type1"/>
+
+                        <include
+                            android:id="@+id/layout_rl"
+                            layout="@layout/layout_flash_type2"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_tj"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="@dimen/newsContentPadding3"
-                        android:drawableLeft="@mipmap/icon_video_line"
-                        android:gravity="center_vertical"
-                        android:text="推荐要闻"
-                        android:textColor="@color/font_color60"
-                        android:textSize="@dimen/content_font_size"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/layout_tj1"
-                        layout="@layout/item_news"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line_height"
+                            android:background="@color/line_color2"/>
 
-                    <include
-                        android:id="@+id/layout_tj2"
-                        layout="@layout/item_news"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="@dimen/newsContentPadding3"
+                            android:drawableLeft="@mipmap/icon_video_line"
+                            android:gravity="center_vertical"
+                            android:text="推荐要闻"
+                            android:textColor="@color/font_color60"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <include
+                            android:id="@+id/layout_tj1"
+                            layout="@layout/item_news"/>
+
+                        <include
+                            android:id="@+id/layout_tj2"
+                            layout="@layout/item_news"/>
+                    </LinearLayout>
+
                 </LinearLayout>
-
-            </LinearLayout>
-        </ScrollView>
+            </ScrollView>
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </com.library.widget.PageLoadLayout>
 
     <View
         android:layout_width="match_parent"

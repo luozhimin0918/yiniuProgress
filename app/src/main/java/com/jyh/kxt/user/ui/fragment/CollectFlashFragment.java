@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.main.json.NewsJson;
@@ -66,7 +67,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      *
      * @param observerData
      */
-    public void edit(CollectActivity.DelNumListener observerData) {
+    public void edit(DelNumListener observerData) {
         try {
             adapter.setEdit(true);
             adapter.setObserverData(observerData);
@@ -81,7 +82,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      * @param selected
      * @param observerData
      */
-    public void selAll(boolean selected, CollectActivity.DelNumListener observerData) {
+    public void selAll(boolean selected, DelNumListener observerData) {
         if (selected) {
             //全选
             List data = adapter.getSoucesData();
@@ -95,10 +96,10 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             }
             try {
                 //设置选中数量
-                observerData.callback(size);
+                observerData.delItem(size);
             } catch (Exception e) {
                 e.printStackTrace();
-                observerData.callback(0);
+                observerData.delItem(0);
             }
         } else {
             //取消全选
@@ -110,7 +111,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
                 }
             }
             //还原选中数量
-            observerData.callback(0);
+            observerData.delItem(0);
         }
         adapter.notifyDataSetChanged();
     }
@@ -120,7 +121,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      *
      * @param observerData
      */
-    public void del(final CollectActivity.DelNumListener observerData) {
+    public void del(final DelNumListener observerData) {
         //获取选中的id
         List data = adapter.getSoucesData();
         String ids = "";
@@ -168,15 +169,17 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      *
      * @param observerData
      */
-    public void quitEdit(CollectActivity.DelNumListener observerData) {
+    public void quitEdit(DelNumListener observerData) {
         adapter.setEdit(false);
         List souces = adapter.getSoucesData();
         List data = adapter.getData();
         //还原删除按钮数字
         if (observerData != null)
-            observerData.callback(0);
+            observerData.delItem(0);
         //空数据处理
         if (data == null || data.size() == 0) {
+            plRootView.setNullImgId(R.mipmap.icon_collect_null);
+            plRootView.setNullText("");
             plRootView.loadEmptyData();
             return;
         }
@@ -216,7 +219,13 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
     }
 
     public void loadMore(List<FlashJson> newsMore) {
-
+        adapter.addData(newsMore);
+        lvContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lvContent.onRefreshComplete();
+            }
+        }, 500);
     }
 
     public void refresh(List<FlashJson> adapterSourceList) {

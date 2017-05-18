@@ -100,6 +100,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     public void onDestroyView() {
         super.onDestroyView();
         try {
+            getQueue().cancelAll(newsItemPresenter.getClass().getName());
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();

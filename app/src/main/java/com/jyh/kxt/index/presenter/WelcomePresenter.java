@@ -51,8 +51,9 @@ public class WelcomePresenter extends BasePresenter {
 
     public void initConfig() {
         queue = welcomeActivity.getQueue();
-        request = new VolleyRequest(mContext, queue);
-
+        if (request == null) {
+            request = new VolleyRequest(mContext, queue);
+        }
         initView();
 
         request.doGet(HttpConstant.CONFIG, new HttpListener<String>() {

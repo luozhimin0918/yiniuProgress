@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.user.ui.fragment.CollectFlashFragment;
 import com.jyh.kxt.user.ui.fragment.CollectNewsFragment;
@@ -32,7 +33,7 @@ import butterknife.OnClick;
  * 创建日期:2017/5/2.
  */
 
-public class CollectActivity extends BaseActivity {
+public class CollectActivity extends BaseActivity implements DelNumListener{
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -75,7 +76,7 @@ public class CollectActivity extends BaseActivity {
         flashFragment = new CollectFlashFragment();
         fragmentList.add(flashFragment);
 
-        numListener = new DelNumListener();
+        numListener = this;
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.ll_selAll, R.id.tv_del})
@@ -182,24 +183,19 @@ public class CollectActivity extends BaseActivity {
             super.onBackPressed();
     }
 
-    /**
-     * 删除按钮数字监听
-     */
-    public class DelNumListener implements ObserverData<Integer> {
-
-        @Override
-        public void callback(Integer integer) {
-            try {
-                tvDel.setText("删除(" + integer + ")");
-                ivBarFunction.setText("编辑");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onError(Exception e) {
-
+    @Override
+    public void delItem(Integer num) {
+        try {
+            tvDel.setText("删除(" + num + ")");
+            ivBarFunction.setText("编辑");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    @Override
+    public void delError() {
+
+    }
+
 }

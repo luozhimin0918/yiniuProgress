@@ -39,8 +39,10 @@ public class RankItemPresenter extends BasePresenter implements PullToRefreshBas
 
     public void init(final String rankUrl) {
         url = rankUrl;
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
         request.doGet(getUrl(), new HttpListener<List<VideoListJson>>() {
             @Override
             protected void onResponse(List<VideoListJson> list) {

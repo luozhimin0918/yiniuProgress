@@ -273,6 +273,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_focus:
                 //我的关注
+                if (LoginUtils.isLogined(this))
+                    startActivity(new Intent(this, AttentionActivity.class));
+                else
+                    ToastView.makeText3(this, "请先登录");
                 break;
             case R.id.ll_history:
                 //浏览历史

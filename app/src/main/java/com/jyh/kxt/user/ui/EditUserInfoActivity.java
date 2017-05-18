@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,10 +27,13 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
+import com.library.base.http.VarConstant;
 import com.library.util.CommonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -94,7 +96,7 @@ public class EditUserInfoActivity extends BaseActivity {
 
     public static final String VIEW_NAME_IMG = "view_name_img";
     public static final String VIEW_NAME_TITLE = "view_name_title";
-    private PopupWindow popupWindow;
+    private PopupUtil popupWindow;
     private EditText edtName;
 
     /**
@@ -141,6 +143,9 @@ public class EditUserInfoActivity extends BaseActivity {
             case 2:
                 tvGender.setText("女");
                 break;
+            default:
+                tvGender.setText("保密");
+                break;
         }
 
         int imgSize = (int) getResources().getDimension(R.dimen.item_height);
@@ -173,8 +178,11 @@ public class EditUserInfoActivity extends BaseActivity {
      * @param province
      * @param city
      */
-    public void setAddress(String province, String city) {
-        tvAddress.setText(province + "-" + city);
+    public void changeAddress(String province, String city) {
+        String oldAddress = tvAddress.getText().toString();
+        String address = province + "-" + city;
+        tvAddress.setText(address);
+        editUserInfoPresenter.postChangedInfo(address, oldAddress, VarConstant.HTTP_ADDRESS);
     }
 
     /**
@@ -182,20 +190,23 @@ public class EditUserInfoActivity extends BaseActivity {
      *
      * @param birthday
      */
-    public void setBirthday(Date birthday) {
-
+    public void changeBirthday(Date birthday) {
+        String oldBirthday = tvBirthday.getText().toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(birthday);
-
         tvBirthday.setText(dateStr);
+        editUserInfoPresenter.postChangedInfo(dateStr, oldBirthday, VarConstant.HTTP_BIRTHDAY);
     }
 
     /**
      * 设置工作
+     *
      * @param work
      */
-    public void setWork(String work) {
+    public void changeWork(String work) {
+        String oldWork = tvWork.getText().toString();
         tvWork.setText(work);
+        editUserInfoPresenter.postChangedInfo(work, oldWork, VarConstant.HTTP_WORK);
     }
 
     /**
@@ -203,8 +214,10 @@ public class EditUserInfoActivity extends BaseActivity {
      *
      * @param gender
      */
-    public void setGender(String gender) {
+    public void changeGender(String gender) {
+        String oldGender = tvGender.getText().toString();
         tvGender.setText(gender);
+        editUserInfoPresenter.postChangedInfo(gender, oldGender, VarConstant.HTTP_SEX);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.rl_photo, R.id.rl_nickname, R.id.rl_gender, R.id.rl_birthday, R.id
@@ -216,11 +229,10 @@ public class EditUserInfoActivity extends BaseActivity {
                 //退出
                 onBackPressed();
                 break;
-            case R.id.iv_bar_function:
-                //提交更改
-                showWaitDialog(null);
-                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString());
-                break;
+//            case R.id.iv_bar_function:
+//                //提交更改
+//                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString());
+//                break;
             case R.id.rl_photo:
                 //修改头像
                 editUserInfoPresenter.showPop(getContext(), rlPhoto);
@@ -282,8 +294,9 @@ public class EditUserInfoActivity extends BaseActivity {
      * @param metrics
      */
     private void initNameChangePop(DisplayMetrics metrics) {
-        View rootView = LayoutInflater.from(this).inflate(R.layout.dialog_edittext, null, false);
 
+        popupWindow = new PopupUtil(this);
+        View rootView = popupWindow.createPopupView(R.layout.dialog_edittext);
         edtName = (EditText) rootView.findViewById(R.id.edt_name);
         final TextView tvNum = (TextView) rootView.findViewById(R.id.tv_num);
         TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
@@ -319,25 +332,23 @@ public class EditUserInfoActivity extends BaseActivity {
                     ToastView.makeText3(getContext(), "昵称字符不能大于10");
                     return;
                 }
-                tvNickname.setText(text.toString().trim());
+                String name = text.toString().trim();
+                String oldName = tvNickname.getText().toString();
+                tvNickname.setText(name);
+                editUserInfoPresenter.postChangedInfo(name, oldName, VarConstant.HTTP_NICKNAME);
             }
         });
 
-        popupWindow = new PopupWindow();
-        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x7F000000));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(metrics.widthPixels);
-        popupWindow.setHeight((int) getResources().getDimension(R.dimen.editUserInfo_EditHeight));
-        popupWindow.setContentView(rootView);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                backgroundAlpha(1f);
-            }
-        });
+//        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+//        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        PopupUtil.Config config = new PopupUtil.Config();
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+        config.width = metrics.widthPixels;
+        config.height = (int) getResources().getDimension(R.dimen.editUserInfo_EditHeight);
     }
 
 
@@ -376,10 +387,68 @@ public class EditUserInfoActivity extends BaseActivity {
                 photoFolderAddress);
     }
 
+    /**
+     * 设置图片
+     *
+     * @param bitmap
+     * @param bitmapByte
+     */
     public void setBitmapAndByte(Bitmap bitmap, byte[] bitmapByte) {
         lastBmp = bitmap;
         lastByte = bitmapByte;
         ivPhoto.setImageBitmap(bitmap);
+        //提交图片
+        editUserInfoPresenter.postBitmap(lastByte);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(editUserInfoPresenter.getClass().getName());
+    }
+
+    /**
+     * 还原昵称
+     *
+     * @param oldValue
+     */
+    public void restoreNickName(String oldValue) {
+        tvNickname.setText(oldValue);
+    }
+
+    /**
+     * 还原性别
+     *
+     * @param oldValue
+     */
+    public void restoreGender(String oldValue) {
+        tvGender.setText(oldValue);
+    }
+
+    /**
+     * 还原生日
+     *
+     * @param oldValue
+     */
+    public void restoreBirthday(String oldValue) {
+        tvBirthday.setText(oldValue);
+    }
+
+    /**
+     * 还原地址
+     *
+     * @param oldValue
+     */
+    public void restoreAddress(String oldValue) {
+        tvAddress.setText(oldValue);
+    }
+
+    /**
+     * 还原工作
+     *
+     * @param oldValue
+     */
+    public void restoreWork(String oldValue) {
+        tvWork.setText(oldValue);
+    }
 }

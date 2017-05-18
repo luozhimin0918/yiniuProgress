@@ -123,6 +123,7 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
     public void onDestroyView() {
         super.onDestroyView();
         try {
+            getQueue().cancelAll(videoPresenter.getClass().getName());
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();

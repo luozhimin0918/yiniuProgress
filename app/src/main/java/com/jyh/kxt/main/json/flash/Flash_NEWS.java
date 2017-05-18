@@ -114,7 +114,7 @@ public class Flash_NEWS {
         this.autoid = autoid;
     }
 
-    class Jump {
+    public class Jump {
         private String c;//news,
         private String i;//26074,
         private String u;

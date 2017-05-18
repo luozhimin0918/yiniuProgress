@@ -1,6 +1,5 @@
 package com.jyh.kxt.main.presenter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,7 +27,8 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
-import com.jyh.kxt.index.ui.WebActivity;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
@@ -36,7 +36,6 @@ import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
-import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -67,7 +66,6 @@ public class NewsItemPresenter extends BasePresenter {
     private AdJson ads;//广告
     private List<SlideJson> shortcuts;//按钮
     private List<QuotesJson> quotes;//行情
-    private List<NewsJson> news;
     private ArrayList<String> list;
     private NewsAdapter newsAdapter;
     private BannerLayout carouseView;
@@ -91,7 +89,10 @@ public class NewsItemPresenter extends BasePresenter {
 
         newsItemFragment.plRootView.loadWait();
         queue = newsItemFragment.getQueue();
-        request = new VolleyRequest(mContext, queue);
+        if (request == null) {
+            request = new VolleyRequest(mContext, queue);
+            request.setTag(getClass().getName());
+        }
         code = arguments.getString(IntentConstant.CODE);
         if (isMain) {
             ininMain(arguments);
@@ -108,14 +109,14 @@ public class NewsItemPresenter extends BasePresenter {
 
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
-
-                    checkNews(newsJsons);
-
-                    news = newsJsons;
-
-                    newsAdapter = new NewsAdapter(mContext, newsJsons);
-                    newsItemFragment.plvContent.setAdapter(newsAdapter);
-                    newsItemFragment.plRootView.loadOver();
+                    List<NewsJson> news = checkNews(newsJsons);
+                    if (news == null) {
+                        newsItemFragment.plRootView.loadEmptyData();
+                    } else {
+                        newsAdapter = new NewsAdapter(mContext, news);
+                        newsItemFragment.plvContent.setAdapter(newsAdapter);
+                        newsItemFragment.plRootView.loadOver();
+                    }
                 }
 
                 @Override
@@ -133,19 +134,8 @@ public class NewsItemPresenter extends BasePresenter {
     }
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
-        NewsJson newsJson = news.get(position);
-
-        Intent intent = null;
-        if (TextUtils.isEmpty(newsJson.getHref())) {
-            intent = new Intent(mContext, NewsContentActivity.class);
-            intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
-        } else {
-            intent = new Intent(mContext, WebActivity.class);
-            intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
-        }
-
-        mContext.startActivity(intent);
-
+        NewsJson newsJson = newsAdapter.getData().get(position);
+        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
 
@@ -163,51 +153,62 @@ public class NewsItemPresenter extends BasePresenter {
         shortcuts = arguments.getParcelableArrayList(IntentConstant.NEWS_SHORTCUTS);
         quotes = arguments.getParcelableArrayList(IntentConstant.NEWS_QUOTES);
         ads = arguments.getParcelable(IntentConstant.NEWS_ADS);
-        news = arguments.getParcelableArrayList(IntentConstant.NEWS_NEWS);
+
+        ArrayList<NewsJson> parcelableArrayList = arguments.getParcelableArrayList(IntentConstant.NEWS_NEWS);
         list = arguments.getStringArrayList(IntentConstant.NEWS_LIST);
 
-        initMain();
+        initMain(parcelableArrayList);
     }
 
     /**
      * 初始化首页布局
+     *
+     * @param data
      */
-    private void initMain() {
-        checkNews(news);
+    private void initMain(List<NewsJson> data) {
 
-        newsAdapter = new NewsAdapter(mContext, news);
-        newsItemFragment.plvContent.setAdapter(newsAdapter);
-
-        newsItemFragment.plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                itemClickEvent(position - 2, view, parent);
+        List<NewsJson> newsJsons = checkNews(data);
+        if (newsJsons == null) {
+            newsItemFragment.plRootView.loadEmptyData();
+        } else {
+            if (newsAdapter == null) {
+                newsAdapter = new NewsAdapter(mContext, newsJsons);
+                newsItemFragment.plvContent.setAdapter(newsAdapter);
+            } else {
+                newsAdapter.setData(newsJsons);
             }
-        });
-
-        initHeadViewLayout();
-
-        //头部排序
-        if (list != null)
-            for (String type : list) {
-                switch (type) {
-                    case VarConstant.NEWS_AD:
-                        addAD();
-                        break;
-                    case VarConstant.NEWS_SLIDE:
-                        addCarouselView(slides);
-                        break;
-                    case VarConstant.NEWS_SHORTCUT:
-                        addBtn(shortcuts);
-                        break;
-                    case VarConstant.NEWS_QUOTES:
-                        break;
+            newsItemFragment.plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    itemClickEvent(position - 2, view, parent);
                 }
-            }
-        if (homeHeadView != null)
-            newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
-        newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
-        newsItemFragment.plRootView.loadOver();
+            });
+
+            initHeadViewLayout();
+
+            //头部排序
+            if (list != null)
+                for (String type : list) {
+                    switch (type) {
+                        case VarConstant.NEWS_AD:
+                            addAD();
+                            break;
+                        case VarConstant.NEWS_SLIDE:
+                            addCarouselView(slides);
+                            break;
+                        case VarConstant.NEWS_SHORTCUT:
+                            addBtn(shortcuts);
+                            break;
+                        case VarConstant.NEWS_QUOTES:
+                            break;
+                    }
+                }
+            if (homeHeadView != null)
+                newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+            newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
+            newsItemFragment.plRootView.loadOver();
+        }
+
     }
 
 
@@ -242,13 +243,13 @@ public class NewsItemPresenter extends BasePresenter {
             currentItem = carouseView.getViewPager().getCurrentItem();
         }
 
-        int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_slide);
+        final int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_slide);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
         carouseView = (BannerLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_slide, null);
         carouseView.setLayoutParams(params);
 
-        List<String> carouseList = new ArrayList<>();
+        final List<String> carouseList = new ArrayList<>();
         List<String> titles = new ArrayList<>();
         for (int i = 0; i < carouselList.size(); i++) {
             SlideJson slideJson = carouselList.get(i);
@@ -262,7 +263,8 @@ public class NewsItemPresenter extends BasePresenter {
         carouseView.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                SlideJson slideJson = carouselList.get(position);
+                JumpUtils.jump((MainActivity) mContext, slideJson, slideJson.getHref());
             }
         });
 
@@ -374,7 +376,7 @@ public class NewsItemPresenter extends BasePresenter {
                 protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
-
+                    List<NewsJson> data = new ArrayList<NewsJson>();
                     for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
@@ -394,7 +396,7 @@ public class NewsItemPresenter extends BasePresenter {
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                data = JSON.parseArray(newsArray.toString(), NewsJson.class);
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
@@ -418,7 +420,7 @@ public class NewsItemPresenter extends BasePresenter {
                                 break;
                         }
                     }
-                    initMain();
+                    initMain(data);
                     refreshView.onRefreshComplete();
                 }
 
@@ -432,14 +434,7 @@ public class NewsItemPresenter extends BasePresenter {
             request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
-                    checkNews(newsJsons);
-                    news = newsJsons;
-                    if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(mContext, newsJsons);
-                        newsItemFragment.plvContent.setAdapter(newsAdapter);
-                    } else {
-                        newsAdapter.setData(newsJsons);
-                    }
+                    newsAdapter.setData(checkNews(newsJsons));
                     refreshView.onRefreshComplete();
                 }
 
@@ -463,9 +458,7 @@ public class NewsItemPresenter extends BasePresenter {
             request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
-                    checkNews(newsJsons);
-                    newsAdapter.addData(newsJsons);
-                    news.addAll(newsJsons);
+                    newsAdapter.addData(checkNews(newsJsons));
                     refreshView.onRefreshComplete();
                 }
 
@@ -482,7 +475,7 @@ public class NewsItemPresenter extends BasePresenter {
                     refreshView.onRefreshComplete();
                     ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
-            }, 500);
+            }, 200);
         }
     }
 
@@ -509,19 +502,20 @@ public class NewsItemPresenter extends BasePresenter {
      *
      * @param news
      */
-    private void checkNews(List<NewsJson> news) {
-        if (news == null) {
-            lastId = "";
-            return;
-        }
-        int size = news.size();
-        lastId = news.get(size - 1).getO_id();
-        if (size > VarConstant.LIST_MAX_SIZE) {
-            news.remove(size - 1);
+    private List<NewsJson> checkNews(List<NewsJson> news) {
+        if (news == null || news.size() == 0)
+            return null;
+        List<NewsJson> newsJsons;
+        if (news.size() > VarConstant.LIST_MAX_SIZE) {
+            newsJsons = new ArrayList<>(news.subList(0, VarConstant.LIST_MAX_SIZE));
+            lastId = news.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
             isMore = true;
         } else {
+            newsJsons = new ArrayList<>(news);
+            lastId = "";
             isMore = false;
         }
+        return newsJsons;
     }
 
     /**
@@ -536,7 +530,7 @@ public class NewsItemPresenter extends BasePresenter {
                 protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
-
+                    List<NewsJson> data = new ArrayList<NewsJson>();
                     for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
@@ -556,7 +550,7 @@ public class NewsItemPresenter extends BasePresenter {
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                data = JSON.parseArray(newsArray.toString(), NewsJson.class);
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
@@ -580,7 +574,7 @@ public class NewsItemPresenter extends BasePresenter {
                                 break;
                         }
                     }
-                    initMain();
+                    initMain(data);
                 }
 
                 @Override
@@ -593,13 +587,16 @@ public class NewsItemPresenter extends BasePresenter {
             request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
-                    checkNews(newsJsons);
-                    news = newsJsons;
+                    List<NewsJson> news = checkNews(newsJsons);
+                    if (news == null) {
+                        newsItemFragment.plRootView.loadEmptyData();
+                        return;
+                    }
                     if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(mContext, newsJsons);
+                        newsAdapter = new NewsAdapter(mContext, news);
                         newsItemFragment.plvContent.setAdapter(newsAdapter);
                     } else {
-                        newsAdapter.setData(newsJsons);
+                        newsAdapter.setData(news);
                     }
                     newsItemFragment.plRootView.loadOver();
                 }

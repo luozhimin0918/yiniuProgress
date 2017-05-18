@@ -79,8 +79,10 @@ public class NewsPresenter extends BasePresenter {
 
         newsFragment.plRootView.loadWait();
 
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
 
         request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
 

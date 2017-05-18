@@ -9,6 +9,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -61,7 +62,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VideoListJson video = adapter.getData().get(position - 1);
                 Intent videoIntent = new Intent(getContext(), VideoDetailActivity.class);
-                videoIntent.putExtra(IntentConstant.ID, video.getId());
+                videoIntent.putExtra(IntentConstant.O_ID, video.getId());
                 startActivity(videoIntent);
             }
         });
@@ -136,7 +137,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
      *
      * @param observerData
      */
-    public void edit(CollectActivity.DelNumListener observerData) {
+    public void edit(DelNumListener observerData) {
         try {
             adapter.setEdit(true);
             adapter.setSelListener(observerData);
@@ -150,7 +151,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
      *
      * @param selected
      */
-    public void selAll(boolean selected, CollectActivity.DelNumListener observerData) {
+    public void selAll(boolean selected, DelNumListener observerData) {
         if (selected) {
             //全选
             List<VideoListJson> data = adapter.getData();
@@ -159,10 +160,10 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
             }
             try {
                 //设置选中数量
-                observerData.callback(data.size());
+                observerData.delItem(data.size());
             } catch (Exception e) {
                 e.printStackTrace();
-                observerData.callback(0);
+                observerData.delItem(0);
             }
         } else {
             //取消全选
@@ -171,7 +172,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
                 videoListJson.setSel(false);
             }
             //还原选中数量
-            observerData.callback(0);
+            observerData.delItem(0);
         }
         adapter.notifyDataSetChanged();
     }
@@ -181,7 +182,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
      *
      * @param observerData
      */
-    public void del(final CollectActivity.DelNumListener observerData) {
+    public void del(final DelNumListener observerData) {
         //获取选中的id
         List<VideoListJson> data = adapter.getData();
         String ids = "";
@@ -224,14 +225,16 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     /**
      * 退出编辑
      */
-    public void quitEdit(CollectActivity.DelNumListener observerData) {
+    public void quitEdit(DelNumListener observerData) {
         adapter.setEdit(false);
         List<VideoListJson> data = adapter.getData();
         //还原删除按钮数字
         if (observerData != null)
-            observerData.callback(0);
+            observerData.delItem(0);
         //空数据处理
         if (data == null || data.size() == 0) {
+            plRootView.setNullImgId(R.mipmap.icon_collect_null);
+            plRootView.setNullText("");
             plRootView.loadEmptyData();
             return;
         }
@@ -239,5 +242,11 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         for (VideoListJson videoListJson : data) {
             videoListJson.setSel(false);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(collectVideoPresenter.getClass().getName());
     }
 }

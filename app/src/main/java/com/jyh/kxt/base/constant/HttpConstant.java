@@ -35,6 +35,9 @@ public class HttpConstant {
     public static final String IMG_URL = "http://img.kuaixun360.com/";
     public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
+    public static final String CONTACT_US_URL = BASE_URL + "statement/contact_us";//联系我们
+    public static final String FEEDBACK_URL = BASE_URL + "statement/feedback";//意见反馈
+
     public static final String CONFIG = BASE_URL + "app/config" + JWT;//配置信息
     public static final String VERSION = BASE_URL + "version/android" + JWT;//版本信息
 
@@ -45,7 +48,7 @@ public class HttpConstant {
      */
     public static final String NEWS_LIST = BASE_URL + "news/list" + VarConstant.HTTP_CONTENT;//要闻列表
     public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
-    public static final String DP_CODE = BASE_URL + "news/dp_nav";//点评CODE
+    public static final String DP_CODE = BASE_URL + "news/dp_nav"+JWT;//点评CODE
     public static final String DP_LIST = BASE_URL + "news/dianping";//点评列表 ?code={}&last_id={}
 
     /**
@@ -63,7 +66,7 @@ public class HttpConstant {
     public static final String EXPLORE = BASE_URL + "discover/index" + JWT;//探索
     public static final String EXPLORE_LOAD_MORE = BASE_URL + "discover/load_more";//探索首页加载更多
     public static final String EXPLORE_AUTHOR = BASE_URL + "discover/list";//作者专栏 ?id={writer_id}&last_id={0}
-    public static final String EXPLORE_BLOG_INDEX = BASE_URL + "blog/index"+JWT;//作者专栏首页
+    public static final String EXPLORE_BLOG_INDEX = BASE_URL + "blog/index" + JWT;//作者专栏首页
     public static final String EXPLORE_BLOG_LIST = BASE_URL + "blog/list";//专栏列表 list_type={writer_id | recommend }&last_id={0}
     public static final String EXPLORE_BLOG_PROFILE = BASE_URL + "blog/profile";//专栏作者 ?id={writer_id}
     public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor";//关注作者 ?id={writer_id}
@@ -76,6 +79,11 @@ public class HttpConstant {
      */
     public static final String SOCKET_TOKEN_KX = BASE_URL + "kuaixun/ws" + VarConstant.HTTP_CONTENT;//快讯socketToken
     public static final String SOCKET_TOKEN_HQ = BASE_URL + "quotes/ws";//行情socketToken
+
+    /**
+     * 快讯详情
+     */
+    public static final String FLASH_INFO = BASE_URL + "kuaixun/detail";//id
 
     public static final String CJRL = BASE_URL + "cjrl/data" + JWT;
 
@@ -97,6 +105,10 @@ public class HttpConstant {
     public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
     public static final String USER_CHANEINFO = BASE_URL + "member/modify_profile";//修改资料
     // picture、uid、token、address、sex、work、nickname、birthday
+    public static final String USER_UPLOAD_AVATAR = BASE_URL + "member/upload_avatar";//上传头像
+    // uid={uid}&accessToken={accessToken}&picture={picture}
+    public static final String USER_FAVOR_WRITER = BASE_URL + "member/favor_writer";//我的关注 作者
+    public static final String USER_FAVOR_BLOGARTICLE = BASE_URL + "member/favor_blogArticle";//我的关注 文章
 
     /**
      * 收藏

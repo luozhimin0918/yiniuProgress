@@ -25,7 +25,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
 
-    private BaseFragment marketVPFragment, optionalFragment;
+    public BaseFragment marketVPFragment, optionalFragment;
     private BaseFragment lastFragment;
 
     public static MarketFragment newInstance() {
@@ -46,6 +46,8 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         onTabSelect(0);
     }
 
+    private int position = 0;
+
     @Override
     public void onTabSelect(int position) {
         BaseFragment currentFragment;
@@ -54,8 +56,13 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         } else {
             currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
         }
+        this.position = position;
         replaceFragment(currentFragment);
         lastFragment = currentFragment;
+    }
+
+    public int getTabSelectPosition() {
+        return position;
     }
 
     @Override

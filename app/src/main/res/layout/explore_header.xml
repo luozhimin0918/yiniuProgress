@@ -28,8 +28,8 @@
             android:drawableLeft="@mipmap/icon_blue_dian"
             android:drawablePadding="@dimen/explore_header_title_padding"
             android:gravity="center"
-            android:text="美国大选"
             android:textColor="@color/font_color60"
+            android:visibility="gone"
             android:textSize="@dimen/content_font_size"/>
 
 

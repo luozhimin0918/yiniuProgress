@@ -43,8 +43,10 @@ public class ExplorePresenter extends BasePresenter {
     }
 
     public void init() {
-        if (request == null)
+        if (request == null){
             request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
         request.doGet(HttpConstant.EXPLORE, new HttpListener<List<HomeHeaderJson>>() {
             @Override
             protected void onResponse(List<HomeHeaderJson> newsExplore) {
@@ -143,8 +145,10 @@ public class ExplorePresenter extends BasePresenter {
     public void loadMore() {
 
         if (isMore) {
-            if (request == null)
+            if (request == null) {
                 request = new VolleyRequest(mContext, mQueue);
+                request.setTag(getClass().getName());
+            }
             request.doGet(getLoadMoreUrl(request), new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
@@ -152,7 +156,7 @@ public class ExplorePresenter extends BasePresenter {
                     getLastId(newsJsons);
                 }
             });
-        }else{
+        } else {
             exploreFragment.noMoreData();
         }
     }

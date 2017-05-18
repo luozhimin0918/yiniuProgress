@@ -101,9 +101,10 @@ public class LoginFragment extends BaseFragment {
 
     private void login() {
         showWaitDialog(null);
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(getContext(), getQueue());
-
+            request.setTag(getClass().getName());
+        }
         request.doPost(HttpConstant.USER_LOGIN2, getMap(), new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson user) {
@@ -133,4 +134,9 @@ public class LoginFragment extends BaseFragment {
         return map;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(getClass().getName());
+    }
 }

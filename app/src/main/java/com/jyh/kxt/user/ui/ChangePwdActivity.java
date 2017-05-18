@@ -1,5 +1,6 @@
 package com.jyh.kxt.user.ui;
 
+import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -84,9 +85,10 @@ public class ChangePwdActivity extends BaseActivity {
 
     private void changePwd(String oldPwd, String newPwd, String rePwd) {
 
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(this, getQueue());
-
+            request.setTag(getClass().getName());
+        }
         showWaitDialog(null);
         request.doPost(HttpConstant.USER_CHANEPWD, getMap(), new HttpListener<Object>() {
             @Override
@@ -110,5 +112,11 @@ public class ChangePwdActivity extends BaseActivity {
 
     private EditText getEditText(PwdEditText edt) {
         return edt.getEditText();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(getClass().getName());
     }
 }

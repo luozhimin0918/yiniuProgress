@@ -18,6 +18,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -34,6 +35,17 @@
             哈
             哈哈哈哈哈哈哈哈"
             android:textSize="@dimen/title_font_size"/>
+
+        <ImageView
+            android:id="@+id/iv_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/flash_type4_imgTop"
+            android:minHeight="74dp"
+            android:minWidth="110dp"
+            android:paddingBottom="10dp"
+            android:scaleType="centerInside"
+            android:visibility="gone"/>
 
         <include layout="@layout/layout_flash_bottom_bar"/>
     </LinearLayout>

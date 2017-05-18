@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
@@ -31,13 +31,11 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.ConfigJson;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
-import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
@@ -671,7 +669,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                     }
                 }
                 if (observerData != null)
-                    observerData.callback(delIds.size());
+                    observerData.delItem(delIds.size());
             }
         });
     }
@@ -1053,13 +1051,13 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         this.delIds = delIds;
     }
 
-    private CollectActivity.DelNumListener observerData;
+    private DelNumListener observerData;
 
-    public CollectActivity.DelNumListener getObserverData() {
+    public DelNumListener getObserverData() {
         return observerData;
     }
 
-    public void setObserverData(CollectActivity.DelNumListener observerData) {
+    public void setObserverData(DelNumListener observerData) {
         this.observerData = observerData;
     }
 

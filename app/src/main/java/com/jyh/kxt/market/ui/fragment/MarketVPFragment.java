@@ -32,7 +32,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
     private MarketVPPresenter marketVPPresenter;
 
     private List<Fragment> marketItemList;
-    private List<MarketNavBean> marketNavList;
+    public List<MarketNavBean> marketNavList;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {

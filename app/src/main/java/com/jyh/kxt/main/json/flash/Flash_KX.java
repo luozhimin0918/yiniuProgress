@@ -12,26 +12,25 @@ public class Flash_KX {
     private String time;
     private String importance;//重要性
     private String autoid;
+    private String image;
 
-    public Flash_KX() {
-    }
-
-    public Flash_KX(String title, String time, String importance, String autoid) {
-
+    public Flash_KX(String title, String time, String importance, String autoid, String image) {
         this.title = title;
         this.time = time;
         this.importance = importance;
         this.autoid = autoid;
+        this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Flash_KX{" +
-                "title='" + title + '\'' +
-                ", time='" + time + '\'' +
-                ", importance='" + importance + '\'' +
-                ", autoid='" + autoid + '\'' +
-                '}';
+    public Flash_KX() {
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTitle() {

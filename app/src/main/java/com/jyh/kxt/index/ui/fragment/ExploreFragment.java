@@ -17,11 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.explore.adapter.ActivityAdapter;
 import com.jyh.kxt.explore.adapter.AuthorAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
@@ -29,6 +31,7 @@ import com.jyh.kxt.explore.ui.AuthorActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
@@ -89,6 +92,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         plvContent.setOnItemClickListener(this);
 
+        plRootView.loadWait();
         explorePresenter.init();
 
     }
@@ -123,7 +127,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      *
      * @param slides
      */
-    public void addSlide(List<SlideJson> slides) {
+    public void addSlide(final List<SlideJson> slides) {
         Context mContext = getContext();
         int currentItem = 0;
         if (carouseView != null) {
@@ -151,7 +155,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         carouseView.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                SlideJson slideJson = slides.get(position);
+                JumpUtils.jump((MainActivity) getActivity(), slideJson, slideJson.getHref());
             }
         });
     }
@@ -286,7 +291,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             public void onItemClick(int position, View view) {
                 String authorId = authors.get(position).getId();
                 Intent authorIntent = new Intent(getContext(), AuthorActivity.class);
-                authorIntent.putExtra(IntentConstant.ID, authorId);
+                authorIntent.putExtra(IntentConstant.O_ID, authorId);
                 startActivity(authorIntent);
             }
         });
@@ -319,6 +324,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         if (plvContent.isRefreshing()) {
             plvContent.onRefreshComplete();
         }
+        plRootView.loadOver();
     }
 
     /**
@@ -379,22 +385,17 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         NewsJson newsJson = newsAdapter.dataList.get(position - 1);
-
-        Intent intent = null;
-        if (TextUtils.isEmpty(newsJson.getHref())) {
-            intent = new Intent(getContext(), NewsContentActivity.class);
-            intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
-        } else {
-            intent = new Intent(getContext(), WebActivity.class);
-            intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
-        }
-
-        startActivity(intent);
-
+        JumpUtils.jump((MainActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(getContext(), newsJson);
 
         //单条刷新,改变浏览状态
         newsAdapter.getView(position, view, parent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(explorePresenter.getClass().getName());
     }
 }

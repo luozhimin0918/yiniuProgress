@@ -8,9 +8,6 @@ public class IntentConstant {
 
     public static final int REQUESTCODE1 = 100;
 
-
-    public static final String ID = "id";
-
     public static final String CONFIG = "config";//app配置信息
     public static final String SOURCE = "Source";//来源
     public static final String NAME = "name";//名称(标题)

@@ -16,6 +16,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.RegexValidateUtil;
 
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class VideoPresenter extends BasePresenter {
     @BindObject VideoFragment videoFragment;
 
     public int index = 0;
-    private RequestQueue queue;
     private VolleyRequest request;
 
     public VideoPresenter(IBaseView iBaseView) {
@@ -68,8 +68,10 @@ public class VideoPresenter extends BasePresenter {
 
         videoFragment.plRootView.loadWait();
 
-        queue = videoFragment.getQueue();
-        request = new VolleyRequest(mContext, queue);
+        if (request == null) {
+            request = new VolleyRequest(mContext, mQueue);
+            request.setTag(getClass().getName());
+        }
         request.doGet(HttpConstant.VIDEO_NAV, new HttpListener<List<VideoNavJson>>() {
             @Override
             protected void onResponse(List<VideoNavJson> videoNavJsons) {

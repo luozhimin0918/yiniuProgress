@@ -67,11 +67,15 @@ public class GoodUtils {
                 switch (type) {
                     case VarConstant.GOOD_TYPE_NEWS:
                         set = SPUtils.getStringSet(context, SpConstant.GOOD_NEWS);
+                        if (set == null)
+                            set = new HashSet<String>();
                         set.add(id);
                         SPUtils.save(context, SpConstant.GOOD_NEWS, set);
                         break;
                     case VarConstant.GOOD_TYPE_VIDEO:
                         set = SPUtils.getStringSet(context, SpConstant.GOOD_VIDEO);
+                        if (set == null)
+                            set = new HashSet<String>();
                         set.add(id);
                         SPUtils.save(context, SpConstant.GOOD_VIDEO, set);
                         break;

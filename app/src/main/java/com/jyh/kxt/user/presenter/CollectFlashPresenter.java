@@ -47,11 +47,12 @@ public class CollectFlashPresenter extends BasePresenter {
             }
             collectFlashFragment.loadMore(newsMore);
         } else {
-            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+
             collectFlashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     collectFlashFragment.lvContent.onRefreshComplete();
+                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
             }, 500);
         }
@@ -103,6 +104,8 @@ public class CollectFlashPresenter extends BasePresenter {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
+                    collectFlashFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                    collectFlashFragment.plRootView.setNullText("");
                     collectFlashFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();

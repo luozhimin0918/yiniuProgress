@@ -50,7 +50,7 @@ public class VideoDetailActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
 
-        videoId = getIntent().getStringExtra(IntentConstant.ID);
+        videoId = getIntent().getStringExtra(IntentConstant.O_ID);
 
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 

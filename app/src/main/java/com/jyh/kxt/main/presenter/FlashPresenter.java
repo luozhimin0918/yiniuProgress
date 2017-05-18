@@ -68,8 +68,10 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      * 初始化Socket
      */
     private void initSocket() {
-        connection = new WebSocketConnection();
-
+        if (connection == null)
+            connection = new WebSocketConnection();
+        if (connection.isConnected())
+            connection.disconnect();
         connect();
     }
 
@@ -87,9 +89,10 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
             if (queue == null)
                 queue = flashFragment.getQueue();
-            if (request == null)
+            if (request == null) {
                 request = new VolleyRequest(mContext, queue);
-
+                request.setTag(getClass().getName());
+            }
             JSONObject object = request.getJsonParam();
             try {
                 object.put(IntentConstant.SOCKET_CLIENT, VarConstant.HTTP_CLIENT);
@@ -199,13 +202,13 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             if ("1".equals(status))
                 switch (cmd) {
                     case VarConstant.SOCKET_CMD_LOGIN:
-                        try {
-                            List<String> initFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG).toString(),
-                                    String.class);
-                            List<FlashJson> initflashs = new ArrayList<>();
-                            for (String initFlash : initFlashStr) {
-                                initflashs.add(JSON.parseObject(initFlash, FlashJson.class));
-                            }
+                        List<String> initFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG).toString(),
+                                String.class);
+                        List<FlashJson> initflashs = new ArrayList<>();
+                        for (String initFlash : initFlashStr) {
+                            initflashs.add(JSON.parseObject(initFlash, FlashJson.class));
+                        }
+                        if (initflashs.size() > 0) {
                             lastId = initflashs.get(initflashs.size() - 1).getSocre();
                             if (adapter == null) {
                                 adapter = new FastInfoAdapter(initflashs, mContext);
@@ -214,9 +217,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                 adapter.setData(initflashs);
                             }
                             flashFragment.plRootView.loadOver();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            flashFragment.plRootView.loadError();
+                        } else {
+                            flashFragment.plRootView.loadEmptyData();
                         }
                         break;
                     case VarConstant.SOCKET_CMD_HISTORY:
@@ -324,7 +326,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
     /**
      * 筛选
      */
-    public  void filtrate() {
+    public void filtrate() {
         adapter.filtrate();
     }
 }

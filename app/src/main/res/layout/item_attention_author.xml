@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/attention_author_item_height"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="@dimen/userPhotoSize1"
+        android:layout_height="@dimen/userPhotoSize1"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/attention_padding1"
+        />
+
+    <ImageView
+        android:id="@+id/iv_attention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/sel_news_attention"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/attention_padding1"
+        android:layout_toLeftOf="@id/iv_attention"
+        android:layout_toRightOf="@id/iv_photo"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_marginTop="@dimen/attention_padding2"
+            android:maxLines="2"
+            android:textColor="@color/font_color6"
+            android:textSize="@dimen/describe_font_size1"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

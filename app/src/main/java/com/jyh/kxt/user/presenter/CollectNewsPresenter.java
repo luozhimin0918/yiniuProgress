@@ -43,6 +43,7 @@ public class CollectNewsPresenter extends BasePresenter {
     public CollectNewsPresenter(IBaseView iBaseView) {
         super(iBaseView);
         request = new VolleyRequest(mContext, mQueue);
+        request.setTag(getClass().getName());
     }
 
     /**
@@ -91,6 +92,8 @@ public class CollectNewsPresenter extends BasePresenter {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
+                    collectNewsFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                    collectNewsFragment.plRootView.setNullText("");
                     collectNewsFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();
@@ -132,6 +135,8 @@ public class CollectNewsPresenter extends BasePresenter {
             @Override
             protected void onResponse(List<NewsJson> o) {
                 if (o == null || o.size() == 0) {
+                    collectNewsFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                    collectNewsFragment.plRootView.setNullText("");
                     collectNewsFragment.plRootView.loadEmptyData();
                 } else {
                     if (o.size() > VarConstant.LIST_MAX_SIZE) {

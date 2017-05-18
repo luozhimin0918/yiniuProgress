@@ -130,4 +130,9 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
         morePresenter.loadMore();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(morePresenter.getClass().getName());
+    }
 }

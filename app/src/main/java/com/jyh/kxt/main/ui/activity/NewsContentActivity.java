@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -135,7 +136,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_type) TextView tvType;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_like) CheckBox cbLike;
+        @BindView(R.id.iv_like) ImageView cbLike;
 
         @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
         @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
@@ -179,7 +180,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvName.setText(newsContentJson.getAuthor_name());
 
                 boolean isFollow = "1".equals(newsContentJson.getIs_follow());
-                cbLike.setChecked(isFollow);
+                cbLike.setSelected(isFollow);
             } else {
                 rlNotAuthor.setVisibility(View.VISIBLE);
             }

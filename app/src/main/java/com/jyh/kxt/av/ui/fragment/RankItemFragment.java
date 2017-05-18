@@ -62,4 +62,10 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         plRootView.loadWait();
         rankItemPresenter.init(rankUrl);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(rankItemPresenter.getClass().getName());
+    }
 }

@@ -31,6 +31,10 @@
 
     <dimen name="nav_padding">13dp</dimen>
 
+    <dimen name="userPhotoSize1">50dp</dimen>
+
+    <dimen name="contentPadding">15dp</dimen>
+
     <!-- 设置右边箭头尺寸 -->
     <dimen name="arrow_right_width">10dp</dimen>
     <dimen name="arrow_right_height">15dp</dimen>
@@ -377,5 +381,11 @@
     <dimen name="collect_video_playImgSize">50dp</dimen>
 
     <dimen name="collect_news_height">79dp</dimen>
+
+    <!-- 我的关注 -->
+    <dimen name="attention_author_item_height">70dp</dimen>
+    <dimen name="attention_padding1">10dp</dimen>
+    <dimen name="attention_padding2">7dp</dimen>
+    <dimen name="attention_padding3">5dp</dimen>
 
 </resources>

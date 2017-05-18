@@ -17,6 +17,11 @@ public class EventBusClass {
     public static final int EVENT_COLLECT_VIDEO = 6;//视听收藏状态改变
     public static final int EVENT_COLLECT_FLASH = 7;//快讯收藏状态改变
 
+    public static final int EVENT_ATTENTION_AUTHOR_DEL = 8;//关注作者 删除
+    public static final int EVENT_ATTENTION_AUTHOR_ADD = 9;//关注作者 添加
+    public static final int EVENT_ATTENTION_ARTICLE_DEL = 10;//关注文章 删除
+    public static final int EVENT_ATTENTION_ARTICLE_ADD = 11;//关注文章 添加
+
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;
         this.intentObj = intentObj;

@@ -17,6 +17,7 @@ import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.DateUtils;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 /**
  * 项目名:Kxt
@@ -106,6 +107,10 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     public String getLastId() {
         return dataList.get(dataList.size() - 1).getO_id();
+    }
+
+    public List<NewsJson> getData() {
+        return dataList;
     }
 
     class ViewHolder {

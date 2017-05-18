@@ -87,8 +87,10 @@ public class RegisterFragment extends BaseFragment {
 
     private void register() {
         showWaitDialog(null);
-        if (request == null)
+        if (request == null) {
             request = new VolleyRequest(getContext(), getQueue());
+            request.setTag(getClass().getName());
+        }
         request.doPost(HttpConstant.USER_REGISTER, getMap(), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
@@ -119,4 +121,9 @@ public class RegisterFragment extends BaseFragment {
         return map;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(getClass().getName());
+    }
 }

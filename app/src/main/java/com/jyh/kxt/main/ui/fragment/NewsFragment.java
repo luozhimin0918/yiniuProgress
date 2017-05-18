@@ -44,6 +44,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     private List<Fragment> fragmentList;
     private String[] tabs;
+    private BaseFragmentAdapter adapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -111,7 +112,8 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             fragmentList.add(itemFragment);
         }
 
-        vpNewsList.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(), fragmentList));
+        adapter = new BaseFragmentAdapter(getChildFragmentManager(), fragmentList);
+        vpNewsList.setAdapter(adapter);
         stlNavigationBar.setViewPager(vpNewsList, tabs);
         newsPresenter.addOnPageChangeListener(vpNewsList);
         plRootView.loadOver();
@@ -119,11 +121,14 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     @Override
     public void OnAfreshLoad() {
+        fragmentList.clear();
+        adapter.notifyDataSetChanged();
         newsPresenter.reLoad();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getQueue().cancelAll(newsPresenter.getClass().getName());
     }
 }

@@ -14,6 +14,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.BrowerHistoryPresenter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
@@ -63,17 +64,8 @@ public class BrowerHistoryActivity extends BaseActivity {
                 if (item instanceof String) return;
                 if (item instanceof NewsJson) {
                     NewsJson newsJson = (NewsJson) item;
-                    Intent intent = null;
-                    if (TextUtils.isEmpty(newsJson.getHref())) {
-                        intent = new Intent(getContext(), NewsContentActivity.class);
-                        intent.putExtra(IntentConstant.O_ID, newsJson.getO_id());
-                    } else {
-                        intent = new Intent(getContext(), WebActivity.class);
-                        intent.putExtra(IntentConstant.WEBURL, newsJson.getHref());
-                    }
-
-                    getContext().startActivity(intent);
-
+                    JumpUtils.jump(BrowerHistoryActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                            newsJson.getHref());
                 }
                 return;
             }
