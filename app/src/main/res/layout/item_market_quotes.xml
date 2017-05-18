@@ -51,6 +51,7 @@
             android:text="@{bean.range}"
             android:textColor="@color/font_color5"
             android:textSize="16sp"
+            app:bindingColorLump = "@{bean.bgGlint}"
             app:bindingRange="@{bean.range}"/>
     </LinearLayout>
 </layout>

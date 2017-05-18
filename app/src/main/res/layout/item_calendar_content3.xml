@@ -57,6 +57,6 @@
         android:layout_alignLeft="@+id/rl_content"
         android:layout_below="@+id/ll_left_gq"
         android:layout_marginTop="14dp"
-        android:background="@color/line_color"
+        android:background="@color/line_background"
         android:orientation="vertical"/>
 </RelativeLayout>

@@ -102,7 +102,7 @@
             android:layout_height="1px"
             android:layout_below="@+id/rl_publish"
             android:layout_marginTop="14dp"
-            android:background="@color/line_color"
+            android:background="@color/line_background"
             android:orientation="vertical"/>
     </RelativeLayout>
 

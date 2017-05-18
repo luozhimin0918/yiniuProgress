@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.datum.presenter.DataPresenter;
+import com.library.widget.PageLoadLayout;
 
 import butterknife.BindView;
 
@@ -21,6 +22,7 @@ public class DataFragment extends BaseFragment implements DataPresenter.TopTabVi
     @BindView(R.id.ll_data_nav) public LinearLayout llDataNav;
     @BindView(R.id.iv_left_content) public ListView ivLeftContent;
     @BindView(R.id.iv_right_content) public ListView ivRightContent;
+    @BindView(R.id.pll_right_content) public PageLoadLayout pllRightContent;
 
     private DataPresenter dataPresenter;
 

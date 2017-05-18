@@ -139,5 +139,5 @@ public class HttpConstant {
     public static final String DATA_GROUP = BASE_URL + "data/group" + VarConstant.HTTP_CONTENT;
     public static final String DATA_LIST = BASE_URL + "data/list" + VarConstant.HTTP_CONTENT;
 
-
+    public static final String DATA_COUNTRY = BASE_URL +"data/country";
 }

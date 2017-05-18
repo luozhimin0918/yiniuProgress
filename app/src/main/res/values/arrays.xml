@@ -51,13 +51,14 @@
     <string-array name="calendar_significance">
         <item>全部</item>
         <item>高</item>
+        <item>中</item>
         <item>低</item>
     </string-array>
     <string-array name="calendar_silver">
         <item>全部</item>
         <item>金银</item>
         <item>石油</item>
-        <item>外汇</item>
+        <item>美元</item>
     </string-array>
     <string-array name="flash_silver">
         <item>金银</item>

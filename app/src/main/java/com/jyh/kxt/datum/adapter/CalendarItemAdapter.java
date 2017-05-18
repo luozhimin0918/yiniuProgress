@@ -20,6 +20,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
+import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
@@ -28,7 +29,11 @@ import com.jyh.kxt.datum.bean.CalendarImportantBean;
 import com.jyh.kxt.datum.bean.CalendarNotBean;
 import com.jyh.kxt.datum.bean.CalendarTitleBean;
 import com.jyh.kxt.datum.bean.CalendarType;
+import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
+import com.jyh.kxt.index.json.AlarmJson;
+import com.jyh.kxt.index.presenter.AlarmPresenter;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
 
@@ -50,6 +55,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     private Context mContext;
     private LayoutInflater layoutInflater;
     private CalendarItemFragment parentFragment;
+
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -341,6 +347,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 break;
         }
 
+
         RadianDrawable radianDrawable = new RadianDrawable(mContext);
 
         try {
@@ -369,6 +376,19 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             tvAlarm.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
             tvAlarm.setText("定时");
 
+            if (mCalendarType instanceof CalendarFinanceBean) {
+                CalendarFinanceBean calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+                AlarmJson alarmItem = AlarmPresenter.getInstance().getAlarmItem(calendarFinanceBean.getCode());
+                if (alarmItem != null) {
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                    Date baseDate = new Date(Long.parseLong(alarmItem.getTime()));
+                    String formatDate = simpleDateFormat.format(baseDate);
+
+                    tvAlarm.setText(formatDate);
+                }
+            }
+
             RadianDrawable effectDrawable = new RadianDrawable(mContext);
 
             TextView textView = generateTextView();
@@ -386,16 +406,11 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                     parentFragment.showTimingWindow(mCalendarType, new ObserverCall<Integer>() {
                         @Override
                         public void onComplete(Integer time) {
-//                            timeList.add("提前5分钟");
-//                            timeList.add("提前10分钟");
-//                            timeList.add("提前15分钟");
-//                            timeList.add("提前30分钟");
-//                            timeList.add("提前一个小时");
                             try {
                                 long baseTime = 0L;
 
 
-                                CalendarFinanceBean calendarFinanceBean;
+                                CalendarFinanceBean calendarFinanceBean = null;
 
                                 if (mCalendarType instanceof CalendarFinanceBean) {
                                     calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
@@ -426,11 +441,31 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                                 }
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                                 Date baseDate = new Date(baseTime);
-                                String formatDate = simpleDateFormat.format(baseDate);
+                                final String formatDate = simpleDateFormat.format(baseDate);
 
-                                int alarmColor = ContextCompat.getColor(mContext, R.color.font_color8);
-                                tvAlarm.setText(formatDate);
-                                tvAlarm.setTextColor(alarmColor);
+                                MainActivity mainActivity = (MainActivity) mContext;
+                                mainActivity.checkAlarmPermissions(baseTime,
+                                        calendarFinanceBean,
+                                        new OnRequestPermissions() {
+                                            /**
+                                             * 调用成功
+                                             */
+                                            @Override
+                                            public void doSomething() {
+                                                int alarmColor = ContextCompat.getColor(mContext, R.color.font_color8);
+                                                tvAlarm.setText(formatDate);
+                                                tvAlarm.setTextColor(alarmColor);
+                                            }
+
+                                            /**
+                                             * 权限失败
+                                             */
+                                            @Override
+                                            public void doFailSomething() {
+
+                                            }
+                                        });
+
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
@@ -443,6 +478,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     }
 
     private void drawingShapeColor(int type, int effectType, String effect, LinearLayout llExponent) {
+
+        CalendarFragment parentFragment = (CalendarFragment) this.parentFragment.getParentFragment();
+
+
         int shapeColor = 0;
         Drawable leftDrawable = null;
 
@@ -466,18 +505,24 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 String[] effect0Split = effect.split(" ");
 
                 for (int i = 0; i < effect0Split.length; i++) {
-                    RadianDrawable effectDrawable = new RadianDrawable(mContext);
+                    String splitTrim = effect0Split[i].trim();
+                    if (parentFragment.judgeSet.size() == 0 ||
+                            parentFragment.judgeSet.contains("全部") ||
+                            parentFragment.judgeSet.contains(splitTrim)) {
 
-                    TextView textView = generateTextView();
-                    textView.setText(effect0Split[i]);
+                        RadianDrawable effectDrawable = new RadianDrawable(mContext);
 
-                    effectDrawable.setStroke(shapeColor);
-                    textView.setTextColor(ContextCompat.getColor(mContext, shapeColor));
+                        TextView textView = generateTextView();
+                        textView.setText(splitTrim);
 
-                    textView.setBackground(effectDrawable);
+                        effectDrawable.setStroke(shapeColor);
+                        textView.setTextColor(ContextCompat.getColor(mContext, shapeColor));
 
-                    textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
-                    llExponent.addView(textView);
+                        textView.setBackground(effectDrawable);
+
+                        textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
+                        llExponent.addView(textView);
+                    }
                 }
             }
         } else {
@@ -566,4 +611,5 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     public int getViewTypeCount() {
         return 5;
     }
+
 }

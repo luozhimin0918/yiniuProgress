@@ -1,6 +1,7 @@
 package com.jyh.kxt.datum.ui.fragment;
 
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
 import com.jyh.kxt.R;
@@ -12,6 +13,7 @@ import com.jyh.kxt.datum.presenter.CalendarItemPresenter;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.library.util.ObserverCall;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class CalendarItemFragment extends BaseFragment {
     @BindView(R.id.ptrlv_content) PullToRefreshListView ptrlvContent;
 
     private CalendarItemPresenter mCalendarItemPresenter;
-    private CalendarItemAdapter calendarItemAdapter;
+    public CalendarItemAdapter calendarItemAdapter;
 
     public String calendarDate;
 
@@ -43,14 +45,29 @@ public class CalendarItemFragment extends BaseFragment {
 
         calendarDate = getCalendarDate();
         mCalendarItemPresenter = new CalendarItemPresenter(this);
+
+        pllContent.loadWait();
         mCalendarItemPresenter.requestPublishData();
+
+        ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        ptrlvContent.getRefreshableView().setDividerHeight(0);
+        ptrlvContent.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                mCalendarItemPresenter.calendarTypeList.clear();
+                mCalendarItemPresenter.requestPublishData();
+            }
+        });
     }
 
     public void setCalendarAdapter(List<CalendarType> calendarBeen) {
+        ptrlvContent.onRefreshComplete();
+
         calendarItemAdapter = new CalendarItemAdapter(getContext(), calendarBeen);
         calendarItemAdapter.setParentFragment(this);
-        ptrlvContent.getRefreshableView().setDividerHeight(0);
         ptrlvContent.setAdapter(calendarItemAdapter);
+
+
     }
 
     public String getCalendarDate() {
@@ -65,7 +82,7 @@ public class CalendarItemFragment extends BaseFragment {
             String time = mCalendarFinanceBean.getTime();
 
             DatumFragment parentFragment = (DatumFragment) getParentFragment().getParentFragment();
-            parentFragment.showTimingWindow(time,observerCall);
+            parentFragment.showTimingWindow(time, observerCall);
         }
     }
 
@@ -78,5 +95,9 @@ public class CalendarItemFragment extends BaseFragment {
         if (calendarDate != null) {
             queue.cancelAll(calendarDate);
         }
+    }
+
+    public void updateFiltration() {
+        mCalendarItemPresenter.updateOrAddAdapter(1);
     }
 }

@@ -19,16 +19,13 @@ public class MarketItemBean extends BaseObservable {
      * price : 3141.76
      * range : +0.23%
      */
-    @Bindable
-    private String change;
-    @Bindable
-    private String code;
-    @Bindable
-    private String name;
-    @Bindable
-    private String price;
-    @Bindable
-    private String range;
+    @Bindable private String change;
+    @Bindable private String code;
+    @Bindable private String name;
+    @Bindable private String price;
+    @Bindable private String range;
+    //本地变量
+    @Bindable private int bgGlint = 0;
 
     public void setChange(String change) {
         this.change = change;
@@ -73,5 +70,14 @@ public class MarketItemBean extends BaseObservable {
     public void setRange(String range) {
         this.range = range;
         notifyPropertyChanged(BR.range);
+    }
+
+    public int getBgGlint() {
+        return bgGlint;
+    }
+
+    public void setBgGlint(int bgGlint) {
+        this.bgGlint = bgGlint;
+        notifyPropertyChanged(BR.bgGlint);
     }
 }

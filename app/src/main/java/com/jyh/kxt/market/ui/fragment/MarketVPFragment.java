@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -44,21 +45,6 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         pllContent.setOnAfreshLoadListener(this);
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
     /**
      * 导航栏请求初始化完成
      */
@@ -87,7 +73,14 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
 
         FragmentManager fm = getChildFragmentManager();
-        BaseFragmentAdapter pageAdapter = new BaseFragmentAdapter(fm, marketItemList);
+        BaseFragmentAdapter pageAdapter = new BaseFragmentAdapter(fm, marketItemList) {
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+                if(!"zhuYe".equals(MarketVPFragment.this.marketNavList.get(position).getCode())){
+                    super.destroyItem(container, position, object);
+                }
+            }
+        };
 
         vpContent.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpContent, titles);
@@ -102,5 +95,20 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void OnAfreshLoad() {
         marketVPPresenter.requestMarketNavData();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

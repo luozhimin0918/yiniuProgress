@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.utils;
 
 import android.databinding.BindingAdapter;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
@@ -40,26 +41,29 @@ public class MarketUtil {
         tvLabel.setTextColor(fontColor);
     }
 
-
     @BindingAdapter("bindingColorLump")
-    public static void bindingColorLump(final TextView tvLabel, final String range) {
-
-        //色块选中时文字 的颜色
-        int colorLumpFont = ContextCompat.getColor(tvLabel.getContext(), R.color.shape_bg1);
+    public static void bindingColorLump(final TextView tvLabel, int bgGlint) {
         final int colorBg;
 
-        if (range.contains("+")) {
-            colorBg = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
-        } else if (range.contains("-")) {
-            colorBg = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
-        } else {
-            colorBg = ContextCompat.getColor(tvLabel.getContext(), android.R.color.transparent);
+        switch (bgGlint) {
+            case 0: //表示不执行任何操作
+                colorBg = Color.TRANSPARENT;
+                break;
+            case 1: //上涨  调红_闪烁
+                colorBg = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
+                break;
+            case 2: //下跌  调绿_闪烁
+                colorBg = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
+                break;
+            default:
+                colorBg = Color.TRANSPARENT;
+                break;
         }
 
-        final RadianDrawable2 radianDrawable2 = new RadianDrawable2(tvLabel.getContext(), colorBg, 3);
+        RadianDrawable2 radianDrawable = new RadianDrawable2(tvLabel.getContext(), colorBg, 3);
 
-        tvLabel.setTextColor(colorLumpFont);
-        tvLabel.setBackground(radianDrawable2);
+        tvLabel.setTextColor(Color.WHITE);
+        tvLabel.setBackground(radianDrawable);
 
         tvLabel.postDelayed(new Runnable() {
             @Override

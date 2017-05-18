@@ -30,6 +30,10 @@ import java.util.Set;
  */
 public class OptionLayout extends FrameLayout implements View.OnClickListener {
 
+    public static enum SelectMode {
+        RadioMode, CheckMode
+    }
+
     public static abstract class OnItemCheckBoxClick {
         public abstract void onItemClick(int position, CheckBox mCheckBox);
 
@@ -61,7 +65,9 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     private boolean disabledClick = false;
 
     //0 默认类型点击之后重选   1 替换类型选新的CheckBox 之后将旧的给移除
-    private int selectMode = 0;
+    private SelectMode selectMode;
+
+
     //最大最小的选择数量
     private int minSelectCount = 0;
     private int maxSelectCount = 0;
@@ -296,10 +302,20 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     public void onClick(View v) {
         int selectCount = 0;
 
+        CheckBox checkBox = (CheckBox) v;
+
+        //默认为0不包括  1点击是全部  2选中的包括有全部
+        int selectedIncludeAll = 0;
+
         for (int index = 0; index < allCheckBox.size(); index++) {
             CheckBox myCheckBox = (CheckBox) getChildAt(index);
             if (myCheckBox.isChecked()) {
-                if (selectMode == 0) {
+
+                if ("全部".equals(myCheckBox.getText())) {
+                    selectedIncludeAll = 2;
+                }
+
+                if (selectMode == SelectMode.CheckMode) {
                     selectCount++;
                 } else {
                     selectCount = minSelectCount;
@@ -308,14 +324,47 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             }
         }
 
-        CheckBox checkBox = (CheckBox) v;
-        if (selectMode == 1) {
+        if ("全部".equals(checkBox.getText())) {
+            selectedIncludeAll = 1;
+        }
+
+        //如果是多选模式
+        //1. 点击选中了全部, 则将除全部之外的所有CheckBox重置
+        //2. 如果选中了其他, 但是全部还是选中状态, 则替换所有全部
+        if (selectMode == SelectMode.CheckMode) {
+            if (selectedIncludeAll == 1) {
+                for (int index = 0; index < allCheckBox.size(); index++) {
+                    CheckBox myCheckBox = (CheckBox) getChildAt(index);
+                    if (myCheckBox.isChecked()) {
+                        if (!"全部".equals(myCheckBox.getText())) {
+                            myCheckBox.setChecked(false);
+                            selectCount--;
+                        }
+                    }
+                }
+            }
+            if (selectedIncludeAll == 2) {
+                for (int index = 0; index < allCheckBox.size(); index++) {
+                    CheckBox myCheckBox = (CheckBox) getChildAt(index);
+                    if (myCheckBox.isChecked()) {
+                        if ("全部".equals(myCheckBox.getText())) {
+                            myCheckBox.setChecked(false);
+                            selectCount--;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (selectMode == SelectMode.RadioMode) {
             checkBox.setChecked(true);
         }
 
+        //如果小于最小的选择数
         if (selectCount < minSelectCount) {
 
-            if (selectMode == 0) {
+            if (selectMode == SelectMode.CheckMode) {
                 checkBox.setChecked(true);
             }
 
@@ -325,6 +374,7 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
             return;
         }
 
+        //如果大于最大的选择数
         if (selectCount > maxSelectCount) {
             checkBox.setChecked(false);
 
@@ -352,7 +402,8 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
         this.maxSelectCount = maxSelectCount;
     }
 
-    public void setSelectMode(int selectMode) {
+    public void setSelectMode(SelectMode selectMode) {
         this.selectMode = selectMode;
     }
+
 }

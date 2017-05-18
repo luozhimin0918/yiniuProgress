@@ -54,7 +54,7 @@ public class ClassifyActivity extends BaseActivity {
 
         olContent.setMinSelectCount(1);
         olContent.setMaxSelectCount(1);
-        olContent.setSelectMode(1);
+        olContent.setSelectMode(OptionLayout.SelectMode.RadioMode);
         olContent.setSelectItemIndex(index);
 
         olContent.setOnItemCheckBoxClick(new OptionLayout.OnItemCheckBoxClick() {

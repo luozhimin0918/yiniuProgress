@@ -33,14 +33,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                app:checkBoxBackground="@drawable/bg_classify_default1"
-                app:defaultFontColor="@color/font_color5"
-                app:selectedFontColor="@color/white"
-
                 app:array="@array/calendar_state"
+                app:checkBoxBackground="@drawable/bg_classify_default1"
                 app:columnSpace="36dp"
+
+                app:defaultFontColor="@color/font_color5"
                 app:itemHeight="39dp"
-                app:rowSpace="15dp">
+                app:rowSpace="15dp"
+                app:selectedFontColor="@color/white">
 
             </com.jyh.kxt.base.widget.OptionLayout>
 
@@ -58,14 +58,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                app:checkBoxBackground="@drawable/bg_classify_default1"
-                app:defaultFontColor="@color/font_color5"
-                app:selectedFontColor="@color/white"
-
                 app:array="@array/calendar_significance"
+                app:checkBoxBackground="@drawable/bg_classify_default1"
                 app:columnSpace="36dp"
+
+                app:defaultFontColor="@color/font_color5"
                 app:itemHeight="39dp"
-                app:rowSpace="15dp">
+                app:rowSpace="15dp"
+                app:selectedFontColor="@color/white">
 
             </com.jyh.kxt.base.widget.OptionLayout>
 
@@ -78,21 +78,32 @@
                 android:textColor="@color/font_color60"
                 android:textSize="@dimen/describe_font_size3"/>
 
-            <com.jyh.kxt.base.widget.OptionLayout
-                android:id="@+id/ol_area"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content">
 
-                app:checkBoxBackground="@drawable/bg_classify_default1"
-                app:defaultFontColor="@color/font_color5"
-                app:selectedFontColor="@color/white"
+                <com.jyh.kxt.base.widget.OptionLayout
+                    android:id="@+id/ol_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                app:array="@array/calendar_silver"
-                app:columnSpace="36dp"
-                app:itemHeight="39dp"
-                app:rowSpace="15dp">
+                    app:checkBoxBackground="@drawable/bg_classify_default1"
+                    app:columnSpace="36dp"
+                    app:defaultFontColor="@color/font_color5"
 
-            </com.jyh.kxt.base.widget.OptionLayout>
+                    app:itemHeight="39dp"
+                    app:rowSpace="15dp"
+                    app:selectedFontColor="@color/white">
+
+                </com.jyh.kxt.base.widget.OptionLayout>
+
+                <ImageView
+                    android:id="@+id/iv_update_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:src="@mipmap/icon_update"/>
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -108,14 +119,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                app:checkBoxBackground="@drawable/bg_classify_default1"
-                app:defaultFontColor="@color/font_color5"
-                app:selectedFontColor="@color/white"
-
                 app:array="@array/calendar_silver"
+                app:checkBoxBackground="@drawable/bg_classify_default1"
                 app:columnSpace="36dp"
+
+                app:defaultFontColor="@color/font_color5"
                 app:itemHeight="39dp"
-                app:rowSpace="15dp">
+                app:rowSpace="15dp"
+                app:selectedFontColor="@color/white">
 
             </com.jyh.kxt.base.widget.OptionLayout>
         </LinearLayout>
@@ -129,14 +140,16 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <TextView
+        <com.jyh.kxt.base.custom.DiscolorTextView
+            android:id="@+id/dtv_reset"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
             android:text="重置"
-            android:textColor="@color/font_color5"
+            app:clickFontColor="@color/font_color8"
+            app:defaultFontColor="@color/font_color5"
             android:textSize="@dimen/title_font_size"/>
 
         <View
@@ -146,14 +159,15 @@
             android:layout_marginTop="12dp"
             android:background="@color/line_color"/>
 
-        <TextView
+        <com.jyh.kxt.base.custom.DiscolorTextView
+            android:id="@+id/dtv_confirm"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
             android:text="确定"
-            android:textColor="@color/font_color8"
+            app:defaultFontColor="@color/font_color8"
             android:textSize="@dimen/title_font_size"/>
     </LinearLayout>
 </LinearLayout>

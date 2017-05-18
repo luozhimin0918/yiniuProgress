@@ -6,8 +6,8 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarBean;
+import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
 import com.jyh.kxt.datum.bean.CalendarImportantBean;
 import com.jyh.kxt.datum.bean.CalendarNotBean;
@@ -30,15 +30,18 @@ public class CalendarItemPresenter extends BasePresenter {
     @BindObject CalendarItemFragment calendarItemFragment;
 
 
-    private List<CalendarType> calendarTypeList = new ArrayList<>();
+    public List<CalendarType> calendarTypeList = new ArrayList<>();
+    private CalendarFragment parentFragment;
+    public List<CalendarBean> calendarBeen;
 
     public CalendarItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
+
+        parentFragment = (CalendarFragment) ((CalendarItemFragment) iBaseView).getParentFragment();
     }
 
 
     public void requestPublishData() {
-        calendarItemFragment.pllContent.loadWait();
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
 
@@ -49,31 +52,48 @@ public class CalendarItemPresenter extends BasePresenter {
         volleyRequest.doGet(HttpConstant.RILI, json, new HttpListener<List<CalendarBean>>() {
             @Override
             protected void onResponse(List<CalendarBean> calendarBeen) {
+                CalendarItemPresenter.this.calendarBeen = calendarBeen;
+
                 calendarItemFragment.pllContent.loadOver();
 
-                for (CalendarBean calendarItemBean : calendarBeen) {
+                updateOrAddAdapter(0);
 
-                    String type = calendarItemBean.getType();
-                    List<String> objectList = calendarItemBean.getData();
-
-                    if ("finance".equals(type)) {//财经数据
-                        generateFinanceListData(objectList);
-                    } else if ("important".equals(type)) {//事件数据
-                        generateImportantListData(objectList);
-                    } else if ("holiday".equals(type)) { //假期数据
-                        generateHolidayListData(objectList);
-                    }
-                }
-                calendarItemFragment.setCalendarAdapter(calendarTypeList);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
-                calendarItemFragment.pllContent.loadError();
 
+                calendarItemFragment.pllContent.loadOver();
+                generateFinanceListData(null);
+                generateImportantListData(null);
+                generateHolidayListData(null);
+                calendarItemFragment.setCalendarAdapter(calendarTypeList);
             }
         });
     }
+
+    public void updateOrAddAdapter(int status) {
+        calendarTypeList.clear();
+
+        for (CalendarBean calendarItemBean : calendarBeen) {
+            String type = calendarItemBean.getType();
+            List<String> objectList = calendarItemBean.getData();
+
+            if ("finance".equals(type)) {//财经数据
+                generateFinanceListData(objectList);
+            } else if ("important".equals(type)) {//事件数据
+                generateImportantListData(objectList);
+            } else if ("holiday".equals(type)) { //假期数据
+                generateHolidayListData(objectList);
+            }
+        }
+        if (status == 0) {
+            calendarItemFragment.setCalendarAdapter(calendarTypeList);
+        } else {
+            calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
+        }
+    }
+
 
     //生成经济数据数组
     private void generateFinanceListData(List<String> data) {
@@ -83,18 +103,25 @@ public class CalendarItemPresenter extends BasePresenter {
         titleBean.setSpaceType(0);
         calendarTypeList.add(titleBean);
 
-
         if (data == null || data.size() == 0) {
-            CalendarNotBean calendarNotBean = new CalendarNotBean();
-            calendarNotBean.setDescribe("暂无数据信息");
-            calendarNotBean.setAdapterType(CalendarFragment.AdapterType.NO_DATA);
-            calendarTypeList.add(calendarNotBean);
+            addNotData("暂无数据信息");
             return;
         }
+
+        boolean isHaveComplacent = false;
         for (String objData : data) {
             CalendarFinanceBean mCalendarFinanceBean = JSONObject.parseObject(objData, CalendarFinanceBean.class);
-            mCalendarFinanceBean.setAdapterType(CalendarFragment.AdapterType.CONTENT1);
-            calendarTypeList.add(mCalendarFinanceBean);
+            boolean isMeetConditions = parentFragment.isFinanceMeetConditions(mCalendarFinanceBean);
+
+            if (isMeetConditions) {
+                mCalendarFinanceBean.setAdapterType(CalendarFragment.AdapterType.CONTENT1);
+                calendarTypeList.add(mCalendarFinanceBean);
+                isHaveComplacent = true;
+            }
+        }
+
+        if (!isHaveComplacent) {
+            addNotData("暂无数据信息");
         }
     }
 
@@ -107,17 +134,23 @@ public class CalendarItemPresenter extends BasePresenter {
         calendarTypeList.add(titleBean);
 
         if (data == null || data.size() == 0) {
-            CalendarNotBean calendarNotBean = new CalendarNotBean();
-            calendarNotBean.setDescribe("暂无时间数据");
-            calendarNotBean.setAdapterType(CalendarFragment.AdapterType.NO_DATA);
-            calendarTypeList.add(calendarNotBean);
+            addNotData("暂无事件数据");
             return;
         }
 
+        boolean isHaveComplacent = false;
         for (String objData : data) {
             CalendarImportantBean mCalendarImportantBean = JSONObject.parseObject(objData, CalendarImportantBean.class);
-            mCalendarImportantBean.setAdapterType(CalendarFragment.AdapterType.CONTENT2);
-            calendarTypeList.add(mCalendarImportantBean);
+            boolean isMeetConditions = parentFragment.isImportantMeetConditions(mCalendarImportantBean);
+
+            if (isMeetConditions) {
+                mCalendarImportantBean.setAdapterType(CalendarFragment.AdapterType.CONTENT2);
+                calendarTypeList.add(mCalendarImportantBean);
+                isHaveComplacent = true;
+            }
+        }
+        if (!isHaveComplacent) {
+            addNotData("暂无事件数据");
         }
     }
 
@@ -130,10 +163,7 @@ public class CalendarItemPresenter extends BasePresenter {
         calendarTypeList.add(titleBean);
 
         if (data == null || data.size() == 0) {
-            CalendarNotBean calendarNotBean = new CalendarNotBean();
-            calendarNotBean.setDescribe("暂无假期公告");
-            calendarNotBean.setAdapterType(CalendarFragment.AdapterType.NO_DATA);
-            calendarTypeList.add(calendarNotBean);
+            addNotData("暂无假期公告");
             return;
         }
 
@@ -142,5 +172,12 @@ public class CalendarItemPresenter extends BasePresenter {
             mCalendarHolidayBean.setAdapterType(CalendarFragment.AdapterType.CONTENT3);
             calendarTypeList.add(mCalendarHolidayBean);
         }
+    }
+
+    private void addNotData(String tip) {
+        CalendarNotBean calendarNotBean = new CalendarNotBean();
+        calendarNotBean.setDescribe(tip);
+        calendarNotBean.setAdapterType(CalendarFragment.AdapterType.NO_DATA);
+        calendarTypeList.add(calendarNotBean);
     }
 }

@@ -65,4 +65,14 @@ public class SpConstant {
     public static final String GOOD_VIDEO = "good_video";
 
 
+    public static final String CALENDAR_ALARM_LIST = "calendar_alarm_list";
+
+    /**
+     * 日历的HashSet相关
+     */
+    public static final String DATUM_STATE = "datum_state";
+    public static final String DATUM_IMPORTANCE = "datum_importance";
+    public static final String DATUM_AREA = "datum_area";
+    public static final String DATUM_JUDGE = "datum_judge";
+
 }

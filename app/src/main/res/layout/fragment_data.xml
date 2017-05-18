@@ -7,15 +7,15 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:background="@color/bg_color1"
-        android:layout_height="46dp">
+        android:layout_height="46dp"
+        android:background="@color/bg_color1">
 
         <LinearLayout
             android:id="@+id/ll_data_nav"
             android:layout_width="wrap_content"
-            android:paddingRight="15dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
 
         </LinearLayout>
 
@@ -29,20 +29,27 @@
         <ListView
             android:id="@+id/iv_left_content"
             android:layout_width="0dp"
-            android:scrollbars="none"
             android:layout_height="match_parent"
-            android:layout_weight="1.5">
+            android:layout_weight="1.5"
+            android:scrollbars="none">
 
         </ListView>
 
-        <ListView
-            android:id="@+id/iv_right_content"
-            android:scrollbars="none"
+        <com.library.widget.PageLoadLayout
+            android:id="@+id/pll_right_content"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3">
 
-        </ListView>
+            <ListView
+                android:id="@+id/iv_right_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+            </ListView>
+
+        </com.library.widget.PageLoadLayout>
     </LinearLayout>
 
 

@@ -35,8 +35,10 @@ import com.jyh.kxt.datum.ui.fragment.DataFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
+import com.library.widget.PageLoadLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,6 +56,7 @@ public class DataPresenter extends BasePresenter {
     private TopTabViewClick topTabViewClick;
     private List<DataGroup> mDataLeftGroupList;
     private List<DataList> mDataRightList = new ArrayList<>();
+    private HashMap<String, List<DataList>> mDataRightMap = new HashMap<>();
 
     private int mLeftSelectedItem = -1;
     private RadioButton mOldLeftSelectedView;
@@ -213,56 +216,68 @@ public class DataPresenter extends BasePresenter {
         }
     }
 
-    private void initRightLayout(String groupId) {
+    private BaseListAdapter<DataList> rightContentAdapter;
 
-        final BaseListAdapter<DataList> rightContentAdapter = new BaseListAdapter<DataList>(mDataRightList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+    private void initRightLayout(final String groupId) {
 
-                DataList dataList = mDataRightList.get(position);
+        if (dataFragment.ivRightContent.getAdapter() == null) {
+            rightContentAdapter = new BaseListAdapter<DataList>(mDataRightList) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
 
-                ViewHolder mViewHolder;
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_data_right, null);
-                    mViewHolder = new ViewHolder();
-                    convertView.setTag(mViewHolder);
+                    DataList dataList = mDataRightList.get(position);
 
-                    mViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-                } else {
-                    mViewHolder = (ViewHolder) convertView.getTag();
+                    ViewHolder mViewHolder;
+                    if (convertView == null) {
+                        convertView = LayoutInflater.from(mContext).inflate(R.layout.item_data_right, null);
+                        mViewHolder = new ViewHolder();
+                        convertView.setTag(mViewHolder);
+
+                        mViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                    } else {
+                        mViewHolder = (ViewHolder) convertView.getTag();
+                    }
+
+                    if ("hot".equals(dataList.getStyle_class())) {
+                        String name = dataList.getName() + ".";
+                        SpannableString msp = new SpannableString(name);
+
+                        int gapWidth = SystemUtil.dp2px(mContext, 6);
+
+
+                        CircleDrawable mCircleDrawable = new CircleDrawable(Color.RED);
+                        mCircleDrawable.setBounds(0, 0, gapWidth, gapWidth);
+
+                        ImageSpan what = new MyImageSpan(mCircleDrawable);
+
+                        msp.setSpan(what, name.length() - 1, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+                        mViewHolder.tvTitle.setText(msp);
+                    } else {
+                        mViewHolder.tvTitle.setText(dataList.getName());
+                    }
+
+
+                    return convertView;
+
                 }
 
-                if ("hot".equals(dataList.getStyle_class())) {
-                    String name = dataList.getName() + ".";
-                    SpannableString msp = new SpannableString(name);
-
-                    int gapWidth = SystemUtil.dp2px(mContext, 6);
-
-
-                    CircleDrawable mCircleDrawable = new CircleDrawable(Color.RED);
-                    mCircleDrawable.setBounds(0, 0, gapWidth, gapWidth);
-
-                    ImageSpan what = new MyImageSpan(mCircleDrawable);
-
-                    msp.setSpan(what, name.length() - 1, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-
-                    mViewHolder.tvTitle.setText(msp);
-                } else {
-                    mViewHolder.tvTitle.setText(dataList.getName());
+                class ViewHolder {
+                    TextView tvTitle;
                 }
+            };
+            dataFragment.ivRightContent.setAdapter(rightContentAdapter);
+        }
 
 
-                return convertView;
+        if (mDataRightMap.get(groupId) != null) {
 
-            }
+            mDataRightList.clear();
+            mDataRightList.addAll(mDataRightMap.get(groupId));
+            rightContentAdapter.notifyDataSetChanged();
+            return;
+        }
 
-            class ViewHolder {
-                TextView tvTitle;
-            }
-        };
-
-
-        dataFragment.ivRightContent.setAdapter(rightContentAdapter);
         dataFragment.ivRightContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -270,6 +285,8 @@ public class DataPresenter extends BasePresenter {
             }
         });
 
+
+        dataFragment.pllRightContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT, null);
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
 
         JSONObject jsonParam = volleyRequest.getJsonParam();
@@ -277,15 +294,17 @@ public class DataPresenter extends BasePresenter {
         volleyRequest.doGet(HttpConstant.DATA_LIST, jsonParam, new HttpListener<List<DataList>>() {
             @Override
             protected void onResponse(List<DataList> mDataList) {
+                mDataRightMap.put(groupId, mDataList);
+
                 mDataRightList.clear();
                 mDataRightList.addAll(mDataList);
-
                 rightContentAdapter.notifyDataSetChanged();
+                dataFragment.pllRightContent.loadOver();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
-
+                dataFragment.pllRightContent.loadError();
             }
         });
     }

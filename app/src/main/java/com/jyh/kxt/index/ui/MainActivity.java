@@ -1,11 +1,15 @@
 package com.jyh.kxt.index.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
@@ -25,11 +29,13 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
@@ -82,7 +88,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TextView loginName;
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
-    private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn, themeBtn, loginBtn, quitBtn;
+    private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
+            themeBtn, loginBtn, quitBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,10 +236,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (DoubleClickUtils.isFastDoubleClick(500))
+            if (DoubleClickUtils.isFastDoubleClick(500)) {
                 super.onBackPressed();
-            else
+            } else {
                 ToastView.makeText3(this, "双击退出应用");
+            }
         }
 
     }
@@ -245,7 +254,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
                         new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
 
-                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation
+                        (this, pairs);
                 Intent intent = new Intent(this, EditUserInfoActivity.class);
                 ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
                 break;
@@ -370,9 +380,69 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
-        if (currentFragment != null)
+        if (currentFragment != null) {
             currentFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
+
+    private long baseTime;
+    private OnRequestPermissions onRequestPermissions;
+    private CalendarFinanceBean calendarFinanceBean;
+
+    /**
+     * 权限申请管理
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (datumFragment != null) {
+                datumFragment.obtainAlarmPermissionsSuccess(baseTime, calendarFinanceBean, onRequestPermissions);
+            }
+        } else {
+            if (datumFragment != null) {
+                datumFragment.obtainAlarmPermissionsFailure();
+            }
+        }
+    }
+
+
+    /**
+     * 添加日历访问权限
+     *
+     * @param calendarFinanceBean
+     * @param baseTime
+     * @param onRequestPermissions
+     */
+    public void checkAlarmPermissions(long baseTime,
+                                      CalendarFinanceBean calendarFinanceBean,
+                                      OnRequestPermissions onRequestPermissions) {
+
+        this.baseTime = baseTime;
+        this.calendarFinanceBean = calendarFinanceBean;
+        this.onRequestPermissions = onRequestPermissions;
+
+        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR);
+        int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED
+                || readPermission != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_CALENDAR}, 1000);
+        } else {
+            if (datumFragment != null) {
+                datumFragment.obtainAlarmPermissionsSuccess(baseTime, calendarFinanceBean, onRequestPermissions);
+            }
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
