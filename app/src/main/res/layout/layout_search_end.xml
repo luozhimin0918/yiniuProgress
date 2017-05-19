@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.library.widget.PageLoadLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/pl_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,7 +10,6 @@
         android:id="@+id/stl_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigationBar2Height"
-        android:layout_gravity="bottom"
         android:background="@color/bg_color"
         android:paddingRight="@dimen/navigationBar2ImageWidth"
         tl:tl_indicator_color="@color/white"
@@ -30,4 +28,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</com.library.widget.PageLoadLayout>
+</LinearLayout>

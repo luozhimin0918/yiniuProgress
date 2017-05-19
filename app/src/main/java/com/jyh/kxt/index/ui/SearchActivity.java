@@ -1,10 +1,13 @@
 package com.jyh.kxt.index.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +18,18 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.widget.SearchEditText;
+import com.jyh.kxt.index.adapter.SearchBrowerAdapter;
 import com.jyh.kxt.index.presenter.SearchPresenter;
+import com.jyh.kxt.index.ui.fragment.SearchArticleFragment;
+import com.jyh.kxt.index.ui.fragment.SearchVideoFragment;
+import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.flowlayout.TagAdapter;
@@ -39,7 +51,7 @@ import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity {
 
-    @BindView(R.id.edt_search) EditText edtSearch;
+    @BindView(R.id.edt_search) SearchEditText edtSearch;
     @BindView(R.id.fl_hot) TagFlowLayout flHot;
     @BindView(R.id.ll_hot) LinearLayout llHot;
     @BindView(R.id.ll_history) LinearLayout llHistory;
@@ -48,12 +60,15 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.vp_content) ViewPager vpContent;
     @BindView(R.id.layout_search_start) View rootSearchStart;
     @BindView(R.id.layout_search_end) View rootSearchEnd;
-    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
-    private final String[] tabs = new String[]{"文章", "视听"};
+    private final String[] tabs = new String[]{"视听", "文章"};
     private SearchPresenter searchPresenter;
     private TagAdapter<String> tagAdapter;
     private List<String> flows;
+
+    private List<Fragment> fragmentList = new ArrayList<>();
+    public SearchVideoFragment videoFragment;
+    public SearchArticleFragment articleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +82,25 @@ public class SearchActivity extends BaseActivity {
         initView();
 
         if (RegexValidateUtil.isEmpty(searchKey)) {
-            //初始化搜索历史
-            searchPresenter.initSearchHistory();
-            //初始化浏览历史
-            searchPresenter.initBrowseHistory();
+            searchBefore();
         } else {
             rootSearchStart.setVisibility(View.GONE);
             rootSearchEnd.setVisibility(View.VISIBLE);
             searchPresenter.search(searchKey);
         }
+
+    }
+
+    /**
+     * 未搜索前布局
+     */
+    private void searchBefore() {
+        rootSearchStart.setVisibility(View.VISIBLE);
+        rootSearchEnd.setVisibility(View.GONE);
+        //初始化搜索历史
+        searchPresenter.initSearchHistory();
+        //初始化浏览历史
+        searchPresenter.initBrowseHistory();
     }
 
     private void initView() {
@@ -91,7 +116,7 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        edtSearch.addTextChangedListener(edtSearch.new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -104,11 +129,10 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
                 if (RegexValidateUtil.isEmpty(s.toString())) {
-                    //初始化搜索历史
-                    searchPresenter.initSearchHistory();
-                    //初始化浏览历史
-                    searchPresenter.initBrowseHistory();
+                    showHistory();
+                    searchBefore();
                 }
             }
         });
@@ -116,10 +140,25 @@ public class SearchActivity extends BaseActivity {
         flHot.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                searchPresenter.search(flows.get(position));
+                String searchKey = flows.get(position);
+                edtSearch.setText(searchKey);
+                searchPresenter.search(searchKey);
                 return false;
             }
         });
+
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvContent.setLayoutManager(manager);
+
+        fragmentList.add(videoFragment = new SearchVideoFragment());
+        fragmentList.add(articleFragment = new SearchArticleFragment());
+
+        vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
+        stlNavigationBar.setViewPager(vpContent, tabs);
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
+        stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
+
     }
 
     @OnClick({R.id.tv_break, R.id.tv_history_more, R.id.iv_clear_history})
@@ -163,7 +202,6 @@ public class SearchActivity extends BaseActivity {
                         TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_tv,
                                 flHot, false);
                         tv.setText(s);
-
                         return tv;
                     }
                 };
@@ -180,11 +218,21 @@ public class SearchActivity extends BaseActivity {
      *
      * @param historyData
      */
-    public void initBrowseHistory(List historyData) {
+    public void initBrowseHistory(final List<NewsJson> historyData) {
         if (historyData == null || historyData.size() == 0) {
             llHistory.setVisibility(View.GONE);
         } else {
             llHistory.setVisibility(View.VISIBLE);
+            SearchBrowerAdapter adapter = new SearchBrowerAdapter(this, historyData);
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    NewsJson newsJson = historyData.get(position);
+                    JumpUtils.jump(SearchActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
+                            .getHref());
+                }
+            });
+            rvContent.setAdapter(adapter);
         }
     }
 
@@ -194,5 +242,32 @@ public class SearchActivity extends BaseActivity {
     public void hideHistory() {
         rootSearchStart.setVisibility(View.GONE);
         rootSearchEnd.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 显示历史记录
+     */
+    public void showHistory() {
+        rootSearchStart.setVisibility(View.GONE);
+        rootSearchEnd.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 添加历史信息
+     *
+     * @param searchKey
+     */
+    public void addHistory(String searchKey) {
+        if (llHot.getVisibility() == View.GONE) {
+            searchPresenter.initSearchHistory();
+        } else {
+            tagAdapter.addTagDatas(searchKey);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(searchPresenter.getClass().getName());
     }
 }

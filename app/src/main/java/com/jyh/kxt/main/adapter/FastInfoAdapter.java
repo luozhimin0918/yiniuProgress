@@ -916,23 +916,60 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 break;
         }
 
+//        if (effectType != 2) {
+//            if (effect != null && !"".equals(effect.trim())) {
+//                String[] effect0Split = effect.split(" ");
+//
+//                for (int i = 0; i < effect0Split.length; i++) {
+//                    RadianDrawable effectDrawable = new RadianDrawable(context);
+//
+//                    TextView textView = generateTextView();
+//                    textView.setText(effect0Split[i]);
+//
+//                    effectDrawable.setStroke(shapeColor);
+//                    textView.setTextColor(ContextCompat.getColor(context, shapeColor));
+//
+//                    textView.setBackground(effectDrawable);
+//
+//                    textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
+//                    llExponent.addView(textView);
+//                }
+//            }
+//        } else {
+//            RadianDrawable effectDrawable = new RadianDrawable(context);
+//
+//            TextView textView = generateTextView();
+//            textView.setText(effect);
+//
+//            effectDrawable.setStroke(shapeColor);
+//            textView.setTextColor(ContextCompat.getColor(context, shapeColor));
+//            textView.setBackground(effectDrawable);
+//
+//            llExponent.addView(textView);
+//        }
         if (effectType != 2) {
             if (effect != null && !"".equals(effect.trim())) {
                 String[] effect0Split = effect.split(" ");
-
+                Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
                 for (int i = 0; i < effect0Split.length; i++) {
-                    RadianDrawable effectDrawable = new RadianDrawable(context);
+                    String splitTrim = effect0Split[i].trim();
+                    if (set.size() == 0 ||
+                            set.contains("全部") ||
+                            set.contains(splitTrim)) {
 
-                    TextView textView = generateTextView();
-                    textView.setText(effect0Split[i]);
+                        RadianDrawable effectDrawable = new RadianDrawable(context);
 
-                    effectDrawable.setStroke(shapeColor);
-                    textView.setTextColor(ContextCompat.getColor(context, shapeColor));
+                        TextView textView = generateTextView();
+                        textView.setText(splitTrim);
 
-                    textView.setBackground(effectDrawable);
+                        effectDrawable.setStroke(shapeColor);
+                        textView.setTextColor(ContextCompat.getColor(context, shapeColor));
 
-                    textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
-                    llExponent.addView(textView);
+                        textView.setBackground(effectDrawable);
+
+                        textView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
+                        llExponent.addView(textView);
+                    }
                 }
             }
         } else {

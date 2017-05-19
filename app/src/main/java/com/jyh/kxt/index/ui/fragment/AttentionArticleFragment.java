@@ -123,11 +123,13 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
      * @param isEdit
      */
     public void editMode(boolean isEdit) {
-        adapter.setEdit(isEdit);
-        if (isEdit) {
-            llDel.setVisibility(View.VISIBLE);
-        } else {
-            llDel.setVisibility(View.GONE);
+        if (adapter != null) {
+            adapter.setEdit(isEdit);
+            if (isEdit) {
+                llDel.setVisibility(View.VISIBLE);
+            } else {
+                llDel.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.library.R;
+import com.library.util.NetUtils;
 
 /**
  * Created by DaiYao on 2016/5/21 0021.
@@ -28,6 +29,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     }
 
     private View llLoadView;
+    private Context context;
 
     public interface OnAfreshLoadListener {
         void OnAfreshLoad();
@@ -48,6 +50,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     public PageLoadLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mInflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     public void setOnAfreshLoadListener(OnAfreshLoadListener onAfreshLoadListener) {
@@ -81,6 +84,18 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     public void loadError() {
         removeLoading();
         llLoadView = mInflater.inflate(R.layout.volley_load_error, null);
+
+        ImageView errorImg = (ImageView) llLoadView.findViewById(R.id.iv_error);
+        TextView errorTv = (TextView) llLoadView.findViewById(R.id.tv_error);
+
+        if (NetUtils.isNetworkAvailable(context)) {
+            errorImg.setImageResource(R.mipmap.icon_error_load);
+            errorTv.setText("加载出错！");
+        } else {
+            errorImg.setImageResource(R.mipmap.icon_error_net);
+            errorTv.setText("网络无法连接");
+        }
+
         llLoadView.findViewById(R.id.id_volley_load_error).setOnClickListener(this);
         updateView();
     }

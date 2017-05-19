@@ -6,7 +6,50 @@
               tools:context="com.jyh.kxt.index.ui.fragment.ExploreFragment">
 
 
-    <include layout="@layout/action_bar1"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/theme1"
+        android:orientation="vertical">
+
+        <com.jyh.kxt.base.custom.RoundImageView
+            android:id="@+id/iv_bar_break"
+            android:layout_width="@dimen/navigationBarLeftImageViewSize"
+            android:layout_height="@dimen/navigationBarLeftImageViewSize"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
+            android:src="@mipmap/icon_user_def_photo"/>
+
+        <TextView
+            android:id="@+id/tv_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/iv_bar_function"
+            android:layout_toRightOf="@+id/iv_bar_break"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/actionBar_textColor1"
+            android:textSize="@dimen/font_title_max"/>
+
+        <TextView
+            android:id="@+id/iv_bar_function"
+            android:layout_width="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/actionbar_padding"
+            android:textColor="@color/actionBar_textColor2"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color3"/>
+
+    </RelativeLayout>
 
     <com.library.widget.PageLoadLayout
         android:id="@id/pl_rootView"

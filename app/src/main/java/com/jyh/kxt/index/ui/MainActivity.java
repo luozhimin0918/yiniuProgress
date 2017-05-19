@@ -14,6 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -452,5 +453,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showUserCenter() {
+        drawer.openDrawer(Gravity.LEFT);
     }
 }

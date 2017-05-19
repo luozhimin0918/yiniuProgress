@@ -4,6 +4,7 @@
                 android:layout_height="@dimen/rankItemHeight"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/rankItemPaddingVertical"
+                android:paddingLeft="@dimen/contentPadding"
                 android:paddingRight="@dimen/rankItemPaddingRight"
                 android:paddingTop="@dimen/rankItemPaddingVertical"
     >

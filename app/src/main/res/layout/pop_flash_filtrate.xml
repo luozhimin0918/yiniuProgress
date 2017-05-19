@@ -41,6 +41,12 @@
             android:id="@+id/ol_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+
+            app:checkBoxBackground="@drawable/bg_classify_default1"
+            app:defaultFontColor="@color/font_color5"
+            app:selectedFontColor="@color/white"
+
             app:array="@array/flash_silver"
             app:columnSpace="18dp"
             app:itemHeight="39dp"/>

@@ -2,6 +2,7 @@ package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.DateUtils;
+import com.library.util.RegexValidateUtil;
 
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -30,6 +32,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     private Context mContext;
     private boolean isShowTitle = false;
+    private String searchKey = "";
 
     public boolean isShowTitle() {
         return isShowTitle;
@@ -73,13 +76,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 .error(R.mipmap.ico_def_load)
                 .into(holder.ivPhoto);
 
-        if (BrowerHistoryUtils.isBrowered(mContext, news)) {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
-        } else {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
-        }
-
-        holder.tvTitle.setText(news.getTitle());
+        setContentColor(holder, news);
         String author = news.getAuthor();
         if (author != null)
             author = "文/" + author;
@@ -92,6 +89,45 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
         }
 
         return convertView;
+    }
+
+    /**
+     * 设置内容字体颜色
+     *
+     * @param holder
+     * @param news
+     */
+    private void setContentColor(ViewHolder holder, NewsJson news) {
+        String content = news.getTitle();
+        boolean browered = BrowerHistoryUtils.isBrowered(mContext, news);
+        if (RegexValidateUtil.isEmpty(searchKey)) {
+            if (browered) {
+                holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+            } else {
+                holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+            }
+        } else {
+            if (content.contains(searchKey)) {
+                int searchKeyIndex = content.indexOf(searchKey);
+                String before = content.substring(0, searchKeyIndex);
+                String end = content.substring(searchKeyIndex + searchKey.length());
+
+                String defalutColor = "#2E3239";
+                String keyColor = "#EA492A";
+                String browerColor = "#A1ABB2";
+                String textColor;
+                if (browered) {
+                    textColor = browerColor;
+                } else
+                    textColor = defalutColor;
+
+                content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
+                        "</font><font " +
+                        "color='" + textColor +
+                        "'>" + end + "</font>";
+            }
+        }
+        holder.tvTitle.setText(Html.fromHtml(content));
     }
 
     public void addData(List<NewsJson> newsJsons) {
@@ -111,6 +147,11 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     public List<NewsJson> getData() {
         return dataList;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {

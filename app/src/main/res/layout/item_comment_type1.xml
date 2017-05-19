@@ -10,6 +10,7 @@
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"
         android:layout_width="27dp"
+        android:src="@mipmap/icon_user_def_photo"
         android:layout_height="27dp" />
 
     <LinearLayout

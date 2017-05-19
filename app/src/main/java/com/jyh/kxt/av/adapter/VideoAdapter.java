@@ -154,6 +154,10 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         notifyDataSetChanged();
     }
 
+    public List<VideoListJson> getData() {
+        return dataList;
+    }
+
     class ViewHolder {
         public ImageView iv;
         public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount;

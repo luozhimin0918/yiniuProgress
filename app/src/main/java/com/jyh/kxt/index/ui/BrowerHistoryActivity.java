@@ -1,10 +1,7 @@
 package com.jyh.kxt.index.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -12,22 +9,15 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.BrowerHistoryPresenter;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.widget.PageLoadLayout;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.taobao.accs.ACCSManager.mContext;
 
 /**
  * 项目名:Kxt

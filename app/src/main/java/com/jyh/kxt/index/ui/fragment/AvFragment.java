@@ -6,17 +6,30 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.fragment.RankFragment;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.SearchActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
+import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +50,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     }
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
-    @BindView(R.id.vp_audio_visual)public ViewPager vpAudioVisual;
-    @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
+    @BindView(R.id.vp_audio_visual) public ViewPager vpAudioVisual;
+    @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
 
@@ -59,6 +72,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         vpAudioVisual.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
 
         vpAudioVisual.addOnPageChangeListener(this);
+
+        changeUserImg(LoginUtils.getUserInfo(getContext()));
     }
 
     @Override
@@ -75,13 +90,14 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
-
+                ((MainActivity) getActivity()).showUserCenter();
                 break;
             case R.id.iv_right_icon2:
 
                 break;
             case R.id.iv_right_icon1:
-
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -108,6 +124,48 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
             if (fragment != null) {
                 fragment.onActivityResult(requestCode, resultCode, data);
             }
+        }
+    }
+
+    private void changeUserImg(UserJson user) {
+        if (user == null) {
+            ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+        } else {
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                    .icon_user_def_photo).into(ivLeftIcon);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_LOGIN:
+                UserJson userJson = (UserJson) eventBus.intentObj;
+                changeUserImg(userJson);
+                break;
+            case EventBusClass.EVENT_LOGOUT:
+                changeUserImg(null);
+                break;
         }
     }
 }

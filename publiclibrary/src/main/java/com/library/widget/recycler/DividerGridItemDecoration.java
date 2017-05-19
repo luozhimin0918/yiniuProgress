@@ -23,6 +23,8 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private Context mContext;
     private int spanCount = -1;
+    private boolean isShowVerticalLine = true;//是否显示竖线
+    private boolean isShowHorizontalLine = true;//是否显示横线
 
     public DividerGridItemDecoration(Context mContext) {
         this.mContext = mContext;
@@ -33,8 +35,10 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
 
-        drawHorizontal(c, parent);
-        drawVertical(c, parent);
+        if (isShowHorizontalLine)
+            drawHorizontal(c, parent);
+        if (isShowVerticalLine)
+            drawVertical(c, parent);
 
     }
 
@@ -186,5 +190,13 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
     public void setSpanCount(int spanCount) {
         this.spanCount = spanCount;
+    }
+
+    public void setShowVerticalLine(boolean showVerticalLine) {
+        isShowVerticalLine = showVerticalLine;
+    }
+
+    public void setShowHorizontalLine(boolean showHorizontalLine) {
+        isShowHorizontalLine = showHorizontalLine;
     }
 }

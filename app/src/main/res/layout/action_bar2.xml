@@ -6,7 +6,7 @@
     android:layout_height="@dimen/navigationBarHeight"
     android:background="@color/theme1">
 
-    <ImageView
+    <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/iv_left_icon"
         android:layout_width="@dimen/navigationBarLeftImageViewSize"
         android:layout_height="@dimen/navigationBarLeftImageViewSize"

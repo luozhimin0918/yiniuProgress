@@ -121,8 +121,11 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     @Override
     public void OnAfreshLoad() {
-        fragmentList.clear();
-        adapter.notifyDataSetChanged();
+        if (fragmentList != null && adapter != null) {
+            fragmentList.clear();
+            adapter.notifyDataSetChanged();
+        }
+        plRootView.loadWait();
         newsPresenter.reLoad();
     }
 
