@@ -36,7 +36,6 @@ public class AuthorHeadViewAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
         container.removeView(views.get(position));
     }
 

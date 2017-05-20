@@ -45,6 +45,7 @@
             android:minWidth="110dp"
             android:paddingBottom="10dp"
             android:scaleType="centerInside"
+            android:src="@mipmap/ico_def_load"
             android:visibility="gone"/>
 
         <include layout="@layout/layout_flash_bottom_bar"/>

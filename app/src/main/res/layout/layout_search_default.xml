@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:zhy="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:zhy="http://schemas.android.com/tools"
               android:orientation="vertical">
 
     <LinearLayout
@@ -46,18 +46,18 @@
             android:id="@+id/fl_hot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/searchMargin2"
             android:paddingLeft="@dimen/newsContentPadding3"
             android:paddingRight="@dimen/newsContentPadding3"
             android:paddingTop="@dimen/searchPadding3"
-            zhy:max_select="-1"
             zhy:auto_select_effect="false"
+            zhy:max_select="-1"
             />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_history"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/searchMargin2"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -94,6 +94,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="@dimen/contentPadding"
+        android:paddingRight="@dimen/contentPadding"/>
 
 </LinearLayout>

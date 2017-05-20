@@ -20,6 +20,7 @@
             android:layout_width="@dimen/drawer_head_login_avatarSize"
             android:layout_height="@dimen/drawer_head_login_avatarSize"
             android:layout_centerInParent="true"
+            android:src="@mipmap/icon_user_def_photo"
             app:outsideRound="true"/>
 
         <TextView

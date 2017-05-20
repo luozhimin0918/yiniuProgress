@@ -19,6 +19,7 @@
         android:layout_height="@dimen/navigationBar2Height"
         android:layout_gravity="bottom"
         android:paddingRight="@dimen/navigationBar2ImageWidth"
+        android:background="@color/line_color2"
 
         tl:tl_indicator_color="@color/blue"
         tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"

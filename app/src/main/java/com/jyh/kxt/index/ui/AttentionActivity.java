@@ -45,7 +45,7 @@ public class AttentionActivity extends BaseActivity implements ViewPager.OnPageC
 
         tvBarTitle.setText("我的关注");
         tvBarFunction.setText("编辑");
-        tvBarFunction.setVisibility(View.GONE);
+        tvBarFunction.setVisibility(View.INVISIBLE);
 
         initFragments();
 

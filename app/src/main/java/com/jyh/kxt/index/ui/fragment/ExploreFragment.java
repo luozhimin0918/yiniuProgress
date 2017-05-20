@@ -6,54 +6,57 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.ActivityAdapter;
 import com.jyh.kxt.explore.adapter.AuthorAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
+import com.jyh.kxt.explore.json.ActivityJson;
+import com.jyh.kxt.explore.json.AuthorJson;
+import com.jyh.kxt.explore.json.TopicJson;
 import com.jyh.kxt.explore.ui.AuthorActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
-import com.jyh.kxt.explore.json.ActivityJson;
-import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
-import com.jyh.kxt.explore.json.TopicJson;
-import com.jyh.kxt.main.ui.activity.NewsContentActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.viewpager.BannerLayout;
 import com.library.widget.window.ToastView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -61,7 +64,7 @@ import butterknife.OnClick;
  */
 public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener {
 
-    @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
+    @BindView(R.id.iv_bar_break) RoundImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.plv_content) PullToRefreshListView plvContent;
@@ -90,6 +93,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
         plvContent.setOnRefreshListener(this);
 
+        changeUserImg(LoginUtils.getUserInfo(getContext()));
+
         plvContent.setOnItemClickListener(this);
 
         plRootView.loadWait();
@@ -101,6 +106,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_bar_break:
+                ((MainActivity) getActivity()).showUserCenter();
                 break;
         }
     }
@@ -384,18 +390,57 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        NewsJson newsJson = newsAdapter.dataList.get(position - 1);
+        int index = position - 2;
+        NewsJson newsJson = newsAdapter.dataList.get(index);
         JumpUtils.jump((MainActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(getContext(), newsJson);
 
         //单条刷新,改变浏览状态
-        newsAdapter.getView(position, view, parent);
+        newsAdapter.getView(index, view, parent);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         getQueue().cancelAll(explorePresenter.getClass().getName());
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    private void changeUserImg(UserJson user) {
+        if (user == null) {
+            ivBarBreak.setImageResource(R.mipmap.icon_user_def_photo);
+        } else {
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                    .icon_user_def_photo).into(ivBarBreak);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_LOGIN:
+                UserJson userJson = (UserJson) eventBus.intentObj;
+                changeUserImg(userJson);
+                break;
+            case EventBusClass.EVENT_LOGOUT:
+                changeUserImg(null);
+                break;
+        }
+    }
+
 }

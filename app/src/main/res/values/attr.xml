@@ -51,6 +51,20 @@
         <attr name="textSize" format="dimension|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="SearchEditText">
+        <attr name="searchBackground" format="color|reference"/>
+        <attr name="searchLeftImgSize" format="dimension|reference"/>
+        <attr name="searchRightImgSize" format="dimension|reference"/>
+        <attr name="searchMarginLeft" format="dimension|reference"/>
+        <attr name="searchMarginRight" format="dimension|reference"/>
+        <attr name="searchHint" format="string|reference"/>
+        <attr name="searchText" format="string|reference"/>
+        <attr name="searchTextColor" format="color|reference"/>
+        <attr name="searchHintColor" format="color|reference"/>
+        <attr name="searchTextSize" format="string|reference"/>
+        <attr name="searchDrawablePadding" format="dimension|reference"/>
+    </declare-styleable>
+
     <!--夜间模式-->
     <declare-styleable name="SkinnableView">
         <attr name="android:background"/>

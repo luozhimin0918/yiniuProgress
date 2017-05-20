@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/rankItemHeight"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/rankItemPaddingVertical"
+                android:paddingLeft="@dimen/contentPadding"
+                android:paddingRight="@dimen/rankItemPaddingRight"
+                android:paddingTop="@dimen/rankItemPaddingVertical"
+    >
+
+    <FrameLayout
+        android:id="@+id/fl_photo"
+        android:layout_width="@dimen/rankItemPhotoWidth"
+        android:layout_height="@dimen/rankItemPhotoHeight"
+        android:layout_marginRight="@dimen/rankItemPhotoMarginRight"
+        >
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="@dimen/rankItemPlaySize"
+            android:layout_height="@dimen/rankItemPlaySize"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_video_play_big"
+            />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/fl_photo"
+        android:lineSpacingExtra="@dimen/rankItemTitleLineSpacingExtra"
+        android:maxLines="2"
+        android:paddingTop="@dimen/rankItemTitlePaddingTop"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/describe_font_size4"
+        />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/rankItemTimeMarginBottom"
+        android:layout_toRightOf="@id/fl_photo"
+        android:drawableLeft="@mipmap/icon_video_time"
+        android:drawablePadding="@dimen/rankItemTimeDrawablePadding"
+        android:textColor="@color/font_color3"/>
+
+    <TextView
+        android:id="@+id/tv_playCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/rankItemTimeMarginBottom"
+        android:drawableLeft="@mipmap/icon_video_play_small"
+        android:drawablePadding="@dimen/rankItemTimeDrawablePadding"
+        android:textColor="@color/font_color3"
+        android:layout_alignParentRight="true"/>
+</RelativeLayout>

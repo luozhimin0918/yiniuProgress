@@ -53,123 +53,6 @@ public class JumpUtils {
     public static void jump(final BaseActivity context, JumpJson jumpJson, String url) {
         try {
             if (RegexValidateUtil.isEmpty(url)) {
-//                if (jumpJson == null) return;
-//                String o_class = jumpJson.o_class;
-//                if (o_class == null) return;
-//                if (context instanceof MainActivity) {
-//                    final MainActivity mainActivity = (MainActivity) context;
-//                    switch (o_class) {
-//                        case VarConstant.OCLASS_DATA:
-//                            //数据
-//                            final String data_action = jumpJson.getO_action();
-//                            final String data_id = jumpJson.getO_id();
-//                            switch (data_action) {
-//                                case VarConstant.OACTION_ETF:
-//                                    Intent etfIntent = new Intent(mainActivity, DatumHistoryActivity.class);
-//                                    etfIntent.putExtra(IntentConstant.O_ID, data_id);
-//                                    mainActivity.startActivity(etfIntent);
-//                                    break;
-//                                case VarConstant.OACTION_DETAIL:
-//                                    break;
-//                                case VarConstant.OACTION_CFTC:
-//                                    break;
-//                            }
-//                            /*
-//                            mainActivity.rbDatum.performClick();
-//                            mainActivity.rbDatum.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mainActivity.datumFragment.onTabSelect(1);
-//
-//                                }
-//                            }, 500);*/
-//
-//                            break;
-//                        case VarConstant.OCLASS_ARTICLE:
-//                            //文章
-//                            String article_action = jumpJson.getO_action();
-//                            switch (article_action) {
-//                                case VarConstant.OACTION_DETAIL:
-//                                    //详情
-//                                    Intent newsIntent = new Intent(mainActivity, NewsContentActivity.class);
-//                                    newsIntent.putExtra(IntentConstant.O_ID, jumpJson.getO_id());
-//                                    mainActivity.startActivity(newsIntent);
-//                                    break;
-//                            }
-//                            break;
-//                        case VarConstant.OCLASS_DATING:
-//                            break;
-//                        case VarConstant.OCLASS_DIANPING:
-//
-//                            break;
-//                        case VarConstant.OCLASS_FLASH:
-//                            //快讯
-//                            mainActivity.rbHome.performClick();
-//                            mainActivity.homeFragment.onTabSelect(1);
-//                            break;
-//                        case VarConstant.OCLASS_INDEX:
-//                            //首页
-//                            mainActivity.rbHome.performClick();
-//                            break;
-//                        case VarConstant.OCLASS_NEWS:
-//                            //要闻
-//                            mainActivity.rbHome.performClick();
-//                            break;
-//                        case VarConstant.OCLASS_QUOTES:
-//                            //行情
-//                            mainActivity.rbMarket.performClick();
-//                            break;
-//                        case VarConstant.OCLASS_RL:
-//                            //日历
-//                            mainActivity.rbDatum.performClick();
-//                            break;
-//                        case VarConstant.OCLASS_SCHOOL:
-//                            break;
-//                        case VarConstant.OCLASS_SEARCH:
-//                            //搜索
-//                            Intent searchIntent = new Intent(mainActivity, SearchActivity.class);
-//                            //搜索关键字
-//                            searchIntent.putExtra(IntentConstant.SEARCH_KEY, jumpJson.o_id);
-//                            mainActivity.startActivity(searchIntent);
-//                            break;
-//                        case VarConstant.OCLASS_VIDEO:
-//                            //视听
-//                            mainActivity.rbAudioVisual.performClick();
-//                            break;
-//                    }
-//                } else {
-//                    switch (o_class) {
-//                        case VarConstant.OCLASS_DATA:
-//                            break;
-//                        case VarConstant.OCLASS_ARTICLE:
-//                            break;
-//                        case VarConstant.OCLASS_DATING:
-//                            break;
-//                        case VarConstant.OCLASS_DIANPING:
-//                            break;
-//                        case VarConstant.OCLASS_FLASH:
-//                            break;
-//                        case VarConstant.OCLASS_INDEX:
-//                            break;
-//                        case VarConstant.OCLASS_NEWS:
-//                            break;
-//                        case VarConstant.OCLASS_QUOTES:
-//                            break;
-//                        case VarConstant.OCLASS_RL:
-//                            break;
-//                        case VarConstant.OCLASS_SCHOOL:
-//                            break;
-//                        case VarConstant.OCLASS_SEARCH:
-//                            //搜索
-//                            Intent searchIntent = new Intent(context, SearchActivity.class);
-//                            //搜索关键字
-//                            searchIntent.putExtra(IntentConstant.SEARCH_KEY, jumpJson.o_id);
-//                            context.startActivity(searchIntent);
-//                            break;
-//                        case VarConstant.OCLASS_VIDEO:
-//                            break;
-//                    }
-//                }
                 String o_class = jumpJson.getO_class();
                 String o_action = jumpJson.getO_action();
                 String o_id = jumpJson.getO_id();
@@ -369,6 +252,7 @@ public class JumpUtils {
                 intent = new Intent(content, DatumHistoryActivity.class);
                 intent.putExtra(IntentConstant.O_ID, o_id);
                 break;
+            case VarConstant.OCLASS_BLOG:
             case VarConstant.OCLASS_ARTICLE:
             case VarConstant.OCLASS_NEWS:
                 //要闻详情

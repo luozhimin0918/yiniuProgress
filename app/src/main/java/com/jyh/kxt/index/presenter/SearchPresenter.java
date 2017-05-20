@@ -1,10 +1,19 @@
 package com.jyh.kxt.index.presenter;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.android.volley.Request;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.index.ui.BrowerHistoryActivity;
 import com.jyh.kxt.index.ui.SearchActivity;
+import com.jyh.kxt.main.json.NewsJson;
+import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
@@ -21,10 +30,13 @@ import java.util.List;
 
 public class SearchPresenter extends BasePresenter {
 
+    private final VolleyRequest request;
     @BindObject SearchActivity searchActivity;
 
     public SearchPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        request = new VolleyRequest(mContext, mQueue);
+        request.setTag(getClass().getName());
     }
 
     /**
@@ -47,8 +59,10 @@ public class SearchPresenter extends BasePresenter {
      */
     public void initBrowseHistory() {
 
-        List list = new ArrayList();
-
+        List<NewsJson> list = BrowerHistoryUtils.getHistory(mContext);
+        if (list != null && list.size() > 5) {
+            list = list.subList(0, 5);
+        }
         searchActivity.initBrowseHistory(list);
     }
 
@@ -56,7 +70,7 @@ public class SearchPresenter extends BasePresenter {
      * 清除搜索历史
      */
     public void clearSearchHistory() {
-        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY, null);
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY, "");
         initSearchHistory();
     }
 
@@ -64,7 +78,8 @@ public class SearchPresenter extends BasePresenter {
      * 更多浏览历史
      */
     public void moreBrowseHistory() {
-
+        Intent intent = new Intent(mContext, BrowerHistoryActivity.class);
+        mContext.startActivity(intent);
     }
 
     /**
@@ -78,12 +93,12 @@ public class SearchPresenter extends BasePresenter {
             return;
         }
         searchActivity.hideHistory();
-        searchActivity.plRootView.loadWait();
-
         upDataSearchHistory(searchKey);
         initSearchHistory();
-
-        searchActivity.plRootView.loadOver();
+        if(searchActivity.videoFragment!=null)
+            searchActivity.videoFragment.search(searchKey);
+        if(searchActivity.articleFragment!=null)
+            searchActivity.articleFragment.search(searchKey);
     }
 
     /**
@@ -104,8 +119,7 @@ public class SearchPresenter extends BasePresenter {
             }
             searchHistory += "," + searchKey;
         }
-
-
         SPUtils.save(mContext, SpConstant.SEARCH_HISTORY, searchHistory);
+        searchActivity.addHistory(searchKey);
     }
 }

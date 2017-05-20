@@ -130,7 +130,6 @@ public class DpFragmentPresenter extends BasePresenter {
     private List<NewsJson> manageData(List<NewsJson> newsJsons) {
 
         if (newsJsons == null || newsJsons.size() == 0) {
-            dpItemFragment.plRootView.loadEmptyData();
             return null;
         } else {
             List<NewsJson> news;

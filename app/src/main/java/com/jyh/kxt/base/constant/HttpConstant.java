@@ -48,7 +48,7 @@ public class HttpConstant {
      */
     public static final String NEWS_LIST = BASE_URL + "news/list" + VarConstant.HTTP_CONTENT;//要闻列表
     public static final String NEWS_CONTENT = BASE_URL + "news/detail" + VarConstant.HTTP_CONTENT;//要闻详情
-    public static final String DP_CODE = BASE_URL + "news/dp_nav"+JWT;//点评CODE
+    public static final String DP_CODE = BASE_URL + "news/dp_nav" + JWT;//点评CODE
     public static final String DP_LIST = BASE_URL + "news/dianping";//点评列表 ?code={}&last_id={}
 
     /**
@@ -139,5 +139,13 @@ public class HttpConstant {
     public static final String DATA_GROUP = BASE_URL + "data/group" + VarConstant.HTTP_CONTENT;
     public static final String DATA_LIST = BASE_URL + "data/list" + VarConstant.HTTP_CONTENT;
 
-    public static final String DATA_COUNTRY = BASE_URL +"data/country";
+    public static final String DATA_COUNTRY = BASE_URL + "data/country";
+
+    /**
+     * 搜索
+     */
+    public static final String SEARCH_ARTICLE = BASE_URL + "search/article";//?word={}?last_id={}
+    public static final String SEARCH_VIDEO = BASE_URL + "search/video";//?word={}?last_id={}
+    public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes"+JWT;//行情热门搜索
+    public static final String SEARCH_MARKET = BASE_URL + "quotes/search";//?word={}
 }

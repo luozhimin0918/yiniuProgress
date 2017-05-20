@@ -1,15 +1,11 @@
 package com.jyh.kxt.index.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.market.ui.MarketEditActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.market.ui.fragment.OptionalFragment;
 import com.library.base.LibActivity;
@@ -24,7 +20,8 @@ import butterknife.OnClick;
  */
 public class MarketFragment extends BaseFragment implements OnTabSelectListener {
 
-    @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
+    @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
+      @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
     @BindView(R.id.tv_right_icon1) TextView tvRightIcon1;
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
@@ -46,6 +43,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         String[] mTitles = getResources().getStringArray(R.array.nav_market);
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
+        changeUserImg(LoginUtils.getUserInfo(getContext()));
 
         onTabSelect(0);
     }
@@ -56,12 +54,8 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     public void onTabSelect(int position) {
         BaseFragment currentFragment;
         if (position == 0) {
-            tvRightIcon1.setText("");
-            tvRightIcon1.setBackgroundResource(R.mipmap.icon_search);
             currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
         } else {
-            tvRightIcon1.setText("编辑");
-            tvRightIcon1.setBackground(null);
             currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
         }
         this.position = position;
@@ -76,6 +70,18 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     @Override
     public void onTabReselect(int position) {
 
+    }
+
+    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_left_icon:
+                ((MainActivity) getActivity()).showUserCenter();
+                break;
+            case R.id.iv_right_icon1:
+                startActivity(new Intent(getContext(), SearchActivity.class));
+                break;
+        }
     }
 
     @OnClick(R.id.tv_right_icon1)
@@ -102,7 +108,46 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         transaction.commitAllowingStateLoss();
     }
 
+    private void changeUserImg(UserJson user) {
+        if (user == null) {
+            ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+        } else {
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                    .icon_user_def_photo).into(ivLeftIcon);
+        }
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_LOGIN:
+                UserJson userJson = (UserJson) eventBus.intentObj;
+                changeUserImg(userJson);
+                break;
+            case EventBusClass.EVENT_LOGOUT:
+                changeUserImg(null);
+                break;
+        }
+    }
 
 }

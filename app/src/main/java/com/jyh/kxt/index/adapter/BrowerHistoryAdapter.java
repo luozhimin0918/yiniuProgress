@@ -138,9 +138,13 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
     }
 
     public void setData(List<NewsJson> data) {
-        dataList.clear();
-        dataList.addAll(data);
-        inspiritDateInfo(dataList);
+        if (data == null){
+            dataList.clear();
+        }else{
+            dataList.clear();
+            dataList.addAll(data);
+            inspiritDateInfo(dataList);
+        }
         notifyDataSetChanged();
     }
 

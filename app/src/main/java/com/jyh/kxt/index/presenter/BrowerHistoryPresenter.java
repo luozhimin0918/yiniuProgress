@@ -73,6 +73,7 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
                     if (adapter != null) {
                         adapter.setData(null);
                         adapter.notifyDataSetChanged();
+                        browerHistoryActivity.loadEmptyData();
                     }
                     popupWindow.dismiss();
                 }

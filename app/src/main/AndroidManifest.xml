@@ -10,8 +10,10 @@
     <!-- umeng权限 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -47,7 +49,8 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".index.ui.SearchActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".index.ui.ShareActivity"
             android:screenOrientation="portrait"/>
@@ -55,15 +58,22 @@
             android:name=".index.ui.BrowerHistoryActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".user.ui.SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentBgTheme"/>
+            android:name=".index.ui.AttentionActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 视听 -->
         <activity
             android:name=".av.ui.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VideoTheme">
         </activity>
+
+        <!-- 用户 -->
+        <activity
+            android:name=".user.ui.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentBgTheme"/>
         <activity
             android:name=".user.ui.EditUserInfoActivity"
             android:screenOrientation="portrait"
@@ -93,6 +103,8 @@
         <activity
             android:name=".user.ui.CollectActivity"
             android:screenOrientation="portrait"/>
+
+        <!-- 要闻 -->
         <activity
             android:name=".main.ui.activity.NewsContentActivity"
             android:screenOrientation="portrait"
@@ -103,6 +115,8 @@
         <activity
             android:name=".main.ui.activity.FlashActivity"
             android:screenOrientation="portrait"/>
+
+        <!-- 探索 -->
         <activity
             android:name=".explore.ui.AuthorActivity"
             android:screenOrientation="portrait"/>
@@ -111,6 +125,20 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".explore.ui.MoreActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- 行情 -->
+        <activity
+            android:name=".market.ui.MarketDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".market.ui.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"/>
+
+        <!-- 日历 -->
+        <activity
+            android:name=".datum.ui.DatumHistoryActivity"
             android:screenOrientation="portrait"/>
 
         <!-- umeng推送 -->

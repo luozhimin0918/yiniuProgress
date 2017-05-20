@@ -46,6 +46,8 @@ public class VarConstant {
     public static final String HTTP_OPENID = "openid";
     public static final String HTTP_UNIONID = "unionid";
 
+    public static final String HTTP_WORD = "word";
+
 
     /**
      * 跳转
@@ -62,6 +64,7 @@ public class VarConstant {
     public static final String OCLASS_SEARCH = "search";//搜索
     public static final String OCLASS_DATING = "dating";//大厅
     public static final String OCLASS_ARTICLE = "article";//文章
+    public static final String OCLASS_BLOG = "blog";//博客
 
     public static final String OACTION_LIST = "list";//列表
     public static final String OACTION_INDEX = "index";//首页
@@ -70,8 +73,8 @@ public class VarConstant {
     public static final String OACTION_ARTICLE = "article";//文章
     public static final String OACTION_CFTC = "cftc";
 
-    public static final String OID_GOLD="gold";
-    public static final String OID_SILVER="silver";
+    public static final String OID_GOLD = "gold";
+    public static final String OID_SILVER = "silver";
 
     /**
      * umeng 配置信息

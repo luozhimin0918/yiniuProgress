@@ -127,4 +127,8 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     public void OnAfreshLoad() {
         flashPresenter.init();
     }
+
+    public void flashFiltrate() {
+        flashPresenter.filtrate();
+    }
 }

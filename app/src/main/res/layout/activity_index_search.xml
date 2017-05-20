@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:background="@color/theme1"
               android:orientation="vertical">
 
@@ -14,20 +15,17 @@
         android:paddingTop="@dimen/searchPadding1"
         >
 
-        <EditText
+        <com.jyh.kxt.base.widget.SearchEditText
             android:id="@+id/edt_search"
             android:layout_width="0dp"
             android:layout_height="@dimen/searchEditTextHeight"
             android:layout_weight="1"
-            android:background="@drawable/bg_edt"
-            android:drawableLeft="@mipmap/icon_drawer_search"
-            android:drawablePadding="@dimen/searchDrawablePadding"
-            android:hint="搜索文章、视频"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:textColor="@color/font_color1"
-            android:textColorHint="@color/font_color6"
-            android:textSize="@dimen/describe_font_size4"/>
+            app:searchBackground="@drawable/bg_edt"
+            app:searchDrawablePadding="@dimen/searchDrawablePadding"
+            app:searchHint="搜索文章、视频"
+            app:searchTextColor="@color/font_color1"
+            app:searchHintColor="@color/font_color6"
+            app:searchTextSize="@dimen/describe_font_size4"/>
 
         <TextView
             android:id="@+id/tv_break"
