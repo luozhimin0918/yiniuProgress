@@ -6,6 +6,7 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
 import com.jyh.kxt.base.dao.EmojeBean;
+import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.library.util.SPUtils;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class EmoticonsUtils {
      *
      * @param context
      */
-    public static void initEmoticonsDB(Context context) {
+    public static void loadEmoticonToDB(Context context) {
 
         Boolean isInitEmoJe = SPUtils.getBoolean(context, SpConstant.EMOJE_IS_INIT);
         if (!isInitEmoJe) {
@@ -78,5 +79,7 @@ public class EmoticonsUtils {
                 e.printStackTrace();
             }
         }
+
+        EmoJeUtil.getInstance().loadAllEmoJe(context);
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="62dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="61.5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/opt_edit_chebox"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:button="@drawable/sel_collect_nav"
+
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="8dp"
+            android:text="黄金T+D"
+
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/content_font_size2"/>
+
+
+        <ImageView
+            android:id="@+id/opt_edit_top"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@mipmap/icon_zhiding"/>
+
+        <ImageView
+            android:id="@+id/opt_edit_drag"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@mipmap/icon_paixu"/>
+
+    </LinearLayout>
+
+</LinearLayout>

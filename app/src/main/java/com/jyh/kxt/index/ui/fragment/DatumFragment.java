@@ -51,6 +51,8 @@ import java.util.TimeZone;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.umeng.message.proguard.k.A;
+
 /**
  * 首页-数据
  */
@@ -192,7 +194,6 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         timeList.add("提前15分钟");
         timeList.add("提前30分钟");
         timeList.add("提前一个小时");
-
         OptionsPickerView timePickerView = new OptionsPickerView
                 .Builder(getContext(),
                 new OptionsPickerView.OnOptionsSelectListener() {

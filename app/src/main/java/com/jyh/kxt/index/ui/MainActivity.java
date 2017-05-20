@@ -30,8 +30,8 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
-import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         clickSwitchFragment(R.id.rb_home);
 
         //初始化操作
-        EmoJeUtil.getInstance().loadAllEmoJe(this);
+        EmoticonsUtils.loadEmoticonToDB(this);
 //        DBUtils.toSDWriteFile(this, DBManager.dbName);
     }
 

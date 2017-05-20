@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/navigationBarHeight"
+    android:background="@color/theme1">
+
+    <ImageView
+        android:id="@+id/iv_left_icon"
+        android:layout_width="@dimen/navigationBarLeftImageViewSize"
+        android:layout_height="@dimen/navigationBarLeftImageViewSize"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
+        android:src="@mipmap/icon_user_def_photo"
+        />
+
+    <com.library.widget.tablayout.SegmentTabLayout
+        android:id="@+id/stl_navigation_bar"
+        android:layout_width="@dimen/navigationBarTabLayoutWidth"
+        android:layout_height="@dimen/navigationBarTabLayoutHeight"
+        android:layout_centerInParent="true"
+        tl:tl_bar_color="@color/segmentTabLayout_bar_color"
+        tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
+        tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
+        tl:tl_tab_padding="@dimen/navigationBarPadding"
+        />
+
+    <ImageView
+        android:id="@+id/iv_right_icon2"
+        android:layout_width="@dimen/navigationBarRightImageViewSize"
+        android:layout_height="@dimen/navigationBarRightImageViewSize"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight1"
+        android:layout_toLeftOf="@+id/iv_right_icon1"
+        android:src="@color/calendar_header"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_right_icon1"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/navigationBarRightImageViewSize"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2" />
+
+</RelativeLayout>

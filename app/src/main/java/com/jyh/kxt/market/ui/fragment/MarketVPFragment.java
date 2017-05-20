@@ -76,7 +76,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         BaseFragmentAdapter pageAdapter = new BaseFragmentAdapter(fm, marketItemList) {
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
-                if(!"zhuYe".equals(MarketVPFragment.this.marketNavList.get(position).getCode())){
+                if (!"zhuYe".equals(MarketVPFragment.this.marketNavList.get(position).getCode())) {
                     super.destroyItem(container, position, object);
                 }
             }

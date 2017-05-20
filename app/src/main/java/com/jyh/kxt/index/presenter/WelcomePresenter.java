@@ -61,16 +61,21 @@ public class WelcomePresenter extends BasePresenter {
             protected void onResponse(String configStr) {
                 if (configStr != null) {
                     SPUtils.save(mContext, SpConstant.CONFIG, configStr);
-                    if (!isShowAd)
+                    if (!isShowAd) {
                         handler.sendEmptyMessage(1);
+                    }
                 }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+
                 super.onErrorResponse(error);
-                if (!isShowAd)
+                if (!isShowAd) {
                     handler.sendEmptyMessage(1);
+                } else {
+
+                }
             }
         });
     }
@@ -109,13 +114,15 @@ public class WelcomePresenter extends BasePresenter {
             final int finalShowTime = showTime;
             Glide.with(mContext).load(picture).listener(new RequestListener<String, GlideDrawable>() {
                 @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean
+                        isFirstResource) {
                     return false;
                 }
 
                 @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean
-                        isFromMemoryCache, boolean isFirstResource) {
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                               boolean
+                                                       isFromMemoryCache, boolean isFirstResource) {
                     handler.sendEmptyMessageDelayed(1, finalShowTime * 1000);
                     return false;
                 }
@@ -182,10 +189,12 @@ public class WelcomePresenter extends BasePresenter {
                     //跳转至广告页
                     handler.removeMessages(1);
                     Bundle bundle = msg.getData();
-                    jumpAD(bundle.getString(IntentConstant.WEBURL), (LoadADJson) bundle.getSerializable(IntentConstant.CONFIG), bundle
+                    jumpAD(bundle.getString(IntentConstant.WEBURL), (LoadADJson) bundle.getSerializable
+                            (IntentConstant.CONFIG), bundle
                             .getString
-                                    (IntentConstant.O_CLASS), bundle.getString(IntentConstant.O_ACTION), bundle.getString(IntentConstant
-                            .O_ID));
+                                    (IntentConstant.O_CLASS), bundle.getString(IntentConstant.O_ACTION), bundle
+                            .getString(IntentConstant
+                                    .O_ID));
                     break;
             }
             return false;

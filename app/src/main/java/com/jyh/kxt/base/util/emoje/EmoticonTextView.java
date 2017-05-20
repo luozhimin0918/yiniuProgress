@@ -40,7 +40,7 @@ public class EmoticonTextView extends TextView {
     /**
      * 刷新时间
      */
-    private int postInvalidateDelayed = 100;
+    private int postInvalidateDelayed = 50;
 
     public EmoticonTextView(Context context) {
         this(context, null);
@@ -166,7 +166,6 @@ public class EmoticonTextView extends TextView {
                                     matcherEnd,
                                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
                             setText(currentSpannable);
 
                             isLoopInvalidate = true;
@@ -207,12 +206,8 @@ public class EmoticonTextView extends TextView {
     Runnable actionTextRunnable = new Runnable() {
         @Override
         public void run() {
-
-            CharSequence text = getText();
-            setText(text);
-
 //            invalidate(); //避免刷新导致的EmoJe白屏没问题
-
+            postInvalidateOnAnimation();
             startLoopInvalidate();
         }
     };

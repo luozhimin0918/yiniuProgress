@@ -15,8 +15,6 @@ import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +27,6 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
 
     private JSONArray marketCodeList = new JSONArray();
     private MarketMainItemAdapter marketMainItemAdapter;
-    private HashMap<String, MarketItemBean> marketMap = new HashMap<>();
 
     public MarketOtherPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -50,7 +47,10 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
                 for (MarketItemBean marketItemBean : marketList) {
 
                     marketCodeList.add(marketItemBean.getCode());
-                    marketMap.put(marketItemBean.getCode(), marketItemBean);
+                    marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+                    //赋值默认的初始值
+                    marketItemBean.setSwitchTarget(marketItemBean.getRange());
                 }
 
                 MarketConnectUtil.getInstance().sendSocketParams(
@@ -70,59 +70,27 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
     @Override
     public void onTextMessage(String text) {
         try {
-            mapToMarketBean(text);
+            marketItemFragment.mapToMarketBean(text);
         } catch (Exception e) {
             try {
                 List<String> jsonList = JSONArray.parseArray(text, String.class);
                 for (String itemJson : jsonList) {
-                    mapToMarketBean(itemJson);
+                    marketItemFragment.mapToMarketBean(itemJson);
                 }
             } catch (Exception e1) {
             }
         }
     }
 
-    private void mapToMarketBean(String text) {
-        JSONObject jsonObject = JSONObject.parseObject(text);
-        String code = jsonObject.getString("c");
-        String price = jsonObject.getString("p");   //最新价  3.5951
-        String change = jsonObject.getString("d");  //涨跌额  0.0238
-        String range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
-
-        MarketItemBean marketItemBean = marketMap.get(code);
-        if (marketItemBean != null) {
-            marketItemBean.setPrice(price);
-            marketItemBean.setChange(reserveDecimals(change, 4));
-
-            //设置涨跌幅
-            String rangeReserve = reserveDecimals(range, 2);
-            marketItemBean.setRange(rangeReserve);
 
 
-            if (rangeReserve.contains("-")) {
-                marketItemBean.setBgGlint(2);
-            } else {
-                marketItemBean.setBgGlint(1);
-            }
+    public void switchItemContent() {
+        marketItemFragment.switchItemType = marketItemFragment.switchItemType == 0 ? 1 : 0;
+        marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
+
+        for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
+            marketItemBean.setSwitchTarget(
+                    marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
         }
-    }
-
-    private String reserveDecimals(String defStr, int places) {
-        //先替换负数和百分比
-        boolean isIncludePositiveNumber = defStr.contains("-");
-        boolean isIncludePercentage = defStr.contains("%");
-
-        String clearSpecialChars = defStr.replace("-", "").replace("%", "");
-
-        BigDecimal bigDecimal = new BigDecimal(clearSpecialChars);
-        String after = bigDecimal.setScale(places, BigDecimal.ROUND_HALF_UP).toString();
-
-        if (isIncludePositiveNumber) {
-            after = "-" + after;
-        }
-        if (isIncludePercentage) {
-            after = after + "%";
-        }
-        return after;
     }
 }

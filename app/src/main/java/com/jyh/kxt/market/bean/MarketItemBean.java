@@ -2,6 +2,8 @@ package com.jyh.kxt.market.bean;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.jyh.kxt.BR;
 
@@ -10,7 +12,7 @@ import com.jyh.kxt.BR;
  * Created by Mr'Dai on 2017/4/26.
  */
 
-public class MarketItemBean extends BaseObservable {
+public class MarketItemBean extends BaseObservable implements Parcelable {
 
     /**
      * change : +7.19
@@ -24,8 +26,9 @@ public class MarketItemBean extends BaseObservable {
     @Bindable private String name;
     @Bindable private String price;
     @Bindable private String range;
-    //本地变量
+    //本地变
     @Bindable private int bgGlint = 0;
+    @Bindable private String switchTarget;
 
     public void setChange(String change) {
         this.change = change;
@@ -80,4 +83,54 @@ public class MarketItemBean extends BaseObservable {
         this.bgGlint = bgGlint;
         notifyPropertyChanged(BR.bgGlint);
     }
+
+    public String getSwitchTarget() {
+        return switchTarget;
+    }
+
+    public void setSwitchTarget(String switchTarget) {
+        this.switchTarget = switchTarget;
+        notifyPropertyChanged(BR.switchTarget);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.change);
+        dest.writeString(this.code);
+        dest.writeString(this.name);
+        dest.writeString(this.price);
+        dest.writeString(this.range);
+        dest.writeInt(this.bgGlint);
+        dest.writeString(this.switchTarget);
+    }
+
+    public MarketItemBean() {
+    }
+
+    protected MarketItemBean(Parcel in) {
+        this.change = in.readString();
+        this.code = in.readString();
+        this.name = in.readString();
+        this.price = in.readString();
+        this.range = in.readString();
+        this.bgGlint = in.readInt();
+        this.switchTarget = in.readString();
+    }
+
+    public static final Parcelable.Creator<MarketItemBean> CREATOR = new Parcelable.Creator<MarketItemBean>() {
+        @Override
+        public MarketItemBean createFromParcel(Parcel source) {
+            return new MarketItemBean(source);
+        }
+
+        @Override
+        public MarketItemBean[] newArray(int size) {
+            return new MarketItemBean[size];
+        }
+    };
 }

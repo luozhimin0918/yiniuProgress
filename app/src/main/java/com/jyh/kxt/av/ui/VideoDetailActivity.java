@@ -13,6 +13,7 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.superplayer.library.SuperPlayer;
 
@@ -27,14 +28,15 @@ public class VideoDetailActivity extends BaseActivity {
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
     @BindView(R.id.activity_video_detail) LinearLayout llDetailContent;
-    @BindView(R.id.tv_title) TextView tvTitle;
-    @BindView(R.id.tv_playCount) TextView tvPlayCount;
+    @BindView(R.id.tv_title) public TextView tvTitle;
+    @BindView(R.id.tv_playCount) public TextView tvPlayCount;
     @BindView(R.id.rv_message) public PullToRefreshListView rvMessage;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_comment) ImageView ivComment;
     @BindView(R.id.iv_collect) ImageView ivCollect;
     @BindView(R.id.iv_like) ImageView ivLike;
     @BindView(R.id.iv_share) ImageView ivShare;
+    @BindView(R.id.pll_content) public PageLoadLayout pllContent;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
@@ -57,9 +59,10 @@ public class VideoDetailActivity extends BaseActivity {
         videoDetailPresenter = new VideoDetailPresenter(this);
         commentPresenter = new CommentPresenter(this);
 
+        pllContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT8, "正在进入..");
+
         videoDetailPresenter.requestInitVideo();
 
-//        videoDetailPresenter.requestInitVideoTest();
     }
 
 

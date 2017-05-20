@@ -7,16 +7,22 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketMainPresenter;
 import com.jyh.kxt.market.presenter.MarketOtherPresenter;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Mr'Dai on 2017/4/25.
@@ -26,6 +32,7 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
 
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
     @BindView(R.id.rl_list_nav) public RelativeLayout rlListNav;
+    @BindView(R.id.tv_target_nav) public TextView tvTargetNav;
 
     public ListView refreshableView;
     public MarketNavBean navBean;
@@ -34,6 +41,13 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     private MarketVPFragment marketVPFragment;
     private MarketMainPresenter marketMainPresenter; //行情首页P
     private MarketOtherPresenter marketOtherPresenter;//其他行情P
+
+    /**
+     * 切换Item 类型  0 涨跌幅   1 涨跌额
+     */
+    public int switchItemType = 0;
+    public HashMap<String, MarketItemBean> marketMap = new HashMap<>();
+
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -70,6 +84,16 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
         ptrlvContent.setOnScrollListener(this);
     }
 
+
+    @OnClick(R.id.rl_target_nav)
+    public void navClick(View view) {
+        if (isZhuYePage) {
+            marketMainPresenter.switchItemContent();
+        } else {
+            marketOtherPresenter.switchItemContent();
+        }
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -98,5 +122,13 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
                 rlListNav.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void mapToMarketBean(String text) {
+        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap, text);
+    }
+
+    public String replacePositive(String defStr) {
+        return MarketUtil.replacePositive(defStr);
     }
 }

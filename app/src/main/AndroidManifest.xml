@@ -10,10 +10,8 @@
     <!-- umeng权限 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -182,14 +180,19 @@
             android:name="com.jyh.kxt.base.utils.MyGlideModule"
             android:value="GlideModule"/>
 
-        <activity android:name=".datum.ui.DatumHistoryActivity"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".market.ui.MarketDetailActivity"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".index.ui.AttentionActivity"
+        <activity
+            android:name=".datum.ui.DatumHistoryActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".market.ui.MarketDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".index.ui.AttentionActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".market.ui.MarketEditActivity">
         </activity>
     </application>
 

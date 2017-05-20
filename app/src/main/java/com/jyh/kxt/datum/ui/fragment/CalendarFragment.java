@@ -130,6 +130,17 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         importanceSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_IMPORTANCE);
         areaSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_AREA);
         judgeSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_JUDGE);
+
+        if (importanceSet.size() == 0) {
+            importanceSet.add("全部");
+        }
+        if (stateSet.size() == 0) {
+            stateSet.add("全部");
+        }
+
+        if (judgeSet.size() == 0) {
+            judgeSet.add("全部");
+        }
     }
 
     /**
@@ -157,7 +168,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
      * @return
      */
     public boolean isFinanceMeetConditions(CalendarFinanceBean mCalendarFinanceBean) {
-        if (stateSet != null) {
+        if (stateSet.size() != 0) {
 
             boolean isPublished;
             try {
@@ -175,7 +186,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             }
         }
 
-        if (areaSet != null) {
+        if (areaSet.size() != 0) {
             if (!areaSet.contains("全部")) {
                 if (!areaSet.contains(mCalendarFinanceBean.getState())) {
                     return false;
@@ -202,7 +213,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                 }
             }
         }*/
-        if (importanceSet != null) {
+        if (importanceSet.size() != 0) {
             if (!importanceSet.contains("全部")) {
                 if (!importanceSet.contains(mCalendarFinanceBean.getImportance())) {
                     return false;

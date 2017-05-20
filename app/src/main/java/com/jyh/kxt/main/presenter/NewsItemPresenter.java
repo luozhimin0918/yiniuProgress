@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,26 +27,33 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.custom.RollViewPager;
+import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
+import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
-import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
+import com.jyh.kxt.market.adapter.MarketGridAdapter;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -55,7 +63,7 @@ import java.util.List;
  * 创建日期:2017/4/12.
  */
 
-public class NewsItemPresenter extends BasePresenter {
+public class NewsItemPresenter extends BasePresenter implements OnSocketTextMessage {
 
     @BindObject
     NewsItemFragment newsItemFragment;
@@ -65,7 +73,7 @@ public class NewsItemPresenter extends BasePresenter {
     private List<SlideJson> slides;//幻灯片
     private AdJson ads;//广告
     private List<SlideJson> shortcuts;//按钮
-    private List<QuotesJson> quotes;//行情
+    private List<MarketItemBean> quotes;//行情
     private ArrayList<String> list;
     private NewsAdapter newsAdapter;
     private BannerLayout carouseView;
@@ -135,7 +143,8 @@ public class NewsItemPresenter extends BasePresenter {
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
         NewsJson newsJson = newsAdapter.getData().get(position);
-        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
 
@@ -187,7 +196,7 @@ public class NewsItemPresenter extends BasePresenter {
             initHeadViewLayout();
 
             //头部排序
-            if (list != null)
+            if (list != null) {
                 for (String type : list) {
                     switch (type) {
                         case VarConstant.NEWS_AD:
@@ -200,11 +209,14 @@ public class NewsItemPresenter extends BasePresenter {
                             addBtn(shortcuts);
                             break;
                         case VarConstant.NEWS_QUOTES:
+                            addQuotes();
                             break;
                     }
                 }
-            if (homeHeadView != null)
+            }
+            if (homeHeadView != null) {
                 newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+            }
             newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
             newsItemFragment.plRootView.loadOver();
         }
@@ -297,8 +309,46 @@ public class NewsItemPresenter extends BasePresenter {
     /**
      * 添加行情
      */
-    public void addQuotes() {
+    private JSONArray marketCodeList = new JSONArray();
+    private HashMap<String, MarketItemBean> marketMap = new HashMap<>();
 
+    public void addQuotes() {
+        for (MarketItemBean marketItemBean : quotes) {
+            marketCodeList.add(marketItemBean.getCode());
+            marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+            marketItemBean.setChange(MarketUtil.replacePositive(marketItemBean.getChange()));
+            marketItemBean.setRange(MarketUtil.replacePositive(marketItemBean.getRange()));
+        }
+
+
+        RollViewPager recommendView = new RollViewPager(mContext);
+        recommendView
+                .setGridMaxCount(3)
+                .setDataList(quotes)
+                .setGridViewItemData(new RollViewPager.GridViewItemData() {
+                    @Override
+                    public void itemData(List dataSubList, GridView gridView) {
+
+                        MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
+                        gridView.setAdapter(adapter);
+                    }
+                });
+        recommendView.build();
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                SystemUtil.dp2px(mContext, 110));
+
+        recommendView.setLayoutParams(lp);
+        homeHeadView.addView(recommendView);
+
+        addLineView();
+
+        MarketConnectUtil.getInstance().sendSocketParams(
+                iBaseView,
+                marketCodeList,
+                NewsItemPresenter.this);
     }
 
     /**
@@ -323,8 +373,9 @@ public class NewsItemPresenter extends BasePresenter {
 
             isShowTextAd = isShowTextAd || !TextUtils.isEmpty(title);
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                    .WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams
+                            .WRAP_CONTENT);
 
             tvAd.setText(title);
             tvAd.setTextSize(16);
@@ -335,12 +386,14 @@ public class NewsItemPresenter extends BasePresenter {
             ll_ad.addView(tvAd);
         }
 
-        if (isShowTextAd)
+        if (isShowTextAd) {
             ll_ad.setVisibility(View.VISIBLE);
-        else
+        } else {
             ll_ad.setVisibility(View.GONE);
+        }
 
-        Glide.with(mContext).load(ads.getPic_ad().getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(iv_ad);
+        Glide.with(mContext).load(ads.getPic_ad().getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
+                .ico_def_load).into(iv_ad);
 
         homeHeadView.addView(adView);
 
@@ -383,15 +436,17 @@ public class NewsItemPresenter extends BasePresenter {
                                 JSONArray slideArray = (JSONArray) headerJson.getData();
                                 if (slideArray == null) break;
                                 slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
-                                if (slides.size() > 0)
+                                if (slides.size() > 0) {
                                     list.add(VarConstant.NEWS_SLIDE);
+                                }
                                 break;
                             case VarConstant.NEWS_SHORTCUT:
                                 JSONArray shortcutArray = (JSONArray) headerJson.getData();
                                 if (shortcutArray == null) break;
                                 shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
-                                if (shortcuts.size() > 0)
+                                if (shortcuts.size() > 0) {
                                     list.add(VarConstant.NEWS_SHORTCUT);
+                                }
                                 break;
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
@@ -401,17 +456,20 @@ public class NewsItemPresenter extends BasePresenter {
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
                                 if (quotesArray == null) break;
-                                quotes = JSON.parseArray(quotesArray.toString(), QuotesJson.class);
-                                if (quotes.size() > 0)
+                                quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
+                                if (quotes.size() > 0) {
                                     list.add(VarConstant.NEWS_QUOTES);
+                                }
                                 break;
                             case VarConstant.NEWS_AD:
-                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson.getData();
+                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson
+                                        .getData();
                                 if (adObj == null) break;
 
                                 SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
 
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString(), SlideJson
+                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
+                                        (), SlideJson
                                         .class);
                                 SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
 
@@ -454,7 +512,7 @@ public class NewsItemPresenter extends BasePresenter {
      */
     public void onPullUpToRefresh(final PullToRefreshBase refreshView) {
 
-        if (isMore)
+        if (isMore) {
             request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
@@ -468,7 +526,7 @@ public class NewsItemPresenter extends BasePresenter {
                     refreshView.onRefreshComplete();
                 }
             });
-        else {
+        } else {
             refreshView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -486,10 +544,12 @@ public class NewsItemPresenter extends BasePresenter {
         String url = HttpConstant.NEWS_LIST;
         try {
             JSONObject object = request.getJsonParam();
-            if (!TextUtils.isEmpty(code))
+            if (!TextUtils.isEmpty(code)) {
                 object.put(VarConstant.HTTP_CODE, code);
-            if (!TextUtils.isEmpty(lastId))
+            }
+            if (!TextUtils.isEmpty(lastId)) {
                 object.put(VarConstant.HTTP_LASTID, lastId);
+            }
             url = url + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -503,8 +563,9 @@ public class NewsItemPresenter extends BasePresenter {
      * @param news
      */
     private List<NewsJson> checkNews(List<NewsJson> news) {
-        if (news == null || news.size() == 0)
+        if (news == null || news.size() == 0) {
             return null;
+        }
         List<NewsJson> newsJsons;
         if (news.size() > VarConstant.LIST_MAX_SIZE) {
             newsJsons = new ArrayList<>(news.subList(0, VarConstant.LIST_MAX_SIZE));
@@ -537,15 +598,17 @@ public class NewsItemPresenter extends BasePresenter {
                                 JSONArray slideArray = (JSONArray) headerJson.getData();
                                 if (slideArray == null) break;
                                 slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
-                                if (slides.size() > 0)
+                                if (slides.size() > 0) {
                                     list.add(VarConstant.NEWS_SLIDE);
+                                }
                                 break;
                             case VarConstant.NEWS_SHORTCUT:
                                 JSONArray shortcutArray = (JSONArray) headerJson.getData();
                                 if (shortcutArray == null) break;
                                 shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
-                                if (shortcuts.size() > 0)
+                                if (shortcuts.size() > 0) {
                                     list.add(VarConstant.NEWS_SHORTCUT);
+                                }
                                 break;
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
@@ -555,17 +618,20 @@ public class NewsItemPresenter extends BasePresenter {
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
                                 if (quotesArray == null) break;
-                                quotes = JSON.parseArray(quotesArray.toString(), QuotesJson.class);
-                                if (quotes.size() > 0)
+                                quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
+                                if (quotes.size() > 0) {
                                     list.add(VarConstant.NEWS_QUOTES);
+                                }
                                 break;
                             case VarConstant.NEWS_AD:
-                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson.getData();
+                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson
+                                        .getData();
                                 if (adObj == null) break;
 
                                 SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
 
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString(), SlideJson
+                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
+                                        (), SlideJson
                                         .class);
                                 SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
 
@@ -615,6 +681,26 @@ public class NewsItemPresenter extends BasePresenter {
             newsAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 行情  Socket
+     *
+     * @param text
+     */
+    @Override
+    public void onTextMessage(String text) {
+        try {
+            MarketUtil.mapToMarketBean(newsItemFragment.plRootView, 0, marketMap, text);
+        } catch (Exception e) {
+            try {
+                List<String> jsonList = JSONArray.parseArray(text, String.class);
+                for (String itemJson : jsonList) {
+                    MarketUtil.mapToMarketBean(newsItemFragment.plRootView, 0, marketMap, text);
+                }
+            } catch (Exception e1) {
+            }
         }
     }
 }

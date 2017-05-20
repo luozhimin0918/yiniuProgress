@@ -15,9 +15,9 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.NewsNavJson;
-import com.jyh.kxt.main.json.QuotesJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.presenter.NewsPresenter;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -85,7 +85,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      * @param news
      * @param list
      */
-    public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts, List<QuotesJson> quotes,
+    public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts, List<MarketItemBean> quotes,
                          AdJson ad, List<NewsJson> news, ArrayList<String> list) {
         if (newsNavs == null) return;
         int size = newsNavs.size();

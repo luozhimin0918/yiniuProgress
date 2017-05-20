@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.jyh.kxt.index.ui.fragment.HomeFragment">
 
-    <include layout="@layout/action_bar2"/>
+    <include layout="@layout/action_bar4"/>
 
     <FrameLayout
         android:id="@+id/fl_content"

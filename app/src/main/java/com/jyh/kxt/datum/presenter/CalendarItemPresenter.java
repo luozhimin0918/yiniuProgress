@@ -57,7 +57,6 @@ public class CalendarItemPresenter extends BasePresenter {
                 calendarItemFragment.pllContent.loadOver();
 
                 updateOrAddAdapter(0);
-
             }
 
             @Override

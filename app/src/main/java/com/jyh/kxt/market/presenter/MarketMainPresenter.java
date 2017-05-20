@@ -2,17 +2,16 @@ package com.jyh.kxt.market.presenter;
 
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -21,18 +20,21 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.custom.RollDotViewPager;
+import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
+import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
-import com.jyh.kxt.market.adapter.MarketRecommendAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketMainBean;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
-import com.library.widget.recycler.DividerGridItemDecoration;
 
 import java.util.List;
 
@@ -47,6 +49,12 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     private LinearLayout mainHeaderView;
     private JSONArray marketCodeList = new JSONArray();
+    private MarketMainItemAdapter marketMainItemAdapter;
+
+    /**
+     * 首页的 角标
+     */
+    private TextView tvTargetNav;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -89,7 +97,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
                 MarketConnectUtil.getInstance().sendSocketParams(
                         iBaseView,
-                        marketCodeList ,
+                        marketCodeList,
                         MarketMainPresenter.this);
 
                 marketItemFragment.refreshableView.addHeaderView(mainHeaderView);
@@ -108,35 +116,34 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private void createMainView(MarketMainBean marketBean) {
         createPaddingView(1);
 
-        RecyclerView recommendView = new RecyclerView(mContext);
-        GridLayoutManager layout = new GridLayoutManager(mContext, 3) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        recommendView.setLayoutManager(layout);
-        DividerGridItemDecoration decor = new DividerGridItemDecoration(mContext);
-        decor.setSpanCount(3);
-        recommendView.addItemDecoration(decor);
-
         for (MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
+            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
+            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
         }
 
-        MarketRecommendAdapter adapter = new MarketRecommendAdapter(mContext, marketBean.getData());
-        recommendView.setAdapter(adapter);
+        List<MarketItemBean> data = marketBean.getData();
+
+        RollDotViewPager recommendView = new RollDotViewPager(mContext);
+        RollViewPager rollViewPager = recommendView.getRollViewPager();
+        rollViewPager.setGridMaxCount(6).setDataList(data).setGridViewItemData(new RollViewPager.GridViewItemData() {
+            @Override
+            public void itemData(List dataSubList, GridView gridView) {
+
+                MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
+                gridView.setAdapter(adapter);
+            }
+        });
+        recommendView.build();
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                SystemUtil.dp2px(mContext, 230));
+        recommendView.setLayoutParams(lp);
 
-        mainHeaderView.addView(recommendView, lp);
+        mainHeaderView.addView(recommendView);
     }
 
     private void createFavorView(MarketMainBean marketBean) {
@@ -168,6 +175,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         for (MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
+            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
+            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
 
             ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
                     R.layout.item_market_recommend,
@@ -178,6 +189,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
             View v = dataBinding.getRoot();
             hqLayout.addView(v);
         }
+        SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketBean.getData()));
         horizontalScrollView.addView(hqLayout);
     }
 
@@ -192,14 +204,25 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);
         navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
         navigationView.findViewById(R.id.view_line).setVisibility(View.GONE);
+        tvTargetNav = (TextView) navigationView.findViewById(R.id.tv_target_nav);
+        tvTargetNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marketItemFragment.navClick(v);
+            }
+        });
 
         mainHeaderView.addView(navigationView);
 
         for (MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
+            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
+            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
         }
 
-        MarketMainItemAdapter marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketBean.getData());
+        marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketBean.getData());
         marketItemFragment.refreshableView.setAdapter(marketMainItemAdapter);
     }
 
@@ -214,6 +237,29 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     @Override
     public void onTextMessage(String text) {
-        Log.e("onTextMessage", "onTextMessage >>>> : " + text);
+        try {
+            marketItemFragment.mapToMarketBean(text);
+        } catch (Exception e) {
+            try {
+                List<String> jsonList = JSONArray.parseArray(text, String.class);
+                for (String itemJson : jsonList) {
+                    marketItemFragment.mapToMarketBean(itemJson);
+                }
+            } catch (Exception e1) {
+            }
+        }
+    }
+
+    public void switchItemContent() {
+        marketItemFragment.switchItemType = marketItemFragment.switchItemType == 0 ? 1 : 0;
+        marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
+        if (tvTargetNav != null) {
+            tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
+        }
+
+        for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
+            marketItemBean.setSwitchTarget(
+                    marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
+        }
     }
 }

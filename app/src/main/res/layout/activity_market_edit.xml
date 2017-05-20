@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:background="@color/bg_color">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:gravity="center_vertical"
+            android:paddingLeft="24dp"
+            android:text="全部"
+            android:textColor="@color/font_color7"
+            android:textSize="@dimen/describe_font_size4"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="置顶"
+            android:textColor="@color/font_color7"
+            android:textSize="@dimen/describe_font_size4"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="拖动"
+            android:textColor="@color/font_color7"
+            android:textSize="@dimen/describe_font_size4"/>
+    </LinearLayout>
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.library.widget.PageLoadLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/bg_color">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <CheckBox
+                android:id="@+id/cb_complete_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:button="@drawable/sel_collect_nav"
+
+                android:checked="false"
+                android:paddingLeft="8dp"
+                android:text="全选"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/content_font_size2"/>
+        </FrameLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/font_color63"></View>
+
+        <TextView
+            android:id="@+id/tv_delete_count"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="删除(0)"
+            android:textColor="@color/red2"
+            android:textSize="@dimen/content_font_size2"/>
+    </LinearLayout>
+</LinearLayout>
