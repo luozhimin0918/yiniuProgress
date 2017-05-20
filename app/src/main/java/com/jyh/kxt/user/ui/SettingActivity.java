@@ -1,6 +1,5 @@
 package com.jyh.kxt.user.ui;
 
-import android.databinding.tool.util.L;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;

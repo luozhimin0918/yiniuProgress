@@ -1,16 +1,32 @@
 package com.jyh.kxt.index.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.ImageView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.market.ui.MarketEditActivity;
+import com.jyh.kxt.market.ui.SearchActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.market.ui.fragment.OptionalFragment;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
+import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -21,7 +37,6 @@ import butterknife.OnClick;
 public class MarketFragment extends BaseFragment implements OnTabSelectListener {
 
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
-      @BindView(R.id.iv_left_icon) ImageView ivLeftIcon;
     @BindView(R.id.tv_right_icon1) TextView tvRightIcon1;
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
@@ -54,8 +69,12 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     public void onTabSelect(int position) {
         BaseFragment currentFragment;
         if (position == 0) {
+            tvRightIcon1.setText("");
+            tvRightIcon1.setBackgroundResource(R.mipmap.icon_search);
             currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
         } else {
+            tvRightIcon1.setText("编辑");
+            tvRightIcon1.setBackground(null);
             currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
         }
         this.position = position;
@@ -72,23 +91,20 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     }
 
-    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1})
+    @OnClick({R.id.iv_left_icon, R.id.tv_right_icon1})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
-            case R.id.iv_right_icon1:
-                startActivity(new Intent(getContext(), SearchActivity.class));
+            case R.id.tv_right_icon1:
+                if (position == 1) {//如果是行情 - 编辑
+                    Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
+                    startActivity(marketEditIntent);
+                }else{
+                     startActivity(new Intent(getContext(), SearchActivity.class));
+                }
                 break;
-        }
-    }
-
-    @OnClick(R.id.tv_right_icon1)
-    public void onClickRightTop(View view) {
-        if (position == 1) {//如果是行情 - 编辑
-            Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
-            startActivity(marketEditIntent);
         }
     }
 
@@ -112,8 +128,9 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
-            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
-                    .icon_user_def_photo).into(ivLeftIcon);
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap
+                            .icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
