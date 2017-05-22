@@ -50,6 +50,15 @@ public class CalendarItemPresenter extends BasePresenter {
         volleyRequest.setTag(calendarItemFragment.calendarDate);
 
         volleyRequest.doGet(HttpConstant.RILI, json, new HttpListener<List<CalendarBean>>() {
+
+//            @Override
+//            protected void onStart() {
+//                List<CalendarBean> cacheT = getCacheT();
+//                if (cacheT != null) {
+//                    onResponse(cacheT);
+//                }
+//            }
+
             @Override
             protected void onResponse(List<CalendarBean> calendarBeen) {
                 CalendarItemPresenter.this.calendarBeen = calendarBeen;
@@ -91,6 +100,8 @@ public class CalendarItemPresenter extends BasePresenter {
         } else {
             calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
         }
+
+        calendarItemFragment.ptrlvContent.onRefreshComplete();
     }
 
 

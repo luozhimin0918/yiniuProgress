@@ -27,7 +27,7 @@ import butterknife.BindView;
 
 public class CalendarItemFragment extends BaseFragment {
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
-    @BindView(R.id.ptrlv_content) PullToRefreshListView ptrlvContent;
+    @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
 
     private CalendarItemPresenter mCalendarItemPresenter;
     public CalendarItemAdapter calendarItemAdapter;
@@ -47,7 +47,7 @@ public class CalendarItemFragment extends BaseFragment {
         mCalendarItemPresenter = new CalendarItemPresenter(this);
 
         pllContent.loadWait();
-        mCalendarItemPresenter.requestPublishData();
+
 
         ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ptrlvContent.getRefreshableView().setDividerHeight(0);
@@ -58,6 +58,7 @@ public class CalendarItemFragment extends BaseFragment {
                 mCalendarItemPresenter.requestPublishData();
             }
         });
+        mCalendarItemPresenter.requestPublishData();
     }
 
     public void setCalendarAdapter(List<CalendarType> calendarBeen) {

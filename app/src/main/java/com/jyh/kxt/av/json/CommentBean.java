@@ -51,6 +51,11 @@ public class CommentBean {
     private int status;
     private String type;
 
+    /**
+     * 本地变量,判断是否需要在攒上+1，本地内存的
+     */
+    private boolean temporaryClickFavour = false;
+
     public String getContent() {
         return content;
     }
@@ -209,5 +214,13 @@ public class CommentBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isTemporaryClickFavour() {
+        return temporaryClickFavour;
+    }
+
+    public void setTemporaryClickFavour(boolean temporaryClickFavour) {
+        this.temporaryClickFavour = temporaryClickFavour;
     }
 }

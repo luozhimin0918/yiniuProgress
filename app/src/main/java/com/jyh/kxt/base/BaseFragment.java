@@ -43,6 +43,8 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         super.setUserVisibleHint(isVisibleToUser);
         isViewPagerToCurrentLocate = isVisibleToUser;
         if (isViewPagerToCurrentLocate) {
+            onResume();
+
             if (isCreateView && !isUserVisible) {
                 userVisibleHint();
                 isUserVisible = true;
@@ -52,6 +54,12 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
 
     public void userVisibleHint() {
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

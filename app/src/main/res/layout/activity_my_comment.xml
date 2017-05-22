@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_index_attention"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme1"
+    android:orientation="vertical"
+    tools:context="com.jyh.kxt.index.ui.AttentionActivity">
+
+    <include layout="@layout/action_bar1"
+        />
+
+    <com.library.widget.tablayout.SlidingTabLayout
+        android:id="@+id/stl_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigationBar2Height"
+        android:layout_gravity="bottom"
+        android:paddingRight="@dimen/navigationBar2ImageWidth"
+        android:background="@color/line_color2"
+
+        tl:tl_indicator_color="@color/blue"
+        tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+        tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+
+        tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+        tl:tl_mode_scrollable="MODE_FIXED"
+        tl:tl_tab_padding="10dp"
+        tl:tl_textSelectColor="@color/font_color5"
+        tl:tl_textUnselectColor="@color/font_color3"
+        tl:tl_textsize="@dimen/describe_font_size2"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

@@ -11,7 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -38,7 +37,8 @@ import com.library.base.http.VolleyRequest;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.window.ToastView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,8 +126,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     @Override
-    public void onPublish(PopupWindow popupWindow, EditText etContent) {
-        webViewAndHead.requestIssueComment(popupWindow, etContent);
+    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho) {
+        webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, commentWho);
     }
 
     class WebViewAndHead {
@@ -136,7 +136,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_type) TextView tvType;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_like) ImageView cbLike;
+        @BindView(R.id.iv_like) CheckBox cbLike;
 
         @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
         @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
@@ -163,6 +163,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
 
             if ("0".equals(newsContentJson.getAuthor_id())) {
+                tvTitle.setText(newsContentJson.getTitle());
+                tvType.setText(newsContentJson.getTypeName());
+
+                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
+                tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+
                 rlExistAuthor.setVisibility(View.VISIBLE);
                 Glide.with(NewsContentActivity.this)
                         .load(HttpConstant.IMG_URL + newsContentJson.getPicture())
@@ -180,16 +186,26 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvName.setText(newsContentJson.getAuthor_name());
 
                 boolean isFollow = "1".equals(newsContentJson.getIs_follow());
-                cbLike.setSelected(isFollow);
+                cbLike.setChecked(isFollow);
+                cbLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        CheckBox checkBox = (CheckBox) v;
+                        boolean checked = checkBox.isChecked();
+
+                        newsContentPresenter.requestAttention(
+                                checked,
+                                WebViewAndHead.this.newsContentJson.getAuthor_id());
+                    }
+                });
             } else {
                 rlNotAuthor.setVisibility(View.VISIBLE);
+                tvNewsType.setText(newsContentJson.getTypeName());
+
+                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
+                tvNewsTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
             }
-
-            tvTitle.setText(newsContentJson.getTitle());
-            tvType.setText(newsContentJson.getTypeName());
-
-            long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
-            tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
 
             /**
              * ----------  创建WebView
@@ -240,22 +256,35 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
          *
          * @param popupWindow
          * @param commentEdit
+         * @param commentBean
+         * @param commentWho
          */
-        public void requestIssueComment(final PopupWindow popupWindow, final EditText commentEdit) {
+        public void requestIssueComment(final PopupWindow popupWindow,
+                                        final EditText commentEdit,
+                                        CommentBean commentBean,
+                                        int commentWho) {
+
             String commentContent = commentEdit.getText().toString();
             if (commentContent.trim().length() == 0) {
                 commentEdit.setText("");
-                commentEdit.setError("评论不能为空!");
+
+                TSnackbar.make(commentEdit,
+                        "评论好像为空喔,请检查",
+                        TSnackbar.LENGTH_LONG,
+                        TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                        .setPromptThemBackground(Prompt.WARNING).show();
                 return;
             }
 
             UserJson userInfo = LoginUtils.getUserInfo(getContext());
-            if (userInfo == null) {
-                ToastView.makeText(getContext(), "先去登录?");
-                return;
-            }
 
-            pllContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT8,"提交中...");
+            final TSnackbar snackBar = TSnackbar.make
+                    (
+                            commentEdit,
+                            "正在提交评论",
+                            TSnackbar.LENGTH_INDEFINITE,
+                            TSnackbar.APPEAR_FROM_TOP_TO_DOWN
+                    );
 
             VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
             JSONObject jsonParam = volleyRequest.getJsonParam();
@@ -265,15 +294,29 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             jsonParam.put("accessToken", userInfo.getToken());
             jsonParam.put("content", commentContent);
 
+            switch (commentWho) {
+                case 0:
+
+                    break;
+                case 1:
+                    jsonParam.put("parent_id", commentBean.getId());
+                    break;
+                case 2:
+                    jsonParam.put("parent_id", commentBean.getParent_id());
+                    break;
+            }
             volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
                 @Override
                 protected void onResponse(CommentBean mCommentBean) {
                     popupWindow.dismiss();
                     commentEdit.setText("");
 
-                    newsContentPresenter.commentFirstCommit(mCommentBean);
+                    newsContentPresenter.commentCommit(mCommentBean);
 
-                    pllContent.loadOver();
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS)
+                            .setText("评论提交成功")
+                            .setDuration(TSnackbar.LENGTH_LONG)
+                            .show();
                 }
 
                 @Override

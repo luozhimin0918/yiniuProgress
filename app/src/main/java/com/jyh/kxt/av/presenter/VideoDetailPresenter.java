@@ -1,25 +1,44 @@
 package com.jyh.kxt.av.presenter;
 
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.adapter.CommentAdapter;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.superplayer.library.SuperPlayer;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
  */
 
 public class VideoDetailPresenter extends BasePresenter {
-    @BindObject VideoDetailActivity videoDetailActivity;
+    @BindObject public VideoDetailActivity videoDetailActivity;
+
+    private LinearLayout headView;
+    private CommentAdapter commentAdapter;
+    private List<CommentBean> adapterCommentList = new ArrayList<>();
 
     private VideoDetailBean videoDetailBean;
 
@@ -30,26 +49,70 @@ public class VideoDetailPresenter extends BasePresenter {
     /**
      * 请求初始化Video
      */
-    public void requestInitVideo() {
+    public void requestInitVideo(final PullToRefreshBase.Mode pullMode) {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("id", videoDetailActivity.videoId);
+
+        if (pullMode == PullToRefreshBase.Mode.PULL_FROM_END) {
+            CommentBean commentBean = adapterCommentList.get(adapterCommentList.size() - 1);
+            jsonParam.put("last_id", commentBean.getId());
+        } else if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            if (userInfo != null) {
+                jsonParam.put("uid", userInfo.getUid());
+                jsonParam.put("token", userInfo.getToken());
+            }
+        }
+
         volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<VideoDetailBean>() {
             @Override
-            protected void onResponse(VideoDetailBean videoDetailBean) {
-                VideoDetailPresenter.this.videoDetailBean = videoDetailBean;
+            protected void onResponse(VideoDetailBean detailJson) {
 
-                videoDetailActivity.pllContent.loadOver();
-                playVideo();
+                if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
+                    VideoDetailPresenter.this.videoDetailBean = detailJson;
 
-                videoDetailActivity.tvPlayCount.setText(videoDetailBean.getNum_play());
-                videoDetailActivity.tvTitle.setText(videoDetailBean.getTitle());
+                    videoDetailActivity.pllContent.loadOver();
+                    playVideo();
 
-                CommentAdapter commentAdapter = new CommentAdapter(mContext, videoDetailBean.getComment());
-                videoDetailActivity.rvMessage.setAdapter(commentAdapter);
+                    videoDetailActivity.tvPlayCount.setText(detailJson.getNum_play());
+                    videoDetailActivity.tvTitle.setText(detailJson.getTitle());
 
-                videoDetailActivity.commentPresenter.bindListView(videoDetailActivity.rvMessage);
-                videoDetailActivity.commentPresenter.createMoreVideoView(videoDetailBean.getVideo());
+                    List<CommentBean> comment = detailJson.getComment();
+                    adapterCommentList.addAll(comment);
+
+                    commentAdapter = new CommentAdapter(
+                            mContext,
+                            adapterCommentList,
+                            VideoDetailPresenter.this);
+
+                    videoDetailActivity.rvMessage.setAdapter(commentAdapter);
+
+                    videoDetailActivity.commentPresenter.bindListView(videoDetailActivity.rvMessage);
+
+                    headView = videoDetailActivity.commentPresenter.getHeadView();
+                    videoDetailActivity.commentPresenter.createMoreVideoView(detailJson.getVideo());
+                    videoDetailActivity.tvCommentCount.setText(detailJson.getNum_comment());
+
+                    if (adapterCommentList.size() == 0) {
+                        videoDetailActivity.commentPresenter.createNoneComment();
+                    } else {
+                        videoDetailActivity.rvMessage.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+                    }
+                } else {
+                    videoDetailActivity.rvMessage.onRefreshComplete();
+                    List<CommentBean> comment = detailJson.getComment();
+
+                    if (comment.size() == 0) {
+                        TSnackbar.make(videoDetailActivity.rvMessage,
+                                "暂无更多评论",
+                                Snackbar.LENGTH_LONG,
+                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                        return;
+                    }
+                    adapterCommentList.addAll(comment);
+                    commentAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -57,6 +120,108 @@ public class VideoDetailPresenter extends BasePresenter {
                 videoDetailActivity.pllContent.loadError();
             }
         });
+    }
+
+    /**
+     * 发表评论的
+     *
+     * @param popupWindow
+     * @param commentEdit
+     * @param commentBean
+     * @param commentWho
+     */
+    public void requestIssueComment(final PopupWindow popupWindow,
+                                    final EditText commentEdit,
+                                    CommentBean commentBean,
+                                    int commentWho) {
+
+        String commentContent = commentEdit.getText().toString();
+
+        if (commentContent.trim().length() == 0) {
+            commentEdit.setText("");
+
+            TSnackbar.make(commentEdit,
+                    "评论好像为空喔,请检查",
+                    TSnackbar.LENGTH_LONG,
+                    TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                    .setPromptThemBackground(Prompt.WARNING).show();
+
+            return;
+        }
+
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+
+        final TSnackbar snackBar = TSnackbar.make
+                (
+                        commentEdit,
+                        "正在提交评论",
+                        TSnackbar.LENGTH_INDEFINITE,
+                        TSnackbar.APPEAR_FROM_TOP_TO_DOWN
+                );
+
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
+
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("type", "video");
+        jsonParam.put("object_id", videoDetailActivity.videoId);
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+        jsonParam.put("content", commentContent);
+
+
+        switch (commentWho) {
+            case 0:
+
+                break;
+            case 1:
+                jsonParam.put("parent_id", commentBean.getId());
+                break;
+            case 2:
+                jsonParam.put("parent_id", commentBean.getParent_id());
+                break;
+        }
+
+        volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
+            @Override
+            protected void onResponse(CommentBean mCommentBean) {
+                popupWindow.dismiss();
+                commentEdit.setText("");
+
+                snackBar.setPromptThemBackground(Prompt.SUCCESS)
+                        .setText("评论提交成功")
+                        .setDuration(TSnackbar.LENGTH_LONG)
+                        .show();
+
+                commentCommit(mCommentBean);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
+    }
+
+    /**
+     * 第一次提交
+     *
+     * @param mCommentBean
+     */
+    public void commentCommit(CommentBean mCommentBean) {
+        try {
+            if (adapterCommentList.size() == 0) {
+                View noneComment = headView.findViewWithTag("noneComment");
+                headView.removeView(noneComment);
+            }
+
+            adapterCommentList.add(0, mCommentBean);
+            commentAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void playVideo() {

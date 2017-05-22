@@ -84,12 +84,21 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
         vpContent.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpContent, titles);
+        vpContent.addOnPageChangeListener(this);
     }
 
 
     public MarketNavBean getNavBean(Fragment fragment) {
         int indexOf = marketItemList.indexOf(fragment);
         return marketNavList.get(indexOf);
+    }
+
+    public void sendSocketParams() {
+        if (vpContent != null) {
+            int currentItem = vpContent.getCurrentItem();
+            MarketItemFragment marketItemFragment = (MarketItemFragment) marketItemList.get(currentItem);
+            marketItemFragment.onPageSelected();
+        }
     }
 
     @Override
@@ -104,11 +113,27 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-
+        try {
+            MarketItemFragment marketItemFragment = (MarketItemFragment) marketItemList.get(position);
+            marketItemFragment.onPageSelected();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    public void onItemDestroyView(MarketItemFragment marketItemFragment) {
+        try {
+            int indexOf = marketItemList.indexOf(marketItemFragment);
+            MarketNavBean marketNavBean = marketNavList.get(indexOf);
+            getQueue().cancelAll(marketNavBean.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

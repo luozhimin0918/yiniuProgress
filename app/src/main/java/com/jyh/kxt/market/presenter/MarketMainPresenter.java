@@ -48,7 +48,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     @BindObject MarketItemFragment marketItemFragment;
 
     private LinearLayout mainHeaderView;
-    private JSONArray marketCodeList = new JSONArray();
+    public JSONArray marketCodeList = new JSONArray();
     private MarketMainItemAdapter marketMainItemAdapter;
 
     /**
@@ -75,6 +75,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         //去获得HeadView 视图
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject json = volleyRequest.getJsonParam();
+        volleyRequest.setTag(marketItemFragment.navBean.getCode());
         volleyRequest.doGet(HttpConstant.MARKET_INDEX, json, new HttpListener<List<MarketMainBean>>() {
             @Override
             protected void onResponse(List<MarketMainBean> marketMainList) {
@@ -220,6 +221,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
+
+            marketItemBean.setSwitchTarget(marketItemBean.getRange());
         }
 
         marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketBean.getData());

@@ -104,6 +104,7 @@ public class MarketConnectUtil {
 
                         }
                     }, options, headers);
+
                 } catch (WebSocketException e) {
                     e.printStackTrace();
                 }

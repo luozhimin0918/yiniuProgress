@@ -270,6 +270,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_pl:
                 //评论
+                startActivity(new Intent(this,MyCommentActivity.class));
                 break;
             case R.id.ll_activity:
                 //活动

@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
@@ -15,14 +16,20 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+
+import static com.taobao.accs.ACCSManager.mContext;
 
 /**
  * Created by Mr'Dai on 2017/5/4.
@@ -121,6 +128,11 @@ public class ThumbView extends RelativeLayout {
      * 请求点赞
      */
     private void requestClickThumb() {
+        UserJson userInfo = LoginUtils.getUserInfo(getContext());
+        if (userInfo == null) {
+            getContext().startActivity(new Intent(getContext(), LoginOrRegisterActivity.class));
+            return;
+        }
 
         NativeStore.getInstance(getContext()).addThumbID(getContext(), thumbId);
 
@@ -140,13 +152,13 @@ public class ThumbView extends RelativeLayout {
         }, mAnimation.getDuration());
         isThumb = true;
 
-
-
         IBaseView iBaseView = (IBaseView) getContext();
 
         VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("id", thumbId);
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("token", userInfo.getToken());
 
         volleyRequest.doPost(HttpConstant.GOOD_NEWS, jsonParam, new HttpListener<String>() {
             @Override
@@ -170,14 +182,15 @@ public class ThumbView extends RelativeLayout {
         }
     }
 
-    public void setThumbCount(int count, int thumbId) {
+    public void setThumbCount(CommentBean commentBean, int thumbId) {
         this.thumbId = thumbId;
+        int count = commentBean.getNum_good();
 
         isThumb = NativeStore.getInstance(getContext()).isThumbSucceed(thumbId);
 
         if (isThumb) {
             ivThumb.setImageResource(R.mipmap.icon_comment_like);
-            count = count + 1;
+            count = count + (commentBean.isTemporaryClickFavour() ? 1 : 0);
         } else {
             ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
         }

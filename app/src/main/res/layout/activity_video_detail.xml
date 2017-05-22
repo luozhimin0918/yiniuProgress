@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.library.widget.PageLoadLayout
-    android:id="@+id/pll_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,14 +32,14 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/font_color5"
-                android:maxLines="1"
-                android:layout_marginRight="8dp"
                 android:layout_alignParentLeft="true"
-                android:ellipsize="end"
-                android:textSize="@dimen/content_font_size"
+                android:layout_marginRight="8dp"
                 android:layout_toLeftOf="@+id/tv_playCount"
-                android:layout_toStartOf="@+id/tv_playCount"/>
+                android:layout_toStartOf="@+id/tv_playCount"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/font_color5"
+                android:textSize="@dimen/content_font_size"/>
 
             <TextView
                 android:id="@+id/tv_playCount"
@@ -69,10 +69,35 @@
                 style="@style/Audio_RB_Style"
                 android:src="@mipmap/icon_nav_break"/>
 
-            <ImageView
-                android:id="@+id/iv_comment"
-                style="@style/Audio_RB_Style"
-                android:src="@mipmap/icon_nav_commend"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@mipmap/icon_nav_commend"/>
+
+                <View
+                    android:id="@+id/view_zw"
+                    android:layout_width="1dp"
+                    android:layout_centerInParent="true"
+                    android:layout_height="1dp"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/view_zw"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_read_count"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/min_min_font_size"
+                    android:id="@+id/tv_commentCount"/>
+            </RelativeLayout>
+
 
             <ImageView
                 android:id="@+id/iv_collect"

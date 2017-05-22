@@ -15,6 +15,7 @@ import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,8 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
 
     @BindObject MarketItemFragment marketItemFragment;
 
-    private JSONArray marketCodeList = new JSONArray();
+    public JSONArray marketCodeList = new JSONArray();
+    private List<MarketItemBean> marketDataList = new ArrayList<>();
     private MarketMainItemAdapter marketMainItemAdapter;
 
     public MarketOtherPresenter(IBaseView iBaseView) {
@@ -34,21 +36,41 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
 
     public void generateAdapter() {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        volleyRequest.setTag(marketItemFragment.navBean.getCode());
+
         JSONObject json = volleyRequest.getJsonParam();
-
         json.put("code", marketItemFragment.navBean.getCode());
-
         volleyRequest.doGet(HttpConstant.MARKET_LIST, json, new HttpListener<List<MarketItemBean>>() {
             @Override
+            protected void onStart() {
+                List<MarketItemBean> cacheT = getCacheT();
+                if (cacheT != null) {
+                    onResponse(cacheT);
+                } else {
+                    marketItemFragment.pageLoadLayout.loadWait();
+                }
+            }
+
+            @Override
             protected void onResponse(List<MarketItemBean> marketList) {
-                marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketList);
-                marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
+                marketDataList.clear();
+                marketCodeList.clear();
+                marketItemFragment.marketMap.clear();
+
+                marketItemFragment.pageLoadLayout.loadOver();
+
+                if (marketMainItemAdapter == null) {
+                    marketDataList.addAll(marketList);
+                    marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketList);
+                    marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
+                } else {
+                    marketDataList.addAll(marketList);
+                    marketMainItemAdapter.notifyDataSetChanged();
+                }
 
                 for (MarketItemBean marketItemBean : marketList) {
-
                     marketCodeList.add(marketItemBean.getCode());
                     marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
-
                     //赋值默认的初始值
                     marketItemBean.setSwitchTarget(marketItemBean.getRange());
                 }
@@ -57,7 +79,6 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
                         iBaseView,
                         marketCodeList,
                         MarketOtherPresenter.this);
-
             }
 
             @Override
@@ -81,7 +102,6 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
             }
         }
     }
-
 
 
     public void switchItemContent() {

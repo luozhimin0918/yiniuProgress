@@ -67,7 +67,8 @@ public class HttpConstant {
     public static final String EXPLORE_LOAD_MORE = BASE_URL + "discover/load_more";//探索首页加载更多
     public static final String EXPLORE_AUTHOR = BASE_URL + "discover/list";//作者专栏 ?id={writer_id}&last_id={0}
     public static final String EXPLORE_BLOG_INDEX = BASE_URL + "blog/index" + JWT;//作者专栏首页
-    public static final String EXPLORE_BLOG_LIST = BASE_URL + "blog/list";//专栏列表 list_type={writer_id | recommend }&last_id={0}
+    public static final String EXPLORE_BLOG_LIST = BASE_URL + "blog/list";//专栏列表 list_type={writer_id | recommend
+    // }&last_id={0}
     public static final String EXPLORE_BLOG_PROFILE = BASE_URL + "blog/profile";//专栏作者 ?id={writer_id}
     public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor";//关注作者 ?id={writer_id}
     public static final String EXPLORE_BLOG_DELETEFAVOR = BASE_URL + "blog/deleteFavor";//取消关注作者 ?id={writer_id}
@@ -146,6 +147,8 @@ public class HttpConstant {
      */
     public static final String SEARCH_ARTICLE = BASE_URL + "search/article";//?word={}?last_id={}
     public static final String SEARCH_VIDEO = BASE_URL + "search/video";//?word={}?last_id={}
-    public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes"+JWT;//行情热门搜索
+    public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes" + JWT;//行情热门搜索
     public static final String SEARCH_MARKET = BASE_URL + "quotes/search";//?word={}
+
+    public static final String MEMBER_FAVOR_WRITER = BASE_URL + "member/favor_writer";
 }

@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketMainPresenter;
 import com.jyh.kxt.market.presenter.MarketOtherPresenter;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -30,6 +32,7 @@ import butterknife.OnClick;
  */
 public class MarketItemFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
+    @BindView(R.id.pll_content) public PageLoadLayout pageLoadLayout;
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
     @BindView(R.id.rl_list_nav) public RelativeLayout rlListNav;
     @BindView(R.id.tv_target_nav) public TextView tvTargetNav;
@@ -94,10 +97,32 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
         }
     }
 
+    //重新发送Socket参数
+    public void onPageSelected() {
+        if (isZhuYePage) {
+            if (marketMainPresenter == null) {
+                return;
+            }
+            MarketConnectUtil.getInstance().sendSocketParams(
+                    this,
+                    marketMainPresenter.marketCodeList,
+                    marketMainPresenter);
+        } else {
+            if (marketOtherPresenter == null) {
+                return;
+            }
+            MarketConnectUtil.getInstance().sendSocketParams(
+                    this,
+                    marketOtherPresenter.marketCodeList,
+                    marketOtherPresenter);
+        }
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
+
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -130,5 +155,15 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
 
     public String replacePositive(String defStr) {
         return MarketUtil.replacePositive(defStr);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            ((MarketVPFragment) getParentFragment()).onItemDestroyView(MarketItemFragment.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.jyh.kxt.base.presenter;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,14 +17,21 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.json.VideoDetailVideoBean;
 import com.jyh.kxt.av.presenter.ReplyMessagePresenter;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.ui.activity.NewsContentActivity;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.manager.ActivityManager;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -60,7 +68,13 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     private OnCommentPublishListener onCommentPublishListener;
 
     public interface OnCommentPublishListener {
-        void onPublish(PopupWindow popupWindow, EditText etContent);
+        /**
+         * @param popupWindow
+         * @param etContent
+         * @param commentBean
+         * @param commentWho  0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
+         */
+        void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho);
     }
 
     public void setOnCommentPublishListener(OnCommentPublishListener onCommentPublishListener) {
@@ -97,6 +111,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
                 showReplyMessageView(tvReplyMessage);
             }
         });
+        replyMessageView();
     }
 
     public LinearLayout getHeadView() {
@@ -108,7 +123,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      */
     public void createMoreVideoView(List<VideoDetailVideoBean> videoList) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        for (VideoDetailVideoBean videoDetailVideoBean : videoList) {
+        for (final VideoDetailVideoBean videoDetailVideoBean : videoList) {
 
             String imageUrl = HttpConstant.IMG_URL + videoDetailVideoBean.getPicture();
 
@@ -120,6 +135,21 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ivVideoName.setText(videoDetailVideoBean.getTitle());
 
             llMoreVideo.addView(moreVideoView);
+
+            moreVideoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Activity singleActivity = ActivityManager
+                            .getInstance()
+                            .getSingleActivity(VideoDetailActivity.class);
+                    singleActivity.finish();
+
+                    Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, videoDetailVideoBean.getId());
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -128,7 +158,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      */
     public void createMoreView(List<NewsJson> articleList) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        for (NewsJson mArticleJson : articleList) {
+        for (final NewsJson mArticleJson : articleList) {
 
             String imageUrl = HttpConstant.IMG_URL + mArticleJson.getPicture();
 
@@ -140,6 +170,20 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ivVideoName.setText(mArticleJson.getTitle());
 
             llMoreVideo.addView(moreVideoView);
+
+            moreVideoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Activity singleActivity = ActivityManager
+//                            .getInstance()
+//                            .getSingleActivity(NewsContentActivity.class);
+//                    singleActivity.finish();
+
+                    Intent intent = new Intent(mContext, NewsContentActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, mArticleJson.getO_id());
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -169,17 +213,42 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         tvNoneComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onCommentClickListener != null) {
-                    onCommentClickListener.onClickView(ClickName.NONE_COMMENT);
+                boolean loginEd = LoginUtils.isLogined(mContext);
+                if (loginEd) {
+                    if (onCommentClickListener != null) {
+                        onCommentClickListener.onClickView(ClickName.NONE_COMMENT);
+                    }
+                } else {
+                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
                 }
             }
         });
     }
 
+    private CommentBean commentBean;
+    private int commentWho;
+
     /**
      * 弹出回复的PopWindow
      */
     public void showReplyMessageView(View showAtLocation) {
+        showReplyMessageView(showAtLocation, null, 0);
+    }
+
+    /**
+     * @param showAtLocation
+     * @param commentBean
+     * @param commentWho     0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
+     */
+    public void showReplyMessageView(View showAtLocation, CommentBean commentBean, int commentWho) {
+        this.commentBean = commentBean;
+        this.commentWho = commentWho;
+
+        boolean loginEd = LoginUtils.isLogined(mContext);
+        if (!loginEd) {
+            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            return;
+        }
         if (replyMessagePopup == null) {
 
             replyMessagePopup = new PopupUtil((Activity) mContext);
@@ -187,6 +256,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
             View replyMessageView = replyMessagePopup.createPopupView(R.layout.view_reply_message);
 
+            replyMessagePresenter.setCommentBean(commentBean);
+            replyMessagePresenter.setCommentWho(commentWho);
             replyMessagePresenter.initView(replyMessageView, replyMessagePopup, onCommentPublishListener);
 
             PopupUtil.Config config = new PopupUtil.Config();
@@ -234,5 +305,20 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
                 !replyMessagePresenter.isShowEmoJiView) {
             replyMessagePopup.dismiss();
         }
+    }
+
+    private void replyMessageView() {
+        if (tvReplyMessage != null) {
+            boolean loginEd = LoginUtils.isLogined(mContext);
+            if (loginEd) {
+                tvReplyMessage.setText("发表你的看法...");
+            } else {
+                tvReplyMessage.setText("一秒登录,发表你的看法...");
+            }
+        }
+    }
+
+    public void onResume() {
+        replyMessageView();
     }
 }

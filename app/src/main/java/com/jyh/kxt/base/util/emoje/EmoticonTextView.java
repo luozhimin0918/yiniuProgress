@@ -1,15 +1,21 @@
 package com.jyh.kxt.base.util.emoje;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.dao.EmojeBean;
+import com.jyh.kxt.base.util.TextGifDrawable;
 import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.library.util.SystemUtil;
 
@@ -17,7 +23,6 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pl.droidsonroids.gif.GifDrawable;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -33,14 +38,6 @@ public class EmoticonTextView extends TextView {
     private int emoJeSize = SystemUtil.dp2px(getContext(), 60);
     private int emoJeSize2 = SystemUtil.dp2px(getContext(), 25);
 
-    /**
-     * 是否开启循环
-     */
-    private volatile boolean isLoopInvalidate = false;
-    /**
-     * 刷新时间
-     */
-    private int postInvalidateDelayed = 50;
 
     public EmoticonTextView(Context context) {
         this(context, null);
@@ -54,9 +51,13 @@ public class EmoticonTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public boolean convertToGif(String text) {
+    public boolean convertToGif(int nickNameLength, String text) {
 
         SpannableString currentSpannable = new SpannableString(text);
+
+        int color = ContextCompat.getColor(getContext(), R.color.blue);
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(color);
+        currentSpannable.setSpan(redSpan, 0, nickNameLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         boolean isFindMatcher = false;
         Matcher matcher = Pattern.compile("\\[([^\\]]*)\\]").matcher(text);
@@ -80,9 +81,12 @@ public class EmoticonTextView extends TextView {
                      * 配置EmoJe基本信息
                      * 设置EmoJe的来源,本地或者是网络
                      */
-                    GifDrawable gifDrawable = new GifDrawable(
-                            getContext().getAssets(),
-                            emoJeBean.getGroupName() + "/" + emoJeName + "." + emoJeBean.getSuffixName());
+
+                    String assetName = emoJeBean.getGroupName() + "/" + emoJeName + "." + emoJeBean.getSuffixName();
+                    AssetManager assets = getContext().getAssets();
+                    AssetFileDescriptor assetFileDescriptor = assets.openFd(assetName);
+                    TextGifDrawable gifDrawable = new TextGifDrawable(assetFileDescriptor);
+                    gifDrawable.setTextView(this);
 
                     if ("default".equals(emoJeBean.getGroupName()) ||
                             "paobing".equals(emoJeBean.getGroupName()) ||
@@ -101,28 +105,26 @@ public class EmoticonTextView extends TextView {
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
                     isFindMatcher = false;
-                    startDownloadGif(currentSpannable, matcher.start(), matcher.end(), emoJeUrl);
+                    startDownloadGif(currentSpannable, matcher.start(), matcher.end(), emoJeUrl, emoJeName);
                 }
             }
         } catch (Exception e) {
         }
+
+
         setText(currentSpannable);
 
-
-        if (isFindMatcher) {
-            isLoopInvalidate = true;
-            startLoopInvalidate();
-        } else {
-            isLoopInvalidate = false;
-            stopLoopInvalidate();
-        }
         return isFindMatcher;
     }
 
+    /**
+     * 网络上下载图片
+     */
     private void startDownloadGif(final SpannableString currentSpannable,
                                   final int matcherStart,
                                   final int matcherEnd,
-                                  final String emoJeUrl) {
+                                  final String emoJeUrl,
+                                  final String emoJeName) {
 
         Observable.create(new Observable.OnSubscribe<File>() {
             @Override
@@ -155,60 +157,35 @@ public class EmoticonTextView extends TextView {
                     @Override
                     public void onNext(File gifFile) {
                         try {
-                            GifDrawable gifDrawable = new GifDrawable(gifFile);
-                            gifDrawable.setBounds(0, 0, gifDrawable.getIntrinsicWidth(), gifDrawable
-                                    .getIntrinsicHeight());
+                            TextGifDrawable gifDrawable = new TextGifDrawable(gifFile);
+                            gifDrawable.setTextView(EmoticonTextView.this);
 
+                            if ("default".equals(emoJeName) ||
+                                    "paobing".equals(emoJeName) ||
+                                    "baolixiong".equals(emoJeName)) {
+
+                                gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
+                            } else {
+                                gifDrawable.setBounds(0, 0, emoJeSize, emoJeSize);
+                            }
                             ImageSpan mEmoJeImageSpan = new ImageSpan(gifDrawable, ImageSpan.ALIGN_BASELINE);
                             currentSpannable.setSpan(
                                     mEmoJeImageSpan,
-                                    matcherStart,
+                                    matcherStart, //这里因为没有加上中括号
                                     matcherEnd,
                                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                             setText(currentSpannable);
-
-                            isLoopInvalidate = true;
-                            startLoopInvalidate();
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                 });
-
     }
 
-    public void startLoopInvalidate() {
-        if (!isLoopInvalidate) {
-            return;
-        }
-
-        isLoopInvalidate = true;
-        postDelayed(actionTextRunnable, postInvalidateDelayed);
-
-    }
-
-    public void stopLoopInvalidate() {
-        isLoopInvalidate = false;
-
-        removeCallbacks(actionTextRunnable);
-    }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
-        stopLoopInvalidate();
     }
-
-    Runnable actionTextRunnable = new Runnable() {
-        @Override
-        public void run() {
-//            invalidate(); //避免刷新导致的EmoJe白屏没问题
-            postInvalidateOnAnimation();
-            startLoopInvalidate();
-        }
-    };
 }

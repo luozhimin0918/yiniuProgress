@@ -127,7 +127,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
 
     private void openTipWindow() {
         new AlertDialog.Builder(this).setTitle("提示")
-                .setMessage("检测到自选数据发生改变,是否保存并且退出?")
+                .setMessage("自选数据发生改变,是否保存并且退出?")
                 .setPositiveButton("保存并退出",
                         new DialogInterface.OnClickListener() {
                             @Override

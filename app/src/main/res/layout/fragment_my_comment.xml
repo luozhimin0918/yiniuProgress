@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.library.widget.PageLoadLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pll_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.library.widget.handmark.PullToRefreshListView
+        android:id="@+id/rv_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_nav"/>
+
+</com.library.widget.PageLoadLayout>

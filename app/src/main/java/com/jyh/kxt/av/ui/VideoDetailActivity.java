@@ -4,16 +4,21 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.superplayer.library.SuperPlayer;
 
@@ -23,7 +28,7 @@ import butterknife.OnClick;
 /**
  * 视听-视屏详细页
  */
-public class VideoDetailActivity extends BaseActivity {
+public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener {
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
@@ -37,6 +42,7 @@ public class VideoDetailActivity extends BaseActivity {
     @BindView(R.id.iv_like) ImageView ivLike;
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
+    @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
@@ -59,10 +65,18 @@ public class VideoDetailActivity extends BaseActivity {
         videoDetailPresenter = new VideoDetailPresenter(this);
         commentPresenter = new CommentPresenter(this);
 
+        commentPresenter.setOnCommentPublishListener(this);
         pllContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT8, "正在进入..");
 
-        videoDetailPresenter.requestInitVideo();
+        videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_START);
 
+        rvMessage.setMode(PullToRefreshBase.Mode.DISABLED);
+        rvMessage.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_END);
+            }
+        });
     }
 
 
@@ -88,6 +102,11 @@ public class VideoDetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho) {
+        videoDetailPresenter.requestIssueComment(popupWindow, etContent, commentBean, commentWho);
+    }
+
     /**
      * 下面的这几个Activity的生命状态很重要
      */
@@ -102,6 +121,10 @@ public class VideoDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        commentPresenter.onResume();
+        if (spVideo != null) {
+            spVideo.onResume();
+        }
     }
 
     @Override

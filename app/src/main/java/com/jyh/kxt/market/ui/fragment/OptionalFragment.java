@@ -13,7 +13,6 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
-import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.OptionalPresenter;
@@ -97,7 +96,6 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
     public void onMarketEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.MARKET_OPTION_UPDATE:
-
                 List<MarketItemBean> marketList = (List<MarketItemBean>) eventBus.intentObj;
                 marketItemList.clear();
                 marketItemList.addAll(marketList);
@@ -113,6 +111,16 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
                         marketCodeList,
                         this);
                 break;
+        }
+    }
+
+    public void sendSocketParams() {
+        //参数改变
+        if (marketCodeList != null) {
+            MarketConnectUtil.getInstance().sendSocketParams(
+                    this,
+                    marketCodeList,
+                    this);
         }
     }
 
@@ -151,19 +159,18 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
     @Override
     public void onTextMessage(String text) {
-
-        MarketFragment marketFragment = (MarketFragment) getParentFragment();
         try {
-            MarketUtil.mapToMarketBean(ptrContent,switchItemType, marketMap, text);
+            MarketUtil.mapToMarketBean(ptrContent, switchItemType, marketMap, text);
         } catch (Exception e) {
             try {
                 List<String> jsonList = JSONArray.parseArray(text, String.class);
                 for (String itemJson : jsonList) {
-                    MarketUtil.mapToMarketBean(ptrContent,switchItemType, marketMap, itemJson);
+                    MarketUtil.mapToMarketBean(ptrContent, switchItemType, marketMap, itemJson);
                 }
             } catch (Exception e1) {
 
             }
         }
     }
+
 }

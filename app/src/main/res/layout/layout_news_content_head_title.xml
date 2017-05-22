@@ -74,14 +74,13 @@
                 android:textColor="@color/font_color6"
                 android:textSize="@dimen/describe_font_size1"/>
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/iv_like"
                 android:layout_width="@dimen/newsAuthorAttentionWidth"
                 android:layout_height="@dimen/newsAuthorAttentionHeight"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/sel_news_attention"
                 android:button="@null"
-                android:checked="false"
                 />
         </RelativeLayout>
 

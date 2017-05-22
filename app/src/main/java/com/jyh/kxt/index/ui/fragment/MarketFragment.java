@@ -72,10 +72,12 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
             tvRightIcon1.setText("");
             tvRightIcon1.setBackgroundResource(R.mipmap.icon_search);
             currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
+            ((MarketVPFragment)marketVPFragment).sendSocketParams();
         } else {
             tvRightIcon1.setText("编辑");
             tvRightIcon1.setBackground(null);
             currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
+            ((OptionalFragment)optionalFragment).sendSocketParams();
         }
         this.position = position;
         replaceFragment(currentFragment);

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
     <ImageView
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_above="@+id/id_volley_load_nodata"
-        android:src="@mipmap/ico_calendar_data"/>
+        android:src="@mipmap/icon_not_data"/>
 
     <TextView
         android:id="@+id/id_volley_load_nodata"
@@ -20,7 +21,8 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginTop="15dp"
         android:textColor="#999999"
-        android:text="暂无数据"
+        android:text="没有数据！"
         android:textSize="16sp"/>
 </RelativeLayout>

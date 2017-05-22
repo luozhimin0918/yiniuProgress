@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.dao.EmojeBean;
@@ -46,6 +47,8 @@ public class ReplyMessagePresenter extends BasePresenter {
 
     private PopupUtil replyMessagePopup;
     private CommentPresenter.OnCommentPublishListener onCommentPublishListener;
+    private CommentBean commentBean;
+    private int commentWho;
 
     public ReplyMessagePresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -78,7 +81,7 @@ public class ReplyMessagePresenter extends BasePresenter {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int currentCount = start + count;
-                tvMaxLength.setText(currentCount+"/140");
+                tvMaxLength.setText(currentCount + "/140");
             }
         });
     }
@@ -91,7 +94,7 @@ public class ReplyMessagePresenter extends BasePresenter {
                 break;
             case R.id.tv_publish:
                 if (onCommentPublishListener != null) {
-                    onCommentPublishListener.onPublish(replyMessagePopup, eetContent);
+                    onCommentPublishListener.onPublish(replyMessagePopup, eetContent, commentBean, commentWho);
                 }
                 break;
         }
@@ -164,4 +167,11 @@ public class ReplyMessagePresenter extends BasePresenter {
     }
 
 
+    public void setCommentBean(CommentBean commentBean) {
+        this.commentBean = commentBean;
+    }
+
+    public void setCommentWho(int commentWho) {
+        this.commentWho = commentWho;
+    }
 }
