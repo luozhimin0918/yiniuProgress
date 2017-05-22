@@ -4,7 +4,7 @@
     android:id="@+id/rl_list_nav"
     android:layout_width="match_parent"
     android:layout_height="41dp"
-    android:background="@color/white">
+    android:background="@color/theme1">
 
     <LinearLayout
         android:id="@+id/ll_list_nav"

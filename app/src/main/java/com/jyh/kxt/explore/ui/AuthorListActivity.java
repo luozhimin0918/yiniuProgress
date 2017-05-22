@@ -153,6 +153,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
         } else {
             newsAdapter.setData(newsList);
         }
+        newsAdapter.setIsSplice(false);
         if (headView != null)
             plvContent.getRefreshableView().removeHeaderView(headView);
         plvContent.getRefreshableView().addHeaderView(headView);
@@ -191,12 +192,22 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
      * @param pageCount
      * @param views
      * @param params
-     * @param i 页码
+     * @param i         页码
      */
     private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount, List<View> views, ViewGroup
             .LayoutParams params, int i) {
         RecyclerView recyclerView = new RecyclerView(this);
-        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        GridLayoutManager manager = new GridLayoutManager(this, 3) {
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.setLayoutParams(params);
@@ -217,7 +228,9 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
 
         llDian.addView(dian);
 
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
+        DividerGridItemDecoration decor = new DividerGridItemDecoration(this);
+        decor.setSpanCount(3);
+        recyclerView.addItemDecoration(decor);
 
         final AuthorHeadContentAdapter adapter = new AuthorHeadContentAdapter(this, authorJsons);
         adapter.setOnItemClickListener(new OnItemClickListener() {

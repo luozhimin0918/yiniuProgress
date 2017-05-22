@@ -23,6 +23,7 @@
             android:scaleType="fitXY"/>
 
         <ImageView
+            android:id="@+id/iv_play"
             android:layout_width="@dimen/rankItemPlaySize"
             android:layout_height="@dimen/rankItemPlaySize"
             android:layout_gravity="center"
@@ -59,9 +60,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/rankItemTimeMarginBottom"
         android:drawableLeft="@mipmap/icon_video_play_small"
         android:drawablePadding="@dimen/rankItemTimeDrawablePadding"
-        android:textColor="@color/font_color3"
-        android:layout_alignParentRight="true"/>
+        android:textColor="@color/font_color3"/>
 </RelativeLayout>

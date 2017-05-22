@@ -23,6 +23,7 @@
             android:scaleType="fitXY"/>
 
         <ImageView
+            android:id="@+id/iv_playBtn"
             android:layout_width="@dimen/rankItemPlaySize"
             android:layout_height="@dimen/rankItemPlaySize"
             android:layout_gravity="center"

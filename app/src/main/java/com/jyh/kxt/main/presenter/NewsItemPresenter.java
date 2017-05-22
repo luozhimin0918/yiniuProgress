@@ -294,7 +294,17 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 carouselHeight);
         recyclerView.setLayoutParams(params);
 
-        GridLayoutManager manager = new GridLayoutManager(mContext, 4);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 4){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(GridLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(manager);

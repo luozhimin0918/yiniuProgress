@@ -14,6 +14,7 @@
         android:layout_marginRight="@dimen/flash_type1_marginRight"
         android:maxLines="3"
         android:text="16:30"
+        android:textColor="@color/font_color6"
         android:textSize="@dimen/describe_font_size2"
         />
 
@@ -43,7 +44,6 @@
             android:layout_marginTop="@dimen/flash_type4_imgTop"
             android:minHeight="74dp"
             android:minWidth="110dp"
-            android:paddingBottom="10dp"
             android:scaleType="centerInside"
             android:src="@mipmap/ico_def_load"
             android:visibility="gone"/>

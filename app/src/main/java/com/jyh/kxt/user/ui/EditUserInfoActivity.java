@@ -1,5 +1,7 @@
 package com.jyh.kxt.user.ui;
 
+import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,11 +16,13 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,12 +30,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.presenter.ReplyMessagePresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.presenter.CollectFlashPresenter;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
 import com.library.base.http.VarConstant;
 import com.library.util.CommonUtil;
@@ -53,7 +60,7 @@ import butterknife.OnClick;
  * 创建日期:2017/4/6.
  */
 
-public class EditUserInfoActivity extends BaseActivity {
+public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
 
     private EditUserInfoPresenter editUserInfoPresenter;
 
@@ -105,6 +112,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private Bitmap lastBmp;
     private byte[] lastByte;
     private String photoFolderAddress;
+    private View namePopView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,7 +177,6 @@ public class EditUserInfoActivity extends BaseActivity {
         ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
 
         tvTitle.setText("个人中心");
-        btnSubmit.setText("完成");
     }
 
     /**
@@ -229,10 +236,6 @@ public class EditUserInfoActivity extends BaseActivity {
                 //退出
                 onBackPressed();
                 break;
-//            case R.id.iv_bar_function:
-//                //提交更改
-//                editUserInfoPresenter.postChangedInfo(editUserInfoPresenter.drawableToByte(lastByte), tvNickname.getText().toString());
-//                break;
             case R.id.rl_photo:
                 //修改头像
                 editUserInfoPresenter.showPop(getContext(), rlPhoto);
@@ -240,19 +243,17 @@ public class EditUserInfoActivity extends BaseActivity {
             case R.id.rl_nickname:
                 //修改昵称
                 DisplayMetrics metrics = SystemUtil.getScreenDisplay(this);
-                if (popupWindow == null) {
+                if (popupWindow == null)
                     initNameChangePop(metrics);
-                } else {
-                    backgroundAlpha(0.5f);
-                    popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                    //让编辑框弹出来，并显示对谁进行评论
-                    edtName.setFocusable(true);
-                    edtName.setFocusableInTouchMode(true);
-                    edtName.requestFocus();
-                    //打开软键盘
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                }
+                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                //让编辑框弹出来，并显示对谁进行评论
+                edtName.setFocusable(true);
+                edtName.setFocusableInTouchMode(true);
+                edtName.requestFocus();
+                //打开软键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
                 break;
             case R.id.rl_gender:
                 //修改性别
@@ -294,13 +295,11 @@ public class EditUserInfoActivity extends BaseActivity {
      * @param metrics
      */
     private void initNameChangePop(DisplayMetrics metrics) {
-
         popupWindow = new PopupUtil(this);
-        View rootView = popupWindow.createPopupView(R.layout.dialog_edittext);
-        edtName = (EditText) rootView.findViewById(R.id.edt_name);
-        final TextView tvNum = (TextView) rootView.findViewById(R.id.tv_num);
-        TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
-
+        namePopView = popupWindow.createPopupView(R.layout.dialog_edittext);
+        edtName = (EditText) namePopView.findViewById(R.id.edt_name);
+        final TextView tvNum = (TextView) namePopView.findViewById(R.id.tv_num);
+        TextView tvSure = (TextView) namePopView.findViewById(R.id.tv_sure);
         edtName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -317,7 +316,6 @@ public class EditUserInfoActivity extends BaseActivity {
                 tvNum.setText(s.length() + "/10");
             }
         });
-
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,28 +337,23 @@ public class EditUserInfoActivity extends BaseActivity {
             }
         });
 
-//        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-//        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         PopupUtil.Config config = new PopupUtil.Config();
+
         config.outsideTouchable = true;
         config.alpha = 0.5f;
         config.bgColor = 0X00000000;
 
         config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = metrics.widthPixels;
-        config.height = (int) getResources().getDimension(R.dimen.editUserInfo_EditHeight);
-    }
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
+        popupWindow.setConfig(config);
 
-    /**
-     * 设置添加屏幕的背景透明度
-     *
-     * @param bgAlpha
-     */
-    public void backgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        getWindow().setAttributes(lp);
+        SoftKeyBoardListener.setListener(this, this);
+
+        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+
     }
 
     @Override
@@ -450,5 +443,18 @@ public class EditUserInfoActivity extends BaseActivity {
      */
     public void restoreWork(String oldValue) {
         tvWork.setText(oldValue);
+    }
+
+    @Override
+    public void keyBoardShow(int height) {
+//        ViewGroup.LayoutParams layoutParams = namePopView.getLayoutParams();
+//        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        layoutParams.height = height + namePopView.getHeight();
+//        namePopView.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void keyBoardHide(int height) {
+        popupWindow.dismiss();
     }
 }

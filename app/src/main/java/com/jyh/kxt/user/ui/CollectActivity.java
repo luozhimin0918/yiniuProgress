@@ -33,7 +33,7 @@ import butterknife.OnClick;
  * 创建日期:2017/5/2.
  */
 
-public class CollectActivity extends BaseActivity implements DelNumListener{
+public class CollectActivity extends BaseActivity implements DelNumListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -50,6 +50,8 @@ public class CollectActivity extends BaseActivity implements DelNumListener{
     private CollectFlashFragment flashFragment;
     private DelNumListener numListener;
 
+    private boolean isVideoEdit, isNewsEdit, isFlashEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener{
 
         initFragments();
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
+        vpContent.addOnPageChangeListener(this);
         stlNavigationBar.setViewPager(vpContent, tabs);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 3));
     }
@@ -87,40 +90,54 @@ public class CollectActivity extends BaseActivity implements DelNumListener{
                 break;
             case R.id.iv_bar_function:
                 //编辑
-                boolean isShowEdit = false;
                 switch (vpContent.getCurrentItem()) {
                     case 0:
                         if (videoFragment.adapter != null && videoFragment.adapter.getData().size() > 0) {
-                            isShowEdit = true;
+                            isVideoEdit = !isVideoEdit;
                         } else {
-                            isShowEdit = false;
+                            isVideoEdit = false;
                         }
-                        videoFragment.edit(numListener);
+                        videoFragment.edit(isVideoEdit, numListener);
+                        if (isVideoEdit) {
+                            llDel.setVisibility(View.VISIBLE);
+                            ivBarFunction.setText("取消");
+                        } else {
+                            llDel.setVisibility(View.GONE);
+                            ivBarFunction.setText("编辑");
+                        }
                         break;
                     case 1:
                         if (newsFragment.adapter != null && newsFragment.adapter.getData().size() > 0) {
-                            isShowEdit = true;
+                            isNewsEdit = !isNewsEdit;
                         } else {
-                            isShowEdit = false;
+                            isNewsEdit = false;
                         }
-                        newsFragment.edit(numListener);
+                        newsFragment.edit(isNewsEdit, numListener);
+                        if (isNewsEdit) {
+                            llDel.setVisibility(View.VISIBLE);
+                            ivBarFunction.setText("取消");
+                        } else {
+                            llDel.setVisibility(View.GONE);
+                            ivBarFunction.setText("编辑");
+                        }
                         break;
                     case 2:
                         if (flashFragment.adapter != null && flashFragment.adapter.getData().size() > 0) {
-                            isShowEdit = true;
+                            isFlashEdit = !isFlashEdit;
                         } else {
-                            isShowEdit = false;
+                            isFlashEdit = false;
                         }
-                        flashFragment.edit(numListener);
+                        flashFragment.edit(isFlashEdit, numListener);
+                        if (isFlashEdit) {
+                            llDel.setVisibility(View.VISIBLE);
+                            ivBarFunction.setText("取消");
+                        } else {
+                            llDel.setVisibility(View.GONE);
+                            ivBarFunction.setText("编辑");
+                        }
                         break;
                 }
-                if (isShowEdit) {
-                    llDel.setVisibility(View.VISIBLE);
-                    ivBarFunction.setText("取消");
-                } else {
-                    llDel.setVisibility(View.GONE);
-                    ivBarFunction.setText("编辑");
-                }
+
                 break;
             case R.id.ll_selAll:
                 //全选
@@ -198,4 +215,46 @@ public class CollectActivity extends BaseActivity implements DelNumListener{
 
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        switch (position) {
+            case 0:
+                if (isVideoEdit) {
+                    llDel.setVisibility(View.VISIBLE);
+                    ivBarFunction.setText("取消");
+                } else {
+                    llDel.setVisibility(View.GONE);
+                    ivBarFunction.setText("编辑");
+                }
+                break;
+            case 1:
+                if (isNewsEdit) {
+                    llDel.setVisibility(View.VISIBLE);
+                    ivBarFunction.setText("取消");
+                } else {
+                    llDel.setVisibility(View.GONE);
+                    ivBarFunction.setText("编辑");
+                }
+                break;
+            case 2:
+                if (isFlashEdit) {
+                    llDel.setVisibility(View.VISIBLE);
+                    ivBarFunction.setText("取消");
+                } else {
+                    llDel.setVisibility(View.GONE);
+                    ivBarFunction.setText("编辑");
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

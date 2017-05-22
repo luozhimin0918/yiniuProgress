@@ -398,10 +398,10 @@ public class TimePickerView extends BasePickerView implements View.OnClickListen
             btnCancel.setText(TextUtils.isEmpty(Str_Cancel) ? context.getResources().getString(R.string.pickerview_cancel) : Str_Cancel);
             tvTitle.setText(TextUtils.isEmpty(Str_Title) ? "" : Str_Title);//默认为空
 
-            //设置文字颜色
-            btnSubmit.setTextColor(Color_Submit == 0 ? pickerview_timebtn_nor : Color_Submit);
-            btnCancel.setTextColor(Color_Cancel == 0 ? pickerview_timebtn_nor : Color_Cancel);
-            tvTitle.setTextColor(Color_Title == 0 ? pickerview_topbar_title : Color_Title);
+//            //设置文字颜色
+//            btnSubmit.setTextColor(Color_Submit == 0 ? pickerview_timebtn_nor : Color_Submit);
+//            btnCancel.setTextColor(Color_Cancel == 0 ? pickerview_timebtn_nor : Color_Cancel);
+//            tvTitle.setTextColor(Color_Title == 0 ? pickerview_topbar_title : Color_Title);
 
             //设置文字大小
             btnSubmit.setTextSize(Size_Submit_Cancel);

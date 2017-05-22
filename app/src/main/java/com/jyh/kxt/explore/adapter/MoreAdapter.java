@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.TopicJson;
 import com.library.base.http.VarConstant;
@@ -61,7 +62,8 @@ public class MoreAdapter extends BaseListAdapter {
                 } else {
                     viewHolder.ivTime.setSelected(false);
                 }
-                Glide.with(context).load(activity.getUrl()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + activity.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
+                        .ico_def_load).into
                         (viewHolder.ivPhoto);
             }
             break;
@@ -77,7 +79,7 @@ public class MoreAdapter extends BaseListAdapter {
                 TopicJson topic = JSON.parseObject(dataList.get(position).toString(), TopicJson.class);
                 viewHolder.tvTitle.setText(topic.getTitle());
                 viewHolder.tvContent.setText(topic.getBackground());
-                Glide.with(context).load(topic.getUrl()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
                         (viewHolder.ivPhoto);
             }
             break;

@@ -546,13 +546,13 @@ public class BannerLayout extends RelativeLayout {
         selectedDrawable = selectedLayerDrawable;
 
 
-        for (int i = 0; i < indicatorContainer.getChildCount(); i++) {
+        for (int i = 1; i < indicatorContainer.getChildCount(); i++) {
             ImageView childAt = (ImageView) indicatorContainer.getChildAt(i);
             childAt.setImageDrawable(unSelectedGradientDrawable);
         }
-        int currentItem = 0;
+        int currentItem = 1;
         if (pager.getChildCount() != 0) {
-            currentItem = pager.getCurrentItem() % pager.getChildCount();
+            currentItem = pager.getCurrentItem() % pager.getChildCount() + 1;
         }
         ((ImageView) indicatorContainer.getChildAt(currentItem)).setImageDrawable(selectedGradientDrawable);
     }

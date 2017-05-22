@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.TopicJson;
 
 import java.util.List;
@@ -43,7 +44,8 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         TopicJson topic = topics.get(position);
         holder.tvTitle.setText(topic.getTitle());
-        Glide.with(context).load(topic.getUrl()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(holder.ivBtn);
+        Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load)
+                .into(holder.ivBtn);
     }
 
     @Override

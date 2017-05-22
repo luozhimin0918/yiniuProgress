@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.library.util.DateUtils;
 
@@ -58,7 +59,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             e.printStackTrace();
             holder.tvTime.setText("00:00");
         }
-        Glide.with(mContext).load(activity.getUrl()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(holder.ivBtn);
+        Glide.with(mContext).load(HttpConstant.IMG_URL+activity.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(holder.ivBtn);
 
     }
 

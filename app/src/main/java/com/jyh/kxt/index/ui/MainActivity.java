@@ -14,6 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -29,6 +30,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
@@ -36,6 +38,7 @@ import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
@@ -50,6 +53,9 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.bean.EventBusClass;
+import com.library.util.BitmapUtils;
+import com.library.util.RegexValidateUtil;
+import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -91,7 +97,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
             themeBtn, loginBtn, quitBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +275,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_pl:
                 //评论
-                startActivity(new Intent(this,MyCommentActivity.class));
+                startActivity(new Intent(this, MyCommentActivity.class));
                 break;
             case R.id.ll_activity:
                 //活动
@@ -296,6 +301,18 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_theme:
                 //夜间模式
+
+                int theme = ThemeUtil.getAlertTheme(this);
+                switch (theme) {
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, false);
+                        break;
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, true);
+                        break;
+                }
                 break;
             case R.id.ll_setting:
                 //设置
@@ -334,6 +351,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case EventBusClass.EVENT_LOGOUT:
                 changeUserStatus(null);
                 break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserStatus((UserJson) eventBus.intentObj);
+                break;
         }
     }
 
@@ -351,20 +371,29 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
 
-            Glide.with(getContext())
-                    .load(userJson.getPicture())
-                    .asBitmap()
-                    .override(imgSize, imgSize)
+            String pictureStr = userJson.getPictureStr();
+            if (RegexValidateUtil.isEmpty(pictureStr)) {
+                Glide.with(getContext())
+                        .load(userJson.getPicture())
+                        .asBitmap()
+                        .override(imgSize, imgSize)
 
-                    .error(R.mipmap.icon_user_def_photo)
-                    .placeholder(R.mipmap.icon_user_def_photo)
+                        .error(R.mipmap.icon_user_def_photo)
+                        .placeholder(R.mipmap.icon_user_def_photo)
 
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            loginPhoto.setImageBitmap(resource);
-                        }
-                    });
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                loginPhoto.setImageBitmap(resource);
+                            }
+                        });
+            } else {
+                try {
+                    loginPhoto.setImageBitmap(BitmapUtils.StringToBitmap(pictureStr));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             loginName.setText(userJson.getNickname());
         } else {

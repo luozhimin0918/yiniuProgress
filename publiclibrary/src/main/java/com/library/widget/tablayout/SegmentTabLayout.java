@@ -472,6 +472,13 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         invalidate();
     }
 
+
+    public void setDarColor(Integer barColor) {
+        this.mBarColor = barColor;
+        invalidate();
+    }
+
+
     public void setDividerWidth(float dividerWidth) {
         this.mDividerWidth = dp2px(dividerWidth);
         invalidate();

@@ -1,12 +1,15 @@
 package com.jyh.kxt.user.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.DelNumListener;
@@ -26,11 +31,13 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.ConfigJson;
+import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -40,6 +47,7 @@ import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.pickerview.view.BasePickerView;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -70,12 +78,16 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     private static final int TYPE_RIGHT = 4;
     private static final int TYPE_TOP = 5;
     private static final int TYPE_BOTTOM = 6;
+    private int imgMaxHeight;
+    private ImageView ivPop;
+    private PopupUtil.Config config;
 
     private List flashJsons;
     private Context context;
 
     private boolean isEdit = false;
     private Set<String> delIds = new HashSet<>();
+    private PopupUtil popupUtil;
 
     public CollectFlashAdapter(List<FlashJson> flashJsons, Context context) {
 
@@ -88,6 +100,23 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         }
 
         this.flashJsons = flashJsons;
+
+        this.context = context;
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+        imgMaxHeight = screenDisplay.heightPixels / 3;
+
+        popupUtil = new PopupUtil((Activity) context);
+        View inflate = popupUtil.createPopupView(R.layout.pop_img);
+        ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+        config = new PopupUtil.Config();
+
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+
+
         inspiritDateInfo(this.flashJsons);
         this.context = context;
     }
@@ -167,7 +196,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         TimeViewHolder timeHolder = null;
         KXViewHolder kxHolder = null;
@@ -250,32 +279,32 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                         convertView.setTag(timeHolder);
                         break;
                     case TYPE_KX:
-                        convertView = inflater.inflate(R.layout.item_flash_news, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_news, parent, false);
                         kxHolder = new KXViewHolder(convertView);
                         convertView.setTag(kxHolder);
                         break;
                     case TYPE_RL:
-                        convertView = inflater.inflate(R.layout.item_flash_rl, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_rl, parent, false);
                         rlHolder = new RLViewHolder(convertView);
                         convertView.setTag(rlHolder);
                         break;
                     case TYPE_LEFT:
-                        convertView = inflater.inflate(R.layout.item_flash_news_left, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_news_left, parent, false);
                         leftHolder = new NEWViewHolder(convertView);
                         convertView.setTag(leftHolder);
                         break;
                     case TYPE_RIGHT:
-                        convertView = inflater.inflate(R.layout.item_flash_news_right, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_news_right, parent, false);
                         rightHolder = new NEWViewHolder(convertView);
                         convertView.setTag(rightHolder);
                         break;
                     case TYPE_TOP:
-                        convertView = inflater.inflate(R.layout.item_flash_news_top, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_news_top, parent, false);
                         topHolder = new NEWViewHolder(convertView);
                         convertView.setTag(topHolder);
                         break;
                     case TYPE_BOTTOM:
-                        convertView = inflater.inflate(R.layout.item_flash_news_bottom, parent, false);
+                        convertView = inflater.inflate(R.layout.item_collect_flash_news_bottom, parent, false);
                         bottomHolder = new NEWViewHolder(convertView);
                         convertView.setTag(bottomHolder);
                         break;
@@ -286,6 +315,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         switch (type) {
             case TYPE_TIME:
                 timeHolder.tvTime.setText(flashJsons.get(position).toString());
+                timeHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
                 break;
             case TYPE_KX:
                 FlashJson flash = (FlashJson) flashJsons.get(position);
@@ -299,15 +329,82 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 kxHolder.tvTime.setText(time);
                 kxHolder.tvContent.setText(getString(kx.getTitle()));
                 kxHolder.tvMore.setVisibility(View.VISIBLE);
-                kxHolder.ivMore.setVisibility(View.VISIBLE);
+
+                final int imgMaxWidth = kxHolder.llContent.getWidth();
+
+                if (RegexValidateUtil.isEmpty(kx.getImage())) {
+                    kxHolder.imageView.setVisibility(View.GONE);
+                } else {
+                    kxHolder.imageView.setVisibility(View.VISIBLE);
+                    //点击查看大图
+                    kxHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Glide.with(context)
+                                    .load(kx.getImage())
+                                    .asBitmap()
+                                    .error(R.mipmap.ico_def_load)
+                                    .placeholder(R.mipmap.ico_def_load)
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                            if (popupUtil.isShowing())
+                                                popupUtil.dismiss();
+
+                                            ivPop.setImageBitmap(resource);
+
+                                            int width = resource.getWidth();
+                                            int height = resource.getHeight();
+                                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+
+                                            int widthPixels = screenDisplay.widthPixels;
+                                            width = width > widthPixels ? widthPixels : width;
+                                            int heightPixels = screenDisplay.heightPixels;
+                                            height = height > heightPixels ? heightPixels : height;
+                                            config.width = width;
+                                            config.height = height;
+                                            popupUtil.setConfig(config);
+                                            popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
+                                        }
+                                    });
+                        }
+                    });
+
+                    final KXViewHolder finalKxHolder = kxHolder;
+                    Glide.with(context)
+                            .load(kx.getImage())
+                            .asBitmap()
+                            .error(R.mipmap.ico_def_load)
+                            .placeholder(R.mipmap.ico_def_load)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();//px
+                                    int height = resource.getHeight();
+                                    ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+                                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                    //等比例缩放
+                                    finalKxHolder.imageView.setAdjustViewBounds(true);
+                                    finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                    if (width > imgMaxWidth) {
+                                        layoutParams.width = imgMaxWidth;
+                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+                                        finalKxHolder.imageView.setImageBitmap(resource);
+                                    }
+                                    if (height > imgMaxHeight) {
+                                        layoutParams.height = imgMaxHeight;
+                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+                                        finalKxHolder.imageView.setImageBitmap(resource);
+                                    }
+                                }
+                            });
+                }
+
+                setKxTheme(kxHolder, kx);
+
                 setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
                         null, TYPE_KX, kxHolder.flDel, kxHolder.ivDel);
-
-                if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
-                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
 
                 setShowMoreBtn(kxHolder);
 
@@ -318,7 +415,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_rl = (FlashJson) flashJsons.get(position);
                 Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
 
-                boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
+//                boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
 
                 Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
                         .ivFlag);
@@ -336,6 +433,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                         .getReality()));
                 rlHolder.tvMore.setVisibility(View.GONE);
                 rlHolder.ivMore.setVisibility(View.GONE);
+
+                setRlTheme(rlHolder);
 
                 /**
                  * 前值 后值 等
@@ -363,23 +462,23 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setOnclick(rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
                         null, TYPE_RL, rlHolder.flDel, rlHolder.ivDel);
-                /**
-                 * 重要性判断
-                 */
-                if (onlyShowHigh) {
-                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                    } else {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                        return null;
-                    }
-                } else {
-                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                    } else {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                    }
-                }
+//                /**
+//                 * 重要性判断
+//                 */
+//                if (onlyShowHigh) {
+//                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+//                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+//                    } else {
+//                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+//                        return null;
+//                    }
+//                } else {
+//                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+//                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+//                    } else {
+//                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+//                    }
+//                }
 
                 rlHolder.ivCollect.setSelected(flash_rl.isColloct());
                 break;
@@ -400,11 +499,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 leftHolder.tvMore.setVisibility(View.GONE);
                 leftHolder.ivMore.setVisibility(View.GONE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(left.getImportance())) {
-                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(leftHolder, left);
 
                 setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
@@ -431,11 +526,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 rightHolder.tvMore.setVisibility(View.GONE);
                 rightHolder.ivMore.setVisibility(View.GONE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(right.getImportance())) {
-                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(rightHolder, right);
 
                 setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
@@ -462,11 +553,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 topHolder.tvMore.setVisibility(View.VISIBLE);
                 topHolder.ivMore.setVisibility(View.VISIBLE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(top.getImportance())) {
-                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(topHolder, top);
 
                 setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP, topHolder.flDel, topHolder.ivDel);
@@ -497,11 +584,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 bottomHolder.tvMore.setVisibility(View.VISIBLE);
                 bottomHolder.ivMore.setVisibility(View.VISIBLE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(bottom.getImportance())) {
-                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(bottomHolder, bottom);
 
                 setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel, bottomHolder
@@ -513,6 +596,46 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         }
 
         return convertView;
+    }
+
+    private void setNewsTheme(NEWViewHolder holder, Flash_NEWS news) {
+        holder.ivDel.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_collect_item));
+        holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        holder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        holder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+
+        if (VarConstant.IMPORTANCE_HIGH.equals(news.getImportance())) {
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+        } else {
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+        }
+    }
+
+    private void setRlTheme(RLViewHolder rlHolder) {
+        rlHolder.ivDel.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_collect_item));
+        rlHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        rlHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        rlHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        rlHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        rlHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        rlHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+    }
+
+    private void setKxTheme(KXViewHolder kxHolder, Flash_KX kx) {
+        kxHolder.ivDel.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_collect_item));
+        kxHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        kxHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        kxHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        kxHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        kxHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
+            kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+        } else {
+            kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+        }
     }
 
     /**
@@ -1076,6 +1199,10 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
      * 普通快讯
      */
     class KXViewHolder extends BaseViewHolder {
+
+        @BindView(R.id.iv_flash) ImageView imageView;
+        @BindView(R.id.ll_content) LinearLayout llContent;
+
         public KXViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

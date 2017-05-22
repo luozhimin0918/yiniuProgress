@@ -75,7 +75,7 @@ public class MarketUtil {
             RadianDrawable2 radianDrawable = new RadianDrawable2(tvLabel.getContext(), colorBg, 3);
 
             tvLabel.setBackground(radianDrawable);
-            tvLabel.setTextColor(Color.WHITE);
+            tvLabel.setTextColor(ContextCompat.getColor(tvLabel.getContext(),R.color.white));
         }
         if (bgGlint == 11 || bgGlint == 12) {
             tvLabel.setBackground(null);

@@ -8,6 +8,7 @@
     <color name="actionBar_textColor2">#3BA9F3</color>
 
     <color name="white">#ffffff</color>
+    <color name="translucent_white">#ccffffff</color>
     <color name="blue">#2A87F0</color>
 
     <!-- 半透明 -->
@@ -55,6 +56,7 @@
     <color name="font_color13">#99ffffff</color>
     <color name="font_color14">#CCD4CF65</color>
     <color name="font_color15">#C2BCB8</color>
+    <color name="font_color16">#2E3239</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
     <color name="font_color61">#F9FAFB</color>
@@ -97,4 +99,8 @@
 
     <color name="check_box_color3">#f1f2f6</color>
     <color name="check_box_color4">#d9e8ff</color>
+
+    <!-- 搜索 -->
+    <color name="search_high_color">#EA492A</color>
+    <color name="search_default_color">#2E3239</color>
 </resources>

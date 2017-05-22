@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 
 /**
  * 项目名:Kxt
- * 类描述:
+ * 类描述:要闻收藏删除Adapter
  * 创建人:苟蒙蒙
  * 创建日期:2017/5/11.
  */
@@ -66,17 +66,12 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         }
 
         final NewsJson news = dataList.get(position);
+        setTheme(holder, news);
         holder.ivDel.setSelected(news.isSel());
 
         Glide.with(context).load(HttpConstant.IMG_URL + news.getPicture()).placeholder(R.mipmap.ico_def_load).error(R.mipmap.ico_def_load)
                 .into
                         (holder.ivPhoto);
-
-        if (BrowerHistoryUtils.isBrowered(context, news)) {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
-        } else {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
-        }
 
         holder.tvTitle.setText(news.getTitle());
         String author = news.getAuthor();
@@ -118,6 +113,20 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         });
 
         return convertView;
+    }
+
+    private void setTheme(ViewHolder holder, NewsJson news) {
+        holder.ivDel.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.sel_collect_item));
+        holder.tvAuthor.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+
+        if (BrowerHistoryUtils.isBrowered(context, news)) {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        } else {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        }
+
     }
 
     public void setData(List<NewsJson> data) {

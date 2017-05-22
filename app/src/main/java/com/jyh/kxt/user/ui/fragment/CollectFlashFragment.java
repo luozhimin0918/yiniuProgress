@@ -65,11 +65,12 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
     /**
      * 编辑
      *
+     * @param isFlashEdit
      * @param observerData
      */
-    public void edit(DelNumListener observerData) {
+    public void edit(boolean isFlashEdit, DelNumListener observerData) {
         try {
-            adapter.setEdit(true);
+            adapter.setEdit(isFlashEdit);
             adapter.setObserverData(observerData);
         } catch (Exception e) {
             e.printStackTrace();

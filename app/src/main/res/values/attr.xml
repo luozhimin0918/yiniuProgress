@@ -117,4 +117,14 @@
         <attr name="unSelectedIndicatorColor"/>
     </declare-styleable>
 
+    <declare-styleable name="SkinnableSlidingTabLayoutView">
+        <attr name="tl_indicator_color"/>
+        <!-- underline -->
+        <attr name="tl_underline_color"/>
+        <!-- divider -->
+        <attr name="tl_divider_color"/>
+        <!-- title -->
+        <attr name="tl_textSelectColor"/>
+        <attr name="tl_textUnselectColor"/>
+    </declare-styleable>
 </resources>

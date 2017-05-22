@@ -36,6 +36,7 @@ import com.jyh.kxt.base.widget.night.heple.SkinnableToggleButton;
 import com.jyh.kxt.base.widget.night.heple.SkinnableToolbar;
 import com.jyh.kxt.base.widget.night.heple.SkinnableView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableViewGroup;
+import com.jyh.kxt.base.widget.night.heple.SkinnableWheelView;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -133,6 +134,9 @@ public class SkinnableViewInflater {
                 break;
             case "com.library.widget.viewpager.BannerLayout":
                 view = new SkinnableBannerLayout(context, attrs);
+                break;
+            case "com.library.widget.pickerview.lib.WheelView":
+                view = new SkinnableWheelView(context, attrs);
                 break;
             case "com.jyh.kxt.base.custom.RoundImageView":
                 view = new SkinnableRoundImageView(context, attrs);

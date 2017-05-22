@@ -14,6 +14,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
@@ -33,6 +34,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     private Context mContext;
     private boolean isShowTitle = false;
     private String searchKey = "";
+    private boolean isSplice = true;//是否需要拼接图片地址
 
     public boolean isShowTitle() {
         return isShowTitle;
@@ -70,7 +72,15 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         final NewsJson news = dataList.get(position);
 
-        Glide.with(mContext).load(HttpConstant.IMG_URL + news.getPicture())
+        String picture;
+        String picture1 = news.getPicture();
+        if(isSplice){
+            picture=HttpConstant.IMG_URL + picture1;
+        }else{
+            picture= picture1;
+        }
+
+        Glide.with(mContext).load(picture)
                 .placeholder(R.mipmap.ico_def_load)
                 .override(100, 100)
                 .error(R.mipmap.ico_def_load)
@@ -112,9 +122,23 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 String before = content.substring(0, searchKeyIndex);
                 String end = content.substring(searchKeyIndex + searchKey.length());
 
-                String defalutColor = "#2E3239";
-                String keyColor = "#EA492A";
-                String browerColor = "#A1ABB2";
+                String defalutColor = "";
+                String keyColor = "";
+                String browerColor = "";
+
+                switch (ThemeUtil.getAlertTheme(mContext)) {
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                        defalutColor = "#909090";
+                        keyColor = "#136AA4";
+                        browerColor="#4D4D4D";
+                        break;
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                        defalutColor = "#2E3239";
+                        keyColor = "#EA492A";
+                        browerColor="#A1ABB2";
+                        break;
+                }
+
                 String textColor;
                 if (browered) {
                     textColor = browerColor;
@@ -151,6 +175,11 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+        notifyDataSetChanged();
+    }
+
+    public void setIsSplice(boolean isSplice) {
+        this.isSplice = isSplice;
         notifyDataSetChanged();
     }
 

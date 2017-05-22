@@ -1,6 +1,8 @@
 package com.jyh.kxt.index.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +83,7 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
         switch (itemViewType) {
             case TYPE_TIME:
                 timeHolder.tvTime.setText(dataList.get(position).toString());
+                setTimeTheme(timeHolder);
                 break;
             case TYPE_NEWS:
                 NewsJson newsBean = (NewsJson) dataList.get(position);
@@ -106,10 +110,28 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
                     e.printStackTrace();
                 }
                 newsHolder.tvTime.setText(time);
+
+                setContentTheme(newsHolder);
                 break;
         }
 
         return convertView;
+    }
+
+    private void setContentTheme(NewsHolder newsHolder) {
+        newsHolder.tv1.setTextColor(ContextCompat.getColor(context, R.color.font_color60));
+        int paddingVal = SystemUtil.dp2px(context, 2);
+        newsHolder.tv1.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(newsHolder.tv1, R.mipmap.icon_video_line, 0, 0, 0);
+
+        newsHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        newsHolder.tvAuthor.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        newsHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+    }
+
+    private void setTimeTheme(TimeHolder timeHolder) {
+        timeHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        timeHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color3));
     }
 
     @Override
@@ -138,9 +160,9 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
     }
 
     public void setData(List<NewsJson> data) {
-        if (data == null){
+        if (data == null) {
             dataList.clear();
-        }else{
+        } else {
             dataList.clear();
             dataList.addAll(data);
             inspiritDateInfo(dataList);
@@ -255,6 +277,7 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
 
     static class TimeHolder {
         @BindView(R.id.tv_time) TextView tvTime;
+        @BindView(R.id.v_line) View vLine;
 
         TimeHolder(View view) {
             ButterKnife.bind(this, view);

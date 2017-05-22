@@ -2,6 +2,8 @@ package com.jyh.kxt.user.adapter;
 
 import android.content.Context;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +64,8 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        changeTheme(viewHolder);
+
         if (isEdit) {
             viewHolder.flDel.setVisibility(View.VISIBLE);
         } else {
@@ -113,6 +117,24 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         }
 
         return convertView;
+    }
+
+    private void changeTheme(ViewHolder holder) {
+        holder.ivDel.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_collect_item));
+        holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color9));
+        holder.tvPlayCount.setTextColor(ContextCompat.getColor(context, R.color.font_color9));
+        holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+
+        holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color9));
+        int paddingVal = SystemUtil.dp2px(context, 4);
+        holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_explore_time, 0, 0, 0);
+
+        holder.tvPlayCount.setTextColor(ContextCompat.getColor(context, R.color.font_color9));
+        paddingVal = SystemUtil.dp2px(context, 4);
+        holder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap.icon_collect_play_smail, 0, 0, 0);
+
     }
 
     public void setData(List<VideoListJson> videos) {

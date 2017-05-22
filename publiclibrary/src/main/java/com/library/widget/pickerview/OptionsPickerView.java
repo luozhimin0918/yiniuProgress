@@ -397,11 +397,11 @@ public class OptionsPickerView<T> extends BasePickerView implements View.OnClick
             btnCancel.setText(TextUtils.isEmpty(Str_Cancel) ? context.getResources().getString(R.string.pickerview_cancel) : Str_Cancel);
             tvTitle.setText(TextUtils.isEmpty(Str_Title) ? "" : Str_Title);//默认为空
 
-            //设置color
-            btnSubmit.setTextColor(Color_Submit == 0 ? pickerview_timebtn_nor : Color_Submit);
-            btnCancel.setTextColor(Color_Cancel == 0 ? pickerview_timebtn_nor : Color_Cancel);
-            tvTitle.setTextColor(Color_Title == 0 ? pickerview_topbar_title : Color_Title);
-            rv_top_bar.setBackgroundColor(Color_Background_Title == 0 ? pickerview_bg_topbar : Color_Background_Title);
+//            //设置color
+//            btnSubmit.setTextColor(Color_Submit == 0 ? pickerview_timebtn_nor : Color_Submit);
+//            btnCancel.setTextColor(Color_Cancel == 0 ? pickerview_timebtn_nor : Color_Cancel);
+//            tvTitle.setTextColor(Color_Title == 0 ? pickerview_topbar_title : Color_Title);
+//            rv_top_bar.setBackgroundColor(Color_Background_Title == 0 ? pickerview_bg_topbar : Color_Background_Title);
 
             //设置文字大小
             btnSubmit.setTextSize(Size_Submit_Cancel);

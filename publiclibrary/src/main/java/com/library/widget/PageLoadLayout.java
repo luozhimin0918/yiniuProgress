@@ -2,6 +2,7 @@ package com.library.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -75,7 +76,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         } else {
             tvDesc.setText(desc);
         }
-        llLoadView.setBackgroundColor(bgColor.bgColor);
+        llLoadView.setBackgroundColor(ContextCompat.getColor(context, R.color.theme1));
 
         updateView();
     }

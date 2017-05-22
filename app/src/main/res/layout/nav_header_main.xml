@@ -5,6 +5,7 @@
     android:id="@+id/nav_header_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -13,7 +14,7 @@
         android:layout_height="@dimen/drawer_image_height"
         android:layout_marginBottom="@dimen/drawer_head_bottom"
         android:background="@mipmap/icon_user_login_bg_login"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.jyh.kxt.base.custom.RoundImageView
             android:id="@+id/riv_avatar"
@@ -38,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_image_height"
         android:layout_marginBottom="@dimen/drawer_head_bottom"
-        android:background="@mipmap/icon_user_login_bg_unlogin">
+        android:background="@mipmap/icon_user_login_bg_unlogin"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,7 +113,7 @@
             android:gravity="center_vertical"
             android:hint="搜索文章、视频"
             android:paddingLeft="@dimen/newsContentPadding3"
-            android:textColorHint="@color/font_color6"
+            android:textColor="@color/font_color6"
             android:textSize="@dimen/content_font_size"/>
     </FrameLayout>
 
@@ -126,7 +128,7 @@
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
             android:padding="@dimen/drawer_imgPadding"
-            android:src="@mipmap/icon_drawer_about"/>
+            android:src="@mipmap/icon_drawer_collect"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -346,6 +348,7 @@
                 >
 
                 <ImageView
+                    android:id="@+id/iv_theme"
                     android:layout_width="@dimen/drawer_item_height"
                     android:layout_height="@dimen/drawer_item_height"
                     android:padding="@dimen/drawer_imgPadding"

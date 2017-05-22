@@ -34,6 +34,7 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.user.adapter.CollectFlashAdapter;
 import com.library.base.http.VarConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.utils.PingYinUtil;
@@ -341,7 +342,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 kxHolder.tvTime.setText(time);
                 kxHolder.tvContent.setText(getString(kx.getTitle()));
                 kxHolder.tvMore.setVisibility(View.VISIBLE);
-                kxHolder.ivMore.setVisibility(View.VISIBLE);
 
                 imgMaxWidth = kxHolder.llContent.getWidth();
 
@@ -417,11 +417,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
                         null, TYPE_KX);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
-                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setKxTheme(kxHolder, kx);
 
                 setShowMoreBtn(kxHolder);
 
@@ -450,6 +446,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         .getReality()));
                 rlHolder.tvMore.setVisibility(View.GONE);
                 rlHolder.ivMore.setVisibility(View.GONE);
+
+                setRlTheme(rlHolder);
 
                 /**
                  * 前值 后值 等
@@ -517,11 +515,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 leftHolder.tvMore.setVisibility(View.GONE);
                 leftHolder.ivMore.setVisibility(View.GONE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(left.getImportance())) {
-                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    leftHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(leftHolder, left);
 
                 setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
@@ -548,11 +542,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 rightHolder.tvMore.setVisibility(View.GONE);
                 rightHolder.ivMore.setVisibility(View.GONE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(right.getImportance())) {
-                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    rightHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(rightHolder, right);
 
                 setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
@@ -579,11 +569,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 topHolder.tvMore.setVisibility(View.VISIBLE);
                 topHolder.ivMore.setVisibility(View.VISIBLE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(top.getImportance())) {
-                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    topHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(topHolder, top);
 
                 setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
@@ -614,11 +600,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 bottomHolder.tvMore.setVisibility(View.VISIBLE);
                 bottomHolder.ivMore.setVisibility(View.VISIBLE);
 
-                if (VarConstant.IMPORTANCE_HIGH.equals(bottom.getImportance())) {
-                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                } else {
-                    bottomHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                }
+                setNewsTheme(bottomHolder, bottom);
 
                 setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
@@ -1157,6 +1139,47 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     public boolean isItemViewTypePinned(int viewType) {
         return viewType == 0;
     }
+
+    private void setNewsTheme(NEWViewHolder holder, Flash_NEWS news) {
+        holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        holder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        holder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        holder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        holder.ivCollect.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_flash_item_collect));
+
+        if (VarConstant.IMPORTANCE_HIGH.equals(news.getImportance())) {
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+        } else {
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+        }
+    }
+
+    private void setRlTheme(RLViewHolder rlHolder) {
+        rlHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        rlHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        rlHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        rlHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        rlHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        rlHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        rlHolder.ivCollect.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_flash_item_collect));
+    }
+
+    private void setKxTheme(KXViewHolder kxHolder, Flash_KX kx) {
+        kxHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        kxHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        kxHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
+        kxHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
+        kxHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
+            kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+        } else {
+            kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+        }
+        kxHolder.ivCollect.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_flash_item_collect));
+    }
+
 
     private String getString(String str) {
         if (str == null) return null;

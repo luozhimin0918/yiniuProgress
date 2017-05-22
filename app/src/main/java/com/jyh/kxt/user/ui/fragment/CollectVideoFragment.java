@@ -135,11 +135,12 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     /**
      * 编辑
      *
+     * @param isVideoEdit
      * @param observerData
      */
-    public void edit(DelNumListener observerData) {
+    public void edit(boolean isVideoEdit, DelNumListener observerData) {
         try {
-            adapter.setEdit(true);
+            adapter.setEdit(isVideoEdit);
             adapter.setSelListener(observerData);
         } catch (Exception e) {
             e.printStackTrace();

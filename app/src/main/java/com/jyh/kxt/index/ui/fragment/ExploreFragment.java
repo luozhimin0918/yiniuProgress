@@ -180,7 +180,17 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
                 carouselHeight);
         recyclerView.setLayoutParams(params);
 
-        GridLayoutManager manager = new GridLayoutManager(mContext, 4);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 4) {
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(GridLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(manager);
@@ -209,7 +219,17 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         RecyclerView rvContent = (RecyclerView) topicView.findViewById(R.id.rv_content);
 
-        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        LinearLayoutManager manager = new LinearLayoutManager(mContext){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvContent.setLayoutManager(manager);
 
@@ -257,7 +277,17 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         RecyclerView rvContent = (RecyclerView) activityView.findViewById(R.id.rv_content);
 
-        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        LinearLayoutManager manager = new LinearLayoutManager(mContext){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rvContent.setLayoutManager(manager);
@@ -324,9 +354,13 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         if (homeHeadView != null)
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
         plvContent.getRefreshableView().addHeaderView(homeHeadView);
-        newsAdapter = null;
-        newsAdapter = new NewsAdapter(getContext(), articles);
-        plvContent.setAdapter(newsAdapter);
+        if (newsAdapter == null) {
+            newsAdapter = new NewsAdapter(getContext(), articles);
+            plvContent.setAdapter(newsAdapter);
+        } else {
+            newsAdapter.setData(articles);
+        }
+        newsAdapter.setIsSplice(false);
         if (plvContent.isRefreshing()) {
             plvContent.onRefreshComplete();
         }
@@ -439,6 +473,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
                 break;
             case EventBusClass.EVENT_LOGOUT:
                 changeUserImg(null);
+                break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserImg((UserJson) eventBus.intentObj);
                 break;
         }
     }

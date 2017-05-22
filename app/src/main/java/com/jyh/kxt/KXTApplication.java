@@ -10,6 +10,7 @@ import android.support.multidex.MultiDex;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.jyh.kxt.base.utils.CrashHandler;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.push.KXTPushIntentService;
@@ -64,6 +65,9 @@ public class KXTApplication extends Application {
                 UmLog.i(TAG, "register failed: " + s + " " +s1);
             }
         });
+
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(this);
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
     }

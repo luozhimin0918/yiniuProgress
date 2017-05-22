@@ -1,19 +1,23 @@
 package com.jyh.kxt.base;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.VectorEnabledTintResources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -22,9 +26,12 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.base.widget.night.heple.Skinnable;
 import com.jyh.kxt.base.widget.night.skinnable.SkinnableViewInflater;
 import com.library.base.LibActivity;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 
@@ -41,11 +48,18 @@ public class BaseActivity extends LibActivity implements IBaseView {
 
     private PopupWindow waitPopup;
     private SkinnableViewInflater mSkinnableViewInflater;
+    private SkinnableCallback mSkinnableCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtil.addActivityToThemeCache(this);
+
+        Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
+        if (isNight)
+            setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else
+            setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     @Override
@@ -64,6 +78,52 @@ public class BaseActivity extends LibActivity implements IBaseView {
                 true, /* Read read app:theme as a fallback at all times for legacy reasons */
                 VectorEnabledTintResources.shouldBeUsed() /* Only tint wrap the context if enabled */
         );
+    }
+
+    public void setDayNightMode(@AppCompatDelegate.NightMode int nightMode) {
+        final boolean isPost21 = Build.VERSION.SDK_INT >= 21;
+
+        if (mSkinnableCallback != null) {
+            mSkinnableCallback.beforeApplyDayNight();
+        }
+        getDelegate().setLocalNightMode(nightMode);
+
+        if (isPost21) {
+            applyDayNightForStatusBar();
+        }
+
+        View decorView = getWindow().getDecorView();
+        applyDayNightForView(decorView);
+
+        if (mSkinnableCallback != null) {
+            mSkinnableCallback.onApplyDayNight();
+        }
+    }
+
+    private void applyDayNightForView(View view) {
+        if (view instanceof Skinnable && !"filter".equals(view.getTag())) {
+            Skinnable skinnable = (Skinnable) view;
+            if (skinnable.isSkinnable()) {
+                skinnable.applyDayNight();
+            }
+        }
+        if (view instanceof ViewGroup && !"filter".equals(view.getTag())) {
+            ViewGroup parent = (ViewGroup) view;
+            int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                applyDayNightForView(parent.getChildAt(i));
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void applyDayNightForStatusBar() {
+        TypedArray a = getTheme().obtainStyledAttributes(0, new int[]{
+                android.R.attr.statusBarColor
+        });
+        int color = a.getColor(0, 0);
+        getWindow().setStatusBarColor(color);
+        a.recycle();
     }
 
     @Override
@@ -197,5 +257,11 @@ public class BaseActivity extends LibActivity implements IBaseView {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public interface SkinnableCallback {
+        void beforeApplyDayNight();
+
+        void onApplyDayNight();
     }
 }

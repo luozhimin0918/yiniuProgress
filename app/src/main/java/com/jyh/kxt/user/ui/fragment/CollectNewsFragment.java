@@ -134,11 +134,12 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
     /**
      * 编辑
      *
+     * @param isNewsEdit
      * @param observerData
      */
-    public void edit(DelNumListener observerData) {
+    public void edit(boolean isNewsEdit, DelNumListener observerData) {
         try {
-            adapter.setEdit(true);
+            adapter.setEdit(isNewsEdit);
             adapter.setSelListener(observerData);
         } catch (Exception e) {
             e.printStackTrace();

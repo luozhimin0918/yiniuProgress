@@ -481,6 +481,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             case EventBusClass.EVENT_LOGOUT:
                 changeUserImg(null);
                 break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserImg((UserJson) eventBus.intentObj);
+                break;
         }
     }
 }

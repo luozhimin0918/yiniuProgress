@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -98,7 +99,7 @@ public class SearchEditText extends RelativeLayout {
      */
     private void drawSearchView() {
         ImageView searchView = new ImageView(context);
-        searchView.setImageResource(R.mipmap.icon_search_edt_search);
+        searchView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search));
         LayoutParams searchParams = new LayoutParams((int) searchImgSize, (int) searchImgSize);
         searchParams.leftMargin = (int) marginLeft;
         searchParams.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -132,7 +133,7 @@ public class SearchEditText extends RelativeLayout {
      */
     private void drawClearView() {
         clearView = new ImageView(context);
-        clearView.setImageResource(R.mipmap.icon_search_edt_clear);
+        clearView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_clear));
         LayoutParams clearParams = new LayoutParams((int) clearImgSize, (int) clearImgSize);
         clearParams.rightMargin = (int) marginRight;
         clearParams.addRule(RelativeLayout.CENTER_VERTICAL);

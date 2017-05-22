@@ -11,6 +11,7 @@
         android:layout_height="@dimen/flash_bottom_height"
         android:layout_centerVertical="true"
         android:text="展开"
+        android:textColor="@color/font_color6"
         android:gravity="center"
         android:textSize="@dimen/content_font_size"/>
 
@@ -44,7 +45,7 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/iv_collect"
+        android:layout_below="@id/iv_share"
         android:layout_marginTop="@dimen/flash_bottom_padding"
         android:background="@color/line_color2"
         />

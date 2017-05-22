@@ -166,6 +166,9 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
             case EventBusClass.EVENT_LOGOUT:
                 changeUserImg(null);
                 break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserImg((UserJson) eventBus.intentObj);
+                break;
         }
     }
 }

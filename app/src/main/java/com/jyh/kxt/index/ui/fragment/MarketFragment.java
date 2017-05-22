@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         BaseFragment currentFragment;
         if (position == 0) {
             tvRightIcon1.setText("");
-            tvRightIcon1.setBackgroundResource(R.mipmap.icon_search);
+            tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(),R.mipmap.icon_search));
             currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
             ((MarketVPFragment)marketVPFragment).sendSocketParams();
         } else {
@@ -165,6 +166,9 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
                 break;
             case EventBusClass.EVENT_LOGOUT:
                 changeUserImg(null);
+                break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserImg((UserJson) eventBus.intentObj);
                 break;
         }
     }

@@ -22,7 +22,6 @@
 
         android:layout_width="match_parent"
         android:layout_height="@dimen/newsItemHeight"
-        android:background="@color/white"
         android:paddingBottom="@dimen/newsItemPaddingVertical"
         android:paddingLeft="@dimen/newsItemPaddingLeft"
         android:paddingRight="@dimen/newsItemPaddingRight"

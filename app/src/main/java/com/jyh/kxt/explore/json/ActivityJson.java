@@ -29,18 +29,22 @@ public class ActivityJson {
     private String status;
     private String title;
     private String url;
+    private String picture;
+    private String type;
 
 
     public ActivityJson() {
     }
 
-    public ActivityJson(String id, String remark, String start_time, String status, String title, String url) {
+    public ActivityJson(String id, String remark, String start_time, String status, String title, String url, String picture, String type) {
         this.id = id;
         this.remark = remark;
         this.start_time = start_time;
         this.status = status;
         this.title = title;
         this.url = url;
+        this.picture = picture;
+        this.type = type;
     }
 
     public String getRemark() {
@@ -82,5 +86,22 @@ public class ActivityJson {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getType() {
+
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

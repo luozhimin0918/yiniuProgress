@@ -18,7 +18,7 @@
         android:id="@+id/optionspicker"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@color/theme1"
         android:orientation="horizontal">
 
         <com.library.widget.pickerview.lib.WheelView

@@ -3,7 +3,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/attention_author_item_height"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/contentPadding"
+                android:paddingRight="@dimen/contentPadding">
 
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/iv_photo"
@@ -27,8 +29,8 @@
         android:layout_marginRight="@dimen/attention_padding1"
         android:layout_toLeftOf="@id/iv_attention"
         android:layout_toRightOf="@id/iv_photo"
-        android:orientation="vertical"
         android:gravity="center_vertical"
+        android:orientation="vertical"
         >
 
         <TextView

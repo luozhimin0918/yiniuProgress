@@ -2,6 +2,8 @@ package com.jyh.kxt.av.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.util.Iterator;
@@ -60,11 +63,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
             holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
             holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
+            holder.ivPlay = (ImageView) convertView.findViewById(R.id.iv_playBtn);
+            holder.vLine = convertView.findViewById(R.id.v_line);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        setTheme(holder);
 
         final VideoListJson video = list.get(position);
         boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
@@ -143,6 +149,30 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         return convertView;
     }
 
+    private void setTheme(ViewHolder holder) {
+        holder.ivPlay.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_video_play_big));
+        holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
+        holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+        int paddingVal = SystemUtil.dp2px(mContext, 6);
+        holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_time, 0, 0, 0);
+
+        holder.tvCommentCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+        paddingVal = SystemUtil.dp2px(mContext, 6);
+        holder.tvCommentCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvCommentCount, R.mipmap.icon_video_comment, 0, 0, 0);
+
+        holder.tvPlayCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+        paddingVal = SystemUtil.dp2px(mContext, 6);
+        holder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap.icon_video_play_small, 0, 0, 0);
+
+        holder.ivMore.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_video_more));
+
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color2));
+
+    }
+
     public void setData(List<VideoListJson> videoListJsons) {
         list.clear();
         list.addAll(videoListJsons);
@@ -160,8 +190,9 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     }
 
     class ViewHolder {
-        public ImageView iv;
+        public ImageView iv, ivPlay;
         public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount;
         public ImageView ivMore;
+        public View vLine;
     }
 }

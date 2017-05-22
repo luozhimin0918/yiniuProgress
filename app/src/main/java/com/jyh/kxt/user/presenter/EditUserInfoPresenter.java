@@ -1,17 +1,25 @@
 package com.jyh.kxt.user.presenter;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,8 +32,11 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.json.UserJson;
@@ -34,6 +45,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.BitmapUtils;
 import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
@@ -97,7 +109,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     private TextView openTake;
     private TextView openDiffer;
     private TextView cancelWindow;
-    private PopupWindow popupWindow;
+    private PopupUtil popupWindow;
     private PhotoTailorUtil photoTailorUtil;
 
     public EditUserInfoPresenter(IBaseView iBaseView) {
@@ -154,6 +166,11 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
+                    .setTitleBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_center))
+                    .setTextColorOut(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_out))
+                    .setBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_divider))
                     .setSelectOptions(provinceSel, citySel)
                     .build();
             cityPicker.setPicker(options1Items, options2Items);
@@ -188,6 +205,11 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     .setSelectOptions(sexInt)
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
+                    .setTitleBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_center))
+                    .setTextColorOut(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_out))
+                    .setBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_divider))
                     .setDecorView(activity.fl_picker)
                     .build();
 
@@ -225,6 +247,11 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     .setDividerColor(ContextCompat.getColor(mContext, R.color.line_color3))
                     .setTextColorCenter(ContextCompat.getColor(mContext, R.color.font_color5)) //设置选中项文字颜色
                     .setSelectOptions(selPosition)
+                    .setTitleBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_center))
+                    .setTextColorOut(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_out))
+                    .setBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_divider))
                     .setContentTextSize(pickerTextSize)
                     .setOutSideCancelable(true)// default is true
                     .setDecorView(activity.fl_picker)
@@ -265,13 +292,18 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     }
                 }
             })
-                    .setTitleText("选择生日")
+                    .setTitleText("")
                     .setType(TimePickerView.Type.YEAR_MONTH_DAY)
                     .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示
                     .setDividerColor(Color.DKGRAY)
                     .setContentSize(pickerTextSize)
                     .setDate(selectedDate)
+                    .setTitleBgColor(ContextCompat.getColor(mContext, R.color.theme1))
                     .setRangDate(startDate, endDate)
+                    .setTextColorCenter(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_center))
+                    .setTextColorOut(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_out))
+                    .setBgColor(ContextCompat.getColor(mContext, R.color.theme1))
+                    .setDividerColor(ContextCompat.getColor(mContext, R.color.pickerview_wheelview_textcolor_divider))
                     .setDecorView(activity.fl_picker)
                     .build();
         }
@@ -529,20 +561,25 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      * @param rlPhoto
      */
     public void showPop(Context context, RelativeLayout rlPhoto) {
-        View view = LayoutInflater.from(context).inflate(R.layout.popup_selectimg_view, null, false);
+        if (popupWindow == null)
+            initPhotoPop(context);
+        popupWindow.showAtLocation(rlPhoto, Gravity.BOTTOM, 0, 0);
 
-        SystemUtil.closeSoftInputWindow((Activity) context);
+    }
+
+    private void initPhotoPop(Context context) {
+
+        popupWindow = new PopupUtil(activity);
+        View view = popupWindow.createPopupView(R.layout.popup_selectimg_view);
 
         openTake = (TextView) view.findViewById(R.id.selectimg_open_take);
         openDiffer = (TextView) view.findViewById(R.id.selectimg_open_differ);
         cancelWindow = (TextView) view.findViewById(R.id.selectimg_open_cancel);
-
         View spaceView = view.findViewById(R.id.selectimg_open_space);
-
         openTake.setOnClickListener(this);
         openDiffer.setOnClickListener(this);
         cancelWindow.setOnClickListener(this);
-
+        view.setOnClickListener(this);
 
         if (SystemUtil.navigationBar(context) > 10) {
             ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
@@ -550,16 +587,16 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             spaceView.setLayoutParams(layoutParams);
         }
 
-        popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams
-                .MATCH_PARENT);
-        ColorDrawable dw = new ColorDrawable(Color.TRANSPARENT);
-        popupWindow.setFocusable(true); // 可以聚焦
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setTouchable(true);
-        popupWindow.setBackgroundDrawable(dw);
-        popupWindow.showAtLocation(rlPhoto, Gravity.BOTTOM, 0, 0);
+        PopupUtil.Config config = new PopupUtil.Config();
 
-        view.setOnClickListener(this);
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        popupWindow.setConfig(config);
     }
 
     /**
@@ -610,24 +647,20 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         activity.setBitmapAndByte(bitmap, bitmapByte);
     }
 
-    public String drawableToByte(byte[] bytes) {
-        if (null != bytes) {
-            return Base64.encodeToString(bytes, Base64.DEFAULT);
-        } else {
-            return null;
-        }
-    }
-
     /**
      * 提交头像
      *
      * @param lastByte
      */
     public void postBitmap(byte[] lastByte) {
-        String bitmapStr = drawableToByte(lastByte);
+        final String bitmapStr = BitmapUtils.drawableToByte(lastByte);
         request.doPost(HttpConstant.USER_UPLOAD_AVATAR, getPhotoMap(bitmapStr), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
+                UserJson newUser = LoginUtils.getUserInfo(mContext);
+                newUser.setPictureStr(bitmapStr);
+                LoginUtils.changeUserInfo(mContext, newUser);
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
             }
 
             @Override

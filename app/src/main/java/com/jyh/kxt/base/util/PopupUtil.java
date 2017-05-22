@@ -70,6 +70,13 @@ public class PopupUtil extends PopupWindow {
             setAnimationStyle(config.animationStyle);
             darkenBackground(config.alpha);
 
+            if (config.softInputMode != 0) {
+                setSoftInputMode(config.softInputMode);
+            }
+            if (config.softInputMode2 != 0) {
+                setSoftInputMode(config.softInputMode2);
+            }
+
 
             setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
@@ -104,5 +111,7 @@ public class PopupUtil extends PopupWindow {
 
         public int width;
         public int height;
+        public int softInputMode;
+        public int softInputMode2;
     }
 }

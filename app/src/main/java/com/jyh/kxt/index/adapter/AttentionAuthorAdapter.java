@@ -2,6 +2,7 @@ package com.jyh.kxt.index.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,8 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        setTheme(viewHolder);
+
         final AuthorDetailsJson author = dataList.get(position);
         final ViewHolder finalViewHolder = viewHolder;
         Glide.with(context).load(author.getPicture()).asBitmap().error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(new SimpleTarget<Bitmap>() {
@@ -86,7 +89,7 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
                         protected void onResponse(Object o) {
                             dataList.remove(author);
                             notifyDataSetChanged();
-                            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL,null));
+                            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, null));
                         }
 
                         @Override
@@ -103,6 +106,17 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
         viewHolder.tvContent.setText(author.getIntroduce());
 
         return convertView;
+    }
+
+    /**
+     * 设置主题
+     *
+     * @param viewHolder
+     */
+    private void setTheme(ViewHolder viewHolder) {
+        viewHolder.tvName.setTextColor(ContextCompat.getColor(context,R.color.font_color5));
+        viewHolder.tvContent.setTextColor(ContextCompat.getColor(context,R.color.font_color6));
+        viewHolder.ivAttention.setBackground(ContextCompat.getDrawable(context,R.drawable.sel_news_attention));
     }
 
     public void setData(List<AuthorDetailsJson> data) {

@@ -25,7 +25,7 @@
         tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
         tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
 
-        tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+        tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth2"
         tl:tl_mode_scrollable="MODE_FIXED"
         tl:tl_tab_padding="10dp"
         tl:tl_textSelectColor="@color/font_color5"
