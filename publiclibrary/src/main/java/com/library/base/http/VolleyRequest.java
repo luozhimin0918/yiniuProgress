@@ -1,6 +1,7 @@
 package com.library.base.http;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -98,24 +99,30 @@ public class VolleyRequest {
     }
 
 
-    private <T> void enqueue(int method, final String url,
-                             final Map<String, String> mParams, final HttpListener<T> mHttpListener) {
+    private <T> void enqueue(final int method,
+                             final String url,
+                             final Map<String, String> mParams,
+                             final HttpListener<T> mHttpListener) {
+
 
         this.superclassTypeParameter = getSuperclassTypeParameter(mHttpListener.getClass());
+        mHttpListener.setCacheConfig(mQueue, url, superclassTypeParameter);
         SsX509TrustManager.allowAllSSL();
-        StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
 
-            @Override
-            public void onResponse(String response) {
-                try {
-                    if (response == null || "".equals(response.trim())) {
-                        mHttpListener.onErrorResponse(null);
-                        return;
-                    }
+        long delayRequestTime = mHttpListener.getDelayRequestTime();
+        new Handler(mContext.getMainLooper()).postDelayed(new Runnable() {
+            public void run() {
+                mHttpListener.onStart();
+                StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if (response == null || "".equals(response.trim())) {
+                                mHttpListener.onErrorResponse(null);
+                                return;
+                            }
 
-                    EncryptionUtils.parseToString(response, VarConstant.KEY, new ObserverToJson() {
-                        @Override
-                        protected void toJsonString(String json) {
+                            String json = EncryptionUtils.parseToString(response, VarConstant.KEY);
                             try {
                                 LogUtil.e("toJsonString", "响应:" + json);
 
@@ -141,26 +148,27 @@ public class VolleyRequest {
                                 e.printStackTrace();
                                 mHttpListener.onErrorResponse(null);
                             }
+                        } catch (Exception e) {
+                            mHttpListener.onErrorResponse(null);
+                            e.printStackTrace();
                         }
-                    });
-                } catch (Exception e) {
-                    mHttpListener.onErrorResponse(null);
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mHttpListener.onErrorResponse(error);
-                if (!isToastFailed) {
-                    ToastView.makeText3(mContext, "网络出错:" + error.getMessage());
-                }
-            }
-        });
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mHttpListener.onErrorResponse(error);
+                        if (!isToastFailed) {
+                            ToastView.makeText3(mContext, "网络出错:" + error.getMessage());
+                        }
+                    }
+                });
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(OUT_TIME, 1, 1.0f));
-        stringRequest.setTag(httpTag);
-        mQueue.add(stringRequest);
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(OUT_TIME, 1, 1.0f));
+                stringRequest.setTag(httpTag);
+
+                mQueue.add(stringRequest);
+            }
+        }, delayRequestTime);
     }
 
     public String getMag() {

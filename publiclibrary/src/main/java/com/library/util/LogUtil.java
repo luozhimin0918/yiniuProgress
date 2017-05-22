@@ -9,6 +9,7 @@ import com.library.BuildConfig;
  */
 public class LogUtil
 {
+    public static final String TAG = "LogUtil";
     public static void e(String tag, String msg)
     {
         if (BuildConfig.DEBUG)

@@ -63,7 +63,19 @@ public class EncryptionUtils {
                 .parseClaimsJws(jwt).getBody();
 
     }
-
+    /**
+     * 解密 jwt
+     *
+     * @param jwt
+     * @return
+     * @throws Exception
+     */
+    public static String parseToString(String jwt, String key) {
+        ParseClaims jwtParser = new ParseClaims();
+        jwtParser.setSigningKey(getJwtKey(key))
+                .parseClaimsJws(jwt).getBody();
+        return jwtParser.getJsonData();
+    }
     /**
      * 获取 jwt  key
      *

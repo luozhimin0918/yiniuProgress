@@ -65,6 +65,7 @@ import io.jsonwebtoken.lang.Strings;
 public class ParseClaims implements JwtParser {
 
 
+    private String jsonData;
     private ObserverToJson mObserverToJson;
 
     //don't need millis since JWT date fields are only second granularity:
@@ -290,6 +291,7 @@ public class ParseClaims implements JwtParser {
         if (mObserverToJson != null) {
             mObserverToJson.toJsonString(payload);
         }
+        jsonData = payload;
 
         Claims claims = null;
 
@@ -592,5 +594,9 @@ public class ParseClaims implements JwtParser {
         } catch (IOException e) {
             throw new MalformedJwtException("Unable to read JSON value: " + val, e);
         }
+    }
+
+    public String getJsonData(){
+        return jsonData;
     }
 }
