@@ -32,6 +32,7 @@
                 android:id="@+id/iv_photo"
                 android:layout_width="@dimen/newsAuthorPhotoSize"
                 android:layout_height="@dimen/newsAuthorPhotoSize"
+                android:src="@mipmap/icon_user_def_photo"
                 android:layout_marginRight="@dimen/newsContentMargin"
                 android:scaleType="fitXY"/>
 

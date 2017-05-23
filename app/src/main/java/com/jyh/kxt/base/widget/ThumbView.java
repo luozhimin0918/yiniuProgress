@@ -113,7 +113,9 @@ public class ThumbView extends RelativeLayout {
                     requestClickThumb();
                 } else {
                     TSnackbar tSnackbar = TSnackbar.make(v, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
-                            .APPEAR_FROM_TOP_TO_DOWN);
+                            .APPEAR_FROM_TOP_TO_DOWN)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height));
 
                     int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
                     tSnackbar.setBackgroundColor(color);

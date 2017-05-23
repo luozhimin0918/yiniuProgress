@@ -42,7 +42,7 @@
     <declare-styleable name="PwdEditText">
         <attr name="showPwd" format="boolean|reference"/>
         <attr name="lineColor" format="color|reference"/>
-        <attr name="background" format="reference"/>
+        <attr name="pwdBackground" format="reference"/>
         <attr name="eye" format="boolean|reference"/>
         <attr name="hint" format="string|reference"/>
         <attr name="text" format="string|reference"/>

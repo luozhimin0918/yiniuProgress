@@ -357,7 +357,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             TSnackbar tSnackbar = TSnackbar.make(flRootContent,
                     "设置成功",
                     Snackbar.LENGTH_SHORT,
-                    TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                    TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                    .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                            .getDimensionPixelOffset(R.dimen.actionbar_height));
 
             int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
             tSnackbar.setBackgroundColor(color);

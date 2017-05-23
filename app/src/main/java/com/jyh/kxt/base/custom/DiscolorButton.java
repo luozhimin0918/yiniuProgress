@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -82,7 +81,9 @@ public class DiscolorButton extends Button {
         GradientDrawable mGradientDrawable = new GradientDrawable();
         mGradientDrawable.setCornerRadius(cornerRadius);
         mGradientDrawable.setColor(bgColor);
-        ViewCompat.setBackground(this, mGradientDrawable);
+//        ViewCompat.setBackground(this, mGradientDrawable);
+
+        this.setBackground(mGradientDrawable);
         setTextColor(fontColor);
     }
 

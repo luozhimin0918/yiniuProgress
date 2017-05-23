@@ -250,7 +250,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
 
     }
-
+boolean isYeJianTheme = false;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -442,6 +442,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
 
     /**
      * 添加日历访问权限

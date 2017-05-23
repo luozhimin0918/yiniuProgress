@@ -21,6 +21,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.superplayer.library.SuperPlayer;
 import com.trycatch.mysnackbar.Prompt;
@@ -128,12 +129,12 @@ public class VideoDetailPresenter extends BasePresenter {
      * @param popupWindow
      * @param commentEdit
      * @param commentBean
-     * @param commentWho
+     * @param parentId
      */
     public void requestIssueComment(final PopupWindow popupWindow,
                                     final EditText commentEdit,
                                     CommentBean commentBean,
-                                    int commentWho) {
+                                    int parentId) {
 
         String commentContent = commentEdit.getText().toString();
 
@@ -158,7 +159,6 @@ public class VideoDetailPresenter extends BasePresenter {
                         TSnackbar.LENGTH_INDEFINITE,
                         TSnackbar.APPEAR_FROM_TOP_TO_DOWN
                 );
-
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
@@ -171,17 +171,8 @@ public class VideoDetailPresenter extends BasePresenter {
         jsonParam.put("accessToken", userInfo.getToken());
         jsonParam.put("content", commentContent);
 
-
-        switch (commentWho) {
-            case 0:
-
-                break;
-            case 1:
-                jsonParam.put("parent_id", commentBean.getId());
-                break;
-            case 2:
-                jsonParam.put("parent_id", commentBean.getParent_id());
-                break;
+        if (parentId != 0) {
+            jsonParam.put("parent_id", parentId);
         }
 
         volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
@@ -193,6 +184,8 @@ public class VideoDetailPresenter extends BasePresenter {
                 snackBar.setPromptThemBackground(Prompt.SUCCESS)
                         .setText("评论提交成功")
                         .setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height))
                         .show();
 
                 commentCommit(mCommentBean);

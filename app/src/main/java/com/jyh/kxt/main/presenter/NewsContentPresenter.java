@@ -101,7 +101,9 @@ public class NewsContentPresenter extends BasePresenter {
                         TSnackbar.make(newsContentActivity.ptrLvMessage,
                                 "暂无更多评论",
                                 Snackbar.LENGTH_LONG,
-                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                                .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                        .getDimensionPixelOffset(R.dimen.actionbar_height));
                         return;
                     }
 

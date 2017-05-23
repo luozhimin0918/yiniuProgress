@@ -72,9 +72,9 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
          * @param popupWindow
          * @param etContent
          * @param commentBean
-         * @param commentWho  0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
+         * @param parentId  0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
          */
-        void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho);
+        void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId);
     }
 
     public void setOnCommentPublishListener(OnCommentPublishListener onCommentPublishListener) {

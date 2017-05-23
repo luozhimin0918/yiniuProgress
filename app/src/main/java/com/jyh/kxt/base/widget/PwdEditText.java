@@ -66,7 +66,7 @@ public class PwdEditText extends RelativeLayout {
         textSize = SystemUtil.px2sp(getContext(), getResources().getDimension(R.dimen.content_font_size));
         showPwd = array.getBoolean(R.styleable.PwdEditText_showPwd, false);
         lineColor = array.getColor(R.styleable.PwdEditText_lineColor, ContextCompat.getColor(getContext(), R.color.line_color3));
-        background = array.getColor(R.styleable.PwdEditText_background, ContextCompat.getColor(getContext(), R.color.theme1));
+        background = array.getColor(R.styleable.PwdEditText_pwdBackground, ContextCompat.getColor(getContext(), R.color.theme1));
         text = array.getString(R.styleable.PwdEditText_text);
         hint = array.getString(R.styleable.PwdEditText_hint);
         textColor = array.getColor(R.styleable.PwdEditText_textColor, Color.GRAY);

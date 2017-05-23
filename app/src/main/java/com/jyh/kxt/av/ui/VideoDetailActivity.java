@@ -103,8 +103,8 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     }
 
     @Override
-    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho) {
-        videoDetailPresenter.requestIssueComment(popupWindow, etContent, commentBean, commentWho);
+    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId) {
+        videoDetailPresenter.requestIssueComment(popupWindow, etContent, commentBean, parentId);
     }
 
     /**

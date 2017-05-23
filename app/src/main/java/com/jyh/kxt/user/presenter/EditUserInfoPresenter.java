@@ -1,26 +1,15 @@
 package com.jyh.kxt.user.presenter;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.Layout;
-import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,10 +22,9 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
-import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.json.UserJson;
@@ -50,7 +38,6 @@ import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
 import com.library.widget.pickerview.OptionsPickerView;
 import com.library.widget.pickerview.TimePickerView;
 import com.library.widget.window.ToastView;
@@ -457,7 +444,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     private TSnackbar snackBar;
 
     public void postChangedInfo(final String newValue, final String oldValue, final String type) {
-        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN) ;
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
@@ -487,11 +474,15 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     }
                     LoginUtils.changeUserInfo(mContext, newUser);
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("信息更改成功").setDuration(TSnackbar.LENGTH_LONG).show();
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("信息更改成功").setDuration(TSnackbar.LENGTH_LONG)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                     postError(type, oldValue);
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败").setDuration(TSnackbar.LENGTH_LONG).show();
+                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败").setDuration(TSnackbar.LENGTH_LONG)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             }
 
@@ -499,7 +490,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 postError(type, oldValue);
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败").setDuration(TSnackbar.LENGTH_LONG).show();
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败")
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).setDuration(TSnackbar.LENGTH_LONG).show();
             }
         });
 

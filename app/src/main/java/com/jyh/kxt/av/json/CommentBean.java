@@ -1,34 +1,37 @@
 package com.jyh.kxt.av.json;
 
+import java.util.List;
+
 /**
  * Created by Mr'Dai on 2017/5/4.
  */
 
 public class CommentBean {
 
-    /**
-     * content : 有呀
-     * create_time : 1492257667
-     * id : 37381
-     * is_good : false
-     * member_id : 54988
-     * member_nickname : 越努力越幸运
-     * member_picture : http://img.kuaixun360.com/Uploads/Picture/2017-04-09/58e90bdb50ea9.png
-     * num_good : 0
-     * num_reply : 0
-     * parent_content : 怎么没有黄金，白银，原油的分析？
-     * parent_create_time : 1492244524
-     * parent_id : 37378
-     * parent_is_good : false
-     * parent_member_id : 21313
-     * parent_member_nickname : 博大精深
-     * parent_member_picture : http://img.kuaixun360.com/Uploads/Picture/2016-10-11/57fbec59b056f.png
-     * parent_num_good : 0
-     * parent_num_reply : 1
-     * status : 1
-     * type : 2
-     */
-
+//    {
+//        "content": "讲的很好",
+//            "create_time": 1495420009,
+//            "id": 39603,
+//            "is_good": false,
+//            "member_id": 38717,
+//            "member_nickname": "daoyao",
+//            "member_picture": "http://img.kuaixun360.com/Public/Home/images/default_head_pic.jpg",
+//            "num_good": 0,
+//            "num_reply": 0,
+//            "object_id": 541,
+//            "object_title": "《指标秘籍》宣传片",
+//            "parent_content": 0,
+//            "parent_create_time": 0,
+//            "parent_id": 0,
+//            "parent_is_good": false,
+//            "parent_member_id": 0,
+//            "parent_member_nickname": 0,
+//            "parent_member_picture": 0,
+//            "parent_num_good": 0,
+//            "parent_num_reply": 0,
+//            "status": 0,
+//            "type": "video"
+//    }
     private String content;
     private long create_time;
     private int id;
@@ -50,6 +53,12 @@ public class CommentBean {
     private int parent_num_reply;
     private int status;
     private String type;
+
+    private String object_id;
+    private String object_title;
+
+    //我的评论才有
+    private List<CommentBean> reply;
 
     /**
      * 本地变量,判断是否需要在攒上+1，本地内存的
@@ -222,5 +231,29 @@ public class CommentBean {
 
     public void setTemporaryClickFavour(boolean temporaryClickFavour) {
         this.temporaryClickFavour = temporaryClickFavour;
+    }
+
+    public String getObject_id() {
+        return object_id;
+    }
+
+    public void setObject_id(String object_id) {
+        this.object_id = object_id;
+    }
+
+    public String getObject_title() {
+        return object_title;
+    }
+
+    public void setObject_title(String object_title) {
+        this.object_title = object_title;
+    }
+
+    public List<CommentBean> getReply() {
+        return reply;
+    }
+
+    public void setReply(List<CommentBean> reply) {
+        this.reply = reply;
     }
 }

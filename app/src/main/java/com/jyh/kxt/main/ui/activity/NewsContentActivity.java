@@ -34,6 +34,7 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -126,8 +127,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     @Override
-    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int commentWho) {
-        webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, commentWho);
+    public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId) {
+        webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, parentId);
     }
 
     class WebViewAndHead {
@@ -162,51 +163,56 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             ButterKnife.bind(this, llFullContent);
 
 
-            if ("0".equals(newsContentJson.getAuthor_id())) {
-                tvTitle.setText(newsContentJson.getTitle());
-                tvType.setText(newsContentJson.getTypeName());
+//            if (!"0".equals(newsContentJson.getAuthor_id())) {
+            tvType.setText(newsContentJson.getTypeName());
 
-                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
-                tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+            long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
+            tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
 
-                rlExistAuthor.setVisibility(View.VISIBLE);
-                Glide.with(NewsContentActivity.this)
-                        .load(HttpConstant.IMG_URL + newsContentJson.getPicture())
-                        .asBitmap()
-                        .override(50, 50)
-                        .thumbnail(0.5f)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                    glideAnimation) {
-                                ivPhoto.setImageBitmap(resource);
-                            }
-                        });
+            rlExistAuthor.setVisibility(View.VISIBLE);
+            Glide.with(NewsContentActivity.this)
+                    .load(HttpConstant.IMG_URL + newsContentJson.getAuthor_image())
+                    .asBitmap()
+                    .override(50, 50)
+                    .thumbnail(0.5f)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                glideAnimation) {
+                            ivPhoto.setImageBitmap(resource);
+                        }
+                    });
 
-                tvName.setText(newsContentJson.getAuthor_name());
+            tvName.setText(newsContentJson.getAuthor_name());
 
-                boolean isFollow = "1".equals(newsContentJson.getIs_follow());
-                cbLike.setChecked(isFollow);
-                cbLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        CheckBox checkBox = (CheckBox) v;
-                        boolean checked = checkBox.isChecked();
-
-                        newsContentPresenter.requestAttention(
-                                checked,
-                                WebViewAndHead.this.newsContentJson.getAuthor_id());
-                    }
-                });
-            } else {
-                rlNotAuthor.setVisibility(View.VISIBLE);
-                tvNewsType.setText(newsContentJson.getTypeName());
-
-                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
-                tvNewsTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+            boolean isAllowAttention = "0".equals(newsContentJson.getAuthor_id());
+            if (isAllowAttention) {
+                cbLike.setVisibility(View.GONE);
             }
 
+            boolean isFollow = "1".equals(newsContentJson.getIs_follow());
+            cbLike.setChecked(isFollow);
+            cbLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    CheckBox checkBox = (CheckBox) v;
+                    boolean checked = checkBox.isChecked();
+
+                    newsContentPresenter.requestAttention(
+                            checked,
+                            WebViewAndHead.this.newsContentJson.getAuthor_id());
+                }
+            });
+//            } else {
+//                rlNotAuthor.setVisibility(View.VISIBLE);
+//                tvNewsType.setText(newsContentJson.getTypeName());
+//
+//                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
+//                tvNewsTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+//            }
+
+            tvTitle.setText(newsContentJson.getTitle());
             /**
              * ----------  创建WebView
              */
@@ -257,12 +263,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
          * @param popupWindow
          * @param commentEdit
          * @param commentBean
-         * @param commentWho
+         * @param parentId
          */
         public void requestIssueComment(final PopupWindow popupWindow,
                                         final EditText commentEdit,
                                         CommentBean commentBean,
-                                        int commentWho) {
+                                        int parentId) {
 
             String commentContent = commentEdit.getText().toString();
             if (commentContent.trim().length() == 0) {
@@ -272,7 +278,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         "评论好像为空喔,请检查",
                         TSnackbar.LENGTH_LONG,
                         TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
-                        .setPromptThemBackground(Prompt.WARNING).show();
+                        .setPromptThemBackground(Prompt.WARNING)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 return;
             }
 
@@ -293,17 +301,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             jsonParam.put("uid", userInfo.getUid());
             jsonParam.put("accessToken", userInfo.getToken());
             jsonParam.put("content", commentContent);
-
-            switch (commentWho) {
-                case 0:
-
-                    break;
-                case 1:
-                    jsonParam.put("parent_id", commentBean.getId());
-                    break;
-                case 2:
-                    jsonParam.put("parent_id", commentBean.getParent_id());
-                    break;
+            if (parentId != 0) {
+                jsonParam.put("parent_id", parentId);
             }
             volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
                 @Override
@@ -316,6 +315,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     snackBar.setPromptThemBackground(Prompt.SUCCESS)
                             .setText("评论提交成功")
                             .setDuration(TSnackbar.LENGTH_LONG)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height))
                             .show();
                 }
 

@@ -139,6 +139,15 @@
             android:name=".datum.ui.DatumHistoryActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".market.ui.MarketEditActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".index.ui.MyCommentActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->
@@ -194,6 +203,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.UMDefault"/>
 
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="537c3e0456240b761700cd92">
@@ -206,10 +216,6 @@
             android:name="com.jyh.kxt.base.utils.MyGlideModule"
             android:value="GlideModule"/>
 
-        <activity android:name=".market.ui.MarketEditActivity">
-        </activity>
-        <activity android:name=".index.ui.MyCommentActivity">
-        </activity>
     </application>
 
 </manifest>

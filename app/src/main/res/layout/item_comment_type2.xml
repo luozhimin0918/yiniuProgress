@@ -3,16 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:padding="18dp">
+    android:paddingLeft="18dp"
+    android:paddingTop="18dp"
+    android:background="@color/theme1"
+    android:paddingRight="18dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/tv_read_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"/>
 
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"
         android:layout_width="27dp"
-        android:src="@mipmap/icon_user_def_photo"
-        android:layout_height="27dp" />
+        android:layout_height="27dp"
+        android:src="@mipmap/icon_user_def_photo"/>
 
     <LinearLayout
         android:id="@+id/ll_je_sao"
@@ -72,20 +81,36 @@
         android:layout_below="@+id/ll_je_sao"
         android:layout_marginTop="10dp"
         android:background="@color/bg_color2"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="15dp">
 
-        <com.jyh.kxt.base.util.emoje.EmoticonTextView
-            android:id="@+id/tv_primary_content"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+
+        <TextView
+            android:id="@+id/tv_primary_read_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bg_color2"
+            android:drawablePadding="5dp"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size4"
+            android:visibility="gone"/>
+
+
+        <com.jyh.kxt.base.util.emoje.EmoticonTextView
+            android:id="@+id/tv_primary_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_primary_read_title"
+            android:gravity="center_vertical"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/describe_font_size4"/>
 
@@ -134,13 +159,22 @@
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:gravity="center_vertical"
         android:layout_alignLeft="@+id/ll_je_sao"
         android:layout_below="@+id/ll_primary_info"
         android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/describe_font_size4"/>
 
+    <LinearLayout
+        android:id="@+id/ll_reply_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_content"
+        android:layout_below="@+id/tv_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:orientation="vertical"/>
 </RelativeLayout>

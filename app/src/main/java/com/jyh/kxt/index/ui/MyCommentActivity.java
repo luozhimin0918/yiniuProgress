@@ -30,13 +30,22 @@ public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_comment);
+        setContentView(R.layout.activity_my_comment,StatusBarColor.THEME1);
 
         tvBarTitle.setText("我的发言");
 
         tabs = new String[2];
-        fragmentList.add(new MyCommentFragment());
-        fragmentList.add(new MyCommentFragment());
+        MyCommentFragment commentMy = new MyCommentFragment();
+        Bundle commentMyBundle = new Bundle();
+        commentMyBundle.putInt("from", 0);
+        commentMy.setArguments(commentMyBundle);
+        fragmentList.add(commentMy);
+
+        MyCommentFragment commentReply = new MyCommentFragment();
+        Bundle commentReplyBundle = new Bundle();
+        commentReplyBundle.putInt("from", 1);
+        commentReply.setArguments(commentReplyBundle);
+        fragmentList.add(commentReply);
 
         tabs[0] = "我的回复";
         tabs[1] = "我的评论";

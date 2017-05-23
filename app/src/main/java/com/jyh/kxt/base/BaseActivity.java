@@ -9,11 +9,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.VectorEnabledTintResources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +41,7 @@ import com.library.util.SystemUtil;
  * Created by Mr'Dai on 2017/2/22.
  */
 
-public class BaseActivity extends LibActivity implements IBaseView {
+public class BaseActivity extends LibActivity implements IBaseView, LayoutInflaterFactory {
 
     //跳转Activity 策略
     private int intentAnimation = 0;
@@ -47,6 +49,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
     private boolean isAnimationFinish;
 
     private PopupWindow waitPopup;
+
     private SkinnableViewInflater mSkinnableViewInflater;
     private SkinnableCallback mSkinnableCallback;
 
@@ -56,10 +59,11 @@ public class BaseActivity extends LibActivity implements IBaseView {
         ThemeUtil.addActivityToThemeCache(this);
 
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
-        if (isNight)
+        if (isNight) {
             setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        else
+        } else {
             setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     @Override
@@ -105,6 +109,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
             Skinnable skinnable = (Skinnable) view;
             if (skinnable.isSkinnable()) {
                 skinnable.applyDayNight();
+                Log.i(TAG, "applyDayNightForView: "+skinnable);
             }
         }
         if (view instanceof ViewGroup && !"filter".equals(view.getTag())) {

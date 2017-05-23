@@ -11,7 +11,7 @@
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentLeft="true"
-        android:padding="@dimen/actionbar_padding"
+        android:padding="15dp"
         android:src="@mipmap/ico_break"/>
 
     <TextView
@@ -25,14 +25,14 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/actionBar_textColor1"
-        android:textSize="@dimen/font_title_max"/>
+        android:textSize="@dimen/title_font_size"/>
 
     <TextView
         android:id="@+id/iv_bar_function"
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentRight="true"
-        android:padding="@dimen/actionbar_padding"
+        android:padding="15dp"
         android:textColor="@color/actionBar_textColor2"
         />
 
