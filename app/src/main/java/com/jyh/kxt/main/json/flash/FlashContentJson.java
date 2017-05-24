@@ -18,7 +18,7 @@ import java.util.List;
 public class FlashContentJson implements Parcelable {
 
     private FlashJson kuaixun;
-    private AdJson ad;
+    private List<AdJson> ad;
     private List<NewsJson> article;//推荐列表
 
     public FlashJson getKuaixun() {
@@ -29,11 +29,11 @@ public class FlashContentJson implements Parcelable {
         this.kuaixun = kuaixun;
     }
 
-    public AdJson getAd() {
+    public List<AdJson> getAd() {
         return ad;
     }
 
-    public void setAd(AdJson ad) {
+    public void setAd(List<AdJson> ad) {
         this.ad = ad;
     }
 
@@ -45,6 +45,9 @@ public class FlashContentJson implements Parcelable {
         this.article = article;
     }
 
+    public FlashContentJson() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -53,16 +56,13 @@ public class FlashContentJson implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.kuaixun, flags);
-        dest.writeParcelable(this.ad, flags);
+        dest.writeTypedList(this.ad);
         dest.writeTypedList(this.article);
-    }
-
-    public FlashContentJson() {
     }
 
     protected FlashContentJson(Parcel in) {
         this.kuaixun = in.readParcelable(FlashJson.class.getClassLoader());
-        this.ad = in.readParcelable(AdJson.class.getClassLoader());
+        this.ad = in.createTypedArrayList(AdJson.CREATOR);
         this.article = in.createTypedArrayList(NewsJson.CREATOR);
     }
 

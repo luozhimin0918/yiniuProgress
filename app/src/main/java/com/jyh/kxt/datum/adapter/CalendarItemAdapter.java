@@ -134,18 +134,22 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 CalendarTitleBean mCalendarTitleBean = (CalendarTitleBean) mCalendarType;
                 viewHolder0.tvTitle.setText(mCalendarTitleBean.getName());
                 viewHolder0.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+
+                View paddingTagView = viewHolder0.llContent.findViewWithTag("paddingView");
+                if(paddingTagView != null){
+                    viewHolder0.llContent.removeView(paddingTagView);
+                }
+
                 if (mCalendarTitleBean.getSpaceType() == 1) {
                     View mPaddingView = new View(mContext);
+                    mPaddingView.setTag("paddingView");
                     mPaddingView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color2));
 
                     int paddingHeight = SystemUtil.dp2px(mContext, 10);
                     ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             paddingHeight);
-
                     mPaddingView.setLayoutParams(lp);
-                    mCalendarTitleBean.setSpaceType(2);
-
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
 
@@ -154,7 +158,11 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
 
                 viewHolder1.tvTitle.setText(mCalendarFinanceBean.getTitle());
-
+                viewHolder1.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
+                viewHolder1.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+                viewHolder1.tvAlarm.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+                viewHolder1.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+                viewHolder1.tvDescribe.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
                 /**
                  * 时间
                  */
@@ -204,6 +212,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 2:
                 CalendarImportantBean mCalendarImportantBean = (CalendarImportantBean) mCalendarType;
                 viewHolder2.tvTitle.setText(mCalendarImportantBean.getTitle());
+                viewHolder2.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
+                viewHolder2.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+                viewHolder2.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
                 /**
                  * 时间
                  */
@@ -233,7 +244,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 3:
                 CalendarHolidayBean mCalendarHolidayBean = (CalendarHolidayBean) mCalendarType;
                 viewHolder3.tvTitle.setText(mCalendarHolidayBean.getTitle());
-
+                viewHolder3.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
+                viewHolder3.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+                viewHolder3.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
                 /**
                  * 时间
                  */
@@ -266,6 +279,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
     class ViewBaseHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoqi;
+        @BindView(R.id.v_line) View vLine;
     }
 
     class ViewHolder0 {
@@ -372,7 +386,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
         } catch (NumberFormatException e) {
             radianDrawable.setStroke(R.color.font_color8);
 
-            Drawable alarmDrawable = mContext.getResources().getDrawable(R.mipmap.icon_alarm);
+            Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.icon_alarm);
             tvAlarm.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
             tvAlarm.setText("定时");
 

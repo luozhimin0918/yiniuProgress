@@ -246,4 +246,14 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         }
         return true;
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if(fragmentList!=null)
+            for (Fragment fragment : fragmentList) {
+                if(fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

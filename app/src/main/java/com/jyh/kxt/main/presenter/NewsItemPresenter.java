@@ -34,6 +34,7 @@ import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.base.widget.night.heple.SkinnableView;
 import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
@@ -144,7 +145,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
         NewsJson newsJson = newsAdapter.getData().get(position);
-        JumpUtils.jumpDetails((MainActivity) mContext, newsJson.getO_class(),newsJson.getO_id(),
+        JumpUtils.jumpDetails((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_id(),
                 newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
@@ -277,7 +278,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = carouselList.get(position);
-                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(),slideJson.getO_id(), slideJson.getHref());
+                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(), slideJson.getO_id(), slideJson.getHref());
             }
         });
 
@@ -295,7 +296,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 carouselHeight);
         recyclerView.setLayoutParams(params);
 
-        GridLayoutManager manager = new GridLayoutManager(mContext, 4){
+        GridLayoutManager manager = new GridLayoutManager(mContext, 4) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -415,15 +416,11 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      * 添加分割线
      */
     public void addLineView() {
-        View view = new View(mContext);
-        int lineHeight = (int) mContext.getResources().getDimension(R.dimen.line_height);
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                lineHeight);
-        view.setBackgroundResource(R.color.line_color2);
-
-        view.setLayoutParams(params);
-
-        homeHeadView.addView(view);
+        View inflate = LayoutInflater.from(mContext).inflate(R.layout.layout_line, null);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) mContext.getResources()
+                .getDimension(R.dimen.line_height));
+        inflate.setLayoutParams(params);
+        homeHeadView.addView(inflate);
     }
 
     /**

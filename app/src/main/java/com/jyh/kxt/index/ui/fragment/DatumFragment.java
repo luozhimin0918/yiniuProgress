@@ -111,7 +111,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         changeUserImg(LoginUtils.getUserInfo(getContext()));
     }
 
-    @OnClick({R.id.iv_right_icon1, R.id.iv_right_icon2,R.id.iv_left_icon})
+    @OnClick({R.id.iv_right_icon1, R.id.iv_right_icon2, R.id.iv_left_icon})
     public void onNavClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
@@ -486,6 +486,14 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             case EventBusClass.EVENT_CHANGEUSERINFO:
                 changeUserImg((UserJson) eventBus.intentObj);
                 break;
+        }
+    }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (lastFragment != null) {
+            lastFragment.onChangeTheme();
         }
     }
 }

@@ -67,7 +67,7 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         }
     }
 
-    protected void onChangeTheme() {
+    public void onChangeTheme() {
 
     }
 

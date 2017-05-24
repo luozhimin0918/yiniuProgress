@@ -77,9 +77,9 @@
             android:orientation="horizontal"/>
     </LinearLayout>
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/iv_adRL"
         android:layout_width="match_parent"
-        android:scaleType="fitXY"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 </LinearLayout>

@@ -72,6 +72,8 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         final NewsJson news = dataList.get(position);
 
+        setContentColor(holder, news);
+
         String picture;
         String picture1 = news.getPicture();
         if(isSplice){
@@ -86,7 +88,6 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 .error(R.mipmap.icon_def_news)
                 .into(holder.ivPhoto);
 
-        setContentColor(holder, news);
         String author = news.getAuthor();
         if (author != null)
             author = "文/" + author;

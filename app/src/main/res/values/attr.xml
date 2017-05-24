@@ -129,4 +129,8 @@
         <attr name="tl_textSelectColor"/>
         <attr name="tl_textUnselectColor"/>
     </declare-styleable>
+
+    <declare-styleable name="SkinnableListView">
+        <attr name="android:divider"/>
+    </declare-styleable>
 </resources>

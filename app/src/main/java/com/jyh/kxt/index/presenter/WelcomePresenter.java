@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.target.Target;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.index.json.ConfigJson;
@@ -24,6 +26,7 @@ import com.jyh.kxt.index.json.LoadADJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
+import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
 
@@ -54,7 +57,7 @@ public class WelcomePresenter extends BasePresenter {
         initView();
 
         handler.sendEmptyMessage(1);
-        /*request.doGet(HttpConstant.CONFIG, new HttpListener<String>() {
+        request.doGet(HttpConstant.CONFIG, new HttpListener<String>() {
             @Override
             protected void onResponse(String configStr) {
                 if (configStr != null) {
@@ -75,7 +78,7 @@ public class WelcomePresenter extends BasePresenter {
 
                 }
             }
-        });*/
+        });
     }
 
     public void initView() {

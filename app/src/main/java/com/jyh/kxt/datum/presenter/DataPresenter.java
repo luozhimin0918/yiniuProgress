@@ -48,6 +48,8 @@ import java.util.List;
 
 public class DataPresenter extends BasePresenter {
 
+    private BaseListAdapter<DataGroup> leftAdapter;
+
     public interface TopTabViewClick {
         void topTabSelected(int position);
     }
@@ -143,7 +145,7 @@ public class DataPresenter extends BasePresenter {
 
 
     private void initLeftLayout() {
-        BaseListAdapter<DataGroup> adapter = new BaseListAdapter<DataGroup>(mDataLeftGroupList) {
+        leftAdapter = new BaseListAdapter<DataGroup>(mDataLeftGroupList) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -198,7 +200,7 @@ public class DataPresenter extends BasePresenter {
                 RadioButton rbName;
             }
         };
-        dataFragment.ivLeftContent.setAdapter(adapter);
+        dataFragment.ivLeftContent.setAdapter(leftAdapter);
         dataFragment.ivLeftContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -238,9 +240,13 @@ public class DataPresenter extends BasePresenter {
                         convertView.setTag(mViewHolder);
 
                         mViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                        mViewHolder.vLine=convertView.findViewById(R.id.v_line);
                     } else {
                         mViewHolder = (ViewHolder) convertView.getTag();
                     }
+
+                    mViewHolder.tvTitle.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
+                    mViewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_background1));
 
                     if ("hot".equals(dataList.getStyle_class())) {
                         String name = dataList.getName() + ".";
@@ -268,6 +274,7 @@ public class DataPresenter extends BasePresenter {
 
                 class ViewHolder {
                     TextView tvTitle;
+                    View vLine;
                 }
             };
             dataFragment.ivRightContent.setAdapter(rightContentAdapter);
@@ -364,5 +371,12 @@ public class DataPresenter extends BasePresenter {
             b.draw(canvas);
             canvas.restore();
         }
+    }
+
+    public void onChangeTheme() {
+        if (rightContentAdapter != null)
+            rightContentAdapter.notifyDataSetChanged();
+        if (leftAdapter != null)
+            leftAdapter.notifyDataSetChanged();
     }
 }

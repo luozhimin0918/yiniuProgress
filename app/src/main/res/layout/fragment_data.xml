@@ -8,7 +8,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:background="@color/bg_color1">
+        android:background="@color/bg_color1"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/ll_data_nav"

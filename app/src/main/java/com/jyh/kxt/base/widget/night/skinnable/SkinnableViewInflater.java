@@ -21,9 +21,11 @@ import com.jyh.kxt.base.widget.night.heple.SkinnableButton;
 import com.jyh.kxt.base.widget.night.heple.SkinnableEditText;
 import com.jyh.kxt.base.widget.night.heple.SkinnableFrameLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableGeneralBannerLayout;
+import com.jyh.kxt.base.widget.night.heple.SkinnableHorizontalScrollView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableImageButton;
 import com.jyh.kxt.base.widget.night.heple.SkinnableImageView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableLinearLayout;
+import com.jyh.kxt.base.widget.night.heple.SkinnableListView;
 import com.jyh.kxt.base.widget.night.heple.SkinnablePullToRefreshListView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRadioButton;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRadioGroup;
@@ -32,6 +34,7 @@ import com.jyh.kxt.base.widget.night.heple.SkinnableRelativeLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRoundImageView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableScrollView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableSegmentTabLayout;
+import com.jyh.kxt.base.widget.night.heple.SkinnableSlidingTabLayoutView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTabLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableToggleButton;
@@ -122,8 +125,14 @@ public class SkinnableViewInflater {
             case "RelativeLayout":
                 view = new SkinnableRelativeLayout(context, attrs);
                 break;
+            case "ListView":
+                view = new SkinnableListView(context, attrs);
+                break;
             case "ScrollView":
                 view = new SkinnableScrollView(context, attrs);
+                break;
+            case "HorizontalScrollView":
+                view = new SkinnableHorizontalScrollView(context, attrs);
                 break;
             case "android.support.v7.widget.Toolbar":
                 view = new SkinnableToolbar(context, attrs);
@@ -141,7 +150,10 @@ public class SkinnableViewInflater {
                 view = new SkinnableWheelView(context, attrs);
                 break;
             case "com.library.widget.tablayout.SegmentTabLayout":
-                view=new SkinnableSegmentTabLayout(context,attrs);
+                view = new SkinnableSegmentTabLayout(context, attrs);
+                break;
+            case "com.library.widget.tablayout.SlidingTabLayout":
+                view = new SkinnableSlidingTabLayoutView(context, attrs);
                 break;
             case "com.jyh.kxt.base.custom.RoundImageView":
                 view = new SkinnableRoundImageView(context, attrs);

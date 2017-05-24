@@ -50,6 +50,7 @@ public class CalendarItemFragment extends BaseFragment {
 
 
         ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        ptrlvContent.setDividerNull();
         ptrlvContent.getRefreshableView().setDividerHeight(0);
         ptrlvContent.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -87,6 +88,14 @@ public class CalendarItemFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (calendarItemAdapter != null) {
+            ptrlvContent.setDividerNull();
+            calendarItemAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onDestroyView() {

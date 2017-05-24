@@ -72,14 +72,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     @BindView(R.id.tv_time) TextView tvTime;
     @BindView(R.id.tv_flash_title) TextView tvFlashTitle;
     @BindView(R.id.tv_flash_content) TextView tvFlashContent;
-    @BindView(R.id.iv_adFlash) ImageView ivFlashAd;
+    @BindView(R.id.iv_adFlash) LinearLayout llFlashAd;
 
     @BindView(R.id.tv_rl_title) TextView tvRlTitle;
     @BindView(R.id.sv_star) StarView rlStar;
     @BindView(R.id.iv_flag) ImageView ivRlFlag;
     @BindView(R.id.ll_content) LinearLayout rlContent;
     @BindView(R.id.tv_describe) TextView tvDescribe;
-    @BindView(R.id.iv_adRL) ImageView ivRLAD;
+    @BindView(R.id.iv_adRL) LinearLayout llRLAD;
 
     @BindView(R.id.ll_tj) LinearLayout layoutTj;
     @BindView(R.id.iv_break) ImageView ivBreak;
@@ -264,14 +264,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             ivCollect.setSelected(isCollect);
 
             articles = flash.getArticle();
-            AdJson adJson = flash.getAd();
+            List<AdJson> ads = flash.getAd();
             String type = flashJson.getCode();
             switch (type) {
                 case VarConstant.SOCKET_FLASH_KUAIXUN:
-                    initFlash(flashJson.getContent(), adJson);
+                    initFlash(flashJson.getContent(), ads);
                     break;
                 case VarConstant.SOCKET_FLASH_CJRL:
-                    initRl(flashJson.getContent(), adJson);
+                    initRl(flashJson.getContent(), ads);
                     break;
             }
             if (articles == null || articles.size() == 0) {
@@ -324,7 +324,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         }
     }
 
-    private void initFlash(String content, AdJson adJson) throws Exception {
+    private void initFlash(String content, List<AdJson> ads) throws Exception {
         layoutFlash.setVisibility(View.VISIBLE);
         layoutRL.setVisibility(View.GONE);
         Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
@@ -350,9 +350,15 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         String importance = flash_kx.getImportance();
 
-        if (adJson != null && adJson.getPic_ad() != null) {
-            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
-                    (ivFlashAd);
+        if (ads != null && ads.size() > 0) {
+            for (AdJson ad : ads) {
+                ImageView ivAd = new ImageView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                        .LayoutParams.WRAP_CONTENT);
+                ivAd.setLayoutParams(params);
+                llFlashAd.addView(ivAd);
+                Glide.with(this).load(ad.getPic_ad()).error(R.mipmap.icon_def_video).placeholder(R.mipmap.icon_def_video).into(ivAd);
+            }
         }
 
         if (VarConstant.IMPORTANCE_HIGH.equals(importance)) {
@@ -364,7 +370,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         }
     }
 
-    private void initRl(String content, AdJson adJson) throws Exception {
+    private void initRl(String content, List<AdJson> ads) throws Exception {
         layoutFlash.setVisibility(View.GONE);
         layoutRL.setVisibility(View.VISIBLE);
 
@@ -377,9 +383,15 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(ivRlFlag);
 
-        if (adJson != null && adJson.getPic_ad() != null) {
-            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
-                    (ivRLAD);
+        if (ads != null && ads.size() > 0) {
+            for (AdJson ad : ads) {
+                ImageView ivAd = new ImageView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                        .LayoutParams.WRAP_CONTENT);
+                ivAd.setLayoutParams(params);
+                llRLAD.addView(ivAd);
+                Glide.with(this).load(ad.getPic_ad()).error(R.mipmap.icon_def_video).placeholder(R.mipmap.icon_def_video).into(ivAd);
+            }
         }
 
         String time2 = "00:00";
