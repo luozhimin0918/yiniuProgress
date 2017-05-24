@@ -343,8 +343,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                             Glide.with(context)
                                     .load(kx.getImage())
                                     .asBitmap()
-                                    .error(R.mipmap.ico_def_load)
-                                    .placeholder(R.mipmap.ico_def_load)
+                                    .error(R.mipmap.icon_def_news)
+                                    .placeholder(R.mipmap.icon_def_news)
                                     .into(new SimpleTarget<Bitmap>() {
                                         @Override
                                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -374,8 +374,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                     Glide.with(context)
                             .load(kx.getImage())
                             .asBitmap()
-                            .error(R.mipmap.ico_def_load)
-                            .placeholder(R.mipmap.ico_def_load)
+                            .error(R.mipmap.icon_def_news)
+                            .placeholder(R.mipmap.icon_def_news)
                             .into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -486,7 +486,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
                 Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(left.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(leftHolder
+                Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(leftHolder
                         .ivFlash);
                 String time3 = "00:00";
                 try {
@@ -512,7 +512,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
                 Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(right.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(rightHolder
+                Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(rightHolder
                         .ivFlash);
 
                 String time4 = "00:00";
@@ -538,7 +538,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
                 Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(top.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(topHolder
+                Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(topHolder
                         .ivFlash);
 
                 String time5 = "00:00";
@@ -567,7 +567,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                 Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(bottom.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                         (bottomHolder
                                 .ivFlash);
 

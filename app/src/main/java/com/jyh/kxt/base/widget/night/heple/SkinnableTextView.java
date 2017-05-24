@@ -70,6 +70,20 @@ public class SkinnableTextView extends AppCompatTextView implements Skinnable {
             ColorStateList color = ContextCompat.getColorStateList(context, textColorResource);
             setTextColor(color);
         }
+
+        key = R.styleable.SkinnableTextView[R.styleable.SkinnableTextView_android_drawableLeft];
+        Integer drawableLeftResource = mAttrsHelper.getAttributeResource(key);
+        if (drawableLeftResource != null) {
+            Drawable drawableLeft = ContextCompat.getDrawable(context, drawableLeftResource);
+            setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+        }
+
+        key = R.styleable.SkinnableTextView[R.styleable.SkinnableTextView_android_drawableTop];
+        Integer drawableTopResource = mAttrsHelper.getAttributeResource(key);
+        if (drawableTopResource != null) {
+            Drawable drawableTop = ContextCompat.getDrawable(context, drawableTopResource);
+            setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+        }
     }
 
     @Override

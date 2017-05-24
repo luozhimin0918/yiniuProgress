@@ -36,7 +36,6 @@ public class StatusBarCompat {
                     ViewGroup.LayoutParams.MATCH_PARENT));
             replaceLayout.setOrientation(LinearLayout.VERTICAL);
 
-
             View statusBarView = new View(activity);
             statusBarView.setTag("statusBar");
 

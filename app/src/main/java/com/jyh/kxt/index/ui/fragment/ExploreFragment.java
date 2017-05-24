@@ -162,7 +162,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = slides.get(position);
-                JumpUtils.jump((MainActivity) getActivity(), slideJson, slideJson.getHref());
+                JumpUtils.jumpDetails(getActivity(), slideJson.getO_class(), slideJson.getO_id(), slideJson.getHref());
             }
         });
     }
@@ -219,7 +219,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         RecyclerView rvContent = (RecyclerView) topicView.findViewById(R.id.rv_content);
 
-        LinearLayoutManager manager = new LinearLayoutManager(mContext){
+        LinearLayoutManager manager = new LinearLayoutManager(mContext) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -277,7 +277,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         RecyclerView rvContent = (RecyclerView) activityView.findViewById(R.id.rv_content);
 
-        LinearLayoutManager manager = new LinearLayoutManager(mContext){
+        LinearLayoutManager manager = new LinearLayoutManager(mContext) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -426,7 +426,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 2;
         NewsJson newsJson = newsAdapter.dataList.get(index);
-        JumpUtils.jump((MainActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(),newsJson.getO_id(), newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(getContext(), newsJson);
 

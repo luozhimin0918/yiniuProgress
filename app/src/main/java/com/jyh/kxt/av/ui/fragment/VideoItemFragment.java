@@ -101,12 +101,12 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         try {
-            getQueue().cancelAll(videoItemPresenter.getClass().getName());
+            getQueue().cancelAll(id);
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.onDestroyView();
     }
 }

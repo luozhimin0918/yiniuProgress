@@ -2,4 +2,10 @@
 <resources>
     <item name="iv_thumb" type="id"/>
     <item name="tv_thumb_count" type="id"/>
+
+    <item name="point_one" type="id"/>
+    <item name="point_two" type="id"/>
+    <item name="point_three" type="id"/>
+    <item name="line_one" type="id"/>
+    <item name="line_two" type="id"/>
 </resources>

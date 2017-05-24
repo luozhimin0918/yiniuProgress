@@ -36,6 +36,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     private String name;
     private boolean isMain;//是否为首页
+    private String code;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
         Bundle arguments = getArguments();
         name = arguments.getString(IntentConstant.NAME);
         int index = arguments.getInt(IntentConstant.INDEX);
+        code = arguments.getString(IntentConstant.CODE);
         isMain = index == 0 ? true : false;
 
         newsItemPresenter.setMain(isMain);
@@ -98,12 +100,12 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         try {
-            getQueue().cancelAll(newsItemPresenter.getClass().getName());
+            getQueue().cancelAll(code);
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.onDestroyView();
     }
 }

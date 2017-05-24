@@ -62,7 +62,7 @@ public class AuthorHeadContentAdapter extends RecyclerView.Adapter<AuthorHeadCon
             num_fans = "粉丝 " + num_fans;
         }
         holder.tvFans.setText(num_fans);
-        Glide.with(context).load(author.getPicture()).asBitmap().error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).override
+        Glide.with(context).load(author.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap.icon_user_def_photo).override
                 (100, 100)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override

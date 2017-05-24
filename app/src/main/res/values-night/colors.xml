@@ -7,8 +7,8 @@
     <color name="actionBar_textColor1">#909090</color>
     <color name="actionBar_textColor2">#666666</color>
 
-    <color name="white">#a5a5a5</color>
-    <color name="translucent_white">#cca5a5a5</color>
+    <color name="white">#909090</color>
+    <color name="translucent_white">#cc909090</color>
     <color name="blue">#115e91</color>
 
     <!-- 半透明 -->
@@ -30,7 +30,7 @@
     <color name="stroke_color1">#EDEDEF</color>
 
     <!--视图背景色-->
-    <color name="bg_color1">#F2F5F8</color>
+    <color name="bg_color1">#2d2d2d</color>
     <color name="bg_color2">#1E1E1E</color>
 
     <!-- 验证按钮颜色 -->
@@ -47,7 +47,7 @@
     <color name="font_color4">#909090</color>
     <color name="font_color5">#909090</color>
     <color name="font_color6">#4d4d4d</color>
-    <color name="font_color7">#7A8D99</color>
+    <color name="font_color7">#7f7f7f</color>
     <color name="font_color8">#115e91</color>
     <color name="font_color9">#4d4d4d</color>
     <color name="font_color10">#fefefe</color>
@@ -66,14 +66,14 @@
     <color name="tabUnSelColor">#666666</color>
 
     <!--星星的颜色-->
-    <color name="star_color1">#E4E4E4</color>
-    <color name="star_color2">#FFB700</color>
-    <color name="star_color3">#E74B31</color>
+    <color name="star_color1">#454545</color>
+    <color name="star_color2">#B96B16</color>
+    <color name="star_color3">#A3331D</color>
 
     <!--日历线框的颜色-->
-    <color name="calendar_line0">#EA492A</color>
-    <color name="calendar_line1">#61B484</color>
-    <color name="calendar_line2">#FD9525</color>
+    <color name="calendar_line0">#A3331D</color>
+    <color name="calendar_line1">#447E5C</color>
+    <color name="calendar_line2">#B96B16</color>
 
     <color name="selected_point">#C2DFFF</color>
 
@@ -93,8 +93,8 @@
 
 
     <!--控件颜色-->
-    <color name="check_box_color1">#EFF0F4</color>
-    <color name="check_box_color2">#1B9BF2</color>
+    <color name="check_box_color1">#909090</color>
+    <color name="check_box_color2">#136aa4</color>
 
     <color name="check_box_color3">#f1f2f6</color>
     <color name="check_box_color4">#d9e8ff</color>

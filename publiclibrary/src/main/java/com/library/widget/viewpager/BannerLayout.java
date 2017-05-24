@@ -230,7 +230,7 @@ public class BannerLayout extends RelativeLayout {
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(getContext())
                 .load(res)
-                .placeholder(R.mipmap.ico_def_load)
+                .placeholder(R.mipmap.icon_def_news)
                 .animate(R.anim.item_alpha_in)
                 .thumbnail(0.6f)
                 .override(500, 500)
@@ -292,7 +292,7 @@ public class BannerLayout extends RelativeLayout {
                     .load(url)
                     .thumbnail(0.6f)
                     .override(500, 500)
-                    .placeholder(R.mipmap.ico_def_load)
+                    .placeholder(R.mipmap.icon_def_news)
                     .animate(R.anim.item_alpha_in)
                     .placeholder(defaultImage)
                     .into(imageView);
@@ -302,7 +302,7 @@ public class BannerLayout extends RelativeLayout {
                     .load(url)
                     .thumbnail(0.6f)
                     .override(500, 500)
-                    .placeholder(R.mipmap.ico_def_load)
+                    .placeholder(R.mipmap.icon_def_news)
                     .animate(R.anim.item_alpha_in)
                     .into(imageView);
         }

@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@mipmap/ico_def_load"/>
+            android:src="@mipmap/icon_def_video"/>
 
         <ImageView
             android:id="@+id/iv_playBtn"
@@ -38,7 +38,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoItemContentHeight"
-        android:gravity="center_vertical"
         android:paddingLeft="@dimen/videoItemContentPaddingLeft"
         android:paddingRight="@dimen/videoItemContentPaddingRight"
         >
@@ -46,6 +45,7 @@
         <TextView
             android:id="@+id/tv_time"
             style="@style/VideoItemStyle"
+            android:layout_centerVertical="true"
             android:drawableLeft="@mipmap/icon_video_time"/>
 
         <ImageView
@@ -53,11 +53,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@mipmap/icon_video_more"/>
 
         <TextView
             android:id="@+id/tv_playCount"
             style="@style/VideoItemStyle"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/videoItemTextPadding"
             android:layout_toLeftOf="@id/iv_more"
             android:drawableLeft="@mipmap/icon_video_play_small"/>
@@ -65,6 +67,7 @@
         <TextView
             android:id="@+id/tv_commentCount"
             style="@style/VideoItemStyle"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/videoItemTextPadding"
             android:layout_toLeftOf="@id/tv_playCount"
             android:drawableLeft="@mipmap/icon_video_comment"/>

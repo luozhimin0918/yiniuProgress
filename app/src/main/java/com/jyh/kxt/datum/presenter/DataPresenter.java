@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -157,6 +158,9 @@ public class DataPresenter extends BasePresenter {
                 } else {
                     viewHolder = (ViewHolder) convertView.getTag();
                 }
+
+                viewHolder.rbName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+                viewHolder.rbName.setBackground(ContextCompat.getDrawable(mContext, R.drawable.shape_data_left_item));
 
                 DataGroup dataGroup = mDataLeftGroupList.get(position);
                 viewHolder.rbName.setText(dataGroup.getName());

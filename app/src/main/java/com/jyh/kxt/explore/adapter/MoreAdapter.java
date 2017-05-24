@@ -62,8 +62,8 @@ public class MoreAdapter extends BaseListAdapter {
                 } else {
                     viewHolder.ivTime.setSelected(false);
                 }
-                Glide.with(context).load(HttpConstant.IMG_URL + activity.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                        .ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + activity.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
+                        .icon_def_video).into
                         (viewHolder.ivPhoto);
             }
             break;
@@ -79,7 +79,8 @@ public class MoreAdapter extends BaseListAdapter {
                 TopicJson topic = JSON.parseObject(dataList.get(position).toString(), TopicJson.class);
                 viewHolder.tvTitle.setText(topic.getTitle());
                 viewHolder.tvContent.setText(topic.getBackground());
-                Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
+                        .icon_def_video).into
                         (viewHolder.ivPhoto);
             }
             break;

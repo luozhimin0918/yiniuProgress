@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
             themeBtn, loginBtn, quitBtn;
+    private TextView tvTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         settingBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_setting);
         aboutBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_about);
         themeBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_theme);
+        tvTheme = (TextView) llHeaderLayout.findViewById(R.id.tv_theme);
         quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
 
         loginPhoto.setOnClickListener(this);
@@ -250,7 +252,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
 
     }
-boolean isYeJianTheme = false;
+
+    boolean isYeJianTheme = false;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -307,10 +311,12 @@ boolean isYeJianTheme = false;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, false);
+                        tvTheme.setText("夜间");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, true);
+                        tvTheme.setText("白天");
                         break;
                 }
                 break;

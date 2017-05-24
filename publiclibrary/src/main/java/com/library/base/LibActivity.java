@@ -2,7 +2,11 @@ package com.library.base;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.LayoutInflaterCompat;
+import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by DaiYao on 2016/5/15 0015.
  */
-public abstract class LibActivity extends AppCompatActivity {
+public abstract class LibActivity extends AppCompatActivity implements LayoutInflaterFactory {
     protected final String TAG = this.getClass().getName();
 
     public enum StatusBarColor {
@@ -30,6 +34,7 @@ public abstract class LibActivity extends AppCompatActivity {
         }
     }
 
+    protected StatusBarColor statusBarColor;
     protected RequestQueue mQueue;
 
     /**
@@ -40,6 +45,9 @@ public abstract class LibActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        LayoutInflaterCompat.setFactory(layoutInflater, this);
+
         super.onCreate(savedInstanceState);
         ActivityManager.getInstance().pushOneActivity(this);
     }
@@ -57,6 +65,7 @@ public abstract class LibActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
 
         mQueue = RequestQueueUtil.newRequestQueue(this);
+        this.statusBarColor = statusBarColor;
 
         ButterKnife.bind(this);
         StatusBarCompat.compat(this, statusBarColor.color);
@@ -68,6 +77,7 @@ public abstract class LibActivity extends AppCompatActivity {
 
     protected void setBindingView(int layoutResID, StatusBarColor statusBarColor) {
         mQueue = RequestQueueUtil.newRequestQueue(this);
+        this.statusBarColor = statusBarColor;
         DataBindingUtil.setContentView(this, layoutResID);
         StatusBarCompat.compat(this, statusBarColor.color);
         ButterKnife.bind(this);

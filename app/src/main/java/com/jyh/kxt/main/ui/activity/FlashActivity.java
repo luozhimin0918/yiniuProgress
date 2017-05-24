@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.Space;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,20 +21,31 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
+import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.index.json.ConfigJson;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashContentJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
+import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.presenter.FlashActivityPresenter;
 import com.library.base.http.VarConstant;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 
@@ -90,6 +104,15 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
     private FlashActivityPresenter flashActivityPresenter;
     private String id;
+    private boolean isCollect;
+    private boolean isLoadOver;
+    private FlashJson flashJson;
+    private String title = "";
+    private String shareUrl = "";
+    private String discription = "";
+    private String image = "";
+    private List<NewsJson> articles;
+    private PopupUtil popupUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +125,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         plRootView.loadWait();
         id = getIntent().getStringExtra(IntentConstant.O_ID);
+
         flashActivityPresenter.init(id);
 
     }
@@ -129,18 +153,94 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 onBackPressed();
                 break;
             case R.id.iv_collect:
+                if (isLoadOver)
+                    if (isCollect) {
+                        CollectUtils.unCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson, new ObserverData() {
+                            @Override
+                            public void callback(Object o) {
+                                ivCollect.setSelected(false);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        }, null);
+                    } else {
+                        CollectUtils.collect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson, new ObserverData() {
+                            @Override
+                            public void callback(Object o) {
+                                ivCollect.setSelected(true);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        }, null);
+                    }
+
                 break;
             case R.id.iv_share:
+                UmengShareTool.initUmengLayout(this, new ShareJson(title, shareUrl, discription, image, null,
+                        UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flashJson, ivShare, null);
                 break;
             case R.id.iv_more:
+                if (popupUtil == null)
+                    initPop();
+                popupUtil.showAtLocation(view, Gravity.BOTTOM, 0, 0);
                 break;
             case R.id.layout_tj1:
                 //推荐1
+                NewsJson tj1 = articles.get(0);
+                JumpUtils.jumpDetails(this, tj1.getO_class(), tj1.getO_id(), tj1.getHref());
                 break;
             case R.id.layout_tj2:
                 //推荐2
+                NewsJson tj2 = articles.get(1);
+                JumpUtils.jumpDetails(this, tj2.getO_class(), tj2.getO_id(), tj2.getHref());
                 break;
         }
+    }
+
+    private void initPop() {
+        popupUtil = new PopupUtil(this);
+        View view = popupUtil.createPopupView(R.layout.pop_chang_theme);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int theme = ThemeUtil.getAlertTheme(getContext());
+                switch (theme) {
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, false);
+                        break;
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, true);
+                        break;
+                }
+            }
+        });
+
+        Space spaceView = (Space) view.findViewById(R.id.selectimg_open_space);
+
+        if (SystemUtil.navigationBar(this) > 10) {
+            ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
+            layoutParams.height = SystemUtil.navigationBar(this);
+            spaceView.setLayoutParams(layoutParams);
+        }
+
+        PopupUtil.Config config = new PopupUtil.Config();
+
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = (int) getResources().getDimension(R.dimen.actionbar_height);
+        popupUtil.setConfig(config);
     }
 
 
@@ -151,8 +251,19 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
      */
     public void init(FlashContentJson flash) {
         try {
-            FlashJson flashJson = flash.getKuaixun();
-            List<NewsJson> articles = flash.getArticle();
+            flashJson = flash.getKuaixun();
+
+            isCollect = CollectUtils.isCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson);
+
+            String configStr = SPUtils.getString(this, SpConstant.CONFIG);
+            ConfigJson config = JSON.parseObject(configStr, ConfigJson.class);
+            String url_kx_share = config.getUrl_kx_share();
+
+            shareUrl = url_kx_share.replace("{id}", flashJson.getSocre());
+
+            ivCollect.setSelected(isCollect);
+
+            articles = flash.getArticle();
             AdJson adJson = flash.getAd();
             String type = flashJson.getCode();
             switch (type) {
@@ -178,13 +289,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 tvTj1Author.setText(newsJson.getAuthor());
                 tvTj1Time.setText(newsJson.getDatetime());
                 tvTj1Title.setText(newsJson.getTitle());
-                Glide.with(this).load(newsJson.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(this).load(HttpConstant.IMG_URL + newsJson.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
                         (ivTj1Photo);
 
                 layoutTj1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                        JumpUtils.jumpDetails(FlashActivity.this, newsJson.getO_class(), newsJson.getO_id(),
                                 newsJson.getHref());
                     }
                 });
@@ -193,17 +305,19 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 tvTj2Author.setText(newsJson2.getAuthor());
                 tvTj2Time.setText(newsJson2.getDatetime());
                 tvTj2Title.setText(newsJson2.getTitle());
-                Glide.with(this).load(newsJson2.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(this).load(HttpConstant.IMG_URL + newsJson2.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
                         (ivTj2Photo);
                 layoutTj2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, newsJson2.getO_class(), newsJson2.getO_action(), newsJson2.getO_id(),
+                        JumpUtils.jumpDetails(FlashActivity.this, newsJson2.getO_class(), newsJson2.getO_id(),
                                 newsJson2.getHref());
                     }
                 });
             }
             plRootView.loadOver();
+            isLoadOver = true;
         } catch (Exception e) {
             e.printStackTrace();
             plRootView.loadError();
@@ -214,6 +328,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutFlash.setVisibility(View.VISIBLE);
         layoutRL.setVisibility(View.GONE);
         Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
+
+        title = flash_kx.getTitle();
         tvTime.setText(flash_kx.getTime());
 
         String contentStr = flash_kx.getTitle();
@@ -234,8 +350,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         String importance = flash_kx.getImportance();
 
-        if (adJson != null || adJson.getPic_ad() != null) {
-            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+        if (adJson != null && adJson.getPic_ad() != null) {
+            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                     (ivFlashAd);
         }
 
@@ -253,12 +369,16 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutRL.setVisibility(View.VISIBLE);
 
         Flash_RL rl = JSON.parseObject(content, Flash_RL.class);
+        discription = getResources().getString(R.string.date_describe,
+                rl.getBefore(),
+                rl.getForecast(),
+                rl.getReality());
         tvRlTitle.setText(rl.getTitle());
 
         Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(ivRlFlag);
 
-        if (adJson != null || adJson.getPic_ad() != null) {
-            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+        if (adJson != null && adJson.getPic_ad() != null) {
+            Glide.with(this).load(adJson.getPic_ad()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                     (ivRLAD);
         }
 

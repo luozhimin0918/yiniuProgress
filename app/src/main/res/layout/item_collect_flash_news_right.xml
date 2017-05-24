@@ -63,7 +63,7 @@
                     android:id="@+id/iv_flash"
                     android:layout_width="@dimen/flash_img_width"
                     android:layout_height="@dimen/flash_img_height"
-                    android:src="@mipmap/ico_def_load"/>
+                    android:src="@mipmap/icon_def_news"/>
             </LinearLayout>
 
             <include layout="@layout/layout_flash_bottom_bar"/>

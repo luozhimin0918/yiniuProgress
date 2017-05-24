@@ -134,7 +134,7 @@ public class SearchArticleFragment extends BaseFragment implements PageLoadLayou
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 1;
         NewsJson newsJson = newsAdapter.getData().get(index);
-        JumpUtils.jump((BaseActivity) getContext(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
         BrowerHistoryUtils.save(getContext(), newsJson);
         newsAdapter.getView(index, view, parent);
     }

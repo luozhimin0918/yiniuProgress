@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +40,7 @@ public class StarView extends LinearLayout {
         for (int i = 0; i < STAR_COUNT; i++) {
             ImageView starView = new ImageView(getContext());
 
-            starView.setImageResource(R.mipmap.icon_star1);
+            starView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_star1));
 
             LayoutParams starParams = new LayoutParams(starSize, starSize);
             starParams.setMargins(0, 0, starMargins, 0);
@@ -69,9 +70,10 @@ public class StarView extends LinearLayout {
             ImageView starView = (ImageView) getChildAt(i);
 
             if (i < selectCount) {
-                starView.setImageResource(isHigh ? R.mipmap.icon_star3 : R.mipmap.icon_star2);
+                starView.setImageDrawable(isHigh ? ContextCompat.getDrawable(getContext(), R.mipmap.icon_star3) : ContextCompat
+                        .getDrawable(getContext(), R.mipmap.icon_star2));
             } else {
-                starView.setImageResource(R.mipmap.icon_star1);
+                starView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_star1));
             }
         }
     }

@@ -45,7 +45,7 @@ public class VideoItemPresenter extends BasePresenter {
         this.id = id;
         if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
-            request.setTag(getClass().getName());
+            request.setTag(id);
         }
         initLoad(null);
     }

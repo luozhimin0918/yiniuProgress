@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.presenter;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -97,11 +98,11 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         newsItemFragment.plRootView.loadWait();
         queue = newsItemFragment.getQueue();
+        code = arguments.getString(IntentConstant.CODE);
         if (request == null) {
             request = new VolleyRequest(mContext, queue);
-            request.setTag(getClass().getName());
+            request.setTag(code);
         }
-        code = arguments.getString(IntentConstant.CODE);
         if (isMain) {
             ininMain(arguments);
         } else {
@@ -143,7 +144,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
         NewsJson newsJson = newsAdapter.getData().get(position);
-        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+        JumpUtils.jumpDetails((MainActivity) mContext, newsJson.getO_class(),newsJson.getO_id(),
                 newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
@@ -276,7 +277,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = carouselList.get(position);
-                JumpUtils.jump((MainActivity) mContext, slideJson, slideJson.getHref());
+                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(),slideJson.getO_id(), slideJson.getHref());
             }
         });
 
@@ -402,8 +403,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             ll_ad.setVisibility(View.GONE);
         }
 
-        Glide.with(mContext).load(ads.getPic_ad().getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                .ico_def_load).into(iv_ad);
+        Glide.with(mContext).load(ads.getPic_ad().getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                .icon_def_news).into(iv_ad);
 
         homeHeadView.addView(adView);
 

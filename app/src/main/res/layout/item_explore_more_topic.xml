@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/explore_more_activity_img_height"
             android:scaleType="fitXY"
-            android:src="@mipmap/ico_def_load"/>
+            android:src="@mipmap/icon_def_video"/>
 
         <TextView
             android:id="@+id/tv_title"

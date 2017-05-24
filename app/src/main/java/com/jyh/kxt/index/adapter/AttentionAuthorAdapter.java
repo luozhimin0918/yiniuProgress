@@ -69,7 +69,8 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
 
         final AuthorDetailsJson author = dataList.get(position);
         final ViewHolder finalViewHolder = viewHolder;
-        Glide.with(context).load(author.getPicture()).asBitmap().error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(author.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                .icon_user_def_photo).into(new SimpleTarget<Bitmap>() {
 
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -114,9 +115,9 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
      * @param viewHolder
      */
     private void setTheme(ViewHolder viewHolder) {
-        viewHolder.tvName.setTextColor(ContextCompat.getColor(context,R.color.font_color5));
-        viewHolder.tvContent.setTextColor(ContextCompat.getColor(context,R.color.font_color6));
-        viewHolder.ivAttention.setBackground(ContextCompat.getDrawable(context,R.drawable.sel_news_attention));
+        viewHolder.tvName.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        viewHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
+        viewHolder.ivAttention.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_news_attention));
     }
 
     public void setData(List<AuthorDetailsJson> data) {

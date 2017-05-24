@@ -79,51 +79,48 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      * 连接Socket
      */
     private void connect() {
-        String configStr = SPUtils.getString(mContext, SpConstant.CONFIG);
-        if (!TextUtils.isEmpty(configStr)) {
-            final WebSocketOptions options = new WebSocketOptions();
-            options.setReceiveTextMessagesRaw(false);
-            options.setSocketConnectTimeout(30000);
-            options.setSocketReceiveTimeout(10000);
-            final List<BasicNameValuePair> headers = new ArrayList<>();
-            headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
-            if (queue == null)
-                queue = flashFragment.getQueue();
-            if (request == null) {
-                request = new VolleyRequest(mContext, queue);
-                request.setTag(getClass().getName());
-            }
-            JSONObject object = request.getJsonParam();
-            try {
-                object.put(IntentConstant.SOCKET_CLIENT, VarConstant.HTTP_CLIENT);
+        final WebSocketOptions options = new WebSocketOptions();
+        options.setReceiveTextMessagesRaw(false);
+        options.setSocketConnectTimeout(30000);
+        options.setSocketReceiveTimeout(10000);
+        final List<BasicNameValuePair> headers = new ArrayList<>();
+        headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
+        if (queue == null)
+            queue = flashFragment.getQueue();
+        if (request == null) {
+            request = new VolleyRequest(mContext, queue);
+            request.setTag(getClass().getName());
+        }
+        JSONObject object = request.getJsonParam();
+        try {
+            object.put(IntentConstant.SOCKET_CLIENT, VarConstant.HTTP_CLIENT);
 
-                request.doGet(HttpConstant.SOCKET_TOKEN_KX + EncryptionUtils.createJWT(com.library
-                        .base.http
-                        .VarConstant.KEY, object.toString()), new HttpListener<String>() {
-                    @Override
-                    protected void onResponse(String str) {
-                        try {
-                            org.json.JSONObject jsonObject = new org.json.JSONObject(str);
-                            String server = jsonObject.getString("server");
-                            String token = jsonObject.getString("token");
-                            connection.connect(server + "?token=" + token, null, connectionHandler, options,
-                                    headers);
+            request.doGet(HttpConstant.SOCKET_TOKEN_KX + EncryptionUtils.createJWT(com.library
+                    .base.http
+                    .VarConstant.KEY, object.toString()), new HttpListener<String>() {
+                @Override
+                protected void onResponse(String str) {
+                    try {
+                        org.json.JSONObject jsonObject = new org.json.JSONObject(str);
+                        String server = jsonObject.getString("server");
+                        String token = jsonObject.getString("token");
+                        connection.connect(server + "?token=" + token, null, connectionHandler, options,
+                                headers);
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            flashFragment.plRootView.loadError();
-                        }
-                    }
-
-                    @Override
-                    protected void onErrorResponse(VolleyError error) {
-                        super.onErrorResponse(error);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         flashFragment.plRootView.loadError();
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    flashFragment.plRootView.loadError();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

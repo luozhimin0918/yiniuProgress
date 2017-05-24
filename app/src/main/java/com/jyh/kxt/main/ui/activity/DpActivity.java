@@ -39,7 +39,7 @@ public class DpActivity extends BaseActivity implements PageLoadLayout.OnAfreshL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_dp,StatusBarColor.THEME1);
+        setContentView(R.layout.activity_news_dp, StatusBarColor.THEME1);
 
         dpPresenter = new DpPresenter(this);
         tvBarTitle.setText("专家点评");
@@ -77,6 +77,7 @@ public class DpActivity extends BaseActivity implements PageLoadLayout.OnAfreshL
             plRootView.loadEmptyData();
         } else {
             initFragments(navs);
+            plRootView.loadOver();
         }
     }
 
@@ -94,6 +95,6 @@ public class DpActivity extends BaseActivity implements PageLoadLayout.OnAfreshL
             fragmentList.add(dpItemFragment);
         }
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
-        stlNavigationBar.setViewPager(vpContent, tabs);
+        stlNavigationBar.setViewPager(vpContent, tabs, true);
     }
 }

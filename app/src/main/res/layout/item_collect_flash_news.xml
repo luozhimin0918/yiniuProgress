@@ -64,7 +64,7 @@
                 android:minHeight="74dp"
                 android:minWidth="110dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ico_def_load"
+                android:src="@mipmap/icon_def_news"
                 android:visibility="visible"/>
 
             <include layout="@layout/layout_flash_bottom_bar"/>

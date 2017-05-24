@@ -356,8 +356,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             Glide.with(context)
                                     .load(kx.getImage())
                                     .asBitmap()
-                                    .error(R.mipmap.ico_def_load)
-                                    .placeholder(R.mipmap.ico_def_load)
+                                    .error(R.mipmap.icon_def_news)
+                                    .placeholder(R.mipmap.icon_def_news)
                                     .into(new SimpleTarget<Bitmap>() {
                                         @Override
                                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -387,8 +387,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     Glide.with(context)
                             .load(kx.getImage())
                             .asBitmap()
-                            .error(R.mipmap.ico_def_load)
-                            .placeholder(R.mipmap.ico_def_load)
+                            .error(R.mipmap.icon_def_news)
+                            .placeholder(R.mipmap.icon_def_news)
                             .into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -403,13 +403,12 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                     if (width > imgMaxWidth) {
                                         layoutParams.width = imgMaxWidth;
                                         finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        finalKxHolder.imageView.setImageBitmap(resource);
                                     }
                                     if (height > imgMaxHeight) {
                                         layoutParams.height = imgMaxHeight;
                                         finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        finalKxHolder.imageView.setImageBitmap(resource);
                                     }
+                                    finalKxHolder.imageView.setImageBitmap(resource);
                                 }
                             });
                 }
@@ -499,7 +498,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
                 Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(left.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(leftHolder
+                Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(leftHolder
                         .ivFlash);
 
                 Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
@@ -528,7 +527,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
                 Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(right.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(rightHolder
+                Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(rightHolder
                         .ivFlash);
 
                 String time4 = "00:00";
@@ -554,7 +553,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
                 Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(top.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(topHolder
+                Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(topHolder
                         .ivFlash);
 
                 String time5 = "00:00";
@@ -583,7 +582,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                 Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(bottom.getImage()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into
+                Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                         (bottomHolder
                                 .ivFlash);
 

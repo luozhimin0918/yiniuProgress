@@ -61,8 +61,8 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
         }
 
         VideoListJson videoBean = dataList.get(position);
-        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                .ico_def_load).into(viewHolder.ivPhoto);
+        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                .icon_def_news).into(viewHolder.ivPhoto);
         setContent(viewHolder, videoBean);
 
         try {

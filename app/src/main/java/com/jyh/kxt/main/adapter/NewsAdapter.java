@@ -81,9 +81,9 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
         }
 
         Glide.with(mContext).load(picture)
-                .placeholder(R.mipmap.ico_def_load)
+                .placeholder(R.mipmap.icon_def_news)
                 .override(100, 100)
-                .error(R.mipmap.ico_def_load)
+                .error(R.mipmap.icon_def_news)
                 .into(holder.ivPhoto);
 
         setContentColor(holder, news);

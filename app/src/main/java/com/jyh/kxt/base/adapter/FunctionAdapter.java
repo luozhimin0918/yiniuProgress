@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,9 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
     public void onBindViewHolder(FunctionViewHolder holder, final int position) {
         ShareBtnJson shareBtnJson = list.get(position);
         holder.textView.setText(shareBtnJson.getText());
-        holder.imageView.setBackgroundResource(shareBtnJson.getId());
+
+        holder.textView.setTextColor(ContextCompat.getColor(context, R.color.font_color60));
+        holder.imageView.setBackground(ContextCompat.getDrawable(context, shareBtnJson.getId()));
 
         holder.imageView.setSelected(shareBtnJson.isStatus());
 

@@ -8,25 +8,24 @@ import android.util.AttributeSet;
 
 import com.jyh.kxt.R;
 import com.library.widget.tablayout.SegmentTabLayout;
-import com.library.widget.tablayout.SlidingTabLayout;
 
 
 /**
  * Created by geminiwen on 16/6/15.
  */
-public class SkinnableSlidingSegmentTabLayout extends SegmentTabLayout implements Skinnable {
+public class SkinnableSegmentTabLayout extends SegmentTabLayout implements Skinnable {
 
     private AttrsHelper mAttrsHelper;
 
-    public SkinnableSlidingSegmentTabLayout(Context context) {
+    public SkinnableSegmentTabLayout(Context context) {
         this(context, null);
     }
 
-    public SkinnableSlidingSegmentTabLayout(Context context, AttributeSet attrs) {
+    public SkinnableSegmentTabLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SkinnableSlidingSegmentTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SkinnableSegmentTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mAttrsHelper = new AttrsHelper();
 
@@ -36,6 +35,7 @@ public class SkinnableSlidingSegmentTabLayout extends SegmentTabLayout implement
                 defStyleAttr, 0);
         mAttrsHelper.storeAttributeResource(a, R.styleable.SkinnableView);
         a.recycle();
+
         a = context.obtainStyledAttributes(attrs,
                 R.styleable.SegmentTabLayout,
                 defStyleAttr, 0);

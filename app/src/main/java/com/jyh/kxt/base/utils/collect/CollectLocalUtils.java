@@ -291,6 +291,46 @@ public class CollectLocalUtils {
         return false;
     }
 
+    /**
+     * 是否本地收藏
+     *
+     * @param context
+     * @param type
+     * @param id
+     * @return
+     */
+    public static boolean isCollect(Context context, String type, String id) {
+
+        try {
+            DBManager instance = DBManager.getInstance(context);
+            DaoSession daoSessionRead = instance.getDaoSessionRead();
+            switch (type) {
+                case VarConstant.COLLECT_TYPE_ARTICLE:
+                    List<NewsJson> newsJsons = daoSessionRead.getNewsJsonDao().queryRaw(VarConstant.SELECT_NEWS, new String[]{id
+                            , "" + VarConstant
+                            .DB_TYPE_COLLECT_LOCAL});
+                    if (newsJsons.size() > 0)
+                        return true;
+                    else
+                        return false;
+                case VarConstant.COLLECT_TYPE_FLASH:
+                    List<FlashJson> flashJsons = daoSessionRead.getFlashJsonDao().queryRaw(VarConstant.SELECT_FLASH, new String[]{id, ""
+                            + VarConstant
+                            .DB_TYPE_COLLECT_LOCAL});
+                    if (flashJsons.size() > 0) return true;
+                    else return false;
+                case VarConstant.COLLECT_TYPE_VIDEO:
+                    List<VideoListJson> videoListJsons = daoSessionRead.getVideoListJsonDao().queryRaw(VarConstant.SELECT_VIDEO, new
+                            String[]{id, "" + VarConstant
+                            .DB_TYPE_COLLECT_LOCAL});
+                    if (videoListJsons.size() > 0) return true;
+                    else return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /**
      * 本地批量取消收藏

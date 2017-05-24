@@ -9,7 +9,7 @@
         android:id="@+id/iv_btn"
         android:layout_width="@dimen/explore_header_item1_ImgSize"
         android:layout_height="@dimen/explore_header_item1_ImgSize"
-        android:src="@mipmap/ico_def_load"/>
+        android:src="@mipmap/icon_user_def_photo"/>
 
     <TextView
         android:id="@+id/tv_btn"

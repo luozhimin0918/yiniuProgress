@@ -88,8 +88,8 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
             case TYPE_NEWS:
                 NewsJson newsBean = (NewsJson) dataList.get(position);
 
-                Glide.with(context).load(HttpConstant.IMG_URL + newsBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                        .ico_def_load).into
+                Glide.with(context).load(HttpConstant.IMG_URL + newsBean.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
                         (newsHolder.ivPhoto);
 
                 newsHolder.tv1.setVisibility(View.GONE);

@@ -16,6 +16,7 @@ import com.jyh.kxt.av.presenter.VideoPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -42,6 +43,8 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
 
     private List<Fragment> fragmentList;
     private String[] tabs;
+    private List<VideoNavJson> videoNavJsons;
+    private String oid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,11 +88,23 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
     }
 
     public void ininTab(List<VideoNavJson> videoNavJsons) {
+        this.videoNavJsons = videoNavJsons;
         int size = videoNavJsons.size();
         tabs = new String[size];
         generateListFragment(videoNavJsons);
 
         stlNavigationBar.setViewPager(vpVideoList, tabs);
+
+        if (!RegexValidateUtil.isEmpty(oid)) {
+            int position = 0;
+            for (int i = 0; i < size; i++) {
+                if (oid.equals(videoNavJsons.get(i).getId())) {
+                    position = i;
+                }
+            }
+            oid = null;
+            vpVideoList.setCurrentItem(position);
+        }
 
         plRootView.loadOver();
     }
@@ -127,6 +142,23 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setJumpId(String o_id) {
+        this.oid = o_id;
+        if (videoNavJsons != null) {
+            int size = videoNavJsons.size();
+            if (!RegexValidateUtil.isEmpty(oid)) {
+                int position = 0;
+                for (int i = 0; i < size; i++) {
+                    if (oid.equals(videoNavJsons.get(i).getId())) {
+                        position = i;
+                    }
+                }
+                oid = null;
+                vpVideoList.setCurrentItem(position);
+            }
         }
     }
 }

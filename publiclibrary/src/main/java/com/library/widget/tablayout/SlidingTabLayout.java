@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.library.R;
+import com.library.util.SystemUtil;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.library.widget.tablayout.utils.UnreadMsgUtils;
 import com.library.widget.tablayout.widget.MsgView;
@@ -210,6 +212,13 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
      * 关联ViewPager,用于不想在ViewPager适配器中设置titles数据的情况
      */
     public void setViewPager(ViewPager vp, String[] titles) {
+        setViewPager(vp, titles, false);
+    }
+
+    /**
+     * 关联ViewPager,用于不想在ViewPager适配器中设置titles数据的情况
+     */
+    public void setViewPager(ViewPager vp, String[] titles, boolean isTabSpaceEqual) {
         if (vp == null || vp.getAdapter() == null) {
             throw new IllegalStateException("ViewPager or ViewPager adapter can not be NULL !");
         }
@@ -221,6 +230,23 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         if (titles.length != vp.getAdapter().getCount()) {
             throw new IllegalStateException("Titles length must be the same as the page count !");
         }
+
+        if (isTabSpaceEqual) {//新增是否大于屏幕
+            float textSize = getTextsize();
+            Paint paint = new Paint();
+            paint.setTextSize(textSize);
+            int sumWidth = 0;
+            for (int i = 0; i < titles.length; i++) {
+                String titleItemStr = titles[i];
+                sumWidth += (int) (paint.measureText(titleItemStr) + getTabPadding() * 2);
+
+            }
+            int width = getWidth();
+            if (width > sumWidth) {
+                setTabSpaceEqual(true);
+            }
+        }
+
 
         this.mViewPager = vp;
         mTitles = new ArrayList<>();

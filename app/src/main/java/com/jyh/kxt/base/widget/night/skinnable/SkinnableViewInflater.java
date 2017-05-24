@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.TintContextWrapper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.jyh.kxt.base.widget.night.heple.SkinnableRecyclerView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRelativeLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRoundImageView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableScrollView;
+import com.jyh.kxt.base.widget.night.heple.SkinnableSegmentTabLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTabLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableToggleButton;
@@ -137,6 +139,9 @@ public class SkinnableViewInflater {
                 break;
             case "com.library.widget.pickerview.lib.WheelView":
                 view = new SkinnableWheelView(context, attrs);
+                break;
+            case "com.library.widget.tablayout.SegmentTabLayout":
+                view=new SkinnableSegmentTabLayout(context,attrs);
                 break;
             case "com.jyh.kxt.base.custom.RoundImageView":
                 view = new SkinnableRoundImageView(context, attrs);

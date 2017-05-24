@@ -75,8 +75,8 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         final VideoListJson videoBean = dataList.get(position);
         viewHolder.ivDel.setSelected(videoBean.isSel());
 
-        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                .ico_def_load).into(viewHolder
+        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                .icon_def_news).into(viewHolder
                 .ivPhoto);
 
         viewHolder.tvTitle.setText(videoBean.getTitle());

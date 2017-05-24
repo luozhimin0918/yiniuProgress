@@ -57,7 +57,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsJson newsJson = adapter.dataList.get(position - 1);
 
-                JumpUtils.jump((BaseActivity) getActivity(),newsJson.getO_class(),newsJson.getO_action(),newsJson.getO_id(),newsJson.getHref());
+                JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
 //                //保存浏览记录
 //                BrowerHistoryUtils.save(getContext(), newsJson);
 //
@@ -152,7 +152,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      * @param selected
      * @param observerData
      */
-    public void selAll(boolean selected,DelNumListener observerData) {
+    public void selAll(boolean selected, DelNumListener observerData) {
         if (selected) {
             //全选
             List<NewsJson> data = adapter.getData();

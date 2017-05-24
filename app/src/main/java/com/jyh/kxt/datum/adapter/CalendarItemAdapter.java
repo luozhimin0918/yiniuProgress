@@ -133,7 +133,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 0:
                 CalendarTitleBean mCalendarTitleBean = (CalendarTitleBean) mCalendarType;
                 viewHolder0.tvTitle.setText(mCalendarTitleBean.getName());
-
+                viewHolder0.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
                 if (mCalendarTitleBean.getSpaceType() == 1) {
                     View mPaddingView = new View(mContext);
                     mPaddingView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color2));

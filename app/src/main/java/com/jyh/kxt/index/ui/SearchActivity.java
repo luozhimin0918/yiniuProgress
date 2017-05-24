@@ -228,7 +228,7 @@ public class SearchActivity extends BaseActivity {
                 @Override
                 public void onItemClick(int position, View view) {
                     NewsJson newsJson = historyData.get(position);
-                    JumpUtils.jump(SearchActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
+                    JumpUtils.jumpDetails(SearchActivity.this, newsJson.getO_class(), newsJson.getO_id(), newsJson
                             .getHref());
                 }
             });

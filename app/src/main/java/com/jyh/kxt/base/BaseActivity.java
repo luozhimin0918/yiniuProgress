@@ -9,6 +9,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatDelegate;
@@ -36,12 +39,14 @@ import com.library.base.LibActivity;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
+import java.util.List;
+
 
 /**
  * Created by Mr'Dai on 2017/2/22.
  */
 
-public class BaseActivity extends LibActivity implements IBaseView, LayoutInflaterFactory {
+public class BaseActivity extends LibActivity implements IBaseView {
 
     //跳转Activity 策略
     private int intentAnimation = 0;
@@ -56,7 +61,9 @@ public class BaseActivity extends LibActivity implements IBaseView, LayoutInflat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ThemeUtil.addActivityToThemeCache(this);
+
 
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -102,6 +109,29 @@ public class BaseActivity extends LibActivity implements IBaseView, LayoutInflat
         if (mSkinnableCallback != null) {
             mSkinnableCallback.onApplyDayNight();
         }
+
+        View statusBar = decorView.findViewWithTag("statusBar");
+        if (statusBar != null) {
+            int bgColor = ContextCompat.getColor(this, statusBarColor.color);
+            statusBar.setBackgroundColor(bgColor);
+        }
+
+        try {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            if(fragments != null ){
+                for (Fragment fragment : fragments) {
+                    if(fragment instanceof BaseFragment){
+                        BaseFragment baseFragment = (BaseFragment) fragment;
+                        baseFragment.updateStatusBarColor();
+                        baseFragment.onChangeTheme();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        onChangeTheme();
     }
 
     private void applyDayNightForView(View view) {
@@ -109,7 +139,7 @@ public class BaseActivity extends LibActivity implements IBaseView, LayoutInflat
             Skinnable skinnable = (Skinnable) view;
             if (skinnable.isSkinnable()) {
                 skinnable.applyDayNight();
-                Log.i(TAG, "applyDayNightForView: "+skinnable);
+                Log.i(TAG, "applyDayNightForView: " + skinnable);
             }
         }
         if (view instanceof ViewGroup && !"filter".equals(view.getTag())) {

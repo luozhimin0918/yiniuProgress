@@ -2,6 +2,7 @@ package com.jyh.kxt.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,19 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
 
     }
 
+    public void updateStatusBarColor() {
+        if (replaceLayout != null) {
+            View fragmentStatusBar = replaceLayout.findViewWithTag("fragment_statusBar");
+            if (fragmentStatusBar != null) {
+                int bgColor = ContextCompat.getColor(getContext(), statusBarColor.color);
+                fragmentStatusBar.setBackgroundColor(bgColor);
+            }
+        }
+    }
+
+    protected void onChangeTheme() {
+
+    }
 
     @Override
     public void onResume() {

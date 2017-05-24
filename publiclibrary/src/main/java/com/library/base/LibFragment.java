@@ -23,10 +23,10 @@ public abstract class LibFragment extends Fragment {
 
     protected final String TAG = this.getClass().getName();
 
-    private LinearLayout replaceLayout;
+    protected LinearLayout replaceLayout;
     private LayoutInflater inflater;
     private Unbinder unbinder;
-
+    protected LibActivity.StatusBarColor statusBarColor;
     /**
      * 使用OnDataBinding标注
      */
@@ -50,6 +50,7 @@ public abstract class LibFragment extends Fragment {
      * @param statusBarColor -1 则不填充标题栏
      */
     protected void setContentView(int layoutResID, LibActivity.StatusBarColor statusBarColor) {
+        this.statusBarColor = statusBarColor;
         loadLayout(layoutResID, statusBarColor);
     }
 
@@ -59,6 +60,7 @@ public abstract class LibFragment extends Fragment {
     }
 
     protected void setBindingView(@LayoutRes int layoutResID, LibActivity.StatusBarColor statusBarColor) {
+        this.statusBarColor = statusBarColor;
         loadLayout(layoutResID, statusBarColor);
         try {
             viewDataBinding = DataBindingUtil.bind(replaceLayout);

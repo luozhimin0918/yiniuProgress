@@ -66,8 +66,8 @@ public class KXTApplication extends Application {
             }
         });
 
-        CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(this);
+//        CrashHandler crashHandler = new CrashHandler();
+//        crashHandler.init(this);
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
     }

@@ -38,12 +38,14 @@ public class DpFragmentPresenter extends BasePresenter {
 
     public DpFragmentPresenter(IBaseView iBaseView) {
         super(iBaseView);
-        request = new VolleyRequest(mContext, mQueue);
-        request.setTag(getClass().getName());
     }
 
     public void init(String code) {
         this.code = code;
+        if (request == null) {
+            request = new VolleyRequest(mContext, mQueue);
+            request.setTag(code);
+        }
         request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
             @Override
             protected void onResponse(List<NewsJson> newsJsons) {

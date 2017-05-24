@@ -31,6 +31,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
     private RankItemPresenter rankItemPresenter;
 
     private String rankUrl;
+    private String type;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -40,7 +41,8 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
         plvContent.setOnRefreshListener(rankItemPresenter);
 
-        switch (getArguments().getString(IntentConstant.RANK_TYPE)) {
+        type = getArguments().getString(IntentConstant.RANK_TYPE);
+        switch (type) {
             case RANK_MORE_PLAY:
                 rankUrl = HttpConstant.VIDEO_MOST_PLAY;
                 break;
@@ -65,7 +67,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
 
     @Override
     public void onDestroyView() {
+        getQueue().cancelAll(rankUrl);
         super.onDestroyView();
-        getQueue().cancelAll(rankItemPresenter.getClass().getName());
     }
 }

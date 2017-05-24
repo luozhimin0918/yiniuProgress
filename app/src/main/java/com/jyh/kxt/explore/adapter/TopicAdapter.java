@@ -44,7 +44,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         TopicJson topic = topics.get(position);
         holder.tvTitle.setText(topic.getTitle());
-        Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load)
+        Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap.icon_def_video)
                 .into(holder.ivBtn);
     }
 

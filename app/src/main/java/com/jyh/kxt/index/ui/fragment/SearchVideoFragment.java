@@ -87,7 +87,7 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         VideoListJson video = videoAdapter.getData().get(position - 1);
-        JumpUtils.jump((BaseActivity) getContext(), VarConstant.OCLASS_VIDEO, VarConstant.OACTION_DETAIL, video.getUid(), null);
+        JumpUtils.jumpDetails(getActivity(), VarConstant.OCLASS_VIDEO,video.getUid(), null);
     }
 
     @Override

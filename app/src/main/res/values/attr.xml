@@ -73,6 +73,8 @@
 
     <declare-styleable name="SkinnableTextView">
         <attr name="android:textColor"/>
+        <attr name="android:drawableLeft"/>
+        <attr name="android:drawableTop"/>
     </declare-styleable>
 
     <declare-styleable name="SkinnableButton">

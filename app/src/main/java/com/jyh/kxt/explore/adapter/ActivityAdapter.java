@@ -59,7 +59,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             e.printStackTrace();
             holder.tvTime.setText("00:00");
         }
-        Glide.with(mContext).load(HttpConstant.IMG_URL+activity.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap.ico_def_load).into(holder.ivBtn);
+        Glide.with(mContext).load(HttpConstant.IMG_URL + activity.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
+                .icon_def_video).into(holder.ivBtn);
 
     }
 

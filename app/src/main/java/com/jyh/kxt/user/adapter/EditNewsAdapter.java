@@ -69,7 +69,7 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         setTheme(holder, news);
         holder.ivDel.setSelected(news.isSel());
 
-        Glide.with(context).load(HttpConstant.IMG_URL + news.getPicture()).placeholder(R.mipmap.ico_def_load).error(R.mipmap.ico_def_load)
+        Glide.with(context).load(HttpConstant.IMG_URL + news.getPicture()).placeholder(R.mipmap.icon_def_news).error(R.mipmap.icon_def_news)
                 .into
                         (holder.ivPhoto);
 

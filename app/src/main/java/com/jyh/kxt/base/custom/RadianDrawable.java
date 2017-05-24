@@ -25,7 +25,7 @@ public class RadianDrawable extends GradientDrawable {
 
 
         setOrientation(Orientation.LEFT_RIGHT);
-        setColor(Color.WHITE);
+        setColor(ContextCompat.getColor(mContext, R.color.theme1));
 
         setCornerRadius(btnCornerRadius1);
         setStroke(R.color.line_color);

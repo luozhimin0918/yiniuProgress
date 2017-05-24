@@ -57,14 +57,13 @@
                     android:layout_width="@dimen/authorPhotoSize"
                     android:layout_height="@dimen/authorPhotoSize"
                     android:layout_marginRight="@dimen/newsContentPadding3"
-                    android:src="@mipmap/ico_def_load"/>
+                    android:src="@mipmap/icon_user_def_photo"/>
 
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/iv_photo"
-                    android:text="马克.dsadas"
                     android:textColor="@color/white"
                     android:textSize="@dimen/title_font_size2"/>
 
@@ -78,8 +77,7 @@
 
                     <TextView
                         android:id="@+id/tv_fans"
-                        style="@style/AuthorTextViewStyle"
-                        android:text="粉丝 111"/>
+                        style="@style/AuthorTextViewStyle"/>
 
                     <View
                         android:layout_width="2px"
@@ -91,7 +89,6 @@
                     <TextView
                         android:id="@+id/tv_article"
                         style="@style/AuthorTextViewStyle"
-                        android:text="文章 222"
                         />
                 </LinearLayout>
 
@@ -106,7 +103,6 @@
                 android:layout_marginLeft="@dimen/newsContentPadding3"
                 android:layout_marginRight="@dimen/newsContentPadding3"
                 android:layout_marginTop="16dp"
-                android:text="简介:哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈"
                 android:textColor="@color/font_color15"/>
         </LinearLayout>
 

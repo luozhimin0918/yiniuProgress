@@ -12,6 +12,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.BrowerHistoryPresenter;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.widget.PageLoadLayout;
@@ -54,7 +55,7 @@ public class BrowerHistoryActivity extends BaseActivity {
                 if (item instanceof String) return;
                 if (item instanceof NewsJson) {
                     NewsJson newsJson = (NewsJson) item;
-                    JumpUtils.jump(BrowerHistoryActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                    JumpUtils.jumpDetails(BrowerHistoryActivity.this, newsJson.getO_class(), newsJson.getO_id(),
                             newsJson.getHref());
                 }
                 return;

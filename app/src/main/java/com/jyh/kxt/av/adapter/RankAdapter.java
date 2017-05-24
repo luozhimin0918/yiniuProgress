@@ -56,8 +56,8 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
         setTheme(viewHolder, position);
 
         VideoListJson videoBean = dataList.get(position);
-        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.ico_def_load).placeholder(R.mipmap
-                .ico_def_load).into(viewHolder.ivPhoto);
+        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
+                .icon_def_video).into(viewHolder.ivPhoto);
         viewHolder.tvTitle.setText(videoBean.getTitle());
 
         try {

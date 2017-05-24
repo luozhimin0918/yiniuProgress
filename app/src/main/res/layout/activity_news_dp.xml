@@ -26,7 +26,6 @@
                 android:id="@+id/stl_navigation_bar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/navigationBar2Height"
-                android:paddingRight="@dimen/navigationBar2ImageWidth"
                 tl:tl_indicator_color="@color/blue"
                 tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
                 tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"

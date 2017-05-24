@@ -1,6 +1,8 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -27,16 +29,21 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
+
     private String code;
     private DpFragmentPresenter presenter;
     private NewsAdapter newsAdapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-
         setContentView(R.layout.fragment_news_dp);
-
         presenter = new DpFragmentPresenter(this);
+        newsAdapter = null;
+    }
+
+    @Override
+    public void userVisibleHint() {
+        super.userVisibleHint();
 
         plvContent.setDividerNull();
         plRootView.setOnAfreshLoadListener(this);
@@ -47,7 +54,6 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
 
         plRootView.loadWait();
         presenter.init(code);
-
     }
 
     @Override
@@ -68,12 +74,19 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
 
     @Override
     public void onDestroyView() {
+        try {
+            getQueue().cancelAll(code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onDestroyView();
-        getQueue().cancelAll(presenter.getClass().getName());
     }
 
     public void init(List<NewsJson> news) {
-        if (news == null) plRootView.loadEmptyData();
+        if (news == null) {
+            plRootView.loadEmptyData();
+            return;
+        }
         if (newsAdapter == null) {
             newsAdapter = new NewsAdapter(getContext(), news);
             plvContent.setAdapter(newsAdapter);
