@@ -9,9 +9,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_statement"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/editUserInfo_item_height"
+        android:layout_marginTop="5dp"
         android:paddingLeft="@dimen/itemPaddingLeft">
 
         <TextView
@@ -26,8 +26,8 @@
             android:layout_width="@dimen/editUserInfo_item_height"
             android:layout_height="@dimen/editUserInfo_item_height"
             android:layout_alignParentRight="true"
-            android:paddingTop="@dimen/editUserInfo_padding3"
             android:paddingBottom="@dimen/editUserInfo_padding3"
+            android:paddingTop="@dimen/editUserInfo_padding3"
             android:src="@mipmap/icon_comment_more"/>
 
         <View
@@ -55,8 +55,8 @@
             android:layout_width="@dimen/editUserInfo_item_height"
             android:layout_height="@dimen/editUserInfo_item_height"
             android:layout_alignParentRight="true"
-            android:paddingTop="@dimen/editUserInfo_padding3"
             android:paddingBottom="@dimen/editUserInfo_padding3"
+            android:paddingTop="@dimen/editUserInfo_padding3"
             android:src="@mipmap/icon_comment_more"/>
 
         <View
@@ -84,8 +84,8 @@
             android:layout_width="@dimen/editUserInfo_item_height"
             android:layout_height="@dimen/editUserInfo_item_height"
             android:layout_alignParentRight="true"
-            android:paddingTop="@dimen/editUserInfo_padding3"
             android:paddingBottom="@dimen/editUserInfo_padding3"
+            android:paddingTop="@dimen/editUserInfo_padding3"
             android:src="@mipmap/icon_comment_more"/>
 
         <View
@@ -113,8 +113,37 @@
             android:layout_width="@dimen/editUserInfo_item_height"
             android:layout_height="@dimen/editUserInfo_item_height"
             android:layout_alignParentRight="true"
-            android:paddingTop="@dimen/editUserInfo_padding3"
             android:paddingBottom="@dimen/editUserInfo_padding3"
+            android:paddingTop="@dimen/editUserInfo_padding3"
+            android:src="@mipmap/icon_comment_more"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color3"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_version_update"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/editUserInfo_item_height"
+        android:paddingLeft="@dimen/itemPaddingLeft">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="版本升级"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
+
+        <ImageView
+            android:layout_width="@dimen/editUserInfo_item_height"
+            android:layout_height="@dimen/editUserInfo_item_height"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="@dimen/editUserInfo_padding3"
+            android:paddingTop="@dimen/editUserInfo_padding3"
             android:src="@mipmap/icon_comment_more"/>
 
         <View

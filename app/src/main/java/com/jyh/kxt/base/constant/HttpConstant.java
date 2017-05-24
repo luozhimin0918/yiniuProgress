@@ -154,4 +154,8 @@ public class HttpConstant {
 
     public static final String MEMBER_COMMENT_REPLY = BASE_URL + "member/comment_reply";
     public static final String MEMBER_COMMENT_MY = BASE_URL + "member/comment_my";
+
+    public static final String VERSION_VERSION = BASE_URL + "version/version";
+
+
 }

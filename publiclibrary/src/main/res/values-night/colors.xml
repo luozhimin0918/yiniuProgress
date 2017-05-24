@@ -44,7 +44,7 @@
     <!--App内部应用色值-->
     <color name="black">#ff000000</color>
     <color name="theme1">#242424</color>
-
+    <color name="statusColor">#242424</color>
 
     <color name="pickerview_timebtn_nor">#3d3d3d</color>
     <color name="pickerview_timebtn_pre">#136aa4</color>

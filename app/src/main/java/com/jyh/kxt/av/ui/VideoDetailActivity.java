@@ -1,5 +1,6 @@
 package com.jyh.kxt.av.ui;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.library.manager.ActivityManager;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -55,6 +57,14 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //保证只有一个Video界面
+        Activity singleActivity = ActivityManager
+                .getInstance()
+                .getSingleActivity(VideoDetailActivity.class);
+        if(singleActivity!=null){
+            singleActivity.finish();
+        }
 
         super.onCreate(savedInstanceState);
 

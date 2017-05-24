@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BasePresenter;
@@ -11,6 +12,11 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainPresenter extends BasePresenter {
@@ -57,37 +63,54 @@ public class MainPresenter extends BasePresenter {
      */
     public void postDelayRequest() {
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
+        Observable observable = Observable.create(new Observable.OnSubscribe<JSONObject>() {
+            @Override
+            public void call(Subscriber<? super JSONObject> subscriber) {
 
 
+            }
+        });
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JSONObject>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                    @Override
+                    public void onNext(JSONObject jsonObject) {
+
+                    }
+                });
     }
 
     /**
      * 退出弹窗
      */
     public void showQuitDialog() {
-        if (logoutDialog == null)
-            logoutDialog = new AlertDialog.Builder(mContext).setTitle("提醒").setMessage("确认退出当前账号?").setNegativeButton("确认", new
-                    DialogInterface.OnClickListener() {
+        if (logoutDialog == null) {
+            logoutDialog = new AlertDialog.Builder(mContext)
+                    .setTitle("提醒")
+                    .setMessage("确认退出当前账号?")
+                    .setNegativeButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LoginUtils.logout(mContext);
                         }
                     }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                }
-            }).create();
+                        }
+                    }).create();
+        }
         if (logoutDialog.isShowing()) {
             logoutDialog.dismiss();
         }

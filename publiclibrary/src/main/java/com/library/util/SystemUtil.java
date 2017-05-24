@@ -42,6 +42,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 public class SystemUtil {
     /*屏幕相关----------屏幕相关-------------屏幕相关--------------屏幕相关-----------------屏幕相关*/
 
+
     /**
      * 屏幕 - 宽高
      *

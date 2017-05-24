@@ -31,7 +31,6 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
-import com.library.manager.ActivityManager;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -139,12 +138,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             moreVideoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Activity singleActivity = ActivityManager
-                            .getInstance()
-                            .getSingleActivity(VideoDetailActivity.class);
-                    singleActivity.finish();
-
                     Intent intent = new Intent(mContext, VideoDetailActivity.class);
                     intent.putExtra(IntentConstant.O_ID, videoDetailVideoBean.getId());
                     mContext.startActivity(intent);

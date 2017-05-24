@@ -46,6 +46,7 @@
     <color name="black">#ff000000</color>
     <color name="theme1">#ffffff</color>
 
+    <color name="statusColor">#ffffff</color>
 
     <color name="pickerview_timebtn_nor">#b8c4cc</color>
     <color name="pickerview_timebtn_pre">#1c9cf2</color>

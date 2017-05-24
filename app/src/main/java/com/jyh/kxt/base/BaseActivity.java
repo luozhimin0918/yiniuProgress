@@ -11,14 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.LayoutInflaterCompat;
-import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.VectorEnabledTintResources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +58,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ThemeUtil.addActivityToThemeCache(this);
-
 
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -139,8 +134,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
             Skinnable skinnable = (Skinnable) view;
             if (skinnable.isSkinnable()) {
                 skinnable.applyDayNight();
-                Log.i(TAG, "applyDayNightForView: " + skinnable);
-            }
+                      }
         }
         if (view instanceof ViewGroup && !"filter".equals(view.getTag())) {
             ViewGroup parent = (ViewGroup) view;

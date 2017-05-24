@@ -15,9 +15,20 @@ class AttrsHelper {
 
     public void storeAttributeResource(TypedArray a, int[] styleable) {
         int size = a.getIndexCount();
-        for (int index = 0; index < size; index ++) {
+        for (int index = 0; index < size; index++) {
             int resourceId = a.getResourceId(index, -1);
             int key = styleable[index];
+            if (resourceId != -1) {
+                mResourceMap.put(key, resourceId);
+            }
+        }
+    }
+
+    public void storeAttributeIndex(TypedArray a, int[] styleable ) {
+        int size = a.getIndexCount();
+        for (int index = 0; index < size; index++) {
+            int resourceId = a.getResourceId(a.getIndex(index), -1);
+            int key = styleable[a.getIndex(index)];
             if (resourceId != -1) {
                 mResourceMap.put(key, resourceId);
             }

@@ -34,9 +34,10 @@ public class KXTPushIntentService extends UmengMessageService {
             JSONObject data = new JSONObject(message);
             UMessage uMessage = new UMessage(data);
 
-            showNotification(context, uMessage, new Intent[]{
-                    new Intent(context, MainActivity.class)
-            });
+            showNotification(context, uMessage, new Intent[]{new Intent(context, MainActivity.class)});
+
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -50,7 +51,6 @@ public class KXTPushIntentService extends UmengMessageService {
 
             mBuilder.setContentTitle(msg.title)//设置通知栏标题
                     .setContentText(msg.text);
-//                    .setWhen(mWhen);
 
             PendingIntent pendingIntent = PendingIntent.getActivities(context, 0,
                     intent, PendingIntent.FLAG_ONE_SHOT);//不是Intent

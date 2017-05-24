@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
@@ -30,7 +32,7 @@ public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_comment,StatusBarColor.THEME1);
+        setContentView(R.layout.activity_my_comment, StatusBarColor.THEME1);
 
         tvBarTitle.setText("我的发言");
 
@@ -39,7 +41,11 @@ public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageC
         Bundle commentMyBundle = new Bundle();
         commentMyBundle.putInt("from", 0);
         commentMy.setArguments(commentMyBundle);
-        fragmentList.add(commentMy);
+        fragmentList.add(commentMy)
+
+
+
+        ;
 
         MyCommentFragment commentReply = new MyCommentFragment();
         Bundle commentReplyBundle = new Bundle();
@@ -56,6 +62,16 @@ public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageC
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
     }
+
+    @OnClick({R.id.iv_bar_break})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
+        }
+    }
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

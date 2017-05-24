@@ -36,11 +36,10 @@ public class SkinnableSegmentTabLayout extends SegmentTabLayout implements Skinn
         mAttrsHelper.storeAttributeResource(a, R.styleable.SkinnableView);
         a.recycle();
 
-        a = context.obtainStyledAttributes(attrs,
-                R.styleable.SegmentTabLayout,
-                defStyleAttr, 0);
-        mAttrsHelper.storeAttributeResource(a, R.styleable.SegmentTabLayout);
-        a.recycle();
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SegmentTabLayout);
+        mAttrsHelper.storeAttributeIndex(ta, R.styleable.SegmentTabLayout);
+        ta.recycle();
     }
 
     @Override

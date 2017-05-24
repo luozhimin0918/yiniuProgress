@@ -279,7 +279,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_pl:
                 //评论
-                startActivity(new Intent(this, MyCommentActivity.class));
+                if (LoginUtils.isLogined(this)) {
+                    startActivity(new Intent(this, MyCommentActivity.class));
+                } else {
+                    startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                }
                 break;
             case R.id.ll_activity:
                 //活动
@@ -294,10 +298,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_focus:
                 //我的关注
-                if (LoginUtils.isLogined(this))
+                if (LoginUtils.isLogined(this)) {
                     startActivity(new Intent(this, AttentionActivity.class));
-                else
+                } else {
                     ToastView.makeText3(this, "请先登录");
+                }
                 break;
             case R.id.ll_history:
                 //浏览历史
@@ -389,7 +394,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                    glideAnimation) {
                                 loginPhoto.setImageBitmap(resource);
                             }
                         });
