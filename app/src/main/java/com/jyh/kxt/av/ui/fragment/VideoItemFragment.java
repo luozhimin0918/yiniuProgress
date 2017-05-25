@@ -109,4 +109,10 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
         }
         super.onDestroyView();
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        videoItemPresenter.onChangeTheme();
+    }
 }

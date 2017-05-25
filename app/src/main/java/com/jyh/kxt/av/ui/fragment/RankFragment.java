@@ -59,4 +59,13 @@ public class RankFragment extends BaseFragment {
         fragmentList.add(moreCollect);
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (fragmentList != null)
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

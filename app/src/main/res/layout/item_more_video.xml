@@ -11,13 +11,13 @@
         android:id="@+id/iv_video_cover"
         android:layout_width="147dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/icon_def_news"
         android:layout_height="83dp" />
 
     <TextView
         android:id="@+id/iv_video_name"
         android:layout_width="match_parent"
         android:layout_marginTop="8dp"
+        android:textColor="@color/font_color5"
         android:layout_height="wrap_content"
         android:gravity="center" />
 </LinearLayout>

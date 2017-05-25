@@ -71,7 +71,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
          * @param popupWindow
          * @param etContent
          * @param commentBean
-         * @param parentId  0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
+         * @param parentId    0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
          */
         void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId);
     }
@@ -130,7 +130,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
-            Glide.with(mContext).load(imageUrl).override(100, 100).into(ivVideoCover);
+            Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).override(100, 100).into
+                    (ivVideoCover);
             ivVideoName.setText(videoDetailVideoBean.getTitle());
 
             llMoreVideo.addView(moreVideoView);
@@ -159,7 +160,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
-            Glide.with(mContext).load(imageUrl).override(100, 100).into(ivVideoCover);
+            Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).override(100, 100).into
+                    (ivVideoCover);
             ivVideoName.setText(mArticleJson.getTitle());
 
             llMoreVideo.addView(moreVideoView);

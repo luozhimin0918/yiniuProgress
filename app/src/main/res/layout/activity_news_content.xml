@@ -39,17 +39,17 @@
             <ImageView
                 android:id="@+id/iv_collect"
                 style="@style/Audio_RB_Style"
-                android:src="@mipmap/icon_nav_collect_unsel"/>
+                android:src="@drawable/sel_nav_collect"/>
 
             <ImageView
                 android:id="@+id/iv_ding"
                 style="@style/Audio_RB_Style"
-                android:src="@mipmap/icon_nav_like_unsel"/>
+                android:src="@drawable/sel_nav_like"/>
 
             <ImageView
                 android:id="@+id/iv_share"
                 style="@style/Audio_RB_Style"
-                android:src="@mipmap/icon_nav_more"/>
+                android:src="@mipmap/icon_video_more"/>
 
         </LinearLayout>
 

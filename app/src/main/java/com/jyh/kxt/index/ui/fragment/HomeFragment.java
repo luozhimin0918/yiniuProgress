@@ -311,4 +311,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (fragmentList != null)
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

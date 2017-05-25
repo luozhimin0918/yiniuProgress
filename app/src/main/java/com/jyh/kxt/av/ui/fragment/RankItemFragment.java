@@ -70,4 +70,10 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         getQueue().cancelAll(rankUrl);
         super.onDestroyView();
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        rankItemPresenter.onChangeTheme();
+    }
 }

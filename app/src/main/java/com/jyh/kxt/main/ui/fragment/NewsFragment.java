@@ -134,4 +134,14 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         super.onDestroyView();
         getQueue().cancelAll(newsPresenter.getClass().getName());
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if(fragmentList !=null)
+            for (Fragment fragment : fragmentList) {
+                if(fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

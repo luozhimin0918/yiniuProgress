@@ -3,8 +3,10 @@ package com.jyh.kxt.main.ui.activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.Html;
 import android.widget.ImageView;
 import android.widget.Space;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +51,8 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
+import com.jyh.kxt.base.widget.ThumbView;
+import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.NewsJson;
@@ -174,6 +178,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             @Override
                             public void callback(Object o) {
                                 ivCollect.setSelected(false);
+                                isCollect = false;
                             }
 
                             @Override
@@ -187,6 +192,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             @Override
                             public void callback(Object o) {
                                 ivCollect.setSelected(true);
+                                isCollect = true;
                             }
 
                             @Override
@@ -199,32 +205,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.iv_ding:
                 //点赞
-                if (isLoadOver)
-                    if (isGood) {
-                        GoodUtils.delGood(this, objectId, VarConstant.GOOD_TYPE_NEWS, new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                ivGood.setSelected(false);
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        }, null);
-                    } else {
-                        GoodUtils.addGood(this, objectId, VarConstant.GOOD_TYPE_NEWS, new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                ivGood.setSelected(true);
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        }, null);
-                    }
+                attention();
                 break;
             case R.id.iv_share:
                 //分享
@@ -236,6 +217,41 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 }
                 break;
         }
+    }
+
+    /**
+     * 点赞
+     */
+    private void attention() {
+        if (isLoadOver)
+            if (isGood) {
+                TSnackbar tSnackbar = TSnackbar.make(pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_TOP_TO_DOWN)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height));
+
+                int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
+                tSnackbar.setBackgroundColor(color);
+                tSnackbar.setPromptThemBackground(Prompt.WARNING);
+                tSnackbar.show();
+            } else {
+                GoodUtils.addGood(this, objectId, VarConstant.GOOD_TYPE_NEWS, new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+                        ivGood.setSelected(true);
+                        isGood = true;
+
+                        if (webViewAndHead != null && webViewAndHead.attention != null) {
+                            webViewAndHead.attention.attention();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                }, null);
+            }
     }
 
     private void initShareLayout() {
@@ -452,7 +468,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, parentId);
     }
 
-    class WebViewAndHead {
+    class WebViewAndHead implements View.OnClickListener {
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.iv_photo) RoundImageView ivPhoto;
         @BindView(R.id.tv_name) TextView tvName;
@@ -469,6 +485,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         private LinearLayout headView;
         private NewsContentJson newsContentJson;
+        private TextView tvSource;
+        private ThumbView2 attention;
 
         /**
          * ----------------创建顶部的Head
@@ -555,12 +573,17 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
 
             int alertTheme = ThemeUtil.getAlertTheme(getContext());
+            String source = "";
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
+                    source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + newsContentJson.getSource() +
+                            "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+                    source = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + newsContentJson.getSource() +
+                            "</font>";
                     break;
             }
 
@@ -579,6 +602,29 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
              */
             LinearLayout llShareContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
                     inflate(R.layout.layout_news_content_head_share, headView, false);
+
+            tvSource = (TextView) llShareContent.findViewById(R.id.tv_source);
+
+            View attentionBtn = llShareContent.findViewById(R.id.ll_attention);
+            View sharePYQ = llShareContent.findViewById(R.id.rv_pyq);
+            View shareSina = llShareContent.findViewById(R.id.rl_sina);
+            View shareWx = llShareContent.findViewById(R.id.ll_wx);
+            attention = (ThumbView2) llShareContent.findViewById(R.id.tv_attention);
+
+            try {
+                attention.setThumbCount(Integer.parseInt(newsContentJson.getNum_good()), isGood);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+            attentionBtn.setOnClickListener(this);
+            sharePYQ.setOnClickListener(this);
+            shareWx.setOnClickListener(this);
+            shareSina.setOnClickListener(this);
+            attention.setOnClickListener(this);
+
+            tvSource.setText(Html.fromHtml(source));
+
             headView.addView(llShareContent, 1);
         }
 
@@ -650,6 +696,62 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     super.onErrorResponse(error);
                 }
             });
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_attention:
+                    attention();
+                    break;
+                case R.id.rv_pyq:
+
+                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                        UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
+                    } else {
+                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
+                    }
+
+                    break;
+                case R.id.ll_wx:
+                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN)) {
+                        UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                shareImg, SHARE_MEDIA.WEIXIN);
+                    } else {
+                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
+                    }
+                    break;
+                case R.id.rl_sina:
+                    UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                            shareImg, SHARE_MEDIA.SINA);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        try {
+            int alertTheme = ThemeUtil.getAlertTheme(getContext());
+            String content = "";
+            switch (alertTheme) {
+                case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                    content = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + webViewAndHead.newsContentJson.getSource() +
+                            "</font>";
+                    break;
+                case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                    content = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + webViewAndHead.newsContentJson.getSource() +
+                            "</font>";
+                    break;
+            }
+            webViewAndHead.tvSource.setText(Html.fromHtml(content));
+            webViewAndHead.attention.onChangeTheme();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

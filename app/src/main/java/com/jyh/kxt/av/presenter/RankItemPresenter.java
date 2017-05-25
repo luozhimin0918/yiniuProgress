@@ -121,4 +121,9 @@ public class RankItemPresenter extends BasePresenter implements PullToRefreshBas
             }
         });
     }
+
+    public void onChangeTheme() {
+        if (rankAdapter != null)
+            rankAdapter.notifyDataSetChanged();
+    }
 }

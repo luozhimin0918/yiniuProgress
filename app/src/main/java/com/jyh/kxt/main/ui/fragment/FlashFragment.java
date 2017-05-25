@@ -131,4 +131,12 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     public void flashFiltrate() {
         flashPresenter.filtrate();
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if(flashPresenter.adapter!=null){
+            flashPresenter.adapter.notifyDataSetChanged();
+        }
+    }
 }

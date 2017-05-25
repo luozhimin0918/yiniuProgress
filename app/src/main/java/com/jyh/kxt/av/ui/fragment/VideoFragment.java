@@ -161,4 +161,14 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
             }
         }
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (fragmentList != null)
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

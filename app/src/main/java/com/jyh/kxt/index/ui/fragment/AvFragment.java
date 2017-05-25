@@ -171,4 +171,15 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
                 break;
         }
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (fragmentList != null)
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment) {
+                    ((BaseFragment) fragment).onChangeTheme();
+                }
+            }
+    }
 }

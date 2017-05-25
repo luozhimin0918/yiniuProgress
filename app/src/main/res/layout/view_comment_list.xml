@@ -20,6 +20,7 @@
             android:drawableLeft="@mipmap/icon_video_line"
             android:gravity="center"
             android:text="往期节目"
+            android:textColor="@color/font_color60"
             android:textSize="@dimen/content_font_size"/>
 
         <TextView
@@ -64,6 +65,7 @@
         android:drawableLeft="@mipmap/icon_video_line"
         android:gravity="center"
         android:text="评论"
+        android:textColor="@color/font_color60"
         android:textSize="@dimen/content_font_size"/>
 
 

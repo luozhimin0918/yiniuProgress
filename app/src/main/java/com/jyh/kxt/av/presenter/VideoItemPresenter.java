@@ -164,4 +164,9 @@ public class VideoItemPresenter extends BasePresenter {
             list.remove(size - 1);
         }
     }
+
+    public void onChangeTheme() {
+        if (videoAdapter != null)
+            videoAdapter.notifyDataSetChanged();
+    }
 }

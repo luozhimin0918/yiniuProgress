@@ -3,6 +3,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/theme1"
+              android:clipChildren="false"
+              android:clipToPadding="false"
               android:orientation="vertical"
     >
 
@@ -20,49 +22,45 @@
         android:layout_marginBottom="20dp"
         android:layout_marginTop="25dp"
         android:paddingLeft="@dimen/newsContentPadding3"
-        android:textSize="@dimen/describe_font_size3"
         android:text="文章来源:快讯通财经"
+        android:textSize="@dimen/describe_font_size3"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/newsContentPadding3"
-        android:layout_marginBottom="30dp"
         android:paddingRight="@dimen/newsContentPadding3">
 
         <LinearLayout
+            android:id="@+id/ll_attention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_ding"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/sel_share_ding"/>
-
-            <TextView
-                android:id="@+id/tv_ding"
+            <com.jyh.kxt.base.widget.ThumbView2
+                android:id="@+id/tv_attention"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="@dimen/newsContentPadding1"
-                android:paddingRight="@dimen/newsContentPadding2"
-                android:textColor="@color/font_color6"
-                android:textSize="@dimen/min_font_size"
-                android:text="111"
-                />
+                android:layout_height="20dp"
+                android:drawableLeft="@mipmap/icon_comment_unlike"
+                android:drawablePadding="5dp"/>
 
             <View
+                android:id="@+id/v_line"
                 android:layout_width="1px"
                 android:layout_height="15dp"
                 android:background="@color/line_color3"/>
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/rv_pyq"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -81,17 +79,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textColor="@color/font_color6"
-                android:textSize="@dimen/min_font_size"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/iv_pyq"
                 android:gravity="center"
                 android:text="朋友圈"
+                android:textColor="@color/font_color6"
+                android:textSize="@dimen/min_font_size"
                 />
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/ll_wx"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -112,15 +111,16 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/iv_wx"
-                android:textColor="@color/font_color6"
-                android:textSize="@dimen/min_font_size"
                 android:gravity="center"
                 android:text="微信"
+                android:textColor="@color/font_color6"
+                android:textSize="@dimen/min_font_size"
                 />
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_sina"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -141,10 +141,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/iv_sina"
-                android:textColor="@color/font_color6"
-                android:textSize="@dimen/min_font_size"
                 android:gravity="center"
                 android:text="新浪"
+                android:textColor="@color/font_color6"
+                android:textSize="@dimen/min_font_size"
                 />
 
         </RelativeLayout>

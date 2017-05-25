@@ -77,7 +77,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private List<SlideJson> shortcuts;//按钮
     private List<MarketItemBean> quotes;//行情
     private ArrayList<String> list;
-    private NewsAdapter newsAdapter;
+    public NewsAdapter newsAdapter;
     private BannerLayout carouseView;
     private RequestQueue queue;
 
@@ -323,6 +323,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     private JSONArray marketCodeList = new JSONArray();
     private HashMap<String, MarketItemBean> marketMap = new HashMap<>();
+    public List<MarketGridAdapter> quoteGridAdapter = new ArrayList<>();
 
     public void addQuotes() {
         for (MarketItemBean marketItemBean : quotes) {
@@ -344,6 +345,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
                         MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
                         gridView.setAdapter(adapter);
+                        quoteGridAdapter.add(adapter);
                     }
                 });
         recommendView.build();

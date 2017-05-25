@@ -9,6 +9,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.main.presenter.NewsItemPresenter;
+import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -107,5 +108,18 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
             e.printStackTrace();
         }
         super.onDestroyView();
+    }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if(newsItemPresenter.newsAdapter!=null){
+            newsItemPresenter.newsAdapter.notifyDataSetChanged();
+            plvContent.setDividerNull();
+        }
+
+        for (MarketGridAdapter marketGridAdapter : newsItemPresenter.quoteGridAdapter) {
+            marketGridAdapter.notifyDataSetChanged();
+        }
     }
 }
