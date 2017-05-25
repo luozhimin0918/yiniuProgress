@@ -5,25 +5,35 @@
                 android:paddingTop="@dimen/flash_bottom_padding"
     >
 
-    <TextView
-        android:id="@+id/tv_more"
+    <LinearLayout
+        android:id="@+id/ll_more"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/flash_bottom_height"
-        android:layout_centerVertical="true"
-        android:text="展开"
-        android:textColor="@color/font_color6"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:textSize="@dimen/content_font_size"/>
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/iv_more"
-        android:layout_width="@dimen/flash_bottom_imgWidth"
-        android:layout_height="@dimen/flash_bottom_imgHeight"
-        android:layout_marginTop="4dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/flash_bottom_padding"
-        android:layout_toRightOf="@id/tv_more"
-        android:background="@drawable/bg_flash_show_hide"/>
+        <TextView
+            android:id="@+id/tv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/flash_bottom_height"
+            android:layout_centerVertical="true"
+            android:text="展开"
+            android:textColor="@color/font_color6"
+            android:gravity="center"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="@dimen/flash_bottom_imgWidth"
+            android:layout_height="@dimen/flash_bottom_imgHeight"
+            android:layout_marginTop="4dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/flash_bottom_padding"
+            android:layout_toRightOf="@id/tv_more"
+            android:background="@drawable/bg_flash_show_hide"/>
+    </LinearLayout>
+
+
 
     <ImageView
         android:id="@+id/iv_share"

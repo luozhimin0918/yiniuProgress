@@ -76,4 +76,5 @@ public class SpConstant {
     public static final String DATUM_JUDGE = "datum_judge";
 
     public static final String MARKET_MY_OPTION = "market_my_option";
+    public static final String INIT_LOAD_APP_CONFIG = "init_load_app_config";
 }

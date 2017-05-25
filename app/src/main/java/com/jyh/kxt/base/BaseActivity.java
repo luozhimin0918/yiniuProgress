@@ -59,6 +59,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtil.addActivityToThemeCache(this);
+        setIntentAnimation(0);
 
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -277,15 +278,6 @@ public class BaseActivity extends LibActivity implements IBaseView {
             }
             parent = parent.getParent();
         }
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     public interface SkinnableCallback {

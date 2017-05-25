@@ -196,7 +196,7 @@ public class SlidingBackLayout extends FrameLayout {
                         } else {
                             Context context = getContext();
                             if (context instanceof Activity) {
-                                ((BaseActivity) context).finish(true);
+                                ((BaseActivity) context).finish(/*true*/);
                             }
                         }
                     }

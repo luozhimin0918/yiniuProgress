@@ -1,6 +1,5 @@
 package com.jyh.kxt.av.ui;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
@@ -58,14 +57,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //保证只有一个Video界面
-        Activity singleActivity = ActivityManager
-                .getInstance()
-                .getSingleActivity(VideoDetailActivity.class);
-        if(singleActivity!=null){
-            singleActivity.finish();
-        }
-
         super.onCreate(savedInstanceState);
 
         videoId = getIntent().getStringExtra(IntentConstant.O_ID);
@@ -87,6 +78,15 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_END);
             }
         });
+
+        llDetailContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ActivityManager
+                        .getInstance()
+                        .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
+            }
+        },2000);
     }
 
 

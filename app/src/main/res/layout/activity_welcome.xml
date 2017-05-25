@@ -9,7 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/icon_test"/>
+        android:visibility="visible"
+        android:scaleType="fitXY" />
 
+    <TextView
+        android:id="@+id/tv_advert_time"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:text="5s"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_launch_time"
+        android:gravity="center"
+
+        android:visibility="gone"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+
+        android:textColor="@color/white"
+        android:textSize="@dimen/describe_font_size2"/>
 </RelativeLayout>

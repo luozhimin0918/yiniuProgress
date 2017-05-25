@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @BindView(R.id.rb_datum) public RadioButton rbDatum;
     @BindView(R.id.rb_probe) public RadioButton rbProbe;
 
-    private MainPresenter mainPresenter;
+    public MainPresenter mainPresenter;
 
     //Fragment相关
     public BaseFragment currentFragment;
@@ -177,6 +177,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
+
 
     }
 

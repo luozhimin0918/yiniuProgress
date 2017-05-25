@@ -42,7 +42,6 @@
         android:layout_height="@dimen/navigationBarRightImageViewSize"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
-        android:src="@mipmap/icon_search"/>
+        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2" />
 
 </RelativeLayout>

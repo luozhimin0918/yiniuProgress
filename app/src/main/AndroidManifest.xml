@@ -28,6 +28,10 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".index.ui.WelcomeActivity"
+            android:configChanges="uiMode"
+            android:launchMode="standard"
+            android:alwaysRetainTaskState="true"
+            android:theme="@style/Theme.Start"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

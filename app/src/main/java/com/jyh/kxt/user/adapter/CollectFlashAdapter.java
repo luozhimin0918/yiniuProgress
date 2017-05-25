@@ -37,7 +37,6 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.ConfigJson;
-import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -47,7 +46,6 @@ import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
-import com.library.widget.pickerview.view.BasePickerView;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -403,7 +401,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setKxTheme(kxHolder, kx);
 
-                setOnclick(kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
+                setOnclick(kxHolder.llMore,kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
                         null, TYPE_KX, kxHolder.flDel, kxHolder.ivDel);
 
                 setShowMoreBtn(kxHolder);
@@ -460,7 +458,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                         rlHolder.llExponent);
 
 
-                setOnclick(rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
+                setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
                         null, TYPE_RL, rlHolder.flDel, rlHolder.ivDel);
 //                /**
 //                 * 重要性判断
@@ -501,7 +499,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(leftHolder, left);
 
-                setOnclick(leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
+                setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
 
                 leftHolder.ivCollect.setSelected(flash_left.isColloct());
@@ -528,7 +526,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(rightHolder, right);
 
-                setOnclick(rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
+                setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
 
                 rightHolder.ivCollect.setSelected(flash_right.isColloct());
@@ -555,7 +553,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(topHolder, top);
 
-                setOnclick(topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
+                setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP, topHolder.flDel, topHolder.ivDel);
 
                 topHolder.ivCollect.setSelected(flash_top.isColloct());
@@ -586,7 +584,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(bottomHolder, bottom);
 
-                setOnclick(bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
+                setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel, bottomHolder
                         .ivDel);
 
@@ -690,6 +688,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     /**
      * 绑定点击事件
      *
+     * @param llMore
      * @param tvMore
      * @param ivMore
      * @param ivShare
@@ -697,7 +696,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
      * @param ivFlash
      * @param type
      */
-    private void setOnclick(final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
+    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
                             final TextView content,
                             String weizhi, final ImageView ivFlash, final int type, FrameLayout flDel, final ImageView ivDel) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
@@ -706,7 +705,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
         showMore(tvMore, ivMore, flash.isShowMore(), content, ivFlash, type);
 
-        tvMore.setOnClickListener(new View.OnClickListener() {
+        llMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (flash.isShowMore()) {
@@ -1237,6 +1236,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.iv_guoqi) ImageView ivFlag;
         @BindView(R.id.fl_del) FrameLayout flDel;
         @BindView(R.id.iv_del) ImageView ivDel;
+        @BindView(R.id.ll_more) LinearLayout llMore;
 
         public RLViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -1253,6 +1253,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.v_line) View vLine;
         @BindView(R.id.fl_del) FrameLayout flDel;
         @BindView(R.id.iv_del) ImageView ivDel;
+        @BindView(R.id.ll_more) LinearLayout llMore;
     }
 
 

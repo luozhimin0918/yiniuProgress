@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseSwipeBackActivity;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.user.presenter.SettingPresenter;
 
 import butterknife.BindView;
@@ -17,7 +17,7 @@ import butterknife.OnClick;
 /**
  * 设置
  */
-public class SettingActivity extends BaseSwipeBackActivity {
+public class SettingActivity extends BaseActivity {
 
     public static final String TYPE_PUSH = "push";
     public static final String TYPE_SOUND = "sound";

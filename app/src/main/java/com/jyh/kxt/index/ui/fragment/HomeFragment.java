@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -24,8 +25,8 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.OptionLayout;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.SearchActivity;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -67,6 +68,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     private int position = 0;
 
+    private boolean isShowRightTopAdvert = false;
+
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -82,7 +85,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
 
-        ivRightIcon1.setImageResource(R.mipmap.icon_search);
 
         newsFragment = new NewsFragment();
         flashFrament = new FlashFragment();
@@ -108,7 +110,25 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @Override
     public void onTabReselect(int position) {
+        this.position = position;
+        stlNavigationBar.setCurrentTab(position);
+        if (position == 0) {
 
+            currentFragment = newsFragment;
+
+            if (!isShowRightTopAdvert) {
+                ivRightIcon1.setVisibility(View.GONE);
+            } else {
+                ivRightIcon1.setVisibility(View.VISIBLE);
+            }
+
+            ivRightIcon1.setImageResource(R.mipmap.icon_advert);
+        } else {
+            currentFragment = flashFrament;
+
+            ivRightIcon1.setVisibility(View.VISIBLE);
+            ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
+        }
     }
 
     @OnClick({R.id.iv_left_icon, R.id.iv_right_icon2, R.id.iv_right_icon1})
@@ -122,14 +142,33 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                 break;
             case R.id.iv_right_icon1:
                 if (currentFragment instanceof NewsFragment) {
-                    //搜索
-                    Intent intent = new Intent(getContext(), SearchActivity.class);
-                    startActivity(intent);
+                    showPopWindowAdvert();
                 } else {
-                    //快讯筛选
-                    flashFiltrate();
+                    flashFiltrate();  //快讯筛选
                 }
                 break;
+        }
+    }
+
+    public void closePopWindowAdvert() {
+        if (currentFragment instanceof NewsFragment) {
+            isShowRightTopAdvert = true;
+            ivRightIcon1.setVisibility(View.VISIBLE);
+            ivRightIcon1.setImageResource(R.mipmap.icon_advert);
+        }
+    }
+
+    public void showPopWindowAdvert() {
+        try {
+            String appConfig = SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG);
+
+            MainActivity mainActivity = (MainActivity) getActivity();
+
+            MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
+            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
+            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -242,15 +281,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @Override
     public void onPageSelected(int position) {
-        this.position = position;
-        stlNavigationBar.setCurrentTab(position);
-        if (position == 0) {
-            currentFragment = newsFragment;
-            ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
-        } else {
-            currentFragment = flashFrament;
-            ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
-        }
+
     }
 
     @Override
@@ -262,16 +293,18 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (currentFragment != null)
+        if (currentFragment != null) {
             currentFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void changeUserImg(UserJson user) {
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
-            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
-                    .icon_user_def_photo).into(ivLeftIcon);
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap
+                            .icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
