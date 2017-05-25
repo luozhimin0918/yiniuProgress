@@ -116,4 +116,15 @@ public class ActivityManager {
         }
         return null;
     }
+
+    public void finishNoCurrentActivity(Class<?> activity, Activity currentActivity) {
+        for (int i = 0; i < activityStack.size(); i++) {
+            if (activityStack.get(i).getClass().getSimpleName().equals(activity.getSimpleName())) {
+                Activity oldActivity = activityStack.get(i);
+                if (oldActivity != currentActivity) {
+                    oldActivity.finish();
+                }
+            }
+        }
+    }
 }
