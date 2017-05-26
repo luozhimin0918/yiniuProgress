@@ -10,6 +10,10 @@ package com.jyh.kxt.base.constant;
 public class SpConstant {
 
     /**
+     * 第一次安装
+     */
+    public static final String INIT_SP = "init_sp";
+    /**
      * 配置信息
      */
     public static final String CONFIG = "config";
@@ -77,4 +81,7 @@ public class SpConstant {
 
     public static final String MARKET_MY_OPTION = "market_my_option";
     public static final String INIT_LOAD_APP_CONFIG = "init_load_app_config";
+
+    public static final String SETTING_PUSH = "setting_push";//推送
+    public static final String SETTING_SOUND = "setting_sound";//声音
 }

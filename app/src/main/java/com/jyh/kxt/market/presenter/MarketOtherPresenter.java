@@ -1,5 +1,9 @@
 package com.jyh.kxt.market.presenter;
 
+import android.content.Intent;
+import android.view.View;
+import android.widget.AdapterView;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -11,6 +15,7 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -52,7 +57,7 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
             }
 
             @Override
-            protected void onResponse(List<MarketItemBean> marketList) {
+            protected void onResponse(final List<MarketItemBean> marketList) {
                 marketDataList.clear();
                 marketCodeList.clear();
                 marketItemFragment.marketMap.clear();
@@ -63,6 +68,15 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
                     marketDataList.addAll(marketList);
                     marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketList);
                     marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
+
+                    marketItemFragment.ptrlvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(mContext, MarketDetailActivity.class);
+                            intent.putExtra("market", marketList.get(position));
+                            mContext.startActivity(intent);
+                        }
+                    });
                 } else {
                     marketDataList.addAll(marketList);
                     marketMainItemAdapter.notifyDataSetChanged();

@@ -185,4 +185,18 @@ public class WelcomePresenter extends BasePresenter {
         mContext.startActivity(intent);
         welcomeActivity.finish();
     }
+
+    /**
+     * 第一次安装初始化默认值
+     */
+    public void initSharedPreferences() {
+        Boolean initSp = SPUtils.getBoolean(mContext, SpConstant.INIT_SP);
+        if (!initSp) {
+            SPUtils.save(mContext, SpConstant.INIT_SP, true);
+
+            //初始化默认值
+            SPUtils.save(mContext, SpConstant.SETTING_PUSH, true);
+            SPUtils.save(mContext, SpConstant.SETTING_SOUND, true);
+        }
+    }
 }

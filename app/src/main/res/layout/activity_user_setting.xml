@@ -27,12 +27,13 @@
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size2"/>
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/iv_push"
                 android:layout_width="@dimen/setting_toggle_width"
                 android:layout_height="@dimen/setting_toggle_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:button="@null"
                 android:layout_marginRight="@dimen/setting_paddingRight"
                 android:background="@drawable/bg_toggle_btn"
                 />
@@ -57,10 +58,11 @@
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size2"/>
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/iv_sound"
                 android:layout_width="@dimen/setting_toggle_width"
                 android:layout_height="@dimen/setting_toggle_height"
+                android:button="@null"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/setting_paddingRight"

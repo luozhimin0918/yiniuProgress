@@ -11,7 +11,7 @@
         android:layout_width="263dp"
         android:layout_height="326dp"
         android:layout_centerInParent="true"
-        android:background="@color/white">
+        android:background="@color/theme1">
 
         <ImageView
             android:id="@+id/iv_adimg"
@@ -27,6 +27,19 @@
             android:layout_height="match_parent">
 
         </WebView>
+
+        <View
+            android:id="@+id/tv_top"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="217dp"/>
+
+        <View
+            android:id="@+id/tv_bottom"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_top"
+            android:layout_height="108dp"/>
 
     </com.jyh.kxt.base.widget.ArcRelativeLayout>
 

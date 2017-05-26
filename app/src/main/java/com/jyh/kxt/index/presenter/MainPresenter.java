@@ -1,8 +1,12 @@
 package com.jyh.kxt.index.presenter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -14,10 +18,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -33,9 +39,14 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.base.http.VolleySyncHttp;
+import com.library.util.FileUtils;
+import com.library.util.LogUtil;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
+import com.library.widget.window.ToastView;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -144,7 +155,6 @@ public class MainPresenter extends BasePresenter {
         MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
         showPopAdvertisement(indexAd);
 
-
         MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
         String pictureUrl = HttpConstant.IMG_URL + loadAd.getPicture();
 
@@ -155,73 +165,134 @@ public class MainPresenter extends BasePresenter {
                     .asBitmap()
                     .into(new MySimpleTarget(mContext, pictureUrl));
         }
+
+
     }
 
 
     public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd) {
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
-        final PopupWindow popWnd = new PopupWindow(mContext);
-        popWnd.setContentView(contentView);
-        popWnd.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        popWnd.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popWnd.setFocusable(true);
 
-        popWnd.setOutsideTouchable(true);
-        popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);
+        String webPage = FileUtils.getWebPage(mContext, indexAd.getHref());
 
-        WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
-        lp.alpha = 0.5f;
-        mMainActivity.getWindow().setAttributes(lp);
-
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
-        animation.setDuration(1 * 1000);
-        animation.setInterpolator(new AnticipateOvershootInterpolator());
-        contentView.startAnimation(animation);
-
-        if ("normal".equals(indexAd.getType())) {
-            ImageView imgAdView = (ImageView) contentView.findViewById(R.id.iv_adimg);
-            imgAdView.setVisibility(View.VISIBLE);
-            String pictureUrl = HttpConstant.IMG_URL + indexAd.getPicture();
-            Glide.with(mContext).load(pictureUrl).override(100, 100).into(imgAdView);
-
-            imgAdView.setOnClickListener(new View.OnClickListener() {
+        if (webPage == null) {
+            //去读取webView 的文件缓存  如果存在并且没有过期  则显示
+            VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+            volleyRequest.setDefaultDecode(false);
+            volleyRequest.doGet(indexAd.getHref(), new HttpListener<String>() {
                 @Override
-                public void onClick(View v) {
-                    JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
+                protected void onResponse(String htmlWeb) {
+                    LogUtil.e(LogUtil.TAG, "onResponse() called with: htmlWeb = [" + htmlWeb + "]");
+                    FileUtils.saveWebPage(mContext, indexAd.getHref(), htmlWeb);
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
                 }
             });
-        } else if ("download".equals(indexAd.getType())) {
-
         } else {
-            WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
-            wvContent.setVisibility(View.VISIBLE);
-            wvContent.loadUrl(/*indexAd.getHref()*/"https://www.baidu.com/");
+            View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
+            final PopupWindow popWnd = new PopupWindow(mContext);
+            popWnd.setContentView(contentView);
+            popWnd.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            popWnd.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+            popWnd.setFocusable(true);
+
+            popWnd.setOutsideTouchable(true);
+            popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);
+
+            WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
+            lp.alpha = 0.5f;
+            mMainActivity.getWindow().setAttributes(lp);
+
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
+            animation.setDuration(1 * 1000);
+            animation.setInterpolator(new AnticipateOvershootInterpolator());
+            contentView.startAnimation(animation);
+
+
+            View topView = contentView.findViewById(R.id.tv_top);
+            View bottomView = contentView.findViewById(R.id.tv_bottom);
+
+
+            if ("normal".equals(indexAd.getType()) || "download".equals(indexAd.getType())) {
+
+                topView.setVisibility(View.VISIBLE);
+                bottomView.setVisibility(View.VISIBLE);
+
+                ImageView imgAdView = (ImageView) contentView.findViewById(R.id.iv_adimg);
+                imgAdView.setVisibility(View.VISIBLE);
+                String pictureUrl = HttpConstant.IMG_URL + indexAd.getPicture();
+                Glide.with(mContext).load(pictureUrl).override(100, 100).into(imgAdView);
+
+                topView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (indexAd.getHref() == null || indexAd.getHref().trim().length() == 0) {
+                            return;
+                        }
+
+                        if ("normal".equals(indexAd.getType())) {
+                            JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
+                        } else {
+                            Uri uri = Uri.parse(indexAd.getHref());
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            mContext.startActivity(intent);
+                        }
+                    }
+                });
+
+                bottomView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String title = indexAd.getTitle();
+
+                        ClipboardManager clipboard = (ClipboardManager) mMainActivity
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("title", title);
+                        clipboard.setPrimaryClip(clip);    //把clip对象放在剪贴板中
+                        ToastView.makeText3(mContext, "复制成功");
+                    }
+                });
+            } else {
+                WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
+                wvContent.setVisibility(View.VISIBLE);
+                wvContent.loadDataWithBaseURL("", webPage, "text/html", "utf-8", "");
+                wvContent.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        JumpUtils.jump(mMainActivity, indexAd, url);
+                        popWnd.dismiss();
+                        return true;
+                    }
+                });
+            }
+
+            ImageView ivCloseView = (ImageView) contentView.findViewById(R.id.iv_close);
+            ivCloseView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popWnd.dismiss();
+                }
+            });
+
+            popWnd.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    mMainActivity.homeFragment.closePopWindowAdvert();
+                    WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
+                    lp.alpha = 1.0f;
+                    mMainActivity.getWindow().setAttributes(lp);
+                }
+            });
+
+            contentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popWnd.dismiss();
+                }
+            });
         }
-
-        ImageView ivCloseView = (ImageView) contentView.findViewById(R.id.iv_close);
-        ivCloseView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popWnd.dismiss();
-            }
-        });
-
-        popWnd.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                mMainActivity.homeFragment.closePopWindowAdvert();
-                WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                mMainActivity.getWindow().setAttributes(lp);
-            }
-        });
-
-        contentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popWnd.dismiss();
-            }
-        });
     }
 
     /**

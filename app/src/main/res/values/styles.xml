@@ -15,7 +15,6 @@
     </style>
     <style name="VideoTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="PopupWindow_Style1" mce_bogus="1" parent="android:Animation">

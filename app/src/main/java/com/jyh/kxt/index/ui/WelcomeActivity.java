@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
+import com.library.util.SPUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -29,6 +30,8 @@ public class WelcomeActivity extends BaseActivity {
 
         welcomePresenter = new WelcomePresenter(this);
         welcomePresenter.checkIsShowAdvert();
+
+        welcomePresenter.initSharedPreferences();
 
     }
 

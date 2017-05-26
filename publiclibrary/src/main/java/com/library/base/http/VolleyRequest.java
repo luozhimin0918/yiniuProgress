@@ -12,7 +12,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.library.util.EncryptionUtils;
 import com.library.util.LogUtil;
-import com.library.util.ObserverToJson;
 import com.library.widget.window.ToastView;
 
 import java.lang.reflect.ParameterizedType;
@@ -45,6 +44,8 @@ public class VolleyRequest {
     //是否弹出不成功的提示
     private boolean isToastFailed = true;
 
+    private boolean isDefaultDecode = true;
+
     public VolleyRequest(Context mContext, RequestQueue mQueue) {
         this.mContext = mContext;
         this.mQueue = mQueue;
@@ -56,6 +57,10 @@ public class VolleyRequest {
 
     public void setToastFailed(boolean toastFailed) {
         isToastFailed = toastFailed;
+    }
+
+    public void setDefaultDecode(boolean defaultDecode) {
+        isDefaultDecode = defaultDecode;
     }
 
     public <T> void doGet(String url, HttpListener<T> mHttpListener) {
@@ -116,42 +121,47 @@ public class VolleyRequest {
                 StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
                             if (response == null || "".equals(response.trim())) {
                                 mHttpListener.onErrorResponse(null);
                                 return;
                             }
+                            if (isDefaultDecode) {
+                                String json = EncryptionUtils.parseToString(response, VarConstant.KEY);
+                                try {
+                                    LogUtil.e("toJsonString", "响应:" + json);
 
-                            String json = EncryptionUtils.parseToString(response, VarConstant.KEY);
-                            try {
-                                LogUtil.e("toJsonString", "响应:" + json);
+                                    org.json.JSONObject object = new org.json.JSONObject(json);
+                                    int status = object.getInt("status");
+                                    String data = object.getString("data");
+                                    msg = object.optString("msg");
 
-                                org.json.JSONObject object = new org.json.JSONObject(json);
-                                int status = object.getInt("status");
-                                String data = object.getString("data");
-                                msg = object.optString("msg");
+                                    if (status == 1) {
+                                        T resultT = null;
+                                        if (superclassTypeParameter.parseType == 1) {
+                                            resultT = JSON.parseObject(data, superclassTypeParameter.classType);
+                                        } else if (superclassTypeParameter.parseType == 2) {
 
-                                if (status == 1) {
-                                    T resultT = null;
-                                    if (superclassTypeParameter.parseType == 1) {
-                                        resultT = JSON.parseObject(data, superclassTypeParameter.classType);
-                                    } else if (superclassTypeParameter.parseType == 2) {
-
-                                        Type classType = superclassTypeParameter.classType;
-                                        resultT = (T) JSON.parseArray(data, (Class) classType);
+                                            Type classType = superclassTypeParameter.classType;
+                                            resultT = (T) JSON.parseArray(data, (Class) classType);
+                                        }
+                                        mHttpListener.onResponse(resultT);
+                                    } else {
+                                        mHttpListener.onErrorResponse(new VolleyError(msg));
                                     }
-                                    mHttpListener.onResponse(resultT);
-                                } else {
-                                    mHttpListener.onErrorResponse(new VolleyError(msg));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    mHttpListener.onErrorResponse(null);
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                mHttpListener.onErrorResponse(null);
+                            } else {
+                                mHttpListener.onResponse((T) response);
                             }
                         } catch (Exception e) {
                             mHttpListener.onErrorResponse(null);
                             e.printStackTrace();
                         }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override

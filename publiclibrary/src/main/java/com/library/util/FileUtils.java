@@ -3,8 +3,10 @@ package com.library.util;
 import android.content.Context;
 import android.os.Environment;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 
 /**
  * @author Mr'Dai
@@ -50,5 +52,48 @@ public class FileUtils {
             }
         }
         return sdCachePath;
+    }
+
+    public static void saveWebPage(Context mContext, String url, String content) {
+        String urlMd5Name = ConvertUtils.md5(url);
+        String filePath = getSaveFilePath(mContext) + File.separator + urlMd5Name + ".txt";
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+
+                return;
+            }
+            File dir = new File(file.getParent());
+            dir.mkdirs();
+            file.createNewFile();
+            FileOutputStream outStream = new FileOutputStream(file);
+            outStream.write(content.getBytes());
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getWebPage(Context mContext, String url) {
+
+        StringBuffer stringBuffer = new StringBuffer();
+
+        String urlMd5Name = ConvertUtils.md5(url);
+        String filePath = getSaveFilePath(mContext) + File.separator + urlMd5Name + ".txt";
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+                BufferedReader bre = new BufferedReader(new FileReader(file));//此时获取到的bre就是整个文件的缓存流
+                String str;
+                while ((str = bre.readLine()) != null) { // 判断最后一行不存在，为空结束循环
+                    stringBuffer.append(str);
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stringBuffer.toString();
     }
 }
