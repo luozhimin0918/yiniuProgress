@@ -23,8 +23,6 @@ public class BaseSwipeBackActivity extends BaseActivity {
     }
 
     private void extensionSwipeBackLayout() {
-        setIntentAnimation(1);
-
         int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
         SlidingBackLayout slidingBackLayout = new SlidingBackLayout(getContext());
         slidingBackLayout.setLayoutParams(new ViewGroup.LayoutParams(matchParent, matchParent));

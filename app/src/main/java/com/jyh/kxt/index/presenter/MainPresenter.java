@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -202,7 +204,7 @@ public class MainPresenter extends BasePresenter {
             popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);
 
             WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
-            lp.alpha = 0.5f;
+            lp.alpha = 0.3f;
             mMainActivity.getWindow().setAttributes(lp);
 
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
@@ -257,6 +259,21 @@ public class MainPresenter extends BasePresenter {
             } else {
                 WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
                 wvContent.setVisibility(View.VISIBLE);
+
+                WebSettings settings = wvContent.getSettings();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                }
+
+                settings.setLoadWithOverviewMode(true);
+                settings.setBlockNetworkImage(false);
+
+                settings.setJavaScriptEnabled(true);
+                settings.setAppCacheEnabled(true);
+
+                settings.setDefaultTextEncodingName("utf-8");
+                settings.setLoadWithOverviewMode(true);
+
                 wvContent.loadDataWithBaseURL("", webPage, "text/html", "utf-8", "");
                 wvContent.setWebViewClient(new WebViewClient(){
                     @Override

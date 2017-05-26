@@ -3,7 +3,6 @@ package com.jyh.kxt.base;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,11 +44,6 @@ import java.util.List;
 
 public class BaseActivity extends LibActivity implements IBaseView {
 
-    //跳转Activity 策略
-    private int intentAnimation = 0;
-    //动画退出
-    private boolean isAnimationFinish;
-
     private PopupWindow waitPopup;
 
     private SkinnableViewInflater mSkinnableViewInflater;
@@ -59,7 +53,6 @@ public class BaseActivity extends LibActivity implements IBaseView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtil.addActivityToThemeCache(this);
-        setIntentAnimation(0);
 
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -68,6 +61,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
             setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
@@ -114,9 +108,9 @@ public class BaseActivity extends LibActivity implements IBaseView {
 
         try {
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
-            if(fragments != null ){
+            if (fragments != null) {
                 for (Fragment fragment : fragments) {
-                    if(fragment instanceof BaseFragment){
+                    if (fragment instanceof BaseFragment) {
                         BaseFragment baseFragment = (BaseFragment) fragment;
                         baseFragment.updateStatusBarColor();
                         baseFragment.onChangeTheme();
@@ -135,7 +129,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
             Skinnable skinnable = (Skinnable) view;
             if (skinnable.isSkinnable()) {
                 skinnable.applyDayNight();
-                      }
+            }
         }
         if (view instanceof ViewGroup && !"filter".equals(view.getTag())) {
             ViewGroup parent = (ViewGroup) view;
@@ -208,59 +202,11 @@ public class BaseActivity extends LibActivity implements IBaseView {
 
     }
 
-
     @Override
     public Context getContext() {
         return this;
     }
 
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        addOverridePendingTransition(0);
-    }
-
-
-    public void finish(boolean isAnimationFinish) {
-        this.isAnimationFinish = isAnimationFinish;
-        finish();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        if (isAnimationFinish) {
-            intentAnimation = -1;
-            addOverridePendingTransition(1);
-        } else {
-            addOverridePendingTransition(1);
-        }
-    }
-
-    public void setIntentAnimation(int intentAnimation) {
-        this.intentAnimation = intentAnimation;
-    }
-
-    /**
-     * @param from 0 表示StartActivity动画,进入
-     *             1 表示finish动画,退出
-     */
-    private void addOverridePendingTransition(int from) {
-        switch (intentAnimation) {
-            case -1://动画滑动退出的时候
-                overridePendingTransition(0, from == 1 ? R.anim.activity_out1 : 0);
-                break;
-            case 0:
-
-                break;
-            case 1:
-                overridePendingTransition(from == 0 ? R.anim.activity_in : 0, from == 1 ? R.anim.activity_out : 0);
-                break;
-            case 2:
-
-                break;
-        }
-    }
 
     private boolean shouldInheritContext(ViewParent parent) {
         if (parent == null) {

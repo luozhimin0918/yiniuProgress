@@ -7,6 +7,7 @@
         <item name="colorAccent">#ff669900</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
     </style>
 
     <style name="TranslucentBgTheme" parent="AppTheme">

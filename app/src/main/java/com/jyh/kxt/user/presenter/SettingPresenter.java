@@ -40,7 +40,8 @@ public class SettingPresenter extends BasePresenter {
      * 清理缓存
      */
     public void clear() {
-        ToastView.makeText(mContext, "成功清理");
+        String cacheSize = GlideCacheUtil.getInstance().getCacheSize(mContext);
+        ToastView.makeText(mContext, "成功清理" + cacheSize+"缓存");
         GlideCacheUtil.getInstance().clearImageAllCache(mContext);
     }
 
