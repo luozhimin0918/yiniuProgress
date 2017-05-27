@@ -5,16 +5,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.index.impl.WebBuild;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
@@ -84,6 +83,8 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         ColorDrawable colorDrawable = new ColorDrawable(color);
         wvContent.setForeground(colorDrawable);
 
+        wvContent.addJavascriptInterface(new getShareInfoInterface(), "shareInfoInterface");
+
         IX5WebViewExtension ix5 = wvContent.getX5WebViewExtension();
         if (null != ix5) {
             ix5.setScrollBarFadingEnabled(false);
@@ -138,11 +139,11 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            view.loadUrl("javascript:window.getShareInfo.getShareInfo("
-                    + "document.querySelector('meta[name=\"id\"]').getAttribute('webView_share')" + ");");
-
-            wvContent.addJavascriptInterface(new getShareInfoInterface(),"getShareInfo");
-
+            view.loadUrl("javascript:function getShareInfo(){" +
+                    "var shareVal=document.getElementById(\"webView_share\").innerText;" +
+                    "window.shareInfoInterface.getShareInfo(shareVal);" +
+                    "}");
+            view.loadUrl("javascript:getShareInfo()");
             wvContent.setForeground(null);
         }
 
@@ -218,7 +219,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     public class getShareInfoInterface {
         @JavascriptInterface
         public void getShareInfo(String shareInfo) {
-            Log.i("webViewShare",shareInfo);
+            Toast.makeText(getContext(), shareInfo, Toast.LENGTH_SHORT).show();
         }
     }
 }

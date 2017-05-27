@@ -338,6 +338,11 @@ public class JumpUtils {
                 Intent authorIntent = new Intent(context, AuthorListActivity.class);
                 context.startActivity(authorIntent);
                 break;
+            case VarConstant.OACTION_DETAIL:
+                Intent detailIntent = new Intent(context, NewsContentActivity.class);
+                detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(detailIntent);
+                break;
         }
     }
 
