@@ -250,4 +250,14 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         super.onDestroyView();
         getQueue().cancelAll(collectNewsPresenter.getClass().getName());
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+        if (plvContent != null)
+            plvContent.setDividerNull();
+    }
 }

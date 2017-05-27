@@ -166,4 +166,12 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
     public void delError() {
 
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

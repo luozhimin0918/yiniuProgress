@@ -257,4 +257,18 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (flashFragment != null)
+            flashFragment.onChangeTheme();
+        if (newsFragment != null)
+            newsFragment.onChangeTheme();
+        if (videoFragment != null) {
+            videoFragment.onChangeTheme();
+        }
+        if (stlNavigationBar != null)
+            stlNavigationBar.notifyDataSetChanged();
+    }
 }

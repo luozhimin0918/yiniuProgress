@@ -101,4 +101,14 @@ public class AttentionActivity extends BaseActivity implements ViewPager.OnPageC
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        stlNavigationBar.notifyDataSetChanged();
+        if (attentionArticleFragment != null)
+            attentionArticleFragment.onChangeTheme();
+        if (attentionAuthorFragment != null)
+            attentionAuthorFragment.onChangeTheme();
+    }
 }

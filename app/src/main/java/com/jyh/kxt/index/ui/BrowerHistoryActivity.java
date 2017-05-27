@@ -84,4 +84,11 @@ public class BrowerHistoryActivity extends BaseActivity {
     public void loadEmptyData() {
         plRootView.loadEmptyData();
     }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (browerHistoryPresenter != null && browerHistoryPresenter.adapter != null)
+            browerHistoryPresenter.adapter.notifyDataSetChanged();
+    }
 }

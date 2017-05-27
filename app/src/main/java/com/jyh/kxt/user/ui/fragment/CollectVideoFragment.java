@@ -250,4 +250,13 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         super.onDestroyView();
         getQueue().cancelAll(collectVideoPresenter.getClass().getName());
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+        if(plvContent!=null)
+            plvContent.setDividerNull();
+    }
 }

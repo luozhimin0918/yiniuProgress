@@ -9,9 +9,9 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.AuthorJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.index.json.HomeHeaderJson;
-import com.jyh.kxt.main.json.NewsJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -63,11 +63,11 @@ public class AuthorListPresenter extends BasePresenter {
                                         activity.addHeadView(authors);
                                     break;
                                 case VarConstant.EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND_LIST:
-                                    List<NewsJson> newsList = JSON.parseArray(json.getData().toString(), NewsJson.class);
+                                    List<AuthorNewsJson> newsList = JSON.parseArray(json.getData().toString(), AuthorNewsJson.class);
                                     if (newsList != null && newsList.size() > 0) {
                                         if (newsList.size() > VarConstant.LIST_MAX_SIZE) {
                                             isMore = true;
-                                            activity.init(new ArrayList<NewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
+                                            activity.init(new ArrayList<AuthorNewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
                                             lastId = activity.newsAdapter.getLastId();
                                         } else {
                                             isMore = false;
@@ -110,11 +110,11 @@ public class AuthorListPresenter extends BasePresenter {
                                         activity.addHeadView(authors);
                                     break;
                                 case VarConstant.EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND_LIST:
-                                    List<NewsJson> newsList = JSON.parseArray(json.getData().toString(), NewsJson.class);
+                                    List<AuthorNewsJson> newsList = JSON.parseArray(json.getData().toString(), AuthorNewsJson.class);
                                     if (newsList != null && newsList.size() > 0) {
                                         if (newsList.size() > VarConstant.LIST_MAX_SIZE) {
                                             isMore = true;
-                                            activity.refreshList(new ArrayList<NewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
+                                            activity.refreshList(new ArrayList<AuthorNewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
                                             lastId = activity.newsAdapter.getLastId();
                                         } else {
                                             activity.refreshList(newsList);
@@ -157,13 +157,13 @@ public class AuthorListPresenter extends BasePresenter {
     public void loadMore() {
 
         if (isMore) {
-            request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
+            request.doGet(getUrl(), new HttpListener<List<AuthorNewsJson>>() {
                 @Override
-                protected void onResponse(List<NewsJson> newsList) {
+                protected void onResponse(List<AuthorNewsJson> newsList) {
                     if (newsList != null)
                         if (newsList.size() > VarConstant.LIST_MAX_SIZE) {
                             isMore = true;
-                            activity.loadMore(new ArrayList<NewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
+                            activity.loadMore(new ArrayList<AuthorNewsJson>(newsList.subList(0, VarConstant.LIST_MAX_SIZE)));
                             lastId = activity.newsAdapter.getLastId();
                         } else {
                             activity.loadMore(newsList);

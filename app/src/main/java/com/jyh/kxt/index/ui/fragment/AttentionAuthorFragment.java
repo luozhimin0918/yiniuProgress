@@ -162,4 +162,10 @@ public class AttentionAuthorFragment extends BaseFragment implements PageLoadLay
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if(adapter!=null)
+            adapter.notifyDataSetChanged();
+    }
 }

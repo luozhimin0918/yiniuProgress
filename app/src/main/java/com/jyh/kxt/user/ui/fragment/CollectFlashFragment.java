@@ -238,4 +238,12 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             }
         }, 500);
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

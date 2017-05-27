@@ -2,12 +2,14 @@ package com.jyh.kxt.explore.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,12 +18,13 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.explore.adapter.AuthorHeadContentAdapter;
 import com.jyh.kxt.explore.adapter.AuthorHeadViewAdapter;
+import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.AuthorListPresenter;
-import com.jyh.kxt.main.adapter.NewsAdapter;
-import com.jyh.kxt.main.json.NewsJson;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -40,7 +43,9 @@ import butterknife.OnClick;
  * 创建日期:2017/5/15.
  */
 
-public class AuthorListActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
+public class AuthorListActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase
+        .OnRefreshListener2, AdapterView.OnItemClickListener {
+    private int position;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
@@ -48,6 +53,10 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
     private AuthorListPresenter authorListPresenter;
     public NewsAdapter newsAdapter;
     private View headView;
+    private AuthorHeadContentAdapter headAdapter;
+    private View line;
+    private List<RecyclerView> views;
+    private List<ImageView> points = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
         plvContent.setDividerNull();
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
         plvContent.setOnRefreshListener(this);
+        plvContent.setOnItemClickListener(this);
 
         plRootView.loadWait();
         authorListPresenter.init();
@@ -97,8 +107,10 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
      * @param authors
      */
     public void addHeadView(List<AuthorJson> authors) {
-        if (headView == null)
+        if (headView == null) {
             headView = LayoutInflater.from(this).inflate(R.layout.layout_explore_author_head, null);
+            line = headView.findViewById(R.id.v_line);
+        }
         ViewPager vpContent = (ViewPager) headView.findViewById(R.id.vp_content);
         final LinearLayout llDian = (LinearLayout) headView.findViewById(R.id.ll_dian);
         llDian.removeAllViews();
@@ -107,7 +119,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
         int pageNum = size % 6;
         if (pageNum != 0)
             pageCount++;
-        List<View> views = new ArrayList<>();
+        views = new ArrayList<>();
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
                 .MATCH_PARENT);
 
@@ -115,6 +127,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
             initPageView(authors, llDian, size, pageCount, views, params, i);
         }
         vpContent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -122,6 +135,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
 
             @Override
             public void onPageSelected(int position) {
+                AuthorListActivity.this.position = position;
                 int childCount = llDian.getChildCount();
                 for (int i = 0; i < childCount; i++) {
                     View childAt = llDian.getChildAt(i);
@@ -146,7 +160,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
      *
      * @param newsList
      */
-    public void init(List<NewsJson> newsList) {
+    public void init(List<AuthorNewsJson> newsList) {
         if (newsAdapter == null) {
             newsAdapter = new NewsAdapter(this, newsList);
             plvContent.setAdapter(newsAdapter);
@@ -165,7 +179,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
      *
      * @param newsList
      */
-    public void refreshList(List<NewsJson> newsList) {
+    public void refreshList(List<AuthorNewsJson> newsList) {
         if (headView != null)
             plvContent.getRefreshableView().removeHeaderView(headView);
         plvContent.getRefreshableView().addHeaderView(headView);
@@ -173,7 +187,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
     }
 
 
-    public void loadMore(List<NewsJson> newsJsons) {
+    public void loadMore(List<AuthorNewsJson> newsJsons) {
         newsAdapter.addData(newsJsons);
     }
 
@@ -194,7 +208,7 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
      * @param params
      * @param i         页码
      */
-    private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount, List<View> views, ViewGroup
+    private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount, List<RecyclerView> views, ViewGroup
             .LayoutParams params, int i) {
         RecyclerView recyclerView = new RecyclerView(this);
         GridLayoutManager manager = new GridLayoutManager(this, 3) {
@@ -227,22 +241,58 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
         dian.setLayoutParams(layoutParams);
 
         llDian.addView(dian);
+        points.add(dian);
 
         DividerGridItemDecoration decor = new DividerGridItemDecoration(this);
         decor.setSpanCount(3);
         recyclerView.addItemDecoration(decor);
 
-        final AuthorHeadContentAdapter adapter = new AuthorHeadContentAdapter(this, authorJsons);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        headAdapter = new AuthorHeadContentAdapter(this, authorJsons);
+        headAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                String authorId = adapter.getData().get(position).getId();
+                String authorId = headAdapter.getData().get(position).getId();
                 Intent authorIntent = new Intent(getContext(), AuthorActivity.class);
                 authorIntent.putExtra(IntentConstant.O_ID, authorId);
                 startActivity(authorIntent);
             }
         });
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(headAdapter);
         views.add(recyclerView);
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (newsAdapter != null)
+            newsAdapter.notifyDataSetChanged();
+        if (headAdapter != null)
+            headAdapter.notifyDataSetChanged();
+        if (line != null)
+            line.setBackgroundColor(ContextCompat.getColor(this, R.color.line_color2));
+        if (views != null)
+            for (RecyclerView view : views) {
+                DividerGridItemDecoration decor = new DividerGridItemDecoration(this);
+                decor.setSpanCount(3);
+                view.addItemDecoration(decor);
+            }
+        if (points != null) {
+            int size = points.size();
+            for (int i = 0; i < size; i++) {
+                ImageView imageView = points.get(i);
+                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.sel_dian));
+                if (i == position)
+                    imageView.setSelected(true);
+                else
+                    imageView.setSelected(false);
+            }
+        }
+        if (plvContent != null) plvContent.setDividerNull();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        AuthorNewsJson authorNewsJson = newsAdapter.getData().get(position - 2);
+        JumpUtils.jump(this, authorNewsJson.getO_class(), authorNewsJson.getO_action(), authorNewsJson.getO_id(), authorNewsJson.getHref());
     }
 }
