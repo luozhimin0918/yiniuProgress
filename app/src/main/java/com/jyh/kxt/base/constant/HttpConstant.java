@@ -157,5 +157,13 @@ public class HttpConstant {
 
     public static final String VERSION_VERSION = BASE_URL + "version/version";
 
+    public static final String DATA_FINANCE = BASE_URL + "/data/finance";
 
+
+    /**
+     * 行情相关
+     */
+    public static final String QUOTES_FAVOR = BASE_URL + "quotes/favor";
+    public static final String QUOTES_DELFAVOR = BASE_URL + "quotes/delFavor";
+    public static final String QUOTES_ADDFAVOR = BASE_URL + "quotes/addFavor";
 }

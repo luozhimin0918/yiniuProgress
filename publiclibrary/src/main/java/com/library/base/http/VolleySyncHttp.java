@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.library.util.EncryptionUtils;
+import com.library.util.LogUtil;
 
 import org.json.JSONObject;
 
@@ -52,6 +53,34 @@ public class VolleySyncHttp {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String syncGet(RequestQueue mQueue, String url, com.alibaba.fastjson.JSONObject mParams) {
+        try {
+
+            LogUtil.e("同步请求参数:", "" + mParams);
+            url = url + EncryptionUtils.createJWT(VarConstant.KEY, mParams.toString());
+
+            String response = syncGet(mQueue, url, null, "sync").get();
+            String parseEncrypt = EncryptionUtils.parseToString(response, VarConstant.KEY);
+
+            org.json.JSONObject object = new JSONObject(parseEncrypt);
+            int status = object.getInt("status");
+            String data = object.getString("data");
+            String msg = object.optString("msg");
+
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public com.alibaba.fastjson.JSONObject getJsonParam() {
+        com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
+        jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+        jsonObject.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+        return jsonObject;
     }
 
 

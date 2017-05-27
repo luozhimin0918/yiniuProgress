@@ -28,6 +28,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.datum.bean.DataGroup;
 import com.jyh.kxt.datum.bean.DataHot;
 import com.jyh.kxt.datum.bean.DataList;
@@ -231,7 +232,7 @@ public class DataPresenter extends BasePresenter {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
 
-                    DataList dataList = mDataRightList.get(position);
+                    final DataList dataList = mDataRightList.get(position);
 
                     ViewHolder mViewHolder;
                     if (convertView == null) {
@@ -268,6 +269,15 @@ public class DataPresenter extends BasePresenter {
                     }
 
 
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, DatumHistoryActivity.class);
+                            intent.putExtra(IntentConstant.NAME, dataList.getName());
+                            mContext.startActivity(intent);
+                        }
+                    });
+
                     return convertView;
 
                 }
@@ -288,13 +298,6 @@ public class DataPresenter extends BasePresenter {
             rightContentAdapter.notifyDataSetChanged();
             return;
         }
-
-        dataFragment.ivRightContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mContext.startActivity(new Intent(mContext, DatumHistoryActivity.class));
-            }
-        });
 
 
         dataFragment.pllRightContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT, null);
@@ -374,9 +377,11 @@ public class DataPresenter extends BasePresenter {
     }
 
     public void onChangeTheme() {
-        if (rightContentAdapter != null)
+        if (rightContentAdapter != null) {
             rightContentAdapter.notifyDataSetChanged();
-        if (leftAdapter != null)
+        }
+        if (leftAdapter != null) {
             leftAdapter.notifyDataSetChanged();
+        }
     }
 }

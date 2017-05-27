@@ -11,6 +11,8 @@
     <color name="translucent_white">#ccffffff</color>
     <color name="blue">#2A87F0</color>
 
+    <color name="blue1">#179AF4</color>
+
     <!-- 半透明 -->
     <color name="translucent_color">#66000000</color>
 

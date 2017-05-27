@@ -1,6 +1,7 @@
 package com.jyh.kxt.market.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 
 import java.util.List;
 
@@ -48,9 +50,18 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
 
-        MarketItemBean marketItemBean = dataList.get(position);
+        final MarketItemBean marketItemBean = dataList.get(position);
         ItemMarketRecommendBinding dataBinding = mViewHolder.getDataBinding();
         dataBinding.setBean(marketItemBean);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MarketDetailActivity.class);
+                intent.putExtra("market", marketItemBean);
+                mContext.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

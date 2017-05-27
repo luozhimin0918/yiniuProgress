@@ -13,16 +13,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.helper.OnStartDragListener;
 import com.jyh.kxt.base.widget.helper.SimpleItemTouchHelperCallback;
+import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.market.adapter.MarketEditAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
+import com.library.base.http.VolleySyncHttp;
 import com.library.bean.EventBusClass;
-import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,6 +41,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MarketEditActivity extends BaseActivity implements OnStartDragListener {
 
@@ -86,11 +100,19 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         int rightColor = ContextCompat.getColor(this, R.color.bg_enable_color);
         ivBarFunction.setTextColor(rightColor);
 
-        try {
-            String marketOption = SPUtils.getString(this, SpConstant.MARKET_MY_OPTION);
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo == null) {
+            String marketOption = MarketUtil.getMarketEditOption(getContext());
             adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
             defaultInitMarketList.addAll(adapterMarketItemList);
+            initEditInfo();
+        } else {
+            requestSynchronization(userInfo);
+        }
+    }
 
+    private void initEditInfo() {
+        try {
             marketEditAdapter = new MarketEditAdapter(this, this, adapterMarketItemList, pllContent);
 
             ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(marketEditAdapter);
@@ -145,12 +167,97 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
     }
 
     private void onSaveAndExit() {
+        requestRefresh();
         EventBusClass eventBusClass = new EventBusClass(
                 EventBusClass.MARKET_OPTION_UPDATE,
                 adapterMarketItemList);
-
         EventBus.getDefault().post(eventBusClass);
-
         finish();
+    }
+
+
+    private void requestSynchronization(UserJson userInfo) {
+        pllContent.loadWait();
+
+        VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+
+        volleyRequest.doPost(HttpConstant.QUOTES_FAVOR, jsonParam, new HttpListener<List<MarketItemBean>>() {
+
+            @Override
+            protected void onResponse(List<MarketItemBean> marketItemBeen) {
+                TSnackbar.make(tvBarTitle, "已同步自选列表", TSnackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_BOTTOM_TO_TOP)
+                        .setPromptThemBackground(Prompt.WARNING).show();
+
+                String marketOption = MarketUtil.getMarketEditOption(getContext());
+                adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
+                defaultInitMarketList.addAll(adapterMarketItemList);
+
+                initEditInfo();
+                pllContent.loadOver();
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+
+                TSnackbar.make(tvBarTitle, "自选信息同步失败", TSnackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_BOTTOM_TO_TOP)
+                        .setPromptThemBackground(Prompt.WARNING).show();
+
+                String marketOption = MarketUtil.getMarketEditOption(getContext());
+                adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
+                defaultInitMarketList.addAll(adapterMarketItemList);
+
+                pllContent.loadOver();
+            }
+        });
+    }
+
+    /**
+     * 请求刷新同步
+     */
+    private void requestRefresh() {
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null) {
+            return;
+        }
+
+
+        Observable.create(new Observable.OnSubscribe<SingleThreadJson>() {
+            @Override
+            public void call(Subscriber<? super SingleThreadJson> subscriber) {
+                VolleySyncHttp volleySyncHttp = VolleySyncHttp.getInstance();
+
+                try {//如果一个出错则不继续进行
+                    JSONObject deleteParam = volleySyncHttp.getJsonParam();
+                    String deleteList = volleySyncHttp.syncGet(mQueue, HttpConstant.QUOTES_DELFAVOR);
+
+                    String addList = volleySyncHttp.syncGet(mQueue, HttpConstant.QUOTES_ADDFAVOR);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SingleThreadJson>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(SingleThreadJson jsonStr) {
+
+                    }
+                });
     }
 }

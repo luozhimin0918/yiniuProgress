@@ -42,6 +42,10 @@ public class MarketConnectUtil {
     private WebSocketConnection mConnection = new WebSocketConnection();
 
     public void sendSocketParams(IBaseView iBaseView, JSONArray jsonArray, OnSocketTextMessage onSocketTextMessage) {
+        if (iBaseView == null) {//这里传入的有Fragment 可能被销毁
+            return;
+        }
+
         this.onSocketTextMessage = onSocketTextMessage;
         if (!mConnection.isConnected()) {
             requestConnectToken(iBaseView, jsonArray);

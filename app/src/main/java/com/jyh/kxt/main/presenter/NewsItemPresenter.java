@@ -34,7 +34,6 @@ import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
-import com.jyh.kxt.base.widget.night.heple.SkinnableView;
 import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
@@ -278,7 +277,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = carouselList.get(position);
-                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(), slideJson.getO_id(), slideJson.getHref());
+                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(), slideJson.getO_id(), slideJson
+                        .getHref());
             }
         });
 
@@ -363,6 +363,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 iBaseView,
                 marketCodeList,
                 NewsItemPresenter.this);
+
+        MarketUtil.saveMarketEditOption(mContext, quotes, 0);
     }
 
     /**
@@ -419,8 +421,9 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     public void addLineView() {
         View inflate = LayoutInflater.from(mContext).inflate(R.layout.layout_line, null);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) mContext.getResources()
-                .getDimension(R.dimen.line_height));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)
+                mContext.getResources()
+                        .getDimension(R.dimen.line_height));
         inflate.setLayoutParams(params);
         homeHeadView.addView(inflate);
     }

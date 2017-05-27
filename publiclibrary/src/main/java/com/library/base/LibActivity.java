@@ -90,7 +90,6 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
         }
     };
 
-
     @Override
     protected void onDestroy() {
         if (mQueue != null) {

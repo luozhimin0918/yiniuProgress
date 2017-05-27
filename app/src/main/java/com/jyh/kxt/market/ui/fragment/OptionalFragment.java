@@ -5,11 +5,9 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
@@ -17,7 +15,6 @@ import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.OptionalPresenter;
 import com.library.bean.EventBusClass;
-import com.library.util.SPUtils;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,7 +101,8 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
                 marketMainItemAdapter.notifyDataSetChanged();
 
-                SPUtils.save(getContext(), SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketItemList));
+
+                MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
                 //参数改变
                 MarketConnectUtil.getInstance().sendSocketParams(
                         this,
@@ -131,11 +129,10 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
      */
     private void initMarketData(int form) {
         if (form == 0) {
-            String marketOption = SPUtils.getString(getContext(), SpConstant.MARKET_MY_OPTION);
+            String marketOption = MarketUtil.getMarketEditOption(getContext());
             marketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
             if (marketItemList == null || marketItemList.size() == 0) {
                 marketItemList = new ArrayList<>();
-                SPUtils.save(getContext(), SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketItemList));
             }
         }
 

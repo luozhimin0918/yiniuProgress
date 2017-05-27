@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
@@ -24,6 +22,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
@@ -105,7 +104,7 @@ public class MarketDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_market_detail, StatusBarColor.THEME1);
 
         try {
-            String marketOption = SPUtils.getString(this, SpConstant.MARKET_MY_OPTION);
+            String marketOption = MarketUtil.getMarketEditOption(getContext());
             marketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
             if (marketItemList == null) {
                 marketItemList = new ArrayList<>();
@@ -113,6 +112,7 @@ public class MarketDetailActivity extends BaseActivity {
             String appConfig = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
             marketItemBean = getIntent().getParcelableExtra("market");
+            marketItemBean.setFromSource(1);//编辑来源于本地
 
             quotesChartUrl = mainInitJson.getQuotes_chart_url();
             quotesChartUrl = quotesChartUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
@@ -155,8 +155,7 @@ public class MarketDetailActivity extends BaseActivity {
         }
         isAllowAddOptional = !isAllowAddOptional;
 
-        String listStr = JSON.toJSONString(marketItemList);
-        SPUtils.save(this, SpConstant.MARKET_MY_OPTION, listStr);
+        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
         updateOptionIcon();
     }
 

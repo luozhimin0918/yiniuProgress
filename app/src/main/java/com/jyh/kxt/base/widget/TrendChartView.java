@@ -74,7 +74,7 @@ public class TrendChartView extends View {
         marginTop = marginRight = SystemUtil.dp2px(getContext(), 4);
         padding = SystemUtil.dp2px(getContext(), 10);
 
-        int color = getResources().getColor(R.color.blue);
+        int color = getResources().getColor(R.color.blue1);
         pointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointPaint.setColor(color);
         pointPaint.setStrokeWidth(5);

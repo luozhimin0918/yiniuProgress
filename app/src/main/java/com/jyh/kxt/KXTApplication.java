@@ -1,27 +1,18 @@
 package com.jyh.kxt;
 
 import android.app.Application;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.jyh.kxt.base.utils.CrashHandler;
 import com.jyh.kxt.base.utils.UmengShareTool;
-import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.jyh.kxt.push.KXTPushIntentService;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
-import com.umeng.message.UmengMessageHandler;
-import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.common.UmLog;
-import com.umeng.message.entity.UMessage;
 
 /**
  * 项目名:Kxt
@@ -32,7 +23,7 @@ import com.umeng.message.entity.UMessage;
 
 public class KXTApplication extends Application {
 
-    private String TAG="KXTApplication";
+    private String TAG = "KXTApplication";
 
     @Override
     public void onCreate() {
@@ -62,7 +53,7 @@ public class KXTApplication extends Application {
 
             @Override
             public void onFailure(String s, String s1) {
-                UmLog.i(TAG, "register failed: " + s + " " +s1);
+                UmLog.i(TAG, "register failed: " + s + " " + s1);
             }
         });
 
@@ -70,6 +61,10 @@ public class KXTApplication extends Application {
 //        crashHandler.init(this);
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
+
+        //避免启动慢的问题
+        Intent intent = new Intent(this, PreLoadX5Service.class);
+        this.startService(intent);
     }
 
     @Override

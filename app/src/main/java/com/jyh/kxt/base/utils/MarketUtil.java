@@ -1,18 +1,23 @@
 package com.jyh.kxt.base.utils;
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable2;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.library.util.SPUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Mr'Dai on 2017/5/11.
@@ -75,7 +80,7 @@ public class MarketUtil {
             RadianDrawable2 radianDrawable = new RadianDrawable2(tvLabel.getContext(), colorBg, 3);
 
             tvLabel.setBackground(radianDrawable);
-            tvLabel.setTextColor(ContextCompat.getColor(tvLabel.getContext(),R.color.white));
+            tvLabel.setTextColor(ContextCompat.getColor(tvLabel.getContext(), R.color.white));
         }
         if (bgGlint == 11 || bgGlint == 12) {
             tvLabel.setBackground(null);
@@ -101,7 +106,8 @@ public class MarketUtil {
     /**
      * 行情 相关处理
      */
-    public static void mapToMarketBean(View view, int switchItemType, HashMap<String, MarketItemBean> marketMap, String text) {
+    public static void mapToMarketBean(View view, int switchItemType, HashMap<String, MarketItemBean> marketMap,
+                                       String text) {
         JSONObject jsonObject = JSONObject.parseObject(text);
         String code = jsonObject.getString("c");
         String price = jsonObject.getString("p");   //最新价  3.5951
@@ -174,5 +180,39 @@ public class MarketUtil {
             }
         }
         return defStr;
+    }
+
+
+    /**
+     * @param mContext
+     * @param marketList
+     * @param fromSource 0表示来自于网络  1表示来自于本地
+     */
+    public static void saveMarketEditOption(Context mContext, List<MarketItemBean> marketList, int fromSource) {
+        if (fromSource == 0) {
+            String marketEditOption = getMarketEditOption(mContext);
+
+            List<MarketItemBean> localMarketList = JSONArray.parseArray(marketEditOption, MarketItemBean.class);
+            HashMap<String, MarketItemBean> localCodeMap = new HashMap<>();
+
+            //合并所有本地和网络的数据
+            for (MarketItemBean marketItemBean : localMarketList) {
+                marketItemBean.setFromSource(1);
+                localCodeMap.put(marketItemBean.getCode(), marketItemBean);
+            }
+
+            for (MarketItemBean marketItemBean : marketList) {
+                if (localCodeMap.get(marketItemBean.getCode()) == null) {//如果本地不存这条数据
+                    marketItemBean.setFromSource(0);
+                    marketList.add(marketItemBean);
+                }
+            }
+        }
+        String marketJson = JSON.toJSONString(marketList);
+        SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, marketJson);
+    }
+
+    public static String getMarketEditOption(Context mContext) {
+        return SPUtils.getString(mContext, SpConstant.MARKET_MY_OPTION);
     }
 }

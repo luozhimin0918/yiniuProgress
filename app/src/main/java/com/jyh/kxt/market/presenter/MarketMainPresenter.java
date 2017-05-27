@@ -1,8 +1,8 @@
 package com.jyh.kxt.market.presenter;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -21,20 +20,20 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
+import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketMainBean;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 import java.util.ArrayList;
@@ -52,6 +51,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private LinearLayout mainHeaderView;
     public JSONArray marketCodeList = new JSONArray();
     private MarketMainItemAdapter marketMainItemAdapter;
+
     /**
      * 首页的 角标
      */
@@ -182,7 +182,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         hqLayout.setLayoutParams(hqParams);
 
         LayoutInflater mInflate = LayoutInflater.from(mContext);
-        for (MarketItemBean marketItemBean : marketBean.getData()) {
+
+        for (final MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
             marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
 
@@ -197,8 +198,17 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
             dataBinding.setBean(marketItemBean);
             View v = dataBinding.getRoot();
             hqLayout.addView(v);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MarketDetailActivity.class);
+                    intent.putExtra("market", marketItemBean);
+                    mContext.startActivity(intent);
+                }
+            });
         }
-        SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketBean.getData()));
+        MarketUtil.saveMarketEditOption(mContext, marketBean.getData(),0);
         horizontalScrollView.addView(hqLayout);
     }
 

@@ -29,6 +29,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     //本地变
     @Bindable private int bgGlint = 0;
     @Bindable private String switchTarget;
+    private int fromSource = 0;//0来自网络 1来自本地
 
     public void setChange(String change) {
         this.change = change;
@@ -93,6 +94,14 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.switchTarget);
     }
 
+    public int getFromSource() {
+        return fromSource;
+    }
+
+    public void setFromSource(int fromSource) {
+        this.fromSource = fromSource;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -107,6 +116,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         dest.writeString(this.range);
         dest.writeInt(this.bgGlint);
         dest.writeString(this.switchTarget);
+        dest.writeInt(this.fromSource);
     }
 
     public MarketItemBean() {
@@ -120,6 +130,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         this.range = in.readString();
         this.bgGlint = in.readInt();
         this.switchTarget = in.readString();
+        this.fromSource = in.readInt();
     }
 
     public static final Parcelable.Creator<MarketItemBean> CREATOR = new Parcelable.Creator<MarketItemBean>() {
