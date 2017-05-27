@@ -2,6 +2,7 @@ package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,9 +11,15 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.UmengLoginTool;
+import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.presenter.WebPresenter;
 import com.library.base.http.VarConstant;
+import com.library.util.RegexValidateUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +33,7 @@ public class WebActivity extends BaseActivity {
     @BindView(R.id.activity_web) public LinearLayout llWebParent;
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
-    @BindView(R.id.iv_bar_function) TextView ivBarFunction;
+    @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
 
     private WebPresenter webPresenter;
     private String title;
@@ -45,7 +52,34 @@ public class WebActivity extends BaseActivity {
         if (title != null)
             tvBarTitle.setText(title);
 
+        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
+        ivBarFunction.setVisibility(View.INVISIBLE);
+
         webPresenter.addWebView(url);
+        webPresenter.setOnJsListener(new ObserverData<Boolean>() {
+            @Override
+            public void callback(final Boolean showBtn) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (showBtn)
+                            ivBarFunction.setVisibility(View.VISIBLE);
+                        else
+                            ivBarFunction.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivBarFunction.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        });
 
     }
 
@@ -68,6 +102,14 @@ public class WebActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
+                if (webPresenter != null && webPresenter.loadX5WebView != null) {
+                    LoadX5WebView x5WebView = webPresenter.loadX5WebView;
+                    if (!RegexValidateUtil.isEmpty(x5WebView.shareUrl)) {
+                        UmengShareTool.initUmengLayout(this, new ShareJson(x5WebView.shareTitle, x5WebView.shareUrl, "", x5WebView
+                                .sharePic, null,
+                                UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), null, ivBarBreak, null);
+                    }
+                }
                 break;
         }
     }

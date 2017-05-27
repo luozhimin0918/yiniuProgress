@@ -110,6 +110,10 @@ public class MoreAdapter extends BaseListAdapter {
         return "";
     }
 
+    public List getData() {
+        return dataList;
+    }
+
     static class ActivityViewHolder {
         @BindView(R.id.iv_photo) ImageView ivPhoto;
         @BindView(R.id.tv_title) TextView tvTitle;

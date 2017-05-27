@@ -3,11 +3,13 @@ package com.jyh.kxt.explore.ui;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.explore.adapter.MoreAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.TopicJson;
@@ -29,7 +31,8 @@ import butterknife.OnClick;
  * 创建日期:2017/5/8.
  */
 
-public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
+public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
+        AdapterView.OnItemClickListener {
 
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
@@ -50,6 +53,7 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
         plContent.setDividerNull();
         plContent.setMode(PullToRefreshBase.Mode.BOTH);
         plContent.setOnRefreshListener(this);
+        plContent.setOnItemClickListener(this);
         plRootView.setOnAfreshLoadListener(this);
         type = getIntent().getStringExtra(IntentConstant.TYPE);
 
@@ -134,5 +138,19 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
     protected void onDestroy() {
         super.onDestroy();
         getQueue().cancelAll(morePresenter.getClass().getName());
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int dataPosition = position - 1;
+        switch (type) {
+            case VarConstant.EXPLORE_ACTIVITY:
+                ActivityJson activity = (ActivityJson) moreAdapter.getData().get(dataPosition);
+                JumpUtils.jump(this, null, null, null, activity.getUrl());
+                break;
+            case VarConstant.EXPLORE_TOPIC:
+                TopicJson topic = (TopicJson) moreAdapter.getData().get(dataPosition);
+                break;
+        }
     }
 }

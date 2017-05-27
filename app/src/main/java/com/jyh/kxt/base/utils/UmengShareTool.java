@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import com.jyh.kxt.R;
@@ -22,6 +23,7 @@ import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
@@ -69,7 +71,7 @@ public class UmengShareTool {
 
 
     private static Application application;
-    private static PopupWindow shareLayout;
+    private static PopupUtil shareLayout;
 
     public static MyUMShareListener umShareListener;
 
@@ -81,7 +83,8 @@ public class UmengShareTool {
      */
     public static void initUmengLayout(final BaseActivity activity, ShareJson shareBean, Object o, View view, ObserverData observerData) {
 
-        View rootView = LayoutInflater.from(activity).inflate(R.layout.dialog_umeng_share, null, false);
+        shareLayout = new PopupUtil(activity);
+        View rootView = shareLayout.createPopupView(R.layout.dialog_umeng_share);
         rootView.findViewById(R.id.ll_rootView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,12 +176,17 @@ public class UmengShareTool {
                 }
             }
         };
-        DisplayMetrics metrics = SystemUtil.getScreenDisplay(activity);
-        shareLayout = new PopupWindow(rootView, metrics.widthPixels, metrics.heightPixels);
+        PopupUtil.Config config = new PopupUtil.Config();
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
 
-        shareLayout.setFocusable(true);
-        ColorDrawable dw = new ColorDrawable(0x00000000);
-        shareLayout.setBackgroundDrawable(dw);
+        config.animationStyle = R.style.PopupWindow_Style2;
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        shareLayout.setConfig(config);
+
         //设置分享按钮
         setShareBtn(activity, shareBean, o, rootView, observerData);
 

@@ -1,6 +1,7 @@
 package com.jyh.kxt.explore.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,12 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         ActivityJson activity = activitys.get(position);
         holder.tvTitle.setText(activity.getTitle());
         holder.tvTime.setText(activity.getStart_time());
+
+        holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+        holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        holder.tvTime.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.mipmap.icon_explore_time), null, null,
+                null);
+        holder.tvStart.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.sel_explore_time));
 
         String status = activity.getStatus();
         if ("0".equals(status)) {

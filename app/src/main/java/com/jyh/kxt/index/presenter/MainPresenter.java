@@ -18,18 +18,21 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -38,6 +41,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -273,13 +277,25 @@ public class MainPresenter extends BasePresenter {
                 settings.setDefaultTextEncodingName("utf-8");
                 settings.setLoadWithOverviewMode(true);
 
+                wvContent.addJavascriptInterface(new getShareInfoInterface(), "shareInfoInterface");
+
                 wvContent.loadDataWithBaseURL("", webPage, "text/html", "utf-8", "");
-                wvContent.setWebViewClient(new WebViewClient(){
+                wvContent.setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         JumpUtils.jump(mMainActivity, indexAd, url);
                         popWnd.dismiss();
                         return true;
+                    }
+
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        view.loadUrl("javascript:function getShareInfo(){" +
+                                "var shareVal=document.getElementById(\"webView_share\").innerText;" +
+                                "window.shareInfoInterface.getShareInfo(shareVal);" +
+                                "}");
+                        view.loadUrl("javascript:getShareInfo()");
+                        super.onPageFinished(view, url);
                     }
                 });
             }
@@ -352,6 +368,29 @@ public class MainPresenter extends BasePresenter {
         @Override
         public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
             DiskLruCacheUtils.getInstance(context).putDiskLruCache(url, bitmap);
+        }
+    }
+
+    public class getShareInfoInterface {
+        @JavascriptInterface
+        public void getShareInfo(String shareInfo) {
+//            "id":"2966",
+//                    "title":"豹子头理财：原油四连阳多头延续，黄金回落修正1236依旧是关键",
+//                    "url":"http://test.kxtadi.kuaixun56.com/webview/view/id/2966",
+//                    "create_time":1494901314,
+//                    "picture":"http://img.kuaixun360.com/Member/56833/cover/591a607c452ca.png",
+//                    "type":"blog"
+        }
+
+        @JavascriptInterface
+        public void getClickInfo(String clickInfo) {
+            JSONObject clickJson = JSON.parseObject(clickInfo);
+//            "o_id":"2968",
+//                    "o_class":"blog",
+//                    "o_action":"detail",
+//                    "href":""
+            JumpUtils.jump((BaseActivity) mContext, clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson.getString("o_id"),
+                    clickJson.getString("href"));
         }
     }
 }

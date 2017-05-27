@@ -122,12 +122,12 @@ public class MarketDetailActivity extends BaseActivity {
 
             ThemeUtil.addActivityToThemeCache(this);
 
-            Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
-            if (isNight) {
-                quotesChartUrl += "&yejian=1";
-            } else {
-                quotesChartUrl += "&yejian=0";
-            }
+//            Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
+//            if (isNight) {
+//                quotesChartUrl += "&yejian=1";
+//            } else {
+//                quotesChartUrl += "&yejian=0";
+//            }
 
             lwvContent.build();
             lwvContent.loadUrl(quotesChartUrl);

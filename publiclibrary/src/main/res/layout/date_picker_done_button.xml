@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="@dimen/date_picker_component_width"
-    android:layout_height="wrap_content"
-    style="?android:attr/buttonBarStyle">
+    android:background="@color/date_picker_view_animator"
+    android:layout_height="wrap_content">
 
     <Button
         android:textSize="@dimen/done_label_size"
@@ -14,5 +14,5 @@
         android:layout_height="wrap_content"
         android:minHeight="48dip"
         android:text="@string/done_label"
-        style="?android:attr/buttonBarButtonStyle" />
+        android:background="@null"/>
 </LinearLayout>

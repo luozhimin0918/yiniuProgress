@@ -2,6 +2,7 @@ package com.jyh.kxt.base.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -11,11 +12,16 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.impl.WebBuild;
 import com.library.base.http.VarConstant;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
@@ -36,6 +42,10 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     private WebSettings mSettings;
 
     private String webUrl;
+    public String shareTitle;
+    public String sharePic;
+    public String shareUrl;
+    private ObserverData<Boolean> jsListener;
 
     public LoadX5WebView(Context context) {
         super(context);
@@ -83,7 +93,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         ColorDrawable colorDrawable = new ColorDrawable(color);
         wvContent.setForeground(colorDrawable);
 
-        wvContent.addJavascriptInterface(new getShareInfoInterface(), "shareInfoInterface");
+        wvContent.addJavascriptInterface(new getJsInfoInterface(), "jsinfo");
 
         IX5WebViewExtension ix5 = wvContent.getX5WebViewExtension();
         if (null != ix5) {
@@ -127,6 +137,10 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         wvContent.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
     }
 
+    public void setOnJsListener(ObserverData<Boolean> observerData) {
+        this.jsListener = observerData;
+    }
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -141,7 +155,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         public void onPageFinished(WebView view, String url) {
             view.loadUrl("javascript:function getShareInfo(){" +
                     "var shareVal=document.getElementById(\"webView_share\").innerText;" +
-                    "window.shareInfoInterface.getShareInfo(shareVal);" +
+                    "window.jsinfo.getShareInfo(shareVal);" +
                     "}");
             view.loadUrl("javascript:getShareInfo()");
             wvContent.setForeground(null);
@@ -216,10 +230,40 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         failureView.bringToFront();
     }
 
-    public class getShareInfoInterface {
+    public class getJsInfoInterface {
         @JavascriptInterface
         public void getShareInfo(String shareInfo) {
-            Toast.makeText(getContext(), shareInfo, Toast.LENGTH_SHORT).show();
+            JSONObject shareJson = JSON.parseObject(shareInfo);
+//            "id":"2966",
+//                    "title":"豹子头理财：原油四连阳多头延续，黄金回落修正1236依旧是关键",
+//                    "url":"http://test.kxtadi.kuaixun56.com/webview/view/id/2966",
+//                    "create_time":1494901314,
+//                    "picture":"http://img.kuaixun360.com/Member/56833/cover/591a607c452ca.png",
+//                    "type":"blog"
+            shareTitle = shareJson.getString("title");
+            sharePic = shareJson.getString("picture");
+            shareUrl = shareJson.getString("url");
+
+            if (jsListener != null) {
+                if (!RegexValidateUtil.isEmpty(shareUrl)) {
+                    jsListener.callback(true);
+                } else {
+                    jsListener.callback(false);
+                }
+            }
+
+        }
+
+        @JavascriptInterface
+        public void getJsInfo(String clickInfo) {
+            JSONObject clickJson = JSON.parseObject(clickInfo);
+//            "o_id":"2968",
+//                    "o_class":"blog",
+//                    "o_action":"detail",
+//                    "href":""
+            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson
+                    .getString("o_id"),
+                    clickJson.getString("href"));
         }
     }
 }

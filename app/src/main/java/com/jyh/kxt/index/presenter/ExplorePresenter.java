@@ -7,11 +7,11 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.explore.json.TopicJson;
 import com.library.base.http.HttpListener;
@@ -56,7 +56,7 @@ public class ExplorePresenter extends BasePresenter {
                 List<TopicJson> topics = new ArrayList<>();
                 List<ActivityJson> activitys = new ArrayList<>();
                 List<AuthorJson> authors = new ArrayList<>();
-                List<NewsJson> articles = new ArrayList<>();
+                List<AuthorNewsJson> articles = new ArrayList<>();
 
                 exploreFragment.initHeadView();
 
@@ -115,7 +115,7 @@ public class ExplorePresenter extends BasePresenter {
                         case VarConstant.EXPLORE_BLOG_ARTICLE:
                             try {
                                 JSONArray article = (JSONArray) homeHeaderJson.getData();
-                                articles = JSON.parseArray(article.toString(), NewsJson.class);
+                                articles = JSON.parseArray(article.toString(), AuthorNewsJson.class);
                                 if (articles.size() != 0) {
                                     exploreFragment.addArticle(articles);
                                     getLastId(articles);
@@ -149,9 +149,9 @@ public class ExplorePresenter extends BasePresenter {
                 request = new VolleyRequest(mContext, mQueue);
                 request.setTag(getClass().getName());
             }
-            request.doGet(getLoadMoreUrl(request), new HttpListener<List<NewsJson>>() {
+            request.doGet(getLoadMoreUrl(request), new HttpListener<List<AuthorNewsJson>>() {
                 @Override
-                protected void onResponse(List<NewsJson> newsJsons) {
+                protected void onResponse(List<AuthorNewsJson> newsJsons) {
                     exploreFragment.loadMore(newsJsons);
                     getLastId(newsJsons);
                 }
@@ -180,7 +180,7 @@ public class ExplorePresenter extends BasePresenter {
      * @param article
      * @return
      */
-    public String getLastId(List<NewsJson> article) {
+    public String getLastId(List<AuthorNewsJson> article) {
 
         if (article == null)
             return lastId = "";

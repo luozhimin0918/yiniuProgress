@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
@@ -19,12 +20,15 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
@@ -42,6 +46,7 @@ import java.util.Set;
 
 public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
+    private String url_video_share;
     private Context mContext;
     private List<VideoListJson> list;
 
@@ -49,6 +54,9 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         super(list);
         this.mContext = context;
         this.list = list;
+        String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
+        MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
+        url_video_share = mainInitJson.getUrl_video_share();
     }
 
     @Override
@@ -98,12 +106,13 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www" +
-                        ".baidu.com",
-                        "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
-                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, GoodUtils.isGood(mContext, video
-                        .getId(), VarConstant.GOOD_TYPE_VIDEO),CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video)),
-                        video, holder.ivMore, new ObserverData<Map<String,Boolean>>() {
+                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), url_video_share.replace("{id}",
+                        video.getId()),
+                                "", HttpConstant.IMG_URL +video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
+                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, GoodUtils.isGood(mContext, video
+                                .getId(), VarConstant.GOOD_TYPE_VIDEO), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
+                        video)),
+                        video, holder.ivMore, new ObserverData<Map<String, Boolean>>() {
                             @Override
                             public void callback(Map<String, Boolean> o) {
                                 Set<String> set = o.keySet();

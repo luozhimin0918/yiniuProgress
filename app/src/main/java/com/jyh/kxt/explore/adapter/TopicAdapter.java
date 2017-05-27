@@ -1,6 +1,7 @@
 package com.jyh.kxt.explore.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,10 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         TopicJson topic = topics.get(position);
         holder.tvTitle.setText(topic.getTitle());
-        Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap.icon_def_video)
+        holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_contour));
+        Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
+                .icon_def_video)
                 .into(holder.ivBtn);
     }
 

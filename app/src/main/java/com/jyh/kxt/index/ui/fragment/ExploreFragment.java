@@ -27,9 +27,11 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.ActivityAdapter;
 import com.jyh.kxt.explore.adapter.AuthorAdapter;
+import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
 import com.jyh.kxt.explore.ui.AuthorActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
@@ -37,8 +39,6 @@ import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
-import com.jyh.kxt.main.adapter.NewsAdapter;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
@@ -79,6 +79,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     private BtnAdapter btnAdapter;
     private TopicAdapter topicAdapter;
     private ActivityAdapter activitysAdapter;
+
+    private List<View> headLines = new ArrayList<>();
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -355,7 +357,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      *
      * @param articles
      */
-    public void addArticle(List<NewsJson> articles) {
+    public void addArticle(List<AuthorNewsJson> articles) {
         if (homeHeadView != null)
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
         plvContent.getRefreshableView().addHeaderView(homeHeadView);
@@ -386,6 +388,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         view.setLayoutParams(params);
 
         homeHeadView.addView(view);
+        headLines.add(view);
     }
 
     @Override
@@ -405,7 +408,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      *
      * @param newsJsons
      */
-    public void loadMore(List<NewsJson> newsJsons) {
+    public void loadMore(List<AuthorNewsJson> newsJsons) {
         if (newsJsons == null || newsJsons.size() == 0) {
             ToastView.makeText3(getContext(), getString(R.string.no_data));
         } else {
@@ -430,13 +433,13 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 2;
-        NewsJson newsJson = newsAdapter.dataList.get(index);
+        AuthorNewsJson newsJson = newsAdapter.dataList.get(index);
         JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
-        //保存浏览记录
-        BrowerHistoryUtils.save(getContext(), newsJson);
-
-        //单条刷新,改变浏览状态
-        newsAdapter.getView(index, view, parent);
+//        //保存浏览记录
+//        BrowerHistoryUtils.save(getContext(), newsJson);
+//
+//        //单条刷新,改变浏览状态
+//        newsAdapter.getView(index, view, parent);
     }
 
     @Override
@@ -496,5 +499,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         if (authorAdapter != null) authorAdapter.notifyDataSetChanged();
         if (topicAdapter != null) topicAdapter.notifyDataSetChanged();
         if (activitysAdapter != null) activitysAdapter.notifyDataSetChanged();
+        for (View headLine : headLines) {
+            headLine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+        }
     }
 }

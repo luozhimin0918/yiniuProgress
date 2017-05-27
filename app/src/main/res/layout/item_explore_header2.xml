@@ -4,7 +4,6 @@
               android:layout_height="@dimen/explore_header_item2_height"
               android:layout_marginBottom="@dimen/newsContentPadding3"
               android:layout_marginRight="@dimen/searchItemPadding2"
-              android:background="@drawable/bg_contour"
               android:gravity="center"
               android:orientation="vertical"
               android:padding="1px">

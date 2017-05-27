@@ -11,7 +11,7 @@
         android:layout_width="@dimen/explore_header_item3_imgWidth"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@mipmap/icon_def_news"/>
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
