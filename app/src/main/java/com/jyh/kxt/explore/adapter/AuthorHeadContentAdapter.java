@@ -2,6 +2,7 @@ package com.jyh.kxt.explore.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,9 @@ public class AuthorHeadContentAdapter extends RecyclerView.Adapter<AuthorHeadCon
                         holder.ivPhoto.setImageBitmap(resource);
                     }
                 });
+
+        holder.tvName.setTextColor(ContextCompat.getColor(context,R.color.font_color5));
+        holder.tvFans.setTextColor(ContextCompat.getColor(context,R.color.font_color60));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
