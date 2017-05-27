@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 android:layout_marginRight="@dimen/newsContentPadding3"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/font_color15"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/ll_error"

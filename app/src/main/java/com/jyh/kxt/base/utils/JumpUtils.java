@@ -32,6 +32,7 @@ import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.library.base.http.VarConstant;
 import com.jyh.kxt.base.json.JumpJson;
+import com.library.manager.ActivityManager;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
@@ -70,159 +71,25 @@ public class JumpUtils {
                 if (RegexValidateUtil.isEmpty(o_class)) return;
                 switch (o_class) {
                     case VarConstant.OCLASS_ACTIVITY:
-                        switch (o_action) {
-                            case VarConstant.OACTION_INDEX:
-                            case VarConstant.OACTION_LIST:
-                                //活动列表
-                                Intent activityIntent = new Intent(context, MoreActivity.class);
-                                activityIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_ACTIVITY);
-                                context.startActivity(activityIntent);
-                                break;
-                            case VarConstant.OACTION_DETAIL:
-                                //活动详情
-
-                                break;
-                        }
+                        jumpActivity(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_BLOG:
-                        switch (o_action) {
-                            case VarConstant.OACTION_INDEX:
-                            case VarConstant.OACTION_LIST:
-                                //专栏列表
-                                Intent authorIntent = new Intent(context, AuthorListActivity.class);
-                                context.startActivity(authorIntent);
-                                break;
-                        }
+                        jumpBlog(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_TOPIC:
-                        switch (o_action) {
-                            case VarConstant.OACTION_INDEX:
-                            case VarConstant.OACTION_LIST:
-                                //专题列表
-                                Intent activityIntent = new Intent(context, MoreActivity.class);
-                                activityIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_TOPIC);
-                                context.startActivity(activityIntent);
-                                break;
-                            case VarConstant.OACTION_DETAIL:
-                                //专题详情
-                                break;
-                        }
+                        jumpTopic(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_DATA:
-
-                        if (context instanceof MainActivity) {
-                            final MainActivity mainActivity = (MainActivity) context;
-                            switch (o_action) {
-                                case VarConstant.OACTION_LIST:
-                                    RadioButton rbDatum = mainActivity.rbDatum;
-                                    boolean rbDatumChecked = rbDatum.isChecked();
-                                    if (rbDatumChecked) {
-                                        mainActivity.datumFragment.onTabSelect(1);
-                                    } else {
-                                        rbDatum.performClick();
-                                        rbDatum.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    mainActivity.datumFragment.onTabSelect(1);
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }, 200);
-                                    }
-                                    break;
-                                case VarConstant.OACTION_RL:
-                                    RadioButton rlDatum = mainActivity.rbDatum;
-                                    boolean rlDatumChecked = rlDatum.isChecked();
-                                    if (rlDatumChecked) {
-                                        mainActivity.datumFragment.onTabSelect(0);
-
-                                        long timeInMillis = System.currentTimeMillis();
-                                        String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
-                                        long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
-
-                                        mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
-                                    } else {
-                                        rlDatum.performClick();
-                                        rlDatum.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    mainActivity.datumFragment.onTabSelect(0);
-
-                                                    long timeInMillis = System.currentTimeMillis();
-                                                    String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
-                                                    long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
-
-                                                    mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }, 200);
-                                    }
-                                    break;
-                            }
-                        }
+                        jumpData(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_VIDEO:
-                        if (context instanceof MainActivity) {
-                            final MainActivity mainActivity = (MainActivity) context;
-                            switch (o_action) {
-                                case VarConstant.OACTION_LIST:
-                                    RadioButton rbAudio = mainActivity.rbAudioVisual;
-                                    boolean videoChecked = rbAudio.isChecked();
-                                    if (videoChecked) {
-                                        ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
-                                        vpAudioVisual.setCurrentItem(0);
-                                        VideoFragment videoFragment = (VideoFragment) ((FragmentPagerAdapter) vpAudioVisual
-                                                .getAdapter()).getItem(0);
-                                        videoFragment.setJumpId(o_id);
-                                    } else {
-                                        rbAudio.performClick();
-                                        rbAudio.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
-                                                vpAudioVisual.setCurrentItem(0);
-                                                VideoFragment videoFragment = (VideoFragment) ((BaseFragmentAdapter) vpAudioVisual
-                                                        .getAdapter()).getItem(0);
-                                                videoFragment.setJumpId(o_id);
-                                            }
-                                        }, 200);
-                                    }
-                                    break;
-                            }
-                        }
+                        jumpVideo(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_FLASH:
-                        if (context instanceof MainActivity) {
-                            final MainActivity mainActivity= (MainActivity) context;
-                            RadioButton rbHomeFlash = mainActivity.rbHome;
-                            boolean checkedFlash = rbHomeFlash.isChecked();
-                            if (checkedFlash) {
-                                ViewPager vpContent = mainActivity.homeFragment.vpContent;
-                                vpContent.setCurrentItem(1);
-                            } else {
-                                rbHomeFlash.performClick();
-                                rbHomeFlash.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ViewPager vpContent = mainActivity.homeFragment.vpContent;
-                                        vpContent.setCurrentItem(1);
-                                    }
-                                }, 200);
-                            }
-                        }
+                        jumpFlash(context, o_action, o_id);
                         return;
                     case VarConstant.OCLASS_NEWS:
-                        switch (o_action) {
-                            case VarConstant.OACTION_DIANPING:
-                                Intent dpIntent = new Intent(context, DpActivity.class);
-                                context.startActivity(dpIntent);
-                                break;
-                        }
+                        jumpNews(context, o_action, o_id);
                         return;
                 }
             } else {
@@ -233,6 +100,266 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 要闻
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpNews(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_DIANPING:
+                Intent dpIntent = new Intent(context, DpActivity.class);
+                context.startActivity(dpIntent);
+                break;
+            case VarConstant.OACTION_DETAIL:
+                Intent detailIntent = new Intent(context, NewsContentActivity.class);
+                detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(detailIntent);
+        }
+    }
+
+    /**
+     * 快讯
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpFlash(BaseActivity context, String o_action, String o_id) {
+
+        if (context instanceof MainActivity) {
+
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, FlashActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+                case VarConstant.OACTION_INDEX:
+                case VarConstant.OACTION_LIST:
+                    final MainActivity mainActivity = (MainActivity) context;
+                    RadioButton rbHomeFlash = mainActivity.rbHome;
+                    boolean checkedFlash = rbHomeFlash.isChecked();
+                    if (checkedFlash) {
+                        ViewPager vpContent = mainActivity.homeFragment.vpContent;
+                        vpContent.setCurrentItem(1);
+                    } else {
+                        rbHomeFlash.performClick();
+                        rbHomeFlash.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ViewPager vpContent = mainActivity.homeFragment.vpContent;
+                                vpContent.setCurrentItem(1);
+                            }
+                        }, 200);
+                    }
+                    break;
+            }
+        } else {
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, FlashActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 视听
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpVideo(BaseActivity context, String o_action, final String o_id) {
+        if (context instanceof MainActivity) {
+            final MainActivity mainActivity = (MainActivity) context;
+            switch (o_action) {
+                case VarConstant.OACTION_LIST:
+                    RadioButton rbAudio = mainActivity.rbAudioVisual;
+                    boolean videoChecked = rbAudio.isChecked();
+                    if (videoChecked) {
+                        ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
+                        vpAudioVisual.setCurrentItem(0);
+                        VideoFragment videoFragment = (VideoFragment) ((FragmentPagerAdapter) vpAudioVisual
+                                .getAdapter()).getItem(0);
+                        videoFragment.setJumpId(o_id);
+                    } else {
+                        rbAudio.performClick();
+                        rbAudio.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
+                                vpAudioVisual.setCurrentItem(0);
+                                VideoFragment videoFragment = (VideoFragment) ((BaseFragmentAdapter) vpAudioVisual
+                                        .getAdapter()).getItem(0);
+                                videoFragment.setJumpId(o_id);
+                            }
+                        }, 200);
+                    }
+                    break;
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, VideoDetailActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+            }
+        } else {
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, VideoDetailActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 数据
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     * @throws Exception
+     */
+    private static void jumpData(BaseActivity context, String o_action, String o_id) throws Exception {
+        if (context instanceof MainActivity) {
+            final MainActivity mainActivity = (MainActivity) context;
+            switch (o_action) {
+                case VarConstant.OACTION_LIST:
+                    RadioButton rbDatum = mainActivity.rbDatum;
+                    boolean rbDatumChecked = rbDatum.isChecked();
+                    if (rbDatumChecked) {
+                        mainActivity.datumFragment.onTabSelect(1);
+                    } else {
+                        rbDatum.performClick();
+                        rbDatum.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    mainActivity.datumFragment.onTabSelect(1);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, 200);
+                    }
+                    break;
+                case VarConstant.OACTION_RL:
+                    RadioButton rlDatum = mainActivity.rbDatum;
+                    boolean rlDatumChecked = rlDatum.isChecked();
+                    if (rlDatumChecked) {
+                        mainActivity.datumFragment.onTabSelect(0);
+
+                        long timeInMillis = System.currentTimeMillis();
+                        String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
+                        long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
+
+                        mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
+                    } else {
+                        rlDatum.performClick();
+                        rlDatum.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    mainActivity.datumFragment.onTabSelect(0);
+
+                                    long timeInMillis = System.currentTimeMillis();
+                                    String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
+                                    long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
+
+                                    mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, 200);
+                    }
+                    break;
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, DatumHistoryActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+            }
+        } else {
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    Intent detailIntent = new Intent(context, DatumHistoryActivity.class);
+                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                    context.startActivity(detailIntent);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 专题
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpTopic(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_INDEX:
+            case VarConstant.OACTION_LIST:
+                //专题列表
+                Intent activityIntent = new Intent(context, MoreActivity.class);
+                activityIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_TOPIC);
+                context.startActivity(activityIntent);
+                break;
+            case VarConstant.OACTION_DETAIL:
+                //专题详情
+                break;
+        }
+    }
+
+    /**
+     * 专栏
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpBlog(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_INDEX:
+            case VarConstant.OACTION_LIST:
+                //专栏列表
+                Intent authorIntent = new Intent(context, AuthorListActivity.class);
+                context.startActivity(authorIntent);
+                break;
+        }
+    }
+
+    /**
+     * 活动
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpActivity(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_INDEX:
+            case VarConstant.OACTION_LIST:
+                //活动列表
+                Intent activityIntent = new Intent(context, MoreActivity.class);
+                activityIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_ACTIVITY);
+                context.startActivity(activityIntent);
+                break;
+            case VarConstant.OACTION_DETAIL:
+                //活动详情
+                break;
         }
     }
 

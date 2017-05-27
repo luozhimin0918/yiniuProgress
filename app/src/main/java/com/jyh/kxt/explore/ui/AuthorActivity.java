@@ -2,8 +2,9 @@ package com.jyh.kxt.explore.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,10 +15,11 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.AuthorPresenter;
-import com.jyh.kxt.main.adapter.NewsAdapter;
-import com.jyh.kxt.main.json.NewsJson;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -37,24 +39,25 @@ import butterknife.OnClick;
  * 创建日期:2017/5/3.
  */
 
-public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
-    @BindView(R.id.v_like) View vLike;
-    @BindView(R.id.iv_photo) RoundImageView ivPhoto;
-    @BindView(R.id.tv_name) TextView tvName;
-    @BindView(R.id.tv_fans) TextView tvFans;
-    @BindView(R.id.tv_article) TextView tvArticle;
+public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
+        AdapterView.OnItemClickListener {
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
-    @BindView(R.id.tv_info) TextView tvInfo;
     @BindView(R.id.pl_list_rootView) public PageLoadLayout plListRootView;
-    @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.ll_error) LinearLayout llError;
+    private View vLike;
+    private RoundImageView ivPhoto;
+    private TextView tvName;
+    private TextView tvFans;
+    private TextView tvArticle;
+    private TextView tvInfo;
 
     private AuthorPresenter authorPresenter;
     private boolean isLike;
 
     private String authorId = "";
     public NewsAdapter newsAdapter;
+    private View headView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plContent.setDividerNull();
         plContent.setMode(PullToRefreshBase.Mode.BOTH);
         plContent.setOnRefreshListener(this);
+        plContent.setOnItemClickListener(this);
         plListRootView.setOnAfreshLoadListener(new PageLoadLayout.OnAfreshLoadListener() {
             @Override
             public void OnAfreshLoad() {
@@ -77,10 +81,10 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             }
         });
 
-        llContent.setVisibility(View.VISIBLE);
         llError.setVisibility(View.GONE);
 
         authorId = getIntent().getStringExtra(IntentConstant.O_ID);
+        initHeadView();
 
         loadWait();
         authorPresenter.init(authorId);
@@ -93,36 +97,13 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
      * @param authorDetailsJson
      */
     public void setView(AuthorDetailsJson authorDetailsJson) {
-        tvName.setText(authorDetailsJson.getName());
-        tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
-        tvArticle.setText("文章 " + authorDetailsJson.getArticle_num());
-        tvInfo.setText(authorDetailsJson.getIntroduce());
-
-        //关注
-        String is_follow = authorDetailsJson.getIs_follow();
-        if (is_follow == null)
-            vLike.setSelected(false);
-        else if (is_follow.equals("1"))
-            vLike.setSelected(true);
-        else
-            vLike.setSelected(false);
-
-        Glide.with(this)
-                .load(authorDetailsJson.getPicture())
-                .asBitmap()
-                .override(120, 120)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ivPhoto.setImageBitmap(resource);
-                    }
-                });
+        setHeadView(authorDetailsJson);
         try {
-            List<NewsJson> list = authorDetailsJson.getList();
+            List<AuthorNewsJson> list = authorDetailsJson.getList();
             if (list == null || list.size() == 0) {
                 plListRootView.loadEmptyData();
             } else {
-                List<NewsJson> data;
+                List<AuthorNewsJson> data;
                 if (list.size() > VarConstant.LIST_MAX_SIZE) {
                     authorPresenter.setMore(true);
                     authorPresenter.setLastId(list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id());
@@ -138,6 +119,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 } else {
                     newsAdapter.setData(data);
                 }
+                if (plContent.getRefreshableView().getHeaderViewsCount() <= 1)
+                    plContent.getRefreshableView().addHeaderView(headView);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,39 +129,22 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         loadOver();
     }
 
-    @OnClick({R.id.iv_break, R.id.v_like, R.id.iv_break2})
+    @OnClick({R.id.iv_break2})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_break:
             case R.id.iv_break2:
                 onBackPressed();
-                break;
-            case R.id.v_like:
-                authorPresenter.attention(vLike.isSelected());
                 break;
         }
     }
 
     public void refresh(AuthorDetailsJson authorDetailsJson) {
-        tvName.setText(authorDetailsJson.getName());
-        tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
-        tvArticle.setText("文章 " + authorDetailsJson.getArticle_num());
-        tvInfo.setText(authorDetailsJson.getIntroduce());
-        Glide.with(this)
-                .load(authorDetailsJson.getPicture())
-                .asBitmap()
-                .override(120, 120)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ivPhoto.setImageBitmap(resource);
-                    }
-                });
+        setHeadView(authorDetailsJson);
         try {
-            List<NewsJson> list = authorDetailsJson.getList();
+            List<AuthorNewsJson> list = authorDetailsJson.getList();
             if (list == null || list.size() == 0) {
             } else {
-                List<NewsJson> data;
+                List<AuthorNewsJson> data;
                 if (list.size() > VarConstant.LIST_MAX_SIZE) {
                     authorPresenter.setMore(true);
                     authorPresenter.setLastId(newsAdapter.getLastId());
@@ -206,7 +172,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
      *
      * @param newsJsons
      */
-    public void loadMore(List<NewsJson> newsJsons) {
+    public void loadMore(List<AuthorNewsJson> newsJsons) {
         newsAdapter.addData(newsJsons);
     }
 
@@ -215,8 +181,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
      *
      * @param list
      */
-    public void reLoadListData(List<NewsJson> list) {
-        List<NewsJson> data;
+    public void reLoadListData(List<AuthorNewsJson> list) {
+        List<AuthorNewsJson> data;
         if (list.size() > VarConstant.LIST_MAX_SIZE) {
             authorPresenter.setMore(true);
             authorPresenter.setLastId(newsAdapter.getLastId());
@@ -258,20 +224,17 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
 
     public void loadWait() {
-        llContent.setVisibility(View.GONE);
         llError.setVisibility(View.VISIBLE);
         plRootView.loadWait();
     }
 
 
     public void loadError() {
-        llContent.setVisibility(View.GONE);
         llError.setVisibility(View.VISIBLE);
         plRootView.loadError();
     }
 
     public void loadOver() {
-        llContent.setVisibility(View.VISIBLE);
         llError.setVisibility(View.GONE);
         plRootView.loadOver();
     }
@@ -283,5 +246,63 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
      */
     public void attention(boolean isFollow) {
         vLike.setSelected(!isFollow);
+    }
+
+    public void initHeadView() {
+        headView = LayoutInflater.from(this).inflate(R.layout.layout_author_head, null, false);
+        tvName = (TextView) headView.findViewById(R.id.tv_name);
+        tvInfo = (TextView) headView.findViewById(R.id.tv_info);
+        ivPhoto = (RoundImageView) headView.findViewById(R.id.iv_photo);
+        vLike = headView.findViewById(R.id.v_like);
+        tvFans = (TextView) headView.findViewById(R.id.tv_fans);
+        tvArticle = (TextView) headView.findViewById(R.id.tv_article);
+        View ivBreak = headView.findViewById(R.id.iv_break);
+
+        ivBreak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        vLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                authorPresenter.attention(vLike.isSelected());
+            }
+        });
+    }
+
+    private void setHeadView(AuthorDetailsJson authorDetailsJson) {
+        tvName.setText(authorDetailsJson.getName());
+        tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
+        tvArticle.setText("文章 " + authorDetailsJson.getArticle_num());
+        tvInfo.setText(authorDetailsJson.getIntroduce());
+
+        //关注
+        String is_follow = authorDetailsJson.getIs_follow();
+        if (is_follow == null)
+            vLike.setSelected(false);
+        else if (is_follow.equals("1"))
+            vLike.setSelected(true);
+        else
+            vLike.setSelected(false);
+
+        Glide.with(this)
+                .load(authorDetailsJson.getPicture())
+                .asBitmap()
+                .override(120, 120)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ivPhoto.setImageBitmap(resource);
+                    }
+                });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        List<AuthorNewsJson> data = newsAdapter.getData();
+        AuthorNewsJson newsJson = data.get(position - 2);
+        JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
     }
 }

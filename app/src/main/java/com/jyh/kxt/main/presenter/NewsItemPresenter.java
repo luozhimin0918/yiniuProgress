@@ -345,6 +345,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
                         MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
                         gridView.setAdapter(adapter);
+
                         quoteGridAdapter.add(adapter);
                     }
                 });

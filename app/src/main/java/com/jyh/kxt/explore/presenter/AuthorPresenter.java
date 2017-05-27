@@ -7,11 +7,10 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.Encrypt;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.ui.AuthorActivity;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -100,15 +99,15 @@ public class AuthorPresenter extends BasePresenter {
 
             if (request == null)
                 request = new VolleyRequest(mContext, mQueue);
-            request.doGet(getLoadMoreUrl(), new HttpListener<List<NewsJson>>() {
+            request.doGet(getLoadMoreUrl(), new HttpListener<List<AuthorNewsJson>>() {
                 @Override
-                protected void onResponse(List<NewsJson> newsJsons) {
+                protected void onResponse(List<AuthorNewsJson> newsJsons) {
                     if (newsJsons != null) {
                         int size = newsJsons.size();
-                        List<NewsJson> data;
+                        List<AuthorNewsJson> data;
                         if (size > VarConstant.LIST_MAX_SIZE) {
                             isMore = true;
-                            data = new ArrayList<NewsJson>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                            data = new ArrayList<>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
                             lastId = authorActivity.newsAdapter.getLastId();
                         } else {
                             isMore = false;
@@ -151,14 +150,14 @@ public class AuthorPresenter extends BasePresenter {
      * 重新加载
      */
     public void reLoadListData() {
-        request.doGet(getLoadMoreUrl(), new HttpListener<List<NewsJson>>() {
+        request.doGet(getLoadMoreUrl(), new HttpListener<List<AuthorNewsJson>>() {
             @Override
-            protected void onResponse(List<NewsJson> newsJsons) {
+            protected void onResponse(List<AuthorNewsJson> newsJsons) {
                 if (newsJsons != null) {
                     int size = newsJsons.size();
-                    List<NewsJson> data;
+                    List<AuthorNewsJson> data;
                     if (size > VarConstant.LIST_MAX_SIZE) {
-                        data = new ArrayList<NewsJson>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                        data = new ArrayList<AuthorNewsJson>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
                     } else {
                         data = newsJsons;
                     }

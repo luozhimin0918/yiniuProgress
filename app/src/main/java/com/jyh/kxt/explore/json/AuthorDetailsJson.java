@@ -30,7 +30,7 @@ public class AuthorDetailsJson {
     private String is_follow;//是否关注
 
     @JSONField(name = "article")
-    private List<NewsJson> list;
+    private List<AuthorNewsJson> list;
 
     public String getIs_follow() {
         return is_follow;
@@ -88,11 +88,11 @@ public class AuthorDetailsJson {
         this.article_num = article_num;
     }
 
-    public List<NewsJson> getList() {
+    public List<AuthorNewsJson> getList() {
         return list;
     }
 
-    public void setList(List<NewsJson> list) {
+    public void setList(List<AuthorNewsJson> list) {
         this.list = list;
     }
 }
