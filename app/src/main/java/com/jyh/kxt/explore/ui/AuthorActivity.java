@@ -41,7 +41,6 @@ import butterknife.OnClick;
 
 public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
         AdapterView.OnItemClickListener {
-    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_list_rootView) public PageLoadLayout plListRootView;
     @BindView(R.id.ll_error) LinearLayout llError;
@@ -67,8 +66,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         ButterKnife.bind(this);
 
         authorPresenter = new AuthorPresenter(this);
-
-        plRootView.setOnAfreshLoadListener(this);
+        plListRootView.setOnAfreshLoadListener(this);
         plContent.setDividerNull();
         plContent.setMode(PullToRefreshBase.Mode.BOTH);
         plContent.setOnRefreshListener(this);
@@ -159,7 +157,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         } catch (Exception e) {
             e.printStackTrace();
         }
-        plRootView.postDelayed(new Runnable() {
+        plListRootView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 plContent.onRefreshComplete();
@@ -225,18 +223,18 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     public void loadWait() {
         llError.setVisibility(View.VISIBLE);
-        plRootView.loadWait();
+        plListRootView.loadWait();
     }
 
 
     public void loadError() {
         llError.setVisibility(View.VISIBLE);
-        plRootView.loadError();
+        plListRootView.loadError();
     }
 
     public void loadOver() {
         llError.setVisibility(View.GONE);
-        plRootView.loadOver();
+        plListRootView.loadOver();
     }
 
     /**
@@ -304,5 +302,14 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         List<AuthorNewsJson> data = newsAdapter.getData();
         AuthorNewsJson newsJson = data.get(position - 2);
         JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (plContent != null)
+            plContent.setDividerNull();
+        if (newsAdapter != null)
+            newsAdapter.notifyDataSetChanged();
     }
 }

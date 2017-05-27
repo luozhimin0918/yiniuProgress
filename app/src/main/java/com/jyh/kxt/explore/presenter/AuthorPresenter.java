@@ -80,7 +80,7 @@ public class AuthorPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                authorActivity.plRootView.postDelayed(new Runnable() {
+                authorActivity.plListRootView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         authorActivity.plContent.onRefreshComplete();
@@ -115,7 +115,7 @@ public class AuthorPresenter extends BasePresenter {
                         }
                         authorActivity.loadMore(data);
                     }
-                    authorActivity.plRootView.postDelayed(new Runnable() {
+                    authorActivity.plListRootView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             authorActivity.plContent.onRefreshComplete();
@@ -126,7 +126,7 @@ public class AuthorPresenter extends BasePresenter {
                 @Override
                 protected void onErrorResponse(VolleyError error) {
                     super.onErrorResponse(error);
-                    authorActivity.plRootView.postDelayed(new Runnable() {
+                    authorActivity.plListRootView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             authorActivity.plContent.onRefreshComplete();
@@ -170,7 +170,7 @@ public class AuthorPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                authorActivity.plRootView.postDelayed(new Runnable() {
+                authorActivity.plListRootView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         authorActivity.plContent.onRefreshComplete();
