@@ -106,11 +106,12 @@ public class BitmapUtils {
      * bitmap 转 byte[]
      *
      * @param bm
+     * @param jpeg
      * @return
      */
-    public static byte[] Bitmap2Bytes(Bitmap bm) {
+    public static byte[] Bitmap2Bytes(Bitmap bm, Bitmap.CompressFormat jpeg) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bm.compress(jpeg, 100, baos);
         return baos.toByteArray();
     }
 

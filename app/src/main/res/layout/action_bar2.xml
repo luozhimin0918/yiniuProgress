@@ -12,7 +12,6 @@
         android:layout_height="@dimen/navigationBarLeftImageViewSize"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
-        android:src="@mipmap/icon_user_def_photo"
         />
 
     <com.library.widget.tablayout.SegmentTabLayout
@@ -33,7 +32,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight1"
         android:layout_toLeftOf="@+id/iv_right_icon1"
-        android:src="@color/calendar_header"
         android:visibility="gone"/>
 
     <ImageView

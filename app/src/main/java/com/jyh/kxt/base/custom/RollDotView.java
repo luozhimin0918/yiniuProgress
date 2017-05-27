@@ -43,11 +43,9 @@ public class RollDotView extends View {
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setStyle(Paint.Style.FILL);
 
-        circleSize = SystemUtil.dp2px(getContext(),3);
+        circleSize = SystemUtil.dp2px(getContext(), 3);
         circlePadding = SystemUtil.dp2px(getContext(), 3);
 
-        defaultCircleColor = ContextCompat.getColor(getContext(), R.color.unaltered_color);
-        selectedCircleColor = ContextCompat.getColor(getContext(), R.color.decline_color);
     }
 
 
@@ -69,6 +67,9 @@ public class RollDotView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        defaultCircleColor = ContextCompat.getColor(getContext(), R.color.unaltered_color);
+        selectedCircleColor = ContextCompat.getColor(getContext(), R.color.decline_color);
+
         for (int i = 0; i < circleCount; i++) {
             if (selectedPosition == i) {
                 circlePaint.setColor(selectedCircleColor);
@@ -88,9 +89,13 @@ public class RollDotView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 
-        int measureWidth = SystemUtil.dp2px(getContext(),circleSize * circleCount) + circlePadding * circleCount;
-        int measureHeight = SystemUtil.dp2px(getContext(),circleSize);
+        int measureWidth = SystemUtil.dp2px(getContext(), circleSize * circleCount) + circlePadding * circleCount;
+        int measureHeight = SystemUtil.dp2px(getContext(), circleSize + circlePadding);
         setMeasuredDimension(measureWidth, measureHeight);
 
+    }
+
+    public void onChangeTheme() {
+        postInvalidate();
     }
 }

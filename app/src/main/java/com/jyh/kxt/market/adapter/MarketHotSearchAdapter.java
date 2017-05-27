@@ -26,10 +26,10 @@ import butterknife.ButterKnife;
 public class MarketHotSearchAdapter extends RecyclerView.Adapter<MarketHotSearchAdapter.ViewHolder> {
 
     private Context context;
-    private List<MarketItemBean> list;
+    private List<String> list;
     private OnItemClickListener onItemClickListener;
 
-    public MarketHotSearchAdapter(Context context, List<MarketItemBean> list) {
+    public MarketHotSearchAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
@@ -66,7 +66,7 @@ public class MarketHotSearchAdapter extends RecyclerView.Adapter<MarketHotSearch
                 holder.tvRank.setBackgroundResource(R.drawable.bg_rank4);
                 break;
         }
-        holder.tvTitle.setText(list.get(position).getName());
+        holder.tvTitle.setText(list.get(position));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MarketHotSearchAdapter extends RecyclerView.Adapter<MarketHotSearch
         return size;
     }
 
-    public void setData(List<MarketItemBean> data) {
+    public void setData(List<String> data) {
         list.clear();
         list.addAll(data);
         notifyDataSetChanged();
@@ -87,7 +87,7 @@ public class MarketHotSearchAdapter extends RecyclerView.Adapter<MarketHotSearch
         this.onItemClickListener = onItemClickListener;
     }
 
-    public List<MarketItemBean> getData() {
+    public List<String> getData() {
         return list;
     }
 

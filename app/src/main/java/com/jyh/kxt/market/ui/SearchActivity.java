@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +26,9 @@ import com.jyh.kxt.market.presenter.SearchPresenter;
 import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.flowlayout.FlowLayout;
+import com.library.widget.flowlayout.TagAdapter;
+import com.library.widget.flowlayout.TagFlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.recycler.DividerGridItemDecoration;
@@ -43,16 +48,15 @@ import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener {
 
-    private static final String SEARCH_HISTORY = "1";
-    private static final String SEARCH_RESULT = "2";
-
     @BindView(R.id.edt_search) SearchEditText edtSearch;
     @BindView(R.id.tv_break) TextView tvBreak;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     @BindView(R.id.layout_market_search_start) View layoutSearchStart;
     @BindView(R.id.layout_market_search_end) public PullToRefreshListView plvContent;
-    @BindView(R.id.rv_content) RecyclerView rvContent;
+
+    @BindView(R.id.iv_clear_history) ImageView ivClear;
+    @BindView(R.id.fl_hot) TagFlowLayout hotView;
 
     private SearchPresenter presenter;
     private String searchType;
@@ -60,6 +64,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     private MarketHotSearchAdapter hotAdapter;
     private MarketSearchAdapter adapter;
+    private TagAdapter<String> tagAdapter;
+    private List<String> markets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +79,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         searchKey = getIntent().getStringExtra(IntentConstant.SEARCH_KEY);
         plRootView.loadWait();
         if (searchKey != null) {
-            searchType = SEARCH_RESULT;
             presenter.search(searchKey);
         } else {
-            searchType = SEARCH_HISTORY;
             presenter.initHotSearch();
         }
 
@@ -88,19 +92,22 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plvContent.setOnRefreshListener(this);
         plvContent.setDividerNull();
         plvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        GridLayoutManager manager = new GridLayoutManager(this, 3);
-        rvContent.setLayoutManager(manager);
-        DividerGridItemDecoration decor = new DividerGridItemDecoration(this);
-        decor.setSpanCount(3);
-        decor.setShowVerticalLine(false);
-        rvContent.addItemDecoration(decor);
+
+        hotView.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                String searchKey = markets.get(position);
+                edtSearch.setText(searchKey);
+                presenter.search(searchKey);
+                return false;
+            }
+        });
 
         edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchType = SEARCH_RESULT;
                     String key = edtSearch.getText().toString();
                     searchKey = key;
                     plRootView.loadWait();
@@ -143,14 +150,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     public void OnAfreshLoad() {
         plRootView.loadWait();
-        switch (searchType) {
-            case SEARCH_RESULT:
-                presenter.search(searchKey);
-                break;
-            case SEARCH_HISTORY:
-                presenter.initHotSearch();
-                break;
-        }
+        presenter.search(searchKey);
     }
 
     @Override
@@ -197,24 +197,26 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plRootView.loadOver();
     }
 
-    public void showHotSearch(List<MarketItemBean> markets) {
+    public void showHotSearch(List<String> markets) {
+        this.markets=markets;
         if (markets == null || markets.size() == 0) {
             layoutSearchStart.setVisibility(View.GONE);
         } else {
             layoutSearchStart.setVisibility(View.VISIBLE);
-            if (hotAdapter == null) {
-                hotAdapter = new MarketHotSearchAdapter(this, markets);
-                hotAdapter.setOnItemClickListener(new OnItemClickListener() {
+            if (tagAdapter == null) {
+                tagAdapter = new TagAdapter<String>(markets) {
                     @Override
-                    public void onItemClick(int position, View view) {
-                        plRootView.loadWait();
-                        MarketItemBean itemBean = hotAdapter.getData().get(position);
-                        presenter.search(itemBean.getName());
+                    public View getView(FlowLayout parent, int position, String s) {
+                        TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_tv,
+                                hotView, false);
+                        tv.setText(s);
+                        return tv;
                     }
-                });
-                rvContent.setAdapter(hotAdapter);
+                };
+
+                hotView.setAdapter(tagAdapter);
             } else {
-                hotAdapter.setData(markets);
+                tagAdapter.setTagDatas(markets);
             }
         }
         plRootView.loadOver();

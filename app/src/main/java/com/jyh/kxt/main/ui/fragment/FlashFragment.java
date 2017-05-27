@@ -133,6 +133,14 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(flashPresenter.adapter!=null){
+            flashPresenter.adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onChangeTheme() {
         super.onChangeTheme();
         if(flashPresenter.adapter!=null){

@@ -136,7 +136,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 viewHolder0.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
 
                 View paddingTagView = viewHolder0.llContent.findViewWithTag("paddingView");
-                if(paddingTagView != null){
+                if (paddingTagView != null) {
                     viewHolder0.llContent.removeView(paddingTagView);
                 }
 
@@ -271,6 +271,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 4:
                 CalendarNotBean mCalendarNotBean = (CalendarNotBean) mCalendarType;
                 viewHolder4.tvDescribe.setText(mCalendarNotBean.getDescribe());
+                viewHolder4.tvDescribe.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
                 break;
         }
         return view;

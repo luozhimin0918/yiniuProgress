@@ -33,8 +33,7 @@
             android:layout_width="@dimen/newsItemImageViewWidth"
             android:layout_height="@dimen/newsItemImageViewHeight"
             android:layout_centerVertical="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_def_news"/>
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/tv_title"

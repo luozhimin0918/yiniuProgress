@@ -33,18 +33,20 @@
         <View
             android:id="@+id/v_line"
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="10dp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/explore_header_item4_lineMargin"
             android:layout_marginRight="@dimen/explore_header_item4_lineMargin"
-            android:background="@color/line_color2"/>
+            android:background="@color/black"/>
 
         <TextView
             android:id="@+id/tv_fans"
             android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/v_line"
             android:text="粉丝 0"
+            android:textColor="@color/font_color60"
             android:textSize="@dimen/explore_header_item4_textSize"/>
 
         <TextView
@@ -52,7 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/v_line"
+            android:layout_centerVertical="true"
             android:text="文章 0"
+            android:textColor="@color/font_color60"
             android:textSize="@dimen/explore_header_item4_textSize"/>
     </RelativeLayout>
 

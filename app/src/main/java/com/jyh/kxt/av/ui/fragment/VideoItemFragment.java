@@ -1,7 +1,6 @@
 package com.jyh.kxt.av.ui.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,6 @@ import com.library.widget.handmark.PullToRefreshListView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -113,6 +109,7 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        videoItemPresenter.onChangeTheme();
+        if (videoItemPresenter != null)
+            videoItemPresenter.onChangeTheme();
     }
 }

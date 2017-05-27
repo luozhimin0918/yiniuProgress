@@ -166,4 +166,13 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (marketMainPresenter != null)
+            marketMainPresenter.onChangeTheme();
+        if (ptrlvContent != null)
+            ptrlvContent.onChangeTheme();
+    }
 }

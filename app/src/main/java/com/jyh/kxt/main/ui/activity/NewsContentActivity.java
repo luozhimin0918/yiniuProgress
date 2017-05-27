@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,10 +90,11 @@ import butterknife.OnClick;
 public class NewsContentActivity extends BaseActivity implements CommentPresenter.OnCommentClickListener,
         CommentPresenter.OnCommentPublishListener {
 
-    @BindView(R.id.pll_content) PageLoadLayout pllContent;
+    @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
     @BindView(R.id.iv_ding) ImageView ivGood;
     @BindView(R.id.iv_collect) ImageView ivCollect;
+    @BindView(R.id.tv_commentCount) TextView tvCommentCount;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
@@ -120,6 +122,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private TextView tvFontB;
     private View vLine;
     private View popupView;
+    private int commentCount;
+    private FunctionAdapter functionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,13 +152,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter.setOnCommentPublishListener(this);
     }
 
-    @OnClick({R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_ding, R.id.iv_share})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.iv_ding, R.id.iv_share})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
                 onBackPressed();
                 break;
-            case R.id.iv_comment:
+            case R.id.rl_comment:
                 //回复
                 ptrLvMessage.getRefreshableView().setSelection(2);
                 break;
@@ -292,7 +296,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
         }
 
-        FunctionAdapter functionAdapter = new FunctionAdapter(list, this);
+        functionAdapter = new FunctionAdapter(list, this);
         recyclerView.setAdapter(functionAdapter);
 
         selectView.setSelectItemListener(new SelectLineView.SelectItemListener() {
@@ -459,6 +463,23 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         fontB = newsContentJson.getFont_big();
         content = newsContentJson.getContent();
         night = newsContentJson.getNight_style();
+
+        try {
+            commentCount = Integer.parseInt(newsContentJson.getNum_comment());
+            if (commentCount > 99) {
+                commentCount = 99;
+            }
+            if (commentCount == 0) {
+                tvCommentCount.setVisibility(View.GONE);
+            } else {
+                tvCommentCount.setVisibility(View.VISIBLE);
+                tvCommentCount.setText(commentCount + "");
+            }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            tvCommentCount.setVisibility(View.GONE);
+        }
         isLoadOver = true;
         webViewAndHead.createWebViewAndHead(newsContentJson);
     }
@@ -750,8 +771,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             webViewAndHead.tvSource.setText(Html.fromHtml(content));
             webViewAndHead.attention.onChangeTheme();
+            if (functionAdapter != null)
+                functionAdapter.notifyDataSetChanged();
+            if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null)
+                newsContentPresenter.commentAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
     }
 }

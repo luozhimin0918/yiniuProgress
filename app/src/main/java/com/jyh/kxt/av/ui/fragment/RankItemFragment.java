@@ -39,6 +39,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         rankItemPresenter = new RankItemPresenter(this);
         plRootView.setOnAfreshLoadListener(this);
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plvContent.setDividerNull();
         plvContent.setOnRefreshListener(rankItemPresenter);
 
         type = getArguments().getString(IntentConstant.RANK_TYPE);
@@ -74,6 +75,9 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        rankItemPresenter.onChangeTheme();
+        if (plvContent != null)
+            plvContent.setDividerNull();
+        if (rankItemPresenter != null)
+            rankItemPresenter.onChangeTheme();
     }
 }

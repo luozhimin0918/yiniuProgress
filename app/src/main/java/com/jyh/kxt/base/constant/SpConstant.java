@@ -13,10 +13,6 @@ public class SpConstant {
      * 第一次安装
      */
     public static final String INIT_SP = "init_sp";
-    /**
-     * 配置信息
-     */
-    public static final String CONFIG = "config";
 
     /**
      * 主题
@@ -51,6 +47,7 @@ public class SpConstant {
      * 搜索历史
      */
     public static final String SEARCH_HISTORY = "search_history";
+    public static final String SEARCH_HISTORY_MARKET = "search_history_market";
 
     /**
      * 浏览历史

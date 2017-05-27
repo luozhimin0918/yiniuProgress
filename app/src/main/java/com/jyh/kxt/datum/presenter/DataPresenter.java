@@ -240,13 +240,13 @@ public class DataPresenter extends BasePresenter {
                         convertView.setTag(mViewHolder);
 
                         mViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-                        mViewHolder.vLine=convertView.findViewById(R.id.v_line);
+                        mViewHolder.vLine = convertView.findViewById(R.id.v_line);
                     } else {
                         mViewHolder = (ViewHolder) convertView.getTag();
                     }
 
-                    mViewHolder.tvTitle.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
-                    mViewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_background1));
+                    mViewHolder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+                    mViewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background1));
 
                     if ("hot".equals(dataList.getStyle_class())) {
                         String name = dataList.getName() + ".";
@@ -255,7 +255,7 @@ public class DataPresenter extends BasePresenter {
                         int gapWidth = SystemUtil.dp2px(mContext, 6);
 
 
-                        CircleDrawable mCircleDrawable = new CircleDrawable(Color.RED);
+                        CircleDrawable mCircleDrawable = new CircleDrawable(ContextCompat.getColor(mContext, R.color.point_color_red));
                         mCircleDrawable.setBounds(0, 0, gapWidth, gapWidth);
 
                         ImageSpan what = new MyImageSpan(mCircleDrawable);

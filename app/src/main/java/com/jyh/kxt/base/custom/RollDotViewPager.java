@@ -64,4 +64,9 @@ public class RollDotViewPager extends FrameLayout implements ViewPager.OnPageCha
         int count = rollViewPager.getAdapter().getCount();
         rollDotView.setCircleCount(count);
     }
+
+    public void onChangeTheme() {
+        rollDotView.onChangeTheme();
+        rollViewPager.onChangeTheme();
+    }
 }

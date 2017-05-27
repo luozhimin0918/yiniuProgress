@@ -63,8 +63,9 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         super(context, mode, style);
         initView(null);
     }
-    public PullToRefreshListView(Context context, AttributeSet attrs,Mode mode, int defStyleAttr) {
-        super(context,attrs,mode,defStyleAttr);
+
+    public PullToRefreshListView(Context context, AttributeSet attrs, Mode mode, int defStyleAttr) {
+        super(context, attrs, mode, defStyleAttr);
         initView(null);
     }
 
@@ -353,6 +354,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
             super.setEmptyView(emptyView);
         }
 
+    }
+
+    public void onChangeTheme() {
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
+        mRefreshableView.setDividerHeight(1);
     }
 
 }

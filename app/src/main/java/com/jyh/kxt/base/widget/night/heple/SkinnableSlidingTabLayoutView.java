@@ -90,6 +90,7 @@ public class SkinnableSlidingTabLayoutView extends SlidingTabLayout implements S
             setUnderlineColor(underlineColor);
         }
 
+        updateTabStyles();
     }
 
     @Override

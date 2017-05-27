@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,6 +75,10 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     private LinearLayout homeHeadView;//头部布局
     private BannerLayout carouseView;
     private NewsAdapter newsAdapter;
+    private AuthorAdapter authorAdapter;
+    private BtnAdapter btnAdapter;
+    private TopicAdapter topicAdapter;
+    private ActivityAdapter activitysAdapter;
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -195,7 +200,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         recyclerView.setLayoutManager(manager);
 
-        recyclerView.setAdapter(new BtnAdapter(shortcuts, mContext));
+        recyclerView.setAdapter(btnAdapter = new BtnAdapter(shortcuts, mContext));
 
         homeHeadView.addView(recyclerView);
 
@@ -233,7 +238,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvContent.setLayoutManager(manager);
 
-        rvContent.setAdapter(new TopicAdapter(mContext, topics));
+        rvContent.setAdapter(topicAdapter = new TopicAdapter(mContext, topics));
 
         tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,7 +297,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         rvContent.setLayoutManager(manager);
 
-        rvContent.setAdapter(new ActivityAdapter(mContext, activitys));
+        rvContent.setAdapter(activitysAdapter = new ActivityAdapter(mContext, activitys));
 
         homeHeadView.addView(activityView);
 
@@ -319,10 +324,10 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         rvContent.setLayoutManager(manager);
 
-        AuthorAdapter adapter = new AuthorAdapter(mContext, authors);
-        rvContent.setAdapter(adapter);
+        authorAdapter = new AuthorAdapter(mContext, authors);
+        rvContent.setAdapter(authorAdapter);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        authorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
                 String authorId = authors.get(position).getId();
@@ -372,11 +377,11 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      */
     public void addLineView() {
         Context mContext = getContext();
-        View view = new View(mContext);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_line, null);
         int lineHeight = (int) mContext.getResources().getDimension(R.dimen.line_height);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 lineHeight);
-        view.setBackgroundResource(R.color.line_color2);
+        view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
 
         view.setLayoutParams(params);
 
@@ -426,7 +431,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 2;
         NewsJson newsJson = newsAdapter.dataList.get(index);
-        JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(),newsJson.getO_id(), newsJson.getHref());
+        JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(getContext(), newsJson);
 
@@ -480,4 +485,16 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+
+        if (plvContent != null)
+            plvContent.setDividerNull();
+
+        if (newsAdapter != null) newsAdapter.notifyDataSetChanged();
+        if (authorAdapter != null) authorAdapter.notifyDataSetChanged();
+        if (topicAdapter != null) topicAdapter.notifyDataSetChanged();
+        if (activitysAdapter != null) activitysAdapter.notifyDataSetChanged();
+    }
 }

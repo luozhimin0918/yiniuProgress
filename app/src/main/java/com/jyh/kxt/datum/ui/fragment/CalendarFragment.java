@@ -57,6 +57,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     }
 
     private FragmentManager fm;
+    private BaseFragmentAdapter pageAdapter;
 
     public void createItemFragments() {
         String[] navTitles = calendarPresenter.navTitleList;
@@ -67,7 +68,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
         fm = getChildFragmentManager();
 
-        BaseFragmentAdapter pageAdapter = calendarPresenter.getPageAdapter(fm, fragmentList);
+        pageAdapter = calendarPresenter.getPageAdapter(fm, fragmentList);
         vpCalendarList.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpCalendarList);
 
@@ -255,5 +256,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                 if(fragment instanceof BaseFragment)
                     ((BaseFragment) fragment).onChangeTheme();
             }
+
+        stlNavigationBar.notifyDataSetChanged();
     }
 }

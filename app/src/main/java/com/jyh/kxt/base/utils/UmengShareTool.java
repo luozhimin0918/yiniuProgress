@@ -182,8 +182,8 @@ public class UmengShareTool {
         //设置分享按钮
         setShareBtn(activity, shareBean, o, rootView, observerData);
 
-        int statuBarHeight = SystemUtil.getStatuBarHeight(activity);
-        rootView.setPadding(0, 0, 0, statuBarHeight);
+        int navigationBarHeight = SystemUtil.getNavigationBarHeight(activity);
+        rootView.setPadding(0, 0, 0, navigationBarHeight);
         shareLayout.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
     }

@@ -23,9 +23,12 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
 import com.library.widget.window.ToastView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.HashMap;
@@ -53,6 +56,7 @@ public class RegisterFragment extends BaseFragment {
 
     private boolean isNameError, isEmailError, isPwdError;
     private EditTextValidator editTextValidator;
+    private TSnackbar snackBar;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -86,23 +90,28 @@ public class RegisterFragment extends BaseFragment {
     }
 
     private void register() {
-        showWaitDialog(null);
         if (request == null) {
             request = new VolleyRequest(getContext(), getQueue());
             request.setTag(getClass().getName());
         }
+        snackBar = TSnackbar.make(button, "注册中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
         request.doPost(HttpConstant.USER_REGISTER, getMap(), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                ToastView.makeText3(getContext(), request.getMag());
-                dismissWaitDialog();
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText(request.getMag()).setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                dismissWaitDialog();
-                ToastView.makeText3(getContext(), error == null ? "" : error.getMessage());
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(error == null ? "" : error.getMessage()).setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }
         });
     }

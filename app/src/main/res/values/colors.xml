@@ -74,6 +74,8 @@
     <color name="star_color2">#FFB700</color>
     <color name="star_color3">#E74B31</color>
 
+    <color name="point_color_red">#EA492A</color>
+
     <!--日历线框的颜色-->
     <color name="calendar_line0">#EA492A</color>
     <color name="calendar_line1">#61B484</color>

@@ -3,7 +3,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/rankItemHeight"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/rankItemPaddingVertical"
                 android:paddingLeft="@dimen/contentPadding"
                 android:paddingRight="@dimen/rankItemPaddingRight"
                 android:paddingTop="@dimen/rankItemPaddingVertical"
@@ -63,4 +62,11 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/rankItemRankImgMarginBottom"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_color2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

@@ -12,6 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.presenter.WebPresenter;
+import com.library.base.http.VarConstant;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +56,8 @@ public class WebActivity extends BaseActivity {
      */
     private void getExtra(Intent intent) {
         title = intent.getStringExtra(IntentConstant.NAME);
-        url = intent.getStringExtra(IntentConstant.WEBURL);
+//        url = intent.getStringExtra(IntentConstant.WEBURL);
+        url = "http://test.kxtadi.kuaixun56.com/Webview/view/id/2966";
         source = intent.getStringExtra(IntentConstant.SOURCE);
     }
 

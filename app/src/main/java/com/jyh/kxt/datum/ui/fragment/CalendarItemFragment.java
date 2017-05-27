@@ -91,8 +91,9 @@ public class CalendarItemFragment extends BaseFragment {
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (calendarItemAdapter != null) {
+        if(ptrlvContent!=null)
             ptrlvContent.setDividerNull();
+        if (calendarItemAdapter != null) {
             calendarItemAdapter.notifyDataSetChanged();
         }
     }

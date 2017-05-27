@@ -3,6 +3,7 @@ package com.jyh.kxt.datum.presenter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.app.Fragment;
@@ -153,7 +154,7 @@ public class CalendarPresenter extends BasePresenter {
         }
         int txtSize = SystemUtil.dp2px(mContext, 11);
 
-        int bitmapColor = mContext.getResources().getColor(R.color.font_color5);
+        int bitmapColor =ContextCompat.getColor(mContext,R.color.font_color5);
         int imageViewSize = mContext.getResources().getDimensionPixelSize(R.dimen.navigationBarRightImageViewSize);
 
         Bitmap txtBitmap = rqBitmap.copy(bitmapConfig, true);

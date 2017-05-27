@@ -5,14 +5,18 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.index.impl.WebBuild;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
@@ -66,9 +70,9 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         mSettings.setSupportZoom(false);
 
 //        mSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-
         mSettings.setJavaScriptEnabled(true);
         mSettings.setAppCacheEnabled(true);
+        mSettings.setUserAgent("kxtapp" + "_" + VarConstant.HTTP_SYSTEM_VALUE + "_" + VarConstant.HTTP_VERSION_VALUE);
 
         wvContent.setWebViewClient(new MyWebViewClient());
         wvContent.setWebChromeClient(new MyWebChromeClient());
@@ -87,6 +91,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
         this.addView(wvContent);
         this.addView(pbLoading);
+
         return this;
     }
 
@@ -107,7 +112,12 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
     @Override
     public void loadUrl(String url) {
-        webUrl = url;
+        String connector = "?";
+        if (url.contains("?")) {
+            connector = "&";
+        }
+        webUrl = url + connector + VarConstant.HTTP_VERSION + "=" + VarConstant.HTTP_VERSION_VALUE
+                + "&" + VarConstant.HTTP_SYSTEM + "=" + VarConstant.HTTP_SYSTEM_VALUE;
         wvContent.loadUrl(url);
     }
 
@@ -128,6 +138,11 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 
         @Override
         public void onPageFinished(WebView view, String url) {
+            view.loadUrl("javascript:window.getShareInfo.getShareInfo("
+                    + "document.querySelector('meta[name=\"id\"]').getAttribute('webView_share')" + ");");
+
+            wvContent.addJavascriptInterface(new getShareInfoInterface(),"getShareInfo");
+
             wvContent.setForeground(null);
         }
 
@@ -200,4 +215,10 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         failureView.bringToFront();
     }
 
+    public class getShareInfoInterface {
+        @JavascriptInterface
+        public void getShareInfo(String shareInfo) {
+            Log.i("webViewShare",shareInfo);
+        }
+    }
 }

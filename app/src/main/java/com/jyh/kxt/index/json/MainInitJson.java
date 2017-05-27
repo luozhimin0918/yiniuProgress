@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.json;
 
 import com.jyh.kxt.base.json.JumpJson;
+import com.library.base.http.VarConstant;
 
 /**
  * Created by Mr'Dai on 2017/5/24.
@@ -130,6 +131,11 @@ public class MainInitJson {
         private String type;
 
         public String getHref() {
+            String connector = "?";
+            if (href.contains("?"))
+                connector = "&";
+            href = href + connector + VarConstant.HTTP_VERSION + "=" + VarConstant.HTTP_VERSION_VALUE
+                    + "&" + VarConstant.HTTP_SYSTEM + "=" + VarConstant.HTTP_SYSTEM_VALUE;
             return href;
         }
 
@@ -171,7 +177,7 @@ public class MainInitJson {
         }
     }
 
-    public static class LoadAdBean extends JumpJson{
+    public static class LoadAdBean extends JumpJson {
         /**
          * href : http://appapi.kxt.com/Topic/index/id/3.html
          * o_action :

@@ -115,6 +115,7 @@ public class NewsContentPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                newsContentActivity.pllContent.loadEmptyData();
             }
         });
     }

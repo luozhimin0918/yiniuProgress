@@ -35,6 +35,7 @@ import com.library.widget.tablayout.widget.MsgView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 滑动TabLayout,对于ViewPager的依赖性强
@@ -350,7 +351,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         mTabsContainer.addView(tabView, position, lp_tab);
     }
 
-    private void updateTabStyles() {
+    protected void updateTabStyles() {
         for (int i = 0; i < mTabCount; i++) {
             View v = mTabsContainer.getChildAt(i);
 //            v.setPadding((int) mTabPadding, v.getPaddingTop(), (int) mTabPadding, v.getPaddingBottom());

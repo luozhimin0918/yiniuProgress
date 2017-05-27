@@ -36,7 +36,7 @@ import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
-import com.jyh.kxt.index.json.ConfigJson;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -722,8 +722,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             @Override
             public void onClick(View v) {
                 try {
-                    String configStr = SPUtils.getString(context, SpConstant.CONFIG);
-                    ConfigJson config = JSON.parseObject(configStr, ConfigJson.class);
+                    String configStr = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
+                    MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
                     String url_kx_share = config.getUrl_kx_share();
 
                     String shareUrl = url_kx_share.replace("{id}", flash.getSocre());

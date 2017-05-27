@@ -178,7 +178,7 @@
     <dimen name="videoHistoryTextHeight">40dp</dimen>
 
     <!-- 视听排行 -->
-    <dimen name="rankItemHeight">103dp</dimen>
+    <dimen name="rankItemHeight">104dp</dimen>
     <dimen name="rankItemPaddingVertical">10dp</dimen>
     <dimen name="rankItemPaddingRight">16dp</dimen>
     <dimen name="rankItemPhotoWidth">147dp</dimen>
@@ -187,11 +187,11 @@
     <dimen name="rankItemPlaySize">30dp</dimen>
     <dimen name="rankItemTitleLineSpacingExtra">4dp</dimen>
     <dimen name="rankItemTitlePaddingTop">4dp</dimen>
-    <dimen name="rankItemTimeMarginBottom">4dp</dimen>
+    <dimen name="rankItemTimeMarginBottom">14dp</dimen>
     <dimen name="rankItemTimeDrawablePadding">4dp</dimen>
     <dimen name="rankItemRankImgWidth">18dp</dimen>
     <dimen name="rankItemRankImgHeight">20dp</dimen>
-    <dimen name="rankItemRankImgMarginBottom">2dp</dimen>
+    <dimen name="rankItemRankImgMarginBottom">12dp</dimen>
 
     <!-- 要闻item -->
     <dimen name="newsItemHeight">84dp</dimen>

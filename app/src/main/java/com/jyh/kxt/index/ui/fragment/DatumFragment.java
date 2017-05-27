@@ -492,8 +492,12 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (lastFragment != null) {
-            lastFragment.onChangeTheme();
+        if (dataFragment != null)
+            dataFragment.onChangeTheme();
+        if (calendarFragment != null)
+            calendarFragment.onChangeTheme();
+        if (filtratePopup != null) {
+            filtratePopup = null;
         }
     }
 }

@@ -292,7 +292,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (currentFragment != null) {
             currentFragment.onActivityResult(requestCode, resultCode, data);
         }

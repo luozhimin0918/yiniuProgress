@@ -28,9 +28,12 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
 import com.library.widget.window.ToastView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.HashMap;
@@ -59,6 +62,7 @@ public class LoginFragment extends BaseFragment {
     private VolleyRequest request;
 
     private EditTextValidator editTextValidator;
+    private TSnackbar snackBar;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -66,7 +70,7 @@ public class LoginFragment extends BaseFragment {
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(btnLogin)
-                .add(new ValidationModel(edtEmail, tvErrorEmail,  new UserNameValidation()))
+                .add(new ValidationModel(edtEmail, tvErrorEmail, new UserNameValidation()))
                 .add(new ValidationModel(edtPwd, tvErrorPwd, new PwdValidation()))
                 .execute();
     }
@@ -100,7 +104,11 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void login() {
-        showWaitDialog(null);
+        snackBar = TSnackbar.make(btnLogin, "登录中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
+
         if (request == null) {
             request = new VolleyRequest(getContext(), getQueue());
             request.setTag(getClass().getName());
@@ -108,15 +116,18 @@ public class LoginFragment extends BaseFragment {
         request.doPost(HttpConstant.USER_LOGIN2, getMap(), new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson user) {
-                dismissWaitDialog();
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 LoginUtils.login(getContext(), user);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                dismissWaitDialog();
-                ToastView.makeText3(getContext(), error == null ? "" : error.getMessage());
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(error == null ? "" : error.getMessage()).setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }
         });
     }

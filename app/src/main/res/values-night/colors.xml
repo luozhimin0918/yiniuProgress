@@ -64,6 +64,7 @@
     <color name="font_color60">#777777</color>
     <color name="font_color61">#242424</color>
     <color name="font_color62">#1384ED</color>
+    <color name="font_color63">#3b3b3b</color>
 
     <color name="tabSelColor">#909090</color>
     <color name="tabUnSelColor">#666666</color>
@@ -72,6 +73,8 @@
     <color name="star_color1">#454545</color>
     <color name="star_color2">#B96B16</color>
     <color name="star_color3">#A3331D</color>
+
+    <color name="point_color_red">#A13526</color>
 
     <!--日历线框的颜色-->
     <color name="calendar_line0">#A3331D</color>

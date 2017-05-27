@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.json.SlideJson;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class FlashContentJson implements Parcelable {
 
     private FlashJson kuaixun;
-    private List<AdJson> ad;
+    private List<SlideJson> ad;
     private List<NewsJson> article;//推荐列表
 
     public FlashJson getKuaixun() {
@@ -29,11 +30,11 @@ public class FlashContentJson implements Parcelable {
         this.kuaixun = kuaixun;
     }
 
-    public List<AdJson> getAd() {
+    public List<SlideJson> getAd() {
         return ad;
     }
 
-    public void setAd(List<AdJson> ad) {
+    public void setAd(List<SlideJson> ad) {
         this.ad = ad;
     }
 
@@ -62,7 +63,7 @@ public class FlashContentJson implements Parcelable {
 
     protected FlashContentJson(Parcel in) {
         this.kuaixun = in.readParcelable(FlashJson.class.getClassLoader());
-        this.ad = in.createTypedArrayList(AdJson.CREATOR);
+        this.ad = in.createTypedArrayList(SlideJson.CREATOR);
         this.article = in.createTypedArrayList(NewsJson.CREATOR);
     }
 

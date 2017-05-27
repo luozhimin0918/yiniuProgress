@@ -71,14 +71,14 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         BaseFragment currentFragment;
         if (position == 0) {
             tvRightIcon1.setText("");
-            tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(),R.mipmap.icon_search));
+            tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
             currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
-            ((MarketVPFragment)marketVPFragment).sendSocketParams();
+            ((MarketVPFragment) marketVPFragment).sendSocketParams();
         } else {
             tvRightIcon1.setText("编辑");
             tvRightIcon1.setBackground(null);
             currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
-            ((OptionalFragment)optionalFragment).sendSocketParams();
+            ((OptionalFragment) optionalFragment).sendSocketParams();
         }
         this.position = position;
         replaceFragment(currentFragment);
@@ -104,8 +104,8 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
                 if (position == 1) {//如果是行情 - 编辑
                     Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
                     startActivity(marketEditIntent);
-                }else{
-                     startActivity(new Intent(getContext(), SearchActivity.class));
+                } else {
+                    startActivity(new Intent(getContext(), SearchActivity.class));
                 }
                 break;
         }
@@ -173,4 +173,12 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (marketVPFragment != null)
+            marketVPFragment.onChangeTheme();
+        if (optionalFragment != null)
+            optionalFragment.onChangeTheme();
+    }
 }

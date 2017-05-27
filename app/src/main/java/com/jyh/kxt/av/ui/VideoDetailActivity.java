@@ -1,5 +1,6 @@
 package com.jyh.kxt.av.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
+import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.manager.ActivityManager;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -39,8 +44,8 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.rv_message) public PullToRefreshListView rvMessage;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_comment) ImageView ivComment;
-    @BindView(R.id.iv_collect) ImageView ivCollect;
-    @BindView(R.id.iv_like) ImageView ivLike;
+    @BindView(R.id.iv_collect)public ImageView ivCollect;
+    @BindView(R.id.iv_like)public ImageView ivLike;
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
@@ -86,7 +91,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                         .getInstance()
                         .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
             }
-        },2000);
+        }, 2000);
     }
 
 
@@ -102,12 +107,15 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.iv_collect:
                 //收藏
+                videoDetailPresenter.collect();
                 break;
             case R.id.iv_like:
                 //点赞
+                videoDetailPresenter.attention();
                 break;
             case R.id.iv_share:
                 //分享
+                videoDetailPresenter.share();
                 break;
         }
     }
@@ -166,4 +174,9 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onBackPressed();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+    }
 }

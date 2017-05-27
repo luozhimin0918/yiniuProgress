@@ -43,7 +43,7 @@ public class DataFragment extends BaseFragment implements DataPresenter.TopTabVi
         //初始化右侧List
         int rightLineColor = ContextCompat.getColor(getContext(), R.color.line_color6);
         ivRightContent.setDivider(new ColorDrawable(rightLineColor));
-        ivRightContent.setDividerHeight(1);
+        ivRightContent.setDividerHeight(0);
 
         //网络请求
         dataPresenter.requestTopNavigationData();

@@ -40,7 +40,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/explore_header_content_padding"
-            android:src="@mipmap/icon_explore_more"
+            android:src="@mipmap/icon_comment_more"
             />
 
         <TextView

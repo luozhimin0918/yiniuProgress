@@ -81,6 +81,24 @@ public class BaseActivity extends LibActivity implements IBaseView {
         );
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
+
+        boolean changeCurrentActionTheme = ThemeUtil.isChangeCurrentActionTheme(this);
+        if (changeCurrentActionTheme) {
+            if (isNightTheme) {
+                setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            onChangeTheme();
+            ThemeUtil.changeCacheActionTheme(this);
+        }
+    }
+
     public void setDayNightMode(@AppCompatDelegate.NightMode int nightMode) {
         final boolean isPost21 = Build.VERSION.SDK_INT >= 21;
 

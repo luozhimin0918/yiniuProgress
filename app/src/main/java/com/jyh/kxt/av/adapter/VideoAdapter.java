@@ -99,42 +99,39 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), "http://www" +
-                                ".baidu.com",
-                                "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
-                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, video
-                                .isGood(), video
-                                .isCollect()),
-                        video, holder.ivMore, new
-                                ObserverData<Map<String,
-                                        Boolean>>() {
-                                    @Override
-                                    public void callback(Map<String, Boolean> o) {
-                                        Set<String> set = o.keySet();
-                                        Iterator<String> iterator = set.iterator();
-                                        while (iterator.hasNext()) {
-                                            String key = iterator.next();
-                                            Boolean b = o.get(key);
-                                            switch (key) {
-                                                case VarConstant.FUNCTION_TYPE_COLLECT:
-                                                    //更改video 收藏状态
-                                                    video.setCollect(b);
-                                                    break;
-                                                case VarConstant.FUNCTION_TYPE_GOOD:
-                                                    //更改video 点赞状态
-                                                    video.setGood(b);
-                                                    break;
-                                            }
-                                        }
+                        ".baidu.com",
+                        "http://www.baidu.com", null, null, UmengShareTool.TYPE_VIDEO,
+                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, GoodUtils.isGood(mContext, video
+                        .getId(), VarConstant.GOOD_TYPE_VIDEO),CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video)),
+                        video, holder.ivMore, new ObserverData<Map<String,Boolean>>() {
+                            @Override
+                            public void callback(Map<String, Boolean> o) {
+                                Set<String> set = o.keySet();
+                                Iterator<String> iterator = set.iterator();
+                                while (iterator.hasNext()) {
+                                    String key = iterator.next();
+                                    Boolean b = o.get(key);
+                                    switch (key) {
+                                        case VarConstant.FUNCTION_TYPE_COLLECT:
+                                            //更改video 收藏状态
+                                            video.setCollect(b);
+                                            break;
+                                        case VarConstant.FUNCTION_TYPE_GOOD:
+                                            //更改video 点赞状态
+                                            video.setGood(b);
+                                            break;
                                     }
+                                }
+                            }
 
-                                    @Override
-                                    public void onError(Exception e) {
-                                        //失败
-                                        if (e != null && e.getMessage() != null) {
-                                            ToastView.makeText3(mContext, e.getMessage());
-                                        }
-                                    }
-                                });
+                            @Override
+                            public void onError(Exception e) {
+                                //失败
+                                if (e != null && e.getMessage() != null) {
+                                    ToastView.makeText3(mContext, e.getMessage());
+                                }
+                            }
+                        });
             }
         });
         holder.iv.setOnClickListener(new View.OnClickListener() {
@@ -167,9 +164,9 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
         TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap.icon_video_play_small, 0, 0, 0);
 
-        holder.ivMore.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_video_more));
+        holder.ivMore.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_video_more));
 
-        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color2));
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color2));
 
     }
 

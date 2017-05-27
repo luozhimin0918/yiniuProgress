@@ -2,6 +2,7 @@ package com.jyh.kxt.market.presenter;
 
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,11 +52,14 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private LinearLayout mainHeaderView;
     public JSONArray marketCodeList = new JSONArray();
     private MarketMainItemAdapter marketMainItemAdapter;
-
     /**
      * 首页的 角标
      */
     private TextView tvTargetNav;
+
+    private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
+    private RollDotViewPager recommendView;
+    private MarketMainBean marketBean;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -127,14 +132,14 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         List<MarketItemBean> data = marketBean.getData();
 
-        RollDotViewPager recommendView = new RollDotViewPager(mContext);
+        recommendView = new RollDotViewPager(mContext);
         RollViewPager rollViewPager = recommendView.getRollViewPager();
         rollViewPager.setGridMaxCount(6).setDataList(data).setGridViewItemData(new RollViewPager.GridViewItemData() {
             @Override
             public void itemData(List dataSubList, GridView gridView) {
-
                 MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
                 gridView.setAdapter(adapter);
+                marketGridAdapters.add(adapter);
             }
         });
         recommendView.build();
@@ -148,6 +153,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createFavorView(MarketMainBean marketBean) {
+
+        this.marketBean = marketBean;
         if (marketBean.getData() == null || marketBean.getData().size() == 0) {
             return;
         }
@@ -164,6 +171,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        horizontalScrollView.setHorizontalScrollBarEnabled(false);
+
         mainHeaderView.addView(horizontalScrollView, lp);
 
         LinearLayout hqLayout = new LinearLayout(mContext);
@@ -173,7 +182,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         hqLayout.setLayoutParams(hqParams);
 
         LayoutInflater mInflate = LayoutInflater.from(mContext);
-
         for (MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
             marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
@@ -230,7 +238,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createPaddingView(int heightPx) {
-        View view = new View(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_line, null);
         int height = SystemUtil.dp2px(mContext, heightPx);
         int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
         view.setBackgroundColor(paddingColor);
@@ -263,6 +271,46 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
             marketItemBean.setSwitchTarget(
                     marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
+        }
+    }
+
+    /**
+     * 改变主题
+     */
+    public void onChangeTheme() {
+
+        //重新设置热门行情主题色
+        if (marketMainItemAdapter != null) {
+            marketMainItemAdapter.notifyDataSetChanged();
+        }
+        if (marketGridAdapters != null) {
+            for (MarketGridAdapter marketGridAdapter : marketGridAdapters) {
+                marketGridAdapter.notifyDataSetChanged();
+            }
+        }
+
+        //重新设置头部行情主题
+        if (recommendView != null)
+            recommendView.onChangeTheme();
+
+        //重新设置我的自选主题色
+        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+            return;
+        }
+        LayoutInflater mInflate = LayoutInflater.from(mContext);
+        for (MarketItemBean marketItemBean : marketBean.getData()) {
+            marketCodeList.add(marketItemBean.getCode());
+            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+
+            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
+            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
+
+            ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
+                    R.layout.item_market_recommend,
+                    null,
+                    false);
+
+            dataBinding.setBean(marketItemBean);
         }
     }
 }

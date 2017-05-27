@@ -183,7 +183,6 @@ public class MainPresenter extends BasePresenter {
             volleyRequest.doGet(indexAd.getHref(), new HttpListener<String>() {
                 @Override
                 protected void onResponse(String htmlWeb) {
-                    LogUtil.e(LogUtil.TAG, "onResponse() called with: htmlWeb = [" + htmlWeb + "]");
                     FileUtils.saveWebPage(mContext, indexAd.getHref(), htmlWeb);
                 }
 

@@ -16,6 +16,7 @@ import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -136,4 +137,13 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (marketItemList != null)
+            for (Fragment fragment : marketItemList) {
+                if (fragment instanceof BaseFragment)
+                    ((BaseFragment) fragment).onChangeTheme();
+            }
+    }
 }

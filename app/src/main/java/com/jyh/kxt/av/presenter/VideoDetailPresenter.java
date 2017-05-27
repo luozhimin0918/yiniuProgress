@@ -1,6 +1,7 @@
 package com.jyh.kxt.av.presenter;
 
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,14 +13,22 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.adapter.CommentAdapter;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.json.VideoDetailBean;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -41,7 +50,10 @@ public class VideoDetailPresenter extends BasePresenter {
     private CommentAdapter commentAdapter;
     private List<CommentBean> adapterCommentList = new ArrayList<>();
 
-    private VideoDetailBean videoDetailBean;
+    private boolean isCollect, isAttention;
+
+    public VideoDetailBean videoDetailBean;
+    private VideoListJson videoListJson;
 
     public VideoDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -72,6 +84,17 @@ public class VideoDetailPresenter extends BasePresenter {
 
                 if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
                     VideoDetailPresenter.this.videoDetailBean = detailJson;
+
+                    videoListJson = new VideoListJson(videoDetailBean.getId(), videoDetailBean.getCategory_id(), videoDetailBean.getTitle(),
+                            videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean.getNum_good(), videoDetailBean
+                            .getNum_play(), videoDetailBean.getCreate_time(), false, false, false, 0);
+                    isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
+                    isAttention=GoodUtils.isGood(mContext,videoDetailBean.getId(),VarConstant.GOOD_TYPE_VIDEO);
+                    videoListJson.setIsCollect(isCollect);
+                    videoListJson.setIsGood(isAttention);
+
+                    videoDetailActivity.ivCollect.setSelected(isCollect);
+                    videoDetailActivity.ivLike.setSelected(isAttention);
 
                     videoDetailActivity.pllContent.loadOver();
                     playVideo();
@@ -284,5 +307,89 @@ public class VideoDetailPresenter extends BasePresenter {
 
         videoDetailActivity.spVideo.setVideoPortraitHeight(avHeight);
         videoDetailActivity.spVideo.setScaleType(SuperPlayer.SCALETYPE_FITXY);
+    }
+
+    /**
+     * 收藏
+     */
+    public void collect() {
+        if (videoDetailBean != null&&videoListJson!=null) {
+            if (isCollect) {
+                CollectUtils.unCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson, new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+                        isCollect = false;
+                        videoDetailActivity.ivCollect.setSelected(false);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        showMsg("取消收藏失败");
+                    }
+                }, null);
+            } else {
+                CollectUtils.collect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson, new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+                        isCollect = true;
+                        videoDetailActivity.ivCollect.setSelected(true);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        showMsg("收藏失败");
+                    }
+                }, null);
+            }
+        }
+    }
+
+    /**
+     * 点赞
+     */
+    public void attention() {
+        if (videoDetailBean != null) {
+            if (isAttention) {
+                showMsg("已经赞过了喔");
+            } else {
+                GoodUtils.addGood(mContext, videoDetailBean.getId(), VarConstant.GOOD_TYPE_VIDEO, new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+                        isAttention = true;
+                        videoDetailActivity.ivLike.setSelected(true);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        showMsg("点赞失败");
+                    }
+                }, null);
+            }
+        }
+    }
+
+    /**
+     * 分享
+     */
+    public void share() {
+        if (videoDetailBean != null) {
+            UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(videoDetailBean.getTitle(), videoDetailBean.getUrl(),
+                            "", HttpConstant.IMG_URL + videoDetailBean
+                            .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null, false, false),
+                    videoDetailBean,
+                    videoDetailActivity.spVideo, null);
+        }
+    }
+
+    private void showMsg(String str) {
+        TSnackbar tSnackbar = TSnackbar.make(videoDetailActivity.spVideo, str, Snackbar.LENGTH_LONG, TSnackbar
+                .APPEAR_FROM_TOP_TO_DOWN)
+                .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                        .getDimensionPixelOffset(R.dimen.actionbar_height));
+
+        int color = ContextCompat.getColor(mContext, R.color.red_btn_bg_color);
+        tSnackbar.setBackgroundColor(color);
+        tSnackbar.setPromptThemBackground(Prompt.WARNING);
+        tSnackbar.show();
     }
 }

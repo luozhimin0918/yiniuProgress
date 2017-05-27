@@ -24,6 +24,8 @@ import java.util.List;
 
 public class RollViewPager extends ViewPager {
 
+    private ArrayList<View> groupViewList;
+
     public interface GridViewItemData {
         void itemData(List dataSubList, GridView gridView);
     }
@@ -64,7 +66,7 @@ public class RollViewPager extends ViewPager {
         int itemGroupViewPagerCount = (dataList.size() / mGridMaxCount) + extendedCount;
 
         //增加分割ViewPager
-        List<View> groupViewList = new ArrayList<>();
+        groupViewList = new ArrayList<>();
 
         for (int i = 0; i < itemGroupViewPagerCount; i++) {
             int startCount = i * mGridMaxCount;
@@ -141,4 +143,12 @@ public class RollViewPager extends ViewPager {
 
         LogUtil.e(LogUtil.TAG, "宽度"+getWidth()+"gaodu :"+getHeight());
     }
+
+    public void onChangeTheme() {
+        if(groupViewList!=null)
+            for (View view : groupViewList) {
+                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+            }
+    }
+
 }

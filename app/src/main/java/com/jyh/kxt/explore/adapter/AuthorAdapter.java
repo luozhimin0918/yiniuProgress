@@ -2,6 +2,7 @@ package com.jyh.kxt.explore.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,8 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         AuthorJson author = authors.get(position);
 
+        setTheme(holder);
+
         holder.tvCount.setText(author.getArticle_num());
         holder.tvFans.setText(author.getNum_fans());
         holder.tvName.setText(author.getName());
@@ -75,6 +78,14 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
 
     }
 
+    private void setTheme(ViewHolder holder) {
+        holder.tvName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+        holder.tvCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+        holder.tvFans.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color60));
+        holder.itemView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_ring));
+    }
+
     @Override
     public int getItemCount() {
         return authors == null ? 0 : authors.size();
@@ -93,6 +104,7 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_fans) TextView tvFans;
         @BindView(R.id.tv_count) TextView tvCount;
+        @BindView(R.id.v_line) View vLine;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.presenter.NewsItemPresenter;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.library.bean.EventBusClass;
@@ -17,6 +18,8 @@ import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -113,13 +116,17 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(newsItemPresenter.newsAdapter!=null){
-            newsItemPresenter.newsAdapter.notifyDataSetChanged();
-            plvContent.setDividerNull();
+        if (newsItemPresenter == null) return;
+        if (plvContent != null) plvContent.setDividerNull();
+        NewsAdapter newsAdapter = newsItemPresenter.newsAdapter;
+        if (newsAdapter != null) {
+            newsAdapter.notifyDataSetChanged();
         }
 
-        for (MarketGridAdapter marketGridAdapter : newsItemPresenter.quoteGridAdapter) {
-            marketGridAdapter.notifyDataSetChanged();
-        }
+        List<MarketGridAdapter> quoteGridAdapter = newsItemPresenter.quoteGridAdapter;
+        if (quoteGridAdapter != null)
+            for (MarketGridAdapter marketGridAdapter : quoteGridAdapter) {
+                marketGridAdapter.notifyDataSetChanged();
+            }
     }
 }

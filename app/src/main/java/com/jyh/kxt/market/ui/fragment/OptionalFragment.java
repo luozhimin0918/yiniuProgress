@@ -173,4 +173,11 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         }
     }
 
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (marketMainItemAdapter != null) {
+            marketMainItemAdapter.notifyDataSetChanged();
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.jyh.kxt.main.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -35,7 +36,7 @@ import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
-import com.jyh.kxt.index.json.ConfigJson;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -108,7 +109,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         config.animationStyle = R.style.PopupWindow_Style2;
 
         inspiritDateInfo(this.flashJsons);
-        initCollectStatus(1);
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -124,7 +124,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         this.flashJsons.clear();
         this.flashJsons.addAll(flashJsons);
         inspiritDateInfo(this.flashJsons);
-        initCollectStatus(1);
         notifyDataSetChanged();
     }
 
@@ -138,7 +137,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         this.flashJsons.add(1, flashJson);
-        initCollectStatus(2);
         notifyDataSetChanged();
     }
 
@@ -154,16 +152,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
-        initCollectStatus(1);
         notifyDataSetChanged();
-    }
-
-    /**
-     * 初始化收藏状态
-     *
-     * @param type
-     */
-    private void initCollectStatus(int type) {
     }
 
     /**
@@ -178,7 +167,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 data.remove(o);
             }
         }
-        return new ArrayList<FlashJson>(data);
+        return new ArrayList<>(data);
     }
 
     /**
@@ -322,290 +311,304 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
         }
 
-        switch (type) {
-            case TYPE_TIME:
-                timeHolder.tvTime.setText(flashJsons.get(position).toString());
-                break;
-            case TYPE_KX:
-                FlashJson flash = (FlashJson) flashJsons.get(position);
-                final Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
-                String time = "00:00";
-                try {
-                    time = getTime(kx.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                kxHolder.tvTime.setText(time);
-                kxHolder.tvContent.setText(getString(kx.getTitle()));
-                kxHolder.tvMore.setVisibility(View.VISIBLE);
+        try {
+            switch (type) {
+                case TYPE_TIME:
+                    timeHolder.tvTime.setText(flashJsons.get(position).toString());
+                    break;
+                case TYPE_KX:
+                    FlashJson flash = (FlashJson) flashJsons.get(position);
+                    final Flash_KX kx = JSON.parseObject(flash.getContent().toString(), Flash_KX.class);
+                    String time = "00:00";
+                    try {
+                        time = getTime(kx.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    kxHolder.tvTime.setText(time);
+                    kxHolder.tvContent.setText(getString(kx.getTitle()));
+                    kxHolder.tvMore.setVisibility(View.VISIBLE);
 
-                imgMaxWidth = kxHolder.llContent.getWidth();
+                    imgMaxWidth = kxHolder.llContent.getWidth();
 
-                if (RegexValidateUtil.isEmpty(kx.getImage())) {
-                    kxHolder.imageView.setVisibility(View.GONE);
-                } else {
-                    kxHolder.imageView.setVisibility(View.VISIBLE);
-                    //点击查看大图
-                    kxHolder.imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Glide.with(context)
-                                    .load(kx.getImage())
-                                    .asBitmap()
-                                    .error(R.mipmap.icon_def_news)
-                                    .placeholder(R.mipmap.icon_def_news)
-                                    .into(new SimpleTarget<Bitmap>() {
-                                        @Override
-                                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                            if (popupUtil.isShowing())
-                                                popupUtil.dismiss();
+                    if (RegexValidateUtil.isEmpty(kx.getImage())) {
+                        kxHolder.imageView.setVisibility(View.GONE);
+                    } else {
+                        kxHolder.imageView.setVisibility(View.VISIBLE);
+                        //点击查看大图
+                        kxHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Glide.with(context)
+                                        .load(kx.getImage())
+                                        .asBitmap()
+                                        .error(R.mipmap.icon_def_news)
+                                        .placeholder(R.mipmap.icon_def_news)
+                                        .into(new SimpleTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                                if (popupUtil.isShowing())
+                                                    popupUtil.dismiss();
 
-                                            ivPop.setImageBitmap(resource);
+                                                ivPop.setImageBitmap(resource);
 
-                                            int width = resource.getWidth();
-                                            int height = resource.getHeight();
-                                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+                                                int width = resource.getWidth();
+                                                int height = resource.getHeight();
+                                                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
 
-                                            int widthPixels = screenDisplay.widthPixels;
-                                            width = width > widthPixels ? widthPixels : width;
-                                            int heightPixels = screenDisplay.heightPixels;
-                                            height = height > heightPixels ? heightPixels : height;
-                                            config.width = width;
-                                            config.height = height;
-                                            popupUtil.setConfig(config);
-                                            popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
+                                                int widthPixels = screenDisplay.widthPixels;
+                                                width = width > widthPixels ? widthPixels : width;
+                                                int heightPixels = screenDisplay.heightPixels;
+                                                height = height > heightPixels ? heightPixels : height;
+                                                config.width = width;
+                                                config.height = height;
+                                                popupUtil.setConfig(config);
+                                                popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
+                                            }
+                                        });
+                            }
+                        });
+
+                        final KXViewHolder finalKxHolder = kxHolder;
+                        Glide.with(context)
+                                .load(kx.getImage())
+                                .asBitmap()
+                                .error(R.mipmap.icon_def_news)
+                                .placeholder(R.mipmap.icon_def_news)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                        int width = resource.getWidth();//px
+                                        int height = resource.getHeight();
+                                        ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+                                        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                        //等比例缩放
+                                        finalKxHolder.imageView.setAdjustViewBounds(true);
+                                        finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                        if (width > imgMaxWidth) {
+                                            layoutParams.width = imgMaxWidth;
+                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
                                         }
-                                    });
+                                        if (height > imgMaxHeight) {
+                                            layoutParams.height = imgMaxHeight;
+                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
+                                        }
+                                        finalKxHolder.imageView.setImageBitmap(resource);
+                                    }
+                                });
+                    }
+
+                    setOnclick(kxHolder.llMore, kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder
+                                    .tvContent, null,
+                            null, TYPE_KX);
+
+                    setKxTheme(kxHolder, kx);
+
+                    setShowMoreBtn(kxHolder);
+
+                    kxHolder.ivCollect.setSelected(flash.isColloct());
+
+                    break;
+                case TYPE_RL:
+                    FlashJson flash_rl = (FlashJson) flashJsons.get(position);
+                    Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
+
+                    boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
+
+                    Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
+                            .ivFlag);
+
+                    String time2 = "00:00";
+                    try {
+                        time2 = getTime(rl.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    rlHolder.tvTime.setText(time2);
+
+                    rlHolder.tvTitle.setText(getString(rl.getTitle()));
+                    rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
+                            .getReality()));
+                    rlHolder.tvMore.setVisibility(View.GONE);
+                    rlHolder.ivMore.setVisibility(View.GONE);
+
+                    setRlTheme(rlHolder);
+
+                    /**
+                     * 前值 后值 等
+                     */
+                    String describe = context.getResources().getString(R.string.date_describe,
+                            rl.getBefore(),
+                            rl.getForecast(),
+                            rl.getReality());
+
+                    String reality = rl.getReality();
+                    setDescribeForegroundColor(rlHolder.tvContent, describe, reality);
+
+                    /**
+                     *  重要程度
+                     */
+                    rlHolder.star.setImportance(rl.getImportance());
+
+                    /**
+                     * 公布状态, 已公布,未公布 利多 ,金银 , 石油   影响较小等
+                     */
+                    setAlarmState(reality,
+                            Integer.parseInt(rl.getEffecttype()),//0 利多美元  1 利多金银石油 2 影响较小
+                            rlHolder.llExponent);
+
+
+                    setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder
+                                    .tvContent, null,
+                            null, TYPE_RL);
+                    /**
+                     * 重要性判断
+                     */
+                    if (onlyShowHigh) {
+                        if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+                            rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                        } else {
+                            rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                            return null;
                         }
-                    });
-
-                    final KXViewHolder finalKxHolder = kxHolder;
-                    Glide.with(context)
-                            .load(kx.getImage())
-                            .asBitmap()
-                            .error(R.mipmap.icon_def_news)
-                            .placeholder(R.mipmap.icon_def_news)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    int width = resource.getWidth();//px
-                                    int height = resource.getHeight();
-                                    ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
-                                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                    //等比例缩放
-                                    finalKxHolder.imageView.setAdjustViewBounds(true);
-                                    finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                    if (width > imgMaxWidth) {
-                                        layoutParams.width = imgMaxWidth;
-                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                    }
-                                    if (height > imgMaxHeight) {
-                                        layoutParams.height = imgMaxHeight;
-                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                    }
-                                    finalKxHolder.imageView.setImageBitmap(resource);
-                                }
-                            });
-                }
-
-                setOnclick(kxHolder.llMore,kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
-                        null, TYPE_KX);
-
-                setKxTheme(kxHolder, kx);
-
-                setShowMoreBtn(kxHolder);
-
-                kxHolder.ivCollect.setSelected(flash.isColloct());
-
-                break;
-            case TYPE_RL:
-                FlashJson flash_rl = (FlashJson) flashJsons.get(position);
-                Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
-
-                boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
-
-                Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
-                        .ivFlag);
-
-                String time2 = "00:00";
-                try {
-                    time2 = getTime(rl.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                rlHolder.tvTime.setText(time2);
-
-                rlHolder.tvTitle.setText(getString(rl.getTitle()));
-                rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
-                        .getReality()));
-                rlHolder.tvMore.setVisibility(View.GONE);
-                rlHolder.ivMore.setVisibility(View.GONE);
-
-                setRlTheme(rlHolder);
-
-                /**
-                 * 前值 后值 等
-                 */
-                String describe = context.getResources().getString(R.string.date_describe,
-                        rl.getBefore(),
-                        rl.getForecast(),
-                        rl.getReality());
-
-                String reality = rl.getReality();
-                setDescribeForegroundColor(rlHolder.tvContent, describe, reality);
-
-                /**
-                 *  重要程度
-                 */
-                rlHolder.star.setImportance(rl.getImportance());
-
-                /**
-                 * 公布状态, 已公布,未公布 利多 ,金银 , 石油   影响较小等
-                 */
-                setAlarmState(reality,
-                        Integer.parseInt(rl.getEffecttype()),//0 利多美元  1 利多金银石油 2 影响较小
-                        rlHolder.llExponent);
-
-
-                setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
-                        null, TYPE_RL);
-                /**
-                 * 重要性判断
-                 */
-                if (onlyShowHigh) {
-                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
                     } else {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                        return null;
+                        if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
+                            rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
+                        } else {
+                            rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+                        }
                     }
-                } else {
-                    if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
-                    } else {
-                        rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
+
+                    rlHolder.ivCollect.setSelected(flash_rl.isColloct());
+                    break;
+                case TYPE_LEFT:
+                    FlashJson flash_left = (FlashJson) flashJsons.get(position);
+                    Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
+
+                    Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                            (leftHolder
+                            .ivFlash);
+
+                    Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
+
+                    String time3 = "00:00";
+                    try {
+                        time3 = getTime(left.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }
+                    leftHolder.tvTime.setText(time3);
+                    leftHolder.tvContent.setText(getString(left.getTitle()));
+                    leftHolder.tvMore.setVisibility(View.GONE);
+                    leftHolder.ivMore.setVisibility(View.GONE);
 
-                rlHolder.ivCollect.setSelected(flash_rl.isColloct());
-                break;
-            case TYPE_LEFT:
-                FlashJson flash_left = (FlashJson) flashJsons.get(position);
-                Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
+                    setNewsTheme(leftHolder, left);
 
-                Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(leftHolder
-                        .ivFlash);
+                    setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position,
+                            leftHolder
+                                    .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
 
-                Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
+                    leftHolder.ivCollect.setSelected(flash_left.isColloct());
 
-                String time3 = "00:00";
-                try {
-                    time3 = getTime(left.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                leftHolder.tvTime.setText(time3);
-                leftHolder.tvContent.setText(getString(left.getTitle()));
-                leftHolder.tvMore.setVisibility(View.GONE);
-                leftHolder.ivMore.setVisibility(View.GONE);
+                    setShowMoreBtn(leftHolder);
+                    break;
+                case TYPE_RIGHT:
+                    FlashJson flash_right = (FlashJson) flashJsons.get(position);
+                    Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
 
-                setNewsTheme(leftHolder, left);
+                    Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                            (rightHolder
+                                    .ivFlash);
 
-                setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
+                    String time4 = "00:00";
+                    try {
+                        time4 = getTime(right.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    rightHolder.tvTime.setText(time4);
+                    rightHolder.tvContent.setText(getString(right.getTitle()));
+                    rightHolder.tvMore.setVisibility(View.GONE);
+                    rightHolder.ivMore.setVisibility(View.GONE);
 
-                leftHolder.ivCollect.setSelected(flash_left.isColloct());
+                    setNewsTheme(rightHolder, right);
 
-                setShowMoreBtn(leftHolder);
-                break;
-            case TYPE_RIGHT:
-                FlashJson flash_right = (FlashJson) flashJsons.get(position);
-                Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
+                    setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect,
+                            position, rightHolder
+                                    .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
 
-                Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(rightHolder
-                        .ivFlash);
+                    rightHolder.ivCollect.setSelected(flash_right.isColloct());
+                    setShowMoreBtn(rightHolder);
+                    break;
+                case TYPE_TOP:
+                    FlashJson flash_top = (FlashJson) flashJsons.get(position);
+                    Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                String time4 = "00:00";
-                try {
-                    time4 = getTime(right.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                rightHolder.tvTime.setText(time4);
-                rightHolder.tvContent.setText(getString(right.getTitle()));
-                rightHolder.tvMore.setVisibility(View.GONE);
-                rightHolder.ivMore.setVisibility(View.GONE);
+                    Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                            (topHolder
+                            .ivFlash);
 
-                setNewsTheme(rightHolder, right);
+                    String time5 = "00:00";
+                    try {
+                        time5 = getTime(top.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    topHolder.tvTime.setText(time5);
+                    topHolder.tvContent.setText(getString(top.getTitle()));
+                    topHolder.tvContent.setVisibility(View.GONE);
+                    topHolder.tvMore.setVisibility(View.VISIBLE);
+                    topHolder.ivMore.setVisibility(View.VISIBLE);
 
-                setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
+                    setNewsTheme(topHolder, top);
 
-                rightHolder.ivCollect.setSelected(flash_right.isColloct());
-                setShowMoreBtn(rightHolder);
-                break;
-            case TYPE_TOP:
-                FlashJson flash_top = (FlashJson) flashJsons.get(position);
-                Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
+                    setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position,
+                            topHolder.tvContent,
+                            VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
 
-                Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(topHolder
-                        .ivFlash);
+                    topHolder.ivCollect.setSelected(flash_top.isColloct());
 
-                String time5 = "00:00";
-                try {
-                    time5 = getTime(top.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                topHolder.tvTime.setText(time5);
-                topHolder.tvContent.setText(getString(top.getTitle()));
-                topHolder.tvContent.setVisibility(View.GONE);
-                topHolder.tvMore.setVisibility(View.VISIBLE);
-                topHolder.ivMore.setVisibility(View.VISIBLE);
+                    setShowMoreBtn(topHolder);
 
-                setNewsTheme(topHolder, top);
+                    break;
+                case TYPE_BOTTOM:
+                    FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
+                    Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
-                        VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
+                    Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                            (bottomHolder
+                                    .ivFlash);
 
-                topHolder.ivCollect.setSelected(flash_top.isColloct());
+                    String time6 = "00:00";
+                    try {
+                        time6 = getTime(bottom.getTime());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    bottomHolder.tvTime.setText(time6);
+                    bottomHolder.tvContent.setText(getString(bottom.getTitle()));
 
-                setShowMoreBtn(topHolder);
+                    bottomHolder.ivFlash.setVisibility(View.GONE);
+                    bottomHolder.tvMore.setVisibility(View.VISIBLE);
+                    bottomHolder.ivMore.setVisibility(View.VISIBLE);
 
-                break;
-            case TYPE_BOTTOM:
-                FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
-                Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
+                    setNewsTheme(bottomHolder, bottom);
 
-                Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
-                        (bottomHolder
-                                .ivFlash);
+                    setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect,
+                            position, bottomHolder
+                                    .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
 
-                String time6 = "00:00";
-                try {
-                    time6 = getTime(bottom.getTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                bottomHolder.tvTime.setText(time6);
-                bottomHolder.tvContent.setText(getString(bottom.getTitle()));
+                    bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
+                    setShowMoreBtn(bottomHolder);
+                    break;
+            }
 
-                bottomHolder.ivFlash.setVisibility(View.GONE);
-                bottomHolder.tvMore.setVisibility(View.VISIBLE);
-                bottomHolder.ivMore.setVisibility(View.VISIBLE);
-
-                setNewsTheme(bottomHolder, bottom);
-
-                setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
-
-                bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
-                setShowMoreBtn(bottomHolder);
-                break;
+            return convertView;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        return convertView;
     }
 
     /**
@@ -642,12 +645,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * @param ivFlash
      * @param type
      */
-    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
+    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView
+            ivCollect, int position,
                             final TextView content,
                             String weizhi, final ImageView ivFlash, final int type) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
 
-        if (flash.isColloct()) {
+        if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
             ivCollect.setSelected(true);
         } else {
             ivCollect.setSelected(false);
@@ -704,8 +708,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             @Override
             public void onClick(View v) {
                 try {
-                    String configStr = SPUtils.getString(context, SpConstant.CONFIG);
-                    ConfigJson config = JSON.parseObject(configStr, ConfigJson.class);
+                    String appConfig = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
+                    MainInitJson config = JSON.parseObject(appConfig, MainInitJson.class);
                     String url_kx_share = config.getUrl_kx_share();
 
                     String shareUrl = url_kx_share.replace("{id}", flash.getSocre());

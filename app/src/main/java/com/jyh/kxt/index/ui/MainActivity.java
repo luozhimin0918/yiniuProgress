@@ -53,6 +53,7 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.bean.EventBusClass;
+import com.library.manager.ActivityManager;
 import com.library.util.BitmapUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
@@ -245,7 +246,26 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (DoubleClickUtils.isFastDoubleClick(500)) {
+            if (DoubleClickUtils.isFastDoubleClick(2000)) {
+                try {
+                    int currentVersion = android.os.Build.VERSION.SDK_INT;
+                    if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
+                        System.exit(0);
+                    } else {// android2.1
+                        android.app.ActivityManager am = (android.app.ActivityManager) MainActivity.this.getSystemService
+                                (ACTIVITY_SERVICE);
+                        am.restartPackage(getPackageName());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ThemeUtil.removeAllCache();
+                ActivityManager.getInstance().finishAllActivity();
                 super.onBackPressed();
             } else {
                 ToastView.makeText3(this, "双击退出应用");
@@ -504,5 +524,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     public void showUserCenter() {
         drawer.openDrawer(Gravity.LEFT);
+    }
+
+    //五百八十二加七千九百二十五  582+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
     }
 }

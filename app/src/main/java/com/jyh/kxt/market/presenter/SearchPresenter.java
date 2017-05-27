@@ -6,13 +6,18 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.SearchActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.RegexValidateUtil;
+import com.library.util.SPUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,6 +41,7 @@ public class SearchPresenter extends BasePresenter {
 
     public void search(String key) {
         this.key = key;
+        saveSearchHistory(key);
         request.doGet(getSearchUrl(), new HttpListener<List<MarketItemBean>>() {
             @Override
             protected void onResponse(List<MarketItemBean> markets) {
@@ -50,19 +56,33 @@ public class SearchPresenter extends BasePresenter {
         });
     }
 
-    public void initHotSearch() {
-        request.doGet(HttpConstant.SEARCH_MARKET_HOT, new HttpListener<List<MarketItemBean>>() {
-            @Override
-            protected void onResponse(List<MarketItemBean> markets) {
-                activity.showHotSearch(markets);
-            }
+    /**
+     * 保存搜索内容
+     *
+     * @param key
+     */
+    private void saveSearchHistory(String key) {
+        String str = SPUtils.getString(mContext, SpConstant.SEARCH_HISTORY_MARKET);
+        if (str.contains(key)) return;
+        StringBuffer history = new StringBuffer(str);
+        if (history.length() > 0) {
+            history.append(",").append(key);
+        } else {
+            history.append(key);
+        }
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_MARKET, history.toString());
+    }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                activity.hideHotSearch();
-            }
-        });
+    public void initHotSearch() {
+        List<String> markets;
+        String history = SPUtils.getString(mContext, SpConstant.SEARCH_HISTORY_MARKET);
+        if (RegexValidateUtil.isEmpty(history)) {
+            markets = null;
+        } else {
+            String[] split = history.split(",");
+            markets = new ArrayList(Arrays.asList(split));
+        }
+        activity.showHotSearch(markets);
     }
 
     public void refresh() {

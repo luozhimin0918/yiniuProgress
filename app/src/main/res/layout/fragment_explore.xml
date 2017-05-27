@@ -18,8 +18,7 @@
             android:layout_width="@dimen/navigationBarLeftImageViewSize"
             android:layout_height="@dimen/navigationBarLeftImageViewSize"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
-            android:src="@mipmap/icon_user_def_photo"/>
+            android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"/>
 
         <TextView
             android:id="@+id/tv_bar_title"
