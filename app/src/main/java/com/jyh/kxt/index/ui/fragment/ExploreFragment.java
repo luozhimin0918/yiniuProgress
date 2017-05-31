@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -214,7 +215,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      *
      * @param topics
      */
-    public void addTopic(List<TopicJson> topics) {
+    public void addTopic(final List<TopicJson> topics) {
 
         Context mContext = getContext();
         View topicView = LayoutInflater.from(mContext).inflate(R.layout.explore_header, null);
@@ -240,7 +241,16 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvContent.setLayoutManager(manager);
 
-        rvContent.setAdapter(topicAdapter = new TopicAdapter(mContext, topics));
+        final TopicAdapter topicAdapter = new TopicAdapter(mContext, topics);
+        topicAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                TopicJson topicJson = topics.get(position);
+                JumpUtils.jump((BaseActivity) getActivity(), topicJson.getO_class(), topicJson.getO_action(), topicJson.getO_id(),
+                        topicJson.getHref());
+            }
+        });
+        rvContent.setAdapter(this.topicAdapter = topicAdapter);
 
         tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,7 +272,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      *
      * @param activitys
      */
-    public void addActivity(List<ActivityJson> activitys) {
+    public void addActivity(final List<ActivityJson> activitys) {
 
         Context mContext = getContext();
         View activityView = LayoutInflater.from(mContext).inflate(R.layout.explore_header, null);
@@ -298,8 +308,15 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         manager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rvContent.setLayoutManager(manager);
-
-        rvContent.setAdapter(activitysAdapter = new ActivityAdapter(mContext, activitys));
+        activitysAdapter = new ActivityAdapter(mContext, activitys);
+        activitysAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                ActivityJson activityJson = activitys.get(position);
+                JumpUtils.jump((BaseActivity) getActivity(), VarConstant.OCLASS_ACTIVITY, VarConstant.OACTION_DETAIL, null, activityJson.getUrl());
+            }
+        });
+        rvContent.setAdapter(activitysAdapter);
 
         homeHeadView.addView(activityView);
 

@@ -1,7 +1,6 @@
-package com.library.widget.pickerview.view;
+package com.jyh.kxt.base.widget.pickerview.view;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -11,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
-import com.library.base.LibActivity;
-import com.library.widget.pickerview.listener.OnDismissListener;
-import com.library.widget.pickerview.utils.PickerViewAnimateUtil;
+import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.widget.pickerview.listener.OnDismissListener;
+import com.jyh.kxt.base.widget.pickerview.utils.PickerViewAnimateUtil;
 import com.library.R;
 import com.library.widget.window.ToastView;
 
@@ -50,7 +50,7 @@ public class BasePickerView {
     private boolean isShowing;
     private int gravity = Gravity.BOTTOM;
 
-    private Dialog mDialog;
+    private PopupUtil mDialog;
     private boolean cancelable;//是否能取消
 
     protected View clickView;//是通过哪个View弹出的
@@ -133,7 +133,7 @@ public class BasePickerView {
      */
     public void show() {
         if (isDialog()) {
-            showDialog();
+            showDialog(clickView);
         } else {
             if (isShowing()) {
                 return;
@@ -305,25 +305,38 @@ public class BasePickerView {
 
     public void createDialog() {
         if (dialogView != null) {
-            mDialog = new Dialog(context, R.style.custom_dialog2);
-            mDialog.setCancelable(cancelable);//不能点外面取消,也不 能点back取消
+//            mDialog = new Dialog(context, R.style.custom_dialog2);
+//            mDialog.setCancelable(cancelable);//不能点外面取消,也不 能点back取消
+//            mDialog.setContentView(dialogView);
+//            mDialog.getWindow().setWindowAnimations(R.style.pickerview_dialogAnim);
+//            mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                @Override
+//                public void onDismiss(DialogInterface dialog) {
+//                    if (onDismissListener != null) {
+//                        onDismissListener.onDismiss(BasePickerView.this);
+//                    }
+//                }
+//            });
+            mDialog = new PopupUtil((Activity) context);
             mDialog.setContentView(dialogView);
-            mDialog.getWindow().setWindowAnimations(R.style.pickerview_dialogAnim);
-            mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    if (onDismissListener != null) {
-                        onDismissListener.onDismiss(BasePickerView.this);
-                    }
-                }
-            });
+
+            PopupUtil.Config config = new PopupUtil.Config();
+            config.outsideTouchable = true;
+            config.alpha = 0.5f;
+            config.bgColor = 0X00000000;
+
+            config.animationStyle = com.jyh.kxt.R.style.PopupWindow_Style2;
+            config.width = WindowManager.LayoutParams.MATCH_PARENT;
+            config.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+            mDialog.setConfig(config);
         }
 
     }
 
-    public void showDialog() {
-        if (mDialog != null) {
-            mDialog.show();
+    public void showDialog(View v) {
+        if (mDialog != null && v != null) {
+            mDialog.showAtLocation(v, Gravity.BOTTOM, 0, 0);
         }
     }
 
@@ -334,6 +347,6 @@ public class BasePickerView {
     }
 
     public boolean isDialog() {
-        return false;
+        return true;
     }
 }

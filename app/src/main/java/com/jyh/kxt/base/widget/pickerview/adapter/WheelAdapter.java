@@ -1,4 +1,4 @@
-package com.library.widget.pickerview.adapter;
+package com.jyh.kxt.base.widget.pickerview.adapter;
 
 public interface WheelAdapter<T> {
 	/**

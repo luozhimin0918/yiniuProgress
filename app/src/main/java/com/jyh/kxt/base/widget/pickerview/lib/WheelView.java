@@ -1,4 +1,4 @@
-package com.library.widget.pickerview.lib;
+package com.jyh.kxt.base.widget.pickerview.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,10 +16,10 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.library.widget.pickerview.adapter.WheelAdapter;
-import com.library.widget.pickerview.listener.OnItemSelectedListener;
-import com.library.widget.pickerview.listener.WheelScroller;
-import com.library.widget.pickerview.model.IPickerViewData;
+import com.jyh.kxt.base.widget.pickerview.adapter.WheelAdapter;
+import com.jyh.kxt.base.widget.pickerview.listener.OnItemSelectedListener;
+import com.jyh.kxt.base.widget.pickerview.listener.WheelScroller;
+import com.jyh.kxt.base.widget.pickerview.model.IPickerViewData;
 import com.library.R;
 
 import java.util.LinkedList;

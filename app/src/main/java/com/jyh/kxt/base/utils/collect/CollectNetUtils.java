@@ -10,13 +10,10 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.bean.EventBusClass;
 import com.library.util.EncryptionUtils;
-import com.library.widget.pickerview.TimePickerView;
 
 import java.util.HashMap;
 import java.util.List;

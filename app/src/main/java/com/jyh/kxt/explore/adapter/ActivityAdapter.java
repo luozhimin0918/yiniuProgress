@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.library.util.DateUtils;
@@ -31,6 +32,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     private Context mContext;
     private List<ActivityJson> activitys;
+    private OnItemClickListener onItemClickListener;
 
     public ActivityAdapter(Context mContext, List<ActivityJson> activitys) {
         this.mContext = mContext;
@@ -43,7 +45,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ActivityAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ActivityAdapter.ViewHolder holder, final int position) {
         ActivityJson activity = activitys.get(position);
         holder.tvTitle.setText(activity.getTitle());
         holder.tvTime.setText(activity.getStart_time());
@@ -68,12 +70,23 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         }
         Glide.with(mContext).load(HttpConstant.IMG_URL + activity.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
                 .icon_def_video).into(holder.ivBtn);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(position, holder.itemView);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
         return activitys == null ? 0 : activitys.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

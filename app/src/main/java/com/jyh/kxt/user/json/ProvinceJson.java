@@ -1,7 +1,7 @@
 package com.jyh.kxt.user.json;
 
 
-import com.library.widget.pickerview.model.IPickerViewData;
+import com.jyh.kxt.base.widget.pickerview.model.IPickerViewData;
 
 import java.io.Serializable;
 import java.util.List;

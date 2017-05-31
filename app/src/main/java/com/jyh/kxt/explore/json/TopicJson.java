@@ -18,15 +18,24 @@ public class TopicJson {
     private String background;
     private String title;
     private String picture;
+    private String o_class;
+    private String o_action;
+    private String o_id;
+    private String href;
 
     public TopicJson() {
     }
 
-    public TopicJson(String id, String background, String title, String picture) {
+    public TopicJson(String id, String background, String title, String picture, String o_class, String o_action, String o_id, String
+            href) {
         this.id = id;
         this.background = background;
         this.title = title;
         this.picture = picture;
+        this.o_class = o_class;
+        this.o_action = o_action;
+        this.o_id = o_id;
+        this.href = href;
     }
 
     public String getId() {
@@ -61,5 +70,37 @@ public class TopicJson {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getO_class() {
+        return o_class;
+    }
+
+    public void setO_class(String o_class) {
+        this.o_class = o_class;
+    }
+
+    public String getO_action() {
+        return o_action;
+    }
+
+    public void setO_action(String o_action) {
+        this.o_action = o_action;
+    }
+
+    public String getO_id() {
+        return o_id;
+    }
+
+    public void setO_id(String o_id) {
+        this.o_id = o_id;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
     }
 }

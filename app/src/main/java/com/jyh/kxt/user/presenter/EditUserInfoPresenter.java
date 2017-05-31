@@ -38,8 +38,8 @@ import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.library.widget.pickerview.OptionsPickerView;
-import com.library.widget.pickerview.TimePickerView;
+import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
+import com.jyh.kxt.base.widget.pickerview.TimePickerView;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -165,7 +165,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         if (cityPicker.isShowing()) {
             return;
         }
-        cityPicker.show();
+        cityPicker.show(activity.plRootView);
     }
 
     /**
@@ -205,7 +205,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         if (genderPicker.isShowing()) {
             return;
         }
-        genderPicker.show();
+        genderPicker.show(activity.plRootView);
     }
 
     /**
@@ -249,7 +249,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         if (workPicker.isShowing()) {
             return;
         }
-        workPicker.show();
+        workPicker.show(activity.plRootView);
     }
 
     /**
@@ -297,7 +297,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         if (birthdayPicker.isShowing()) {
             return;
         }
-        birthdayPicker.show();
+        birthdayPicker.show(activity.plRootView);
     }
 
     /**

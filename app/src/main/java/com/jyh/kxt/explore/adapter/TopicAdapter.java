@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.TopicJson;
 
@@ -30,6 +31,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
 
     private Context context;
     private List<TopicJson> topics;
+    private OnItemClickListener onItemClickListener;
 
     public TopicAdapter(Context context, List<TopicJson> topics) {
         this.context = context;
@@ -42,7 +44,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         TopicJson topic = topics.get(position);
         holder.tvTitle.setText(topic.getTitle());
         holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
@@ -50,11 +52,22 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
         Glide.with(context).load(HttpConstant.IMG_URL + topic.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
                 .icon_def_video)
                 .into(holder.ivBtn);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(position, holder.itemView);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return topics == null ? 0 : topics.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

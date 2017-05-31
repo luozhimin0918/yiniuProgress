@@ -146,7 +146,7 @@ public class SkinnableViewInflater {
             case "com.library.widget.viewpager.BannerLayout":
                 view = new SkinnableBannerLayout(context, attrs);
                 break;
-            case "com.library.widget.pickerview.lib.WheelView":
+            case "com.jyh.kxt.base.widget.pickerview.lib.WheelView":
                 view = new SkinnableWheelView(context, attrs);
                 break;
             case "com.library.widget.tablayout.SegmentTabLayout":

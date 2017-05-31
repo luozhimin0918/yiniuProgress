@@ -47,7 +47,7 @@ import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
-import com.library.widget.pickerview.OptionsPickerView;
+import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.trycatch.mysnackbar.Prompt;
@@ -62,8 +62,6 @@ import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.umeng.message.proguard.k.A;
 
 /**
  * 首页-数据
