@@ -53,7 +53,7 @@ public class CollectVideoPresenter extends BasePresenter {
         lastId = "";
         collectVideoFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
-            CollectUtils.localAndNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
             initNetData();
         } else {
             initLocalData();

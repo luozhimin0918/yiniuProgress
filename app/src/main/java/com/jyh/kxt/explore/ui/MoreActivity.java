@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
@@ -145,11 +146,12 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
         int dataPosition = position - 1;
         switch (type) {
             case VarConstant.EXPLORE_ACTIVITY:
-                ActivityJson activity = (ActivityJson) moreAdapter.getData().get(dataPosition);
-                JumpUtils.jump(this, null, null, null, activity.getUrl());
+                ActivityJson activity = JSON.parseObject(moreAdapter.getData().get(dataPosition).toString(), ActivityJson.class);
+                JumpUtils.jump(this, VarConstant.OCLASS_ACTIVITY, VarConstant.OACTION_DETAIL, null, activity.getUrl());
                 break;
             case VarConstant.EXPLORE_TOPIC:
-                TopicJson topic = (TopicJson) moreAdapter.getData().get(dataPosition);
+                TopicJson topic = JSON.parseObject(moreAdapter.getData().get(dataPosition).toString(), TopicJson.class);
+                JumpUtils.jump(this, topic.getO_class(), topic.getO_action(), topic.getO_id(), topic.getHref());
                 break;
         }
     }

@@ -142,6 +142,7 @@ public class JumpUtils {
                     break;
                 case VarConstant.OACTION_INDEX:
                 case VarConstant.OACTION_LIST:
+                default:
                     final MainActivity mainActivity = (MainActivity) context;
                     RadioButton rbHomeFlash = mainActivity.rbHome;
                     boolean checkedFlash = rbHomeFlash.isChecked();

@@ -15,15 +15,16 @@ public class EventBusClass {
     public static final int EVENT_CLEAR_BROWER = 4;//删除浏览记录
     public static final int EVENT_CHANGEUSERINFO = 5;//更新用户信息
     public static final int EVENT_COLLECT_VIDEO = 6;//视听收藏状态改变
-    public static final int EVENT_COLLECT_FLASH = 7;//快讯收藏状态改变
+    public static final int EVENT_COLLECT_NEWS = 7;//要闻收藏状态改变
+    public static final int EVENT_COLLECT_FLASH = 8;//快讯收藏状态改变
 
-    public static final int EVENT_ATTENTION_AUTHOR_DEL = 8;//关注作者 删除
-    public static final int EVENT_ATTENTION_AUTHOR_ADD = 9;//关注作者 添加
-    public static final int EVENT_ATTENTION_ARTICLE_DEL = 10;//关注文章 删除
-    public static final int EVENT_ATTENTION_ARTICLE_ADD = 11;//关注文章 添加
+    public static final int EVENT_ATTENTION_AUTHOR_DEL = 9;//关注作者 删除
+    public static final int EVENT_ATTENTION_AUTHOR_ADD = 10;//关注作者 添加
+    public static final int EVENT_ATTENTION_ARTICLE_DEL = 11;//关注文章 删除
+    public static final int EVENT_ATTENTION_ARTICLE_ADD = 12;//关注文章 添加
 
 
-    public static final int MARKET_OPTION_UPDATE = 12;//行情自选,编辑中删除或者增加
+    public static final int MARKET_OPTION_UPDATE = 13;//行情自选,编辑中删除或者增加
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

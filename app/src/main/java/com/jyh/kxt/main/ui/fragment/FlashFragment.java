@@ -94,9 +94,15 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                 flashPresenter.filtrate();
                 break;
             case EventBusClass.EVENT_COLLECT_FLASH:
+                FlashJson flash = (FlashJson) eventBus.intentObj;
                 FastInfoAdapter adapter = flashPresenter.adapter;
-                if (adapter != null)
-                    adapter.notifyDataSetChanged();
+                List<FlashJson> data = adapter.getData();
+                for (FlashJson flashJson : data) {
+                    if (flash.getSocre().equals(flashJson.getSocre())) {
+                        flashJson.setColloct(!flashJson.isColloct());
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -135,7 +141,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     @Override
     public void onResume() {
         super.onResume();
-        if(flashPresenter.adapter!=null){
+        if (flashPresenter.adapter != null) {
             flashPresenter.adapter.notifyDataSetChanged();
         }
     }
@@ -143,8 +149,13 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(flashPresenter.adapter!=null){
-            flashPresenter.adapter.notifyDataSetChanged();
+        try {
+            if (flashPresenter.adapter != null) {
+                flashPresenter.adapter.notifyDataSetChanged();
+            }
+            lvContent.getRefreshableView().invalidatePinnedView();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -53,7 +53,7 @@ public class CollectNewsPresenter extends BasePresenter {
         lastId = "";
         collectNewsFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
-            CollectUtils.localAndNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
             initNetData();
         } else {
             initLocalData();
@@ -261,34 +261,44 @@ public class CollectNewsPresenter extends BasePresenter {
      * 加载网络更多收藏信息
      */
     private void loadNetMore() {
-        request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
-            @Override
-            protected void onResponse(List<NewsJson> o) {
-                if (o == null || o.size() == 0) {
-                } else {
-                    if (o.size() > VarConstant.LIST_MAX_SIZE) {
-                        o = o.subList(0, VarConstant.LIST_MAX_SIZE);
-                        isMore = true;
-                        lastId = o.get(o.size() - 1).getO_id();
+        if (isMore)
+            request.doGet(getUrl(), new HttpListener<List<NewsJson>>() {
+                @Override
+                protected void onResponse(List<NewsJson> o) {
+                    if (o == null || o.size() == 0) {
                     } else {
-                        isMore = false;
-                        lastId = "";
+                        if (o.size() > VarConstant.LIST_MAX_SIZE) {
+                            o = o.subList(0, VarConstant.LIST_MAX_SIZE);
+                            isMore = true;
+                            lastId = o.get(o.size() - 1).getO_id();
+                        } else {
+                            isMore = false;
+                            lastId = "";
+                        }
+                        collectNewsFragment.loadMore(o);
                     }
-                    collectNewsFragment.loadMore(o);
                 }
-            }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                collectNewsFragment.plvContent.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        collectNewsFragment.plvContent.onRefreshComplete();
-                    }
-                }, 500);
-            }
-        });
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    collectNewsFragment.plvContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            collectNewsFragment.plvContent.onRefreshComplete();
+                        }
+                    }, 500);
+                }
+            });
+        else {
+            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+            collectNewsFragment.plvContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    collectNewsFragment.plvContent.onRefreshComplete();
+                }
+            },200);
+        }
     }
 
     private String getUrl() {

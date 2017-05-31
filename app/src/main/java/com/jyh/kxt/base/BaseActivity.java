@@ -93,8 +93,6 @@ public class BaseActivity extends LibActivity implements IBaseView {
             } else {
                 setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-
-            onChangeTheme();
             ThemeUtil.changeCacheActionTheme(this);
         }
     }

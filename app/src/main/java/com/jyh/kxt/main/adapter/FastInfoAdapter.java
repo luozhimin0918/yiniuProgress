@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -99,6 +100,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         popupUtil = new PopupUtil((Activity) context);
         View inflate = popupUtil.createPopupView(R.layout.pop_img);
+        inflate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (popupUtil != null && popupUtil.isShowing())
+                    popupUtil.dismiss();
+            }
+        });
         ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
         config = new PopupUtil.Config();
 
@@ -314,6 +322,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         try {
             switch (type) {
                 case TYPE_TIME:
+                    timeHolder.tvTime.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color2));
+                    timeHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
                     timeHolder.tvTime.setText(flashJsons.get(position).toString());
                     break;
                 case TYPE_KX:
@@ -342,27 +352,61 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                 Glide.with(context)
                                         .load(kx.getImage())
                                         .asBitmap()
-                                        .error(R.mipmap.icon_def_news)
-                                        .placeholder(R.mipmap.icon_def_news)
+                                        .error(R.mipmap.icon_def_video)
+                                        .placeholder(R.mipmap.icon_def_video)
                                         .into(new SimpleTarget<Bitmap>() {
                                             @Override
                                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                                 if (popupUtil.isShowing())
                                                     popupUtil.dismiss();
 
-                                                ivPop.setImageBitmap(resource);
-
+                                                //图片尺寸
                                                 int width = resource.getWidth();
                                                 int height = resource.getHeight();
+                                                //屏幕尺寸
                                                 DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
-
                                                 int widthPixels = screenDisplay.widthPixels;
-                                                width = width > widthPixels ? widthPixels : width;
                                                 int heightPixels = screenDisplay.heightPixels;
-                                                height = height > heightPixels ? heightPixels : height;
-                                                config.width = width;
-                                                config.height = height;
+                                                //放大1.5倍后的图片尺寸
+                                                double largeWidth = width * 1.5;
+                                                double largeHeight = height * 1.5;
+                                                //放大图片(最大1.5倍),是其宽或高全屏
+                                                if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+                                                    width *= 1.5;
+                                                    height *= 1.5;
+                                                } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+                                                    double outWidth = largeWidth - widthPixels;
+                                                    double outHeight = largeHeight - heightPixels;
+                                                    if (outHeight > outWidth) {
+                                                        float size = widthPixels / (float) width;
+                                                        width = widthPixels;
+                                                        height *= size;
+                                                    } else {
+                                                        float size = heightPixels / (float) height;
+                                                        height = heightPixels;
+                                                        width *= size;
+                                                    }
+                                                } else if (largeWidth > widthPixels) {
+                                                    float size = widthPixels / (float) width;
+                                                    width = widthPixels;
+                                                    height *= size;
+                                                } else {
+                                                    float size = heightPixels / (float) height;
+                                                    height = heightPixels;
+                                                    width *= size;
+                                                }
+
+                                                config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                config.height = WindowManager.LayoutParams.MATCH_PARENT;
+
                                                 popupUtil.setConfig(config);
+
+                                                ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+                                                layoutParams.width = width;
+                                                layoutParams.height = height;
+                                                ivPop.setLayoutParams(layoutParams);
+
+                                                ivPop.setImageBitmap(resource);
                                                 popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
                                             }
                                         });
@@ -488,7 +532,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                             (leftHolder
-                            .ivFlash);
+                                    .ivFlash);
 
                     Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
 
@@ -547,7 +591,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                             (topHolder
-                            .ivFlash);
+                                    .ivFlash);
 
                     String time5 = "00:00";
                     try {
@@ -624,8 +668,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 //获取textView的行数
                 int txtPart = finalKxHolder.tvContent.getLineCount();
                 if (txtPart <= 3) {
-                    finalKxHolder.ivMore.setVisibility(View.GONE);
-                    finalKxHolder.tvMore.setVisibility(View.GONE);
+                    finalKxHolder.ivMore.setVisibility(View.INVISIBLE);
+                    finalKxHolder.tvMore.setVisibility(View.INVISIBLE);
                 } else {
                     finalKxHolder.ivMore.setVisibility(View.VISIBLE);
                     finalKxHolder.tvMore.setVisibility(View.VISIBLE);

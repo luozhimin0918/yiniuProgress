@@ -145,5 +145,6 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
                 if (fragment instanceof BaseFragment)
                     ((BaseFragment) fragment).onChangeTheme();
             }
+        stlNavigationBar.notifyDataSetChanged();
     }
 }

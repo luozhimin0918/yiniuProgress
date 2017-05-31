@@ -1,7 +1,9 @@
 package com.jyh.kxt.user.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
@@ -12,14 +14,20 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.user.adapter.EditNewsAdapter;
 import com.jyh.kxt.user.presenter.CollectNewsPresenter;
 import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -248,6 +256,11 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getQueue().cancelAll(collectNewsPresenter.getClass().getName());
     }
 
@@ -259,5 +272,40 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         }
         if (plvContent != null)
             plvContent.setDividerNull();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_NEWS) {
+            if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_FLASH) {
+                NewsJson flash = (NewsJson) eventBus.intentObj;
+                List<NewsJson> data = adapter.getData();
+                for (NewsJson flashJson : data) {
+                    if (flash.getO_id().equals(flashJson.getO_id())) {
+                        adapter.removeById(flashJson.getO_id());
+                        adapter.notifyDataSetChanged();
+                        List<NewsJson> data1 = adapter.getData();
+                        if (data1 == null || data1.size() == 0) {
+                            plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                            plRootView.setNullText("");
+                            plRootView.loadEmptyData();
+                        }
+                        return;
+                    }
+                }
+                collectNewsPresenter.refresh();
+            }
+        }
+
     }
 }

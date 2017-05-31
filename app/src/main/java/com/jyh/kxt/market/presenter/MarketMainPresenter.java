@@ -289,38 +289,42 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
      */
     public void onChangeTheme() {
 
-        //重新设置热门行情主题色
-        if (marketMainItemAdapter != null) {
-            marketMainItemAdapter.notifyDataSetChanged();
-        }
-        if (marketGridAdapters != null) {
-            for (MarketGridAdapter marketGridAdapter : marketGridAdapters) {
-                marketGridAdapter.notifyDataSetChanged();
+        try {
+            //重新设置热门行情主题色
+            if (marketMainItemAdapter != null) {
+                marketMainItemAdapter.notifyDataSetChanged();
             }
-        }
+            if (marketGridAdapters != null) {
+                for (MarketGridAdapter marketGridAdapter : marketGridAdapters) {
+                    marketGridAdapter.notifyDataSetChanged();
+                }
+            }
 
-        //重新设置头部行情主题
-        if (recommendView != null)
-            recommendView.onChangeTheme();
+            //重新设置头部行情主题
+            if (recommendView != null)
+                recommendView.onChangeTheme();
 
-        //重新设置我的自选主题色
-        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
-            return;
-        }
-        LayoutInflater mInflate = LayoutInflater.from(mContext);
-        for (MarketItemBean marketItemBean : marketBean.getData()) {
-            marketCodeList.add(marketItemBean.getCode());
-            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+            //重新设置我的自选主题色
+            if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+                return;
+            }
+            LayoutInflater mInflate = LayoutInflater.from(mContext);
+            for (MarketItemBean marketItemBean : marketBean.getData()) {
+                marketCodeList.add(marketItemBean.getCode());
+                marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
 
-            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
-            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
+                marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
+                marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
 
-            ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
-                    R.layout.item_market_recommend,
-                    null,
-                    false);
+                ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
+                        R.layout.item_market_recommend,
+                        null,
+                        false);
 
-            dataBinding.setBean(marketItemBean);
+                dataBinding.setBean(marketItemBean);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

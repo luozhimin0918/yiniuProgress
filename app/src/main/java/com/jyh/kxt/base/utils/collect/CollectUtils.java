@@ -13,6 +13,7 @@ import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -20,6 +21,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.window.ToastView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -118,9 +120,12 @@ public class CollectUtils {
     }
 
     /**
-     * 收藏数据同步
+     * 本地收藏数据提交到网络收藏库
+     *
+     * @param context
+     * @param type
      */
-    public static void localAndNetSynchronization(final Context context, String type) {
+    public static void localToNetSynchronization(final Context context, String type) {
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         DaoSession dbRead = DBManager.getInstance(context).getDaoSessionRead();
@@ -165,6 +170,33 @@ public class CollectUtils {
                 ToastView.makeText3(context, "网络收藏同步失败");
             }
         });
+    }
+
+    /**
+     * 网络收藏数据同步到本地
+     *
+     * @param context
+     * @param type
+     * @param data
+     */
+    public static void netToLocalSynchronization(Context context, String type, List data) {
+        switch (type) {
+            case VarConstant.COLLECT_TYPE_ARTICLE:
+                for (NewsJson obj : (List<NewsJson>) data) {
+                    CollectLocalUtils.collect(context, type, obj, null, null);
+                }
+                break;
+            case VarConstant.COLLECT_TYPE_FLASH:
+                for (FlashJson obj : (List<FlashJson>) data) {
+                    CollectLocalUtils.collect(context, type, obj, null, null);
+                }
+                break;
+            case VarConstant.COLLECT_TYPE_VIDEO:
+                for (VideoListJson obj : (List<VideoListJson>) data) {
+                    CollectLocalUtils.collect(context, type, obj, null, null);
+                }
+                break;
+        }
     }
 
     /**

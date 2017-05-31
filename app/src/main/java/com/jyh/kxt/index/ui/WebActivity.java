@@ -90,8 +90,8 @@ public class WebActivity extends BaseActivity {
      */
     private void getExtra(Intent intent) {
         title = intent.getStringExtra(IntentConstant.NAME);
-//        url = intent.getStringExtra(IntentConstant.WEBURL);
-        url = "http://test.kxtadi.kuaixun56.com/Webview/view/id/2966";
+        url = intent.getStringExtra(IntentConstant.WEBURL);
+//        url = "http://test.kxtadi.kuaixun56.com/Webview/view/id/2966";
         source = intent.getStringExtra(IntentConstant.SOURCE);
     }
 

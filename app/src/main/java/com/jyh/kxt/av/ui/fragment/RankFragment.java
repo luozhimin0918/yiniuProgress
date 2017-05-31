@@ -67,5 +67,7 @@ public class RankFragment extends BaseFragment {
                 if (fragment instanceof BaseFragment)
                     ((BaseFragment) fragment).onChangeTheme();
             }
+        if (stlNavigationBar != null)
+            stlNavigationBar.notifyDataSetChanged();
     }
 }

@@ -43,10 +43,13 @@ import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.presenter.FlashActivityPresenter;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.util.DateUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -159,6 +162,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                             public void callback(Object o) {
                                 ivCollect.setSelected(false);
                                 isCollect = false;
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH, flashJson));
                             }
 
                             @Override
@@ -172,6 +176,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                             public void callback(Object o) {
                                 ivCollect.setSelected(true);
                                 isCollect = true;
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH, flashJson));
                             }
 
                             @Override
@@ -387,7 +392,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 ivAd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this,ad.getO_class(),ad.getO_action(),ad.getO_id(),ad.getHref());
+                        JumpUtils.jump(FlashActivity.this, ad.getO_class(), ad.getO_action(), ad.getO_id(), ad.getHref());
                     }
                 });
             }

@@ -1,8 +1,11 @@
 package com.jyh.kxt.base.widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -18,17 +21,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.impl.WebBuild;
 import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
  * Created by Mr'Dai on 2016/11/22.
@@ -147,6 +155,30 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
             if (url == null) {
                 return true;
             }
+            if (url.contains("mqqwpa://")) {
+                UMShareAPI umShareAPI = UMShareAPI.get(getContext());
+                boolean isInstall = umShareAPI.isInstall((Activity) getContext(), SHARE_MEDIA.QQ);
+                if (isInstall) {
+                    Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    getContext().startActivity(in);
+                } else {
+                    ToastView.makeText3(getContext(), "未安装QQ");
+                }
+                return true;
+            } else if (url.contains("weixin://")) {
+                UMShareAPI umShareAPI = UMShareAPI.get(getContext());
+                boolean isInstall = umShareAPI.isInstall((Activity) getContext(), SHARE_MEDIA.WEIXIN);
+                if (isInstall) {
+                    Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    getContext().startActivity(in);
+                } else {
+                    ToastView.makeText3(getContext(), "未安装微信");
+                }
+                return true;
+            } else if (!url.startsWith("https://") && !url.startsWith("http://")) {
+                return true;
+            }
+
             view.loadUrl(url);
             return true;
         }
@@ -262,8 +294,10 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 //                    "o_action":"detail",
 //                    "href":""
             JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson
-                    .getString("o_id"),
+                            .getString("o_id"),
                     clickJson.getString("href"));
         }
     }
+
+
 }
