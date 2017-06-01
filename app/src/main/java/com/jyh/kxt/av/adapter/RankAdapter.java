@@ -101,6 +101,10 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
         notifyDataSetChanged();
     }
 
+    public List<VideoListJson> getData() {
+        return dataList;
+    }
+
     static class ViewHolder {
         @BindView(R.id.iv_photo) ImageView ivPhoto;
         @BindView(R.id.tv_title) TextView tvTitle;

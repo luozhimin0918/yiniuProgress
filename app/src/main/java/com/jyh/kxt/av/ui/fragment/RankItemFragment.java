@@ -1,12 +1,18 @@
 package com.jyh.kxt.av.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.presenter.RankItemPresenter;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -20,7 +26,7 @@ import butterknife.BindView;
  * 创建日期:2017/5/2.
  */
 
-public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
+public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, AdapterView.OnItemClickListener {
 
     public static final String RANK_MORE_PLAY = "rank_more_play";//视听排行 最多播放
     public static final String RANK_MORE_COMMENT = "rank_more_comment";//视听排行 最多评论
@@ -41,6 +47,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
         plvContent.setDividerNull();
         plvContent.setOnRefreshListener(rankItemPresenter);
+        plvContent.setOnItemClickListener(this);
 
         type = getArguments().getString(IntentConstant.RANK_TYPE);
         switch (type) {
@@ -79,5 +86,16 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
             plvContent.setDividerNull();
         if (rankItemPresenter != null)
             rankItemPresenter.onChangeTheme();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(position>0){
+            int dataPosition = position - 1;
+            VideoListJson video = rankItemPresenter.rankAdapter.getData().get(dataPosition);
+            Intent intent = new Intent(getContext(), VideoDetailActivity.class);
+            intent.putExtra(IntentConstant.O_ID, video.getId());
+            startActivity(intent);
+        }
     }
 }

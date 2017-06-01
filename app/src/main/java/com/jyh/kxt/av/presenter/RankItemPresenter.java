@@ -31,7 +31,7 @@ public class RankItemPresenter extends BasePresenter implements PullToRefreshBas
     private String url;
     private VolleyRequest request;
     private String lastId;
-    private RankAdapter rankAdapter;
+    public RankAdapter rankAdapter;
 
     public RankItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
