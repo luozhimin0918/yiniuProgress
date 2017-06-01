@@ -7,15 +7,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.PopupWindow;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
@@ -26,7 +22,6 @@ import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.base.http.VarConstant;
-import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
@@ -190,8 +185,8 @@ public class UmengShareTool {
         //设置分享按钮
         setShareBtn(activity, shareBean, o, rootView, observerData);
 
-        int navigationBarHeight = SystemUtil.getNavigationBarHeight(activity);
-        rootView.setPadding(0, 0, 0, navigationBarHeight);
+      /*  int navigationBarHeight = SystemUtil.getNavigationBarHeight(activity);
+        rootView.setPadding(0, 0, 0, navigationBarHeight);*/
         shareLayout.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
     }

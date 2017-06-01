@@ -9,7 +9,7 @@
     </style>
 
     <style name="Theme.Start" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/ic_launcher</item>
+        <item name="android:windowBackground">@mipmap/icon_lauch</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>

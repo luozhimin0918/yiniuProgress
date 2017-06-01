@@ -574,11 +574,11 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         cancelWindow.setOnClickListener(this);
         view.setOnClickListener(this);
 
-        if (SystemUtil.navigationBar(context) > 10) {
+       /* if (SystemUtil.navigationBar(context) > 10) {
             ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
             layoutParams.height = SystemUtil.navigationBar(context);
             spaceView.setLayoutParams(layoutParams);
-        }
+        }*/
 
         PopupUtil.Config config = new PopupUtil.Config();
 

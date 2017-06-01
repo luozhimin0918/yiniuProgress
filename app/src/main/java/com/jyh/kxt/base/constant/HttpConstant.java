@@ -157,7 +157,11 @@ public class HttpConstant {
 
     public static final String VERSION_VERSION = BASE_URL + "version/version";
 
-    public static final String DATA_FINANCE = BASE_URL + "/data/finance";
+    public static final String DATA_FINANCE = BASE_URL + "data/finance";
+    public static final String DATA_ETF = BASE_URL + "data/etf";
+    public static final String DATA_CFTC = BASE_URL + "data/cftc";
+
+    public static final String MORE_DATA = BASE_URL + "data/more_data";
 
 
     /**
@@ -166,4 +170,6 @@ public class HttpConstant {
     public static final String QUOTES_FAVOR = BASE_URL + "quotes/favor";
     public static final String QUOTES_DELFAVOR = BASE_URL + "quotes/delFavor";
     public static final String QUOTES_ADDFAVOR = BASE_URL + "quotes/addFavor";
+    public static final String QUOTES_SORT = BASE_URL + "quotes/sort";
+
 }

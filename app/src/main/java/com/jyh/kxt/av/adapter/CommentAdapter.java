@@ -3,6 +3,7 @@ package com.jyh.kxt.av.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -167,6 +168,8 @@ public class CommentAdapter extends BaseAdapter {
                     }
                 });
 
+                mViewHolder2.llPrimaryInfo.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color2));
+
                 break;
         }
 
@@ -253,6 +256,8 @@ public class CommentAdapter extends BaseAdapter {
                 commentStatement(v, commentBean, commentBean.getId());
             }
         });
+
+        baseViewHolder.rlContentItem.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
     }
 
     private void setReadTitle(TextView textView, final CommentBean commentBean) {
@@ -327,6 +332,8 @@ public class CommentAdapter extends BaseAdapter {
 
         @BindView(R.id.tv_read_title) TextView tvReadTitle;
         @BindView(R.id.ll_reply_content) LinearLayout llReplyContent;
+
+        @BindView(R.id.rl_content_item) RelativeLayout rlContentItem;
 
     }
 

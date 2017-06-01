@@ -15,6 +15,7 @@ public class DataList {
     private String code;
     private String name;
     private String style_class;
+    private String type;
 
     public String getCode() {
         return code;
@@ -38,5 +39,13 @@ public class DataList {
 
     public void setStyle_class(String style_class) {
         this.style_class = style_class;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

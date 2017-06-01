@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -85,7 +86,8 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      * @param news
      * @param list
      */
-    public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts, List<MarketItemBean> quotes,
+    public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts,
+                         List<MarketItemBean> quotes,
                          AdJson ad, List<NewsJson> news, ArrayList<String> list) {
         if (newsNavs == null) return;
         int size = newsNavs.size();
@@ -112,11 +114,13 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             fragmentList.add(itemFragment);
         }
 
-        adapter = new BaseFragmentAdapter(getChildFragmentManager(), fragmentList);
+        FragmentManager childFragmentManager = NewsFragment.this.getChildFragmentManager();
+        adapter = new BaseFragmentAdapter(childFragmentManager, fragmentList);
         vpNewsList.setAdapter(adapter);
         stlNavigationBar.setViewPager(vpNewsList, tabs);
         newsPresenter.addOnPageChangeListener(vpNewsList);
         plRootView.loadOver();
+
     }
 
     @Override
@@ -138,10 +142,12 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(fragmentList !=null)
+        if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
-                if(fragment instanceof BaseFragment)
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
+                }
             }
+        }
     }
 }

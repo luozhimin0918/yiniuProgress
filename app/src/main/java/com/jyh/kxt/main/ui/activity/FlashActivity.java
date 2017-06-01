@@ -238,11 +238,11 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         Space spaceView = (Space) view.findViewById(R.id.selectimg_open_space);
 
-        if (SystemUtil.navigationBar(this) > 10) {
+       /* if (SystemUtil.navigationBar(this) > 10) {
             ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
             layoutParams.height = SystemUtil.navigationBar(this);
             spaceView.setLayoutParams(layoutParams);
-        }
+        }*/
 
         PopupUtil.Config config = new PopupUtil.Config();
 

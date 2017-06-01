@@ -99,8 +99,13 @@ public class WelcomePresenter extends BasePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        showGif();
+        welcomeActivity.ivWelcome.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startToActivity(MainActivity.class);
+            }
+        }, 2 * 1000);
+//        showGif();
     }
 
     public void advertTimeManage() {

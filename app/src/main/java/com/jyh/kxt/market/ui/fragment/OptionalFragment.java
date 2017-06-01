@@ -15,6 +15,7 @@ import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.OptionalPresenter;
 import com.library.bean.EventBusClass;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.jyh.kxt.base.utils.MarketUtil.getMarketEditOption;
 import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 /**
@@ -36,6 +38,7 @@ import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 public class OptionalFragment extends BaseFragment implements OnSocketTextMessage {
 
+    @BindView(R.id.pll_content) PageLoadLayout pllContent;
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrContent;
     @BindView(R.id.tv_target_nav) TextView tvTargetNav;
 
@@ -93,16 +96,21 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
     public void onMarketEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.MARKET_OPTION_UPDATE:
+
                 List<MarketItemBean> marketList = (List<MarketItemBean>) eventBus.intentObj;
                 marketItemList.clear();
                 marketItemList.addAll(marketList);
+
+                if (marketItemList.size() == 0) {
+                    pllContent.loadEmptyData();
+                } else {
+                    pllContent.loadOver();
+                }
 
                 initMarketData(1);
 
                 marketMainItemAdapter.notifyDataSetChanged();
 
-
-                MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
                 //参数改变
                 MarketConnectUtil.getInstance().sendSocketParams(
                         this,
@@ -129,8 +137,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
      */
     private void initMarketData(int form) {
         if (form == 0) {
-            String marketOption = MarketUtil.getMarketEditOption(getContext());
-            marketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
+            marketItemList = getMarketEditOption(getContext());
             if (marketItemList == null || marketItemList.size() == 0) {
                 marketItemList = new ArrayList<>();
             }

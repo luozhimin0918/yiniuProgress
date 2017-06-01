@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_datumhistory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,148 +10,143 @@
 
     <include layout="@layout/action_bar1"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@mipmap/iocn_blue_sx"
-        android:gravity="center"
-        android:text="数据走势"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/title_font_size"/>
 
     <LinearLayout
+        android:id="@+id/ll_list_head"
         android:layout_width="match_parent"
-        android:layout_height="154dp"
-        android:layout_marginTop="20dp"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.jyh.kxt.base.widget.TrendChartLayout
+        <LinearLayout
+            android:id="@+id/ll_chart_head"
             android:layout_width="match_parent"
-            android:layout_margin="15dp"
-            android:layout_height="154dp">
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-        </com.jyh.kxt.base.widget.TrendChartLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableLeft="@mipmap/iocn_blue_sx"
+                android:gravity="center"
+                android:text="数据走势"
+                android:textColor="@color/font_color60"
+                android:textSize="@dimen/title_font_size"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="154dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
+
+                <com.jyh.kxt.base.widget.TrendChartLayout
+                    android:id="@+id/tcl_chart_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="154dp"
+                    android:layout_margin="15dp">
+
+                </com.jyh.kxt.base.widget.TrendChartLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/bg_color2"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@mipmap/iocn_blue_sx"
+            android:gravity="center"
+            android:text="数据释义"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/title_font_size"/>
+
+
+        <TextView
+            android:id="@+id/tv_published_agencies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_department_labor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="15dp"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.5"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_data_affecting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="15dp"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.5"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_data_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="15dp"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size2"
+            android:visibility="gone"/>
+
+        <com.jyh.kxt.base.custom.DiscolorTextView
+            android:id="@+id/dtv_more_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:text="更多信息"
+            android:textSize="@dimen/describe_font_size1"
+            app:defaultFontColor="@color/blue"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@color/bg_color2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@mipmap/iocn_blue_sx"
+            android:gravity="center"
+            android:text="历史数据"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/title_font_size"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="@color/bg_color2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@mipmap/iocn_blue_sx"
-        android:gravity="center"
-        android:text="数据释义"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/title_font_size"/>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="公布机构: 美国劳工局"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="发布频率: 美国劳工局"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="数据影响: 公布值大于预期值，且利于经济"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:text="更多信息"
-        android:textSize="@dimen/describe_font_size1"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="@color/bg_color2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@mipmap/iocn_blue_sx"
-        android:gravity="center"
-        android:text="历史数据"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/title_font_size"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="9dp"
-        android:background="@color/bg_color2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1.5"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center"
-            android:text="公布日期"
-            android:textSize="13sp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center"
-            android:text="前值"
-            android:textSize="13sp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center"
-            android:text="预测值"
-            android:textSize="13sp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center"
-            android:text="公布值"
-            android:textSize="13sp"/>
-
-    </LinearLayout>
-
-    <com.library.widget.handmark.PullToRefreshListView
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.library.widget.handmark.PullToRefreshListView>
+        <com.jyh.kxt.main.widget.FastInfoPullPinnedListView
+            android:id="@+id/fplv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.jyh.kxt.main.widget.FastInfoPullPinnedListView>
+    </com.library.widget.PageLoadLayout>
+
+
 </LinearLayout>

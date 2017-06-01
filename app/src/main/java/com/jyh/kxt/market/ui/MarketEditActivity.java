@@ -22,14 +22,13 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.helper.OnStartDragListener;
 import com.jyh.kxt.base.widget.helper.SimpleItemTouchHelperCallback;
-import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.market.adapter.MarketEditAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.base.http.VolleySyncHttp;
 import com.library.bean.EventBusClass;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -41,10 +40,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MarketEditActivity extends BaseActivity implements OnStartDragListener {
 
@@ -62,7 +57,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
     private MarketEditAdapter marketEditAdapter;
 
     private List<MarketItemBean> defaultInitMarketList = new ArrayList<>();
-    private List<MarketItemBean> adapterMarketItemList;
+    private List<MarketItemBean> adapterMarketItemList = new ArrayList<>();
 
 
     @OnClick({R.id.cb_complete_checked, R.id.tv_delete_count, R.id.iv_bar_break, R.id.iv_bar_function})
@@ -102,8 +97,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo == null) {
-            String marketOption = MarketUtil.getMarketEditOption(getContext());
-            adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
+            adapterMarketItemList.addAll(MarketUtil.getMarketEditOption(getContext()));
             defaultInitMarketList.addAll(adapterMarketItemList);
             initEditInfo();
         } else {
@@ -167,14 +161,24 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
     }
 
     private void onSaveAndExit() {
-        requestRefresh();
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null) {
+            requestRefresh(userInfo);
+        } else {
+            postEventBean();
+        }
+    }
+
+
+    private void postEventBean() {
+        MarketUtil.saveMarketEditOption(getContext(), adapterMarketItemList, 2);
+
         EventBusClass eventBusClass = new EventBusClass(
                 EventBusClass.MARKET_OPTION_UPDATE,
                 adapterMarketItemList);
         EventBus.getDefault().post(eventBusClass);
         finish();
     }
-
 
     private void requestSynchronization(UserJson userInfo) {
         pllContent.loadWait();
@@ -185,17 +189,10 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         jsonParam.put("accessToken", userInfo.getToken());
 
         volleyRequest.doPost(HttpConstant.QUOTES_FAVOR, jsonParam, new HttpListener<List<MarketItemBean>>() {
-
             @Override
             protected void onResponse(List<MarketItemBean> marketItemBeen) {
-                TSnackbar.make(tvBarTitle, "已同步自选列表", TSnackbar.LENGTH_LONG, TSnackbar
-                        .APPEAR_FROM_BOTTOM_TO_TOP)
-                        .setPromptThemBackground(Prompt.WARNING).show();
-
-                String marketOption = MarketUtil.getMarketEditOption(getContext());
-                adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
+                adapterMarketItemList.addAll(MarketUtil.getMergeLocalMarket(getContext(), marketItemBeen));
                 defaultInitMarketList.addAll(adapterMarketItemList);
-
                 initEditInfo();
                 pllContent.loadOver();
             }
@@ -204,13 +201,11 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
 
-                TSnackbar.make(tvBarTitle, "自选信息同步失败", TSnackbar.LENGTH_LONG, TSnackbar
-                        .APPEAR_FROM_BOTTOM_TO_TOP)
-                        .setPromptThemBackground(Prompt.WARNING).show();
-
-                String marketOption = MarketUtil.getMarketEditOption(getContext());
-                adapterMarketItemList = JSONArray.parseArray(marketOption, MarketItemBean.class);
-                defaultInitMarketList.addAll(adapterMarketItemList);
+                if (error != null) {
+                    TSnackbar.make(tvBarTitle, error.getMessage() + "", TSnackbar.LENGTH_LONG, TSnackbar
+                            .APPEAR_FROM_BOTTOM_TO_TOP)
+                            .setPromptThemBackground(Prompt.WARNING).show();
+                }
 
                 pllContent.loadOver();
             }
@@ -220,44 +215,40 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
     /**
      * 请求刷新同步
      */
-    private void requestRefresh() {
-        UserJson userInfo = LoginUtils.getUserInfo(this);
-        if (userInfo != null) {
-            return;
+    private void requestRefresh(final UserJson userInfo) {
+
+        final TSnackbar snackBar = TSnackbar.make(tvBarTitle, "同步中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
+                .APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
+
+        JSONArray jsonArray = new JSONArray();
+        for (MarketItemBean marketItemBean : adapterMarketItemList) {
+            jsonArray.add(marketItemBean.getCode());
         }
 
+        VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+        jsonParam.put("codes", jsonArray);
 
-        Observable.create(new Observable.OnSubscribe<SingleThreadJson>() {
+        volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
             @Override
-            public void call(Subscriber<? super SingleThreadJson> subscriber) {
-                VolleySyncHttp volleySyncHttp = VolleySyncHttp.getInstance();
-
-                try {//如果一个出错则不继续进行
-                    JSONObject deleteParam = volleySyncHttp.getJsonParam();
-                    String deleteList = volleySyncHttp.syncGet(mQueue, HttpConstant.QUOTES_DELFAVOR);
-
-                    String addList = volleySyncHttp.syncGet(mQueue, HttpConstant.QUOTES_ADDFAVOR);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            protected void onResponse(String sort) {
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("同步成功").setDuration(TSnackbar
+                        .LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                postEventBean();
             }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SingleThreadJson>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(SingleThreadJson jsonStr) {
-
-                    }
-                });
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                postEventBean();
+            }
+        });
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:layout_marginTop="9dp"
+    android:background="@color/bg_color2"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:text="公布日期"
+        android:textSize="13sp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="前值(%)"
+        android:textSize="13sp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="预测值(%)"
+        android:textSize="13sp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="公布值(%)"
+        android:textSize="13sp"/>
+
+</LinearLayout>

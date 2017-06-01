@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
  * Created by DaiYao on 2016/5/15 0015.
  */
 public abstract class LibActivity extends AppCompatActivity implements LayoutInflaterFactory {
+
     protected final String TAG = this.getClass().getName();
 
     public enum StatusBarColor {
@@ -65,7 +66,6 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
 
         mQueue = RequestQueueUtil.newRequestQueue(this);
         this.statusBarColor = statusBarColor;
-
         ButterKnife.bind(this);
         StatusBarCompat.compat(this, statusBarColor.color);
     }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="数据走势"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:layout_marginTop="20dp"
+        android:visibility="visible">
+
+        <com.jyh.kxt.base.widget.TrendChartLayout
+            android:layout_width="match_parent"
+            android:layout_height="154dp"
+            android:layout_margin="15dp">
+
+        </com.jyh.kxt.base.widget.TrendChartLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/bg_color2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="数据释义"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+
+
+    <TextView
+        android:id="@+id/tv_published_agencies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:id="@+id/tv_department_labor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="3dp"
+        android:lineSpacingMultiplier="1.5"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:id="@+id/tv_data_affecting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="3dp"
+        android:lineSpacingMultiplier="1.5"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:id="@+id/tv_data_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="3dp"
+        android:lineSpacingMultiplier="1.2"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/describe_font_size2"
+        android:visibility="gone"/>
+
+    <com.jyh.kxt.base.custom.DiscolorTextView
+        android:id="@+id/dtv_more_information"
+        app:defaultFontColor="@color/blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:text="更多信息"
+        android:textSize="@dimen/describe_font_size1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/bg_color2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="历史数据"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+</LinearLayout>

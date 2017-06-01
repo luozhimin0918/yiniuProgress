@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -65,6 +66,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 主界面
@@ -420,6 +422,18 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                                 loginPhoto.setImageBitmap(resource);
                             }
                         });
+
+                Glide.with(getContext())
+                        .load(userJson.getPicture())
+                        .crossFade(1000)
+                        .bitmapTransform(new BlurTransformation(getContext(),23,4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                        .into(new SimpleTarget<GlideDrawable>() {
+                            @Override
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                loginView.setBackground(resource);
+                            }
+                        });
+
             } else {
                 try {
                     loginPhoto.setImageBitmap(BitmapUtils.StringToBitmap(pictureStr));

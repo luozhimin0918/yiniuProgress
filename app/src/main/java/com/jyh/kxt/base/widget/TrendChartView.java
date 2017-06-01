@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.AttributeSet;
+import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -20,7 +20,6 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class TrendChartView extends View {
     private List<TrendBean> trendList;
     private Double[] trendPriceArray;
 
-    private Double differencePrice, minPrice, maxPrice;
+    private int minPrice, maxPrice;
     private int minPricePoint, maxPricePoint;
     //触发等级   1 蓄势不触发  2 蓄势画背景横线  3 蓄势完成画折线动画 4 点击放大圆点
     private int triggerLevel = 1;
@@ -55,16 +54,10 @@ public class TrendChartView extends View {
 
     private TrendChartTextView priceShowView;
 
-    public TrendChartView(Context context) {
-        this(context, null);
-    }
-
-    public TrendChartView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public TrendChartView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public TrendChartView(Context context, int min, int max) {
+        super(context);
+        minPrice = min;
+        maxPrice = max;
         initView();
     }
 
@@ -81,7 +74,7 @@ public class TrendChartView extends View {
         pointPaint.setStyle(Paint.Style.FILL);
 
         int selectedColor = getResources().getColor(R.color.selected_point);
-        selectedPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         selectedPaint.setStyle(Paint.Style.STROKE);
         selectedPaint.setColor(selectedColor);
         selectedPaint.setStrokeWidth(5);
@@ -102,16 +95,9 @@ public class TrendChartView extends View {
      * 计算间隔大小
      */
     private void calculateIntervalSize() {
-        Double[] differenceArray = Arrays.copyOf(trendPriceArray, trendPriceArray.length);
-        Arrays.sort(differenceArray);
 
-        minPrice = differenceArray[0];
-        maxPrice = differenceArray[differenceArray.length - 1];
-
-        differencePrice = (maxPrice - minPrice) / lineCount;
-
-        minPricePoint = 820;
-        maxPricePoint = 850;
+        minPricePoint = minPrice;
+        maxPricePoint = maxPrice;
 
         if (triggerLevel == 2) {
             drawBg();
@@ -247,19 +233,26 @@ public class TrendChartView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                int moveX = (int) event.getX();
-                int moveY = (int) event.getY();
+                try {
+                    int moveX = (int) event.getX();
+                    int moveY = (int) event.getY();
 
-                if (frameRect.contains(moveX, moveY)) {
-                    int position = (moveX - frameRect.left) / pointScaleValueX;
-                    Point point = pointFinalList.get(position);
+                    if (frameRect.contains(moveX, moveY)) {
+                        int position = (moveX - frameRect.left) / pointScaleValueX;
+                        Point point = pointFinalList.get(position);
 
-                    priceShowView.setPoint(point);
-                    priceShowView.setText("etf:" + trendPriceArray[position]);
-                    if (currentSelectedPosition != position) {
-                        invalidate();
+                        long timeLong = Long.parseLong(trendList.get(position).date) * 1000;
+                        CharSequence format = DateFormat.format("yyyy-MM-dd", timeLong);
+
+                        priceShowView.setPoint(point);
+                        priceShowView.setText("日期"+format+"\n价格:" + trendPriceArray[position]);
+                        if (currentSelectedPosition != position) {
+                            invalidate();
+                        }
+                        currentSelectedPosition = position;
                     }
-                    currentSelectedPosition = position;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -305,7 +298,18 @@ public class TrendChartView extends View {
         txtPaint.setStrokeWidth(1);
         txtPaint.setTextSize(fontSize);
 
-        String[] lineMultipleTxt = new String[]{"850", "840", "830", "820"};
+        String[] lineMultipleTxt = new String[4];
+        int cha = maxPrice - minPrice;
+        int yuShu = cha % 3;
+
+        int itemPadding = yuShu == 0 ? cha / 3 : (cha - yuShu) / 3;
+
+        int leiJia = minPrice;
+        for (int i = 3; i >= 0; i--) {
+            lineMultipleTxt[i] = String.valueOf(leiJia);
+            leiJia = leiJia + itemPadding + (yuShu == 0 ? 0 : 1);
+        }
+
         for (int i = 0; i < lineMultipleTxt.length; i++) {
             int lineMultiple = (frameRect.height() / (lineCount + 1)) * i;
 
@@ -318,7 +322,24 @@ public class TrendChartView extends View {
                     marginLeft - txtRect.width() - marginRight * 3,
                     lineMultiple + txtRect.height() + frameRect.top,
                     txtPaint);
+
         }
+
+        /*for (int i = 0; i < trendList.size(); i++) {
+            TrendBean trendBean = trendList.get(i);
+
+            long timeLong = Long.parseLong(trendBean.date) * 1000;
+            CharSequence format = DateFormat.format("yyyy-MM-dd", timeLong);
+
+            Point point = generateCoordsPoint(i);
+
+            canvas.drawText(
+                    format.toString(),
+                    point.x,
+                    frameRect.bottom,
+                    txtPaint);
+        }*/
+
 
         setBackground(new BitmapDrawable(initBitmap));
     }

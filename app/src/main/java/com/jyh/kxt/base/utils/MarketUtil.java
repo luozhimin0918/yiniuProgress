@@ -16,6 +16,7 @@ import com.jyh.kxt.market.bean.MarketItemBean;
 import com.library.util.SPUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -186,33 +187,50 @@ public class MarketUtil {
     /**
      * @param mContext
      * @param marketList
-     * @param fromSource 0表示来自于网络  1表示来自于本地
+     * @param status     状态为0   则第一次安装使用  2 不比对直接保存
      */
-    public static void saveMarketEditOption(Context mContext, List<MarketItemBean> marketList, int fromSource) {
-        if (fromSource == 0) {
-            String marketEditOption = getMarketEditOption(mContext);
+    public static void saveMarketEditOption(Context mContext, List<MarketItemBean> marketList, int status) {
 
-            List<MarketItemBean> localMarketList = JSONArray.parseArray(marketEditOption, MarketItemBean.class);
-            HashMap<String, MarketItemBean> localCodeMap = new HashMap<>();
-
-            //合并所有本地和网络的数据
-            for (MarketItemBean marketItemBean : localMarketList) {
-                marketItemBean.setFromSource(1);
-                localCodeMap.put(marketItemBean.getCode(), marketItemBean);
-            }
-
-            for (MarketItemBean marketItemBean : marketList) {
-                if (localCodeMap.get(marketItemBean.getCode()) == null) {//如果本地不存这条数据
-                    marketItemBean.setFromSource(0);
-                    marketList.add(marketItemBean);
-                }
-            }
+        Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
+        if (status == 0 && !isInit) {
+            SPUtils.save(mContext, SpConstant.INIT_MARKET_MY_OPTION, true);
+            SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketList));
         }
-        String marketJson = JSON.toJSONString(marketList);
-        SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, marketJson);
+
+        List<MarketItemBean> mergeLocalMarket;
+        if (status == 2) {
+            mergeLocalMarket = marketList;
+        } else {
+            mergeLocalMarket = getMergeLocalMarket(mContext, marketList);
+        }
+        SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, JSON.toJSONString(mergeLocalMarket));
     }
 
-    public static String getMarketEditOption(Context mContext) {
-        return SPUtils.getString(mContext, SpConstant.MARKET_MY_OPTION);
+    public static List<MarketItemBean> getMarketEditOption(Context mContext) {
+        String option = SPUtils.getString(mContext, SpConstant.MARKET_MY_OPTION);
+        if (option == null || "".equals(option)) {
+            return new ArrayList<>();
+        }
+        List<MarketItemBean> list = JSONArray.parseArray(option, MarketItemBean.class);
+        return list;
+    }
+
+    public static List<MarketItemBean> getMergeLocalMarket(Context mContext, List<MarketItemBean> marketItemBeen) {
+        List<MarketItemBean> localMarketList = getMarketEditOption(mContext);
+
+        HashMap<String, MarketItemBean> mergeCodeMap = new HashMap<>();
+        for (MarketItemBean marketItemBean : localMarketList) {
+            mergeCodeMap.put(marketItemBean.getCode(), marketItemBean);
+        }
+
+        for (MarketItemBean marketItemBean : marketItemBeen) {
+
+            MarketItemBean codeItemBean = mergeCodeMap.get(marketItemBean.getCode());
+            if (codeItemBean == null) {
+                localMarketList.add(marketItemBean);
+            }
+        }
+
+        return localMarketList;
     }
 }

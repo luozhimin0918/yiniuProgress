@@ -17,14 +17,21 @@ import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketMainPresenter;
 import com.jyh.kxt.market.presenter.MarketOtherPresenter;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 /**
  * Created by Mr'Dai on 2017/4/25.
@@ -85,8 +92,22 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
         }
         ptrlvContent.setMode(PullToRefreshBase.Mode.DISABLED);
         ptrlvContent.setOnScrollListener(this);
+        if (isZhuYePage) {
+            EventBus.getDefault().register(this);
+        }
     }
 
+    @Subscribe(threadMode = MAIN)
+    public void onMarketEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.MARKET_OPTION_UPDATE:
+                if (isZhuYePage) {
+                    List<MarketItemBean> marketList = (List<MarketItemBean>) eventBus.intentObj;
+                    marketMainPresenter.eventBusUpdate(marketList);
+                }
+                break;
+        }
+    }
 
     @OnClick(R.id.rl_target_nav)
     public void navClick(View view) {
@@ -160,6 +181,9 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (isZhuYePage) {
+            EventBus.getDefault().unregister(this);
+        }
         try {
             ((MarketVPFragment) getParentFragment()).onItemDestroyView(MarketItemFragment.this);
         } catch (Exception e) {
@@ -170,9 +194,11 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (marketMainPresenter != null)
+        if (marketMainPresenter != null) {
             marketMainPresenter.onChangeTheme();
-        if (ptrlvContent != null)
+        }
+        if (ptrlvContent != null) {
             ptrlvContent.onChangeTheme();
+        }
     }
 }

@@ -7,6 +7,7 @@
     android:clipToPadding="false"
     android:paddingLeft="18dp"
     android:paddingTop="18dp"
+    android:id="@+id/rl_content_item"
     android:background="@color/theme1"
     android:paddingRight="18dp"
     android:paddingBottom="10dp">

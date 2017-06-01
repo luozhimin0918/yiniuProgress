@@ -2,7 +2,6 @@ package com.jyh.kxt.datum.presenter;
 
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -90,7 +89,7 @@ public class DataPresenter extends BasePresenter {
                 int paddingLeftRight = SystemUtil.dp2px(mContext, 5);
 
 
-                for (DataHot dataHot : mDataHotList) {
+                for (final DataHot dataHot : mDataHotList) {
 
                     TextView tvTitle = new TextView(mContext);
                     tvTitle.setText(dataHot.getName());
@@ -109,10 +108,11 @@ public class DataPresenter extends BasePresenter {
                     tvTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (topTabViewClick != null) {
-                                int position = dataFragment.llDataNav.indexOfChild(v);
-                                topTabViewClick.topTabSelected(position);
-                            }
+                            Intent intent = new Intent(mContext, DatumHistoryActivity.class);
+                            intent.putExtra("code", dataHot.getCode());
+                            intent.putExtra("type", dataHot.getType());
+                            intent.putExtra(IntentConstant.NAME, dataHot.getName());
+                            mContext.startActivity(intent);
                         }
                     });
                 }
@@ -256,7 +256,8 @@ public class DataPresenter extends BasePresenter {
                         int gapWidth = SystemUtil.dp2px(mContext, 6);
 
 
-                        CircleDrawable mCircleDrawable = new CircleDrawable(ContextCompat.getColor(mContext, R.color.point_color_red));
+                        CircleDrawable mCircleDrawable = new CircleDrawable(ContextCompat.getColor(mContext, R.color
+                                .point_color_red));
                         mCircleDrawable.setBounds(0, 0, gapWidth, gapWidth);
 
                         ImageSpan what = new MyImageSpan(mCircleDrawable);
@@ -273,6 +274,9 @@ public class DataPresenter extends BasePresenter {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(mContext, DatumHistoryActivity.class);
+                            intent.putExtra("groupId", groupId);
+                            intent.putExtra("code", dataList.getCode());
+                            intent.putExtra("type", dataList.getType());
                             intent.putExtra(IntentConstant.NAME, dataList.getName());
                             mContext.startActivity(intent);
                         }

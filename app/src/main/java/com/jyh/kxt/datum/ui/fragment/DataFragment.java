@@ -3,7 +3,6 @@ package com.jyh.kxt.datum.ui.fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,7 +51,6 @@ public class DataFragment extends BaseFragment implements DataPresenter.TopTabVi
 
     @Override
     public void topTabSelected(int position) {
-
     }
 
     @Override

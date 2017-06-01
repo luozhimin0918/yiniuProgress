@@ -6,17 +6,19 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.datum.bean.HistoryChartBean;
 import com.jyh.kxt.datum.bean.TrendBean;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Mr'Dai on 2017/4/13.
  */
 
 public class TrendChartLayout extends RelativeLayout {
+    private HistoryChartBean data;
+
     public TrendChartLayout(Context context) {
         this(context, null);
     }
@@ -28,12 +30,13 @@ public class TrendChartLayout extends RelativeLayout {
     public TrendChartLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        initLayout();
     }
 
     private void initLayout() {
+        int max = data.getY_axis().getMax();
+        int min = data.getY_axis().getMin();
 
-        TrendChartView trendCharView = new TrendChartView(getContext());
+        TrendChartView trendCharView = new TrendChartView(getContext(), min, max);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams
                 (
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -41,19 +44,15 @@ public class TrendChartLayout extends RelativeLayout {
                 );
         addView(trendCharView, layoutParams);
 
-        Random random = new Random();
-        int max = 850;
-        int min = 820;
 
         List<TrendBean> trendList = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
+        for (HistoryChartBean.DataBean dataBean : data.getData()) {
             TrendBean trendBean = new TrendBean();
-            trendBean.date = "2017-03-1" + i;
-            trendBean.price = Double.parseDouble(String.valueOf(random.nextInt(max) % (max - min + 1) + min));
+            trendBean.date = dataBean.getTime();
+            trendBean.price = dataBean.getValue();
             trendList.add(trendBean);
         }
         trendCharView.setTrendData(trendList);
-
 
         TrendChartTextView textView = new TrendChartTextView(getContext());
         textView.setBackgroundResource(R.drawable.shape_trend_chart_view);
@@ -61,5 +60,10 @@ public class TrendChartLayout extends RelativeLayout {
         addView(textView);
 
         trendCharView.setPriceShowView(textView);
+    }
+
+    public void setData(HistoryChartBean data) {
+        this.data = data;
+        initLayout();
     }
 }

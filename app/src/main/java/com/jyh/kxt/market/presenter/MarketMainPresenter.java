@@ -20,6 +20,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
@@ -34,6 +35,7 @@ import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 import java.util.ArrayList;
@@ -65,9 +67,23 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         super(iBaseView);
     }
 
+    public void eventBusUpdate(List<MarketItemBean> marketList) {
+
+        LinearLayout hqLayoutView = (LinearLayout) mainHeaderView.findViewWithTag("hqLayoutView");
+        if (hqLayoutView != null) {
+            hqLayoutView.removeAllViews();
+        }
+
+        MarketMainBean marketMainBean = new MarketMainBean();
+        marketMainBean.setData(marketList);
+
+        createFavorView(marketMainBean, hqLayoutView);
+    }
+
     /**
      * 生成首页的View
      */
+
     public void generateMainHeaderView() {
 
         mainHeaderView = new LinearLayout(mContext);
@@ -154,26 +170,46 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     private void createFavorView(MarketMainBean marketBean) {
 
+        Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
+        if (isInit) {
+            List<MarketItemBean> data = marketBean.getData();
+            data.clear();
+            data.addAll(MarketUtil.getMarketEditOption(mContext));
+        }
+
+        createFavorView(marketBean, null);
+    }
+
+    private void createFavorView(MarketMainBean marketBean, LinearLayout hqLayoutView) {
+
         this.marketBean = marketBean;
         if (marketBean.getData() == null || marketBean.getData().size() == 0) {
             return;
         }
-        createPaddingView(6);
+        if (hqLayoutView == null) {
+            hqLayoutView = new LinearLayout(mContext);
+            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.WRAP_CONTENT));
+            hqLayoutView.setTag("hqLayoutView");
+            hqLayoutView.setOrientation(LinearLayout.VERTICAL);
+
+            mainHeaderView.addView(hqLayoutView);
+        }
+        createPaddingView(6, hqLayoutView);
 
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("我的自选");
-        mainHeaderView.addView(titleBlue);
+        hqLayoutView.addView(titleBlue);
 
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(mContext);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-
         horizontalScrollView.setHorizontalScrollBarEnabled(false);
 
-        mainHeaderView.addView(horizontalScrollView, lp);
+        hqLayoutView.addView(horizontalScrollView, lp);
 
         LinearLayout hqLayout = new LinearLayout(mContext);
         ViewGroup.LayoutParams hqParams = new ViewGroup.LayoutParams(
@@ -208,7 +244,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 }
             });
         }
-        MarketUtil.saveMarketEditOption(mContext, marketBean.getData(),0);
+        MarketUtil.saveMarketEditOption(mContext, marketBean.getData(), 0);
         horizontalScrollView.addView(hqLayout);
     }
 
@@ -256,6 +292,15 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         mainHeaderView.addView(view, lp);
     }
 
+    private void createPaddingView(int heightPx, LinearLayout parentLayout) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_line, null);
+        int height = SystemUtil.dp2px(mContext, heightPx);
+        int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
+        view.setBackgroundColor(paddingColor);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
+        parentLayout.addView(view, lp);
+    }
+
     @Override
     public void onTextMessage(String text) {
         try {
@@ -300,8 +345,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         }
 
         //重新设置头部行情主题
-        if (recommendView != null)
+        if (recommendView != null) {
             recommendView.onChangeTheme();
+        }
 
         //重新设置我的自选主题色
         if (marketBean.getData() == null || marketBean.getData().size() == 0) {

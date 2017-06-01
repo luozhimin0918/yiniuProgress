@@ -326,6 +326,13 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     public List<MarketGridAdapter> quoteGridAdapter = new ArrayList<>();
 
     public void addQuotes() {
+
+        /*Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
+        if (isInit) {
+            quotes.clear();
+            quotes.addAll(MarketUtil.getMarketEditOption(mContext));
+        }*/
+
         for (MarketItemBean marketItemBean : quotes) {
             marketCodeList.add(marketItemBean.getCode());
             marketMap.put(marketItemBean.getCode(), marketItemBean);

@@ -131,6 +131,7 @@ public class FastInfoPinnedListView extends ListView {
      * 0. 表示未拉动
      * 1. 表示上拉中
      * 2. 表示下拉中
+     * 3. 表示上啦没有更多数据
      */
     public int currentPullStatus = 0;
     /**
@@ -205,7 +206,9 @@ public class FastInfoPinnedListView extends ListView {
     }
 
     private void showFoot() {
-
+        if (currentPullStatus == 3) {
+            return;
+        }
         boolean connected = SystemUtil.isConnected(getContext());
         if (!connected) {
             ToastView.makeText3(getContext(), "暂无网络");
@@ -234,12 +237,19 @@ public class FastInfoPinnedListView extends ListView {
             timeOutHandler.removeCallbacksAndMessages(null);
         }
     }
+
     public void goneFoot2() {
         currentPullStatus = 0;
         if (footView.isShown()) {
             footView.setVisibility(View.GONE);
             timeOutHandler.removeCallbacksAndMessages(null);
         }
+    }
+
+    public void noMoreData() {
+        currentPullStatus = 3;
+        footView.setVisibility(View.VISIBLE);
+        footView.setText("暂无更多信息");
     }
 
     public boolean isFootShow() {

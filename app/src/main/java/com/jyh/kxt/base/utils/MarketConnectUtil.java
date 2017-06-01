@@ -42,20 +42,24 @@ public class MarketConnectUtil {
     private WebSocketConnection mConnection = new WebSocketConnection();
 
     public void sendSocketParams(IBaseView iBaseView, JSONArray jsonArray, OnSocketTextMessage onSocketTextMessage) {
-        if (iBaseView == null) {//这里传入的有Fragment 可能被销毁
-            return;
-        }
+        try {
+            if (iBaseView == null) {//这里传入的有Fragment 可能被销毁
+                return;
+            }
 
-        this.onSocketTextMessage = onSocketTextMessage;
-        if (!mConnection.isConnected()) {
-            requestConnectToken(iBaseView, jsonArray);
-        } else {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("cmd", "login");
-            jsonObject.put("codes", jsonArray);
-            mConnection.sendTextMessage(jsonObject.toJSONString());
+            this.onSocketTextMessage = onSocketTextMessage;
+            if (!mConnection.isConnected()) {
+                requestConnectToken(iBaseView, jsonArray);
+            } else {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("cmd", "login");
+                jsonObject.put("codes", jsonArray);
+                mConnection.sendTextMessage(jsonObject.toJSONString());
 
-            Log.e("Socket 已连接发送参数", "sendSocketParams: " + jsonObject.toJSONString());
+                Log.e("Socket 已连接发送参数", "sendSocketParams: " + jsonObject.toJSONString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

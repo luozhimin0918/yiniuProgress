@@ -407,13 +407,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         );
 
-        if (SystemUtil.navigationBar(this) > 10)
+       /* if (SystemUtil.navigationBar(this) > 10)
 
         {
             ViewGroup.LayoutParams layoutParams = space.getLayoutParams();
             layoutParams.height = SystemUtil.navigationBar(this);
             space.setLayoutParams(layoutParams);
-        }
+        }*/
 
         PopupUtil.Config config = new PopupUtil.Config();
 
