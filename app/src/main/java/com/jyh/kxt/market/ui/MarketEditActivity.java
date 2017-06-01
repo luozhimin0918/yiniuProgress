@@ -96,9 +96,10 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         ivBarFunction.setTextColor(rightColor);
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
+        adapterMarketItemList.addAll(MarketUtil.getMarketEditOption(getContext()));
+        defaultInitMarketList.addAll(adapterMarketItemList);
+
         if (userInfo == null) {
-            adapterMarketItemList.addAll(MarketUtil.getMarketEditOption(getContext()));
-            defaultInitMarketList.addAll(adapterMarketItemList);
             initEditInfo();
         } else {
             requestSynchronization(userInfo);
@@ -202,11 +203,14 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
                 super.onErrorResponse(error);
 
                 if (error != null) {
-                    TSnackbar.make(tvBarTitle, error.getMessage() + "", TSnackbar.LENGTH_LONG, TSnackbar
-                            .APPEAR_FROM_BOTTOM_TO_TOP)
-                            .setPromptThemBackground(Prompt.WARNING).show();
+                    if (adapterMarketItemList.size() == 0) {
+                        TSnackbar.make(tvBarTitle, error.getMessage() + "", TSnackbar.LENGTH_LONG, TSnackbar
+                                .APPEAR_FROM_BOTTOM_TO_TOP)
+                                .setPromptThemBackground(Prompt.WARNING).show();
+                    } else {
+                        initEditInfo();
+                    }
                 }
-
                 pllContent.loadOver();
             }
         });

@@ -107,10 +107,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
 
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            savedInstanceState.clear();
+
+            ThemeUtil.removeAllCache();
+            ActivityManager.getInstance().finishAllActivity();
+
+            return;
+        }
+
         mainPresenter = new MainPresenter(this);
 
         //侧边栏相关控件
         initDrawer();
+
 
         try {
             EventBus.getDefault().register(this);
