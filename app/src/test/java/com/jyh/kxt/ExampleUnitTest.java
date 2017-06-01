@@ -1,6 +1,7 @@
 package com.jyh.kxt;
 
-import android.text.SpannableString;
+import com.library.base.http.VarConstant;
+import com.library.util.EncryptionUtils;
 
 import org.junit.Test;
 
@@ -12,7 +13,6 @@ import org.junit.Test;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        SpannableString spannableString = new SpannableString("你好我是测试好");
-        System.out.println(spannableString);
+        System.out.print(EncryptionUtils.parseJWT("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdGF0dXMiOjAsIm1zZyI6Ilx1NTNjMlx1NjU3MFx1OTUxOVx1OGJlZjpjb250ZW50IiwiZGF0YSI6W119.EZc8_jgVcemugAM_7cOiAwhgsYGYdOVvjXBFEyJ-xt8", VarConstant.KEY));
     }
 }
