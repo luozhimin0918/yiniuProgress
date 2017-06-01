@@ -1,16 +1,20 @@
 package com.jyh.kxt.user.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
+import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
+import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.jyh.kxt.user.adapter.CollectFlashAdapter;
@@ -23,6 +27,8 @@ import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -54,10 +60,37 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(this);
         lvContent.setOnRefreshListener(this);
-        lvContent.setMode(PullToRefreshBase.Mode.DISABLED);
+        lvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 
         if (adapter != null)
             lvContent.setAdapter(adapter);
+        lvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                List source = adapter.getSource();
+                Object obj = source.get(position - 1);
+                if (obj != null && obj instanceof FlashJson) {
+                    FlashJson flashJson = (FlashJson) obj;
+                    String type = flashJson.getCode();
+                    String content = flashJson.getContent();
+
+                    CollectActivity ac = (CollectActivity) getActivity();
+
+                    switch (type) {
+                        case VarConstant.SOCKET_FLASH_KUAIXUN:
+                        case VarConstant.SOCKET_FLASH_CJRL:
+                            JumpUtils.jumpDetails(ac, VarConstant.OCLASS_FLASH, flashJson.getUid(), null);
+                            break;
+                        case VarConstant.SOCKET_FLASH_KXTNEWS:
+                            Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
+                            Flash_NEWS.Jump url = flash_news.getUrl();
+                            JumpUtils.jumpDetails(ac, url.getC(), url.getI(), url.getU());
+                            break;
+                    }
+
+                }
+            }
+        });
 
         collectFlashPresenter.init();
     }
@@ -108,7 +141,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             for (Object flash : data) {
                 if (flash instanceof FlashJson) {
                     FlashJson flashJson = (FlashJson) flash;
-                    flashJson.setSel(true);
+                    flashJson.setSel(false);
                 }
             }
             //还原选中数量
@@ -224,7 +257,11 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         lvContent.postDelayed(new Runnable() {
             @Override
             public void run() {
-                lvContent.onRefreshComplete();
+                try {
+                    lvContent.getRefreshableView().goneFoot2();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 500);
     }
@@ -244,6 +281,48 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         super.onChangeTheme();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_FLASH) {
+            FlashJson flash = (FlashJson) eventBus.intentObj;
+            List<FlashJson> data = adapter.getData();
+            for (FlashJson flashJson : data) {
+                if (flash.getSocre().equals(flashJson.getSocre())) {
+                    adapter.removeById(flashJson.getSocre());
+                    adapter.notifyDataSetChanged();
+                    List<FlashJson> data1 = adapter.getData();
+                    if (data1==null||data1.size()==0) {
+                        plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        plRootView.setNullText("");
+                        plRootView.loadEmptyData();
+                    }
+                    return;
+                }
+            }
+            collectFlashPresenter.refresh();
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

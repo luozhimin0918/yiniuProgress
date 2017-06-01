@@ -1,8 +1,11 @@
 package com.jyh.kxt.user.ui.fragment;
 
 import android.content.Intent;
+import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
@@ -13,6 +16,7 @@ import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.adapter.CollectVideoAdapter;
 import com.jyh.kxt.user.presenter.CollectVideoPresenter;
 import com.jyh.kxt.user.ui.CollectActivity;
@@ -24,6 +28,8 @@ import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -45,6 +51,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     private CollectVideoPresenter collectVideoPresenter;
 
     public CollectVideoAdapter adapter;
+    private boolean isRefresh;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -248,7 +255,22 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getQueue().cancelAll(collectVideoPresenter.getClass().getName());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -256,7 +278,40 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         super.onChangeTheme();
         if (adapter != null)
             adapter.notifyDataSetChanged();
-        if(plvContent!=null)
+        if (plvContent != null)
             plvContent.setDividerNull();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_VIDEO) {
+            if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_FLASH) {
+                VideoListJson flash = (VideoListJson) eventBus.intentObj;
+                List<VideoListJson> data = adapter.getData();
+                for (VideoListJson flashJson : data) {
+                    if (flash.getId().equals(flashJson.getId())) {
+                        adapter.removeById(flashJson.getId());
+                        adapter.notifyDataSetChanged();
+                        List<VideoListJson> data1 = adapter.getData();
+                        if (data1 == null || data1.size() == 0) {
+                            plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                            plRootView.setNullText("");
+                            plRootView.loadEmptyData();
+                        }
+                        return;
+                    }
+                }
+                collectVideoPresenter.refresh();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isRefresh) {
+            isRefresh = false;
+            collectVideoPresenter.refresh();
+        }
     }
 }

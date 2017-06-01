@@ -47,11 +47,10 @@ public class CollectFlashPresenter extends BasePresenter {
             }
             collectFlashFragment.loadMore(newsMore);
         } else {
-
             collectFlashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    collectFlashFragment.lvContent.onRefreshComplete();
+                    collectFlashFragment.lvContent.getRefreshableView().goneFoot2();
                     ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
             }, 500);
@@ -59,10 +58,16 @@ public class CollectFlashPresenter extends BasePresenter {
     }
 
     public void refresh() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_FLASH, new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
+                    collectFlashFragment.lvContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            collectFlashFragment.lvContent.onRefreshComplete();
+                        }
+                    }, 500);
                 } else {
                     int size = list.size();
                     pageCount = size / VarConstant.LIST_MAX_SIZE;

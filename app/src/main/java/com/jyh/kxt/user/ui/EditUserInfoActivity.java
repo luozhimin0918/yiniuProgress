@@ -445,6 +445,25 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
         tvWork.setText(oldValue);
     }
 
+    public void restorePhoto() {
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        int imgSize = (int) getResources().getDimension(R.dimen.item_height);
+        Glide.with(getContext())
+                .load(userInfo.getPicture())
+                .asBitmap()
+                .override(imgSize, imgSize)
+
+                .error(R.mipmap.icon_user_def_photo)
+                .placeholder(R.mipmap.icon_user_def_photo)
+
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ivPhoto.setImageBitmap(resource);
+                    }
+                });
+    }
+
     @Override
     public void keyBoardShow(int height) {
 //        ViewGroup.LayoutParams layoutParams = namePopView.getLayoutParams();
@@ -457,4 +476,5 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
     public void keyBoardHide(int height) {
         popupWindow.dismiss();
     }
+
 }

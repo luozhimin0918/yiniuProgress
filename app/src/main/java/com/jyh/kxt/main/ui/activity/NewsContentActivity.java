@@ -62,6 +62,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -72,6 +73,8 @@ import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +127,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private View popupView;
     private int commentCount;
     private FunctionAdapter functionAdapter;
+    private String font;//字体大小
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +170,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 //收藏
                 if (isLoadOver) {
                     NewsContentJson newsContentJson = webViewAndHead.newsContentJson;
-                    NewsJson newsJson = new NewsJson();
+                    final NewsJson newsJson = new NewsJson();
                     newsJson.setAuthor(newsContentJson.getAuthor_name());
                     newsJson.setDataType(VarConstant.DB_TYPE_COLLECT_LOCAL);
                     newsJson.setDatetime(newsContentJson.getCreate_time());
@@ -183,6 +187,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             public void callback(Object o) {
                                 ivCollect.setSelected(false);
                                 isCollect = false;
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS,newsJson));
                             }
 
                             @Override
@@ -197,6 +202,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             public void callback(Object o) {
                                 ivCollect.setSelected(true);
                                 isCollect = true;
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS,newsJson));
                             }
 
                             @Override
@@ -302,7 +308,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         selectView.setSelectItemListener(new SelectLineView.SelectItemListener() {
             @Override
             public void selectItem(int position) {
-                String font = "";
                 switch (position) {
                     case 0:
                         font = fontS;
@@ -460,6 +465,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         shareImg = HttpConstant.IMG_URL + newsContentJson.getPicture();
         fontS = newsContentJson.getFont_small();
         fontM = newsContentJson.getFont_mid();
+        font = fontM;
         fontB = newsContentJson.getFont_big();
         content = newsContentJson.getContent();
         night = newsContentJson.getNight_style();
@@ -774,7 +780,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             if (functionAdapter != null)
                 functionAdapter.notifyDataSetChanged();
             if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null)
-                newsContentPresenter.commentAdapter.notifyDataSetChanged();
+                newsContentPresenter.commentAdapter.notifyDataSetInvalidated();
+            if(commentPresenter!=null)
+                commentPresenter.onChangeTheme();
         } catch (Exception e) {
             e.printStackTrace();
         }

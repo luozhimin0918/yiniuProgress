@@ -281,7 +281,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @Override
     public void onPageSelected(int position) {
-
+        stlNavigationBar.setCurrentTab(position);
     }
 
     @Override

@@ -19,6 +19,7 @@
             android:layout_centerVertical="true"
             android:text="展开"
             android:textColor="@color/font_color6"
+            android:visibility="invisible"
             android:gravity="center"
             android:textSize="@dimen/content_font_size"/>
 
@@ -26,6 +27,7 @@
             android:id="@+id/iv_more"
             android:layout_width="@dimen/flash_bottom_imgWidth"
             android:layout_height="@dimen/flash_bottom_imgHeight"
+            android:visibility="invisible"
             android:layout_marginTop="4dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/flash_bottom_padding"

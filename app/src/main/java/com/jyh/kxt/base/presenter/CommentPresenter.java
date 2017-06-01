@@ -44,6 +44,10 @@ import butterknife.ButterKnife;
  */
 
 public class CommentPresenter extends BasePresenter implements SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
+    public void onChangeTheme() {
+
+    }
+
     public enum ClickName {
         MORE_VIEW_ITEM,//更多视图
         NONE_COMMENT//暂无评论

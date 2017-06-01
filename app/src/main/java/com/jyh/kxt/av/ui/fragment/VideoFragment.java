@@ -170,5 +170,7 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
                 if (fragment instanceof BaseFragment)
                     ((BaseFragment) fragment).onChangeTheme();
             }
+        if (stlNavigationBar != null)
+            stlNavigationBar.notifyDataSetChanged();
     }
 }
