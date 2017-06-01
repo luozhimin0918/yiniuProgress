@@ -60,12 +60,7 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
                 .icon_def_video).into(viewHolder.ivPhoto);
         viewHolder.tvTitle.setText(videoBean.getTitle());
 
-        try {
-            viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(videoBean.getCreate_time()) * 1000));
-        } catch (Exception e) {
-            e.printStackTrace();
-            viewHolder.tvTime.setText("00:00");
-        }
+        viewHolder.tvTime.setText(videoBean.getNum_play());
 
         return convertView;
     }
@@ -77,7 +72,7 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
 
         int paddingVal = SystemUtil.dp2px(context, 4);
         holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_time, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_play_small, 0, 0, 0);
 
         if (position < 10) {
             holder.ivRank.setVisibility(View.VISIBLE);

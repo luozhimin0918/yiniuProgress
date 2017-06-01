@@ -121,10 +121,10 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         });
 
         try {
-            viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(videoBean.getCreate_time()) * 1000));
+            viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(videoBean.getCreate_time()) * 1000, DateUtils.TYPE_YMD));
         } catch (Exception e) {
             e.printStackTrace();
-            viewHolder.tvTime.setText("00:00");
+            viewHolder.tvTime.setText("2017-1-1");
         }
 
         return convertView;

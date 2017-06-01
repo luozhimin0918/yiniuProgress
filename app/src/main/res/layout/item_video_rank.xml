@@ -50,7 +50,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/rankItemTimeMarginBottom"
         android:layout_toRightOf="@id/fl_photo"
-        android:drawableLeft="@mipmap/icon_video_time"
+        android:drawableLeft="@mipmap/icon_video_play_small"
         android:drawablePadding="@dimen/rankItemTimeDrawablePadding"
         android:textColor="@color/font_color3"/>
 

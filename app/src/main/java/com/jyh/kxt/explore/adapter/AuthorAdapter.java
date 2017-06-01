@@ -53,8 +53,8 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
 
         setTheme(holder);
 
-        holder.tvCount.setText(author.getArticle_num());
-        holder.tvFans.setText(author.getNum_fans());
+        holder.tvCount.setText("文章 " + author.getArticle_num());
+        holder.tvFans.setText("粉丝 " + author.getNum_fans());
         holder.tvName.setText(author.getName());
 
         Glide.with(mContext)
