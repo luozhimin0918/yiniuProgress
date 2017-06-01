@@ -5,6 +5,7 @@
     android:layout_height="30dp"
     android:gravity="center"
     android:background="@color/gray_btn_bg_color"
+    android:textColor="#666666"
     android:text="日历">
 
 </TextView>

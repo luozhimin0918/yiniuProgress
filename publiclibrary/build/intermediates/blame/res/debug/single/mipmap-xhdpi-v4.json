@@ -1,38 +1,50 @@
 [
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\toast_icon.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\toast_icon.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ico_calendar_data.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\ico_calendar_data.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ico_calendar_data.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\ico_calendar_data.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_def_news.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_def_news.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ic_launcher.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\volley_update.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\volley_update.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\volley_update.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\volley_update.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\erorr_net.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\erorr_net.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ico_def_load.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\ico_def_load.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_not_data.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_not_data.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_error.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_error.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\error.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\error.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\erorr_net.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\erorr_net.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ic_launcher.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\loading.gif",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\loading.gif"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_error.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_error.png"
     },
     {
-        "merged": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\error.png",
-        "source": "D:\\Android\\Repertory\\KxtProfessional\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\error.png"
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\loading.gif",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\loading.gif"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_error_load.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_error_load.png"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\icon_error_net.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\icon_error_net.png"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\toast_icon.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\src\\main\\res\\mipmap-xhdpi\\toast_icon.png"
     }
 ]
