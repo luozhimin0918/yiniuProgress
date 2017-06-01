@@ -218,7 +218,7 @@ public class MarketEditAdapter extends RecyclerView.Adapter<MarketEditAdapter.It
 
         @Override
         public void onItemClear() {
-            int color = ContextCompat.getColor(marketEditActivity, R.color.white);
+            int color = ContextCompat.getColor(marketEditActivity, R.color.theme1);
             itemView.setBackgroundColor(color);
         }
     }
