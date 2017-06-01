@@ -160,8 +160,12 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         BaseFragment currentFragment;
         if (position == 0) {
             currentFragment = calendarFragment = calendarFragment == null ? new CalendarFragment() : calendarFragment;
+            ivFiltrate.setVisibility(View.VISIBLE);
+            ivCalendar.setVisibility(View.VISIBLE);
         } else {
             currentFragment = dataFragment = dataFragment == null ? new DataFragment() : dataFragment;
+            ivFiltrate.setVisibility(View.GONE);
+            ivCalendar.setVisibility(View.GONE);
         }
         replaceFragment(currentFragment);
         lastFragment = currentFragment;

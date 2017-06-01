@@ -148,7 +148,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                     ((BaseFragment) fragment).onChangeTheme();
                 }
             }
-        if (stlNavigationBar != null) stlNavigationBar.notifyDataSetChanged();
         }
+        if (stlNavigationBar != null) stlNavigationBar.notifyDataSetChanged();
     }
 }

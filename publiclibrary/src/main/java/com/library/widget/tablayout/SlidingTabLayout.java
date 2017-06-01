@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -109,6 +110,8 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     private float mTextsize;
     private int mTextSelectColor;
     private int mTextUnselectColor;
+    private int mTextUnselectColorResource;
+
     private int mTextBold;
     private boolean mTextAllCaps;
 
@@ -182,6 +185,8 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         mTextsize = ta.getDimension(R.styleable.SlidingTabLayout_tl_textsize, sp2px(14));
         mTextSelectColor = ta.getColor(R.styleable.SlidingTabLayout_tl_textSelectColor, Color.parseColor("#ffffff"));
         mTextUnselectColor = ta.getColor(R.styleable.SlidingTabLayout_tl_textUnselectColor, Color.parseColor("#AAffffff"));
+       mTextUnselectColorResource = ta.getResourceId(R.styleable.SlidingTabLayout_tl_textUnselectColor, R.color.gray_btn_bg_color);
+
         mTextBold = ta.getInt(R.styleable.SlidingTabLayout_tl_textBold, TEXT_BOLD_NONE);
         mTextAllCaps = ta.getBoolean(R.styleable.SlidingTabLayout_tl_textAllCaps, false);
 
@@ -356,6 +361,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     }
 
     protected void updateTabStyles() {
+        mTextUnselectColor = ContextCompat.getColor(mContext, mTextUnselectColorResource);
         for (int i = 0; i < mTabCount; i++) {
             View v = mTabsContainer.getChildAt(i);
 //            v.setPadding((int) mTabPadding, v.getPaddingTop(), (int) mTabPadding, v.getPaddingBottom());
@@ -432,6 +438,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     }
 
     private void updateTabSelection(int position) {
+        mTextUnselectColor = ContextCompat.getColor(mContext, mTextUnselectColorResource);
         for (int i = 0; i < mTabCount; ++i) {
             View tabView = mTabsContainer.getChildAt(i);
             final boolean isSelect = i == position;

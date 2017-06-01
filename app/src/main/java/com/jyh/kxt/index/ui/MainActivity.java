@@ -436,7 +436,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 Glide.with(getContext())
                         .load(userJson.getPicture())
                         .crossFade(1000)
-                        .bitmapTransform(new BlurTransformation(getContext(),23,4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                        .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
                         .into(new SimpleTarget<GlideDrawable>() {
                             @Override
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -550,9 +550,25 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         drawer.openDrawer(Gravity.LEFT);
     }
 
-    //五百八十二加七千九百二十五  582+
     @Override
     protected void onChangeTheme() {
-        super.onChangeTheme();
+        try {
+            if (LoginUtils.isLogined(this)) {
+                UserJson userInfo = LoginUtils.getUserInfo(this);
+                super.onChangeTheme();
+                Glide.with(getContext())
+                        .load(userInfo.getPicture())
+                        .crossFade(1000)
+                        .bitmapTransform(new BlurTransformation(getContext(), 23, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                        .into(new SimpleTarget<GlideDrawable>() {
+                            @Override
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                loginView.setBackground(resource);
+                            }
+                        });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

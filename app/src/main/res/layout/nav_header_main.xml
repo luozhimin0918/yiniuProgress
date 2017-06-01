@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_image_height"
         android:layout_marginBottom="@dimen/drawer_head_bottom"
-        android:background="@mipmap/icon_user_login_bg_login"
         android:visibility="visible">
 
         <com.jyh.kxt.base.custom.RoundImageView
@@ -30,7 +29,7 @@
             android:layout_below="@+id/riv_avatar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/drawer_head_login_name_marginTop"
-            android:textColor="@color/white"/>
+            android:textColor="#fff"/>
     </RelativeLayout>
 
     <RelativeLayout

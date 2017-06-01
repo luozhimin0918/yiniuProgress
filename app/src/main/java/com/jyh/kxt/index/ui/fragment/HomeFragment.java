@@ -106,12 +106,14 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     public void onTabSelect(int position) {
         this.position = position;
         vpContent.setCurrentItem(position);
+        changeRightIcon(position);
     }
 
-    @Override
-    public void onTabReselect(int position) {
-        this.position = position;
-        stlNavigationBar.setCurrentTab(position);
+    /**
+     * 更改右上角图片
+     * @param position
+     */
+    private void changeRightIcon(int position) {
         if (position == 0) {
 
             currentFragment = newsFragment;
@@ -129,6 +131,12 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             ivRightIcon1.setVisibility(View.VISIBLE);
             ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
         }
+    }
+
+    @Override
+    public void onTabReselect(int position) {
+        this.position = position;
+        stlNavigationBar.setCurrentTab(position);
     }
 
     @OnClick({R.id.iv_left_icon, R.id.iv_right_icon2, R.id.iv_right_icon1})
@@ -282,6 +290,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onPageSelected(int position) {
         stlNavigationBar.setCurrentTab(position);
+        changeRightIcon(position);
     }
 
     @Override
