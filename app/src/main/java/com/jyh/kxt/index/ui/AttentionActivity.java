@@ -105,6 +105,7 @@ public class AttentionActivity extends BaseActivity implements ViewPager.OnPageC
     @Override
     protected void onChangeTheme() {
         super.onChangeTheme();
+        if(stlNavigationBar!=null)
         stlNavigationBar.notifyDataSetChanged();
         if (attentionArticleFragment != null)
             attentionArticleFragment.onChangeTheme();

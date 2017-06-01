@@ -294,6 +294,7 @@ public class CollectVideoPresenter extends BasePresenter {
                             lastId = "";
                         }
                         collectVideoFragment.loadMore(o);
+                        CollectUtils.netToLocalSynchronization(mContext,VarConstant.COLLECT_TYPE_VIDEO,o);
                     }
                 }
 

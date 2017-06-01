@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/collect_video_height"
-                android:paddingBottom="@dimen/collect_padding1"
-                android:paddingLeft="@dimen/newsContentPadding3"
-                android:paddingRight="@dimen/newsContentPadding3"
-                android:paddingTop="@dimen/collect_padding1">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="@dimen/collect_video_height"
+              android:orientation="horizontal"
+              android:paddingBottom="@dimen/collect_padding1"
+              android:paddingLeft="@dimen/newsContentPadding3"
+              android:paddingRight="@dimen/newsContentPadding3"
+              android:paddingTop="@dimen/collect_padding1">
 
     <FrameLayout
         android:id="@+id/fl_del"
@@ -24,7 +25,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/fl_del">
 
@@ -83,4 +84,4 @@
             android:textSize="@dimen/describe_font_size1"/>
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

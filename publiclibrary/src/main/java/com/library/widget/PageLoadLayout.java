@@ -114,7 +114,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         if (nullImgId != 0) {
             imageView.setImageResource(nullImgId);
         }
-        if (!TextUtils.isEmpty(nullText)) {
+        if (nullText != null) {
             textView.setText(nullText);
         }
 

@@ -290,6 +290,7 @@ public class CollectNewsPresenter extends BasePresenter {
                             lastId = "";
                         }
                         collectNewsFragment.loadMore(o);
+                        CollectUtils.netToLocalSynchronization(mContext,VarConstant.COLLECT_TYPE_ARTICLE,o);
                     }
                 }
 

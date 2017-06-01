@@ -4,9 +4,13 @@ import android.content.Context;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,6 +26,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
+import com.nineoldandroids.animation.AnimatorSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +47,7 @@ import butterknife.ButterKnife;
 
 public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
 
-    private final int widthPixels;
+    private int widthPixels;
     private Context context;
     private boolean isEdit = false;
     private Set<String> delIds = new HashSet<>();
@@ -50,7 +55,8 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
     public CollectVideoAdapter(List<VideoListJson> dataList, Context context) {
         super(dataList);
         this.context = context;
-        widthPixels = SystemUtil.getScreenDisplay(context).widthPixels;
+        widthPixels = (int) (SystemUtil.getScreenDisplay(context).widthPixels - context.getResources().getDimension(R.dimen
+                .newsContentPadding3) * 2);
     }
 
     @Override
@@ -68,8 +74,13 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
 
         if (isEdit) {
             viewHolder.flDel.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams layoutParams = viewHolder.rlContent.getLayoutParams();
+            layoutParams.width = widthPixels;
+            viewHolder.rlContent.setLayoutParams(layoutParams);
         } else {
             viewHolder.flDel.setVisibility(View.GONE);
+
+
         }
 
         final VideoListJson videoBean = dataList.get(position);

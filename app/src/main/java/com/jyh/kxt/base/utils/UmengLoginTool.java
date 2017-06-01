@@ -70,19 +70,21 @@ public class UmengLoginTool {
         login(context, platform, data);
     }
 
-    private static void login(BaseActivity context, SHARE_MEDIA platform, Map data) {
+    private static void login(final BaseActivity context, SHARE_MEDIA platform, Map data) {
         RequestQueue queue = context.getQueue();
         VolleyRequest request = new VolleyRequest(context, queue);
         Map map = getMap(request, platform, data);
         request.doPost(HttpConstant.USER_LOGIN, map, new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson user) {
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN,user));
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, user));
+                context.dismissWaitDialog();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                context.dismissWaitDialog();
             }
         });
     }

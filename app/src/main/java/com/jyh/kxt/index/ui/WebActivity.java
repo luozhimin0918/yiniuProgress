@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -14,15 +13,12 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.presenter.WebPresenter;
-import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
