@@ -444,7 +444,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     private TSnackbar snackBar;
 
     public void postChangedInfo(final String newValue, final String oldValue, final String type) {
-        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN) ;
+        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
@@ -647,6 +647,10 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      */
     public void postBitmap(byte[] lastByte) {
         final String bitmapStr = BitmapUtils.drawableToByte(lastByte);
+        snackBar = TSnackbar.make(activity.plRootView, "头像更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
         request.doPost(HttpConstant.USER_UPLOAD_AVATAR, getPhotoMap(bitmapStr), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
@@ -654,11 +658,18 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                 newUser.setPictureStr(bitmapStr);
                 LoginUtils.changeUserInfo(mContext, newUser);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("头像更改成功").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText("头像更改失败").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                activity.restorePhoto();
             }
         });
     }

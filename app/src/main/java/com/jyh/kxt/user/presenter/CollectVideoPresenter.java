@@ -53,8 +53,18 @@ public class CollectVideoPresenter extends BasePresenter {
         lastId = "";
         collectVideoFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
-            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
-            initNetData();
+            //先提交本地收藏,再请求网络收藏
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData() {
+                @Override
+                public void callback(Object o) {
+                    initNetData();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    initNetData();
+                }
+            });
         } else {
             initLocalData();
         }

@@ -66,11 +66,6 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
                 NewsJson newsJson = adapter.dataList.get(position - 1);
 
                 JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
-//                //保存浏览记录
-//                BrowerHistoryUtils.save(getContext(), newsJson);
-//
-//                //单条刷新,改变浏览状态
-//                adapter.getView(position, view, parent);
             }
         });
 

@@ -9,6 +9,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
@@ -53,8 +54,18 @@ public class CollectNewsPresenter extends BasePresenter {
         lastId = "";
         collectNewsFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
-            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE);
-            initNetData();
+            //先提交本地收藏,再请求网络收藏
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE, new ObserverData() {
+                @Override
+                public void callback(Object o) {
+                    initNetData();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    initNetData();
+                }
+            });
         } else {
             initLocalData();
         }
@@ -148,6 +159,9 @@ public class CollectNewsPresenter extends BasePresenter {
                         isMore = false;
                         lastId = "";
                     }
+
+                    CollectUtils.netToLocalSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE, o);
+
                     collectNewsFragment.initData(o);
                     collectNewsFragment.plRootView.loadOver();
                 }
@@ -297,7 +311,7 @@ public class CollectNewsPresenter extends BasePresenter {
                 public void run() {
                     collectNewsFragment.plvContent.onRefreshComplete();
                 }
-            },200);
+            }, 200);
         }
     }
 

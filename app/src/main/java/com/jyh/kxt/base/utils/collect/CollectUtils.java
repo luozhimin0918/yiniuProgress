@@ -11,6 +11,8 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
+import com.jyh.kxt.base.dao.NewsJsonDao;
+import com.jyh.kxt.base.dao.VideoListJsonDao;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
@@ -125,14 +127,15 @@ public class CollectUtils {
      * @param context
      * @param type
      */
-    public static void localToNetSynchronization(final Context context, String type) {
+    public static void localToNetSynchronization(final Context context, String type, final ObserverData observerData) {
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         DaoSession dbRead = DBManager.getInstance(context).getDaoSessionRead();
         StringBuffer ids = new StringBuffer();
         switch (type) {
             case VarConstant.COLLECT_TYPE_ARTICLE:
-                List<NewsJson> newsJsons = dbRead.getNewsJsonDao().loadAll();
+                List<NewsJson> newsJsons = dbRead.getNewsJsonDao().queryBuilder().where
+                        (NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")).list();
                 for (NewsJson newsJson : newsJsons) {
                     String o_id = newsJson.getO_id();
                     if ("".equals(ids.toString())) {
@@ -143,7 +146,8 @@ public class CollectUtils {
                 }
                 break;
             case VarConstant.COLLECT_TYPE_VIDEO:
-                List<VideoListJson> videoListJsons = dbRead.getVideoListJsonDao().loadAll();
+                List<VideoListJson> videoListJsons = dbRead.getVideoListJsonDao().queryBuilder().where
+                        (VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")).list();
                 for (VideoListJson videoListJson : videoListJsons) {
                     String id = videoListJson.getId();
                     if ("".equals(ids.toString()))
@@ -153,21 +157,21 @@ public class CollectUtils {
                 }
                 break;
         }
-
-        if ("".equals(ids.toString())) {
-            return;
-        }
+//
+//        if ("".equals(ids.toString())) {
+//            return;
+//        }
 
         request.doGet(getUrl(context, type, request, ids.toString()), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                ToastView.makeText3(context, "网络收藏已同步");
+                observerData.callback(null);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                ToastView.makeText3(context, "网络收藏同步失败");
+                observerData.onError(null);
             }
         });
     }
@@ -183,16 +187,19 @@ public class CollectUtils {
         switch (type) {
             case VarConstant.COLLECT_TYPE_ARTICLE:
                 for (NewsJson obj : (List<NewsJson>) data) {
+                    if (isCollect(context, type, obj)) continue;
                     CollectLocalUtils.collect(context, type, obj, null, null);
                 }
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
                 for (FlashJson obj : (List<FlashJson>) data) {
+                    if (isCollect(context, type, obj)) continue;
                     CollectLocalUtils.collect(context, type, obj, null, null);
                 }
                 break;
             case VarConstant.COLLECT_TYPE_VIDEO:
                 for (VideoListJson obj : (List<VideoListJson>) data) {
+                    if (isCollect(context, type, obj)) continue;
                     CollectLocalUtils.collect(context, type, obj, null, null);
                 }
                 break;
