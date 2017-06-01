@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\mipmap-night-xhdpi-v8\\icon_error_load.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\bundles\\debug\\res\\mipmap-night-xhdpi-v8\\icon_error_load.png"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\mipmap-night-xhdpi-v8\\icon_def_news.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\bundles\\debug\\res\\mipmap-night-xhdpi-v8\\icon_def_news.png"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\mipmap-night-xhdpi-v8\\icon_error_net.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\bundles\\debug\\res\\mipmap-night-xhdpi-v8\\icon_error_net.png"
+    },
+    {
+        "merged": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\mipmap-night-xhdpi-v8\\icon_not_data.png",
+        "source": "D:\\git\\kxt\\Kxt\\publiclibrary\\build\\intermediates\\bundles\\debug\\res\\mipmap-night-xhdpi-v8\\icon_not_data.png"
+    }
+]
