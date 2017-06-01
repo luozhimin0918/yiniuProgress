@@ -68,66 +68,73 @@
         </LinearLayout>
     </com.library.widget.PageLoadLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color3"/>
-
     <LinearLayout
+        android:id="@+id/ll_nav"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/videoNavHeight"
-        android:orientation="horizontal"
-        >
+        android:layout_height="@dimen/videoNavHeight2"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_color3"/>
 
-        <ImageView
-            android:id="@+id/iv_break"
-            style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_nav_break"/>
-
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:orientation="horizontal"
+            >
 
             <ImageView
-                android:id="@+id/iv_comment"
-                android:layout_width="match_parent"
+                android:id="@+id/iv_break"
+                style="@style/Audio_RB_Style"
+                android:src="@mipmap/icon_nav_break"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:scaleType="center"
-                android:src="@mipmap/icon_nav_commend"/>
+                android:layout_weight="1">
 
-            <View
-                android:id="@+id/view_zw"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:layout_centerInParent="true"></View>
+                <ImageView
+                    android:id="@+id/iv_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@mipmap/icon_nav_commend"/>
 
-            <TextView
-                android:id="@+id/tv_commentCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/view_zw"
-                android:background="@drawable/shape_read_count"
-                android:textColor="@color/white"
-                android:textSize="@dimen/min_min_font_size"/>
-        </RelativeLayout>
+                <View
+                    android:id="@+id/view_zw"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    android:layout_centerInParent="true"></View>
+
+                <TextView
+                    android:id="@+id/tv_commentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/view_zw"
+                    android:background="@drawable/shape_read_count"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/min_min_font_size"/>
+            </RelativeLayout>
 
 
-        <ImageView
-            android:id="@+id/iv_collect"
-            style="@style/Audio_RB_Style"
-            android:src="@drawable/sel_nav_collect"/>
+            <ImageView
+                android:id="@+id/iv_collect"
+                style="@style/Audio_RB_Style"
+                android:src="@drawable/sel_nav_collect"/>
 
-        <ImageView
-            android:id="@+id/iv_like"
-            style="@style/Audio_RB_Style"
-            android:src="@drawable/sel_nav_like"/>
+            <ImageView
+                android:id="@+id/iv_like"
+                style="@style/Audio_RB_Style"
+                android:src="@drawable/sel_nav_like"/>
 
-        <ImageView
-            android:id="@+id/iv_share"
-            style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_nav_share"/>
+            <ImageView
+                android:id="@+id/iv_share"
+                style="@style/Audio_RB_Style"
+                android:src="@mipmap/icon_nav_share"/>
 
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

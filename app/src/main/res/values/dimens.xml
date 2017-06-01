@@ -166,6 +166,7 @@
     <dimen name="videoTitlePadding">15dp</dimen>
     <dimen name="videoTitlePlayCountPadding">7dp</dimen>
     <dimen name="videoNavHeight">49dp</dimen>
+    <dimen name="videoNavHeight2">50dp</dimen>
     <dimen name="videoNavPadding">15dp</dimen>
 
     <dimen name="videoDrawablePadding">5dp</dimen>
