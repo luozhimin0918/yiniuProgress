@@ -97,8 +97,9 @@
     <FrameLayout
         android:id="@+id/fl_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/drawer_item_height"
+        android:layout_height="@dimen/drawer_search_height"
         android:paddingLeft="@dimen/drawer_edtPadding"
+        android:layout_marginBottom="10dp"
         android:paddingRight="@dimen/drawer_edtPadding"
         >
 
@@ -107,10 +108,10 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_edt"
             android:drawableLeft="@mipmap/icon_drawer_search"
-            android:drawablePadding="5dp"
+            android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:hint="搜索文章、视频"
-            android:paddingLeft="@dimen/newsContentPadding3"
+            android:text="搜索文章、视频"
+            android:paddingLeft="7dp"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/content_font_size"/>
     </FrameLayout>
@@ -125,7 +126,7 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_collect"/>
 
         <TextView
@@ -133,7 +134,8 @@
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="我的收藏"
-            android:textColor="@color/font_color1"/>
+            android:textSize="@dimen/content_font_size2"
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -147,7 +149,7 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_like"/>
 
         <TextView
@@ -155,7 +157,8 @@
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="我的关注"
-            android:textColor="@color/font_color1"/>
+            android:textSize="@dimen/content_font_size2"
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -169,15 +172,16 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_history"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
+            android:textSize="@dimen/content_font_size2"
             android:text="浏览历史"
-            android:textColor="@color/font_color1"/>
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -191,15 +195,16 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_pl"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
+            android:textSize="@dimen/content_font_size2"
             android:gravity="center"
             android:text="评论查询"
-            android:textColor="@color/font_color1"/>
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -214,15 +219,16 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_about"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
+            android:textSize="@dimen/content_font_size2"
             android:text="我的活动"
-            android:textColor="@color/font_color1"/>
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -236,7 +242,7 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_share"/>
 
         <TextView
@@ -244,7 +250,8 @@
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="推荐给好友"
-            android:textColor="@color/font_color1"/>
+            android:textSize="@dimen/content_font_size2"
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -258,15 +265,16 @@
         <ImageView
             android:layout_width="@dimen/drawer_item_height"
             android:layout_height="@dimen/drawer_item_height"
-            android:padding="@dimen/drawer_imgPadding"
+            android:padding="12dp"
             android:src="@mipmap/icon_drawer_quit"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
+            android:textSize="@dimen/content_font_size2"
             android:text="退出登录"
-            android:textColor="@color/font_color1"/>
+            android:textColor="@color/font_color5"/>
     </LinearLayout>
 
     <View
@@ -289,7 +297,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <LinearLayout
                 android:id="@+id/ll_setting"
@@ -301,17 +310,18 @@
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/drawer_item_height"
-                    android:layout_height="@dimen/drawer_item_height"
-                    android:padding="@dimen/drawer_imgPadding"
+                    android:layout_marginLeft="14dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="@dimen/drawer_imgPadding"
                     android:src="@mipmap/icon_drawer_setting"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:text="设置"
-                    android:textColor="@color/font_color1"/>
+                    android:textColor="@color/font_color5"/>
             </LinearLayout>
 
             <LinearLayout
@@ -324,17 +334,17 @@
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/drawer_item_height"
-                    android:layout_height="@dimen/drawer_item_height"
-                    android:padding="@dimen/drawer_imgPadding"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="@dimen/drawer_imgPadding"
                     android:src="@mipmap/icon_drawer_about"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/drawer_item_height"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:text="关于"
-                    android:textColor="@color/font_color1"/>
+                    android:textColor="@color/font_color5"/>
             </LinearLayout>
 
             <LinearLayout
@@ -342,24 +352,26 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center_vertical|right"
                 android:orientation="horizontal"
                 >
 
                 <ImageView
                     android:id="@+id/iv_theme"
-                    android:layout_width="@dimen/drawer_item_height"
-                    android:layout_height="@dimen/drawer_item_height"
-                    android:padding="@dimen/drawer_imgPadding"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="@dimen/drawer_imgPadding"
                     android:src="@mipmap/icon_drawer_theme"/>
 
                 <TextView
                     android:id="@+id/tv_theme"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/drawer_item_height"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:text="夜间"
-                    android:textColor="@color/font_color1"/>
+                    android:textColor="@color/font_color5"
+                    android:layout_marginRight="14dp"
+                    />
             </LinearLayout>
         </LinearLayout>
 

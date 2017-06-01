@@ -66,6 +66,7 @@
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>
+    <dimen name="drawer_search_height">31dp</dimen>
     <dimen name="av_video_height">211dp</dimen>
 
     <dimen name="index_slide">180dp</dimen>
@@ -89,7 +90,7 @@
 
 
     <!-- 侧滑菜单 -->
-    <dimen name="drawer_head_bottom">15dp</dimen>
+    <dimen name="drawer_head_bottom">28dp</dimen>
     <dimen name="drawer_head_login_avatarSize">90dp</dimen>
     <dimen name="drawer_head_login_name_marginTop">8dp</dimen>
     <dimen name="drawer_head_unlogin_imgMarginTop">50dp</dimen>
@@ -99,7 +100,7 @@
     <dimen name="drawer_head_unlogin_tvMarginRight">16dp</dimen>
 
     <dimen name="drawer_imgPadding">10dp</dimen>
-    <dimen name="drawer_edtPadding">20dp</dimen>
+    <dimen name="drawer_edtPadding">24dp</dimen>
 
     <!-- 修改个人信息 -->
 
