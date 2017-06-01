@@ -95,10 +95,10 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());
         try {
-            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000));
+            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils.TYPE_YMD));
         } catch (Exception e) {
             e.printStackTrace();
-            holder.tvTime.setText("00:00");
+            holder.tvTime.setText("2017-1-1");
         }
         holder.tvCommentCount.setText(video.getNum_comment());
         holder.tvPlayCount.setText(video.getNum_play());
@@ -108,7 +108,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             public void onClick(View v) {
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
-                                "", HttpConstant.IMG_URL +video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
+                                "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
                                 video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, GoodUtils.isGood(mContext, video
                                 .getId(), VarConstant.GOOD_TYPE_VIDEO), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
                         video)),

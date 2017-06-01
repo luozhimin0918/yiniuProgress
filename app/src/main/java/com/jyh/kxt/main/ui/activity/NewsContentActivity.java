@@ -551,8 +551,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             tvName.setText(newsContentJson.getAuthor_name());
 
-            boolean isAllowAttention = "0".equals(newsContentJson.getAuthor_id());
+            boolean isAllowAttention = "blog".equals(newsContentJson.getType());
             if (isAllowAttention) {
+                cbLike.setVisibility(View.VISIBLE);
+            }else{
                 cbLike.setVisibility(View.GONE);
             }
 

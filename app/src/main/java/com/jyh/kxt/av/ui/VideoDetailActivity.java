@@ -44,11 +44,12 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.rv_message) public PullToRefreshListView rvMessage;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_comment) ImageView ivComment;
-    @BindView(R.id.iv_collect)public ImageView ivCollect;
-    @BindView(R.id.iv_like)public ImageView ivLike;
+    @BindView(R.id.iv_collect) public ImageView ivCollect;
+    @BindView(R.id.iv_like) public ImageView ivLike;
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
+    @BindView(R.id.ll_nav) LinearLayout llNav;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
@@ -162,6 +163,8 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onConfigurationChanged(newConfig);
 
         if (spVideo != null) {
+            boolean portrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT;
+            llNav.setVisibility(portrait ? View.VISIBLE : View.GONE);
             spVideo.onConfigurationChanged(newConfig);
         }
     }
