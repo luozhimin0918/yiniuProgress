@@ -1,9 +1,11 @@
 package com.jyh.kxt.index.presenter;
 
+import android.app.Activity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.index.adapter.BrowerHistoryAdapter;
 import com.jyh.kxt.index.ui.BrowerHistoryActivity;
@@ -37,7 +40,7 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
     @BindObject BrowerHistoryActivity browerHistoryActivity;
 
     public BrowerHistoryAdapter adapter;
-    private PopupWindow popupWindow;
+    private PopupUtil popupWindow;
 
     List<List<NewsJson>> lists = new ArrayList<>();
     private int count = 0;//一共有几页数据
@@ -56,7 +59,8 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
     public void clear(View view) {
 
         if (popupWindow == null) {
-            View rootView = LayoutInflater.from(mContext).inflate(R.layout.pop_brower_clear, null);
+            popupWindow = new PopupUtil((Activity) mContext);
+            View rootView = popupWindow.createPopupView(R.layout.pop_brower_clear);
 
             TextView tvCancel = (TextView) rootView.findViewById(R.id.tv_cancel);
             TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
@@ -78,7 +82,18 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
                     popupWindow.dismiss();
                 }
             });
-            popupWindow = new PopupWindow(rootView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            PopupUtil.Config config = new PopupUtil.Config();
+            config.outsideTouchable = true;
+            config.alpha = 0.5f;
+            config.bgColor = 0X00000000;
+
+            config.animationStyle = R.style.PopupWindow_Style2;
+            config.width = WindowManager.LayoutParams.MATCH_PARENT;
+            config.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+            popupWindow.setConfig(config);
+
         }
         if (popupWindow.isShowing()) {
             popupWindow.dismiss();
@@ -115,9 +130,9 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
                     lists.add(history);
                 }
 
-                copyList=new ArrayList<>();
+                copyList = new ArrayList<>();
                 for (List<NewsJson> list : lists) {
-                    List<NewsJson> newsJsons=new ArrayList<>();
+                    List<NewsJson> newsJsons = new ArrayList<>();
                     for (NewsJson newsJson : list) {
                         newsJsons.add(newsJson);
                     }

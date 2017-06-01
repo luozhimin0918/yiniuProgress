@@ -46,19 +46,16 @@ public class UmengLoginTool {
 
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-                ToastView.makeText3(context, "Authorize succeed");
                 UmengLoginTool.onComplete(context, platform, action, data);
             }
 
             @Override
             public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-                ToastView.makeText3(context, "Authorize fail");
                 context.dismissWaitDialog();
             }
 
             @Override
             public void onCancel(SHARE_MEDIA platform, int action) {
-                ToastView.makeText3(context, "Authorize cancel");
                 context.dismissWaitDialog();
             }
         };
@@ -77,6 +74,7 @@ public class UmengLoginTool {
         request.doPost(HttpConstant.USER_LOGIN, map, new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson user) {
+                LoginUtils.login(context, user);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, user));
                 context.dismissWaitDialog();
             }
@@ -210,7 +208,7 @@ public class UmengLoginTool {
         jsonParam.put(VarConstant.HTTP_AVATAR, img);
         jsonParam.put(VarConstant.HTTP_PROVINCE, prvinice);
         jsonParam.put(VarConstant.HTTP_SEX, sex);
-        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, accesstoken);
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN2, accesstoken);
         jsonParam.put(VarConstant.HTTP_OPENID, openid);
         jsonParam.put(VarConstant.HTTP_UNIONID, unionid);
 

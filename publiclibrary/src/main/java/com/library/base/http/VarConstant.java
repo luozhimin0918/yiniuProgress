@@ -40,6 +40,7 @@ public class VarConstant {
     public static final String HTTP_NICKNAME = "nickname";
     public static final String HTTP_BIRTHDAY = "birthday";
     public static final String HTTP_ACCESS_TOKEN = "accessToken";
+    public static final String HTTP_ACCESS_TOKEN2 = "access_token";
     public static final String HTTP_TOKEN = "token";
     public static final String HTTP_TYPE = "type";  //1:QQ|2:微信|3:微博
     public static final String HTTP_LIST_TYPE = "list_type";

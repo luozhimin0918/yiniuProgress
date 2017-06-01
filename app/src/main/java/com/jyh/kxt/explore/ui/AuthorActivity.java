@@ -299,9 +299,11 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        List<AuthorNewsJson> data = newsAdapter.getData();
-        AuthorNewsJson newsJson = data.get(position - 2);
-        JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        if (position >= 2) {
+            List<AuthorNewsJson> data = newsAdapter.getData();
+            AuthorNewsJson newsJson = data.get(position - 2);
+            JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        }
     }
 
     @Override

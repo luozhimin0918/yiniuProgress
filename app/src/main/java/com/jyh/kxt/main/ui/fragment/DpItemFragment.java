@@ -3,10 +3,15 @@ package com.jyh.kxt.main.ui.fragment;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.presenter.DpFragmentPresenter;
@@ -25,7 +30,8 @@ import butterknife.BindView;
  * 创建日期:2017/5/18.
  */
 
-public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
+public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
+        AdapterView.OnItemClickListener {
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
@@ -48,6 +54,7 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
         plvContent.setDividerNull();
         plRootView.setOnAfreshLoadListener(this);
         plvContent.setOnRefreshListener(this);
+        plvContent.setOnItemClickListener(this);
 
         Bundle arguments = getArguments();
         code = arguments.getString(IntentConstant.CODE);
@@ -117,5 +124,19 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
                 plvContent.onRefreshComplete();
             }
         }, 200);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position >= 1) {
+            int location = position - 1;
+            NewsJson newsJson = newsAdapter.getData().get(location);
+            JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
+                    .getHref());
+            //保存浏览记录
+            BrowerHistoryUtils.save(getContext(), newsJson);
+            //单条刷新,改变浏览状态
+            newsAdapter.getView(location, view, parent);
+        }
     }
 }
