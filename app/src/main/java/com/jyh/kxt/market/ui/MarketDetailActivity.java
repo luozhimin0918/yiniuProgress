@@ -244,7 +244,7 @@ public class MarketDetailActivity extends BaseActivity {
     }
 
     private void requestAddOrDeleteOptions() {
-        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
+        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
         EventBusClass eventBusClass = new EventBusClass(
                 EventBusClass.MARKET_OPTION_UPDATE,
                 marketItemList);

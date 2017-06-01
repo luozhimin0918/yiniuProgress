@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="35dp"
-    android:layout_marginTop="9dp"
     android:orientation="horizontal">
 
 
@@ -11,16 +10,16 @@
         android:id="@+id/tv_time"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:gravity="center"
+        android:textColor="@color/font_color60"
         android:textSize="13sp"/>
 
     <TextView
         android:id="@+id/tv_qian"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
+        android:textColor="@color/font_color60"
         android:layout_weight="1"
         android:gravity="center"
         android:textSize="13sp"/>
@@ -29,8 +28,8 @@
         android:id="@+id/tv_yuce"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
         android:layout_weight="1"
+        android:textColor="@color/font_color60"
         android:gravity="center"
         android:textSize="13sp"/>
 
@@ -38,7 +37,7 @@
         android:id="@+id/tv_gongbu"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
+        android:textColor="@color/font_color60"
         android:layout_weight="1"
         android:gravity="center"
         android:textSize="13sp"/>

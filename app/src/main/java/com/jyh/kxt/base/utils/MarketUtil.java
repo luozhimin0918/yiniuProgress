@@ -192,10 +192,14 @@ public class MarketUtil {
     public static void saveMarketEditOption(Context mContext, List<MarketItemBean> marketList, int status) {
 
         Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
+        if (status == 0 && isInit) {
+            return;
+        }
         if (status == 0 && !isInit) {
             SPUtils.save(mContext, SpConstant.INIT_MARKET_MY_OPTION, true);
             SPUtils.save(mContext, SpConstant.MARKET_MY_OPTION, JSON.toJSONString(marketList));
         }
+
 
         List<MarketItemBean> mergeLocalMarket;
         if (status == 2) {

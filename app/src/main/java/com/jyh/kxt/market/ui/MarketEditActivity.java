@@ -1,9 +1,7 @@
 package com.jyh.kxt.market.ui;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -65,14 +63,23 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         switch (view.getId()) {
             case R.id.cb_complete_checked:
                 CheckBox completeChecked = (CheckBox) view;
-                marketEditAdapter.completeChecked(completeChecked.isChecked());
+                try {
+                    marketEditAdapter.completeChecked(completeChecked.isChecked());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    completeChecked.setChecked(false);
+                }
                 break;
             case R.id.tv_delete_count:
-                List<MarketItemBean> checkedList = marketEditAdapter.getCheckedList();
-                for (int i = 0; i < checkedList.size(); i++) {
-                    MarketItemBean checkedPosition = checkedList.get(i);
-                    int indexOf = marketEditAdapter.listContent.indexOf(checkedPosition);
-                    marketEditAdapter.onItemDismiss(indexOf);
+                try {
+                    List<MarketItemBean> checkedList = marketEditAdapter.getCheckedList();
+                    for (int i = 0; i < checkedList.size(); i++) {
+                        MarketItemBean checkedPosition = checkedList.get(i);
+                        int indexOf = marketEditAdapter.listContent.indexOf(checkedPosition);
+                        marketEditAdapter.onItemDismiss(indexOf);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case R.id.iv_bar_break:
@@ -143,13 +150,13 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
     }
 
     private void openTipWindow() {
-        new AlertDialog.Builder(this).setTitle("提示")
+        onSaveAndExit();
+      /*  new AlertDialog.Builder(this).setTitle("提示")
                 .setMessage("自选数据发生改变,是否保存并且退出?")
                 .setPositiveButton("保存并退出",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                onSaveAndExit();
                             }
                         })
                 .setNegativeButton("直接退出",
@@ -158,7 +165,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
                             public void onClick(DialogInterface dialog, int which) {
                                 MarketEditActivity.this.finish();
                             }
-                        }).show();
+                        }).show();*/
     }
 
     private void onSaveAndExit() {
@@ -192,10 +199,12 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         volleyRequest.doPost(HttpConstant.QUOTES_FAVOR, jsonParam, new HttpListener<List<MarketItemBean>>() {
             @Override
             protected void onResponse(List<MarketItemBean> marketItemBeen) {
+                pllContent.loadOver();
+
+                adapterMarketItemList.clear();
                 adapterMarketItemList.addAll(MarketUtil.getMergeLocalMarket(getContext(), marketItemBeen));
                 defaultInitMarketList.addAll(adapterMarketItemList);
                 initEditInfo();
-                pllContent.loadOver();
             }
 
             @Override
@@ -204,14 +213,14 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
 
                 if (error != null) {
                     if (adapterMarketItemList.size() == 0) {
-                        TSnackbar.make(tvBarTitle, error.getMessage() + "", TSnackbar.LENGTH_LONG, TSnackbar
-                                .APPEAR_FROM_BOTTOM_TO_TOP)
-                                .setPromptThemBackground(Prompt.WARNING).show();
+                        pllContent.loadEmptyData();
                     } else {
+                        pllContent.loadOver();
                         initEditInfo();
                     }
+                } else {
+                    pllContent.loadEmptyData();
                 }
-                pllContent.loadOver();
             }
         });
     }
