@@ -1,7 +1,6 @@
 package com.jyh.kxt.market.ui;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -97,10 +96,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         setContentView(R.layout.activity_market_edit, StatusBarColor.THEME1);
 
         tvBarTitle.setText("编辑");
-        ivBarFunction.setText("完成");
-
-        int rightColor = ContextCompat.getColor(this, R.color.bg_enable_color);
-        ivBarFunction.setTextColor(rightColor);
+        ivBarFunction.setVisibility(View.GONE);
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         adapterMarketItemList.addAll(MarketUtil.getMarketEditOption(getContext()));

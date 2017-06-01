@@ -48,7 +48,6 @@ public class CalendarItemFragment extends BaseFragment {
 
         pllContent.loadWait();
 
-
         ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ptrlvContent.setDividerNull();
         ptrlvContent.getRefreshableView().setDividerHeight(0);
@@ -91,8 +90,10 @@ public class CalendarItemFragment extends BaseFragment {
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(ptrlvContent!=null)
+        if (ptrlvContent != null) {
             ptrlvContent.setDividerNull();
+        }
+
         if (calendarItemAdapter != null) {
             calendarItemAdapter.notifyDataSetChanged();
         }
