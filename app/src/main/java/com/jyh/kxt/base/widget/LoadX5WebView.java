@@ -1,4 +1,4 @@
-﻿package com.jyh.kxt.base.widget;
+package com.jyh.kxt.base.widget;
 
 import android.app.Activity;
 import android.content.Context;
