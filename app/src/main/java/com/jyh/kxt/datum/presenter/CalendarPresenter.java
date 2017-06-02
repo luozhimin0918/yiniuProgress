@@ -3,7 +3,6 @@ package com.jyh.kxt.datum.presenter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.app.Fragment;
@@ -91,7 +90,7 @@ public class CalendarPresenter extends BasePresenter {
         }
     }
 
-    public BaseFragmentAdapter getPageAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+    public BaseFragmentAdapter getPageAdapter(FragmentManager fm, final List<Fragment> fragmentList) {
         BaseFragmentAdapter baseFragmentAdapter = new BaseFragmentAdapter(fm, fragmentList) {
             @Override
             public CharSequence getPageTitle(int position) {

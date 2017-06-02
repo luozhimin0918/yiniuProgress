@@ -67,6 +67,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
         optionalPresenter = new OptionalPresenter(this);
 
+
         marketMainItemAdapter = new MarketMainItemAdapter(getContext(), marketItemList);
         ptrContent.setAdapter(marketMainItemAdapter);
         /*
@@ -78,6 +79,10 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
                 this);
 
         EventBus.getDefault().register(this);
+
+        if (marketItemList.size() == 0) {
+            pllContent.loadEmptyData();
+        }
     }
 
     @OnClick(R.id.rl_target_nav)

@@ -12,14 +12,19 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.datum.adapter.DatumHistoryAdapter;
+import com.jyh.kxt.datum.bean.HistoryCftcListBean;
 import com.jyh.kxt.datum.bean.HistoryChartBean;
+import com.jyh.kxt.datum.bean.HistoryEtfListBean;
 import com.jyh.kxt.datum.bean.HistoryInfoBean;
 import com.jyh.kxt.datum.bean.HistoryListBean;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * Created by Mr'Dai on 2017/5/26.
@@ -34,7 +39,8 @@ public class DatumHistoryPresenter extends BasePresenter {
 
     private DatumHistoryAdapter datumHistoryAdapter;
 
-    private List<HistoryListBean.DataBean> historyList;
+    private List<HistoryListBean.DataBean> adapterList = new ArrayList<>();
+    private List<HistoryEtfListBean.DataBean> etfList;
 
     public void requestInitInfo() {
         datumHistoryActivity.pageLoadLayout.loadWait();
@@ -73,17 +79,16 @@ public class DatumHistoryPresenter extends BasePresenter {
 
                     switch (type) {
                         case "chart":
-                            HistoryChartBean historyChartBean = JSONObject.parseObject(jsonString, HistoryChartBean
+                            HistoryChartBean historyChartBean = parseObject(jsonString, HistoryChartBean
                                     .class);
                             datumHistoryActivity.initChartView(historyChartBean);
                             break;
                         case "info":
-                            HistoryInfoBean historyInfoBean = JSONObject.parseObject(jsonString, HistoryInfoBean.class);
+                            HistoryInfoBean historyInfoBean = parseObject(jsonString, HistoryInfoBean.class);
                             datumHistoryActivity.initInfoView(historyInfoBean);
                             break;
                         case "history":
-                            HistoryListBean historyListBean = JSONObject.parseObject(jsonString, HistoryListBean.class);
-                            initListView(historyListBean);
+                            initListView(JSONObject.parseObject(jsonString).getString("data"));
                             break;
                     }
                 }
@@ -102,17 +107,15 @@ public class DatumHistoryPresenter extends BasePresenter {
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("type", datumHistoryActivity.type);
         jsonParam.put("code", datumHistoryActivity.datumCode);
-        jsonParam.put("lastTime", historyList.get(historyList.size() - 1).getTime());
+        jsonParam.put("lastTime", adapterList.get(adapterList.size() - 1).getTime());
 
-        volleyRequest.doPost(HttpConstant.MORE_DATA, jsonParam, new HttpListener<List<HistoryListBean.DataBean>>() {
+        volleyRequest.doPost(HttpConstant.MORE_DATA, jsonParam, new HttpListener<String>() {
             @Override
-            protected void onResponse(List<HistoryListBean.DataBean> moreData) {
+            protected void onResponse(String jsonStr) {
                 datumHistoryActivity.fplvContent.getRefreshableView().goneFoot();
-                if (moreData.size() == 0) {
-                    datumHistoryActivity.fplvContent.getRefreshableView().noMoreData();
-                    return;
-                }
-                historyList.addAll(moreData);
+
+                addToAdapterList(jsonStr);
+
                 datumHistoryAdapter.notifyDataSetChanged();
             }
 
@@ -125,19 +128,74 @@ public class DatumHistoryPresenter extends BasePresenter {
     }
 
 
-    private void initListView(HistoryListBean historyListBean) {
-        historyList = historyListBean.getData();
+    private void initListView(String historyListBean) {
+        addToAdapterList(historyListBean);
 
         HistoryListBean.DataBean headDataBean = new HistoryListBean.DataBean();
         headDataBean.setListAdapterType(0);
-        historyList.add(0, headDataBean);
+        headDataBean.setListAdapterTypeName(datumHistoryActivity.type);
+        adapterList.add(0, headDataBean);
 
-        datumHistoryAdapter = new DatumHistoryAdapter(mContext, historyList);
+        datumHistoryAdapter = new DatumHistoryAdapter(mContext, adapterList);
         datumHistoryActivity.fplvContent.setAdapter(datumHistoryAdapter);
-        AbsListView.LayoutParams absListView = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+
+        AbsListView.LayoutParams absListView = new AbsListView.LayoutParams(
+                AbsListView.LayoutParams.MATCH_PARENT,
                 AbsListView.LayoutParams.WRAP_CONTENT);
+
         datumHistoryActivity.llListHead.setLayoutParams(absListView);
         datumHistoryActivity.fplvContent.getRefreshableView().addHeaderView(datumHistoryActivity.llListHead);
+    }
+
+    private void addToAdapterList(String historyListBean) {
+        switch (datumHistoryActivity.type) {
+            case "finance":
+                List<HistoryListBean.DataBean> historyList = JSONObject.parseArray(historyListBean, HistoryListBean
+                        .DataBean.class);
+                if (historyList.size() == 0) {
+                    datumHistoryActivity.fplvContent.getRefreshableView().noMoreData();
+                    return;
+                }
+                adapterList.addAll(historyList);
+                break;
+            case "etf":
+                List<HistoryEtfListBean.DataBean> etfList = JSONObject.parseArray(historyListBean,
+                        HistoryEtfListBean.DataBean.class);
+                if (etfList.size() == 0) {
+                    datumHistoryActivity.fplvContent.getRefreshableView().noMoreData();
+                    return;
+                }
+                for (HistoryEtfListBean.DataBean dataBean : etfList) {
+
+                    HistoryListBean.DataBean headDataBean = new HistoryListBean.DataBean();
+                    headDataBean.setBefore(dataBean.getTotalounce());
+                    headDataBean.setReality(dataBean.getTotal());
+                    headDataBean.setForecast(dataBean.getChange());
+                    headDataBean.setTime(dataBean.getTime());
+
+                    adapterList.add(headDataBean);
+                }
+                break;
+            case "cftc":
+                List<HistoryCftcListBean.DataBean> cftcList = JSONObject.parseArray(historyListBean,
+                        HistoryCftcListBean.DataBean.class);
+
+                if (cftcList.size() == 0) {
+                    datumHistoryActivity.fplvContent.getRefreshableView().noMoreData();
+                    return;
+                }
+                for (HistoryCftcListBean.DataBean dataBean : cftcList) {
+
+                    HistoryListBean.DataBean headDataBean = new HistoryListBean.DataBean();
+                    headDataBean.setBefore(dataBean.getBull());
+                    headDataBean.setReality(dataBean.getOnly());
+                    headDataBean.setForecast(dataBean.getBear());
+                    headDataBean.setTime(dataBean.getTime());
+
+                    adapterList.add(headDataBean);
+                }
+                break;
+        }
     }
 
     public Spanned getHtmlFont(String label, String content) {

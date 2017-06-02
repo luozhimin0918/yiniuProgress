@@ -2,10 +2,8 @@ package com.jyh.kxt.index.presenter;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
@@ -99,13 +97,7 @@ public class WelcomePresenter extends BasePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        welcomeActivity.ivWelcome.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startToActivity(MainActivity.class);
-            }
-        }, 2 * 1000);
-//        showGif();
+        showGif();
     }
 
     public void advertTimeManage() {
@@ -145,8 +137,6 @@ public class WelcomePresenter extends BasePresenter {
 
     private void showGif() {
         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
-        welcomeActivity.ivWelcome.setBackgroundColor(Color.WHITE);
-        welcomeActivity.ivWelcome.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Glide
                 .with(welcomeActivity)
                 .load(R.raw.qidong)
@@ -178,7 +168,7 @@ public class WelcomePresenter extends BasePresenter {
                             public void run() {
                                 startToActivity(MainActivity.class);
                             }
-                        }, duration + 1000);
+                        }, duration);
 
                         return false;
                     }

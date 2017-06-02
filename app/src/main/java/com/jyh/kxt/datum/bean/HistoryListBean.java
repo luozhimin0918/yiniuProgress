@@ -63,6 +63,7 @@ public class HistoryListBean {
         private String reality;
         private String time;
         private int listAdapterType = 1;
+        private String listAdapterTypeName ;
 
         public String getBefore() {
             return before;
@@ -110,6 +111,14 @@ public class HistoryListBean {
 
         public void setListAdapterType(int listAdapterType) {
             this.listAdapterType = listAdapterType;
+        }
+
+        public String getListAdapterTypeName() {
+            return listAdapterTypeName;
+        }
+
+        public void setListAdapterTypeName(String listAdapterTypeName) {
+            this.listAdapterTypeName = listAdapterTypeName;
         }
     }
 }

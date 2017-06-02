@@ -23,23 +23,11 @@
             android:textColor="@color/font_color60"
             android:textSize="@dimen/content_font_size"/>
 
-        <TextView
-            android:id="@+id/tv_more_video"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:drawablePadding="5dp"
-            android:drawableRight="@mipmap/icon_comment_more"
-            android:gravity="center"
-            android:text="更多"
-            android:textColor="@color/font_color9"
-            android:textSize="@dimen/describe_font_size3"/>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="136dp"
-            android:layout_below="@+id/tv_more_video"
+            android:layout_below="@+id/tv_recommend_label"
             android:scrollbars="none">
 
             <LinearLayout

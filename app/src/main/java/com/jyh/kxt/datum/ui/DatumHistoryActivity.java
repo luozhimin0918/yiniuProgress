@@ -21,6 +21,11 @@ import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.widget.PageLoadLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -120,6 +125,29 @@ public class DatumHistoryActivity extends BaseActivity implements FastInfoPinned
     public void initChartView(HistoryChartBean historyChartBean) {
         try {
             llChartHead.setVisibility(View.VISIBLE);
+
+            List<HistoryChartBean.DataBean> data = historyChartBean.getData();
+
+            List<HistoryChartBean.DataBean> sortData = new ArrayList<>(data);
+            Collections.sort(sortData, new Comparator<HistoryChartBean.DataBean>() {
+                @Override
+                public int compare(HistoryChartBean.DataBean lhs, HistoryChartBean.DataBean rhs) {
+                    return lhs.getValue() - rhs.getValue() > 0 ? 1 : -1;
+                }
+            });
+
+            HistoryChartBean.YAxisBean mYAxisBean = new HistoryChartBean.YAxisBean();
+
+            double value1 = sortData.get(sortData.size() - 1).getValue();
+            int max = value1 > 0 ? (int) Math.ceil(value1) : (int) Math.floor(value1);
+            mYAxisBean.setMax(max);
+
+            double value2 = sortData.get(0).getValue();
+            int min = value1 > 0 ? (int) Math.floor(value2) : (int) Math.ceil(value2);
+            mYAxisBean.setMin(min);
+
+            historyChartBean.setY_axis(mYAxisBean);
+
             trendChartLayout.setData(historyChartBean);
         } catch (Exception e) {
             e.printStackTrace();

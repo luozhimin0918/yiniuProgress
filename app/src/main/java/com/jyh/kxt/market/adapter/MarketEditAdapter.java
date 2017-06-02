@@ -102,7 +102,7 @@ public class MarketEditAdapter extends RecyclerView.Adapter<MarketEditAdapter.It
             marketEditActivity.cbCompleteChecked.setChecked(false);
         } else if (selectedCount == listContent.size() && !marketEditActivity.cbCompleteChecked.isChecked()) {
             marketEditActivity.cbCompleteChecked.setChecked(true);
-        } else if (selectedCount !=0 && !marketEditActivity.cbCompleteChecked.isChecked()) {
+        } else if (selectedCount != 0 && !marketEditActivity.cbCompleteChecked.isChecked()) {
             marketEditActivity.cbCompleteChecked.setChecked(true);
         }
 

@@ -1,5 +1,6 @@
 package com.jyh.kxt.datum.bean;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -101,7 +102,8 @@ public class HistoryChartBean {
         }
 
         public double getValue() {
-            return value;
+            BigDecimal b = new BigDecimal(value);
+            return b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
 
         public void setValue(double value) {

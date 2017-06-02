@@ -51,14 +51,6 @@ public class CalendarItemPresenter extends BasePresenter {
 
         volleyRequest.doGet(HttpConstant.RILI, json, new HttpListener<List<CalendarBean>>() {
 
-//            @Override
-//            protected void onStart() {
-//                List<CalendarBean> cacheT = getCacheT();
-//                if (cacheT != null) {
-//                    onResponse(cacheT);
-//                }
-//            }
-
             @Override
             protected void onResponse(List<CalendarBean> calendarBeen) {
                 CalendarItemPresenter.this.calendarBeen = calendarBeen;
@@ -71,11 +63,15 @@ public class CalendarItemPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
 
-                calendarItemFragment.pllContent.loadOver();
-                generateFinanceListData(null);
-                generateImportantListData(null);
-                generateHolidayListData(null);
-                calendarItemFragment.setCalendarAdapter(calendarTypeList);
+                try {
+                    calendarItemFragment.pllContent.loadOver();
+                    generateFinanceListData(null);
+                    generateImportantListData(null);
+                    generateHolidayListData(null);
+                    calendarItemFragment.setCalendarAdapter(calendarTypeList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -71,49 +71,82 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
         int type = getItemViewType(position);
         HistoryListBean.DataBean itemDataBean = data.get(position);
 
-        ViewHolder mViewHolder = null;
+        ViewHolder0 mViewHolder0 = null;
+        ViewHolder1 mViewHolder1 = null;
         if (convertView == null) {
             switch (type) {
                 case 0:
                     convertView = mInflater.inflate(R.layout.activity_datum_history_suspension, parent, false);
+                    mViewHolder0 = new ViewHolder0(convertView);
+                    convertView.setTag(mViewHolder0);
                     break;
                 case 1:
-                    convertView = mInflater.inflate(R.layout.activity_datum_history_item,  parent, false);
-                    mViewHolder = new ViewHolder(convertView);
-                    convertView.setTag(mViewHolder);
+                    convertView = mInflater.inflate(R.layout.activity_datum_history_item, parent, false);
+                    mViewHolder1 = new ViewHolder1(convertView);
+                    convertView.setTag(mViewHolder1);
                     break;
             }
         } else {
             switch (type) {
                 case 0:
+                    mViewHolder0 = (ViewHolder0) convertView.getTag();
                     break;
                 case 1:
-                    mViewHolder = (ViewHolder) convertView.getTag();
+                    mViewHolder1 = (ViewHolder1) convertView.getTag();
                     break;
             }
         }
         switch (type) {
             case 0:
+                String listAdapterTypeName = itemDataBean.getListAdapterTypeName();
+                switch (listAdapterTypeName) {
+                    case "finance":
+                        mViewHolder0.tvTitle1.setText("前值(%)");
+                        mViewHolder0.tvTitle2.setText("预测值(%)");
+                        mViewHolder0.tvTitle3.setText("公布值(%)");
+                        break;
+                    case "etf":
+                        mViewHolder0.tvTitle1.setText("净持仓量(盎司)");
+                        mViewHolder0.tvTitle2.setText("净持仓量(吨)");
+                        mViewHolder0.tvTitle3.setText("增减(吨)");
+                        break;
+                    case "cftc":
+                        mViewHolder0.tvTitle1.setText("多投持仓");
+                        mViewHolder0.tvTitle2.setText("空头持仓");
+                        mViewHolder0.tvTitle3.setText("多空净投仓");
+                        break;
+                }
+
                 break;
             case 1:
                 long timeLong = Long.parseLong(itemDataBean.getTime()) * 1000;
-                mViewHolder.tvTime.setText(DateFormat.format("yyyy-MM-dd", timeLong));
+                mViewHolder1.tvTime.setText(DateFormat.format("yyyy-MM-dd", timeLong));
 
-                mViewHolder.tvQian.setText(itemDataBean.getBefore());
-                mViewHolder.tvYuce.setText(itemDataBean.getForecast());
-                mViewHolder.tvGongbu.setText(itemDataBean.getReality());
+                mViewHolder1.tvQian.setText(itemDataBean.getBefore());
+                mViewHolder1.tvYuce.setText(itemDataBean.getForecast());
+                mViewHolder1.tvGongbu.setText(itemDataBean.getReality());
                 break;
         }
         return convertView;
     }
 
-    class ViewHolder {
+    class ViewHolder0 {
+        @BindView(R.id.tv_title1) TextView tvTitle1;
+        @BindView(R.id.tv_title2) TextView tvTitle2;
+        @BindView(R.id.tv_title3) TextView tvTitle3;
+
+        ViewHolder0(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    class ViewHolder1 {
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.tv_qian) TextView tvQian;
         @BindView(R.id.tv_yuce) TextView tvYuce;
         @BindView(R.id.tv_gongbu) TextView tvGongbu;
 
-        ViewHolder(View view) {
+        ViewHolder1(View view) {
             ButterKnife.bind(this, view);
         }
     }
