@@ -29,6 +29,7 @@ import com.jyh.kxt.base.widget.ThumbView;
 import com.jyh.kxt.index.presenter.MyCommentPresenter;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -284,6 +285,16 @@ public class CommentAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, NewsContentActivity.class);
+
+                    switch (commentBean.getType()) {
+                        case VarConstant.ARTICLE:
+                            intent.putExtra(IntentConstant.O_ACTION, VarConstant.OCLASS_NEWS);
+                            break;
+                        case VarConstant.BLOG_ARTICLE:
+                            intent.putExtra(IntentConstant.O_ACTION, VarConstant.OCLASS_BLOG);
+                            break;
+                    }
+
                     intent.putExtra(IntentConstant.O_ID, commentBean.getObject_id());
                     mContext.startActivity(intent);
                 }

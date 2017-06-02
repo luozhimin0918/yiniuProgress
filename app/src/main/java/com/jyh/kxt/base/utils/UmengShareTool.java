@@ -471,7 +471,7 @@ public class UmengShareTool {
                             ToastView.makeText3(activity, "已点赞");
                             return;
                         } else
-                            GoodUtils.addGood(activity, shareBean.getId(), shareBean.getGoodType(), observerData, new
+                            NativeStore.addThumbID(activity,shareBean.getGoodType(), shareBean.getId(),  observerData, new
                                     ObserverData<Boolean>() {
 
                                         @Override

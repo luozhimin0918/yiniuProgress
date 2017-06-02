@@ -24,10 +24,13 @@ import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+
+import butterknife.BindView;
 
 import static com.taobao.accs.ACCSManager.mContext;
 
@@ -47,6 +50,7 @@ public class ThumbView extends RelativeLayout {
     private ImageView ivThumb;
     private TextView tvThumbCount;
     private TextView tvThumbAddCount;
+    private CommentBean commentBean;
 
     private Animation mAnimation;
 
@@ -130,13 +134,20 @@ public class ThumbView extends RelativeLayout {
      * 请求点赞
      */
     private void requestClickThumb() {
-        UserJson userInfo = LoginUtils.getUserInfo(getContext());
-        if (userInfo == null) {
-            getContext().startActivity(new Intent(getContext(), LoginOrRegisterActivity.class));
-            return;
-        }
 
-        NativeStore.getInstance(getContext()).addThumbID(getContext(), thumbId);
+        String type = "";
+        switch (commentBean.getType()) {
+            case "2":
+                type = VarConstant.GOOD_TYPE_COMMENT_VIDEO;
+                break;
+            case "1":
+                type = VarConstant.GOOD_TYPE_COMMENT_NEWS;
+                break;
+            case "3":
+                type = VarConstant.GOOD_TYPE_COMMENT_BLOG;
+                break;
+        }
+        NativeStore.addThumbID(getContext(), type, thumbId + "", null, null);
 
         changerCount(1);
         ivThumb.setImageResource(R.mipmap.icon_comment_like);
@@ -154,24 +165,23 @@ public class ThumbView extends RelativeLayout {
         }, mAnimation.getDuration());
         isThumb = true;
 
-        IBaseView iBaseView = (IBaseView) getContext();
-
-        VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
-        JSONObject jsonParam = volleyRequest.getJsonParam();
-        jsonParam.put("id", thumbId);
-        jsonParam.put("uid", userInfo.getUid());
-        jsonParam.put("token", userInfo.getToken());
-
-        volleyRequest.doPost(HttpConstant.GOOD_NEWS, jsonParam, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String data) {
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-            }
-        });
+//        IBaseView iBaseView = (IBaseView) getContext();
+//        VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
+//        JSONObject jsonParam = volleyRequest.getJsonParam();
+//        jsonParam.put("id", thumbId);
+//        jsonParam.put("uid", userInfo.getUid());
+//        jsonParam.put("token", userInfo.getToken());
+//
+//        volleyRequest.doPost(HttpConstant.GOOD_NEWS, jsonParam, new HttpListener<String>() {
+//            @Override
+//            protected void onResponse(String data) {
+//            }
+//
+//            @Override
+//            protected void onErrorResponse(VolleyError error) {
+//                super.onErrorResponse(error);
+//            }
+//        });
 
     }
 
@@ -186,9 +196,24 @@ public class ThumbView extends RelativeLayout {
 
     public void setThumbCount(CommentBean commentBean, int thumbId) {
         this.thumbId = thumbId;
+        this.commentBean = commentBean;
         int count = commentBean.getNum_good();
 
-        isThumb = NativeStore.getInstance(getContext()).isThumbSucceed(thumbId);
+        String type = null;
+
+        switch (commentBean.getType()) {
+            case "1":
+                type = VarConstant.GOOD_TYPE_COMMENT_NEWS;
+                break;
+            case "2":
+                type = VarConstant.GOOD_TYPE_COMMENT_VIDEO;
+                break;
+            case "3":
+                type = VarConstant.GOOD_TYPE_COMMENT_BLOG;
+                break;
+        }
+
+        isThumb = NativeStore.isThumbSucceed(getContext(), type, thumbId + "");
 
         if (isThumb) {
             ivThumb.setImageResource(R.mipmap.icon_comment_like);

@@ -63,7 +63,7 @@ public class GoodUtils {
                     umengOb.callback(true);
                 }
 
-                Set<String> set = new HashSet<String>();
+                Set<String> set;
                 switch (type) {
                     case VarConstant.GOOD_TYPE_NEWS:
                         set = SPUtils.getStringSet(context, SpConstant.GOOD_NEWS);

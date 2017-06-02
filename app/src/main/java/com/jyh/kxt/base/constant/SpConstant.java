@@ -32,12 +32,6 @@ public class SpConstant {
      */
     public static final String COLLECT_FLASH = "collect_flash";
 
-
-    /**
-     * 点赞ID
-     */
-    public static final String THUMB_ITEM_SET = "thumb_item_set";
-
     /**
      * EmoJe表情是否初始化
      */
@@ -64,6 +58,9 @@ public class SpConstant {
      */
     public static final String GOOD_NEWS = "good_news";
     public static final String GOOD_VIDEO = "good_video";
+    public static final String GOOD_COMMENT_NEWS = "good_comment_news";
+    public static final String GOOD_COMMENT_VIDEO = "good_comment_video";
+    public static final String GOOD_COMMENT_BLOG = "good_comment_blog";
 
 
     public static final String CALENDAR_ALARM_LIST = "calendar_alarm_list";

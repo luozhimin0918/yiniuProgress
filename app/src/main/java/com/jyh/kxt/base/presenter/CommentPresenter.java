@@ -27,9 +27,9 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -178,9 +178,12 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 //                            .getSingleActivity(NewsContentActivity.class);
 //                    singleActivity.finish();
 
-                    Intent intent = new Intent(mContext, NewsContentActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, mArticleJson.getO_id());
-                    mContext.startActivity(intent);
+//                    Intent intent = new Intent(mContext, NewsContentActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, mArticleJson.getO_id());
+//                    mContext.startActivity(intent);
+                    JumpUtils.jump((BaseActivity) mContext, mArticleJson.getO_class(), mArticleJson.getO_action(), mArticleJson.getO_id()
+                            , mArticleJson
+                                    .getHref());
                 }
             });
         }

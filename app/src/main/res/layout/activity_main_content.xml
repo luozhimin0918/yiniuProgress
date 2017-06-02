@@ -52,7 +52,7 @@
             style="@style/Main_RB_Style"
             android:drawableTop="@drawable/sel_index_data"
             android:onClick="clickSwitchFragment"
-            android:text="数据"/>
+            android:text="日历"/>
 
         <RadioButton
             android:id="@+id/rb_probe"

@@ -22,8 +22,8 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.user.json.UserJson;
@@ -89,7 +89,7 @@ public class VideoDetailPresenter extends BasePresenter {
                             videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean.getNum_good(), videoDetailBean
                             .getNum_play(), videoDetailBean.getCreate_time(), false, false, false, 0);
                     isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
-                    isAttention=GoodUtils.isGood(mContext,videoDetailBean.getId(),VarConstant.GOOD_TYPE_VIDEO);
+                    isAttention=NativeStore.isThumbSucceed(mContext,VarConstant.GOOD_TYPE_VIDEO,videoDetailBean.getId());
                     videoListJson.setIsCollect(isCollect);
                     videoListJson.setIsGood(isAttention);
 
@@ -188,7 +188,7 @@ public class VideoDetailPresenter extends BasePresenter {
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
-        jsonParam.put("type", "video");
+        jsonParam.put("type", VarConstant.VIDEO);
         jsonParam.put("object_id", videoDetailActivity.videoId);
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
@@ -352,7 +352,7 @@ public class VideoDetailPresenter extends BasePresenter {
             if (isAttention) {
                 showMsg("已经赞过了喔");
             } else {
-                GoodUtils.addGood(mContext, videoDetailBean.getId(), VarConstant.GOOD_TYPE_VIDEO, new ObserverData() {
+                NativeStore.addThumbID(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean.getId(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
                         isAttention = true;
@@ -363,7 +363,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     public void onError(Exception e) {
                         showMsg("点赞失败");
                     }
-                }, null);
+                },null);
             }
         }
     }

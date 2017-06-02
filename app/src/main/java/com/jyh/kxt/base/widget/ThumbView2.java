@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.utils.NativeStore;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 
 /**
@@ -30,6 +32,8 @@ public class ThumbView2 extends RelativeLayout {
     private TextView tvThumbAddCount;
 
     private Animation mAnimation;
+    private String type;
+    private String id;
 
     public ThumbView2(Context context) {
         this(context, null);
@@ -93,6 +97,7 @@ public class ThumbView2 extends RelativeLayout {
      * 请求点赞
      */
     private void requestClickThumb() {
+        NativeStore.addThumbID(getContext(), type, id, null, null);
         changerCount(1);
         ivThumb.setImageResource(R.mipmap.icon_share_ding_sel);
         tvThumbAddCount.setVisibility(View.VISIBLE);
@@ -116,7 +121,9 @@ public class ThumbView2 extends RelativeLayout {
         }
     }
 
-    public void setThumbCount(int count, boolean isThumb) {
+    public void setThumbCount(int count, String id, String type, boolean isThumb) {
+        this.id=id;
+        this.type=type;
         this.isThumb = isThumb;
         if (isThumb) {
             ivThumb.setImageResource(R.mipmap.icon_share_ding_sel);

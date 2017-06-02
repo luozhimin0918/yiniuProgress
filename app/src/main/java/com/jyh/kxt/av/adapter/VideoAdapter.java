@@ -22,9 +22,9 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.collect.CollectUtils;
-import com.jyh.kxt.base.utils.GoodUtils;
+import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
@@ -83,7 +83,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         final VideoListJson video = list.get(position);
         boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
         video.setCollect(collect);
-        boolean good = GoodUtils.isGood(mContext, video.getId(), VarConstant.GOOD_TYPE_VIDEO);
+        boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
         video.setGood(good);
 
         Glide.with(mContext)
@@ -109,8 +109,9 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
                                 "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
-                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, GoodUtils.isGood(mContext, video
-                                .getId(), VarConstant.GOOD_TYPE_VIDEO), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
+                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore.isThumbSucceed(mContext,
+                        VarConstant.GOOD_TYPE_VIDEO, video
+                                .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
                         video)),
                         video, holder.ivMore, new ObserverData<Map<String, Boolean>>() {
                             @Override

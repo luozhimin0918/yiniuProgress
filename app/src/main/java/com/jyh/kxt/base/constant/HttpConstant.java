@@ -70,9 +70,10 @@ public class HttpConstant {
     public static final String EXPLORE_BLOG_LIST = BASE_URL + "blog/list";//专栏列表 list_type={writer_id | recommend
     // }&last_id={0}
     public static final String EXPLORE_BLOG_PROFILE = BASE_URL + "blog/profile";//专栏作者 ?id={writer_id}
-    public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor"+ VarConstant.HTTP_CONTENT;//关注作者 ?id={writer_id}
-    public static final String EXPLORE_BLOG_DELETEFAVOR = BASE_URL + "blog/deleteFavor"+ VarConstant.HTTP_CONTENT;//取消关注作者 ?id={writer_id}
-    public static final String EXPLORE_BLOG_CONTENT = BASE_URL + "/blog/detail"+ VarConstant.HTTP_CONTENT;//blog详情  ?id={}&last_id={0}&uid={0}&accessToken={0}
+    public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor" + VarConstant.HTTP_CONTENT;//关注作者 ?id={writer_id}
+    public static final String EXPLORE_BLOG_DELETEFAVOR = BASE_URL + "blog/deleteFavor" + VarConstant.HTTP_CONTENT;//取消关注作者 ?id={writer_id}
+    public static final String EXPLORE_BLOG_CONTENT = BASE_URL + "/blog/detail" + VarConstant.HTTP_CONTENT;//blog详情
+    // ?id={}&last_id={0}&uid={0}&accessToken={0}
     public static final String EXPLORE_TOPIC = BASE_URL + "topic/list";//专题
     public static final String EXPLORE_ACTIVITY = BASE_URL + "activity/list";//活动
 
@@ -131,10 +132,9 @@ public class HttpConstant {
     /**
      * 点评
      */
-    public static final String GOOD_NEWS = BASE_URL + "news/addGood";//点赞-文章 ?id={}
-    public static final String GOOD_VIDEO = BASE_URL + "video/addGood";//点赞-视听 ?id={}
-    public static final String GOOD_NEWS_STATUS = BASE_URL + "news/isGood";//点赞状态-文章 ?id={}
-    public static final String GOOD_VIDEO_STATUS = BASE_URL + "video/isGood";//点赞状态-视听 ?id={}
+    public static final String GOOD_NEWS = BASE_URL + "news/addGood" + VarConstant.HTTP_CONTENT;//点赞-文章 ?id={}
+    public static final String GOOD_VIDEO = BASE_URL + "video/addGood" + VarConstant.HTTP_CONTENT;//点赞-视听 ?id={}
+    public static final String GOOD_COMMENT = BASE_URL + "comment/addGood" + VarConstant.HTTP_CONTENT;//点赞-评论 ?id={}&type
 
 
     public static final String DATA_HOT = BASE_URL + "data/hot" + VarConstant.HTTP_CONTENT;

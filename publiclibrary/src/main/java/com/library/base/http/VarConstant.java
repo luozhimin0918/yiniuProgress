@@ -49,6 +49,9 @@ public class VarConstant {
 
     public static final String HTTP_WORD = "word";
 
+    public static final String ARTICLE = "article";//文章
+    public static final String BLOG_ARTICLE = "blog_article";//博客
+    public static final String VIDEO = "video";//视听
 
     /**
      * 跳转
@@ -183,8 +186,11 @@ public class VarConstant {
     /**
      * 点赞状态
      */
-    public static final String GOOD_TYPE_NEWS = "news";//文章
-    public static final String GOOD_TYPE_VIDEO = "video";//视听
+    public static final String GOOD_TYPE_NEWS = "good_type_news";//文章
+    public static final String GOOD_TYPE_VIDEO = "good_type_video";//视听
+    public static final String GOOD_TYPE_COMMENT_NEWS = "good_type_comment_news";//文章评论
+    public static final String GOOD_TYPE_COMMENT_VIDEO = "good_type_comment_video";//视听评论
+    public static final String GOOD_TYPE_COMMENT_BLOG = "good_type_comment_blog";//博客评论
 
     /**
      * 分享面板操作类型

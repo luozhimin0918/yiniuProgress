@@ -7,25 +7,23 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
-import android.text.Html;
-import android.widget.ImageView;
-import android.widget.Space;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -37,7 +35,6 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
-import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
@@ -46,13 +43,12 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
-import com.jyh.kxt.base.utils.GoodUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
-import com.jyh.kxt.base.widget.ThumbView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.main.json.NewsContentJson;
@@ -138,7 +134,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         objectId = getIntent().getStringExtra(IntentConstant.O_ID);//获取传递过来的Id
         type = getIntent().getStringExtra(IntentConstant.TYPE);
-        isGood = GoodUtils.isGood(this, objectId, VarConstant.GOOD_TYPE_NEWS);
+        isGood = NativeStore.isThumbSucceed(this, VarConstant.GOOD_TYPE_NEWS, objectId);
         ivGood.setSelected(isGood);
 
         isCollect = CollectLocalUtils.isCollect(this, VarConstant.COLLECT_TYPE_ARTICLE, objectId);
@@ -150,7 +146,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.bindListView(ptrLvMessage);
         webViewAndHead = new WebViewAndHead();
-        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START,type);
+        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START, type);
 
         pllContent.loadWait();
 
@@ -247,7 +243,16 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tSnackbar.setPromptThemBackground(Prompt.WARNING);
                 tSnackbar.show();
             } else {
-                GoodUtils.addGood(this, objectId, VarConstant.GOOD_TYPE_NEWS, new ObserverData() {
+                String goodType = "";
+                switch (type) {
+                    case VarConstant.OCLASS_BLOG:
+                        goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
+                        break;
+                    case VarConstant.OCLASS_NEWS:
+                        goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
+                        break;
+                }
+                NativeStore.addThumbID(this, goodType, objectId, new ObserverData() {
                     @Override
                     public void callback(Object o) {
                         ivGood.setSelected(true);
@@ -567,7 +572,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 public void onClick(View v) {
                     newsContentPresenter.requestAttention(
                             cbLike.isSelected(),
-                            WebViewAndHead.this.newsContentJson.getAuthor_id(),cbLike);
+                            WebViewAndHead.this.newsContentJson.getAuthor_id(), cbLike);
                 }
             });
 //            } else {
@@ -639,7 +644,16 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             attention = (ThumbView2) llShareContent.findViewById(R.id.tv_attention);
 
             try {
-                attention.setThumbCount(Integer.parseInt(newsContentJson.getNum_good()), isGood);
+                String goodType = "";
+                switch (type) {
+                    case VarConstant.OCLASS_BLOG:
+                        goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
+                        break;
+                    case VarConstant.OCLASS_NEWS:
+                        goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
+                        break;
+                }
+                attention.setThumbCount(Integer.parseInt(newsContentJson.getNum_good()), newsContentJson.getId(), goodType, isGood);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
