@@ -415,42 +415,33 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
 
-            String pictureStr = userJson.getPictureStr();
-            if (RegexValidateUtil.isEmpty(pictureStr)) {
-                Glide.with(getContext())
-                        .load(userJson.getPicture())
-                        .asBitmap()
-                        .override(imgSize, imgSize)
+            String pictureStr = userJson.getPicture();
+            Glide.with(getContext())
+                    .load(pictureStr)
+                    .asBitmap()
+                    .override(imgSize, imgSize)
 
-                        .error(R.mipmap.icon_user_def_photo)
-                        .placeholder(R.mipmap.icon_user_def_photo)
+                    .error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap.icon_user_def_photo)
 
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                    glideAnimation) {
-                                loginPhoto.setImageBitmap(resource);
-                            }
-                        });
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                glideAnimation) {
+                            loginPhoto.setImageBitmap(resource);
+                        }
+                    });
 
-                Glide.with(getContext())
-                        .load(userJson.getPicture())
-                        .crossFade(1000)
-                        .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
-                        .into(new SimpleTarget<GlideDrawable>() {
-                            @Override
-                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                loginView.setBackground(resource);
-                            }
-                        });
-
-            } else {
-                try {
-                    loginPhoto.setImageBitmap(BitmapUtils.StringToBitmap(pictureStr));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            Glide.with(getContext())
+                    .load(pictureStr)
+                    .crossFade(1000)
+                    .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            loginView.setBackground(resource);
+                        }
+                    });
 
             loginName.setText(userJson.getNickname());
         } else {

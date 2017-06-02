@@ -651,13 +651,22 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
-        request.doPost(HttpConstant.USER_UPLOAD_AVATAR, getPhotoMap(bitmapStr), new HttpListener<Object>() {
+        request.doPost(HttpConstant.USER_UPLOAD_AVATAR, getPhotoMap(bitmapStr), new HttpListener<String>() {
             @Override
-            protected void onResponse(Object o) {
-                UserJson newUser = LoginUtils.getUserInfo(mContext);
-                newUser.setPictureStr(bitmapStr);
-                LoginUtils.changeUserInfo(mContext, newUser);
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
+            protected void onResponse(String o) {
+//                {"headimgurl2":"http://img.kxt.com/Member/55887/picture/5930df721cf5b.png","uid":"55887"}
+                try {
+                    JSONObject object=new JSONObject(o);
+                    String headImgUrl = object.optString("headimgurl2");
+                    if(headImgUrl!=null){
+                        UserJson newUser = LoginUtils.getUserInfo(mContext);
+                        newUser.setPicture(headImgUrl);
+                        LoginUtils.changeUserInfo(mContext, newUser);
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("头像更改成功").setDuration(TSnackbar.LENGTH_LONG)
                         .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height)).show();

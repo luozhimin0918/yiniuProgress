@@ -30,13 +30,12 @@ public class UserJson {
     private String address;
     private String work;
     private String birthday;
-    private String pictureStr;
 
     public UserJson() {
     }
 
     public UserJson(String token, String nickname, String picture, String uid, int sex, String email, String address, String work, String
-            birthday, String pictureStr) {
+            birthday) {
         this.token = token;
         this.nickname = nickname;
         this.picture = picture;
@@ -46,7 +45,6 @@ public class UserJson {
         this.address = address;
         this.work = work;
         this.birthday = birthday;
-        this.pictureStr = pictureStr;
     }
 
     public String getToken() {
@@ -122,11 +120,4 @@ public class UserJson {
         this.birthday = birthday;
     }
 
-    public String getPictureStr() {
-        return pictureStr;
-    }
-
-    public void setPictureStr(String pictureStr) {
-        this.pictureStr = pictureStr;
-    }
 }
