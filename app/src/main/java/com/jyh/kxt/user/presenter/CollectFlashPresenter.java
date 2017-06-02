@@ -110,7 +110,7 @@ public class CollectFlashPresenter extends BasePresenter {
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
                     collectFlashFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                    collectFlashFragment.plRootView.setNullText("");
+                    collectFlashFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectFlashFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();

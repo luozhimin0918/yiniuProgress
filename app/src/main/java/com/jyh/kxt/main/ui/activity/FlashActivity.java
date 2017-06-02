@@ -199,12 +199,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             case R.id.layout_tj1:
                 //推荐1
                 NewsJson tj1 = articles.get(0);
-                JumpUtils.jumpDetails(this, tj1.getO_class(), tj1.getO_id(), tj1.getHref());
+                JumpUtils.jump(this, tj1.getO_class(), tj1.getO_action(), tj1.getO_id(), tj1.getHref());
                 break;
             case R.id.layout_tj2:
                 //推荐2
                 NewsJson tj2 = articles.get(1);
-                JumpUtils.jumpDetails(this, tj2.getO_class(), tj2.getO_id(), tj2.getHref());
+                JumpUtils.jump(this, tj2.getO_class(), tj2.getO_action(), tj2.getO_id(), tj2.getHref());
                 break;
         }
     }
@@ -321,7 +321,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 layoutTj1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jumpDetails(FlashActivity.this, newsJson.getO_class(), newsJson.getO_id(),
+                        JumpUtils.jump(FlashActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
                                 newsJson.getHref());
                     }
                 });
@@ -341,7 +341,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 layoutTj2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jumpDetails(FlashActivity.this, newsJson2.getO_class(), newsJson2.getO_id(),
+                        JumpUtils.jump(FlashActivity.this, newsJson2.getO_class(), newsJson.getO_action(), newsJson2.getO_id(),
                                 newsJson2.getHref());
                     }
                 });

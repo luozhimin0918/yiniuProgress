@@ -64,6 +64,10 @@ public class MarketSearchAdapter extends BaseListAdapter<MarketItemBean> {
         this.searchKey = searchKey;
     }
 
+    public List<MarketItemBean> getData() {
+        return dataList;
+    }
+
     static class ViewHolder {
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.tv_content) TextView tvContent;

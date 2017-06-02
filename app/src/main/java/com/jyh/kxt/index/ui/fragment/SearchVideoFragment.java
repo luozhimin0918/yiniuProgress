@@ -51,7 +51,7 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
         plvContent.setOnRefreshListener(this);
         plRootView.setOnAfreshLoadListener(this);
         plvContent.setOnItemClickListener(this);
-        if(isSearch){
+        if (isSearch) {
             plRootView.loadWait();
             presenter.init(key);
         }
@@ -62,9 +62,9 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
         if (isVisible()) {
             plRootView.loadWait();
             presenter.init(key);
-            isSearch=false;
-        }else{
-            isSearch=true;
+            isSearch = false;
+        } else {
+            isSearch = true;
         }
     }
 
@@ -87,7 +87,7 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         VideoListJson video = videoAdapter.getData().get(position - 1);
-        JumpUtils.jumpDetails(getActivity(), VarConstant.OCLASS_VIDEO,video.getUid(), null);
+        JumpUtils.jump((BaseActivity) getActivity(), VarConstant.OCLASS_VIDEO, VarConstant.OACTION_DETAIL, video.getUid(), null);
     }
 
     @Override
@@ -98,6 +98,7 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
 
     public void init(List<VideoListJson> videos) {
         if (videos == null) {
+            plRootView.setNullText(getString(R.string.error_search_null));
             plRootView.loadEmptyData();
         } else {
             if (videoAdapter == null) {

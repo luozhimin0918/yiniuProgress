@@ -79,12 +79,12 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
                     switch (type) {
                         case VarConstant.SOCKET_FLASH_KUAIXUN:
                         case VarConstant.SOCKET_FLASH_CJRL:
-                            JumpUtils.jumpDetails(ac, VarConstant.OCLASS_FLASH, flashJson.getUid(), null);
+                            JumpUtils.jump(ac, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL, flashJson.getUid(), null);
                             break;
                         case VarConstant.SOCKET_FLASH_KXTNEWS:
                             Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
                             Flash_NEWS.Jump url = flash_news.getUrl();
-                            JumpUtils.jumpDetails(ac, url.getC(), url.getI(), url.getU());
+                            JumpUtils.jump(ac, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU());
                             break;
                     }
 
@@ -213,7 +213,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         //空数据处理
         if (data == null || data.size() == 0) {
             plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText("");
+            plRootView.setNullText(getString(R.string.error_collect_null));
             plRootView.loadEmptyData();
             return;
         }
@@ -294,9 +294,9 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
                     adapter.removeById(flashJson.getSocre());
                     adapter.notifyDataSetChanged();
                     List<FlashJson> data1 = adapter.getData();
-                    if (data1==null||data1.size()==0) {
+                    if (data1 == null || data1.size() == 0) {
                         plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                        plRootView.setNullText("");
+                        plRootView.setNullText(getString(R.string.error_collect_null));
                         plRootView.loadEmptyData();
                     }
                     return;

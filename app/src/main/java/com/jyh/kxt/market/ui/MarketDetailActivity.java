@@ -21,6 +21,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -123,7 +124,7 @@ public class MarketDetailActivity extends BaseActivity {
             }
             String appConfig = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
-            marketItemBean = getIntent().getParcelableExtra("market");
+            marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
             marketItemBean.setFromSource(1);//编辑来源于本地
 
             quotesChartUrl = mainInitJson.getQuotes_chart_url();

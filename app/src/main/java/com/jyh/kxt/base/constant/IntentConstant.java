@@ -11,16 +11,17 @@ public class IntentConstant {
     public static final String CONFIG = "config";//app配置信息
     public static final String SOURCE = "Source";//来源
     public static final String NAME = "name";//名称(标题)
-    public static final String TYPE="type";
+    public static final String TYPE = "type";
     public static final String CODE = "code";
     public static final String INDEX = "index";//下标
     public static final String ACTIONNAV = "actionNav";//导航
     public static final String WEBURL = "webUrl";//网址
+    public static final String MARKET = "market";//行情
     public static final String O_ID = "o_id";
     public static final String O_CLASS = "o_class";
     public static final String O_ACTION = "o_action";
 
-    public static final String SEARCH_KEY="search_key";//搜索关键字
+    public static final String SEARCH_KEY = "search_key";//搜索关键字
 
     /**
      * 要闻首页

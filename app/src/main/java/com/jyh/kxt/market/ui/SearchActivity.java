@@ -1,29 +1,26 @@
 package com.jyh.kxt.market.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.widget.SearchEditText;
 import com.jyh.kxt.market.adapter.MarketHotSearchAdapter;
 import com.jyh.kxt.market.adapter.MarketSearchAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.SearchPresenter;
-import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
@@ -31,12 +28,10 @@ import com.library.widget.flowlayout.TagAdapter;
 import com.library.widget.flowlayout.TagFlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.recycler.DividerGridItemDecoration;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -46,7 +41,8 @@ import butterknife.OnClick;
  * 创建日期:2017/5/18.
  */
 
-public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener {
+public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener,
+        AdapterView.OnItemClickListener {
 
     @BindView(R.id.edt_search) SearchEditText edtSearch;
     @BindView(R.id.tv_break) TextView tvBreak;
@@ -92,6 +88,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plvContent.setOnRefreshListener(this);
         plvContent.setDividerNull();
         plvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        plvContent.setOnItemClickListener(this);
 
         hotView.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
@@ -177,6 +174,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     public void init(List<MarketItemBean> markets) {
         if (markets == null || markets.size() == 0) {
+            plRootView.setNullText(getString(R.string.error_search_null));
             plRootView.loadEmptyData();
         } else {
             hideHotSearch();
@@ -198,7 +196,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     }
 
     public void showHotSearch(List<String> markets) {
-        this.markets=markets;
+        this.markets = markets;
         if (markets == null || markets.size() == 0) {
             layoutSearchStart.setVisibility(View.GONE);
         } else {
@@ -220,5 +218,16 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             }
         }
         plRootView.loadOver();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int dataPosition = position - 1;
+        if (dataPosition >= 0) {
+            MarketItemBean marketItemBean = adapter.getData().get(dataPosition);
+            Intent intent = new Intent(this, MarketDetailActivity.class);
+            intent.putExtra(IntentConstant.MARKET, marketItemBean);
+            startActivity(intent);
+        }
     }
 }

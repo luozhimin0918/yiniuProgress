@@ -55,7 +55,7 @@ public class BrowerHistoryActivity extends BaseActivity {
                 if (item instanceof String) return;
                 if (item instanceof NewsJson) {
                     NewsJson newsJson = (NewsJson) item;
-                    JumpUtils.jumpDetails(BrowerHistoryActivity.this, newsJson.getO_class(), newsJson.getO_id(),
+                    JumpUtils.jump(BrowerHistoryActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
                             newsJson.getHref());
                 }
                 return;

@@ -242,7 +242,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         //空数据处理
         if (data == null || data.size() == 0) {
             plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText("");
+            plRootView.setNullText(getString(R.string.error_collect_null));
             plRootView.loadEmptyData();
             return;
         }
@@ -295,7 +295,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
                         List<VideoListJson> data1 = adapter.getData();
                         if (data1 == null || data1.size() == 0) {
                             plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                            plRootView.setNullText("");
+                            plRootView.setNullText(getString(R.string.error_collect_null));
                             plRootView.loadEmptyData();
                         }
                         return;

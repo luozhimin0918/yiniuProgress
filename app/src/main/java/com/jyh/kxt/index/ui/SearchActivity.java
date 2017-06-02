@@ -6,13 +6,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +28,6 @@ import com.jyh.kxt.index.ui.fragment.SearchVideoFragment;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.flowlayout.TagAdapter;
 import com.library.widget.flowlayout.TagFlowLayout;
@@ -228,7 +225,7 @@ public class SearchActivity extends BaseActivity {
                 @Override
                 public void onItemClick(int position, View view) {
                     NewsJson newsJson = historyData.get(position);
-                    JumpUtils.jumpDetails(SearchActivity.this, newsJson.getO_class(), newsJson.getO_id(), newsJson
+                    JumpUtils.jump(SearchActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
                             .getHref());
                 }
             });

@@ -2,6 +2,7 @@ package com.jyh.kxt.market.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -51,6 +52,7 @@ public class SearchPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                activity.plRootView.setNullText(mContext.getString(R.string.error_search_null));
                 activity.plRootView.loadEmptyData();
             }
         });

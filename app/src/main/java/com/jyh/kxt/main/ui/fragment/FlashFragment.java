@@ -72,12 +72,12 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     switch (type) {
                         case VarConstant.SOCKET_FLASH_KUAIXUN:
                         case VarConstant.SOCKET_FLASH_CJRL:
-                            JumpUtils.jumpDetails(mainActivity, VarConstant.OCLASS_FLASH, flashJson.getUid(), null);
+                            JumpUtils.jump(mainActivity, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL, flashJson.getUid(), null);
                             break;
                         case VarConstant.SOCKET_FLASH_KXTNEWS:
                             Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
                             Flash_NEWS.Jump url = flash_news.getUrl();
-                            JumpUtils.jumpDetails(mainActivity, url.getC(), url.getI(), url.getU());
+                            JumpUtils.jump(mainActivity, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU());
                             break;
                     }
 

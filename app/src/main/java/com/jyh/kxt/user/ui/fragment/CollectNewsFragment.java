@@ -65,7 +65,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsJson newsJson = adapter.dataList.get(position - 1);
 
-                JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
+                JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
             }
         });
 
@@ -238,7 +238,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         //空数据处理
         if (data == null || data.size() == 0) {
             plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText("");
+            plRootView.setNullText(getString(R.string.error_collect_null));
             plRootView.loadEmptyData();
             return;
         }
@@ -292,7 +292,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
                         List<NewsJson> data1 = adapter.getData();
                         if (data1 == null || data1.size() == 0) {
                             plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                            plRootView.setNullText("");
+                            plRootView.setNullText(getString(R.string.error_collect_null));
                             plRootView.loadEmptyData();
                         }
                         return;

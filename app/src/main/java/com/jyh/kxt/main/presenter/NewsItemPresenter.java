@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -144,7 +145,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
         NewsJson newsJson = newsAdapter.getData().get(position);
-        JumpUtils.jumpDetails((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_id(),
+        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(),newsJson.getO_id(),
                 newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
@@ -277,7 +278,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = carouselList.get(position);
-                JumpUtils.jumpDetails((Activity) mContext, slideJson.getO_class(), slideJson.getO_id(), slideJson
+                JumpUtils.jump((BaseActivity) mContext, slideJson.getO_class(), slideJson.getO_action(), slideJson.getO_id(), slideJson
                         .getHref());
             }
         });

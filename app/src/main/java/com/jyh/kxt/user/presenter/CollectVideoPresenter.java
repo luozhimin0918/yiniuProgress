@@ -103,7 +103,7 @@ public class CollectVideoPresenter extends BasePresenter {
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
                     collectVideoFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                    collectVideoFragment.plRootView.setNullText("");
+                    collectVideoFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectVideoFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();
@@ -147,7 +147,7 @@ public class CollectVideoPresenter extends BasePresenter {
                 try {
                     if (o == null || o.size() == 0) {
                         collectVideoFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                        collectVideoFragment.plRootView.setNullText("");
+                        collectVideoFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                         collectVideoFragment.plRootView.loadEmptyData();
                     } else {
                         if (o.size() > VarConstant.LIST_MAX_SIZE) {

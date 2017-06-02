@@ -170,7 +170,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = slides.get(position);
-                JumpUtils.jumpDetails(getActivity(), slideJson.getO_class(), slideJson.getO_id(), slideJson.getHref());
+                JumpUtils.jump((BaseActivity) getActivity(), slideJson.getO_class(), slideJson.getO_action(), slideJson.getO_id(), slideJson.getHref());
             }
         });
     }
@@ -313,7 +313,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             @Override
             public void onItemClick(int position, View view) {
                 ActivityJson activityJson = activitys.get(position);
-                JumpUtils.jump((BaseActivity) getActivity(), VarConstant.OCLASS_ACTIVITY, VarConstant.OACTION_DETAIL, null, activityJson.getUrl());
+                JumpUtils.jump((BaseActivity) getActivity(), VarConstant.OCLASS_ACTIVITY, VarConstant.OACTION_DETAIL, null, activityJson
+                        .getUrl());
             }
         });
         rvContent.setAdapter(activitysAdapter);
@@ -451,12 +452,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 2;
         AuthorNewsJson newsJson = newsAdapter.dataList.get(index);
-        JumpUtils.jumpDetails(getActivity(), newsJson.getO_class(), newsJson.getO_id(), newsJson.getHref());
-//        //保存浏览记录
-//        BrowerHistoryUtils.save(getContext(), newsJson);
-//
-//        //单条刷新,改变浏览状态
-//        newsAdapter.getView(index, view, parent);
+        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(),newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
     }
 
     @Override

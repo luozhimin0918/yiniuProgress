@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.databinding.ItemMarketQuotesBinding;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
@@ -61,7 +62,7 @@ public class MarketMainItemAdapter extends BaseListAdapter<MarketItemBean> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MarketDetailActivity.class);
-                intent.putExtra("market", marketItemBean);
+                intent.putExtra(IntentConstant.MARKET, marketItemBean);
                 mContext.startActivity(intent);
             }
         });

@@ -104,7 +104,7 @@ public class CollectNewsPresenter extends BasePresenter {
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
                     collectNewsFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                    collectNewsFragment.plRootView.setNullText("");
+                    collectNewsFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectNewsFragment.plRootView.loadEmptyData();
                 } else {
                     int size = list.size();
@@ -147,7 +147,7 @@ public class CollectNewsPresenter extends BasePresenter {
             protected void onResponse(List<NewsJson> o) {
                 if (o == null || o.size() == 0) {
                     collectNewsFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                    collectNewsFragment.plRootView.setNullText("");
+                    collectNewsFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectNewsFragment.plRootView.loadEmptyData();
                 } else {
                     if (o.size() > VarConstant.LIST_MAX_SIZE) {

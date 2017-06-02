@@ -13,6 +13,8 @@
     <string name="date_describe">前值:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;预测:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;公布:<xliff:g id="yyy">%s</xliff:g></string>
 
     <string name="no_data">无更多数据</string>
+    <string name="error_collect_null">你还没有任何收藏</string>
+    <string name="error_search_null">对不起,没有找到相关搜索结果</string>
     <string name="tokenError">token获取失败</string>
     <string name="statement2">上海快讯网络科技有限公司</string>
     <string name="statement1">快讯通财经专注于金融行业信息服务，力求为广大投资提供更快更精准的数据与快讯，本站信息来自各合作方，提供使用者参考，不构成任何交易建议，基于本站数据进行交易导致的损失本站概不负责。</string>

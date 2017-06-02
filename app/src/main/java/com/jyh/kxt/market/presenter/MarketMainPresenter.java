@@ -20,6 +20,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
@@ -239,7 +240,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, MarketDetailActivity.class);
-                    intent.putExtra("market", marketItemBean);
+                    intent.putExtra(IntentConstant.MARKET, marketItemBean);
                     mContext.startActivity(intent);
                 }
             });

@@ -369,42 +369,42 @@ public class JumpUtils {
         }
     }
 
-    public static void jumpDetails(Activity content, String o_class, String o_id, String href) {
-        Intent intent = null;
-        if (!RegexValidateUtil.isEmpty(href)) {
-            intent = new Intent(content, WebActivity.class);
-            intent.putExtra(IntentConstant.WEBURL, href);
-        } else {
-            switch (o_class) {
-                case VarConstant.OCLASS_VIDEO:
-                    //视听详情
-                    intent = new Intent(content, VideoDetailActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, o_id);
-                    break;
-                case VarConstant.OCLASS_DATA:
-                    //数据详情
-                    intent = new Intent(content, DatumHistoryActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, o_id);
-                    break;
-                case VarConstant.OCLASS_BLOG:
-                case VarConstant.OCLASS_ARTICLE:
-                case VarConstant.OCLASS_NEWS:
-                    //要闻详情
-                    intent = new Intent(content, NewsContentActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, o_id);
-                    break;
-                case VarConstant.OCLASS_QUOTES:
-                    //行情详情
-                    intent = new Intent(content, MarketDetailActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, o_id);
-                    break;
-                case VarConstant.OCLASS_FLASH:
-                    //快讯详情
-                    intent = new Intent(content, FlashActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, o_id);
-                    break;
-            }
-        }
-        content.startActivity(intent);
-    }
+//    public static void jumpDetails(Activity content, String o_class, String o_id, String href) {
+//        Intent intent = null;
+//        if (!RegexValidateUtil.isEmpty(href)) {
+//            intent = new Intent(content, WebActivity.class);
+//            intent.putExtra(IntentConstant.WEBURL, href);
+//        } else {
+//            switch (o_class) {
+//                case VarConstant.OCLASS_VIDEO:
+//                    //视听详情
+//                    intent = new Intent(content, VideoDetailActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, o_id);
+//                    break;
+//                case VarConstant.OCLASS_DATA:
+//                    //数据详情
+//                    intent = new Intent(content, DatumHistoryActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, o_id);
+//                    break;
+//                case VarConstant.OCLASS_BLOG:
+//                case VarConstant.OCLASS_ARTICLE:
+//                case VarConstant.OCLASS_NEWS:
+//                    //要闻详情
+//                    intent = new Intent(content, NewsContentActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, o_id);
+//                    break;
+//                case VarConstant.OCLASS_QUOTES:
+//                    //行情详情
+//                    intent = new Intent(content, MarketDetailActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, o_id);
+//                    break;
+//                case VarConstant.OCLASS_FLASH:
+//                    //快讯详情
+//                    intent = new Intent(content, FlashActivity.class);
+//                    intent.putExtra(IntentConstant.O_ID, o_id);
+//                    break;
+//            }
+//        }
+//        content.startActivity(intent);
+//    }
 }
