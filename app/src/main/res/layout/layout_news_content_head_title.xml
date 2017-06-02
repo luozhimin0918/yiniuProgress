@@ -75,7 +75,7 @@
                 android:textColor="@color/font_color6"
                 android:textSize="@dimen/describe_font_size1"/>
 
-            <CheckBox
+            <ImageView
                 android:id="@+id/iv_like"
                 android:layout_width="@dimen/newsAuthorAttentionWidth"
                 android:layout_height="@dimen/newsAuthorAttentionHeight"

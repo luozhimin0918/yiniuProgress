@@ -369,7 +369,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             tvFlashTitle.setText(split[0]);
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < length; i++) {
-                if (i > 1)
+                if (i >= 1)
                     buffer.append(split[i]);
             }
             tvFlashContent.setText(buffer.toString().replace("<br/>", "\n").replace("<br />", "\n"));

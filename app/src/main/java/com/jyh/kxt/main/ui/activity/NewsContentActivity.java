@@ -128,6 +128,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private int commentCount;
     private FunctionAdapter functionAdapter;
     private String font;//字体大小
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +137,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         setContentView(R.layout.activity_news_content, StatusBarColor.THEME1);
 
         objectId = getIntent().getStringExtra(IntentConstant.O_ID);//获取传递过来的Id
+        type = getIntent().getStringExtra(IntentConstant.TYPE);
         isGood = GoodUtils.isGood(this, objectId, VarConstant.GOOD_TYPE_NEWS);
         ivGood.setSelected(isGood);
 
@@ -148,7 +150,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.bindListView(ptrLvMessage);
         webViewAndHead = new WebViewAndHead();
-        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START);
+        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START,type);
 
         pllContent.loadWait();
 
@@ -187,7 +189,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             public void callback(Object o) {
                                 ivCollect.setSelected(false);
                                 isCollect = false;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS,newsJson));
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
                             }
 
                             @Override
@@ -202,7 +204,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             public void callback(Object o) {
                                 ivCollect.setSelected(true);
                                 isCollect = true;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS,newsJson));
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
                             }
 
                             @Override
@@ -501,7 +503,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_type) TextView tvType;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_like) CheckBox cbLike;
+        @BindView(R.id.iv_like) ImageView cbLike;
 
         @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
         @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
@@ -537,7 +539,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             rlExistAuthor.setVisibility(View.VISIBLE);
             Glide.with(NewsContentActivity.this)
-                    .load(HttpConstant.IMG_URL + newsContentJson.getAuthor_image())
+                    .load(newsContentJson.getAuthor_image())
                     .asBitmap()
                     .override(50, 50)
                     .thumbnail(0.5f)
@@ -554,22 +556,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             boolean isAllowAttention = "blog".equals(newsContentJson.getType());
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 cbLike.setVisibility(View.GONE);
             }
 
             boolean isFollow = "1".equals(newsContentJson.getIs_follow());
-            cbLike.setChecked(isFollow);
+            cbLike.setSelected(isFollow);
             cbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    CheckBox checkBox = (CheckBox) v;
-                    boolean checked = checkBox.isChecked();
-
                     newsContentPresenter.requestAttention(
-                            checked,
-                            WebViewAndHead.this.newsContentJson.getAuthor_id());
+                            cbLike.isSelected(),
+                            WebViewAndHead.this.newsContentJson.getAuthor_id(),cbLike);
                 }
             });
 //            } else {
@@ -783,7 +781,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 functionAdapter.notifyDataSetChanged();
             if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null)
                 newsContentPresenter.commentAdapter.notifyDataSetInvalidated();
-            if(commentPresenter!=null)
+            if (commentPresenter != null)
                 commentPresenter.onChangeTheme();
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,6 +5,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -31,7 +34,6 @@ import java.util.List;
 
 import static com.jyh.kxt.base.constant.HttpConstant.EXPLORE_BLOG_ADDFAVOR;
 import static com.jyh.kxt.base.constant.HttpConstant.EXPLORE_BLOG_DELETEFAVOR;
-import static com.jyh.kxt.base.constant.HttpConstant.MEMBER_FAVOR_WRITER;
 
 
 /**
@@ -46,6 +48,7 @@ public class NewsContentPresenter extends BasePresenter {
     @BindObject public NewsContentActivity newsContentActivity;
     public List<CommentBean> commentList;
     public CommentAdapter commentAdapter;
+    private String type;
 
     public NewsContentPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -55,25 +58,38 @@ public class NewsContentPresenter extends BasePresenter {
      * 请求初始化评论
      *
      * @param pullMode
+     * @param type
      */
-    public void requestInitComment(final PullToRefreshBase.Mode pullMode) {
+    public void requestInitComment(final PullToRefreshBase.Mode pullMode, String type) {
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        jsonParam.put("id", newsContentActivity.objectId);
+        jsonParam.put(VarConstant.HTTP_ID, newsContentActivity.objectId);
 
         if (pullMode == PullToRefreshBase.Mode.PULL_FROM_END) {
             CommentBean commentBean = commentList.get(commentList.size() - 1);
-            jsonParam.put("last_id", commentBean.getId());
+            jsonParam.put(VarConstant.HTTP_LASTID, commentBean.getId());
         } else if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             if (userInfo != null) {
-                jsonParam.put("uid", userInfo.getUid());
-                jsonParam.put("token", userInfo.getToken());
+                jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+                jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
             }
         }
-        volleyRequest.doGet(HttpConstant.NEWS_CONTENT, jsonParam, new HttpListener<NewsContentJson>() {
+
+        this.type = type;
+        String url = HttpConstant.NEWS_CONTENT;
+        switch (type) {
+            case VarConstant.OCLASS_BLOG:
+                url = HttpConstant.EXPLORE_BLOG_CONTENT;
+                break;
+            case VarConstant.OCLASS_NEWS:
+                url = HttpConstant.NEWS_CONTENT;
+                break;
+        }
+
+        volleyRequest.doGet(url, jsonParam, new HttpListener<NewsContentJson>() {
             @Override
             protected void onResponse(NewsContentJson newsContentJson) {
                 if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
@@ -120,7 +136,7 @@ public class NewsContentPresenter extends BasePresenter {
         });
     }
 
-    public void requestAttention(final boolean isCheck, String author_id) {
+    public void requestAttention(final boolean isCheck, String author_id, final ImageView cbLike) {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
@@ -134,17 +150,15 @@ public class NewsContentPresenter extends BasePresenter {
 
         String url;
         if (isCheck) {
-            url = EXPLORE_BLOG_ADDFAVOR;
-        } else {
             url = EXPLORE_BLOG_DELETEFAVOR;
+        } else {
+            url = EXPLORE_BLOG_ADDFAVOR;
         }
 
         volleyRequest.doGet(url, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String json) {
-                if(isCheck){
-
-                }
+                cbLike.setSelected(!isCheck);
             }
 
             @Override
@@ -188,7 +202,7 @@ public class NewsContentPresenter extends BasePresenter {
                         tvLoadMore.setTag("loading");
                         tvLoadMore.setText("更多评论加载中,请稍等...");
 
-                        requestInitComment(PullToRefreshBase.Mode.PULL_FROM_END);
+                        requestInitComment(PullToRefreshBase.Mode.PULL_FROM_END, type);
                     }
                 }
                 oldTime = currentTimeMillis;
@@ -200,7 +214,7 @@ public class NewsContentPresenter extends BasePresenter {
                 if (!"loading".equals(tvLoadMore.getTag())) {
                     tvLoadMore.setTag("loading");
                     tvLoadMore.setText("更多评论加载中,请稍等...");
-                    requestInitComment(PullToRefreshBase.Mode.PULL_FROM_END);
+                    requestInitComment(PullToRefreshBase.Mode.PULL_FROM_END, type);
                 }
             }
         });

@@ -119,6 +119,7 @@ public class JumpUtils {
             case VarConstant.OACTION_DETAIL:
                 Intent detailIntent = new Intent(context, NewsContentActivity.class);
                 detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                detailIntent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
                 context.startActivity(detailIntent);
         }
     }
@@ -342,6 +343,7 @@ public class JumpUtils {
             case VarConstant.OACTION_DETAIL:
                 Intent detailIntent = new Intent(context, NewsContentActivity.class);
                 detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                detailIntent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_BLOG);
                 context.startActivity(detailIntent);
                 break;
         }
