@@ -708,18 +708,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             "}");
                     view.loadUrl("javascript:clickImg()");
 
-                    view.loadUrl("javascript:function urlClick()" +
-                            "{" +
-                            "   var urls = document.getElementsByTagName(\"a\");" +
-                            "   for(var i = 0; i < urls.length; i++)" +
-                            "   {" +
-                            "       urls[i].onclick = function()" +
-                            "       {" +
-                            "           jsinfo.urlClick(this.href); " +
-                            "       }" +
-                            "   }" +
-                            "}");
-                    view.loadUrl("javascript:urlClick()");
+//                    view.loadUrl("javascript:function urlClick()" +
+//                            "{" +
+//                            "   var urls = document.getElementsByTagName(\"a\");" +
+//                            "   for(var i = 0; i < urls.length; i++)" +
+//                            "   {" +
+//                            "       urls[i].onclick = function()" +
+//                            "       {" +
+//                            "           jsinfo.urlClick(this.href); " +
+//                            "       }" +
+//                            "   }" +
+//                            "}");
+//                    view.loadUrl("javascript:urlClick()");
 
                     pllContent.loadOver();
                 }
@@ -1009,9 +1009,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     clickJson.getString("href"));
         }
 
-        @JavascriptInterface
-        public void urlClick(String url){
-
-        }
+//        @JavascriptInterface
+//        public void urlClick(String url){
+//
+//        }
     }
 }
