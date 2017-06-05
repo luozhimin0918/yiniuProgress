@@ -26,6 +26,7 @@ import com.jyh.kxt.index.presenter.SearchPresenter;
 import com.jyh.kxt.index.ui.fragment.SearchArticleFragment;
 import com.jyh.kxt.index.ui.fragment.SearchVideoFragment;
 import com.jyh.kxt.main.json.NewsJson;
+import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.flowlayout.FlowLayout;
@@ -58,7 +59,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.layout_search_start) View rootSearchStart;
     @BindView(R.id.layout_search_end) View rootSearchEnd;
 
-    private final String[] tabs = new String[]{"视听", "文章"};
+    private final String[] tabs = new String[]{"文章", "视听"};
     private SearchPresenter searchPresenter;
     private TagAdapter<String> tagAdapter;
     private List<String> flows;
@@ -148,14 +149,21 @@ public class SearchActivity extends BaseActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);
 
-        fragmentList.add(videoFragment = new SearchVideoFragment());
         fragmentList.add(articleFragment = new SearchArticleFragment());
+        fragmentList.add(videoFragment = new SearchVideoFragment());
 
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         stlNavigationBar.setViewPager(vpContent, tabs);
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
 
+
+        String type = getIntent().getStringExtra(IntentConstant.TYPE);
+        if (type != null && VarConstant.VIDEO.equals(type)) {
+            stlNavigationBar.setCurrentTab(1);
+        } else {
+            stlNavigationBar.setCurrentTab(0);
+        }
     }
 
     @OnClick({R.id.tv_break, R.id.tv_history_more, R.id.iv_clear_history})

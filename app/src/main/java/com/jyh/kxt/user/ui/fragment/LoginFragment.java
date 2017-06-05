@@ -22,6 +22,7 @@ import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.LineEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.ChangePwdActivity;
+import com.jyh.kxt.user.ui.ForgetPwdActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -80,7 +81,7 @@ public class LoginFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_forgetPwd:
                 //忘记密码
-                Intent intent = new Intent(getContext(), ChangePwdActivity.class);
+                Intent intent = new Intent(getContext(), ForgetPwdActivity.class);
                 startActivity(intent);
                 break;
             case R.id.db_login:

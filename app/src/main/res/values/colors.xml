@@ -89,6 +89,9 @@
     <color name="selectedIndicatorColor">#ffffff</color>
     <color name="unselectedIndicatorColor">#66ffffff</color>
 
+    <color name="selectedPointColor">#c2c2c2</color>
+    <color name="unselectedPointColor">#e5e5e5</color>
+
     <!--行情等所有涨跌颜色-->
     <color name="rise_color">#EA4E2A</color>
     <color name="decline_color">#60B280</color>

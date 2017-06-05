@@ -31,9 +31,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -308,14 +310,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.fl_search:
                 //搜索
-                startActivity(new Intent(this, SearchActivity.class));
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
             case R.id.ll_pl:
                 //评论
                 if (LoginUtils.isLogined(this)) {
                     startActivity(new Intent(this, MyCommentActivity.class));
                 } else {
-                    startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                    mainPresenter.showLoginDialog();
                 }
                 break;
             case R.id.ll_activity:
@@ -334,7 +337,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 if (LoginUtils.isLogined(this)) {
                     startActivity(new Intent(this, AttentionActivity.class));
                 } else {
-                    ToastView.makeText3(this, "请先登录");
+                    mainPresenter.showLoginDialog();
                 }
                 break;
             case R.id.ll_history:

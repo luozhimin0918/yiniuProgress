@@ -67,8 +67,8 @@ public class RollDotView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        defaultCircleColor = ContextCompat.getColor(getContext(), R.color.unaltered_color);
-        selectedCircleColor = ContextCompat.getColor(getContext(), R.color.decline_color);
+        defaultCircleColor = ContextCompat.getColor(getContext(), R.color.unselectedPointColor);
+        selectedCircleColor = ContextCompat.getColor(getContext(), R.color.selectedPointColor);
 
         for (int i = 0; i < circleCount; i++) {
             if (selectedPosition == i) {

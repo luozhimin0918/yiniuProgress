@@ -17,12 +17,14 @@ import com.jyh.kxt.av.ui.fragment.RankFragment;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.SearchActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
+import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
@@ -61,6 +63,7 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_av, LibActivity.StatusBarColor.THEME1);
 
+        ivRightIcon1.setImageResource(R.mipmap.icon_search);
         String[] mTitles = getResources().getStringArray(R.array.nav_audio_visual);
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
@@ -97,6 +100,7 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
                 break;
             case R.id.iv_right_icon1:
                 Intent intent = new Intent(getContext(), SearchActivity.class);
+                intent.putExtra(IntentConstant.TYPE, VarConstant.VIDEO);
                 startActivity(intent);
                 break;
         }

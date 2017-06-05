@@ -45,6 +45,7 @@ import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.base.http.VolleySyncHttp;
@@ -353,6 +354,33 @@ public class MainPresenter extends BasePresenter {
         logoutDialog.show();
     }
 
+    private AlertDialog loginPop;
+
+    /**
+     * 显示登录dialog
+     */
+    public void showLoginDialog() {
+        if (loginPop == null)
+            loginPop = new AlertDialog.Builder(mContext)
+                    .setTitle("提醒")
+                    .setMessage("请先登录")
+                    .setNegativeButton("登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                        }
+                    }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+        if (loginPop.isShowing()) {
+            loginPop.dismiss();
+        }
+        loginPop.show();
+    }
+
     /**
      * 缓存图片
      */
@@ -389,7 +417,8 @@ public class MainPresenter extends BasePresenter {
 //                    "o_class":"blog",
 //                    "o_action":"detail",
 //                    "href":""
-            JumpUtils.jump((BaseActivity) mContext, clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson.getString("o_id"),
+            JumpUtils.jump((BaseActivity) mContext, clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson.getString
+                            ("o_id"),
                     clickJson.getString("href"));
         }
     }

@@ -40,7 +40,7 @@ import butterknife.OnClick;
 
 public class LoginOrRegisterActivity extends BaseActivity {
 
-    @BindView(R.id.sv_rootView)public ScrollView rootView;
+    @BindView(R.id.sv_rootView) public ScrollView rootView;
     @BindView(R.id.iv_close) ImageView ivClose;
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.fl_bg) FrameLayout flBg;
@@ -60,16 +60,18 @@ public class LoginOrRegisterActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        String[] tabs = new String[]{"登录", "注册"};
+        String[] tabs = new String[]{"注册", "登录"};
 
         loginFragment = new LoginFragment();
         registerFragment = new RegisterFragment();
-        fragmentList.add(loginFragment);
         fragmentList.add(registerFragment);
+        fragmentList.add(loginFragment);
 
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
 
         stlNavigationBar.setViewPager(vpContent, tabs);
+
+        stlNavigationBar.setCurrentTab(1);
 
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
