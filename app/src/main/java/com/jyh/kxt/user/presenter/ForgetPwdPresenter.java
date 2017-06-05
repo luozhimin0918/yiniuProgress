@@ -14,6 +14,9 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class ForgetPwdPresenter extends BasePresenter {
 
     @BindObject ForgetPwdActivity forgetPwdActivity;
     private VolleyRequest request;
+    private TSnackbar snackBar;
 
     public ForgetPwdPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -49,15 +53,25 @@ public class ForgetPwdPresenter extends BasePresenter {
             e.printStackTrace();
         }
 
+        snackBar = TSnackbar.make(forgetPwdActivity.ivBarBreak, "邮件发送中", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        snackBar.addIconProgressLoading(0, true, false);
+        snackBar.show();
         request.doPost(HttpConstant.USER_FORGET, map, new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("邮件发送成功,请前往查看密码").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                forgetPwdActivity.finish();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText("邮件发送失败").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }
         });
         forgetPwdActivity.dismissWaitDialog();

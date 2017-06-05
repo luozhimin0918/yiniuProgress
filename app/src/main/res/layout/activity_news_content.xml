@@ -68,7 +68,8 @@
                 android:layout_toRightOf="@+id/view_zw"
                 android:background="@drawable/shape_read_count"
                 android:textColor="@color/white"
-                android:textSize="@dimen/min_min_font_size"/>
+                android:textSize="@dimen/min_min_font_size"
+                android:visibility="gone"/>
         </RelativeLayout>
 
 

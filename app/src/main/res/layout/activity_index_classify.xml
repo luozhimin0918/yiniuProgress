@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:zhy="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
               android:background="@color/theme1"
+              android:orientation="vertical"
     >
 
     <include layout="@layout/action_bar3"/>
 
-    <com.jyh.kxt.base.widget.OptionLayout
+    <!--<com.jyh.kxt.base.widget.OptionLayout-->
+    <!--android:id="@+id/ol_content"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="10dp"-->
+    <!--app:columnSpace="25dp"-->
+    <!--app:checkBoxBackground="@drawable/bg_classify_default"-->
+    <!--app:defaultFontColor="@color/font_color5"-->
+    <!--app:selectedFontColor="@color/font_color8"-->
+    <!--app:itemHeight="40dp"-->
+    <!--app:rowSpace="15dp"-->
+    <!--/>-->
+
+    <com.library.widget.flowlayout.TagFlowLayout
         android:id="@+id/ol_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        app:columnSpace="25dp"
-        app:checkBoxBackground="@drawable/bg_classify_default"
-        app:defaultFontColor="@color/font_color5"
-        app:selectedFontColor="@color/font_color8"
-        app:itemHeight="40dp"
-        app:rowSpace="15dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/newsContentPadding3"
+        android:paddingRight="@dimen/newsContentPadding3"
+        android:paddingTop="@dimen/searchPadding3"
+        zhy:auto_select_effect="false"
+        zhy:max_select="-1"
         />
 
 </LinearLayout>

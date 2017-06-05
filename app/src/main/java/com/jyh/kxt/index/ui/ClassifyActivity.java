@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -13,6 +14,9 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.widget.OptionLayout;
 import com.jyh.kxt.index.presenter.ClassifyPresenter;
+import com.library.widget.flowlayout.FlowLayout;
+import com.library.widget.flowlayout.TagAdapter;
+import com.library.widget.flowlayout.TagFlowLayout;
 
 import java.util.Arrays;
 
@@ -31,11 +35,12 @@ public class ClassifyActivity extends BaseActivity {
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
-    @BindView(R.id.ol_content) OptionLayout olContent;
+    @BindView(R.id.ol_content) TagFlowLayout olContent;
     private ClassifyPresenter classifyPresenter;
 
     private int index;
     private String[] tabs;
+    private TagAdapter<String> tagAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +55,33 @@ public class ClassifyActivity extends BaseActivity {
         index = getIntent().getIntExtra(IntentConstant.INDEX, 0);
         tabs = getIntent().getStringArrayExtra(IntentConstant.ACTIONNAV);
 
-        olContent.generateCheckBox(Arrays.asList(tabs));
+        if (tagAdapter == null) {
+            tagAdapter = new TagAdapter<String>(tabs) {
+                @Override
+                public View getView(FlowLayout parent, int position, String s) {
+                    TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_tv,
+                            olContent, false);
+                    tv.setText(s);
+                    return tv;
+                }
+            };
 
-        olContent.setMinSelectCount(1);
-        olContent.setMaxSelectCount(1);
-        olContent.setSelectMode(OptionLayout.SelectMode.RadioMode);
-        olContent.setSelectItemIndex(index);
+            olContent.setAdapter(tagAdapter);
+        } else {
+            tagAdapter.setTagDatas(Arrays.asList(tabs));
+        }
 
-        olContent.setOnItemCheckBoxClick(new OptionLayout.OnItemCheckBoxClick() {
+        olContent.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
-            public void onItemClick(int position, CheckBox mCheckBox) {
-                olContent.setSelectItemIndex(position);
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
                 Intent intent = new Intent();
                 intent.putExtra(IntentConstant.INDEX, position);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
+                return false;
             }
         });
+
     }
 
     @Override
@@ -74,7 +89,9 @@ public class ClassifyActivity extends BaseActivity {
         super.onNewIntent(intent);
         index = intent.getIntExtra(IntentConstant.INDEX, 0);
         tabs = getIntent().getStringArrayExtra(IntentConstant.ACTIONNAV);
-        olContent.setSelectItemIndex(index);
+        if (tagAdapter != null) {
+            tagAdapter.setSelectedList(index);
+        }
     }
 
     @OnClick(R.id.iv_bar_function)

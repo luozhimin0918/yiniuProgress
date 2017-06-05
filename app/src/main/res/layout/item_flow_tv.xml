@@ -3,7 +3,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_margin="5dp"
-          android:background="@drawable/bg_edt"
+          android:background="@drawable/bg_classify_default"
           android:paddingBottom="@dimen/searchItemPadding2"
           android:paddingLeft="@dimen/newsContentPadding3"
           android:paddingRight="@dimen/newsContentPadding3"

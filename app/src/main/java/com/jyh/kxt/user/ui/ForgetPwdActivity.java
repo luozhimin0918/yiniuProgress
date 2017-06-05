@@ -33,7 +33,7 @@ import butterknife.OnClick;
 
 public class ForgetPwdActivity extends BaseActivity {
 
-    @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
+    @BindView(R.id.iv_bar_break)public ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.edt_email) EditText edtEmail;

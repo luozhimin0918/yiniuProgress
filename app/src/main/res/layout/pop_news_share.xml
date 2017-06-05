@@ -86,6 +86,7 @@
                 android:id="@+id/iv_theme"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:padding="8dp"
                 android:src="@mipmap/icon_drawer_theme"/>
 
             <TextView

@@ -102,7 +102,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     }
 
     private int nullImgId = 0;
-    private String nullText = "";
+    private String nullText = null;
 
     public void loadEmptyData() {
         removeLoading();

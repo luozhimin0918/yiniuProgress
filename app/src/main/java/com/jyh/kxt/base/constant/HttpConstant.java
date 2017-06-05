@@ -104,7 +104,7 @@ public class HttpConstant {
     public static final String USER_LOGIN = BASE_URL + "user/login_from";//第三方登录
     public static final String USER_LOGIN2 = BASE_URL + "user/login";//登录
     public static final String USER_REGISTER = BASE_URL + "user/register";//注册
-    public static final String USER_FORGET = BASE_URL + "user/login_from";//忘记密码
+    public static final String USER_FORGET = BASE_URL + "user/find_password";//忘记密码
     public static final String USER_CHANEPWD = BASE_URL + "user/login_from";//修改密码
     public static final String USER_CHANEINFO = BASE_URL + "member/modify_profile";//修改资料
     // picture、uid、token、address、sex、work、nickname、birthday
