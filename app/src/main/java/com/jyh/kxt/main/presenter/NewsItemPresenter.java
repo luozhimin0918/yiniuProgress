@@ -29,6 +29,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
@@ -342,8 +343,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             marketItemBean.setRange(MarketUtil.replacePositive(marketItemBean.getRange()));
         }
 
-
-        RollViewPager recommendView = new RollViewPager(mContext);
+        RollDotViewPager mRollDotViewPager = new RollDotViewPager(mContext);
+        RollViewPager recommendView =  mRollDotViewPager.getRollViewPager();
         recommendView
                 .setGridMaxCount(3)
                 .setDataList(quotes)
@@ -357,14 +358,14 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                         quoteGridAdapter.add(adapter);
                     }
                 });
-        recommendView.build();
+        mRollDotViewPager.build();
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 SystemUtil.dp2px(mContext, 110));
 
-        recommendView.setLayoutParams(lp);
-        homeHeadView.addView(recommendView);
+        mRollDotViewPager.setLayoutParams(lp);
+        homeHeadView.addView(mRollDotViewPager);
 
         addLineView();
 

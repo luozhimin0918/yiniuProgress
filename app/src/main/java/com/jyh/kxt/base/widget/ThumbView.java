@@ -138,12 +138,15 @@ public class ThumbView extends RelativeLayout {
         String type = "";
         switch (commentBean.getType()) {
             case "2":
+            case VarConstant.VIDEO:
                 type = VarConstant.GOOD_TYPE_COMMENT_VIDEO;
                 break;
             case "1":
+            case VarConstant.ARTICLE:
                 type = VarConstant.GOOD_TYPE_COMMENT_NEWS;
                 break;
             case "3":
+            case VarConstant.BLOG_ARTICLE:
                 type = VarConstant.GOOD_TYPE_COMMENT_BLOG;
                 break;
         }
@@ -202,12 +205,15 @@ public class ThumbView extends RelativeLayout {
         String type = null;
 
         switch (commentBean.getType()) {
+            case VarConstant.ARTICLE:
             case "1":
                 type = VarConstant.GOOD_TYPE_COMMENT_NEWS;
                 break;
+            case VarConstant.VIDEO:
             case "2":
                 type = VarConstant.GOOD_TYPE_COMMENT_VIDEO;
                 break;
+            case VarConstant.BLOG_ARTICLE:
             case "3":
                 type = VarConstant.GOOD_TYPE_COMMENT_BLOG;
                 break;

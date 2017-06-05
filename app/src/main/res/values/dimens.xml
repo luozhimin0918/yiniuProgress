@@ -65,6 +65,8 @@
     <dimen name="navigationBar2ImagePaddingRight">17dp</dimen>
     <!--首页-->
     <dimen name="drawer_item_height">45dp</dimen>
+    <dimen name="drawer_item_imageSize">16dp</dimen>
+    <dimen name="drawer_item_imgPadding">10dp</dimen>
     <dimen name="drawer_image_height">165dp</dimen>
     <dimen name="drawer_search_height">31dp</dimen>
     <dimen name="av_video_height">211dp</dimen>
@@ -83,7 +85,7 @@
     <dimen name="index_btn_padding">10dp</dimen>
 
     <dimen name="index_quotes_height">150dp</dimen>
-    <dimen name="index_btn_height">150dp</dimen>
+    <dimen name="index_btn_height">160dp</dimen>
 
     <dimen name="indicator_margin">10dp</dimen>
     <dimen name="bar_height">35dp</dimen>
