@@ -119,6 +119,11 @@ public class RegexValidateUtil {
         return check(fax, regex);
     }
 
+    public static boolean isUrl(String url) {
+        String regex = "(http|ftp|https):\\/\\/([\\w.]+\\/?)\\S*";
+        return check(url, regex);
+    }
+
     /**
      * 验证QQ号码
      *

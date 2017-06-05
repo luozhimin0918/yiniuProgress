@@ -11,10 +11,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -43,6 +50,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -51,6 +59,7 @@ import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
@@ -59,6 +68,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -594,7 +604,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             }
 
-            settings.setLoadWithOverviewMode(true);
             settings.setBlockNetworkImage(false);
 
             settings.setJavaScriptEnabled(true);
@@ -618,11 +627,100 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             "</font>";
                     break;
             }
-
+            wvContent.addJavascriptInterface(new ImgClickListener(), "jsinfo");
             wvContent.setWebViewClient(new WebViewClient() {
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    boolean isUrl = RegexValidateUtil.isUrl(url);
+                    if (isUrl) {
+                        Intent intent = new Intent(getContext(), WebActivity.class);
+                        intent.putExtra(IntentConstant.WEBURL, url);
+                        startActivity(intent);
+                    } else {
+                        String hrefStr = "href";
+                        String o_class_str = "class";
+                        String o_action_str = "action";
+                        String o_id_str = "id";
+                        if (url.contains("\\?") && url.contains(hrefStr) && url.contains(o_class_str) && url.contains(o_action_str) && url
+                                .contains(o_id_str)) {
+                            String[] split = url.split("\\?");
+                            if (split[1] != null) {
+                                String[] params = split[1].split("&");
+                                if (params != null && params.length > 0) {
+                                    for (String param : params) {
+                                        if (param.contains(hrefStr)) {
+                                            String href = param.substring(param.indexOf("="));
+                                            if (href != null && RegexValidateUtil.isUrl(href)) {
+                                                Intent intent = new Intent(getContext(), WebActivity.class);
+                                                intent.putExtra(IntentConstant.WEBURL, href);
+                                                startActivity(intent);
+                                            }
+                                        } else {
+                                            String o_class = "";
+                                            String o_action = "";
+                                            String o_id = "";
+                                            if (param.contains(o_class_str)) {
+                                                o_class = param.substring(param.indexOf("="));
+                                            } else if (param.contains(o_action_str)) {
+                                                o_action = param.substring(param.indexOf("="));
+                                            } else if (param.contains(o_id_str)) {
+                                                o_id = param.substring(param.indexOf("="));
+                                            }
+                                            JumpUtils.jump(NewsContentActivity.this, o_class, o_action, o_id, null);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                }
+
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    return super.shouldInterceptRequest(view, request);
+                }
+
+                @Override
+                public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+                    return super.shouldOverrideKeyEvent(view, event);
+                }
+
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                    return super.shouldInterceptRequest(view, url);
+                }
+
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
+                    view.loadUrl("javascript:function clickImg()" +
+                            "{" +
+                            "   var imgs = document.getElementsByTagName(\"img\");" +
+                            "   for(var i = 0; i < imgs.length; i++)" +
+                            "   {" +
+                            "       imgs[i].onclick = function()" +
+                            "       {" +
+                            "           jsinfo.imgClick(this.src); " +
+                            "       }" +
+                            "   }" +
+                            "}");
+                    view.loadUrl("javascript:clickImg()");
+
+                    view.loadUrl("javascript:function urlClick()" +
+                            "{" +
+                            "   var urls = document.getElementsByTagName(\"a\");" +
+                            "   for(var i = 0; i < urls.length; i++)" +
+                            "   {" +
+                            "       urls[i].onclick = function()" +
+                            "       {" +
+                            "           jsinfo.urlClick(this.href); " +
+                            "       }" +
+                            "   }" +
+                            "}");
+                    view.loadUrl("javascript:urlClick()");
+
                     pllContent.loadOver();
                 }
             });
@@ -806,5 +904,114 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    class ImgClickListener {
+        private PopupUtil popupUtil;
+        private ImageView ivPop;
+
+        @JavascriptInterface
+        public void imgClick(final String imgPath) {
+            if (imgPath != null && (imgPath.contains("/Uploads/Editor") || imgPath.contains("/uploads/editor"))) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(NewsContentActivity.this)
+                                .load(imgPath)
+                                .asBitmap()
+                                .error(R.mipmap.icon_def_video)
+                                .placeholder(R.mipmap.icon_def_video)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+
+                                        if(popupUtil==null){
+                                            popupUtil = new PopupUtil(NewsContentActivity.this);
+                                            View inflate = popupUtil.createPopupView(R.layout.pop_img);
+                                            inflate.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    if (popupUtil != null && popupUtil.isShowing())
+                                                        popupUtil.dismiss();
+                                                }
+                                            });
+                                            ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+                                            PopupUtil.Config config = new PopupUtil.Config();
+
+                                            config.outsideTouchable = true;
+                                            config.alpha = 0.5f;
+                                            config.bgColor = 0X00000000;
+                                            config.animationStyle = R.style.PopupWindow_Style2;
+                                            config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                            config.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                                            popupUtil.setConfig(config);
+                                        }
+
+                                        if (popupUtil.isShowing())
+                                            popupUtil.dismiss();
+
+                                        //图片尺寸
+                                        int width = resource.getWidth();
+                                        int height = resource.getHeight();
+                                        //屏幕尺寸
+                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(NewsContentActivity.this);
+                                        int widthPixels = screenDisplay.widthPixels;
+                                        int heightPixels = screenDisplay.heightPixels;
+                                        //放大1.5倍后的图片尺寸
+                                        double largeWidth = width * 1.5;
+                                        double largeHeight = height * 1.5;
+                                        //放大图片(最大1.5倍),是其宽或高全屏
+                                        if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+                                            width *= 1.5;
+                                            height *= 1.5;
+                                        } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+                                            double outWidth = largeWidth - widthPixels;
+                                            double outHeight = largeHeight - heightPixels;
+                                            if (outHeight > outWidth) {
+                                                float size = widthPixels / (float) width;
+                                                width = widthPixels;
+                                                height *= size;
+                                            } else {
+                                                float size = heightPixels / (float) height;
+                                                height = heightPixels;
+                                                width *= size;
+                                            }
+                                        } else if (largeWidth > widthPixels) {
+                                            float size = widthPixels / (float) width;
+                                            width = widthPixels;
+                                            height *= size;
+                                        } else {
+                                            float size = heightPixels / (float) height;
+                                            height = heightPixels;
+                                            width *= size;
+                                        }
+
+                                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+                                        layoutParams.width = width;
+                                        layoutParams.height = height;
+                                        ivPop.setLayoutParams(layoutParams);
+
+                                        ivPop.setImageBitmap(resource);
+                                        popupUtil.showAtLocation(ivCollect, Gravity.CENTER, 0, 0);
+                                    }
+                                });
+                    }
+                });
+            }
+        }
+
+        @JavascriptInterface
+        public void getJsInfo(String clickInfo) {
+            JSONObject clickJson = JSON.parseObject(clickInfo);
+            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson
+                            .getString("o_id"),
+                    clickJson.getString("href"));
+        }
+
+        @JavascriptInterface
+        public void urlClick(String url){
+
+        }
     }
 }
