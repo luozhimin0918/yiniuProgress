@@ -544,15 +544,19 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             int alertTheme = ThemeUtil.getAlertTheme(getContext());
             String source = "";
+            String sourceStr = newsContentJson.getSource();
+            if (RegexValidateUtil.isEmpty(sourceStr)) {
+                sourceStr = "";
+            }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
-                    source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + newsContentJson.getSource() +
+                    source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + sourceStr +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
-                    source = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + newsContentJson.getSource() +
+                    source = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + sourceStr +
                             "</font>";
                     break;
             }
@@ -806,13 +810,17 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         try {
             int alertTheme = ThemeUtil.getAlertTheme(getContext());
             String content = "";
+            String source = webViewAndHead.newsContentJson.getSource();
+            if (RegexValidateUtil.isEmpty(source)) {
+                source = "";
+            }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    content = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + webViewAndHead.newsContentJson.getSource() +
+                    content = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + source +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                    content = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + webViewAndHead.newsContentJson.getSource() +
+                    content = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + source +
                             "</font>";
                     break;
             }
