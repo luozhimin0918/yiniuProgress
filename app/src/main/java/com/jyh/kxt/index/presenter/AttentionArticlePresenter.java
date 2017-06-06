@@ -13,6 +13,7 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.index.adapter.AttentionArticleAdapter;
 import com.jyh.kxt.index.ui.fragment.AttentionArticleFragment;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.adapter.EditNewsAdapter;
@@ -179,7 +180,7 @@ public class AttentionArticlePresenter extends BasePresenter {
             }, 200);
     }
 
-    public void selAll(boolean selected, DelNumListener delListener, EditNewsAdapter adapter) {
+    public void selAll(boolean selected, DelNumListener delListener, AttentionArticleAdapter adapter) {
         if (selected) {
             //全选
             List<NewsJson> data = adapter.getData();
@@ -205,7 +206,7 @@ public class AttentionArticlePresenter extends BasePresenter {
         adapter.notifyDataSetChanged();
     }
 
-    public void del(final DelNumListener delNumListener, final EditNewsAdapter adapter) {
+    public void del(final DelNumListener delNumListener, final AttentionArticleAdapter adapter) {
         //获取选中的id
         List<NewsJson> data = adapter.getData();
         String ids = "";
@@ -244,7 +245,7 @@ public class AttentionArticlePresenter extends BasePresenter {
         });
     }
 
-    private void quitEdit(DelNumListener delNumListener, EditNewsAdapter adapter) {
+    private void quitEdit(DelNumListener delNumListener, AttentionArticleAdapter adapter) {
         adapter.setEdit(false);
         List<NewsJson> data = adapter.getData();
         //还原删除按钮数字
