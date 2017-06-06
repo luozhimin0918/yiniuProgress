@@ -12,11 +12,10 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.utils.JumpUtils;
-import com.jyh.kxt.explore.json.AuthorDetailsJson;
+import com.jyh.kxt.index.adapter.AttentionArticleAdapter;
 import com.jyh.kxt.index.presenter.AttentionArticlePresenter;
 import com.jyh.kxt.index.ui.AttentionActivity;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.user.adapter.EditNewsAdapter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -46,7 +45,7 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
-    private EditNewsAdapter adapter;
+    private AttentionArticleAdapter adapter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -93,7 +92,7 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
 
     public void init(List<NewsJson> newsJsons) {
         if (adapter == null) {
-            adapter = new EditNewsAdapter(newsJsons, getContext());
+            adapter = new AttentionArticleAdapter(newsJsons, getContext());
             adapter.setSelListener(this);
             plvContent.setAdapter(adapter);
         } else {
