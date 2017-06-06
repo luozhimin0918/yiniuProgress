@@ -91,7 +91,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                     String format = simpleDateFormat.format(date);
                     long time = simpleDateFormat.parse(format).getTime();
                     if (calendarPresenter.dataLongList.get(position) == time) {
-                        tabView.setBackgroundResource(com.library.R.drawable.shape_calendar_today);
+                        tabView.setBackgroundResource(R.drawable.shape_calendar_today);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

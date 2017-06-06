@@ -110,7 +110,7 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
 
                 String time = "00:00";
                 try {
-                    time = DateUtils.transformTime(Long.parseLong(newsBean.getDatetime()) * 1000, DateUtils.TYPE_HM);
+                    time = DateUtils.transformTime(Long.parseLong(newsBean.getDatetime()) * 1000, DateUtils.TYPE_MDHM);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -44,7 +44,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
         setContentView(R.layout.fragment_video_item);
         rankItemPresenter = new RankItemPresenter(this);
         plRootView.setOnAfreshLoadListener(this);
-        plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         plvContent.setDividerNull();
         plvContent.setOnRefreshListener(rankItemPresenter);
         plvContent.setOnItemClickListener(this);
