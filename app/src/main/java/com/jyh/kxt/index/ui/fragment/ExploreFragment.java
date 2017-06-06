@@ -23,7 +23,6 @@ import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.ActivityAdapter;
@@ -516,5 +515,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         for (View headLine : headLines) {
             headLine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         }
+    }
+
+    public void doubleClickFragment() {
     }
 }

@@ -34,7 +34,7 @@ import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2, PageLoadLayout.OnAfreshLoadListener {
 
-    private NewsItemPresenter newsItemPresenter;
+    public NewsItemPresenter newsItemPresenter;
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;

@@ -146,6 +146,18 @@ public class DatumHistoryActivity extends BaseActivity implements FastInfoPinned
             int min = value1 > 0 ? (int) Math.floor(value2) : (int) Math.ceil(value2);
             mYAxisBean.setMin(min);
 
+
+            switch (type) {
+                case "finance":
+                    mYAxisBean.setUnit("公布值");
+                    break;
+                case "etf":
+                    mYAxisBean.setUnit("净持仓量");
+                    break;
+                case "cftc":
+                    mYAxisBean.setUnit("持仓");
+                    break;
+            }
             historyChartBean.setY_axis(mYAxisBean);
 
             trendChartLayout.setData(historyChartBean);

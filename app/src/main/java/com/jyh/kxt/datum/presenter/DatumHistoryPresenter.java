@@ -169,8 +169,8 @@ public class DatumHistoryPresenter extends BasePresenter {
 
                     HistoryListBean.DataBean headDataBean = new HistoryListBean.DataBean();
                     headDataBean.setBefore(dataBean.getTotalounce());
-                    headDataBean.setReality(dataBean.getTotal());
-                    headDataBean.setForecast(dataBean.getChange());
+                    headDataBean.setForecast(dataBean.getTotaltonne());
+                    headDataBean.setReality(dataBean.getChange());
                     headDataBean.setTime(dataBean.getTime());
 
                     adapterList.add(headDataBean);
@@ -188,8 +188,8 @@ public class DatumHistoryPresenter extends BasePresenter {
 
                     HistoryListBean.DataBean headDataBean = new HistoryListBean.DataBean();
                     headDataBean.setBefore(dataBean.getBull());
-                    headDataBean.setReality(dataBean.getOnly());
                     headDataBean.setForecast(dataBean.getBear());
+                    headDataBean.setReality(dataBean.getOnly());
                     headDataBean.setTime(dataBean.getTime());
 
                     adapterList.add(headDataBean);

@@ -31,6 +31,8 @@ import com.library.util.DateUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.Iterator;
 import java.util.List;
@@ -54,9 +56,13 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         super(list);
         this.mContext = context;
         this.list = list;
-        String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
-        MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
-        url_video_share = mainInitJson.getUrl_video_share();
+        try {
+            String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
+            MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
+            url_video_share = mainInitJson.getUrl_video_share();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -106,6 +112,18 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(url_video_share == null){
+
+
+                    TSnackbar.make(v,
+                            "分享失败了喔,可能因为网络状况不好",
+                            TSnackbar.LENGTH_LONG,
+                            TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                            .setPromptThemBackground(Prompt.WARNING)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                    return;
+                }
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
                                 "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,

@@ -1,12 +1,9 @@
 package com.jyh.kxt.user.ui;
 
-import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -14,9 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -30,15 +25,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.presenter.ReplyMessagePresenter;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.presenter.CollectFlashPresenter;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
 import com.library.base.http.VarConstant;
 import com.library.util.CommonUtil;
@@ -334,6 +326,8 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 String oldName = tvNickname.getText().toString();
                 tvNickname.setText(name);
                 editUserInfoPresenter.postChangedInfo(name, oldName, VarConstant.HTTP_NICKNAME);
+
+                popupWindow.dismiss();
             }
         });
 

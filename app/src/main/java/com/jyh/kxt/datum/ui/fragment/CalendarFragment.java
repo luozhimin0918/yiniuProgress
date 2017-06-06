@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -16,7 +18,10 @@ import com.jyh.kxt.datum.presenter.CalendarPresenter;
 import com.library.util.SPUtils;
 import com.library.widget.tablayout.SlidingTabLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -76,6 +81,28 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         vpCalendarList.addOnPageChangeListener(this);
         vpCalendarList.setCurrentItem(itemPosition);
         calendarPresenter.updateSelectedColor(itemPosition);
+
+        stlNavigationBar.setOnTitleNotifyData(new SlidingTabLayout.OnTitleNotifyData() {
+            @Override
+            public void itemTitleCreate(View tabView, int position) {
+                try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+                    Date date = new Date(System.currentTimeMillis());
+                    String format = simpleDateFormat.format(date);
+                    long time = simpleDateFormat.parse(format).getTime();
+                    if (calendarPresenter.dataLongList.get(position) == time) {
+                        tabView.setBackgroundResource(com.library.R.drawable.shape_calendar_today);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void titleCreateSuccess(LinearLayout mTabsContainer) {
+
+            }
+        });
     }
 
     @Override
@@ -91,6 +118,12 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public String getCurrentTabDate() {
+        Long aLong = calendarPresenter.dataLongList.get(stlNavigationBar.getCurrentTab());
+        String mCalendarDate = (String) DateFormat.format("yyyy-MM-dd", aLong);
+        return mCalendarDate;
     }
 
     /**
@@ -152,9 +185,12 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         try {
             List<Fragment> fragments = fm.getFragments();
             for (int i = 0; i < fragments.size(); i++) {
-                if (fragments.get(i) != null) {
-                    CalendarItemFragment calendarItemFragment = (CalendarItemFragment) fragments.get(i);
-                    calendarItemFragment.updateFiltration();
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    CalendarItemFragment calendarItemFragment = (CalendarItemFragment) fragment;
+                    if (calendarItemFragment.calendarDate != null) {
+                        calendarItemFragment.updateFiltration();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -194,26 +230,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                 }
             }
         }
-
-        /*if (judgeSet != null) {//0 利多美元  1 利多金银石油 2 影响较小
-            if (!judgeSet.contains("全部")) {
-                switch (mCalendarFinanceBean.getEffecttype()) {
-                    case 0:
-                        if (!judgeSet.contains("外汇")) {
-                            return false;
-                        }
-                        break;
-                    case 1:
-                        if (!judgeSet.contains("美元")) {
-                            return false;
-                        }
-                        break;
-                    case 2:
-
-                        break;
-                }
-            }
-        }*/
         if (importanceSet.size() != 0) {
             if (!importanceSet.contains("全部")) {
                 if (!importanceSet.contains(mCalendarFinanceBean.getImportance())) {
@@ -251,11 +267,13 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(fragmentList!=null)
+        if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
-                if(fragment instanceof BaseFragment)
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
+                }
             }
+        }
 
         stlNavigationBar.notifyDataSetChanged();
     }

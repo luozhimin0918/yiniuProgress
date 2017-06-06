@@ -111,6 +111,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     /**
      * 更改右上角图片
+     *
      * @param position
      */
     private void changeRightIcon(int position) {
@@ -355,10 +356,36 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (fragmentList != null)
+        if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment)
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
+                }
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (!isHidden()) { //没有被隐藏
+                if (newsFragment != null) {
+                    newsFragment.sendSocketParams();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void doubleClickFragment() {
+        try {
+            onTabSelect(0);
+            stlNavigationBar.setCurrentTab(0);
+            newsFragment.stlNavigationBar.setCurrentTab(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

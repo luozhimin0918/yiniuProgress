@@ -57,6 +57,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
 
+    private VideoFragment videoFragment;
+
     private List<Fragment> fragmentList = new ArrayList<>();
 
     @Override
@@ -68,7 +70,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
 
-        fragmentList.add(new VideoFragment());
+        videoFragment = new VideoFragment();
+        fragmentList.add(videoFragment);
         fragmentList.add(new RankFragment());
 
         FragmentManager fm = getChildFragmentManager();
@@ -135,8 +138,9 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
-            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
-                    .icon_user_def_photo).into(ivLeftIcon);
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap
+                            .icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
@@ -179,11 +183,22 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (fragmentList != null)
+        if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
                 if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
                 }
             }
+        }
+    }
+
+    public void doubleClickFragment() {
+        try {
+            onTabSelect(0);
+            stlNavigationBar.setCurrentTab(0);
+            videoFragment.stlNavigationBar.setCurrentTab(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

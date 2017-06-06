@@ -39,7 +39,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     private NewsPresenter newsPresenter;
 
-    @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
+    @BindView(R.id.stl_navigation_bar) public SlidingTabLayout stlNavigationBar;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.vp_news_list) ViewPager vpNewsList;
 
@@ -150,5 +150,10 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             }
         }
         if (stlNavigationBar != null) stlNavigationBar.notifyDataSetChanged();
+    }
+
+    public void sendSocketParams() {
+            NewsItemFragment fragment = (NewsItemFragment) fragmentList.get(0);
+            fragment.newsItemPresenter.sendSocketParams();
     }
 }

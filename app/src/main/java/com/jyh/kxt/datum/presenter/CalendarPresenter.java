@@ -43,7 +43,7 @@ public class CalendarPresenter extends BasePresenter {
     @BindObject CalendarFragment calendarFragment;
 
     private String currentMonth;
-    private TextView oldSelectTabView;
+    private int oldSelectTabViewPosition = -1;
 
     public List<Long> dataLongList = new ArrayList<>();    //日期Long类型
     public String[] navTitleList = new String[generateItemCount];  //导航栏Title
@@ -95,7 +95,11 @@ public class CalendarPresenter extends BasePresenter {
             @Override
             public CharSequence getPageTitle(int position) {
                 String title = navTitleList[position];
-                return getColorCharSequence(title, false);
+                boolean isSelect = position == 15;
+                if (isSelect) {
+                    oldSelectTabViewPosition = position;
+                }
+                return getColorCharSequence(title, isSelect);
             }
         };
         return baseFragmentAdapter;
@@ -104,7 +108,7 @@ public class CalendarPresenter extends BasePresenter {
     private SpannableString getColorCharSequence(String title, boolean isSelect) {
         SpannableString msp = new SpannableString(title);
 
-        int dayColor, weekColor;
+        final int dayColor, weekColor;
         if (!isSelect) {
             dayColor = ContextCompat.getColor(mContext, R.color.font_color3);
             weekColor = ContextCompat.getColor(mContext, R.color.font_color6);
@@ -125,7 +129,9 @@ public class CalendarPresenter extends BasePresenter {
         TextView tvTitle = stlNavigationBar.getTitleView(position);
         String title = tvTitle.getText().toString();
 
-        if (oldSelectTabView != null) {
+        if (oldSelectTabViewPosition != -1) {
+            TextView oldSelectTabView = stlNavigationBar.getTitleView(oldSelectTabViewPosition);
+
             String oldSelectTitle = oldSelectTabView.getText().toString();
             SpannableString colorCharSequence = getColorCharSequence(oldSelectTitle, false);
             oldSelectTabView.setText(colorCharSequence);
@@ -133,7 +139,7 @@ public class CalendarPresenter extends BasePresenter {
 
         SpannableString colorCharSequence = getColorCharSequence(title, true);
         tvTitle.setText(colorCharSequence);
-        oldSelectTabView = tvTitle;
+        oldSelectTabViewPosition = position;
 
         //改变右上角日期
         String month = (String) DateFormat.format("MM", dataLongList.get(position));
@@ -153,7 +159,7 @@ public class CalendarPresenter extends BasePresenter {
         }
         int txtSize = SystemUtil.dp2px(mContext, 11);
 
-        int bitmapColor =ContextCompat.getColor(mContext,R.color.font_color5);
+        int bitmapColor = ContextCompat.getColor(mContext, R.color.font_color5);
         int imageViewSize = mContext.getResources().getDimensionPixelSize(R.dimen.navigationBarRightImageViewSize);
 
         Bitmap txtBitmap = rqBitmap.copy(bitmapConfig, true);

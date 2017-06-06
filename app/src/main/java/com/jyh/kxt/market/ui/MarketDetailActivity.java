@@ -39,6 +39,7 @@ import com.library.bean.EventBusClass;
 import com.library.util.BitmapUtils;
 import com.library.util.LogUtil;
 import com.library.util.SPUtils;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -62,6 +63,7 @@ public class MarketDetailActivity extends BaseActivity {
     @BindView(R.id.ll_market_detail_share) LinearLayout llMarketDetailShare;
     @BindView(R.id.activity_market_detail) RelativeLayout activityMarketDetail;
     @BindView(R.id.lwv_content) LoadX5WebView lwvContent;
+    @BindView(R.id.pll_content) PageLoadLayout pageLoadLayout;
 
     private MarketItemBean marketItemBean;
     private List<MarketItemBean> marketItemList;
@@ -149,6 +151,8 @@ public class MarketDetailActivity extends BaseActivity {
             tvBarTitle.setText(marketItemBean.getName());
         } catch (Exception e) {
             e.printStackTrace();
+            pageLoadLayout.setNullText("加载行情地址可能为空");
+            pageLoadLayout.loadEmptyData();
         }
     }
 
@@ -240,11 +244,19 @@ public class MarketDetailActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        requestAddOrDeleteOptions();
+        try {
+            requestAddOrDeleteOptions();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onBackPressed();
     }
 
     private void requestAddOrDeleteOptions() {
+        if (defaultUpdateAddStatus == updateAddStatus) {
+            return;
+        }
+
         MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
         EventBusClass eventBusClass = new EventBusClass(
                 EventBusClass.MARKET_OPTION_UPDATE,
@@ -253,10 +265,6 @@ public class MarketDetailActivity extends BaseActivity {
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo == null) {
-            return;
-        }
-
-        if (defaultUpdateAddStatus == updateAddStatus) {
             return;
         }
 

@@ -1,9 +1,7 @@
 package com.jyh.kxt.base;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -52,8 +50,8 @@ public class BaseActivity extends LibActivity implements IBaseView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtil.addActivityToThemeCache(this);
 
+        ThemeUtil.addActivityToThemeCache(this);
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
             setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -84,8 +82,8 @@ public class BaseActivity extends LibActivity implements IBaseView {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
 
+        boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         boolean changeCurrentActionTheme = ThemeUtil.isChangeCurrentActionTheme(this);
         if (changeCurrentActionTheme) {
             if (isNightTheme) {
@@ -106,7 +104,6 @@ public class BaseActivity extends LibActivity implements IBaseView {
         getDelegate().setLocalNightMode(nightMode);
 
         if (isPost21) {
-            applyDayNightForStatusBar();
         }
 
         View decorView = getWindow().getDecorView();
@@ -156,20 +153,12 @@ public class BaseActivity extends LibActivity implements IBaseView {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void applyDayNightForStatusBar() {
-        TypedArray a = getTheme().obtainStyledAttributes(0, new int[]{
-                android.R.attr.statusBarColor
-        });
-        int color = a.getColor(0, 0);
-        getWindow().setStatusBarColor(color);
-        a.recycle();
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ThemeUtil.removeActivityFromThemeCache(this);
+        Glide.get(this).clearMemory();
     }
 
     @Override

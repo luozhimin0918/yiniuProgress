@@ -45,6 +45,8 @@ public class ClassifyActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_anim2,R.anim.activity_out1);
+
         setContentView(R.layout.activity_index_classify, StatusBarColor.THEME1);
         classifyPresenter = new ClassifyPresenter(this);
 

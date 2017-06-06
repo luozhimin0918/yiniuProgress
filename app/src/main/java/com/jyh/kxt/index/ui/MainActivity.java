@@ -31,11 +31,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -57,8 +55,6 @@ import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
-import com.library.util.BitmapUtils;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -103,10 +99,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
             themeBtn, loginBtn, quitBtn;
     private TextView tvTheme;
+    private long oldClickNavigationTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_anim3, R.anim.activity_out1);
         setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
@@ -200,34 +198,52 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         clickSwitchFragment(view.getId());
     }
 
+
     public void clickSwitchFragment(int viewId) {
         BaseFragment mClickFragment = null;
+        long currentTime = System.currentTimeMillis();
         switch (viewId) {
             case R.id.rb_home:
                 homeFragment = homeFragment == null ? HomeFragment.newInstance() : homeFragment;
                 mClickFragment = homeFragment;
+                if (currentFragment == homeFragment && currentTime - oldClickNavigationTime < 2000) {
+                    homeFragment.doubleClickFragment();
+                }
                 break;
             case R.id.rb_audio_visual:
                 avFragment = avFragment == null ? AvFragment.newInstance() : avFragment;
                 mClickFragment = avFragment;
+                if (currentFragment == avFragment && currentTime - oldClickNavigationTime < 2000) {
+                    avFragment.doubleClickFragment();
+                }
                 break;
             case R.id.rb_market:
                 marketFragment = marketFragment == null ? MarketFragment.newInstance() : marketFragment;
                 mClickFragment = marketFragment;
+                if (currentFragment == marketFragment && currentTime - oldClickNavigationTime < 2000) {
+                    marketFragment.doubleClickFragment();
+                }
                 break;
             case R.id.rb_datum:
                 datumFragment = datumFragment == null ? DatumFragment.newInstance() : datumFragment;
                 mClickFragment = datumFragment;
+                if (currentFragment == datumFragment && currentTime - oldClickNavigationTime < 2000) {
+                    datumFragment.doubleClickFragment();
+                }
                 break;
             case R.id.rb_probe:
                 exploreFragment = exploreFragment == null ? ExploreFragment.newInstance() : exploreFragment;
                 mClickFragment = exploreFragment;
+                if (currentFragment == exploreFragment && currentTime - oldClickNavigationTime < 2000) {
+                    exploreFragment.doubleClickFragment();
+                }
                 break;
         }
         if (mClickFragment != null) {
             mainPresenter.switchToFragment(mClickFragment);
         }
         currentFragment = mClickFragment;
+        oldClickNavigationTime = System.currentTimeMillis();
     }
 
     /**
@@ -270,8 +286,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         startActivity(startMain);
                         System.exit(0);
                     } else {// android2.1
-                        android.app.ActivityManager am = (android.app.ActivityManager) MainActivity.this.getSystemService
-                                (ACTIVITY_SERVICE);
+                        android.app.ActivityManager am = (android.app.ActivityManager) MainActivity.this
+                                .getSystemService
+                                        (ACTIVITY_SERVICE);
                         am.restartPackage(getPackageName());
                     }
                 } catch (Exception e) {
@@ -438,10 +455,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             Glide.with(getContext())
                     .load(pictureStr)
                     .crossFade(1000)
-                    .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                    .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";
+                    // "4":图片缩放比例,默认“1”。
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable>
+                                glideAnimation) {
                             loginView.setBackground(resource);
                         }
                     });
@@ -553,10 +572,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 Glide.with(getContext())
                         .load(userInfo.getPicture())
                         .crossFade(1000)
-                        .bitmapTransform(new BlurTransformation(getContext(), 23, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                        .bitmapTransform(new BlurTransformation(getContext(), 23, 4)) // “23”：设置模糊度(在0.0到25.0之间)
+                        // ，默认”25";"4":图片缩放比例,默认“1”。
                         .into(new SimpleTarget<GlideDrawable>() {
                             @Override
-                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable>
+                                    glideAnimation) {
                                 loginView.setBackground(resource);
                             }
                         });

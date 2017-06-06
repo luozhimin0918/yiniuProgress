@@ -55,6 +55,7 @@ public class TrendChartView extends View {
     private int currentSelectedPosition = -1;
 
     private TrendChartTextView priceShowView;
+    private String unit ="";
 
     public TrendChartView(Context context, int min, int max) {
         super(context);
@@ -242,7 +243,7 @@ public class TrendChartView extends View {
                         CharSequence format = DateFormat.format("yyyy-MM-dd", timeLong);
 
                         priceShowView.setPoint(point);
-                        priceShowView.setText("日期" + format + "\n价格:" + trendPriceArray[position]);
+                        priceShowView.setText("日期" + format + "\n"+unit+":" + trendPriceArray[position]);
                         if (currentSelectedPosition != position) {
                             invalidate();
                         }
@@ -355,5 +356,9 @@ public class TrendChartView extends View {
 
     public void setPriceShowView(TrendChartTextView priceShowView) {
         this.priceShowView = priceShowView;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

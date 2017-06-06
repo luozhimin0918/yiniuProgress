@@ -14,14 +14,11 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
-import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.utils.UmengShareTool;
-import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.library.manager.ActivityManager;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -92,7 +89,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                         .getInstance()
                         .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
             }
-        }, 2000);
+        }, 0);
     }
 
 

@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.presenter.DatumPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
@@ -57,7 +59,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -116,40 +120,40 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
             case R.id.iv_right_icon1:
-                if (filtratePopup == null) {
 
-                    DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
-                    int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
+                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
+                int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
 
-                    filtratePopup = new PopupUtil(getActivity());
-                    View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
-                    datumPresenter.registerFiltrateAgency(filtrateView);
+                filtratePopup = new PopupUtil(getActivity());
+                View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
+                datumPresenter.registerFiltrateAgency(filtrateView);
 
-                    PopupUtil.Config config = new PopupUtil.Config();
+                PopupUtil.Config config = new PopupUtil.Config();
 
-                    config.outsideTouchable = true;
-                    config.alpha = 0.5f;
-                    config.bgColor = 0X00000000;
+                config.outsideTouchable = true;
+                config.alpha = 0.5f;
+                config.bgColor = 0X00000000;
 
-                    config.animationStyle = R.style.PopupWindow_Style2;
-                    config.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    config.height = popHeight;
-                    filtratePopup.setConfig(config);
+                config.animationStyle = R.style.PopupWindow_Style2;
+                config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                config.height = popHeight;
+                filtratePopup.setConfig(config);
 
-                    filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
-                    filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
+                filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
 
-                        }
-                    });
-                } else {
-                    filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                }
+                    }
+                });
                 break;
             case R.id.iv_right_icon2:
-                datumPresenter.openCalendar();
+
+                if (calendarFragment != null) {
+                    CalendarFragment calendarFragment = (CalendarFragment) this.calendarFragment;
+                    datumPresenter.openCalendar(calendarFragment.getCurrentTabDate());
+                }
                 break;
         }
 
@@ -450,8 +454,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
-            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
-                    .icon_user_def_photo).into(ivLeftIcon);
+            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
+                    .placeholder(R.mipmap
+                            .icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
@@ -494,12 +499,30 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (dataFragment != null)
+        if (dataFragment != null) {
             dataFragment.onChangeTheme();
-        if (calendarFragment != null)
+        }
+        if (calendarFragment != null) {
             calendarFragment.onChangeTheme();
+        }
         if (filtratePopup != null) {
             filtratePopup = null;
+        }
+    }
+
+    public void doubleClickFragment() {
+        try {
+            onTabSelect(0);
+            stlNavigationBar.setCurrentTab(0);
+
+            CalendarFragment doubleClickCalendarFragment = (CalendarFragment) calendarFragment;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            Date date = new Date(System.currentTimeMillis());
+            String format = simpleDateFormat.format(date);
+            long selectTimeMillis = simpleDateFormat.parse(format).getTime();
+            doubleClickCalendarFragment.gotoCorrespondItem(selectTimeMillis);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

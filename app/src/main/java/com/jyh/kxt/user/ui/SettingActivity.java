@@ -14,7 +14,6 @@ import com.jyh.kxt.user.presenter.SettingPresenter;
 import com.library.util.SPUtils;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -37,7 +36,6 @@ public class SettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_setting, StatusBarColor.THEME1);
-        ButterKnife.bind(this);
 
 
         Boolean isOpenPush = SPUtils.getBoolean(this, SpConstant.SETTING_PUSH);

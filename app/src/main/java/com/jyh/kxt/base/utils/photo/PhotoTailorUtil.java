@@ -34,7 +34,7 @@ import java.io.File;
 
 public class PhotoTailorUtil {
 
-    private final String AUTHORITY = "com.jph.takephoto.fileprovider";
+    private final String AUTHORITY = "com.kxt.fileprovider";
     private final int requestCameraCode = 1;
     private final int requestSelectCode = 2;
 

@@ -78,11 +78,38 @@
             style="@style/Audio_RB_Style"
             android:src="@drawable/sel_nav_collect"/>
 
-        <ImageView
-            android:id="@+id/iv_ding"
-            style="@style/Audio_RB_Style"
-            android:src="@drawable/sel_nav_like"/>
 
+        <RelativeLayout
+            android:id="@+id/rl_dian_zan"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:id="@+id/iv_ding"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/sel_nav_like"/>
+
+            <View
+                android:id="@+id/view_zw1"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/tv_ding_Count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/view_zw1"
+                android:background="@drawable/shape_read_count"
+                android:textColor="@color/white"
+                android:textSize="@dimen/min_min_font_size"/>
+        </RelativeLayout>
         <ImageView
             android:id="@+id/iv_share"
             style="@style/Audio_RB_Style"

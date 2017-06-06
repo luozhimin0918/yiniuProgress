@@ -8,6 +8,15 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#ff669900</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <style name="Theme.Start" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@mipmap/icon_lauch</item>
         <item name="android:windowNoTitle">true</item>

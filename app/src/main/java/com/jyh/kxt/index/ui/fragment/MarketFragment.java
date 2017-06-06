@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -148,6 +150,15 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IntentConstant.REQUESTCODE1 && resultCode == Activity.RESULT_OK && marketVPFragment !=
+                null) {
+            marketVPFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         try {
@@ -176,9 +187,34 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (marketVPFragment != null)
+        if (marketVPFragment != null) {
             marketVPFragment.onChangeTheme();
-        if (optionalFragment != null)
+        }
+        if (optionalFragment != null) {
             optionalFragment.onChangeTheme();
+        }
+    }
+
+    public void doubleClickFragment() {
+        try {
+            onTabSelect(0);
+            stlNavigationBar.setCurrentTab(0);
+            MarketVPFragment doubleClickMarketVPFragment = (MarketVPFragment) marketVPFragment;
+            doubleClickMarketVPFragment.stlNavigationBar.setCurrentTab(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (!isHidden()) {
+                ((MarketVPFragment) marketVPFragment).sendSocketParams();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

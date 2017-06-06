@@ -11,14 +11,20 @@
         android:id="@+id/ab_title"
         layout="@layout/action_bar1"/>
 
-    <com.jyh.kxt.base.widget.LoadX5WebView
-        android:id="@+id/lwv_content"
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_nav"
         android:layout_below="@+id/ab_title">
 
-    </com.jyh.kxt.base.widget.LoadX5WebView>
+        <com.jyh.kxt.base.widget.LoadX5WebView
+            android:id="@+id/lwv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.jyh.kxt.base.widget.LoadX5WebView>
+    </com.library.widget.PageLoadLayout>
 
     <LinearLayout
         android:id="@+id/ll_nav"

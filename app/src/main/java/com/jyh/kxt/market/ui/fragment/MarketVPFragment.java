@@ -1,14 +1,19 @@
 package com.jyh.kxt.market.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketVPPresenter;
 import com.library.widget.PageLoadLayout;
@@ -16,9 +21,9 @@ import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Mr'Dai on 2017/4/11.
@@ -35,6 +40,20 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private List<Fragment> marketItemList;
     public List<MarketNavBean> marketNavList;
+    private String[] titles;
+
+    @OnClick(R.id.iv_more)
+    public void onViewClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_more:
+
+                Intent intent = new Intent(getContext(), ClassifyActivity.class);
+                intent.putExtra(IntentConstant.INDEX, stlNavigationBar.getCurrentTab());
+                intent.putExtra(IntentConstant.ACTIONNAV, titles);
+                ((Activity) getContext()).startActivityForResult(intent, IntentConstant.REQUESTCODE1);
+                break;
+        }
+    }
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -61,7 +80,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         mMarketNavBean.setCode("zhuYe");
         marketNavList.add(0, mMarketNavBean);
 
-        String[] titles = new String[fragmentSize];
+        titles = new String[fragmentSize];
 
         for (int i = 0; i < fragmentSize; i++) {
             MarketNavBean marketNavBean = marketNavList.get(i);
@@ -140,11 +159,21 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (marketItemList != null)
+        if (marketItemList != null) {
             for (Fragment fragment : marketItemList) {
-                if (fragment instanceof BaseFragment)
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
+                }
             }
+        }
         stlNavigationBar.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == IntentConstant.REQUESTCODE1 && resultCode == Activity.RESULT_OK) {
+            int index = data.getIntExtra(IntentConstant.INDEX, 0);
+            stlNavigationBar.setCurrentTab(index);
+        }
     }
 }

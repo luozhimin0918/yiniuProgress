@@ -41,7 +41,6 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -50,7 +49,6 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.base.http.VolleySyncHttp;
 import com.library.util.FileUtils;
-import com.library.util.LogUtil;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
 import com.library.widget.window.ToastView;
@@ -80,6 +78,7 @@ public class MainPresenter extends BasePresenter {
         //当前用户调用显示
 
         if (toFragment != currentFragment) {
+
             MainActivity mainActivity = (MainActivity) mContext;
             FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
@@ -94,6 +93,8 @@ public class MainPresenter extends BasePresenter {
                     transaction.hide(currentFragment).show(toFragment);
                 }
             }
+
+            toFragment.onResume();
 
             mMainActivity.currentFragment = toFragment;
             transaction.commitAllowingStateLoss();
@@ -172,8 +173,6 @@ public class MainPresenter extends BasePresenter {
                     .asBitmap()
                     .into(new MySimpleTarget(mContext, pictureUrl));
         }
-
-
     }
 
 

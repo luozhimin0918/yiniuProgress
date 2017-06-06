@@ -13,7 +13,7 @@
     <EditText
         android:id="@+id/edt_name"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/editUserInfo_EditHeight"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textCursorDrawable="@color/font_color8"

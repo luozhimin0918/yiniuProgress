@@ -165,10 +165,16 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
     /**
      * 日历选择器
      *
+     * @param currentTabDate
      * @return
      */
-    public void openCalendar() {
+    public void openCalendar(String currentTabDate) {
         Calendar calendar = Calendar.getInstance();
+
+        String[] splitDate = currentTabDate.split("-");
+        int year = Integer.parseInt(splitDate[0]);
+        int month = Integer.parseInt(splitDate[1]) - 1;
+        int dayOfMonth = Integer.parseInt(splitDate[2]);
 
         DatePickerDialog datePickerDialog;
         datePickerDialog = DatePickerDialog.newInstance(
@@ -179,8 +185,8 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
                 false);
 
         datePickerDialog.setYearRange(1985, 2028);
-
         datePickerDialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "");
+        datePickerDialog.onDayOfMonthSelected(year, month, dayOfMonth);
     }
 
     @Override

@@ -168,7 +168,7 @@ public class WelcomePresenter extends BasePresenter {
                             public void run() {
                                 startToActivity(MainActivity.class);
                             }
-                        }, duration);
+                        }, duration - 100);
 
                         return false;
                     }

@@ -52,6 +52,7 @@ public class TrendChartLayout extends RelativeLayout {
             trendBean.price = dataBean.getValue();
             trendList.add(trendBean);
         }
+        trendCharView.setUnit(data.getY_axis().getUnit());
         trendCharView.setTrendData(trendList);
 
         TrendChartTextView textView = new TrendChartTextView(getContext());

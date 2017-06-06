@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +41,6 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
@@ -56,19 +54,16 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
-import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.bean.EventBusClass;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
@@ -80,8 +75,6 @@ import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +98,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.iv_ding) public ImageView ivGood;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) TextView tvCommentCount;
+    @BindView(R.id.tv_ding_Count) TextView tvDianCount;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
@@ -173,7 +167,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter.setOnCommentPublishListener(this);
     }
 
-    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.iv_ding, R.id.iv_share})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -190,7 +184,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     newsContentPresenter.collect(objectId, newsContentJson, type);
                 }
                 break;
-            case R.id.iv_ding:
+            case R.id.rl_dian_zan:
                 //点赞
                 if (isLoadOver)
                     newsContentPresenter.attention(objectId);
@@ -415,20 +409,29 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         try {
             commentCount = Integer.parseInt(newsContentJson.getNum_comment());
-            if (commentCount > 99) {
-                commentCount = 99;
-            }
             if (commentCount == 0) {
                 tvCommentCount.setVisibility(View.GONE);
             } else {
                 tvCommentCount.setVisibility(View.VISIBLE);
                 tvCommentCount.setText(commentCount + "");
             }
-
         } catch (NumberFormatException e) {
             e.printStackTrace();
             tvCommentCount.setVisibility(View.GONE);
         }
+        try {
+            int dianZanCount = Integer.parseInt(newsContentJson.getNum_good());
+            if (dianZanCount == 0) {
+                tvDianCount.setVisibility(View.GONE);
+            } else {
+                tvDianCount.setVisibility(View.VISIBLE);
+                tvDianCount.setText(dianZanCount + "");
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            tvDianCount.setVisibility(View.GONE);
+        }
+
         isLoadOver = true;
         webViewAndHead.createWebViewAndHead(newsContentJson);
     }

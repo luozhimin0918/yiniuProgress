@@ -367,13 +367,15 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         homeHeadView.addView(mRollDotViewPager);
 
         addLineView();
+        sendSocketParams();
+        MarketUtil.saveMarketEditOption(mContext, quotes, 0);
+    }
 
+    public void sendSocketParams(){
         MarketConnectUtil.getInstance().sendSocketParams(
                 iBaseView,
                 marketCodeList,
                 NewsItemPresenter.this);
-
-        MarketUtil.saveMarketEditOption(mContext, quotes, 0);
     }
 
     /**
