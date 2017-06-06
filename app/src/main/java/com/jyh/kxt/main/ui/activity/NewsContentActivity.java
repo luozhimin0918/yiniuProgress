@@ -50,6 +50,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.utils.AttentionUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
@@ -101,21 +102,21 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
-    @BindView(R.id.iv_ding) ImageView ivGood;
-    @BindView(R.id.iv_collect) ImageView ivCollect;
+    @BindView(R.id.iv_ding) public ImageView ivGood;
+    @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) TextView tvCommentCount;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
-    private WebViewAndHead webViewAndHead;
+    public WebViewAndHead webViewAndHead;
 
     public String objectId;
     private PopupUtil sharePop;
     private String title;
     private String shareUrl;
     private String shareImg;
-    private boolean isGood;
-    private boolean isCollect;
+    public boolean isGood;
+    public boolean isCollect;
     private boolean isLoadOver;
 
     private String fontS, fontM, fontB;//字体大小代码
@@ -147,7 +148,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         isGood = NativeStore.isThumbSucceed(this, VarConstant.GOOD_TYPE_NEWS, objectId);
         ivGood.setSelected(isGood);
 
-        isCollect = CollectLocalUtils.isCollect(this, VarConstant.COLLECT_TYPE_ARTICLE, objectId);
+        switch (type) {
+            case VarConstant.OCLASS_BLOG:
+                isCollect = AttentionUtils.isAttention(this, AttentionUtils.TYPE_NEWS, objectId);
+                break;
+            case VarConstant.OCLASS_ARTICLE:
+                isCollect = CollectLocalUtils.isCollect(this, VarConstant.COLLECT_TYPE_ARTICLE, objectId);
+                break;
+        }
+
         ivCollect.setSelected(isCollect);
 
         newsContentPresenter = new NewsContentPresenter(this);
@@ -178,52 +187,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 //收藏
                 if (isLoadOver) {
                     NewsContentJson newsContentJson = webViewAndHead.newsContentJson;
-                    final NewsJson newsJson = new NewsJson();
-                    newsJson.setAuthor(newsContentJson.getAuthor_name());
-                    newsJson.setDataType(VarConstant.DB_TYPE_COLLECT_LOCAL);
-                    newsJson.setDatetime(newsContentJson.getCreate_time());
-                    newsJson.setTitle(newsContentJson.getTitle());
-                    newsJson.setHref("");
-                    newsJson.setO_action(VarConstant.OACTION_DETAIL);
-                    newsJson.setO_class(VarConstant.OCLASS_NEWS);
-                    newsJson.setO_id(objectId);
-                    newsJson.setPicture(newsContentJson.getPicture());
-                    newsJson.setType(newsContentJson.getType());
-                    if (isCollect) {
-                        CollectUtils.unCollect(this, VarConstant.COLLECT_TYPE_ARTICLE, newsJson, new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                ivCollect.setSelected(false);
-                                isCollect = false;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        }, null);
-                    } else {
-
-                        CollectUtils.collect(this, VarConstant.COLLECT_TYPE_ARTICLE, newsJson, new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                ivCollect.setSelected(true);
-                                isCollect = true;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        }, null);
-                    }
+                    newsContentPresenter.collect(objectId, newsContentJson, type);
                 }
                 break;
             case R.id.iv_ding:
                 //点赞
-                attention();
+                if (isLoadOver)
+                    newsContentPresenter.attention(objectId);
                 break;
             case R.id.iv_share:
                 //分享
@@ -235,50 +205,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 }
                 break;
         }
-    }
-
-    /**
-     * 点赞
-     */
-    private void attention() {
-        if (isLoadOver)
-            if (isGood) {
-                TSnackbar tSnackbar = TSnackbar.make(pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
-                        .APPEAR_FROM_TOP_TO_DOWN)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height));
-
-                int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
-                tSnackbar.setBackgroundColor(color);
-                tSnackbar.setPromptThemBackground(Prompt.WARNING);
-                tSnackbar.show();
-            } else {
-                String goodType = "";
-                switch (type) {
-                    case VarConstant.OCLASS_BLOG:
-                        goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
-                        break;
-                    case VarConstant.OCLASS_NEWS:
-                        goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
-                        break;
-                }
-                NativeStore.addThumbID(this, goodType, objectId, new ObserverData() {
-                    @Override
-                    public void callback(Object o) {
-                        ivGood.setSelected(true);
-                        isGood = true;
-
-                        if (webViewAndHead != null && webViewAndHead.attention != null) {
-                            webViewAndHead.attention.attention();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                }, null);
-            }
     }
 
     private void initShareLayout() {
@@ -512,7 +438,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, parentId);
     }
 
-    class WebViewAndHead implements View.OnClickListener {
+    public class WebViewAndHead implements View.OnClickListener {
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.iv_photo) RoundImageView ivPhoto;
         @BindView(R.id.tv_name) TextView tvName;
@@ -530,7 +456,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         private LinearLayout headView;
         private NewsContentJson newsContentJson;
         private TextView tvSource;
-        private ThumbView2 attention;
+        public ThumbView2 attention;
 
         /**
          * ----------------创建顶部的Head
@@ -841,7 +767,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_attention:
-                    attention();
+                    newsContentPresenter.attention(objectId);
                     break;
                 case R.id.rv_pyq:
 
@@ -925,7 +851,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                     @Override
                                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-                                        if(popupUtil==null){
+                                        if (popupUtil == null) {
                                             popupUtil = new PopupUtil(NewsContentActivity.this);
                                             View inflate = popupUtil.createPopupView(R.layout.pop_img);
                                             inflate.setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+
+    <LinearLayout
+        android:layout_width="50dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+    <!--    <TextView
+            android:layout_width="1dip"
+            android:layout_height="10dip"
+            android:background="@android:color/darker_gray"
+            android:visibility="invisible"/>-->
+
+        <ImageView
+            android:id="@+id/calendar_item_img_state"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:src="@mipmap/ic_launcher"
+             />
+
+        <TextView
+            android:id="@+id/calendar_listview_item_tv_title_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14:25"
+            android:textColor="#38a2f3"
+            android:textSize="13sp" />
+
+      <!--  <TextView
+            android:layout_width="1dip"
+            android:layout_height="0dip"
+            android:layout_marginTop="2dip"
+            android:layout_weight="1"
+             android:visibility="invisible"
+            android:background="@android:color/darker_gray" />-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_marginRight="8dip"
+       >
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/calendar_item_listview_version2_nfi"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dip"
+                android:layout_marginRight="30dip"
+                android:textColor="@color/font_color1"
+                android:text="中国4月11日当周API原油库存中国4月11日当周API原油库存"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/calendar_item_nature"
+                android:layout_width="18dip"
+                android:layout_height="18dip"
+                android:layout_marginTop="1dp"
+                android:layout_marginRight="11dip"
+                android:layout_toLeftOf="@id/calendar_item_listview_version2_nfi"
+                android:src="@mipmap/ic_launcher" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/calendar_item_listview_version2_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="9dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/calendar_item_listview_version2_before"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="0.0%"
+                android:textColor="#666666"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:id="@+id/calendar_item_listview_version2_gongbu_parent_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dip"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="公布: "
+                    android:textColor="#e14545"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/calendar_item_listview_version2_gongbu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+150"
+                    android:textColor="#e14545"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/calendar_item_listview_version2_forecall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/calendar_item_listview_version2_ll"
+            android:layout_marginLeft="9dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/calendar_item_listview_version2_forecast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0%"
+                android:textColor="#666666"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_marginLeft="50dp"
+                android:id="@+id/calendar_item_listview_version2_4main_effect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="影响"
+                android:singleLine="true"
+                android:textColor="#444444"
+                android:background="@android:color/transparent"
+                android:textSize="13sp"
+               />
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

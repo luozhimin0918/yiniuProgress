@@ -153,6 +153,15 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
             }
         });
         vpContent.setAdapter(new AuthorHeadViewAdapter(this, views));
+        int childCount = llDian.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = llDian.getChildAt(i);
+            if (i == 0) {
+                childAt.setSelected(true);
+            } else {
+                childAt.setSelected(false);
+            }
+        }
     }
 
     /**

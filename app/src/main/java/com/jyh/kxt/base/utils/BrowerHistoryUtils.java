@@ -74,10 +74,8 @@ public class BrowerHistoryUtils {
      * @return
      */
     public static List<NewsJson> getHistory(Context context) {
-        List<NewsJson> list = DBManager.getInstance(context).getDaoSessionRead().getNewsJsonDao().queryRaw("WHERE DATA_TYPE=?",
-                VarConstant.DB_TYPE_BROWER
-                        + "");
-        return list;
+        return DBManager.getInstance(context).getDaoSessionRead().getNewsJsonDao().queryBuilder().orderDesc(NewsJsonDao
+                .Properties.Datetime).where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_BROWER)).list();
     }
 
     /**

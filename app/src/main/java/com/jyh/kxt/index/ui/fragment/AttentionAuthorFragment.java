@@ -165,7 +165,19 @@ public class AttentionAuthorFragment extends BaseFragment implements PageLoadLay
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if(adapter!=null)
+        if (adapter != null)
             adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+            List<AuthorDetailsJson> data = adapter.getData();
+            if (data == null || data.size() == 0) {
+                plRootView.loadEmptyData();
+            }
+        }
     }
 }

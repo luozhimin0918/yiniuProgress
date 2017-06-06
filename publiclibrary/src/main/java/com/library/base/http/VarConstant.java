@@ -103,7 +103,7 @@ public class VarConstant {
     public static final String SINA_APPSECRET = "2f1ad2df099135ecc384bd4bf8d2a0c8";
     public static final String SINA_CALLBACK = "https://api.weibo.com/oauth2/default.html";
 
-    public static final String QQ_APPID = "1101487761";
+    public static final String QQ_APPID = "101298812";
     public static final String QQ_APPKEY = "ddd0261bbb4375911faf75d5be3d2e34";
 
     /**

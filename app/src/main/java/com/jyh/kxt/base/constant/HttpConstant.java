@@ -72,6 +72,9 @@ public class HttpConstant {
     public static final String EXPLORE_BLOG_PROFILE = BASE_URL + "blog/profile";//专栏作者 ?id={writer_id}
     public static final String EXPLORE_BLOG_ADDFAVOR = BASE_URL + "blog/addFavor" + VarConstant.HTTP_CONTENT;//关注作者 ?id={writer_id}
     public static final String EXPLORE_BLOG_DELETEFAVOR = BASE_URL + "blog/deleteFavor" + VarConstant.HTTP_CONTENT;//取消关注作者 ?id={writer_id}
+    public static final String EXPLORE_BLOG_ADDFAVORARTICLE = BASE_URL + "blog/addFavorArticle" + VarConstant.HTTP_CONTENT;//关注文章
+    // ?id={writer_id}
+    public static final String EXPLORE_BLOG_DELETEFAVORARTICLE = BASE_URL + "blog/deleteFavorArticle" + VarConstant.HTTP_CONTENT;//取消关注文章 ?id={writer_id}
     public static final String EXPLORE_BLOG_CONTENT = BASE_URL + "/blog/detail" + VarConstant.HTTP_CONTENT;//blog详情
     // ?id={}&last_id={0}&uid={0}&accessToken={0}
     public static final String EXPLORE_TOPIC = BASE_URL + "topic/list";//专题

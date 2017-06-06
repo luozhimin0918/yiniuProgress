@@ -8,8 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.DelNumListener;
+import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.index.presenter.AttentionArticlePresenter;
 import com.jyh.kxt.index.ui.AttentionActivity;
 import com.jyh.kxt.main.json.NewsJson;
@@ -72,7 +75,9 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        NewsJson newsJson = adapter.getData().get(position - 1);
+        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                newsJson.getHref());
     }
 
     @Override
@@ -172,6 +177,18 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
         super.onChangeTheme();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+            List<NewsJson> data = adapter.getData();
+            if (data == null || data.size() == 0) {
+                plRootView.loadEmptyData();
+            }
         }
     }
 }

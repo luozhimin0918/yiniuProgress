@@ -56,6 +56,11 @@ public class SPUtils {
         return sp.getBoolean(key, false);
     }
 
+    public static Boolean getBooleanTrue(Context context, String key) {
+        initial(context);
+        return sp.getBoolean(key, true);
+    }
+
     public static String getString(Context mContext, String key) {
         initial(mContext);
         if (sp == null) {

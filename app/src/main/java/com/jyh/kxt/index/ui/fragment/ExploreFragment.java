@@ -32,6 +32,7 @@ import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
+import com.jyh.kxt.explore.json.AuthorListActivity2;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
 import com.jyh.kxt.explore.ui.AuthorActivity;

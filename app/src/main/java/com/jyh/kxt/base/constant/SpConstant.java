@@ -62,6 +62,9 @@ public class SpConstant {
     public static final String GOOD_COMMENT_VIDEO = "good_comment_video";
     public static final String GOOD_COMMENT_BLOG = "good_comment_blog";
 
+    public static final String ATTENTION_AUTHOR = "attention_author";
+    public static final String ATTENTION_NEWS = "attention_news";
+
 
     public static final String CALENDAR_ALARM_LIST = "calendar_alarm_list";
 
