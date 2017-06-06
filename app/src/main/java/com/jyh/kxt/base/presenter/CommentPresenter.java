@@ -164,7 +164,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
-            Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).override(100, 100).into
+            Glide.with(mContext).load(HttpConstant.IMG_URL + imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news)
+                    .override(100, 100).into
                     (ivVideoCover);
             ivVideoName.setText(mArticleJson.getTitle());
 

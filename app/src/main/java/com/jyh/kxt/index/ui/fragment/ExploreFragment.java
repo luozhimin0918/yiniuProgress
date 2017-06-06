@@ -40,6 +40,7 @@ import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
+import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
@@ -453,6 +454,18 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         int index = position - 2;
         AuthorNewsJson newsJson = newsAdapter.dataList.get(index);
         JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(),newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        NewsJson news=new NewsJson();
+        news.setTitle(newsJson.getTitle());
+        news.setType(newsJson.getType());
+        news.setPicture(newsJson.getPicture());
+        news.setHref(newsJson.getHref());
+        news.setO_id(newsJson.getO_id());
+        news.setAuthor(newsJson.getName());
+        news.setDatetime(newsJson.getCreate_time());
+        news.setO_class(newsJson.getO_class());
+        news.setO_action(newsJson.getO_action());
+        BrowerHistoryUtils.save(getContext(),news);
+        newsAdapter.getView(index,view,parent);
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
+import com.jyh.kxt.main.json.NewsJson;
+import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 
@@ -99,12 +101,30 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
      * 设置内容字体颜色
      *
      * @param holder
-     * @param news
+     * @param newsJson
      */
-    private void setContentColor(ViewHolder holder, AuthorNewsJson news) {
-        String content = news.getTitle();
+    private void setContentColor(ViewHolder holder, AuthorNewsJson newsJson) {
+        String content = newsJson.getTitle();
+
+        NewsJson news = new NewsJson();
+        news.setTitle(newsJson.getTitle());
+        news.setType(newsJson.getType());
+        news.setPicture(newsJson.getPicture());
+        news.setHref(newsJson.getHref());
+        news.setO_id(newsJson.getO_id());
+        news.setAuthor(newsJson.getName());
+        news.setDatetime(newsJson.getCreate_time());
+        news.setO_class(newsJson.getO_class());
+        news.setO_action(newsJson.getO_action());
+        news.setDataType(VarConstant.DB_TYPE_BROWER);
+
+        boolean browered = BrowerHistoryUtils.isBrowered(mContext, news);
         if (RegexValidateUtil.isEmpty(searchKey)) {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+            if (browered) {
+                holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+            } else {
+                holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+            }
         } else {
             if (content.contains(searchKey)) {
                 int searchKeyIndex = content.indexOf(searchKey);
@@ -129,7 +149,10 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
                 }
 
                 String textColor;
-                textColor = defalutColor;
+                if (browered) {
+                    textColor = browerColor;
+                } else
+                    textColor = defalutColor;
 
                 content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
                         "</font><font " +
