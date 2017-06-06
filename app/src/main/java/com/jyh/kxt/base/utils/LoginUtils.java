@@ -1,5 +1,6 @@
 package com.jyh.kxt.base.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -49,6 +50,7 @@ public class LoginUtils {
      */
     public static void logout(Context context) {
         SPUtils.save(context, SpConstant.USERINFO, "");
+        UmengLoginTool.logout((Activity) context);
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGOUT, null));
     }
 

@@ -1,6 +1,9 @@
 package com.jyh.kxt.base.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
@@ -60,7 +63,6 @@ public class UmengLoginTool {
             }
         };
         umShareAPI.getPlatformInfo(context, share_media, umAuthListener);
-
     }
 
     private static void onComplete(BaseActivity context, SHARE_MEDIA platform, int action, Map<String, String> data) {
@@ -85,6 +87,12 @@ public class UmengLoginTool {
                 context.dismissWaitDialog();
             }
         });
+    }
+
+    public static void logout(Activity context){
+        UMShareAPI.get(context).deleteOauth(context,SHARE_MEDIA.QQ,null);
+        UMShareAPI.get(context).deleteOauth(context,SHARE_MEDIA.SINA,null);
+        UMShareAPI.get(context).deleteOauth(context,SHARE_MEDIA.WEIXIN,null);
     }
 
     @NonNull
@@ -130,6 +138,8 @@ public class UmengLoginTool {
                             sex = "0";
                             break;
                     }
+                openid=data.get("openid");
+                uid=data.get("unionid");
                 img = data.get("iconurl");
                 city = data.get("city");
                 prvinice = data.get("province");
