@@ -26,6 +26,8 @@ public class SpConstant {
      */
     public static final String FLASH_FILTRATE = "flash_rl_filtrate";
     public static final String FLASH_FILTRATE_HIGH = "flash_filtrate_high";
+    public static final String FLASH_FILTRATE_TOP = "flash_filtrate_top";
+    public static final String FLASH_FILTRATE_SOUND = "flash_filtrate_sound";
 
     /**
      * 收藏

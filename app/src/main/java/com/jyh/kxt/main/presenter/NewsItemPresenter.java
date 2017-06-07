@@ -85,6 +85,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private VolleyRequest request;
     private String code;
     private boolean isMore;
+    private RollDotViewPager mRollDotViewPager;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -343,7 +344,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             marketItemBean.setRange(MarketUtil.replacePositive(marketItemBean.getRange()));
         }
 
-        RollDotViewPager mRollDotViewPager = new RollDotViewPager(mContext);
+        mRollDotViewPager = new RollDotViewPager(mContext);
         RollViewPager recommendView = mRollDotViewPager.getRollViewPager();
         recommendView
                 .setGridMaxCount(3)
@@ -681,6 +682,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 }
             } catch (Exception e1) {
             }
+        }
+    }
+
+    public void onChangeTheme() {
+        if (mRollDotViewPager != null) {
+            mRollDotViewPager.onChangeTheme();
         }
     }
 }

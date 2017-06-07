@@ -568,7 +568,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
-                    source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + sourceStr +
+                    source = "<font color='#909090'>文章来源:</font><font color='#4D4D4D'>" + sourceStr +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
@@ -837,7 +837,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    content = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + source +
+                    content = "<font color='#909090'>文章来源:</font><font color='#4D4D4D'>" + source +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:

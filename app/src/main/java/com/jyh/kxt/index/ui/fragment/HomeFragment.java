@@ -69,6 +69,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     private int position = 0;
 
     private boolean isShowRightTopAdvert = false;
+    private boolean flashTop;
+    private boolean flashSound;
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -221,9 +223,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         olContent.setSelectMode(OptionLayout.SelectMode.CheckMode);
 
         final SwitchCompat scHigh = (SwitchCompat) view.findViewById(R.id.sc_high);
+        final SwitchCompat scTop = (SwitchCompat) view.findViewById(R.id.sc_top);
+        final SwitchCompat scSound = (SwitchCompat) view.findViewById(R.id.sc_sound);
 
         Set<String> set = SPUtils.getStringSet(getContext(), SpConstant.FLASH_FILTRATE);
-        scHigh.setChecked(SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH));
+        scHigh.setChecked(onlyShowHigh = SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH));
+        scTop.setChecked(flashTop = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_TOP));
+        scSound.setChecked(flashSound = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_SOUND));
         if (set.size() == 0 || set.size() == 3) {
             set.clear();
             set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
@@ -267,6 +273,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             public void onClick(View v) {
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, olContent.getSelectedMap());
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
+                SPUtils.save(getContext(),SpConstant.FLASH_FILTRATE_TOP,flashTop);
+                SPUtils.save(getContext(),SpConstant.FLASH_FILTRATE_SOUND,flashSound);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
                 flashFrament.flashFiltrate();
                 filtratePopup.dismiss();
@@ -278,6 +286,18 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 onlyShowHigh = isChecked;
+            }
+        });
+        scTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                flashTop = isChecked;
+            }
+        });
+        scSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                flashSound = isChecked;
             }
         });
 
