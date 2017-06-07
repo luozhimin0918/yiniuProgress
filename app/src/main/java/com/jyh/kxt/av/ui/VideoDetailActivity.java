@@ -82,14 +82,10 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
             }
         });
 
-        llDetailContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ActivityManager
-                        .getInstance()
-                        .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
-            }
-        }, 0);
+        ActivityManager
+                .getInstance()
+                .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
+
     }
 
 

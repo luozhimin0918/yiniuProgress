@@ -2,14 +2,17 @@ package com.jyh.kxt.explore.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -22,6 +25,8 @@ import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.AuthorPresenter;
 import com.library.base.http.VarConstant;
+import com.library.util.LogUtil;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -30,9 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 项目名:Kxt
@@ -41,14 +44,16 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 创建日期:2017/5/3.
  */
 
-public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
-        AdapterView.OnItemClickListener {
+public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase
+        .OnRefreshListener2, AdapterView.OnItemClickListener {
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_list_rootView) public PageLoadLayout plListRootView;
-    @BindView(R.id.ll_error) LinearLayout llError;
-    private View vLike;
+    @BindView(R.id.rl_head_title_bar) public RelativeLayout rlHeadTitleBar;
+    @BindView(R.id.v_like) View vLike;
+
     private RoundImageView ivPhoto;
     private TextView tvName;
+    private LinearLayout llLayoutDesc;
     private TextView tvFans;
     private TextView tvArticle;
     private TextView tvInfo;
@@ -60,17 +65,22 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
     public NewsAdapter newsAdapter;
     private View headView;
 
+    private int statusHeight;
+
+    private float downYPoint = 0;
+    private float upYPoint = 0;
+    private boolean isPullUp = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_news_author, StatusBarColor.NO_COLOR);
-        ButterKnife.bind(this);
 
         authorPresenter = new AuthorPresenter(this);
         plListRootView.setOnAfreshLoadListener(this);
         plContent.setDividerNull();
-        plContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plContent.setOnRefreshListener(this);
         plContent.setOnItemClickListener(this);
         plListRootView.setOnAfreshLoadListener(new PageLoadLayout.OnAfreshLoadListener() {
@@ -81,7 +91,6 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             }
         });
 
-        llError.setVisibility(View.GONE);
 
         authorId = getIntent().getStringExtra(IntentConstant.O_ID);
         initHeadView();
@@ -89,6 +98,146 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         loadWait();
         authorPresenter.init(authorId);
 
+        plContent.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case SCROLL_STATE_IDLE:
+                        startHeadAnimation();
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                listUpdateScroll();
+            }
+        });
+
+
+        plContent.getRefreshableView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        listUpdateScroll();
+                    } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        downYPoint = event.getY();
+                    } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                            event.getAction() == MotionEvent.ACTION_CANCEL) {
+                        upYPoint = event.getY();
+                        isPullUp = downYPoint - upYPoint > 0;
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        });
+        statusHeight = SystemUtil.getStatusHeight(this);
+        rlHeadTitleBar.getBackground().setAlpha(0);
+    }
+
+
+    private void startHeadAnimation() {
+        listUpdateScroll();
+    }
+
+    private void listUpdateScroll() {
+        int scrollY = getScrollY();
+
+        int actionBarHeight = SystemUtil.dp2px(getContext(), 68);
+
+        if (scrollY > 0 && scrollY < actionBarHeight) {
+            //缩放
+            float scaleVal = (float) (actionBarHeight - scrollY) / (float) actionBarHeight;
+            LogUtil.e(LogUtil.TAG, "scrollY" + scrollY + "   actionBarHeight" + actionBarHeight + "    scaleVal" +
+                    scaleVal);
+            if (scaleVal > 0.4f) {
+                ivPhoto.setScaleX(scaleVal);
+                ivPhoto.setScaleY(scaleVal);
+            }
+            if (scaleVal > 0.6f) {
+                tvName.setScaleX(scaleVal);
+                tvName.setScaleY(scaleVal);
+            }
+
+            ivPhoto.setTranslationX(scrollY);
+            tvName.setTranslationX(scrollY);
+
+            if (actionBarHeight - SystemUtil.dp2px(this, 15) >= scrollY) {
+                Log.e(TAG, "ivPhoto: " + scrollY);
+                ivPhoto.setTranslationY(-scrollY);
+            }
+            if (actionBarHeight - SystemUtil.dp2px(this, 30) >= scrollY) {
+                tvName.setTranslationY(-scrollY);
+                Log.e(TAG, "tvName: " + scrollY);
+            }
+
+            llLayoutDesc.setAlpha(scaleVal);
+            tvInfo.setAlpha(scaleVal);
+
+            int bgAlphaVal = (int) ((1 - scaleVal) * 255);
+            rlHeadTitleBar.getBackground().setAlpha(bgAlphaVal);
+        } else if (scrollY > actionBarHeight) {
+
+            ivPhoto.setScaleX(0.4f);
+            ivPhoto.setScaleY(0.4f);
+            tvName.setScaleX(0.6f);
+            tvName.setScaleY(0.6f);
+
+            ivPhoto.setTranslationY(-(actionBarHeight - SystemUtil.dp2px(this, 15)));
+            tvName.setTranslationY(-(actionBarHeight - SystemUtil.dp2px(this, 30)));
+
+            ivPhoto.setTranslationX(actionBarHeight);
+            tvName.setTranslationX(actionBarHeight);
+
+            llLayoutDesc.setAlpha(0);
+            tvInfo.setAlpha(0);
+
+            rlHeadTitleBar.getBackground().setAlpha(255);
+
+        } else if (scrollY == 0) {
+            ivPhoto.setScaleX(1);
+            ivPhoto.setScaleY(1);
+            tvName.setScaleX(1);
+            tvName.setScaleY(1);
+
+            ivPhoto.setTranslationX(0);
+            tvName.setTranslationX(0);
+
+            ivPhoto.setTranslationY(0);
+            tvName.setTranslationY(0);
+
+            llLayoutDesc.setAlpha(1);
+            tvInfo.setAlpha(1);
+
+            rlHeadTitleBar.getBackground().setAlpha(0);
+
+        }
+    }
+
+    public int getScrollY() {
+        int h = 0;
+        try {
+            int top = headView.getTop();
+            h = Math.abs(top);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return h;
+    }
+
+    public void initHeadView() {
+        headView = LayoutInflater.from(this).inflate(R.layout.layout_author_head, null, false);
+        tvInfo = (TextView) headView.findViewById(R.id.tv_info);
+
+        tvName = (TextView) findViewById(R.id.tv_name);
+        ivPhoto = (RoundImageView) findViewById(R.id.iv_photo);
+        tvFans = (TextView) findViewById(R.id.tv_fans);
+        tvArticle = (TextView) findViewById(R.id.tv_article);
+        llLayoutDesc = (LinearLayout) findViewById(R.id.ll_layout_desc);
     }
 
     /**
@@ -119,8 +268,9 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 } else {
                     newsAdapter.setData(data);
                 }
-                if (plContent.getRefreshableView().getHeaderViewsCount() <= 1)
+                if (plContent.getRefreshableView().getHeaderViewsCount() <= 1) {
                     plContent.getRefreshableView().addHeaderView(headView);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,11 +279,14 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         loadOver();
     }
 
-    @OnClick({R.id.iv_break2})
+    @OnClick({R.id.iv_break, R.id.v_like})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_break2:
+            case R.id.iv_break:
                 onBackPressed();
+                break;
+            case R.id.v_like:
+                authorPresenter.attention(vLike.isSelected());
                 break;
         }
     }
@@ -224,18 +377,15 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
 
     public void loadWait() {
-        llError.setVisibility(View.VISIBLE);
         plListRootView.loadWait();
     }
 
 
     public void loadError() {
-        llError.setVisibility(View.VISIBLE);
         plListRootView.loadError();
     }
 
     public void loadOver() {
-        llError.setVisibility(View.GONE);
         plListRootView.loadOver();
     }
 
@@ -248,30 +398,6 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         vLike.setSelected(!isFollow);
     }
 
-    public void initHeadView() {
-        headView = LayoutInflater.from(this).inflate(R.layout.layout_author_head, null, false);
-        tvName = (TextView) headView.findViewById(R.id.tv_name);
-        tvInfo = (TextView) headView.findViewById(R.id.tv_info);
-        ivPhoto = (RoundImageView) headView.findViewById(R.id.iv_photo);
-        vLike = headView.findViewById(R.id.v_like);
-        tvFans = (TextView) headView.findViewById(R.id.tv_fans);
-        tvArticle = (TextView) headView.findViewById(R.id.tv_article);
-        View ivBreak = headView.findViewById(R.id.iv_break);
-
-        ivBreak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        vLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authorPresenter.attention(vLike.isSelected());
-            }
-        });
-    }
-
     private void setHeadView(AuthorDetailsJson authorDetailsJson) {
         tvName.setText(authorDetailsJson.getName());
         tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
@@ -280,12 +406,13 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
         //关注
         String is_follow = authorDetailsJson.getIs_follow();
-        if (is_follow == null)
+        if (is_follow == null) {
             vLike.setSelected(false);
-        else if (is_follow.equals("1"))
+        } else if (is_follow.equals("1")) {
             vLike.setSelected(true);
-        else
+        } else {
             vLike.setSelected(false);
+        }
 
         Glide.with(this)
                 .load(authorDetailsJson.getPicture())
@@ -300,10 +427,12 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 //        Glide.with(getContext())
 //                .load(authorDetailsJson.getPicture())
 //                .crossFade(1000)
-//                .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+//                .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";
+// "4":图片缩放比例,默认“1”。
 //                .into(new SimpleTarget<GlideDrawable>() {
 //                    @Override
-//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable>
+// glideAnimation) {
 //                        headView.setBackground(resource);
 //                    }
 //                });
@@ -321,9 +450,12 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     protected void onChangeTheme() {
         super.onChangeTheme();
-        if (plContent != null)
+        if (plContent != null) {
             plContent.setDividerNull();
-        if (newsAdapter != null)
+        }
+        if (newsAdapter != null) {
             newsAdapter.notifyDataSetChanged();
+        }
     }
+
 }

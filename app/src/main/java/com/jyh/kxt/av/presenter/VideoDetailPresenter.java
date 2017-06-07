@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -32,12 +34,15 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.window.ToastView;
 import com.superplayer.library.SuperPlayer;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jyh.kxt.base.constant.HttpConstant.VIDEO_DETAIL;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -77,19 +82,34 @@ public class VideoDetailPresenter extends BasePresenter {
                 jsonParam.put("token", userInfo.getToken());
             }
         }
+        jsonParam.put("type", "video");
+        jsonParam.put("object_id", videoDetailActivity.videoId);
 
-        volleyRequest.doGet(HttpConstant.VIDEO_DETAIL, jsonParam, new HttpListener<VideoDetailBean>() {
+        String url = null;
+        switch (pullMode) {
+            case PULL_FROM_START:
+                url = HttpConstant.VIDEO_DETAIL;
+                break;
+            case PULL_FROM_END:
+                url = HttpConstant.COMMENT_LIST;
+                break;
+        }
+
+        volleyRequest.doGet(url, jsonParam, new HttpListener<String>() {
             @Override
-            protected void onResponse(VideoDetailBean detailJson) {
-
+            protected void onResponse(String json) {
                 if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
+                    VideoDetailBean detailJson = JSONObject.parseObject(json, VideoDetailBean.class);
                     VideoDetailPresenter.this.videoDetailBean = detailJson;
 
-                    videoListJson = new VideoListJson(videoDetailBean.getId(), videoDetailBean.getCategory_id(), videoDetailBean.getTitle(),
-                            videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean.getNum_good(), videoDetailBean
+                    videoListJson = new VideoListJson(videoDetailBean.getId(), videoDetailBean.getCategory_id(),
+                            videoDetailBean.getTitle(),
+                            videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean
+                            .getNum_good(), videoDetailBean
                             .getNum_play(), videoDetailBean.getCreate_time(), false, false, false, 0);
                     isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
-                    isAttention=NativeStore.isThumbSucceed(mContext,VarConstant.GOOD_TYPE_VIDEO,videoDetailBean.getId());
+                    isAttention = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean
+                            .getId());
                     videoListJson.setIsCollect(isCollect);
                     videoListJson.setIsGood(isAttention);
 
@@ -124,9 +144,8 @@ public class VideoDetailPresenter extends BasePresenter {
                         videoDetailActivity.rvMessage.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
                     }
                 } else {
+                    List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
-                    List<CommentBean> comment = detailJson.getComment();
-
                     if (comment.size() == 0) {
                         TSnackbar.make(videoDetailActivity.rvMessage,
                                 "暂无更多评论",
@@ -141,7 +160,16 @@ public class VideoDetailPresenter extends BasePresenter {
 
             @Override
             protected void onErrorResponse(VolleyError error) {
-                videoDetailActivity.pllContent.loadError();
+                try {
+                    videoDetailActivity.rvMessage.onRefreshComplete();
+                    if (adapterCommentList == null || adapterCommentList.size() == 0) {
+                        videoDetailActivity.pllContent.loadError();
+                    } else {
+                        ToastView.makeText3(mContext, "暂无更多数据");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -313,7 +341,7 @@ public class VideoDetailPresenter extends BasePresenter {
      * 收藏
      */
     public void collect() {
-        if (videoDetailBean != null&&videoListJson!=null) {
+        if (videoDetailBean != null && videoListJson != null) {
             if (isCollect) {
                 CollectUtils.unCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson, new ObserverData() {
                     @Override
@@ -352,18 +380,19 @@ public class VideoDetailPresenter extends BasePresenter {
             if (isAttention) {
                 showMsg("已经赞过了喔");
             } else {
-                NativeStore.addThumbID(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean.getId(), new ObserverData() {
-                    @Override
-                    public void callback(Object o) {
-                        isAttention = true;
-                        videoDetailActivity.ivLike.setSelected(true);
-                    }
+                NativeStore.addThumbID(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean.getId(), new
+                        ObserverData() {
+                            @Override
+                            public void callback(Object o) {
+                                isAttention = true;
+                                videoDetailActivity.ivLike.setSelected(true);
+                            }
 
-                    @Override
-                    public void onError(Exception e) {
-                        showMsg("点赞失败");
-                    }
-                },null);
+                            @Override
+                            public void onError(Exception e) {
+                                showMsg("点赞失败");
+                            }
+                        }, null);
             }
         }
     }
@@ -373,9 +402,11 @@ public class VideoDetailPresenter extends BasePresenter {
      */
     public void share() {
         if (videoDetailBean != null) {
-            UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(videoDetailBean.getTitle(), videoDetailBean.getUrl(),
+            UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(videoDetailBean.getTitle(),
+                            videoDetailBean.getUrl(),
                             "", HttpConstant.IMG_URL + videoDetailBean
-                            .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null, false, false),
+                            .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null,
+                            false, false),
                     videoDetailBean,
                     videoDetailActivity.spVideo, null);
         }

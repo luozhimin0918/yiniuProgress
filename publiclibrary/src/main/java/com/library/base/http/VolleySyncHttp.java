@@ -46,7 +46,6 @@ public class VolleySyncHttp {
             org.json.JSONObject object = new JSONObject(parseEncrypt);
             int status = object.getInt("status");
             String data = object.getString("data");
-            String msg = object.optString("msg");
 
             return data;
         } catch (Exception e) {

@@ -32,7 +32,6 @@ import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.adapter.TopicAdapter;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
-import com.jyh.kxt.explore.json.AuthorListActivity2;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
 import com.jyh.kxt.explore.ui.AuthorActivity;
@@ -163,7 +162,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             SlideJson slideJson = slides.get(i);
             String carouselItem = slideJson.getPicture();
             carouseList.add(HttpConstant.IMG_URL + carouselItem);
-            titles.add(slideJson.getTitile());
+            titles.add(slideJson.getName());
         }
         carouseView.setViewUrls(carouseList, titles, currentItem);
         homeHeadView.addView(carouseView);

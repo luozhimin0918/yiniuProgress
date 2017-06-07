@@ -3,6 +3,8 @@ package com.jyh.kxt.main.json;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.jyh.kxt.base.json.JumpJson;
+
 /**
  * 项目名:Kxt
  * 类描述:广告
@@ -10,36 +12,72 @@ import android.os.Parcelable;
  * 创建日期:2017/4/18.
  */
 
-public class AdJson implements Parcelable{
+public class AdJson  extends JumpJson implements Parcelable{
 
-    private SlideJson pic_ad;
-    private SlideJson[] text_ad;
 
-    public AdJson(SlideJson pic_ad, SlideJson[] text_ad) {
-        this.pic_ad = pic_ad;
-        this.text_ad = text_ad;
+    private String author;
+    private String datetime;
+    private String href;
+    private String picture;
+    private int position;
+    private String title;
+    private String type;
+
+    public String getAuthor() {
+        return author;
     }
 
-    public AdJson() {
-
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    protected AdJson(Parcel in) {
-        pic_ad = in.readParcelable(SlideJson.class.getClassLoader());
-        text_ad = in.createTypedArray(SlideJson.CREATOR);
+    public String getDatetime() {
+        return datetime;
     }
 
-    public static final Creator<AdJson> CREATOR = new Creator<AdJson>() {
-        @Override
-        public AdJson createFromParcel(Parcel in) {
-            return new AdJson(in);
-        }
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
 
-        @Override
-        public AdJson[] newArray(int size) {
-            return new AdJson[size];
-        }
-    };
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Override
     public int describeContents() {
@@ -48,23 +86,37 @@ public class AdJson implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(pic_ad,flags);
-        dest.writeParcelableArray(text_ad, flags);
+        dest.writeString(this.author);
+        dest.writeString(this.datetime);
+        dest.writeString(this.href);
+        dest.writeString(this.picture);
+        dest.writeInt(this.position);
+        dest.writeString(this.title);
+        dest.writeString(this.type);
     }
 
-    public SlideJson[] getText_ad() {
-        return text_ad;
+    public AdJson() {
     }
 
-    public void setText_ad(SlideJson[] text_ad) {
-        this.text_ad = text_ad;
+    protected AdJson(Parcel in) {
+        this.author = in.readString();
+        this.datetime = in.readString();
+        this.href = in.readString();
+        this.picture = in.readString();
+        this.position = in.readInt();
+        this.title = in.readString();
+        this.type = in.readString();
     }
 
-    public SlideJson getPic_ad() {
-        return pic_ad;
-    }
+    public static final Creator<AdJson> CREATOR = new Creator<AdJson>() {
+        @Override
+        public AdJson createFromParcel(Parcel source) {
+            return new AdJson(source);
+        }
 
-    public void setPic_ad(SlideJson pic_ad) {
-        this.pic_ad = pic_ad;
-    }
+        @Override
+        public AdJson[] newArray(int size) {
+            return new AdJson[size];
+        }
+    };
 }

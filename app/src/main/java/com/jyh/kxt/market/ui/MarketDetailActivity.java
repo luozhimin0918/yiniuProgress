@@ -158,6 +158,11 @@ public class MarketDetailActivity extends BaseActivity {
 
     private void addOrDeleteMarket() {
         if (updateAddStatus) {
+            if(marketItemList.size() > 30){
+                TSnackbar.make(ivBarBreak, "自选行情数量太多,超出30条了喔,添加失败", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                        .setPromptThemBackground(Prompt.WARNING).show();
+                return;
+            }
             marketItemList.add(marketItemBean);
             ivOptionalImage.setSelected(true);
             TSnackbar.make(ivBarBreak, "添加成功", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
@@ -170,7 +175,7 @@ public class MarketDetailActivity extends BaseActivity {
         }
         updateAddStatus = !updateAddStatus;
 
-        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
+        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
         updateOptionIcon();
     }
 
@@ -257,7 +262,7 @@ public class MarketDetailActivity extends BaseActivity {
             return;
         }
 
-        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 1);
+        MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
         EventBusClass eventBusClass = new EventBusClass(
                 EventBusClass.MARKET_OPTION_UPDATE,
                 marketItemList);

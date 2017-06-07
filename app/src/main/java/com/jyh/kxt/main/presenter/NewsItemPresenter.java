@@ -1,7 +1,7 @@
 package com.jyh.kxt.main.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -37,6 +36,7 @@ import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
@@ -145,7 +145,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     private void itemClickEvent(int position, View view, AdapterView<?> parent) {
         NewsJson newsJson = newsAdapter.getData().get(position);
-        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(),newsJson.getO_id(),
+        JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
                 newsJson.getHref());
         //保存浏览记录
         BrowerHistoryUtils.save(mContext, newsJson);
@@ -278,7 +278,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = carouselList.get(position);
-                JumpUtils.jump((BaseActivity) mContext, slideJson.getO_class(), slideJson.getO_action(), slideJson.getO_id(), slideJson
+                JumpUtils.jump((BaseActivity) mContext, slideJson.getO_class(), slideJson.getO_action(), slideJson
+                        .getO_id(), slideJson
                         .getHref());
             }
         });
@@ -343,7 +344,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         }
 
         RollDotViewPager mRollDotViewPager = new RollDotViewPager(mContext);
-        RollViewPager recommendView =  mRollDotViewPager.getRollViewPager();
+        RollViewPager recommendView = mRollDotViewPager.getRollViewPager();
         recommendView
                 .setGridMaxCount(3)
                 .setDataList(quotes)
@@ -371,7 +372,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         MarketUtil.saveMarketEditOption(mContext, quotes, 0);
     }
 
-    public void sendSocketParams(){
+    public void sendSocketParams() {
         MarketConnectUtil.getInstance().sendSocketParams(
                 iBaseView,
                 marketCodeList,
@@ -383,46 +384,23 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     public void addAD() {
         LinearLayout adView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, null);
-
         ImageView iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
 
-        LinearLayout ll_ad = (LinearLayout) adView.findViewById(R.id.ll_ad);
 
-        SlideJson[] textAds = ads.getText_ad();
-        int size = textAds.length;
-
-        boolean isShowTextAd = false;
-
-        for (int i = 0; i < size; i++) {
-            TextView tvAd = new TextView(mContext);
-
-            String title = textAds[i].getTitile();
-
-            isShowTextAd = isShowTextAd || !TextUtils.isEmpty(title);
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams
-                            .WRAP_CONTENT);
-
-            tvAd.setText(title);
-            tvAd.setTextSize(16);
-            tvAd.setTextColor(ContextCompat.getColor(mContext, R.color.font_color2));
-
-            tvAd.setLayoutParams(params);
-
-            ll_ad.addView(tvAd);
-        }
-
-        if (isShowTextAd) {
-            ll_ad.setVisibility(View.VISIBLE);
-        } else {
-            ll_ad.setVisibility(View.GONE);
-        }
-
-        Glide.with(mContext).load(ads.getPic_ad().getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
-                .icon_def_news).into(iv_ad);
+        Glide.with(mContext).load(HttpConstant.IMG_URL + ads.getPicture()).error(R.mipmap.icon_def_news)
+                .placeholder(R.mipmap.icon_def_news).into(iv_ad);
 
         homeHeadView.addView(adView);
+
+        adView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, WebActivity.class);
+                intent.putExtra(IntentConstant.NAME, "广告");
+                intent.putExtra(IntentConstant.WEBURL, ads.getHref());
+                mContext.startActivity(intent);
+            }
+        });
 
         addLineView();
     }
@@ -486,18 +464,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_AD:
-                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson
-                                        .getData();
-                                if (adObj == null) break;
-
-                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
-
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
-                                        (), SlideJson
-                                        .class);
-                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
-
-                                ads = new AdJson(ad_img, ad_text);
+                                ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
                                 break;
                         }
@@ -648,18 +615,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_AD:
-                                com.alibaba.fastjson.JSONObject adObj = (com.alibaba.fastjson.JSONObject) headerJson
-                                        .getData();
-                                if (adObj == null) break;
-
-                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
-
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
-                                        (), SlideJson
-                                        .class);
-                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
-
-                                ads = new AdJson(ad_img, ad_text);
+                                ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
                                 break;
                         }

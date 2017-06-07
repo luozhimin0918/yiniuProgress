@@ -156,17 +156,7 @@ public class NewsPresenter extends BasePresenter {
                             break;
                         case VarConstant.NEWS_AD:
                             try {
-                                JSONObject adObj = (JSONObject) headerJson.getData();
-                                if (adObj == null) break;
-
-                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
-
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
-                                        (), SlideJson
-                                        .class);
-                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
-
-                                ad = new AdJson(ad_img, ad_text);
+                                ad = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -277,17 +267,7 @@ public class NewsPresenter extends BasePresenter {
                             break;
                         case VarConstant.NEWS_AD:
                             try {
-                                JSONObject adObj = (JSONObject) headerJson.getData();
-                                if (adObj == null) break;
-
-                                SlideJson ad_img = adObj.getObject("pic_ad", SlideJson.class);
-
-                                List<SlideJson> ad_text_list = JSON.parseArray(adObj.getJSONArray("text_ad").toString
-                                        (), SlideJson
-                                        .class);
-                                SlideJson[] ad_text = ad_text_list.toArray(new SlideJson[ad_text_list.size()]);
-
-                                ad = new AdJson(ad_img, ad_text);
+                                ad = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
                             } catch (Exception e) {
                                 e.printStackTrace();

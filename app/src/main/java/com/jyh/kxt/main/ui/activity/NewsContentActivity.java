@@ -39,6 +39,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -64,6 +65,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.manager.ActivityManager;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
@@ -165,6 +167,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         commentPresenter.setOnCommentClickListener(this);
         commentPresenter.setOnCommentPublishListener(this);
+
+        ActivityManager
+                .getInstance()
+                .finishNoCurrentActivity(NewsContentActivity.class, NewsContentActivity.this);  //保证只有一个
     }
 
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share})
@@ -186,8 +192,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.rl_dian_zan:
                 //点赞
-                if (isLoadOver)
+                if (isLoadOver) {
                     newsContentPresenter.attention(objectId);
+                }
                 break;
             case R.id.iv_share:
                 //分享
@@ -259,7 +266,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 int alertTheme = ThemeUtil.getAlertTheme(getContext());
                 switch (alertTheme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + font + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + font + content, "text/html",
+                                "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         webViewAndHead.wvContent.loadDataWithBaseURL("", font + content, "text/html", "utf-8", "");
@@ -299,8 +307,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                                    switch (position) {
                                                        case 0:
                                                            //朋友圈
-                                                           if (umShareAPI.isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                                                               UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                                           if (umShareAPI.isInstall(NewsContentActivity.this,
+                                                                   SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                                                               UmengShareTool.setShareContent(NewsContentActivity
+                                                                               .this, title, shareUrl, "",
                                                                        shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
                                                            } else {
                                                                ToastView.makeText3(NewsContentActivity.this, "未安装微信");
@@ -308,8 +318,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                                            break;
                                                        case 1:
                                                            //微信
-                                                           if (umShareAPI.isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN)) {
-                                                               UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                                           if (umShareAPI.isInstall(NewsContentActivity.this,
+                                                                   SHARE_MEDIA.WEIXIN)) {
+                                                               UmengShareTool.setShareContent(NewsContentActivity
+                                                                               .this, title, shareUrl, "",
                                                                        shareImg, SHARE_MEDIA.WEIXIN);
                                                            } else {
                                                                ToastView.makeText3(NewsContentActivity.this, "未安装微信");
@@ -317,13 +329,16 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                                            break;
                                                        case 2:
                                                            //新浪
-                                                           UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                                           UmengShareTool.setShareContent(NewsContentActivity.this,
+                                                                   title, shareUrl, "",
                                                                    shareImg, SHARE_MEDIA.SINA);
                                                            break;
                                                        case 3:
                                                            //QQ
-                                                           if (umShareAPI.isInstall(NewsContentActivity.this, SHARE_MEDIA.QQ)) {
-                                                               UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                                           if (umShareAPI.isInstall(NewsContentActivity.this,
+                                                                   SHARE_MEDIA.QQ)) {
+                                                               UmengShareTool.setShareContent(NewsContentActivity
+                                                                               .this, title, shareUrl, "",
                                                                        shareImg, SHARE_MEDIA.QQ);
                                                            } else {
                                                                ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
@@ -331,8 +346,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                                            break;
                                                        case 4:
                                                            //QQ空间
-                                                           if (umShareAPI.isInstall(NewsContentActivity.this, SHARE_MEDIA.QZONE)) {
-                                                               UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
+                                                           if (umShareAPI.isInstall(NewsContentActivity.this,
+                                                                   SHARE_MEDIA.QZONE)) {
+                                                               UmengShareTool.setShareContent(NewsContentActivity
+                                                                               .this, title, shareUrl, "",
                                                                        shareImg, SHARE_MEDIA.QZONE);
                                                            } else {
                                                                ToastView.makeText3(NewsContentActivity.this, "未安装QQ控件");
@@ -575,7 +592,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         String o_class_str = "class";
                         String o_action_str = "action";
                         String o_id_str = "id";
-                        if (url.contains("\\?") && url.contains(hrefStr) && url.contains(o_class_str) && url.contains(o_action_str) && url
+                        if (url.contains("\\?") && url.contains(hrefStr) && url.contains(o_class_str) && url.contains
+                                (o_action_str) && url
                                 .contains(o_id_str)) {
                             String[] split = url.split("\\?");
                             if (split[1] != null) {
@@ -684,7 +702,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
                         break;
                 }
-                attention.setThumbCount(Integer.parseInt(newsContentJson.getNum_good()), newsContentJson.getId(), goodType, isGood);
+                attention.setThumbCount(Integer.parseInt(newsContentJson.getNum_good()), newsContentJson.getId(),
+                        goodType, isGood);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -778,7 +797,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     break;
                 case R.id.rv_pyq:
 
-                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA
+                            .WEIXIN_CIRCLE)) {
                         UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
                                 shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
                     } else {
@@ -787,7 +807,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
                     break;
                 case R.id.ll_wx:
-                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA.WEIXIN)) {
+                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA
+                            .WEIXIN)) {
                         UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
                                 shareImg, SHARE_MEDIA.WEIXIN);
                     } else {
@@ -826,12 +847,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             webViewAndHead.tvSource.setText(Html.fromHtml(content));
             webViewAndHead.attention.onChangeTheme();
-            if (functionAdapter != null)
+            if (functionAdapter != null) {
                 functionAdapter.notifyDataSetChanged();
-            if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null)
+            }
+            if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null) {
                 newsContentPresenter.commentAdapter.notifyDataSetInvalidated();
-            if (commentPresenter != null)
+            }
+            if (commentPresenter != null) {
                 commentPresenter.onChangeTheme();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -860,7 +884,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                 .placeholder(R.mipmap.icon_def_video)
                                 .into(new SimpleTarget<Bitmap>() {
                                     @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                            glideAnimation) {
 
                                         if (popupUtil == null) {
                                             popupUtil = new PopupUtil(NewsContentActivity.this);
@@ -868,8 +893,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                             inflate.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    if (popupUtil != null && popupUtil.isShowing())
+                                                    if (popupUtil != null && popupUtil.isShowing()) {
                                                         popupUtil.dismiss();
+                                                    }
                                                 }
                                             });
                                             ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
@@ -885,14 +911,16 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                             popupUtil.setConfig(config);
                                         }
 
-                                        if (popupUtil.isShowing())
+                                        if (popupUtil.isShowing()) {
                                             popupUtil.dismiss();
+                                        }
 
                                         //图片尺寸
                                         int width = resource.getWidth();
                                         int height = resource.getHeight();
                                         //屏幕尺寸
-                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(NewsContentActivity.this);
+                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay
+                                                (NewsContentActivity.this);
                                         int widthPixels = screenDisplay.widthPixels;
                                         int heightPixels = screenDisplay.heightPixels;
                                         //放大1.5倍后的图片尺寸
@@ -941,7 +969,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @JavascriptInterface
         public void getJsInfo(String clickInfo) {
             JSONObject clickJson = JSON.parseObject(clickInfo);
-            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson
+            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString
+                            ("o_action"), clickJson
                             .getString("o_id"),
                     clickJson.getString("href"));
         }

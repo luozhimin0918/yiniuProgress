@@ -145,7 +145,8 @@ public class CommentAdapter extends BaseAdapter {
                         ":" +
                         commentBean.getParent_content();
                 int nickNameLnegth = commentBean.getParent_member_nickname().length() + 2;//这里包括@ 和 :
-                mViewHolder2.tvPrimaryContent.convertToGif(nickNameLnegth, convertContent);
+
+                mViewHolder2.tvPrimaryContent.convertToGif(2, commentBean, nickNameLnegth, convertContent);
 
                 switch (adapterFromStatus) {
                     case 0:
@@ -249,7 +250,7 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvThumb.setThumbCount(commentBean, commentBean.getId());
 
         baseViewHolder.tvMessage.setText(String.valueOf(commentBean.getNum_reply()));
-        baseViewHolder.tvContent.convertToGif(0, commentBean.getContent());
+        baseViewHolder.tvContent.convertToGif(1, commentBean, 0, commentBean.getContent());
 
         baseViewHolder.tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override

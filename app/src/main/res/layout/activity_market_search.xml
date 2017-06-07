@@ -48,6 +48,8 @@
         <com.library.widget.handmark.PullToRefreshListView
             android:id="@+id/layout_market_search_end"
             android:layout_width="match_parent"
+            android:overScrollMode="never"
+            app:ptrShowIndicator="false"
             android:layout_height="match_parent"/>
 
         <include

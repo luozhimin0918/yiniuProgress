@@ -3,6 +3,8 @@ package com.jyh.kxt.base.util.emoje;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -13,10 +15,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.dao.EmojeBean;
 import com.jyh.kxt.base.util.TextGifDrawable;
 import com.jyh.kxt.base.utils.EmoJeUtil;
+import com.jyh.kxt.base.utils.GlideCircleTransform;
 import com.library.util.SystemUtil;
 
 import java.io.File;
@@ -51,9 +57,36 @@ public class EmoticonTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public boolean convertToGif(int nickNameLength, String text) {
+    public boolean convertToGif(int type, CommentBean commentBean, int nickNameLength, String text) {
 
-        SpannableString currentSpannable = new SpannableString(text);
+        final SpannableString currentSpannable = new SpannableString(text);
+
+        try {
+            if ('@' == currentSpannable.charAt(0) && type == 2) {
+                Glide.with(getContext())
+                        .load(commentBean.getParent_member_picture())
+                        .asBitmap()
+                        .transform(new GlideCircleTransform(getContext()))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                    glideAnimation) {
+                                BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), resource);
+                                int firstImgHeight = SystemUtil.dp2px(getContext(), 15);
+                                bitmapDrawable.setBounds(0, 0, firstImgHeight, firstImgHeight);
+
+                                ImageSpan mEmoJeImageSpan = new ImageSpan(bitmapDrawable, ImageSpan.ALIGN_BASELINE);
+                                currentSpannable.setSpan(
+                                        mEmoJeImageSpan,
+                                        0, //这里因为没有加上中括号
+                                        1,
+                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                setText(currentSpannable);
+                            }
+                        });
+            }
+        } catch (Exception e) {
+        }
 
         int color = ContextCompat.getColor(getContext(), R.color.blue);
         ForegroundColorSpan redSpan = new ForegroundColorSpan(color);
