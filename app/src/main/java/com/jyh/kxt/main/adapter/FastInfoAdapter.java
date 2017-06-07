@@ -337,7 +337,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     }
                     kxHolder.tvTime.setText(time);
                     kxHolder.tvContent.setText(getString(kx.getTitle()));
-                    kxHolder.tvMore.setVisibility(View.VISIBLE);
 
                     imgMaxWidth = kxHolder.llContent.getWidth();
 
@@ -602,8 +601,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     topHolder.tvTime.setText(time5);
                     topHolder.tvContent.setText(getString(top.getTitle()));
                     topHolder.tvContent.setVisibility(View.GONE);
-                    topHolder.tvMore.setVisibility(View.VISIBLE);
-                    topHolder.ivMore.setVisibility(View.VISIBLE);
 
                     setNewsTheme(topHolder, top);
 
@@ -634,8 +631,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     bottomHolder.tvContent.setText(getString(bottom.getTitle()));
 
                     bottomHolder.ivFlash.setVisibility(View.GONE);
-                    bottomHolder.tvMore.setVisibility(View.VISIBLE);
-                    bottomHolder.ivMore.setVisibility(View.VISIBLE);
 
                     setNewsTheme(bottomHolder, bottom);
 
