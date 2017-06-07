@@ -112,4 +112,13 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
     public RequestQueue getQueue() {
         return iBaseView.getQueue();
     }
+
+    /**
+     * 网络监听
+     *
+     * @param netMobile
+     */
+    public void onNetChange(int netMobile) {
+
+    }
 }

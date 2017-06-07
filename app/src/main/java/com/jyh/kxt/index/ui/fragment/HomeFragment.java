@@ -388,4 +388,16 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onNetChange(int netMobile) {
+        super.onNetChange(netMobile);
+        if (fragmentList != null) {
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment) {
+                    ((BaseFragment) fragment).onNetChange(netMobile);
+                }
+            }
+        }
+    }
 }

@@ -19,6 +19,7 @@ import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
+import com.library.util.NetUtils;
 import com.library.widget.PageLoadLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -157,5 +158,24 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private int oldNetStatus;
+
+    @Override
+    public void onNetChange(int netMobile) {
+        super.onNetChange(netMobile);
+        switch (netMobile) {
+            case NetUtils.STATE_CONNECT_NONE:
+                break;
+            case NetUtils.STATE_CONNECT_WIFI:
+            case NetUtils.STATE_CONNECT_MOBILE:
+                if (oldNetStatus == NetUtils.STATE_CONNECT_NONE) {
+                    //断开重连
+                    flashPresenter.reConnection();
+                }
+                break;
+        }
+        oldNetStatus = netMobile;
     }
 }

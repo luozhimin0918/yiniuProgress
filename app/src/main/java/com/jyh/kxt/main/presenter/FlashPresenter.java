@@ -1,6 +1,5 @@
 package com.jyh.kxt.main.presenter;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -12,21 +11,18 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.SpConstant;
-import com.library.base.http.VarConstant;
 import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
-import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,17 +163,6 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
         @Override
         public void onRawTextMessage(byte[] bytes) {
-//            getNewMsg(bytes);
-//            try {
-//                flashFragment.lvContent.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        flashFragment.lvContent.onRefreshComplete();
-//                    }
-//                }, 500);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
         }
 
         @Override
@@ -325,5 +310,17 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      */
     public void filtrate() {
         adapter.filtrate();
+    }
+
+    /**
+     * 网络断开重连
+     */
+    public void reConnection() {
+        if (connection == null)
+            connection = new WebSocketConnection();
+        if (connection.isConnected()) {
+            connection.disconnect();
+        }
+        connect();
     }
 }

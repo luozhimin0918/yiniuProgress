@@ -233,6 +233,11 @@
         <service
             android:name=".index.service.PreLoadX5Service"
             android:exported="false"/>
+        <receiver android:name=".base.utils.NetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

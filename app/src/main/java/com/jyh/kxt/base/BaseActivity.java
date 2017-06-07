@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.annotation.NetEvent;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.base.widget.night.heple.Skinnable;
@@ -40,9 +41,10 @@ import java.util.List;
  * Created by Mr'Dai on 2017/2/22.
  */
 
-public class BaseActivity extends LibActivity implements IBaseView {
+public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
 
     private PopupWindow waitPopup;
+    public static NetEvent netEvent;
 
     private SkinnableViewInflater mSkinnableViewInflater;
     private SkinnableCallback mSkinnableCallback;
@@ -51,6 +53,7 @@ public class BaseActivity extends LibActivity implements IBaseView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        netEvent=this;
         ThemeUtil.addActivityToThemeCache(this);
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -228,6 +231,27 @@ public class BaseActivity extends LibActivity implements IBaseView {
                 return false;
             }
             parent = parent.getParent();
+        }
+    }
+
+    /**
+     * 网络监听
+     * @param netMobile
+     */
+    @Override
+    public void onNetChange(int netMobile) {
+        try {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof BaseFragment) {
+                        BaseFragment baseFragment = (BaseFragment) fragment;
+                        baseFragment.onNetChange(netMobile);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
