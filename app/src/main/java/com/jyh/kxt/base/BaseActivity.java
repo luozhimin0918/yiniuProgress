@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import java.util.List;
  * Created by Mr'Dai on 2017/2/22.
  */
 
-public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
+public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
 
     private PopupWindow waitPopup;
     public static NetEvent netEvent;
@@ -53,7 +54,7 @@ public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        netEvent=this;
+        netEvent = this;
         ThemeUtil.addActivityToThemeCache(this);
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
@@ -99,6 +100,9 @@ public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
     }
 
     public void setDayNightMode(@AppCompatDelegate.NightMode int nightMode) {
+        updateActivityMask(nightMode);
+
+
         final boolean isPost21 = Build.VERSION.SDK_INT >= 21;
 
         if (mSkinnableCallback != null) {
@@ -121,7 +125,6 @@ public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
             int bgColor = ContextCompat.getColor(this, statusBarColor.color);
             statusBar.setBackgroundColor(bgColor);
         }
-
         try {
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             if (fragments != null) {
@@ -236,6 +239,7 @@ public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
 
     /**
      * 网络监听
+     *
      * @param netMobile
      */
     @Override
@@ -259,5 +263,25 @@ public class BaseActivity extends LibActivity implements IBaseView,NetEvent {
         void beforeApplyDayNight();
 
         void onApplyDayNight();
+    }
+
+    /**
+     * 增加蒙板
+     * @param nightMode
+     */
+    private void updateActivityMask(int nightMode) {
+        try {
+            if (nightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                View decorView = getWindow().getDecorView();
+                FrameLayout decorView1 = (FrameLayout) decorView;
+                decorView1.setForeground(new ColorDrawable(Color.parseColor("#77000000")));
+            } else {
+                View decorView = getWindow().getDecorView();
+                FrameLayout decorView1 = (FrameLayout) decorView;
+                decorView1.setForeground(new ColorDrawable(Color.parseColor("#00000000")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

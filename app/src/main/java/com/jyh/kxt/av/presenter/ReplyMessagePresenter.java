@@ -174,4 +174,8 @@ public class ReplyMessagePresenter extends BasePresenter {
     public void setCommentWho(int commentWho) {
         this.commentWho = commentWho;
     }
+
+    public void onChangeTheme() {
+
+    }
 }

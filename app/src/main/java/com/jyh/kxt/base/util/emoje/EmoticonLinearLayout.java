@@ -2,7 +2,6 @@ package com.jyh.kxt.base.util.emoje;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -182,7 +181,6 @@ public class EmoticonLinearLayout extends LinearLayout {
             TextView itemTextView = new TextView(getContext());
 
             itemTextView.setText(itemName);
-
             LayoutParams itemLp = new LayoutParams(
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.MATCH_PARENT);
@@ -222,9 +220,11 @@ public class EmoticonLinearLayout extends LinearLayout {
 
     //当前选中Group
     private void selectGroup(int select) {
+        int color = ContextCompat.getColor(getContext(), R.color.theme1);
+
         for (int i = 0; i < mGroupNameViewList.size(); i++) {
             TextView labelView = mGroupNameViewList.get(i);
-            labelView.setBackgroundColor(Color.WHITE);
+            labelView.setBackgroundColor(color);
         }
 
         TextView labelView = mGroupNameViewList.get(select);

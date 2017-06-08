@@ -179,6 +179,7 @@ public class WelcomePresenter extends BasePresenter {
         Intent intent = new Intent(mContext, activityClass);
         mContext.startActivity(intent);
         welcomeActivity.finish();
+        welcomeActivity.overridePendingTransition(R.anim.activity_out1, R.anim.activity_out1);
     }
 
     /**

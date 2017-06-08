@@ -49,6 +49,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         try {
             SkinnableTextView skinnableTextView = (SkinnableTextView) tvRecommendLabel;
             skinnableTextView.applyDayNight();
+
+            replyMessagePresenter.onChangeTheme();
         } catch (Exception e) {
             e.printStackTrace();
         }

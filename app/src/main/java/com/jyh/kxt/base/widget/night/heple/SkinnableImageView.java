@@ -48,15 +48,9 @@ public class SkinnableImageView extends AppCompatImageView implements Skinnable 
 
     @Override
     public void applyDayNight() {
-        Object tag = getTag();
-        if (tag instanceof String) {
-            String signTag = (String) tag;
-            if ("mask".equals(signTag)) {// 蒙板 ->>> 针对不需要更改图片但是需要更改透明度的而言
-                return;
-            }
-        }
         Context context = getContext();
         int key;
+
 
         key = R.styleable.SkinnableView[R.styleable.SkinnableView_android_background];
         Integer backgroundResource = mAttrsHelper.getAttributeResource(key);

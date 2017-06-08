@@ -39,7 +39,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
-import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -84,6 +83,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.library.base.http.VarConstant.APP_WEB_URL;
 
 /**
  * 项目名:Kxt
@@ -267,11 +268,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 int alertTheme = ThemeUtil.getAlertTheme(getContext());
                 switch (alertTheme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + font + content, "text/html",
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html",
                                 "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", font + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html", "utf-8", "");
                         break;
                 }
             }
@@ -286,13 +287,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         tvTheme.setText("夜间模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, false);
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         tvTheme.setText("白天模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, true);
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8", "");
                         break;
                 }
                 changePopTheme();
