@@ -52,6 +52,7 @@
             android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/icon_video_more"/>
@@ -60,7 +61,7 @@
             android:id="@+id/tv_playCount"
             style="@style/VideoItemStyle"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/videoItemTextPadding"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_more"
             android:drawableLeft="@mipmap/icon_video_play_small"/>
 
