@@ -3,7 +3,9 @@ package com.jyh.kxt.main.presenter;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -68,7 +70,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
     private RequestQueue queue;
     private VolleyRequest request;
     private String lastId;
-    private MediaPlayer mMediaPlayer;
+    private SoundPool mMediaPlayer;
     private String token;
     private String server;
     private WebSocketOptions options;
@@ -319,12 +321,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                 + mContext.getPackageName() + "/" + R.raw.kxt_notify);
         // 如果为空，才构造，不为空，说明之前有构造过
         if (mMediaPlayer == null)
-            mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.create(mContext, R.raw.kxt_notify);
-//        setDataSource(mContext, uri);
-        mMediaPlayer.setLooping(false); //循环播放
-        mMediaPlayer.prepare();
-        mMediaPlayer.start();
+            mMediaPlayer = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        mMediaPlayer.load(mContext, R.raw.kxt_notify, 1);
+        mMediaPlayer.play(1, 1, 1, 0, 0, 1);
     }
 
     /**
