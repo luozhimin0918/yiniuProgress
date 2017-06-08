@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.library.R;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class BannerLayout extends RelativeLayout {
 
     private List<String> titles;
     private TextView tvTitle;
+    private List<String> urls;
+    private List<ImageView> imageViews = new ArrayList<>();
 
     /**
      * 设置PageChange回调
@@ -240,8 +243,9 @@ public class BannerLayout extends RelativeLayout {
 
     //添加网络图片路径
     public void setViewUrls(List<String> urls, List<String> titles, int defaultSelection) {
-        List<View> views = new ArrayList<>();
+        ArrayList<View> views = new ArrayList<>();
         itemCount = urls.size();
+        this.urls = urls;
         this.titles = titles;
         //主要是解决当item为小于3个的时候滑动有问题，这里将其拼凑成3个以上
         if (itemCount < 1) {//当item个数0
@@ -306,6 +310,7 @@ public class BannerLayout extends RelativeLayout {
                     .animate(R.anim.item_alpha_in)
                     .into(imageView);
         }
+        imageViews.add(imageView);
         return inflate;
     }
 
@@ -555,6 +560,21 @@ public class BannerLayout extends RelativeLayout {
             currentItem = pager.getCurrentItem() % pager.getChildCount() + 1;
         }
         ((ImageView) indicatorContainer.getChildAt(currentItem)).setImageDrawable(selectedGradientDrawable);
+    }
+
+
+    public void onChangeTheme() {
+        try {
+            if (imageViews != null && urls != null) {
+                int size = imageViews.size();
+                for (int i = 0; i < size; i++) {
+                    ImageView view = imageViews.get(i);
+                    Glide.with(getContext()).load(urls.get(i)).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(view);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*public class FixedSpeedScroller extends Scroller {
