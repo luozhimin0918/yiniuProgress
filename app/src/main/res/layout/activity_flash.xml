@@ -26,8 +26,8 @@
                 android:layout_height="@dimen/actionbar_height"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/newsContentPadding3"
-                android:textColor="@color/font_color6"
-                android:text="2017-1-1 星期一"/>
+                android:text="2017-1-1 星期一"
+                android:textColor="@color/font_color6"/>
 
             <View
                 android:layout_width="match_parent"
@@ -128,7 +128,7 @@
         <ImageView
             android:id="@+id/iv_more"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_nav_more"/>
+            android:src="@mipmap/icon_drawer_theme"/>
 
 
     </LinearLayout>

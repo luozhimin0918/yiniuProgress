@@ -114,7 +114,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private String discription = "";
     private String image = "";
     private List<NewsJson> articles;
-    private PopupUtil popupUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,9 +191,17 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                         UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flashJson, ivShare, null);
                 break;
             case R.id.iv_more:
-                if (popupUtil == null)
-                    initPop();
-                popupUtil.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                int theme = ThemeUtil.getAlertTheme(getContext());
+                switch (theme) {
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, false);
+                        break;
+                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, true);
+                        break;
+                }
                 break;
             case R.id.layout_tj1:
                 //推荐1
@@ -208,59 +215,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 break;
         }
     }
-
-    private void initPop() {
-        popupUtil = new PopupUtil(this);
-        final View view = popupUtil.createPopupView(R.layout.pop_chang_theme);
-
-        final TextView tvtheme = (TextView) view.findViewById(R.id.tv_theme);
-        final ImageView ivTheme = (ImageView) view.findViewById(R.id.iv_theme);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int theme = ThemeUtil.getAlertTheme(getContext());
-                switch (theme) {
-                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, false);
-                        tvtheme.setText("夜间模式");
-                        tvtheme.setTextColor(ContextCompat.getColor(FlashActivity.this, R.color.font_color60));
-                        ivTheme.setImageDrawable(ContextCompat.getDrawable(FlashActivity.this, R.mipmap.icon_drawer_theme));
-                        view.setBackgroundColor(ContextCompat.getColor(FlashActivity.this, R.color.theme1));
-                        break;
-                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, true);
-                        tvtheme.setText("白天模式");
-                        tvtheme.setTextColor(ContextCompat.getColor(FlashActivity.this, R.color.font_color60));
-                        ivTheme.setImageDrawable(ContextCompat.getDrawable(FlashActivity.this, R.mipmap.icon_drawer_theme));
-                        view.setBackgroundColor(ContextCompat.getColor(FlashActivity.this, R.color.theme1));
-                        break;
-                }
-            }
-        });
-
-        Space spaceView = (Space) view.findViewById(R.id.selectimg_open_space);
-
-       /* if (SystemUtil.navigationBar(this) > 10) {
-            ViewGroup.LayoutParams layoutParams = spaceView.getLayoutParams();
-            layoutParams.height = SystemUtil.navigationBar(this);
-            spaceView.setLayoutParams(layoutParams);
-        }*/
-
-        PopupUtil.Config config = new PopupUtil.Config();
-
-        config.outsideTouchable = true;
-        config.alpha = 0.5f;
-        config.bgColor = 0X00000000;
-
-        config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = WindowManager.LayoutParams.MATCH_PARENT;
-        config.height = (int) getResources().getDimension(R.dimen.actionbar_height);
-        popupUtil.setConfig(config);
-    }
-
 
     /**
      * 初始化布局

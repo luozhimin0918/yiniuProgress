@@ -115,6 +115,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     private int mLastScrollX;
     private int mHeight;
     private boolean mSnapOnTabClick;
+    private int itemSpaceEqualWidth;
 
     public interface OnTitleNotifyData {
         void itemTitleCreate(View tabView, int position);
@@ -259,13 +260,19 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
             Paint paint = new Paint();
             paint.setTextSize(textSize);
             int sumWidth = 0;
+            int maxTextLenght = 0;
             for (int i = 0; i < titles.length; i++) {
                 String titleItemStr = titles[i];
-                sumWidth += (int) (paint.measureText(titleItemStr) + getTabPadding() * 2);
+                int textLenght = (int) (paint.measureText(titleItemStr) + getTabPadding() * 2);
+                maxTextLenght = maxTextLenght > textLenght ? maxTextLenght : textLenght;
+                sumWidth += textLenght;
 
             }
             int width = getWidth();
             if (width > sumWidth) {
+                if (getWidth() / titles.length < maxTextLenght) {
+                    itemSpaceEqualWidth=maxTextLenght;
+                }
                 setTabSpaceEqual(true);
             }
         }
@@ -377,7 +384,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 
         /** 每一个Tab的布局参数 */
         LinearLayout.LayoutParams lp_tab = mTabSpaceEqual ?
-                new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f) :
+                new LinearLayout.LayoutParams(itemSpaceEqualWidth, LayoutParams.MATCH_PARENT) :
                 new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         if (mTabWidth > 0) {
             lp_tab = new LinearLayout.LayoutParams((int) mTabWidth, LayoutParams.MATCH_PARENT);
