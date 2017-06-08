@@ -41,7 +41,7 @@ public class SkinnableTextView extends AppCompatTextView implements Skinnable {
         a = context.obtainStyledAttributes(attrs,
                 R.styleable.SkinnableTextView,
                 defStyleAttr, 0);
-        mAttrsHelper.storeAttributeResource(a, R.styleable.SkinnableTextView);
+        mAttrsHelper.storeAttributeIndex(a, R.styleable.SkinnableTextView);
         a.recycle();
     }
 

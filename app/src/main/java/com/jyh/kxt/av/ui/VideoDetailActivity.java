@@ -175,4 +175,12 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onActivityResult(requestCode, resultCode, data);
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
     }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (commentPresenter != null) {
+            commentPresenter.onChangeTheme();
+        }
+    }
 }

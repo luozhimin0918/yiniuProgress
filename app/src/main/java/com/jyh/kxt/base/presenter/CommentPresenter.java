@@ -29,6 +29,7 @@ import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.util.SystemUtil;
@@ -45,7 +46,12 @@ import butterknife.ButterKnife;
 
 public class CommentPresenter extends BasePresenter implements SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
     public void onChangeTheme() {
-
+        try {
+            SkinnableTextView skinnableTextView = (SkinnableTextView) tvRecommendLabel;
+            skinnableTextView.applyDayNight();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public enum ClickName {
@@ -95,6 +101,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     }
 
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
+    @BindView(R.id.tv_recommend_label) TextView tvRecommendLabel;
     @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
 
     private LinearLayout headView;
@@ -318,6 +325,17 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             } else {
                 tvReplyMessage.setText("一秒登录,发表你的看法...");
             }
+        }
+    }
+
+    public void setRecommendLabel(int recommendType){
+        switch (recommendType) {
+            case 0:
+                tvRecommendLabel.setText("相关文章");
+                break;
+            case 1:
+                tvRecommendLabel.setText("往期节目");
+                break;
         }
     }
 
