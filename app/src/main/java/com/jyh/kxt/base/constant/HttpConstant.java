@@ -32,7 +32,8 @@ public class HttpConstant {
     public static final String OFFICIAL = "https://www.kxt.com";//官网
 
     public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
-    public static final String IMG_URL = "http://img.kxt.com/";
+//    public static final String IMG_URL = "http://img.kxt.com/";
+    public static final String IMG_URL = "";
     public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
     public static final String CONTACT_US_URL = BASE_URL + "statement/contact_us";//联系我们

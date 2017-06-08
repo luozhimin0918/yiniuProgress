@@ -3,24 +3,24 @@ package com.jyh.kxt.index.presenter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.explore.json.AuthorNewsJson;
-import com.jyh.kxt.index.ui.fragment.ExploreFragment;
-import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
-import com.jyh.kxt.main.json.SlideJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
+import com.jyh.kxt.index.json.HomeHeaderJson;
+import com.jyh.kxt.index.ui.fragment.ExploreFragment;
+import com.jyh.kxt.main.json.SlideJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,12 +51,12 @@ public class ExplorePresenter extends BasePresenter {
             @Override
             protected void onResponse(List<HomeHeaderJson> newsExplore) {
 
-                List<SlideJson> slides = new ArrayList<>();
-                List<SlideJson> shortcuts = new ArrayList<>();
-                List<TopicJson> topics = new ArrayList<>();
-                List<ActivityJson> activitys = new ArrayList<>();
-                List<AuthorJson> authors = new ArrayList<>();
-                List<AuthorNewsJson> articles = new ArrayList<>();
+                List<SlideJson> slides;
+                List<SlideJson> shortcuts;
+                List<TopicJson> topics;
+                List<ActivityJson> activitys;
+                List<AuthorJson> authors;
+                List<AuthorNewsJson> articles;
 
                 exploreFragment.initHeadView();
 
@@ -154,6 +154,17 @@ public class ExplorePresenter extends BasePresenter {
                 protected void onResponse(List<AuthorNewsJson> newsJsons) {
                     exploreFragment.loadMore(newsJsons);
                     getLastId(newsJsons);
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    exploreFragment.plvContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                           exploreFragment.plvContent.onRefreshComplete();
+                        }
+                    },200);
                 }
             });
         } else {

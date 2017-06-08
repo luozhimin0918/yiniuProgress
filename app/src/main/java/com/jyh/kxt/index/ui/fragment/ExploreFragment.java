@@ -70,7 +70,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     @BindView(R.id.iv_bar_break) RoundImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-    @BindView(R.id.plv_content) PullToRefreshListView plvContent;
+    @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
 
     private ExplorePresenter explorePresenter;
