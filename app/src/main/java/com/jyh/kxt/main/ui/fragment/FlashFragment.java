@@ -1,10 +1,13 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
@@ -41,6 +44,8 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
 
     @BindView(R.id.lv_content) public FastInfoPullPinnedListView lvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
+    @BindView(R.id.fab_top) public ImageView fabTop;
+
     private FlashPresenter flashPresenter;
 
     @Override
@@ -83,6 +88,29 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     }
 
                 }
+            }
+        });
+
+        lvContent.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem > visibleItemCount) {
+                    fabTop.setVisibility(View.VISIBLE);
+                } else {
+                    fabTop.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        fabTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lvContent.getRefreshableView().setSelection(0);
             }
         });
         flashPresenter.init();

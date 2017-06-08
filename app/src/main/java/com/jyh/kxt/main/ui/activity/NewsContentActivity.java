@@ -39,6 +39,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -83,8 +84,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.library.base.http.VarConstant.APP_WEB_URL;
 
 /**
  * 项目名:Kxt
@@ -166,6 +165,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         pllContent.loadWait();
 
+        commentPresenter.setRecommendLabel(0);
         commentPresenter.setOnCommentClickListener(this);
         commentPresenter.setOnCommentPublishListener(this);
 
@@ -267,12 +267,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 int alertTheme = ThemeUtil.getAlertTheme(getContext());
                 switch (alertTheme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html",
+                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + font + content, "text/html",
                                 "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html",
-                                "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL("", font + content, "text/html", "utf-8", "");
                         break;
                 }
             }
@@ -287,14 +286,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         tvTheme.setText("夜间模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, false);
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         tvTheme.setText("白天模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, true);
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html",
-                                "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
                         break;
                 }
                 changePopTheme();
@@ -546,6 +544,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             /**
              * ----------  创建WebView
              */
+            String webContent = newsContentJson.getContent();
 
             WebSettings settings = wvContent.getSettings();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -569,14 +568,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8",
-                            "");
-                    source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + sourceStr +
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8", "");
+                    source = "<font color='#2E3239'>文章来源:</font><font color='#A1ABB2'>" + sourceStr +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                     webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
-                    source = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + sourceStr +
+                    source = "<font color='#909090'>文章来源:</font><font color='#4D4D4D'>" + sourceStr +
                             "</font>";
                     break;
             }
@@ -843,11 +841,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    content = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + source +
+                    content = "<font color='#909090'>文章来源:</font><font color='#4D4D4D'>" + source +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                    content = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + source +
+                    content = "<font color='#2E3239'>文章来源:</font><font color='#A1ABB2'>" + source +
                             "</font>";
                     break;
             }

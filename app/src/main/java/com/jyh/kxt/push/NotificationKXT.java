@@ -308,7 +308,7 @@ public class NotificationKXT {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context);
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setWhen(System.currentTimeMillis());
         // 响铃
@@ -380,7 +380,7 @@ public class NotificationKXT {
             notification = new NotificationCompat.Builder(context);
         }
         notification.setContentTitle(kxItemCJRL.getState() + " " + kxItemCJRL.getTitle());
-        notification.setSmallIcon(R.drawable.ic_launcher);
+        notification.setSmallIcon(R.mipmap.ic_launcher);
         notification.setWhen(System.currentTimeMillis());
         // 振动
         notification.setDefaults(Notification.DEFAULT_VIBRATE);

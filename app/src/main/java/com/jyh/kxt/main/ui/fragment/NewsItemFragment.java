@@ -128,5 +128,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
             for (MarketGridAdapter marketGridAdapter : quoteGridAdapter) {
                 marketGridAdapter.notifyDataSetChanged();
             }
+        newsItemPresenter.onChangeTheme();
+
     }
 }

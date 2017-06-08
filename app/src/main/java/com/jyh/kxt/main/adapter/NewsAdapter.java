@@ -153,6 +153,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             }
         }
         holder.tvTitle.setText(Html.fromHtml(content));
+        holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext,R.color.font_color6));
     }
 
     public void addData(List<NewsJson> newsJsons) {
