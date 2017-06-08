@@ -171,7 +171,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             @Override
             public void onItemClick(int position) {
                 SlideJson slideJson = slides.get(position);
-                JumpUtils.jump((BaseActivity) getActivity(), slideJson.getO_class(), slideJson.getO_action(), slideJson.getO_id(), slideJson.getHref());
+                JumpUtils.jump((BaseActivity) getActivity(), slideJson.getO_class(), slideJson.getO_action(), slideJson.getO_id(),
+                        slideJson.getHref());
             }
         });
     }
@@ -183,12 +184,12 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      */
     public void addShortcut(List<SlideJson> shortcuts) {
 
-        if(shortcuts==null) return;
+        if (shortcuts == null) return;
         Context mContext = getContext();
         RecyclerView recyclerView = new RecyclerView(mContext);
-        int carouselHeight=(int) mContext.getResources().getDimension(R.dimen.index_btn_height);
-        if(shortcuts.size()<=4)
-            carouselHeight=carouselHeight/2;
+        int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height);
+        if (shortcuts.size() <= 4)
+            carouselHeight = carouselHeight / 2;
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
         recyclerView.setLayoutParams(params);
@@ -457,8 +458,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 2;
         AuthorNewsJson newsJson = newsAdapter.dataList.get(index);
-        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(),newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
-        NewsJson news=new NewsJson();
+        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+        NewsJson news = new NewsJson();
         news.setTitle(newsJson.getTitle());
         news.setType(newsJson.getType());
         news.setPicture(newsJson.getPicture());
@@ -468,8 +469,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         news.setDatetime(newsJson.getCreate_time());
         news.setO_class(newsJson.getO_class());
         news.setO_action(newsJson.getO_action());
-        BrowerHistoryUtils.save(getContext(),news);
-        newsAdapter.getView(index,view,parent);
+        BrowerHistoryUtils.save(getContext(), news);
+        newsAdapter.getView(index, view, parent);
     }
 
     @Override
@@ -529,9 +530,12 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         if (authorAdapter != null) authorAdapter.notifyDataSetChanged();
         if (topicAdapter != null) topicAdapter.notifyDataSetChanged();
         if (activitysAdapter != null) activitysAdapter.notifyDataSetChanged();
+        if (btnAdapter != null) btnAdapter.notifyDataSetChanged();
         for (View headLine : headLines) {
             headLine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         }
+        if (carouseView != null)
+            carouseView.onChangeTheme();
     }
 
     public void doubleClickFragment() {

@@ -86,6 +86,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private String code;
     private boolean isMore;
     private RollDotViewPager mRollDotViewPager;
+    private BtnAdapter btnAdapter;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -288,7 +289,6 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         });
 
 
-
     }
 
     /**
@@ -320,7 +320,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         recyclerView.setLayoutManager(manager);
 
-        recyclerView.setAdapter(new BtnAdapter(shortcuts, mContext));
+        btnAdapter = new BtnAdapter(shortcuts, mContext);
+        recyclerView.setAdapter(btnAdapter);
 
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
@@ -699,5 +700,13 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         if (mRollDotViewPager != null) {
             mRollDotViewPager.onChangeTheme();
         }
+        if (btnAdapter != null)
+            btnAdapter.notifyDataSetChanged();
+        if (quoteGridAdapter != null)
+            for (MarketGridAdapter marketGridAdapter : quoteGridAdapter) {
+                marketGridAdapter.notifyDataSetChanged();
+            }
+        if(carouseView!=null)
+            carouseView.onChangeTheme();
     }
 }
