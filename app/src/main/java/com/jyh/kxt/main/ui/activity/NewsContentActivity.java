@@ -39,7 +39,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
-import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -84,6 +83,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.library.base.http.VarConstant.APP_WEB_URL;
 
 /**
  * 项目名:Kxt
@@ -266,11 +267,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 int alertTheme = ThemeUtil.getAlertTheme(getContext());
                 switch (alertTheme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + font + content, "text/html",
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html",
                                 "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", font + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html",
+                                "utf-8", "");
                         break;
                 }
             }
@@ -285,13 +287,14 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         tvTheme.setText("夜间模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, false);
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         tvTheme.setText("白天模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, true);
-                        webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html",
+                                "utf-8", "");
                         break;
                 }
                 changePopTheme();
@@ -543,7 +546,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             /**
              * ----------  创建WebView
              */
-            String webContent = newsContentJson.getContent();
 
             WebSettings settings = wvContent.getSettings();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -567,12 +569,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL("", night + content, "text/html", "utf-8", "");
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8",
+                            "");
                     source = "<font color='#4D4D4D'>文章来源:</font><font color='#909090'>" + sourceStr +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
                     source = "<font color='#A1ABB2'>文章来源:</font><font color='#2E3239'>" + sourceStr +
                             "</font>";
                     break;
@@ -582,45 +585,48 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    boolean isUrl = RegexValidateUtil.isUrl(url);
+                    boolean isUrl = !url.startsWith(APP_WEB_URL);
                     if (isUrl) {
                         Intent intent = new Intent(getContext(), WebActivity.class);
                         intent.putExtra(IntentConstant.WEBURL, url);
                         startActivity(intent);
                     } else {
                         String hrefStr = "href";
-                        String o_class_str = "class";
-                        String o_action_str = "action";
-                        String o_id_str = "id";
-                        if (url.contains("\\?") && url.contains(hrefStr) && url.contains(o_class_str) && url.contains
-                                (o_action_str) && url
-                                .contains(o_id_str)) {
+                        String o_class_str = "o_class";
+                        String o_action_str = "o_action";
+                        String o_id_str = "o_id";
+
+                        if (url.contains("?") &&
+                                url.contains(hrefStr) &&
+                                url.contains(o_class_str) &&
+                                url.contains(o_action_str) &&
+                                url.contains(o_id_str)) {
                             String[] split = url.split("\\?");
                             if (split[1] != null) {
                                 String[] params = split[1].split("&");
                                 if (params != null && params.length > 0) {
+                                    String o_class = "";
+                                    String o_action = "";
+                                    String o_id = "";
                                     for (String param : params) {
                                         if (param.contains(hrefStr)) {
-                                            String href = param.substring(param.indexOf("="));
+                                            String href = param.substring(param.indexOf("=") + 1);//不能包涵等号自己
                                             if (href != null && RegexValidateUtil.isUrl(href)) {
                                                 Intent intent = new Intent(getContext(), WebActivity.class);
                                                 intent.putExtra(IntentConstant.WEBURL, href);
                                                 startActivity(intent);
                                             }
                                         } else {
-                                            String o_class = "";
-                                            String o_action = "";
-                                            String o_id = "";
                                             if (param.contains(o_class_str)) {
-                                                o_class = param.substring(param.indexOf("="));
+                                                o_class = param.substring(param.indexOf("=") + 1);
                                             } else if (param.contains(o_action_str)) {
-                                                o_action = param.substring(param.indexOf("="));
+                                                o_action = param.substring(param.indexOf("=") + 1);
                                             } else if (param.contains(o_id_str)) {
-                                                o_id = param.substring(param.indexOf("="));
+                                                o_id = param.substring(param.indexOf("=") + 1);
                                             }
-                                            JumpUtils.jump(NewsContentActivity.this, o_class, o_action, o_id, null);
                                         }
                                     }
+                                    JumpUtils.jump(NewsContentActivity.this, o_class, o_action, o_id, null);
                                 }
                             }
                         }

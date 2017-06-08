@@ -1,5 +1,8 @@
 package com.jyh.kxt.datum.ui.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -91,7 +94,12 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                     String format = simpleDateFormat.format(date);
                     long time = simpleDateFormat.parse(format).getTime();
                     if (calendarPresenter.dataLongList.get(position) == time) {
-                        tabView.setBackgroundResource(R.drawable.shape_calendar_today);
+
+//                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.shape_calendar_today);
+//                        tabView.setBackground(drawable);
+
+                        Bitmap rqBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rili);
+                        tabView.setBackground(new BitmapDrawable(rqBitmap));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

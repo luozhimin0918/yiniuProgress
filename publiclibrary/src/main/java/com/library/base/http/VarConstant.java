@@ -207,4 +207,5 @@ public class VarConstant {
     public static final int DB_TYPE_GOOD = 4;//点赞
 
 
+    public static final String APP_WEB_URL = "https://www.daiyao.com";//App内部应用填充Url
 }
