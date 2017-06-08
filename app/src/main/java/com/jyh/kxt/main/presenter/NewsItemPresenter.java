@@ -253,6 +253,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     public void addCarouselView(final List<SlideJson> carouselList) {
 
+        if (carouselList == null) return;
+
         int currentItem = 0;
         if (carouseView != null) {
             currentItem = carouseView.getViewPager().getCurrentItem();
@@ -285,6 +287,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             }
         });
 
+
+
     }
 
     /**
@@ -293,11 +297,13 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      * @param shortcuts
      */
     public void addBtn(List<SlideJson> shortcuts) {
+
         RecyclerView recyclerView = new RecyclerView(mContext);
-        int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height);
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                carouselHeight);
-        recyclerView.setLayoutParams(params);
+
+        int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height) / 2;
+        if (shortcuts.size() > 4) {
+            carouselHeight = carouselHeight * 2;
+        }
 
         GridLayoutManager manager = new GridLayoutManager(mContext, 4) {
             @Override
@@ -315,6 +321,10 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         recyclerView.setLayoutManager(manager);
 
         recyclerView.setAdapter(new BtnAdapter(shortcuts, mContext));
+
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                carouselHeight);
+        recyclerView.setLayoutParams(params);
 
         homeHeadView.addView(recyclerView);
 

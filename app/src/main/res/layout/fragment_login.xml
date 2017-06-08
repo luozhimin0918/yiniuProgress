@@ -26,6 +26,7 @@
 
         <com.jyh.kxt.base.widget.LineEditText
             android:id="@+id/edt_pwd"
+            android:inputType="textPassword"
             style="@style/LoginEditStyle"
             android:hint="输入密码"/>
 

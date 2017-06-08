@@ -29,6 +29,7 @@
     <com.jyh.kxt.base.widget.LineEditText
         android:id="@+id/edt_pwd"
         style="@style/LoginEditStyle"
+        android:inputType="textPassword"
         android:hint="输入密码"/>
 
     <TextView

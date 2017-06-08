@@ -20,6 +20,7 @@
             android:id="@id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/describe_font_size2"
             android:text="16:30"/>
 
         <ImageView
@@ -49,7 +50,7 @@
                 android:layout_alignParentLeft="true"
                 android:text="美国6月EIA WAT原油一年货币供应远期均价5000左右"
                 android:textColor="@color/font_color5"
-                android:textSize="@dimen/describe_font_size2"/>
+                android:textSize="@dimen/content_font_size"/>
 
             <TextView
                 android:id="@+id/tv_describe"
@@ -59,6 +60,7 @@
                 android:layout_marginTop="@dimen/flash_type3_describeTop"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textSize="@dimen/describe_font_size3"
                 android:text="@string/date_describe"
                 android:textColor="@color/font_color3"/>
 

@@ -57,6 +57,7 @@ import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.explore.ui.AuthorActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
@@ -368,14 +369,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         );
 
-       /* if (SystemUtil.navigationBar(this) > 10)
-
-        {
-            ViewGroup.LayoutParams layoutParams = space.getLayoutParams();
-            layoutParams.height = SystemUtil.navigationBar(this);
-            space.setLayoutParams(layoutParams);
-        }*/
-
         PopupUtil.Config config = new PopupUtil.Config();
 
         config.outsideTouchable = true;
@@ -479,6 +472,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         private NewsContentJson newsContentJson;
         private TextView tvSource;
         public ThumbView2 attention;
+        private boolean isAllowAttention;
 
         /**
          * ----------------创建顶部的Head
@@ -493,14 +487,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             ButterKnife.bind(this, llFullContent);
 
-
-//            if (!"0".equals(newsContentJson.getAuthor_id())) {
             tvType.setText(newsContentJson.getTypeName());
 
             long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
             tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
 
             rlExistAuthor.setVisibility(View.VISIBLE);
+            rlExistAuthor.setOnClickListener(this);
             Glide.with(NewsContentActivity.this)
                     .load(newsContentJson.getAuthor_image())
                     .asBitmap()
@@ -516,7 +509,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             tvName.setText(newsContentJson.getAuthor_name());
 
-            boolean isAllowAttention = "blog".equals(newsContentJson.getType());
+            isAllowAttention = "blog".equals(newsContentJson.getType());
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
             } else {
@@ -533,13 +526,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             WebViewAndHead.this.newsContentJson.getAuthor_id(), cbLike);
                 }
             });
-//            } else {
-//                rlNotAuthor.setVisibility(View.VISIBLE);
-//                tvNewsType.setText(newsContentJson.getTypeName());
-//
-//                long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
-//                tvNewsTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
-//            }
 
             tvTitle.setText(newsContentJson.getTitle());
             /**
@@ -823,6 +809,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 case R.id.rl_sina:
                     UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
                             shareImg, SHARE_MEDIA.SINA);
+                    break;
+                case R.id.rl_exist_author:
+                    if (isAllowAttention) {
+                        Intent intent=new Intent(NewsContentActivity.this, AuthorActivity.class);
+                        intent.putExtra(IntentConstant.O_ID,newsContentJson.getAuthor_id());
+                        startActivity(intent);
+                    }
                     break;
                 default:
                     break;

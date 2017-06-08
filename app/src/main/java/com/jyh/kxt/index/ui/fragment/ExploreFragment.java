@@ -182,9 +182,13 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      * @param shortcuts
      */
     public void addShortcut(List<SlideJson> shortcuts) {
+
+        if(shortcuts==null) return;
         Context mContext = getContext();
         RecyclerView recyclerView = new RecyclerView(mContext);
-        int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height);
+        int carouselHeight=(int) mContext.getResources().getDimension(R.dimen.index_btn_height);
+        if(shortcuts.size()<=4)
+            carouselHeight=carouselHeight/2;
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
         recyclerView.setLayoutParams(params);
