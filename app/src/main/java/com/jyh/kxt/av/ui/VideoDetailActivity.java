@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +30,7 @@ import butterknife.OnClick;
 /**
  * 视听-视屏详细页
  */
-public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener {
+public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener, PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
@@ -56,21 +55,22 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         super.onCreate(savedInstanceState);
-
-        videoId = getIntent().getStringExtra(IntentConstant.O_ID);
-
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 
+        int mShowFlags =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.INVISIBLE;
+        spVideo.setSystemUiVisibility(mShowFlags);
+
+        videoId = getIntent().getStringExtra(IntentConstant.O_ID);
         videoDetailPresenter = new VideoDetailPresenter(this);
         commentPresenter = new CommentPresenter(this);
 
         commentPresenter.setOnCommentPublishListener(this);
-        pllContent.loadWait(PageLoadLayout.BgColor.TRANSPARENT8, "正在进入..");
+        pllContent.loadWait(PageLoadLayout.BgColor.WHITE, "正在进入..");
 
         videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_START);
 
@@ -81,6 +81,8 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_END);
             }
         });
+
+        pllContent.setOnAfreshLoadListener(this);
 
         ActivityManager
                 .getInstance()
@@ -182,5 +184,11 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         if (commentPresenter != null) {
             commentPresenter.onChangeTheme();
         }
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        pllContent.loadOver();
+        videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 }

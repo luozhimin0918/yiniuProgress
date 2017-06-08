@@ -147,10 +147,13 @@ public class VideoDetailPresenter extends BasePresenter {
                     List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
                     if (comment.size() == 0) {
+                        int statusBarHeight = SystemUtil.getStatuBarHeight(mContext);
+                        int navigationBarHeight = SystemUtil.getNavigationBarHeight(mContext);
                         TSnackbar.make(videoDetailActivity.rvMessage,
                                 "暂无更多评论",
                                 Snackbar.LENGTH_LONG,
-                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                                TSnackbar.APPEAR_FROM_BOTTOM_TO_TOP).setMinHeight(statusBarHeight,
+                                navigationBarHeight).show();
                         return;
                     }
                     adapterCommentList.addAll(comment);
@@ -165,7 +168,13 @@ public class VideoDetailPresenter extends BasePresenter {
                     if (adapterCommentList == null || adapterCommentList.size() == 0) {
                         videoDetailActivity.pllContent.loadError();
                     } else {
-                        ToastView.makeText3(mContext, "暂无更多数据");
+                        int statusBarHeight = SystemUtil.getStatuBarHeight(mContext);
+                        int navigationBarHeight = SystemUtil.getNavigationBarHeight(mContext);
+                        TSnackbar.make(videoDetailActivity.rvMessage,
+                                "暂无更多评论",
+                                Snackbar.LENGTH_LONG,
+                                TSnackbar.APPEAR_FROM_BOTTOM_TO_TOP).setMinHeight(statusBarHeight,
+                                navigationBarHeight).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

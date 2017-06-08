@@ -2,6 +2,7 @@ package com.jyh.kxt.av.presenter;
 
 import android.app.Service;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -176,6 +177,22 @@ public class ReplyMessagePresenter extends BasePresenter {
     }
 
     public void onChangeTheme() {
+        try {
+            int color = ContextCompat.getColor(mContext, R.color.theme1);
+            emoJeContentView.setBackgroundColor(color);
 
+            int color1 = ContextCompat.getColor(mContext, R.color.line_color3);
+            replyMessageView.setBackgroundColor(color1);
+
+            int color2 = ContextCompat.getColor(mContext, R.color.white);
+            eetContent.setBackgroundColor(color2);
+
+            int color3 = ContextCompat.getColor(mContext, R.color.theme1);
+            flEmoJe.setBackgroundColor(color3);
+
+            emoJeContentView.onChangeTheme();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

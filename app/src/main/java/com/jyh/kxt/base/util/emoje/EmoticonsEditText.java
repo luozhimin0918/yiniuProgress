@@ -5,11 +5,11 @@ import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
 import com.jyh.kxt.base.dao.EmojeBean;
+import com.jyh.kxt.base.widget.night.heple.SkinnableEditText;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * Created by Mr'Dai on 2017/5/5.
  */
 
-public class EmoticonsEditText extends EditText {
+public class EmoticonsEditText extends SkinnableEditText {
 
     public interface OnTextChangedListener {
         void onTextChanged(CharSequence s, int start, int before, int count);

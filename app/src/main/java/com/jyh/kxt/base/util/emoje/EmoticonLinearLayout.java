@@ -29,6 +29,20 @@ import java.util.List;
 
 public class EmoticonLinearLayout extends LinearLayout {
 
+    public void onChangeTheme() {
+        try {
+            selectGroup(groupViewPagerPosition);
+            for (View view : mGroupLineList) {
+                int bgColor = ContextCompat.getColor(getContext(), R.color.line_color3);
+                view.setBackgroundColor(bgColor);
+            }
+            int lineColor = ContextCompat.getColor(getContext(), R.color.line_color);
+            viewLine.setBackgroundColor(lineColor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface OnItemClick {
         void itemEmoJeClick(EmojeBean emojeBean);
 
@@ -44,9 +58,12 @@ public class EmoticonLinearLayout extends LinearLayout {
     private EmoticonViewPager evpEmoJePage;
     private LinearLayout mLlLabel;
     private LinearLayout mLlCircle;
+    private View viewLine;
 
     private List<String> mGroupNameList;
     private List<TextView> mGroupNameViewList = new ArrayList<>();
+    private List<View> mGroupLineList = new ArrayList<>();
+    private int groupViewPagerPosition = 0;
 
     public EmoticonLinearLayout(Context context) {
         super(context, null);
@@ -71,6 +88,7 @@ public class EmoticonLinearLayout extends LinearLayout {
         evpEmoJePage = (EmoticonViewPager) findViewWithTag("evp_emoje");
         mLlCircle = (LinearLayout) findViewWithTag("ll_circle");
         mLlLabel = (LinearLayout) findViewWithTag("ll_label");
+        viewLine =  findViewById(R.id.view_line);
 
         /**
          * 获得数据库最新数据
@@ -215,6 +233,8 @@ public class EmoticonLinearLayout extends LinearLayout {
                     evpEmoJePage.setCurrentItem(finalI);
                 }
             });
+
+            mGroupLineList.add(splitView);
         }
     }
 
@@ -230,6 +250,7 @@ public class EmoticonLinearLayout extends LinearLayout {
         TextView labelView = mGroupNameViewList.get(select);
         int bgColor = ContextCompat.getColor(getContext(), R.color.line_color3);
         labelView.setBackgroundColor(bgColor);
+        groupViewPagerPosition = select;
     }
 
 

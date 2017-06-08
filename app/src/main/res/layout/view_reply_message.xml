@@ -24,7 +24,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
-        android:background="@color/line_color3"
         android:gravity="center_vertical">
 
         <ImageView

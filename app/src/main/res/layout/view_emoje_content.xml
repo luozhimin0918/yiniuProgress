@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
 
@@ -27,7 +28,8 @@
 
     </LinearLayout>
 
-    <include layout="@layout/view_line"></include>
+    <include android:id="@+id/view_line" layout="@layout/view_line"></include>
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="40dp">

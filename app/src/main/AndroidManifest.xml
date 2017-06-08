@@ -78,8 +78,7 @@
         <activity
             android:name=".av.ui.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/VideoTheme">
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- 用户 -->

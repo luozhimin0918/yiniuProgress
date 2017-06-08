@@ -273,7 +273,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                 "utf-8", "");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html",
+                                "utf-8", "");
                         break;
                 }
             }
@@ -294,7 +295,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         tvTheme.setText("白天模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, true);
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8", "");
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html",
+                                "utf-8", "");
                         break;
                 }
                 changePopTheme();
@@ -468,7 +470,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_news_time) TextView tvNewsTime;
         @BindView(R.id.wv_content) public WebView wvContent;
 
-        private LinearLayout headView;
+        public LinearLayout headView;
         private NewsContentJson newsContentJson;
         private TextView tvSource;
         public ThumbView2 attention;
@@ -555,7 +557,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8", "");
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8",
+                            "");
                     source = "<font color='#2E3239'>文章来源:</font><font color='#A1ABB2'>" + sourceStr +
                             "</font>";
                     break;
@@ -662,7 +665,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 //                            "   }" +
 //                            "}");
 //                    view.loadUrl("javascript:urlClick()");
-
                     pllContent.loadOver();
                 }
             });
@@ -812,8 +814,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     break;
                 case R.id.rl_exist_author:
                     if (isAllowAttention) {
-                        Intent intent=new Intent(NewsContentActivity.this, AuthorActivity.class);
-                        intent.putExtra(IntentConstant.O_ID,newsContentJson.getAuthor_id());
+                        Intent intent = new Intent(NewsContentActivity.this, AuthorActivity.class);
+                        intent.putExtra(IntentConstant.O_ID, newsContentJson.getAuthor_id());
                         startActivity(intent);
                     }
                     break;
