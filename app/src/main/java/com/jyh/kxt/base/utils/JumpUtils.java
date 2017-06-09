@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.tool.util.L;
 import android.support.v4.app.Fragment;
@@ -91,6 +92,9 @@ public class JumpUtils {
                     case VarConstant.OCLASS_NEWS:
                         jumpNews(context, o_action, o_id);
                         return;
+                    case VarConstant.OCLASS_QUOTES:
+                        jumpQuotes(context, o_action, o_id);
+                        break;
                 }
             } else {
                 //网页跳转
@@ -100,6 +104,55 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 行情
+     *
+     * @param context
+     * @param o_action
+     * @param o_id
+     */
+    private static void jumpQuotes(BaseActivity context, String o_action, String o_id) {
+        if (context instanceof MainActivity) {
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    break;
+                case VarConstant.OACTION_INDEX:
+                case VarConstant.OACTION_LIST:
+                    break;
+                case VarConstant.OACTION_ZX:
+                    final MainActivity mainActivity = (MainActivity) context;
+                    RadioButton rbMarket = mainActivity.rbMarket;
+                    boolean rbMarketChecked = rbMarket.isChecked();
+                    if (rbMarketChecked) {
+                        mainActivity.marketFragment.onTabSelect(1);
+                    } else {
+                        rbMarket.performClick();
+                        rbMarket.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainActivity.marketFragment.onTabSelect(1);
+                            }
+                        }, 200);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (o_action) {
+                case VarConstant.OACTION_DETAIL:
+                    break;
+                case VarConstant.OACTION_INDEX:
+                case VarConstant.OACTION_LIST:
+                    break;
+                case VarConstant.OACTION_ZX:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -121,6 +174,7 @@ public class JumpUtils {
                 detailIntent.putExtra(IntentConstant.O_ID, o_id);
                 detailIntent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
                 context.startActivity(detailIntent);
+                break;
         }
     }
 

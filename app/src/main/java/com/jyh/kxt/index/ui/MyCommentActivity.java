@@ -39,22 +39,21 @@ public class MyCommentActivity extends BaseActivity implements ViewPager.OnPageC
         tabs = new String[2];
         MyCommentFragment commentMy = new MyCommentFragment();
         Bundle commentMyBundle = new Bundle();
-        commentMyBundle.putInt("from", 0);
+        commentMyBundle.putInt("from", 1);
         commentMy.setArguments(commentMyBundle);
         fragmentList.add(commentMy)
-
 
 
         ;
 
         MyCommentFragment commentReply = new MyCommentFragment();
         Bundle commentReplyBundle = new Bundle();
-        commentReplyBundle.putInt("from", 1);
+        commentReplyBundle.putInt("from", 0);
         commentReply.setArguments(commentReplyBundle);
         fragmentList.add(commentReply);
 
-        tabs[0] = "我的回复";
-        tabs[1] = "我的评论";
+        tabs[0] = "我的评论";
+        tabs[1] = "回复我的";
 
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vpContent.addOnPageChangeListener(this);

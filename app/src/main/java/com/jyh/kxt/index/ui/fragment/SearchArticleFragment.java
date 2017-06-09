@@ -91,7 +91,7 @@ public class SearchArticleFragment extends BaseFragment implements PageLoadLayou
     }
 
     public void init(List<NewsJson> newsJsons) {
-        if (newsJsons == null) {
+        if (newsJsons == null || newsJsons.size() == 0) {
             plRootView.setNullText(getString(R.string.error_search_null));
             plRootView.loadEmptyData();
             return;
@@ -135,7 +135,7 @@ public class SearchArticleFragment extends BaseFragment implements PageLoadLayou
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int index = position - 1;
         NewsJson newsJson = newsAdapter.getData().get(index);
-        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(),newsJson.getO_id(), newsJson.getHref());
+        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
         BrowerHistoryUtils.save(getContext(), newsJson);
         newsAdapter.getView(index, view, parent);
     }

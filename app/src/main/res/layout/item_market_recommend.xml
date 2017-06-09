@@ -41,8 +41,10 @@
             android:textSize="@dimen/describe_font_size4"
 
             android:textStyle="bold"
-            app:bindingArrowsPrice="@{bean.price}"
 
+            app:bindingArrowsFontSize = "@{bean.updateFontSize}"
+            app:bindingArrowsFontSizeRange = "@{bean.range}"
+            app:bindingArrowsPrice="@{bean.price}"
             app:bindingArrowsRange="@{bean.range}"
             app:bindingRange="@{bean.range}"/>
 

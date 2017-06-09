@@ -84,6 +84,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         }
         this.position = position;
         replaceFragment(currentFragment);
+        stlNavigationBar.setCurrentTab(position);
         lastFragment = currentFragment;
     }
 

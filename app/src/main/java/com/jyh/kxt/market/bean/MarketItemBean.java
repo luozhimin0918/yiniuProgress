@@ -30,6 +30,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     @Bindable private int bgGlint = 0;
     @Bindable private String switchTarget;
     private int fromSource = 0;//0来自网络 1来自本地
+    @Bindable  private  int updateFontSize = 0;//0 默认文字大小  1 表示放大文字
 
     public void setChange(String change) {
         this.change = change;
@@ -102,6 +103,15 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         this.fromSource = fromSource;
     }
 
+    public int getUpdateFontSize() {
+        return updateFontSize;
+    }
+
+    public void setUpdateFontSize(int updateFontSize) {
+        this.updateFontSize = updateFontSize;
+        notifyPropertyChanged(BR.updateFontSize);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -117,6 +127,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         dest.writeInt(this.bgGlint);
         dest.writeString(this.switchTarget);
         dest.writeInt(this.fromSource);
+        dest.writeInt(this.updateFontSize);
     }
 
     public MarketItemBean() {
@@ -131,9 +142,10 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         this.bgGlint = in.readInt();
         this.switchTarget = in.readString();
         this.fromSource = in.readInt();
+        this.updateFontSize = in.readInt();
     }
 
-    public static final Parcelable.Creator<MarketItemBean> CREATOR = new Parcelable.Creator<MarketItemBean>() {
+    public static final Creator<MarketItemBean> CREATOR = new Creator<MarketItemBean>() {
         @Override
         public MarketItemBean createFromParcel(Parcel source) {
             return new MarketItemBean(source);

@@ -98,8 +98,8 @@
         android:id="@+id/fl_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_search_height"
-        android:paddingLeft="@dimen/drawer_edtPadding"
         android:layout_marginBottom="10dp"
+        android:paddingLeft="@dimen/drawer_edtPadding"
         android:paddingRight="@dimen/drawer_edtPadding"
         >
 
@@ -110,8 +110,8 @@
             android:drawableLeft="@mipmap/icon_drawer_search"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="搜索文章、视频"
             android:paddingLeft="7dp"
+            android:text="搜索文章、视频"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/content_font_size"/>
     </FrameLayout>
@@ -120,33 +120,33 @@
         android:id="@+id/ll_collect"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding">
 
         <ImageView
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_collect"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_collect"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="我的收藏"
-            android:textSize="@dimen/content_font_size2"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_focus"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
         >
 
@@ -154,25 +154,25 @@
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_like"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_like"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="我的关注"
-            android:textSize="@dimen/content_font_size2"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_history"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
         >
 
@@ -180,25 +180,25 @@
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_history"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_history"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:textSize="@dimen/content_font_size2"
             android:text="浏览历史"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_pl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
         >
 
@@ -206,26 +206,26 @@
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_pl"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_pl"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
-            android:textSize="@dimen/content_font_size2"
             android:gravity="center"
-            android:text="评论查询"
-            android:textColor="@color/font_color5"/>
+            android:text="我的评论"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_activity"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
-        android:gravity="center_vertical"
         android:visibility="gone"
         >
 
@@ -233,68 +233,69 @@
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_about"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_about"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:textSize="@dimen/content_font_size2"
             android:text="我的活动"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_share"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
-        android:gravity="center_vertical"
         >
 
         <ImageView
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_share"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_share"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
             android:text="推荐给好友"
-            android:textSize="@dimen/content_font_size2"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_quit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/drawer_imgPadding"
-        android:gravity="center_vertical"
         >
+
         <ImageView
             android:layout_width="@dimen/drawer_item_imageSize"
             android:layout_height="@dimen/drawer_item_imageSize"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_drawer_quit"
+            android:layout_marginLeft="@dimen/drawer_item_imgPadding"
             android:layout_marginRight="@dimen/drawer_item_imgPadding"
-            android:layout_marginLeft="@dimen/drawer_item_imgPadding"/>
+            android:src="@mipmap/icon_drawer_quit"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/drawer_item_height"
             android:gravity="center"
-            android:textSize="@dimen/content_font_size2"
             android:text="退出登录"
-            android:textColor="@color/font_color5"/>
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/content_font_size2"/>
     </LinearLayout>
 
     <View
@@ -330,9 +331,9 @@
                 >
 
                 <ImageView
-                    android:layout_marginLeft="14dp"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:layout_marginLeft="14dp"
                     android:layout_marginRight="@dimen/drawer_imgPadding"
                     android:src="@mipmap/icon_drawer_setting"/>
 
@@ -341,8 +342,8 @@
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center_vertical"
                     android:text="设置"
-                    android:textSize="@dimen/content_font_size2"
-                    android:textColor="@color/font_color5"/>
+                    android:textColor="@color/font_color5"
+                    android:textSize="@dimen/content_font_size2"/>
             </LinearLayout>
 
             <LinearLayout
@@ -363,10 +364,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/drawer_item_height"
-                    android:textSize="@dimen/content_font_size2"
                     android:gravity="center_vertical"
                     android:text="关于"
-                    android:textColor="@color/font_color5"/>
+                    android:textColor="@color/font_color5"
+                    android:textSize="@dimen/content_font_size2"/>
             </LinearLayout>
 
             <LinearLayout
@@ -389,11 +390,11 @@
                     android:id="@+id/tv_theme"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/drawer_item_height"
-                    android:textSize="@dimen/content_font_size2"
+                    android:layout_marginRight="14dp"
                     android:gravity="center_vertical"
                     android:text="夜间"
                     android:textColor="@color/font_color5"
-                    android:layout_marginRight="14dp"
+                    android:textSize="@dimen/content_font_size2"
                     />
             </LinearLayout>
         </LinearLayout>

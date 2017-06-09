@@ -145,6 +145,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
+
+            marketItemBean.setUpdateFontSize(1);
         }
 
         List<MarketItemBean> data = marketBean.getData();
@@ -222,7 +224,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         for (final MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
-            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+            marketItemFragment.marketMap1.put(marketItemBean.getCode(), marketItemBean);
 
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
@@ -272,7 +274,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         for (MarketItemBean marketItemBean : marketBean.getData()) {
             marketCodeList.add(marketItemBean.getCode());
-            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+            marketItemFragment.marketMap2.put(marketItemBean.getCode(), marketItemBean);
 
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
@@ -352,7 +354,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         }
 
             //重新设置我的自选主题色
-            if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+           /* if (marketBean.getData() == null || marketBean.getData().size() == 0) {
                 return;
             }
             LayoutInflater mInflate = LayoutInflater.from(mContext);
@@ -369,7 +371,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                         false);
 
                 dataBinding.setBean(marketItemBean);
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }

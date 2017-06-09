@@ -81,6 +81,7 @@ public class VarConstant {
     public static final String OACTION_RL = "rili";//日历
     public static final String OACTION_SCHOOL = "school";//投资学堂
     public static final String OACTION_DIANPING = "dianping";//点评
+    public static final String OACTION_ZX = "zixuan";//自选
 
     public static final String OID_GOLD = "gold";
     public static final String OID_SILVER = "silver";

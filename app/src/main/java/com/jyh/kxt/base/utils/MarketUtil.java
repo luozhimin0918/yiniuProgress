@@ -3,6 +3,7 @@ package com.jyh.kxt.base.utils;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -101,6 +102,26 @@ public class MarketUtil {
                 tvLabel.setText(price + " ↑");
                 break;
         }
+    }
+
+    @BindingAdapter({"bindingArrowsFontSize", "bindingArrowsFontSizeRange"})
+    public static void bindingArrowsFontSize(final TextView textView, int updateFontSize,String bindingArrowsFontSizeRange) {
+        final float initFontSize = textView.getTextSize();
+        switch (updateFontSize) {
+            case 0:
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize);
+                break;
+            case 1:
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize+5);
+                textView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize);
+                    }
+                }, 500);
+                break;
+        }
+
     }
 
 

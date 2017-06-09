@@ -97,7 +97,7 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
     }
 
     public void init(List<VideoListJson> videos) {
-        if (videos == null) {
+        if (videos == null || videos.size() == 0) {
             plRootView.setNullText(getString(R.string.error_search_null));
             plRootView.loadEmptyData();
         } else {

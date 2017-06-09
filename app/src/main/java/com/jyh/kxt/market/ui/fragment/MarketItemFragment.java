@@ -57,6 +57,8 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
      */
     public int switchItemType = 0;
     public HashMap<String, MarketItemBean> marketMap = new HashMap<>();
+    public HashMap<String, MarketItemBean> marketMap1 = new HashMap<>();
+    public HashMap<String, MarketItemBean> marketMap2 = new HashMap<>();
 
 
     @Override
@@ -172,6 +174,8 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
 
     public void mapToMarketBean(String text) {
         MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap, text);
+        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap1, text);
+        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap2, text);
     }
 
     public String replacePositive(String defStr) {
