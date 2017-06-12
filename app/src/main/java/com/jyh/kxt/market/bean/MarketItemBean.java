@@ -27,10 +27,13 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     @Bindable private String price;
     @Bindable private String range;
     //本地变
-    @Bindable private int bgGlint = 0;
     @Bindable private String switchTarget;
-    private int fromSource = 0;//0来自网络 1来自本地
-    @Bindable  private  int updateFontSize = 0;//0 默认文字大小  1 表示放大文字
+
+    //行情来源,0 默认来源 1 第一次的数据 >1 之后数据更新
+    @Bindable private int marketFromSource;
+
+    //前一次价格
+    private String aborPrice = "0";
 
     public void setChange(String change) {
         this.change = change;
@@ -64,6 +67,8 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public void setPrice(String price) {
+        setAborPrice(this.price);
+
         this.price = price;
         notifyPropertyChanged(BR.price);
     }
@@ -77,15 +82,6 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.range);
     }
 
-    public int getBgGlint() {
-        return bgGlint;
-    }
-
-    public void setBgGlint(int bgGlint) {
-        this.bgGlint = bgGlint;
-        notifyPropertyChanged(BR.bgGlint);
-    }
-
     public String getSwitchTarget() {
         return switchTarget;
     }
@@ -95,21 +91,24 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.switchTarget);
     }
 
-    public int getFromSource() {
-        return fromSource;
+    public int getMarketFromSource() {
+        return marketFromSource;
     }
 
-    public void setFromSource(int fromSource) {
-        this.fromSource = fromSource;
+    public void setMarketFromSource(int marketFromSource) {
+        this.marketFromSource = marketFromSource;
+        notifyPropertyChanged(BR.marketFromSource);
     }
 
-    public int getUpdateFontSize() {
-        return updateFontSize;
+    public String getAborPrice() {
+        if (aborPrice == null) {
+            aborPrice = "0";
+        }
+        return aborPrice;
     }
 
-    public void setUpdateFontSize(int updateFontSize) {
-        this.updateFontSize = updateFontSize;
-        notifyPropertyChanged(BR.updateFontSize);
+    public void setAborPrice(String aborPrice) {
+        this.aborPrice = aborPrice;
     }
 
     @Override
@@ -124,10 +123,8 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.price);
         dest.writeString(this.range);
-        dest.writeInt(this.bgGlint);
         dest.writeString(this.switchTarget);
-        dest.writeInt(this.fromSource);
-        dest.writeInt(this.updateFontSize);
+        dest.writeInt(this.marketFromSource);
     }
 
     public MarketItemBean() {
@@ -139,10 +136,8 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
         this.name = in.readString();
         this.price = in.readString();
         this.range = in.readString();
-        this.bgGlint = in.readInt();
         this.switchTarget = in.readString();
-        this.fromSource = in.readInt();
-        this.updateFontSize = in.readInt();
+        this.marketFromSource = in.readInt();
     }
 
     public static final Creator<MarketItemBean> CREATOR = new Creator<MarketItemBean>() {

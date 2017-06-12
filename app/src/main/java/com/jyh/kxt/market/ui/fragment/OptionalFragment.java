@@ -1,22 +1,33 @@
 package com.jyh.kxt.market.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.custom.DiscolorTextView;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.OptionalPresenter;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,13 +53,17 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrContent;
     @BindView(R.id.tv_target_nav) TextView tvTargetNav;
 
+    @BindView(R.id.tv_synchronization_label) TextView tvSynchronizationLabel;
+    @BindView(R.id.tv_synchronization) DiscolorTextView tvSynchronization;
+    @BindView(R.id.tv_synchronization_layout) RelativeLayout tvSynchronizationLayout;
+
     private OptionalPresenter optionalPresenter;
     /**
      * 切换Item 类型  0 涨跌幅   1 涨跌额
      */
     public int switchItemType = 0;
     public HashMap<String, MarketItemBean> marketMap = new HashMap<>();
-    public List<MarketItemBean> marketItemList;
+    public List<MarketItemBean> marketItemList = new ArrayList<>();
     private JSONArray marketCodeList = new JSONArray();
 
 
@@ -56,7 +71,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_market_item);
+        setContentView(R.layout.fragment_market_item2);
 
         //初始化，因为行情首页需要
         RelativeLayout.LayoutParams contentParams = (RelativeLayout.LayoutParams) ptrContent.getLayoutParams();
@@ -85,15 +100,29 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         }
     }
 
-    @OnClick(R.id.rl_target_nav)
+    @OnClick({R.id.rl_target_nav, R.id.tv_synchronization})
     public void navClick(View view) {
-        switchItemType = switchItemType == 0 ? 1 : 0;
-        tvTargetNav.setText(switchItemType == 0 ? "涨跌幅" : "涨跌额");
+        switch (view.getId()) {
+            case R.id.rl_target_nav:
+                switchItemType = switchItemType == 0 ? 1 : 0;
+                tvTargetNav.setText(switchItemType == 0 ? "涨跌幅" : "涨跌额");
 
-        for (MarketItemBean marketItemBean : marketItemList) {
-            marketItemBean.setSwitchTarget(switchItemType == 0 ?
-                    marketItemBean.getRange() : marketItemBean.getChange());
+                for (MarketItemBean marketItemBean : marketItemList) {
+                    marketItemBean.setSwitchTarget(switchItemType == 0 ?
+                            marketItemBean.getRange() : marketItemBean.getChange());
+                }
+                break;
+            case R.id.tv_synchronization:
+                UserJson userInfo = LoginUtils.getUserInfo(getContext());
+                if (userInfo == null) {
+                    Intent intent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                    startActivity(intent);
+                } else {
+                    requestSynchronization(userInfo);
+                }
+                break;
         }
+
     }
 
 
@@ -187,6 +216,79 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         super.onChangeTheme();
         if (marketMainItemAdapter != null) {
             marketMainItemAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void requestSynchronization(final UserJson userInfo) {
+        showWaitDialog("同步中...");
+
+        VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+
+        volleyRequest.doPost(HttpConstant.QUOTES_FAVOR, jsonParam, new HttpListener<List<MarketItemBean>>() {
+            @Override
+            protected void onResponse(List<MarketItemBean> marketItemBeen) {
+                marketItemList.clear();
+                marketItemList.addAll(MarketUtil.getMergeLocalMarket(getContext(), marketItemBeen));
+                marketMainItemAdapter.notifyDataSetChanged();
+
+                requestRefresh(userInfo);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                requestRefresh(userInfo);
+            }
+        });
+    }
+
+    private void requestRefresh(final UserJson userInfo) {
+
+        JSONArray jsonArray = new JSONArray();
+        for (MarketItemBean marketItemBean : marketItemList) {
+            jsonArray.add(marketItemBean.getCode());
+        }
+
+        VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+        jsonParam.put("codes", jsonArray);
+
+        volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String sort) {
+                dismissWaitDialog();
+                TSnackbar snackBar = TSnackbar.make(pllContent, "已同步", TSnackbar.LENGTH_INDEFINITE,
+                        TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                snackBar.show();
+
+                MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
+                EventBusClass eventBusClass = new EventBusClass(
+                        EventBusClass.MARKET_OPTION_UPDATE,
+                        marketItemList);
+                EventBus.getDefault().post(eventBusClass);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                dismissWaitDialog();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        UserJson userInfo = LoginUtils.getUserInfo(getContext());
+        if (userInfo == null) {
+            tvSynchronization.setText("登录");
+        } else {
+            tvSynchronization.setText("同步");
         }
     }
 }

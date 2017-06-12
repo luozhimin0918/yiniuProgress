@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.presenter.NewsItemPresenter;
-import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -18,8 +16,6 @@ import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -32,7 +28,8 @@ import static org.greenrobot.eventbus.ThreadMode.MAIN;
  * 创建日期:2017/4/12.
  */
 
-public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2, PageLoadLayout.OnAfreshLoadListener {
+public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2, PageLoadLayout
+        .OnAfreshLoadListener {
 
     public NewsItemPresenter newsItemPresenter;
 
@@ -73,6 +70,11 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
                 //清理浏览记录
                 newsItemPresenter.clearBrowerHistory();
                 break;
+            case EventBusClass.MARKET_OPTION_UPDATE:
+                if(isMain){
+                    newsItemPresenter.addQuotes();
+                }
+                break;
         }
     }
 
@@ -103,6 +105,16 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            newsItemPresenter.sendSocketParams();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         try {
             getQueue().cancelAll(code);
@@ -116,18 +128,13 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (newsItemPresenter == null) return;
-        if (plvContent != null) plvContent.setDividerNull();
-        NewsAdapter newsAdapter = newsItemPresenter.newsAdapter;
-        if (newsAdapter != null) {
-            newsAdapter.notifyDataSetChanged();
+        if (newsItemPresenter == null) {
+            return;
+        }
+        if (plvContent != null) {
+            plvContent.setDividerNull();
         }
 
-        List<MarketGridAdapter> quoteGridAdapter = newsItemPresenter.quoteGridAdapter;
-        if (quoteGridAdapter != null)
-            for (MarketGridAdapter marketGridAdapter : quoteGridAdapter) {
-                marketGridAdapter.notifyDataSetChanged();
-            }
         newsItemPresenter.onChangeTheme();
 
     }

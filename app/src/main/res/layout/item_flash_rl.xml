@@ -67,7 +67,7 @@
             <RelativeLayout
                 android:id="@+id/ll_publish"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/flash_type3_publishHeight"
+                android:layout_height="25dp"
                 android:layout_below="@+id/tv_describe"
                 android:layout_marginTop="@dimen/flash_type3_publishTop"
                 android:orientation="horizontal">

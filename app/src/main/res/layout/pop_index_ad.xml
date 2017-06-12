@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jyh.kxt.base.widget.ArcRelativeLayout
-        android:id="@+id/arl_content"
-        android:layout_width="263dp"
-        android:layout_height="326dp"
-        android:layout_centerInParent="true"
-        android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.jyh.kxt.base.widget.ArcRelativeLayout
+            android:id="@+id/arl_content"
+            android:layout_width="263dp"
+            android:layout_height="326dp"
+            android:layout_centerInParent="true"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_adimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:visibility="gone"/>
+
+            <com.tencent.smtt.sdk.WebView
+                android:id="@+id/wv_ad_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+            </com.tencent.smtt.sdk.WebView>
+
+            <View
+                android:id="@+id/tv_top"
+                android:layout_width="match_parent"
+                android:layout_height="217dp"
+                android:visibility="gone"/>
+
+            <View
+                android:id="@+id/tv_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="108dp"
+                android:layout_below="@+id/tv_top"
+                android:visibility="gone"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:id="@+id/fl_mengban"
+                android:layout_height="match_parent"></FrameLayout>
+
+        </com.jyh.kxt.base.widget.ArcRelativeLayout>
 
         <ImageView
-            android:id="@+id/iv_adimg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:scaleType="fitXY" />
+            android:id="@+id/iv_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/arl_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:src="@mipmap/icon_close"/>
 
-        <WebView
-            android:id="@+id/wv_ad_content"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent">
-
-        </WebView>
-
-        <View
-            android:id="@+id/tv_top"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="217dp"/>
-
-        <View
-            android:id="@+id/tv_bottom"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/tv_top"
-            android:layout_height="108dp"/>
-
-    </com.jyh.kxt.base.widget.ArcRelativeLayout>
-
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/arl_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:padding="10dp"
-        android:src="@mipmap/icon_close"/>
-
+    </RelativeLayout>
 </RelativeLayout>

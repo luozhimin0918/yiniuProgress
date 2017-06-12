@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.bean.MarketItemBean;
 
@@ -47,21 +46,6 @@ public class MarketRecommendAdapter extends RecyclerView.Adapter<MarketRecommend
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         MarketItemBean marketItemBean = marketItemBeanList.get(position);
-
-        int highsOrLows = MarketUtil.isHighsOrLows(marketItemBean.getRange());
-        switch (highsOrLows) {
-            case 1:
-                marketItemBean.setPrice(marketItemBean.getPrice() + " ↑");
-                break;
-            case -1:
-                marketItemBean.setPrice(marketItemBean.getPrice() + " ↓");
-                break;
-            case 0:
-                break;
-        }
-
-        String range = marketItemBean.getRange();
-
 
         ItemMarketRecommendBinding binding = holder.getBinding();
         binding.setBean(marketItemBean);

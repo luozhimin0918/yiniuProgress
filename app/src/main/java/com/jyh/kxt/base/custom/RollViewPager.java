@@ -9,10 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
 import com.jyh.kxt.R;
-import com.library.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class RollViewPager extends ViewPager {
     }
 
     private GridViewItemData gridViewItemData;
+    private ViewPagerAdapter viewPagerAdapter;
     private int mGridMaxCount;
     private List dataList;
 
@@ -57,7 +59,7 @@ public class RollViewPager extends ViewPager {
         this.gridViewItemData = gridViewItemData;
     }
 
-    public  void build() {
+    public void build() {
         int extendedCount = 0;
         if (dataList.size() % mGridMaxCount != 0) {
             extendedCount = 1;
@@ -70,7 +72,8 @@ public class RollViewPager extends ViewPager {
 
         for (int i = 0; i < itemGroupViewPagerCount; i++) {
             int startCount = i * mGridMaxCount;
-            int endCount = (i * mGridMaxCount + mGridMaxCount) > dataList.size() ?  dataList.size() : (i * mGridMaxCount + mGridMaxCount);
+            int endCount = (i * mGridMaxCount + mGridMaxCount) > dataList.size() ? dataList.size() : (i *
+                    mGridMaxCount + mGridMaxCount);
 
             List dataSubList = dataList.subList(startCount, endCount);
             if (gridViewItemData != null) {
@@ -81,7 +84,7 @@ public class RollViewPager extends ViewPager {
             }
         }
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(groupViewList);
+        viewPagerAdapter = new ViewPagerAdapter(groupViewList);
         setAdapter(viewPagerAdapter);
     }
 
@@ -109,6 +112,7 @@ public class RollViewPager extends ViewPager {
      */
     private class ViewPagerAdapter extends PagerAdapter {
         private List<View> viewPagers;
+        private int mChildCount = 0;
 
         public ViewPagerAdapter(List<View> viewPagers) {
             this.viewPagers = viewPagers;
@@ -134,21 +138,45 @@ public class RollViewPager extends ViewPager {
         public boolean isViewFromObject(View arg0, Object arg1) {
             return arg0 == arg1;
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            if (mChildCount > 0) {
+                mChildCount--;
+                return POSITION_NONE;
+            }
+            return super.getItemPosition(object);
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            mChildCount = getCount();
+            super.notifyDataSetChanged();
+        }
     }
 
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
-        LogUtil.e(LogUtil.TAG, "宽度"+getWidth()+"gaodu :"+getHeight());
     }
 
     public void onChangeTheme() {
-        if(groupViewList!=null)
-            for (View view : groupViewList) {
-                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+        try {
+            if (groupViewList != null) {
+                for (View mItemView : groupViewList) {
+                    GridView mGridView = (GridView) mItemView;
+                    ListAdapter adapter = mGridView.getAdapter();
+                    if (adapter instanceof BaseAdapter) {
+                        BaseAdapter gridAdapter = (BaseAdapter) adapter;
+                        gridAdapter.notifyDataSetChanged();
+                    }
+                    mItemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+                }
+                viewPagerAdapter.notifyDataSetChanged();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 }

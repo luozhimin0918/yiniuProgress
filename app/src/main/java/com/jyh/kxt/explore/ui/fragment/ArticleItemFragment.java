@@ -1,7 +1,6 @@
 package com.jyh.kxt.explore.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -138,4 +137,5 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         if (newsAdapter != null)
             newsAdapter.notifyDataSetChanged();
     }
+
 }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -105,6 +106,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
     @BindView(R.id.tv_recommend_label) TextView tvRecommendLabel;
     @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
+    @BindView(R.id.rl_recommend_layout) RelativeLayout rlRecommendLayout;
 
     private LinearLayout headView;
     private PopupUtil replyMessagePopup;
@@ -135,6 +137,10 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      */
     public void createMoreVideoView(List<VideoDetailVideoBean> videoList) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
+        if(videoList == null || videoList.size() == 0){
+            rlRecommendLayout.setVisibility(View.GONE);
+            return;
+        }
         for (final VideoDetailVideoBean videoDetailVideoBean : videoList) {
 
             String imageUrl = HttpConstant.IMG_URL + videoDetailVideoBean.getPicture();

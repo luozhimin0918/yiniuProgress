@@ -4,17 +4,20 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/line_color2"/>
-
     <RelativeLayout
+        android:id="@+id/rl_recommend_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:background="@color/line_color2"/>
+
         <TextView
             android:id="@+id/tv_recommend_label"
+            android:layout_below="@+id/view_line"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:drawableLeft="@mipmap/icon_video_line"

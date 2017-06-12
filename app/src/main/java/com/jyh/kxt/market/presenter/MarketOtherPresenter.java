@@ -43,12 +43,6 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         volleyRequest.doGet(HttpConstant.MARKET_LIST, json, new HttpListener<List<MarketItemBean>>() {
             @Override
             protected void onStart() {
-                List<MarketItemBean> cacheT = getCacheT();
-                if (cacheT != null) {
-                    onResponse(cacheT);
-                } else {
-                    marketItemFragment.pageLoadLayout.loadWait();
-                }
             }
 
             @Override
@@ -61,14 +55,14 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
 
                 if (marketMainItemAdapter == null) {
                     marketDataList.addAll(marketList);
-                    marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketList);
+                    marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketDataList);
                     marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
                 } else {
                     marketDataList.addAll(marketList);
                     marketMainItemAdapter.notifyDataSetChanged();
                 }
 
-                for (MarketItemBean marketItemBean : marketList) {
+                for (MarketItemBean marketItemBean : marketDataList) {
                     marketCodeList.add(marketItemBean.getCode());
                     marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
                     //赋值默认的初始值

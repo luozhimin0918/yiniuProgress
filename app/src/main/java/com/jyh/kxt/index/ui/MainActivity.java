@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -64,6 +65,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
@@ -91,6 +93,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public ExploreFragment exploreFragment;
     //侧边栏控件
     public LinearLayout llHeaderLayout;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout;
+
     private RelativeLayout unLoginView, loginView;
     public RoundImageView loginPhoto;
     public TextView loginName;
@@ -144,8 +148,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         drawer.addDrawerListener(this);
 
         llHeaderLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.nav_header_main, null);
-        navigationView.addView(llHeaderLayout);
 
+        navigationView.addView(llHeaderLayout);
         unLoginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_unlogin);
         loginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_login);
 
@@ -170,6 +174,17 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvTheme = (TextView) llHeaderLayout.findViewById(R.id.tv_theme);
         quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
 
+        tvCollect = ButterKnife.findById(llHeaderLayout, R.id.tv_collect);
+        tvFocus = ButterKnife.findById(llHeaderLayout, R.id.tv_focus);
+        tvHistory = ButterKnife.findById(llHeaderLayout, R.id.tv_history);
+        tvPl = ButterKnife.findById(llHeaderLayout, R.id.tv_pl);
+        tvActivity = ButterKnife.findById(llHeaderLayout, R.id.tv_activity);
+        tvShare = ButterKnife.findById(llHeaderLayout, R.id.tv_share);
+        tvQuit = ButterKnife.findById(llHeaderLayout, R.id.tv_quit);
+        tvSetting = ButterKnife.findById(llHeaderLayout, R.id.tv_setting);
+        tvAbout = ButterKnife.findById(llHeaderLayout, R.id.tv_about);
+
+
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
         ivSina.setOnClickListener(this);
@@ -191,7 +206,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
 
-
+        int theme = ThemeUtil.getAlertTheme(this);
+        switch (theme) {
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                tvTheme.setText("白天");
+                break;
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                tvTheme.setText("夜间");
+                break;
+        }
     }
 
     public void clickSwitchFragment(View view) {
@@ -278,8 +301,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         } else {
             if (DoubleClickUtils.isFastDoubleClick(2000)) {
                 try {
-                    int currentVersion = android.os.Build.VERSION.SDK_INT;
-                    if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
+                    int currentVersion = Build.VERSION.SDK_INT;
+                    if (currentVersion > Build.VERSION_CODES.ECLAIR_MR1) {
                         Intent startMain = new Intent(Intent.ACTION_MAIN);
                         startMain.addCategory(Intent.CATEGORY_HOME);
                         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -582,8 +605,25 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             }
                         });
             }
+
+            leftTextFontColor();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void leftTextFontColor() {
+        int fontColor = ContextCompat.getColor(this, R.color.font_color5);
+        tvCollect.setTextColor(fontColor);
+        tvFocus.setTextColor(fontColor);
+        tvHistory.setTextColor(fontColor);
+        tvPl.setTextColor(fontColor);
+        tvActivity.setTextColor(fontColor);
+        tvShare.setTextColor(fontColor);
+        tvQuit.setTextColor(fontColor);
+
+        tvSetting.setTextColor(fontColor);
+        tvAbout.setTextColor(fontColor);
+        tvTheme.setTextColor(fontColor);
     }
 }

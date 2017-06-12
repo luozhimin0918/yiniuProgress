@@ -127,7 +127,6 @@ public class MarketDetailActivity extends BaseActivity {
             String appConfig = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
             marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
-            marketItemBean.setFromSource(1);//编辑来源于本地
 
             quotesChartUrl = mainInitJson.getQuotes_chart_url();
             quotesChartUrl = quotesChartUrl.replaceAll("\\{code\\}", marketItemBean.getCode());

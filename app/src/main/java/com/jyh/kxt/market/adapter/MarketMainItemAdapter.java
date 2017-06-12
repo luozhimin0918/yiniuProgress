@@ -3,6 +3,7 @@ package com.jyh.kxt.market.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,8 @@ public class MarketMainItemAdapter extends BaseListAdapter<MarketItemBean> {
 
         ItemMarketQuotesBinding binding = mViewHolder.getBinding();
         binding.setBean(marketItemBean);
+
+        binding.setFontColor(ContextCompat.getColor(mContext, R.color.font_color5));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

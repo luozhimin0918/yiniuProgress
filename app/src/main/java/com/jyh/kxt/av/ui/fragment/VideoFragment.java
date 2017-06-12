@@ -20,8 +20,6 @@ import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +46,6 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        try {
-            EventBus.getDefault().register(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -139,7 +132,6 @@ public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfre
         super.onDestroyView();
         try {
             getQueue().cancelAll(videoPresenter.getClass().getName());
-            EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.jyh.kxt.main.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -337,15 +338,31 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     private JSONArray marketCodeList = new JSONArray();
     private HashMap<String, MarketItemBean> marketMap = new HashMap<>();
-    public List<MarketGridAdapter> quoteGridAdapter = new ArrayList<>();
 
     public void addQuotes() {
 
-        /*Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
-        if (isInit) {
-            quotes.clear();
-            quotes.addAll(MarketUtil.getMarketEditOption(mContext));
-        }*/
+        try {
+            List<MarketItemBean> marketEditOption = MarketUtil.getMarketEditOption(mContext);
+            if (marketEditOption.size() > 6) {
+                List<MarketItemBean> subMarketItem = marketEditOption.subList(0, 6);
+                quotes.clear();
+                quotes.addAll(subMarketItem);
+            } else {
+                int quotesSub = 6 - marketEditOption.size();
+                List<MarketItemBean> subMarketItem = marketEditOption.subList(0, marketEditOption.size());
+                List<MarketItemBean> subQuotesItem = new ArrayList<>(quotes.subList(0, quotesSub));
+
+                quotes.clear();
+
+                quotes.addAll(subMarketItem);
+                quotes.addAll(subQuotesItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        marketCodeList.clear();
+        marketMap.clear();
 
         for (MarketItemBean marketItemBean : quotes) {
             marketCodeList.add(marketItemBean.getCode());
@@ -355,6 +372,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             marketItemBean.setRange(MarketUtil.replacePositive(marketItemBean.getRange()));
         }
 
+
         mRollDotViewPager = new RollDotViewPager(mContext);
         RollViewPager recommendView = mRollDotViewPager.getRollViewPager();
         recommendView
@@ -363,11 +381,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 .setGridViewItemData(new RollViewPager.GridViewItemData() {
                     @Override
                     public void itemData(List dataSubList, GridView gridView) {
-
                         MarketGridAdapter adapter = new MarketGridAdapter(mContext, dataSubList);
                         gridView.setAdapter(adapter);
-
-                        quoteGridAdapter.add(adapter);
                     }
                 });
         mRollDotViewPager.build();
@@ -380,6 +395,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         homeHeadView.addView(mRollDotViewPager);
 
         addLineView();
+
         sendSocketParams();
         MarketUtil.saveMarketEditOption(mContext, quotes, 0);
     }
@@ -426,6 +442,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 mContext.getResources()
                         .getDimension(R.dimen.line_height));
         inflate.setLayoutParams(params);
+        inflate.setTag("lineTag");
         homeHeadView.addView(inflate);
     }
 
@@ -689,7 +706,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             try {
                 List<String> jsonList = JSONArray.parseArray(text, String.class);
                 for (String itemJson : jsonList) {
-                    MarketUtil.mapToMarketBean(newsItemFragment.plRootView, 0, marketMap, text);
+                    MarketUtil.mapToMarketBean(newsItemFragment.plRootView, 0, marketMap, itemJson);
                 }
             } catch (Exception e1) {
             }
@@ -697,16 +714,36 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     }
 
     public void onChangeTheme() {
-        if (mRollDotViewPager != null) {
-            mRollDotViewPager.onChangeTheme();
-        }
-        if (btnAdapter != null)
-            btnAdapter.notifyDataSetChanged();
-        if (quoteGridAdapter != null)
-            for (MarketGridAdapter marketGridAdapter : quoteGridAdapter) {
-                marketGridAdapter.notifyDataSetChanged();
+        try {
+            if (mRollDotViewPager != null) {
+                mRollDotViewPager.onChangeTheme();
             }
-        if(carouseView!=null)
-            carouseView.onChangeTheme();
+            if (btnAdapter != null) {
+                btnAdapter.notifyDataSetChanged();
+            }
+            if (carouseView != null) {
+                carouseView.onChangeTheme();
+            }
+            if (newsAdapter != null) {
+                newsAdapter.notifyDataSetChanged();
+            }
+            if (mRollDotViewPager != null) {
+                mRollDotViewPager.onChangeTheme();
+            }
+
+            if (homeHeadView == null) {
+                return;
+            }
+            for (int i = 0; i < homeHeadView.getChildCount(); i++) {
+                String tag = (String) homeHeadView.getChildAt(i).getTag();
+                if ("lineTag".equals(tag)) {
+                    int lineColor = ContextCompat.getColor(mContext, R.color.line_color2);
+                    View lineView = homeHeadView.getChildAt(i);
+                    lineView.setBackgroundColor(lineColor);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

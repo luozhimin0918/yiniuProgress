@@ -145,8 +145,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
-
-            marketItemBean.setUpdateFontSize(1);
         }
 
         List<MarketItemBean> data = marketBean.getData();
@@ -169,6 +167,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         recommendView.setLayoutParams(lp);
 
         mainHeaderView.addView(recommendView);
+
+        createPaddingView(6);
     }
 
     private void createFavorView(MarketMainBean marketBean) {
@@ -184,11 +184,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createFavorView(MarketMainBean marketBean, LinearLayout hqLayoutView) {
-
-        this.marketBean = marketBean;
-        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
-            return;
-        }
         if (hqLayoutView == null) {
             hqLayoutView = new LinearLayout(mContext);
             hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
@@ -198,7 +193,12 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
             mainHeaderView.addView(hqLayoutView);
         }
-        createPaddingView(6, hqLayoutView);
+
+        this.marketBean = marketBean;
+        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+            return;
+        }
+
 
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
@@ -233,6 +233,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                     R.layout.item_market_recommend,
                     null,
                     false);
+
+            int nameFontColor = ContextCompat.getColor(mContext, R.color.font_color5);
+            dataBinding.setNameFontColor(nameFontColor);
 
             dataBinding.setBean(marketItemBean);
             View v = dataBinding.getRoot();
@@ -269,7 +272,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 marketItemFragment.navClick(v);
             }
         });
-
+        navigationView.setTag("navigationView");
         mainHeaderView.addView(navigationView);
 
         for (MarketItemBean marketItemBean : marketBean.getData()) {
@@ -287,12 +290,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createPaddingView(int heightPx) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_line, null);
-        int height = SystemUtil.dp2px(mContext, heightPx);
-        int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
-        view.setBackgroundColor(paddingColor);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-        mainHeaderView.addView(view, lp);
+        createPaddingView(heightPx, mainHeaderView);
     }
 
     private void createPaddingView(int heightPx, LinearLayout parentLayout) {
@@ -302,6 +300,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         view.setBackgroundColor(paddingColor);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
         parentLayout.addView(view, lp);
+        view.setTag("lineTag");
     }
 
     @Override
@@ -348,32 +347,28 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 }
             }
 
-        //重新设置头部行情主题
-        if (recommendView != null) {
-            recommendView.onChangeTheme();
-        }
-
-            //重新设置我的自选主题色
-           /* if (marketBean.getData() == null || marketBean.getData().size() == 0) {
-                return;
+            //重新设置头部行情主题
+            if (recommendView != null) {
+                recommendView.onChangeTheme();
             }
-            LayoutInflater mInflate = LayoutInflater.from(mContext);
-            for (MarketItemBean marketItemBean : marketBean.getData()) {
-                marketCodeList.add(marketItemBean.getCode());
-                marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
 
-                marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
-                marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
 
-                ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
-                        R.layout.item_market_recommend,
-                        null,
-                        false);
+            if (mainHeaderView != null) {
+                for (int i = 0; i < mainHeaderView.getChildCount(); i++) {
+                    View childAt = mainHeaderView.getChildAt(i);
+                    if ("lineTag".equals(childAt.getTag())) {
+                        int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
+                        childAt.setBackgroundColor(paddingColor);
+                    } else if ("navigationView".equals(childAt.getTag())) {
+                        childAt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
+                    }
+                }
+            }
 
-                dataBinding.setBean(marketItemBean);
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 }

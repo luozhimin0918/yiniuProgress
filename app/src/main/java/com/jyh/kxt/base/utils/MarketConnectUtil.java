@@ -43,6 +43,9 @@ public class MarketConnectUtil {
 
     public void sendSocketParams(IBaseView iBaseView, JSONArray jsonArray, OnSocketTextMessage onSocketTextMessage) {
         try {
+            if (jsonArray == null || jsonArray.size() == 0) {
+                return;
+            }
             if (iBaseView == null) {//这里传入的有Fragment 可能被销毁
                 return;
             }
@@ -100,10 +103,8 @@ public class MarketConnectUtil {
                         public void onTextMessage(String payload) {
                             if (onSocketTextMessage != null && payload != null && !"".equals(payload)) {
                                 long currentTime = System.currentTimeMillis();
-                                if (currentTime - oldReceiveTime > 1 * 500) {
-                                    onSocketTextMessage.onTextMessage(payload);
-                                    oldReceiveTime = currentTime;
-                                }
+                                onSocketTextMessage.onTextMessage(payload);
+                                oldReceiveTime = currentTime;
                             }
                         }
 

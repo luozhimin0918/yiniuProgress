@@ -10,18 +10,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -36,9 +33,9 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -47,6 +44,9 @@ import com.library.base.http.VolleySyncHttp;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
 import com.library.widget.window.ToastView;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -105,7 +105,7 @@ public class MainPresenter extends BasePresenter {
             @Override
             public void call(Subscriber<? super SingleThreadJson> subscriber) {
                 try {
-                    Thread.sleep(1 * 1000);
+                    Thread.sleep(3 * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -183,7 +183,7 @@ public class MainPresenter extends BasePresenter {
         popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);*/
 
 
-        final PopupUtil popWnd = new PopupUtil(mMainActivity);
+      /*  final PopupUtil popWnd = new PopupUtil(mMainActivity);
         View contentView = popWnd.createPopupView(R.layout.pop_index_ad);
         PopupUtil.Config config = new PopupUtil.Config();
 
@@ -195,7 +195,14 @@ public class MainPresenter extends BasePresenter {
         config.width = WindowManager.LayoutParams.MATCH_PARENT;
         config.height = WindowManager.LayoutParams.MATCH_PARENT;
         popWnd.setConfig(config);
-        popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);
+        popWnd.showAtLocation(mMainActivity.rbHome, Gravity.BOTTOM, 0, 0);*/
+
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
+
+        AlertDialog.Builder advertBuilderDialog = new AlertDialog.Builder(mContext, R.style.dialog3);
+        final AlertDialog alertDialog = advertBuilderDialog.create();
+        alertDialog.setView(contentView);
+        alertDialog.show();
 
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
         animation.setDuration(1 * 1000);
@@ -205,14 +212,25 @@ public class MainPresenter extends BasePresenter {
 
         View topView = contentView.findViewById(R.id.tv_top);
         View bottomView = contentView.findViewById(R.id.tv_bottom);
+        FrameLayout flMengBan = (FrameLayout) contentView.findViewById(R.id.fl_mengban);
 
+        ImageView imgAdView = (ImageView) contentView.findViewById(R.id.iv_adimg);
+        WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
 
+        int theme = ThemeUtil.getAlertTheme(mContext);
+        switch (theme) {
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                flMengBan.setBackgroundColor(0x88000000);
+                break;
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                flMengBan.setBackgroundColor(0x00000000);
+                break;
+        }
         if ("normal".equals(indexAd.getType()) || "download".equals(indexAd.getType())) {
 
             topView.setVisibility(View.VISIBLE);
             bottomView.setVisibility(View.VISIBLE);
 
-            ImageView imgAdView = (ImageView) contentView.findViewById(R.id.iv_adimg);
             imgAdView.setVisibility(View.VISIBLE);
             String pictureUrl = HttpConstant.IMG_URL + indexAd.getPicture();
             Glide.with(mContext).load(pictureUrl).into(imgAdView);
@@ -247,7 +265,6 @@ public class MainPresenter extends BasePresenter {
                 }
             });
         } else {
-            WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
             wvContent.setVisibility(View.VISIBLE);
 
             WebSettings settings = wvContent.getSettings();
@@ -271,7 +288,7 @@ public class MainPresenter extends BasePresenter {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     JumpUtils.jump(mMainActivity, indexAd, url);
-                    popWnd.dismiss();
+                    alertDialog.dismiss();
                     return true;
                 }
 
@@ -291,13 +308,22 @@ public class MainPresenter extends BasePresenter {
         ivCloseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popWnd.dismiss();
+                alertDialog.dismiss();
             }
         });
 
-        popWnd.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//        popWnd.setOnDismissListener(new PopupUtil.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                mMainActivity.homeFragment.closePopWindowAdvert();
+//                WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
+//                lp.alpha = 1.0f;
+//                mMainActivity.getWindow().setAttributes(lp);
+//            }
+//        });
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismiss() {
+            public void onDismiss(DialogInterface dialog) {
                 mMainActivity.homeFragment.closePopWindowAdvert();
                 WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
                 lp.alpha = 1.0f;
@@ -308,7 +334,7 @@ public class MainPresenter extends BasePresenter {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popWnd.dismiss();
+                alertDialog.dismiss();
             }
         });
     }

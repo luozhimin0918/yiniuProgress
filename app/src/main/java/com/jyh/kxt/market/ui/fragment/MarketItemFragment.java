@@ -173,9 +173,13 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     }
 
     public void mapToMarketBean(String text) {
-        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap, text);
-        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap1, text);
-        MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap2, text);
+        if (isZhuYePage) {
+            MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap, text);
+            MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap1, text);
+            MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap2, text);
+        } else {
+            MarketUtil.mapToMarketBean(ptrlvContent, switchItemType, marketMap, text);
+        }
     }
 
     public String replacePositive(String defStr) {

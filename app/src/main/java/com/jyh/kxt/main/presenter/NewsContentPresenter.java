@@ -136,13 +136,7 @@ public class NewsContentPresenter extends BasePresenter {
                     List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
 
                     if (comment.size() == 0) {
-                        int statusBarHeight = SystemUtil.getStatuBarHeight(mContext);
-                        int navigationBarHeight = SystemUtil.getNavigationBarHeight(mContext);
-                        TSnackbar.make(newsContentActivity.ptrLvMessage,
-                                "暂无更多评论",
-                                Snackbar.LENGTH_LONG,
-                                TSnackbar.APPEAR_FROM_BOTTOM_TO_TOP).setMinHeight(statusBarHeight,
-                                navigationBarHeight).show();
+                        ToastView.makeText3(mContext,"暂无更多评论");
                         return;
                     }
 

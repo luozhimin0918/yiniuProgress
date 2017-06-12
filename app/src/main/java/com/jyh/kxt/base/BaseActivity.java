@@ -102,7 +102,6 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     public void setDayNightMode(@AppCompatDelegate.NightMode int nightMode) {
         updateActivityMask(nightMode);
 
-
         final boolean isPost21 = Build.VERSION.SDK_INT >= 21;
 
         if (mSkinnableCallback != null) {

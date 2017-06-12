@@ -2,13 +2,13 @@ package com.jyh.kxt.index.ui;
 
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
-import com.library.util.SPUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,6 +26,7 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new WebView(this);
         setContentView(R.layout.activity_welcome, StatusBarColor.NO_COLOR);
 
         welcomePresenter = new WelcomePresenter(this);

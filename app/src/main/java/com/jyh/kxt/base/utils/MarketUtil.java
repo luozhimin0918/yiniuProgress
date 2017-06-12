@@ -3,7 +3,6 @@ package com.jyh.kxt.base.utils;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -90,46 +89,53 @@ public class MarketUtil {
         }
     }
 
-    @BindingAdapter(value = {"bindingArrowsPrice", "bindingArrowsRange"})
-    public static void bindingArrows(TextView tvLabel, String price, String range) {
+    @BindingAdapter(value = {"bindingMarketItem", "bindingFromSource"})
+    public static void bindingGlint(final TextView tvLabel, final MarketItemBean marketItemBean, int fromSource) {
+        if (fromSource > 1 && marketItemBean != null) {
+            if (tvLabel.getScaleX() == 1.1f || tvLabel.getScaleY() == 1.1f || tvLabel.getPaint().isFakeBoldText()) {
+                tvLabel.setScaleX(1.0f);
+                tvLabel.setScaleY(1.0f);
+                tvLabel.getPaint().setFakeBoldText(false);
+                return;
+            }
 
-        int highsOrLows = MarketUtil.isHighsOrLows(range);
-        switch (highsOrLows) {
-            case -1:
-                tvLabel.setText(price + " ↓");
-                break;
-            case 0:
-                tvLabel.setText(price + " ↑");
-                break;
+            double aborPrice = Double.valueOf(marketItemBean.getAborPrice());
+            double lastPrice = Double.valueOf(marketItemBean.getPrice());
+
+            //大于等于上一次 涨
+            if (lastPrice >= aborPrice) {
+                int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
+                tvLabel.setTextColor(fontColor);
+            }
+
+            tvLabel.setScaleX(1.1f);
+            tvLabel.setScaleY(1.1f);
+            tvLabel.getPaint().setFakeBoldText(true);
+            tvLabel.postInvalidate();
+
+            tvLabel.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tvLabel.setScaleX(1.0f);
+                    tvLabel.setScaleY(1.0f);
+                    tvLabel.getPaint().setFakeBoldText(false);
+                    tvLabel.postInvalidate();
+
+                    bindingRange(tvLabel, marketItemBean.getRange());
+                }
+            }, 500);
         }
-    }
-
-    @BindingAdapter({"bindingArrowsFontSize", "bindingArrowsFontSizeRange"})
-    public static void bindingArrowsFontSize(final TextView textView, int updateFontSize,String bindingArrowsFontSizeRange) {
-        final float initFontSize = textView.getTextSize();
-        switch (updateFontSize) {
-            case 0:
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize);
-                break;
-            case 1:
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize+5);
-                textView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,initFontSize);
-                    }
-                }, 500);
-                break;
-        }
-
     }
 
 
     /**
      * 行情 相关处理
      */
-    public static void mapToMarketBean(View view, int switchItemType, HashMap<String, MarketItemBean> marketMap,
+    public static void mapToMarketBean(View view,
+                                       int switchItemType,
+                                       HashMap<String, MarketItemBean> marketMap,
                                        String text) {
+
         JSONObject jsonObject = JSONObject.parseObject(text);
         String code = jsonObject.getString("c");
         String price = jsonObject.getString("p");   //最新价  3.5951
@@ -149,23 +155,8 @@ public class MarketUtil {
             } else {
                 marketItemBean.setSwitchTarget(marketItemBean.getChange());
             }
-
-            if (rangeReserve.contains("-")) {
-                marketItemBean.setBgGlint(2);
-            } else {
-                marketItemBean.setBgGlint(1);
-            }
-
-            view.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (rangeReserve.contains("-")) {
-                        marketItemBean.setBgGlint(12);
-                    } else {
-                        marketItemBean.setBgGlint(11);
-                    }
-                }
-            }, 500);
+            int increaseSource = marketItemBean.getMarketFromSource() + 1;
+            marketItemBean.setMarketFromSource(increaseSource);
         }
     }
 

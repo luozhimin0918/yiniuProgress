@@ -3,6 +3,7 @@ package com.jyh.kxt.market.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,12 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
         final MarketItemBean marketItemBean = dataList.get(position);
         ItemMarketRecommendBinding dataBinding = mViewHolder.getDataBinding();
         dataBinding.setBean(marketItemBean);
+
+        int bgColor = ContextCompat.getColor(mContext, R.color.theme1);
+        dataBinding.setLayoutBg(bgColor);
+
+        int nameFontColor = ContextCompat.getColor(mContext, R.color.font_color5);
+        dataBinding.setNameFontColor(nameFontColor);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

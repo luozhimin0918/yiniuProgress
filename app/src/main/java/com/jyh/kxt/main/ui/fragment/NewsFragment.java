@@ -46,6 +46,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     private List<Fragment> fragmentList;
     private String[] tabs;
     private BaseFragmentAdapter adapter;
+    private FragmentManager childFragmentManager;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             fragmentList.add(itemFragment);
         }
 
-        FragmentManager childFragmentManager = NewsFragment.this.getChildFragmentManager();
+        childFragmentManager = NewsFragment.this.getChildFragmentManager();
         adapter = new BaseFragmentAdapter(childFragmentManager, fragmentList);
         vpNewsList.setAdapter(adapter);
         stlNavigationBar.setViewPager(vpNewsList, tabs);
@@ -152,8 +153,25 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         if (stlNavigationBar != null) stlNavigationBar.notifyDataSetChanged();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            List<Fragment> fragments = childFragmentManager.getFragments();
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    NewsItemFragment mNewsItemFragment = (NewsItemFragment) fragment;
+                    mNewsItemFragment.onResume();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendSocketParams() {
-            NewsItemFragment fragment = (NewsItemFragment) fragmentList.get(0);
-            fragment.newsItemPresenter.sendSocketParams();
+        NewsItemFragment fragment = (NewsItemFragment) fragmentList.get(0);
+        fragment.newsItemPresenter.sendSocketParams();
     }
 }

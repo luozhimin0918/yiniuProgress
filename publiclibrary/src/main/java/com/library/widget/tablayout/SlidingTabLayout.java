@@ -312,6 +312,9 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
      */
     public void notifyDataSetChanged() {
         try {
+            if (mViewPager == null || mViewPager.getAdapter() == null) {
+                return;
+            }
             mTabsContainer.removeAllViews();
             this.mTabCount = mTitles == null ? mViewPager.getAdapter().getCount() : mTitles.size();
             View tabView;

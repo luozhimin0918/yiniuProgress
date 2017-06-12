@@ -6,6 +6,11 @@
     <data>
 
         <variable
+            name="fontColor"
+            type="int"></variable>
+
+
+        <variable
             name="bean"
             type="com.jyh.kxt.market.bean.MarketItemBean"/>
     </data>
@@ -19,17 +24,17 @@
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_weight="1.5"
-            android:gravity="center_vertical|left"
-            android:paddingLeft="15dp"
-
             android:layout_margin="5dp"
+            android:layout_weight="1.5"
+            android:ellipsize="end"
+
+            android:gravity="center_vertical|left"
 
             android:maxLines="1"
-            android:ellipsize="end"
+            android:paddingLeft="15dp"
             android:text="@{bean.name}"
 
-            android:textColor="@color/font_color5"
+            android:textColor="@{fontColor}"
             android:textSize="16sp"/>
 
         <TextView
@@ -40,17 +45,18 @@
             android:layout_margin="5dp"
 
             android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="center"
-            android:text="@{bean.price}"
 
             android:maxLines="1"
-            android:ellipsize="end"
+            android:text="@{bean.price}"
 
+            android:textColor="@{fontColor}"
             android:textSize="16sp"
-            android:textColor="@color/font_color5"
 
-            app:bindingRange="@{bean.range}"
-            app:bindingColorLump = "@{bean.bgGlint}"/>
+            app:bindingFromSource="@{bean.marketFromSource}"
+            app:bindingMarketItem="@{bean}"
+            app:bindingRange="@{bean.range}"/>
 
         <TextView
             android:id="@+id/tv_target"
@@ -60,15 +66,14 @@
             android:layout_margin="5dp"
 
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="@{bean.switchTarget}"
-            android:textSize="16sp"
-            android:textColor="@color/font_color5"
-
-            android:maxLines="1"
             android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{bean.switchTarget}"
 
-            app:bindingRange="@{bean.range}"
-            app:bindingColorLump = "@{bean.bgGlint}"/>
+            android:textColor="@{fontColor}"
+            android:textSize="16sp"
+
+            app:bindingRange="@{bean.range}"/>
     </LinearLayout>
 </layout>
