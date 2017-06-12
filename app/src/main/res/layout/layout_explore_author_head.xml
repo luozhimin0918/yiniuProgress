@@ -6,21 +6,60 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_content"
-        android:paddingTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="263dp"/>
+        android:layout_height="263dp"
+        android:paddingTop="15dp"/>
 
     <LinearLayout
         android:id="@+id/ll_dian"
         android:layout_width="match_parent"
         android:layout_height="8px"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginBottom="15dp"
         />
+
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_height"
         android:background="@color/line_color2"/>
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/icon_video_line"
+            android:gravity="center_vertical"
+            android:text="名家专栏"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/content_font_size"/>
+
+        <TextView
+            android:id="@+id/tv_myattention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="我的关注"
+            android:textSize="@dimen/describe_font_size3"
+            android:textColor="@color/font_color5"
+            />
+
+        <ImageView
+            android:id="@+id/iv_myattention"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/contentPadding"
+            android:src="@mipmap/icon_explore_more"/>
+    </LinearLayout>
 </LinearLayout>

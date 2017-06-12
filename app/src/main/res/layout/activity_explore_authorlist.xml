@@ -2,22 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:background="@color/theme1"
               android:orientation="vertical">
 
-    <include layout="@layout/action_bar1"/>
-
-    <com.library.widget.PageLoadLayout
-        android:id="@+id/pl_rootView"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tl="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/navigationBarHeight"
+        android:background="@color/theme1">
 
-        <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/plv_content"
-            android:layout_width="match_parent"
-            android:overScrollMode="never"
-            app:ptrShowIndicator="false"
-            android:layout_height="match_parent"/>
-    </com.library.widget.PageLoadLayout>
+        <ImageView
+            android:id="@+id/iv_left_icon"
+
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
+            android:src="@mipmap/ico_break"
+            />
+
+        <com.library.widget.tablayout.SegmentTabLayout
+            android:id="@+id/stl_navigation_bar"
+            android:layout_width="@dimen/navigationBarTabLayoutWidth"
+            android:layout_height="@dimen/navigationBarTabLayoutHeight"
+            android:layout_centerInParent="true"
+            tl:tl_bar_color="@color/segmentTabLayout_bar_color"
+            tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"
+            tl:tl_indicator_corner_radius="@dimen/navigationBarRadius"
+            tl:tl_tab_padding="@dimen/navigationBarPadding"
+            />
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

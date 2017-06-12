@@ -11,7 +11,6 @@ public class VarConstant {
 
     public static final String KEY = "kuaixun56pslui*!@~^jhk";
 
-
     /**
      * 网络请求参数
      */
@@ -133,9 +132,12 @@ public class VarConstant {
     public static final String EXPLORE_BLOG_ARTICLE = "blog_article";//文章
     //名家专栏
     public static final String EXPLORE_AUTHOR_LIST_TYPE_WRITER_LIST = "writer_list";
+    public static final String EXPLORE_AUTHOR_LIST_TYPE_ALL_WRITER_LIST = "all_writer_list";
     public static final String EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND_LIST = "recommend_list";
     public static final String EXPLORE_AUTHOR_LIST_TYPE_RECOMMEND = "recommend";
     public static final String EXPLORE_AUTHOR_LIST_TYPE_WRITER = "writer_id";
+    public static final String EXPLORE_ARTICLE_LIST_TYPE_ALL = "all";
+    public static final String EXPLORE_ARTICLE_LIST_TYPE_FOLLOW = "follow";
 
     public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
 

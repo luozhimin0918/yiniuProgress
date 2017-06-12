@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center_vertical"
+                android:id="@+id/rl_rootView"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/contentPadding">
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/riv_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/riv_avatar"
+        android:paddingTop="15dp"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/content_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@id/riv_avatar"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <TextView
+        android:id="@+id/tv_fans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/font_color6"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@id/tv_article"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/line_color3"/>
+</RelativeLayout>

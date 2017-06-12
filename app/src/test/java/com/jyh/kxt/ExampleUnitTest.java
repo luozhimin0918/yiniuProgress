@@ -13,6 +13,6 @@ import org.junit.Test;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        System.out.print(EncryptionUtils.parseJWT("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdGF0dXMiOjAsIm1zZyI6Ilx1NTNjMlx1NjU3MFx1OTUxOVx1OGJlZjpjb250ZW50IiwiZGF0YSI6W119.EZc8_jgVcemugAM_7cOiAwhgsYGYdOVvjXBFEyJ-xt8", VarConstant.KEY));
+        System.out.print(EncryptionUtils.parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzeXN0ZW1cIjpcImFuZHJvaWRcIixcInZlcnNpb25cIjpcIjYuMC4wXCJ9In0.MoO4BMZqrevif7ForeSXTZ55TNof4qTcp60YLZbUCfs", VarConstant.KEY));
     }
 }
