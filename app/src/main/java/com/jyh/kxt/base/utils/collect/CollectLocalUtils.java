@@ -63,7 +63,7 @@ public class CollectLocalUtils {
                         flashJsonWrit.insert(flash);
                     } else {
                         QueryBuilder qb = instance.getDaoSessionRead().getFlashJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), FlashJsonDao
+                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), FlashJsonDao
                                 .Properties.Socre.eq(flash.getSocre())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
                         flashJsonWrit.insert(flash);
@@ -73,14 +73,16 @@ public class CollectLocalUtils {
                     NewsJson news = (NewsJson) obj;
                     news.setDataType(VarConstant.DB_TYPE_COLLECT_LOCAL);
                     NewsJsonDao newsJsonRead = instance.getDaoSessionRead().getNewsJsonDao();
-                    List<NewsJson> newsJsons = newsJsonRead.queryRaw(VarConstant.SELECT_NEWS, new
-                            String[]{news.getO_id(), VarConstant.DB_TYPE_COLLECT_LOCAL + ""});
+                    List<NewsJson> newsJsons = newsJsonRead.queryBuilder()
+                            .where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                                    , NewsJsonDao.Properties.Type.eq(news.getType())
+                                    , NewsJsonDao.Properties.O_id.eq(news.getO_id())).list();
                     NewsJsonDao newsJsonWrite = instance.getDaoSessionWrit().getNewsJsonDao();
                     if (newsJsons.size() == 0) {
                         newsJsonWrite.insert(news);
                     } else {
                         QueryBuilder qb = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), NewsJsonDao
+                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), NewsJsonDao
                                 .Properties.O_id.eq(news.getO_id())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
                         newsJsonWrite.insert(news);
@@ -97,7 +99,7 @@ public class CollectLocalUtils {
                         videoDaoWrite.insert(video);
                     } else {
                         QueryBuilder qb = instance.getDaoSessionRead().getVideoListJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL),
+                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""),
                                 VideoListJsonDao
                                         .Properties.Uid.eq(video.getId())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
@@ -146,19 +148,21 @@ public class CollectLocalUtils {
                             String[]{flash.getSocre(), VarConstant.DB_TYPE_COLLECT_LOCAL + ""});
                     for (FlashJson flashJson : flashJsons) {
                         QueryBuilder qb = instance.getDaoSessionRead().getFlashJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), FlashJsonDao
+                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), FlashJsonDao
                                 .Properties.Socre.eq(flashJson.getSocre())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
                     }
                     break;
                 case VarConstant.COLLECT_TYPE_ARTICLE:
                     NewsJson news = (NewsJson) obj;
-                    List<NewsJson> newsJsons = instance.getDaoSessionRead().getNewsJsonDao().queryRaw(VarConstant.SELECT_NEWS, new
-                            String[]{news.getO_id(), VarConstant.DB_TYPE_COLLECT_LOCAL + ""});
+                    List<NewsJson> newsJsons = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder().where(NewsJsonDao.Properties
+                                    .DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                            , NewsJsonDao.Properties.O_id.eq(news.getO_id())
+                            , NewsJsonDao.Properties.Type.eq(news.getType())).list();
                     for (NewsJson newsJson : newsJsons) {
                         QueryBuilder qb = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), NewsJsonDao
-                                .Properties.O_id.eq(newsJson.getO_id())).buildDelete();
+                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), NewsJsonDao
+                                .Properties.O_id.eq(newsJson.getO_id()), NewsJsonDao.Properties.Type.eq(newsJson.getType())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
                     }
                     break;
@@ -169,7 +173,7 @@ public class CollectLocalUtils {
                             String[]{video.getId(), VarConstant.DB_TYPE_COLLECT_LOCAL + ""});
                     for (VideoListJson videoListJson : videoListJsons) {
                         QueryBuilder qb = instance.getDaoSessionRead().getVideoListJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL),
+                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""),
                                 VideoListJsonDao
                                         .Properties.Uid.eq(videoListJson.getId())).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
@@ -204,14 +208,26 @@ public class CollectLocalUtils {
      * @param type
      * @param observerData
      */
-    public static void getCollectData(Context context, String type, ObserverData<List> observerData) {
+    public static void getCollectData(Context context, String type, String newsType, ObserverData<List> observerData) {
         try {
             DaoSession daoSessionRead = DBManager.getInstance(context).getDaoSessionRead();
             List list = new ArrayList();
             switch (type) {
                 case VarConstant.COLLECT_TYPE_ARTICLE:
-                    list = daoSessionRead.getNewsJsonDao().queryBuilder().orderDesc(NewsJsonDao.Properties.Datetime).where(NewsJsonDao
-                            .Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")).list();
+                    if (VarConstant.OCLASS_BLOG.equals(newsType)) {
+                        list = daoSessionRead.getNewsJsonDao().queryBuilder().orderDesc(NewsJsonDao.Properties.Datetime)
+                                .where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                                        , NewsJsonDao.Properties.Type.eq(newsType)).list();
+                    } else {
+                        QueryBuilder<NewsJson> newsJsonQueryBuilder = daoSessionRead.getNewsJsonDao().queryBuilder().orderDesc
+                                (NewsJsonDao.Properties.Datetime);
+                        newsJsonQueryBuilder
+                                .where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                                );
+                        newsJsonQueryBuilder.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS),
+                                NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_DIANPING));
+                        list = newsJsonQueryBuilder.list();
+                    }
                     break;
                 case VarConstant.COLLECT_TYPE_FLASH:
                     List<FlashJson> flashJsons = daoSessionRead.getFlashJsonDao().queryRaw(VarConstant.SELECT_ALL, VarConstant
@@ -263,9 +279,10 @@ public class CollectLocalUtils {
             switch (type) {
                 case VarConstant.COLLECT_TYPE_ARTICLE:
                     NewsJson news = (NewsJson) obj;
-                    List<NewsJson> newsJsons = daoSessionRead.getNewsJsonDao().queryRaw(VarConstant.SELECT_NEWS, new String[]{news.getO_id
-                            (), "" + VarConstant
-                            .DB_TYPE_COLLECT_LOCAL});
+                    List<NewsJson> newsJsons = daoSessionRead.getNewsJsonDao().queryBuilder().
+                            where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                                    , NewsJsonDao.Properties.O_id.eq(news.getO_id())
+                                    , NewsJsonDao.Properties.Type.eq(news.getType())).list();
                     if (newsJsons.size() > 0)
                         return true;
                     else
@@ -299,16 +316,18 @@ public class CollectLocalUtils {
      * @param id
      * @return
      */
-    public static boolean isCollect(Context context, String type, String id) {
+    public static boolean isCollect(Context context, String type, String newsType, String id) {
 
         try {
             DBManager instance = DBManager.getInstance(context);
             DaoSession daoSessionRead = instance.getDaoSessionRead();
             switch (type) {
                 case VarConstant.COLLECT_TYPE_ARTICLE:
-                    List<NewsJson> newsJsons = daoSessionRead.getNewsJsonDao().queryRaw(VarConstant.SELECT_NEWS, new String[]{id
-                            , "" + VarConstant
-                            .DB_TYPE_COLLECT_LOCAL});
+                    List<NewsJson> newsJsons = daoSessionRead.getNewsJsonDao().queryBuilder()
+                            .where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
+                                    , NewsJsonDao.Properties.O_id.eq(id)
+                                    , NewsJsonDao.Properties.Type.eq(newsType)
+                            ).list();
                     if (newsJsons.size() > 0)
                         return true;
                     else
@@ -340,7 +359,7 @@ public class CollectLocalUtils {
      * @param ids
      * @param observerData
      */
-    public static void unCollects(Context context, String type, String ids, ObserverData observerData) {
+    public static void unCollects(Context context, String type, String newsType, String ids, ObserverData observerData) {
         DBManager instance = DBManager.getInstance(context);
         String[] idsSplit = ids.split(",");
         List<String> idList = Arrays.asList(idsSplit);
@@ -349,7 +368,7 @@ public class CollectLocalUtils {
                 case VarConstant.COLLECT_TYPE_FLASH:
                     for (String id : idList) {
                         QueryBuilder qb = instance.getDaoSessionRead().getFlashJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), FlashJsonDao
+                        DeleteQuery bd = qb.where(FlashJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), FlashJsonDao
                                 .Properties.Socre.eq(id)).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();
                     }
@@ -357,15 +376,23 @@ public class CollectLocalUtils {
                 case VarConstant.COLLECT_TYPE_ARTICLE:
                     for (String id : idList) {
                         QueryBuilder qb = instance.getDaoSessionRead().getNewsJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL), NewsJsonDao
-                                .Properties.O_id.eq(id)).buildDelete();
+                        DeleteQuery bd;
+                        if (newsType.equals(VarConstant.OCLASS_BLOG)) {
+                            bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), NewsJsonDao
+                                    .Properties.O_id.eq(id), NewsJsonDao.Properties.Type.eq(newsType)).buildDelete();
+                        } else {
+                            qb.where(NewsJsonDao.Properties.O_id.eq(id), NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""));
+                            qb.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS), NewsJsonDao
+                                    .Properties.O_id.eq(VarConstant.OCLASS_DIANPING));
+                            bd = qb.buildDelete();
+                        }
                         bd.executeDeleteWithoutDetachingEntities();
                     }
                     break;
                 case VarConstant.COLLECT_TYPE_VIDEO:
                     for (String id : idList) {
                         QueryBuilder qb = instance.getDaoSessionRead().getVideoListJsonDao().queryBuilder();
-                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL),
+                        DeleteQuery bd = qb.where(VideoListJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""),
                                 VideoListJsonDao
                                         .Properties.Uid.eq(id)).buildDelete();
                         bd.executeDeleteWithoutDetachingEntities();

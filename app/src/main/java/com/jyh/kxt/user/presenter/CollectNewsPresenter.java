@@ -9,7 +9,6 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
@@ -40,6 +39,7 @@ public class CollectNewsPresenter extends BasePresenter {
     private boolean isMore;//是否拥有更多数据
     private int pageCount = 1;
     private int currentPage = 1;//当前页码
+    private String newsType;
 
     public CollectNewsPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -49,13 +49,16 @@ public class CollectNewsPresenter extends BasePresenter {
 
     /**
      * 初始化
+     *
+     * @param type
      */
-    public void initData() {
+    public void initData(String type) {
         lastId = "";
+        this.newsType = type;
         collectNewsFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
             //先提交本地收藏,再请求网络收藏
-            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE, new ObserverData() {
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE, newsType, new ObserverData() {
                 @Override
                 public void callback(Object o) {
                     initNetData();
@@ -99,7 +102,7 @@ public class CollectNewsPresenter extends BasePresenter {
      * 初始化本地收藏信息
      */
     private void initLocalData() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_ARTICLE, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_ARTICLE, newsType, new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
@@ -179,7 +182,7 @@ public class CollectNewsPresenter extends BasePresenter {
      * 刷新本地收藏信息
      */
     private void refreshLocal() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_ARTICLE, newsType, new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
@@ -290,7 +293,7 @@ public class CollectNewsPresenter extends BasePresenter {
                             lastId = "";
                         }
                         collectNewsFragment.loadMore(o);
-                        CollectUtils.netToLocalSynchronization(mContext,VarConstant.COLLECT_TYPE_ARTICLE,o);
+                        CollectUtils.netToLocalSynchronization(mContext, VarConstant.COLLECT_TYPE_ARTICLE, o);
                     }
                 }
 

@@ -211,7 +211,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         }
 
         final String finalIds = ids;
-        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_VIDEO, ids, new ObserverData() {
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_VIDEO, "", ids, new ObserverData() {
             @Override
             public void callback(Object o) {
                 //删除取消收藏的数据

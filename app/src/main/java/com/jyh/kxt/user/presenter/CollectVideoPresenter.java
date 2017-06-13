@@ -54,7 +54,7 @@ public class CollectVideoPresenter extends BasePresenter {
         collectVideoFragment.plRootView.loadWait();
         if (LoginUtils.isLogined(mContext)) {
             //先提交本地收藏,再请求网络收藏
-            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData() {
+            CollectUtils.localToNetSynchronization(mContext, VarConstant.COLLECT_TYPE_VIDEO, "", new ObserverData() {
                 @Override
                 public void callback(Object o) {
                     initNetData();
@@ -98,7 +98,7 @@ public class CollectVideoPresenter extends BasePresenter {
      * 初始化本地收藏信息
      */
     private void initLocalData() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO,"", new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
@@ -183,7 +183,7 @@ public class CollectVideoPresenter extends BasePresenter {
      * 刷新本地收藏信息
      */
     private void refreshLocal() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_VIDEO,"", new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {

@@ -58,7 +58,7 @@ public class CollectFlashPresenter extends BasePresenter {
     }
 
     public void refresh() {
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_FLASH, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_FLASH,"",new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {
@@ -105,7 +105,7 @@ public class CollectFlashPresenter extends BasePresenter {
     public void init() {
         collectFlashFragment.plRootView.loadWait();
         collectFlashFragment.plRootView.setNullImgId(0);
-        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_FLASH, new ObserverData<List>() {
+        CollectUtils.getCollectData(mContext, VarConstant.COLLECT_TYPE_FLASH,"", new ObserverData<List>() {
             @Override
             public void callback(List list) {
                 if (list == null || list.size() == 0) {

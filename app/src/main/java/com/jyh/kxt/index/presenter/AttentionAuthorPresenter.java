@@ -9,7 +9,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
-import com.jyh.kxt.index.ui.fragment.AttentionAuthorFragment;
+import com.jyh.kxt.index.ui.AttentionActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 public class AttentionAuthorPresenter extends BasePresenter {
-    @BindObject AttentionAuthorFragment fragment;
+    @BindObject AttentionActivity fragment;
     public VolleyRequest request;
     private String lastId = "";
     private boolean isMore = false;
@@ -59,6 +59,7 @@ public class AttentionAuthorPresenter extends BasePresenter {
                         isMore = false;
                     }
                     fragment.init(authorDetails);
+
                 }
             }
 

@@ -179,7 +179,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         }
 
         final String finalIds = ids;
-        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_FLASH, ids, new ObserverData() {
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_FLASH,"", ids, new ObserverData() {
             @Override
             public void callback(Object o) {
                 //删除取消收藏的数据

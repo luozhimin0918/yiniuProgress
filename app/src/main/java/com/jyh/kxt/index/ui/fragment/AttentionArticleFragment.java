@@ -158,12 +158,12 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
 
     @Override
     public void delItem(Integer num) {
-        try {
-            tvDel.setText("删除(" + num + ")");
-            ((AttentionActivity) getActivity()).tvBarFunction.setText("编辑");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            tvDel.setText("删除(" + num + ")");
+//            ((AttentionActivity) getActivity()).tvBarFunction.setText("编辑");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

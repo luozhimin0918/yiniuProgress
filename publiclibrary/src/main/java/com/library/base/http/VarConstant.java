@@ -179,6 +179,7 @@ public class VarConstant {
     public static final String COLLECT_TYPE_FLASH = "flash";//快讯
     public static final String COLLECT_TYPE_VIDEO = "video";//视听
     public static final String COLLECT_TYPE_ARTICLE = "article";//文章
+    public static final String COLLECT_TYPE_BLOG = "blog";//博客
 
     public static final String SELECT_FLASH = "WHERE SOCRE=? AND DATA_TYPE=?";
     public static final String SELECT_NEWS = "WHERE O_ID=? AND DATA_TYPE=?";

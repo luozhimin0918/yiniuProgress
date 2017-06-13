@@ -48,7 +48,6 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
-import com.jyh.kxt.base.utils.AttentionUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
@@ -146,17 +145,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         isGood = NativeStore.isThumbSucceed(this, VarConstant.GOOD_TYPE_NEWS, objectId);
         ivGood.setSelected(isGood);
 
-        switch (type) {
-            case VarConstant.OCLASS_BLOG:
-                isCollect = AttentionUtils.isAttention(this, AttentionUtils.TYPE_NEWS, objectId);
-                break;
-            case VarConstant.OCLASS_ARTICLE:
-                isCollect = CollectLocalUtils.isCollect(this, VarConstant.COLLECT_TYPE_ARTICLE, objectId);
-                break;
-        }
-
-        ivCollect.setSelected(isCollect);
-
         newsContentPresenter = new NewsContentPresenter(this);
         ptrLvMessage.setMode(PullToRefreshBase.Mode.DISABLED);
 
@@ -190,7 +178,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 //收藏
                 if (isLoadOver) {
                     NewsContentJson newsContentJson = webViewAndHead.newsContentJson;
-                    newsContentPresenter.collect(objectId, newsContentJson, type);
+                    newsContentPresenter.collect(objectId, newsContentJson, newsContentJson.getType());
                 }
                 break;
             case R.id.rl_dian_zan:
@@ -487,6 +475,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         public void createWebViewAndHead(NewsContentJson newsContentJson) {
             this.newsContentJson = newsContentJson;
             this.headView = commentPresenter.getHeadView();
+
+            isCollect= CollectLocalUtils.isCollect(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, newsContentJson.getType(), objectId);
+            ivCollect.setSelected(isCollect);
 
             //头部
             LinearLayout llFullContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
