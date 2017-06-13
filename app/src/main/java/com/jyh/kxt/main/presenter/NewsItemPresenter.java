@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.index.json.HomeHeaderJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -228,7 +230,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     }
 
-
+    private List<SkinnableTextView> mAdTextViewList;
     private LinearLayout homeHeadView;
 
     /**
@@ -414,21 +416,63 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         LinearLayout adView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, null);
         ImageView iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
 
+        try {
+            final AdJson.AdItemJson mPicAd = ads.getPic_ad();
 
-        Glide.with(mContext).load(HttpConstant.IMG_URL + ads.getPicture()).error(R.mipmap.icon_def_news)
-                .placeholder(R.mipmap.icon_def_news).into(iv_ad);
+            Glide.with(mContext).load(HttpConstant.IMG_URL + mPicAd.getPicture()).error(R.mipmap.icon_def_news)
+                    .placeholder(R.mipmap.icon_def_news).into(iv_ad);
 
-        homeHeadView.addView(adView);
+            homeHeadView.addView(adView);
 
-        adView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, WebActivity.class);
-                intent.putExtra(IntentConstant.NAME, "广告");
-                intent.putExtra(IntentConstant.WEBURL, ads.getHref());
-                mContext.startActivity(intent);
+            adView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra(IntentConstant.NAME, "广告");
+                    intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
+                    mContext.startActivity(intent);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            mAdTextViewList = new ArrayList<>();
+            List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+
+            int itemHeight = SystemUtil.dp2px(mContext, 30);
+            int itemLeftPadding = SystemUtil.dp2px(mContext, 5);
+
+            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
+
+            for (final AdJson.AdItemJson adItemJson : mTextAd) {
+
+                SkinnableTextView mAdTextView = new SkinnableTextView(mContext);
+                mAdTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        itemHeight));
+                mAdTextView.setGravity(Gravity.CENTER_VERTICAL);
+
+                mAdTextView.setTextColor(adTextColor);
+                mAdTextView.setPadding(itemLeftPadding, 0, 0, 0);
+                mAdTextView.setText(" • " + adItemJson.getTitle());
+                homeHeadView.addView(mAdTextView);
+                mAdTextViewList.add(mAdTextView);
+                mAdTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
+                        intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
+                        mContext.startActivity(intent);
+                    }
+                });
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         addLineView();
     }
@@ -740,6 +784,11 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                     int lineColor = ContextCompat.getColor(mContext, R.color.line_color2);
                     View lineView = homeHeadView.getChildAt(i);
                     lineView.setBackgroundColor(lineColor);
+                }
+            }
+            if (mAdTextViewList != null) {
+                for (SkinnableTextView skinnableTextView : mAdTextViewList) {
+                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
                 }
             }
         } catch (Exception e) {
