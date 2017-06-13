@@ -13,9 +13,11 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.user.ui.fragment.CollectFlashFragment;
 import com.jyh.kxt.user.ui.fragment.CollectNewsFragment;
 import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -46,7 +48,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
 
     private List<Fragment> fragmentList;
     private CollectVideoFragment videoFragment;
-    private CollectNewsFragment newsFragment;
+    private CollectNewsFragment newsFragment, authorFragment;
     private CollectFlashFragment flashFragment;
     private DelNumListener numListener;
 
@@ -61,13 +63,13 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         tvBarTitle.setText("我的收藏");
         ivBarFunction.setText("编辑");
 
-        String[] tabs = new String[]{"视听", "文章", "快讯"};
+        String[] tabs = new String[]{"视听", "文章", "快讯", "专栏"};
 
         initFragments();
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vpContent.addOnPageChangeListener(this);
         stlNavigationBar.setViewPager(vpContent, tabs);
-        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 3));
+        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 4));
     }
 
     private void initFragments() {
@@ -75,9 +77,17 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         videoFragment = new CollectVideoFragment();
         fragmentList.add(videoFragment);
         newsFragment = new CollectNewsFragment();
+        Bundle newsBundle=new Bundle();
+        newsBundle.putString(IntentConstant.TYPE,VarConstant.OCLASS_NEWS);
+        newsFragment.setArguments(newsBundle);
         fragmentList.add(newsFragment);
         flashFragment = new CollectFlashFragment();
         fragmentList.add(flashFragment);
+        authorFragment=new CollectNewsFragment();
+        Bundle flashBundle=new Bundle();
+        flashBundle.putString(IntentConstant.TYPE,VarConstant.OCLASS_BLOG);
+        authorFragment.setArguments(flashBundle);
+        fragmentList.add(authorFragment);
 
         numListener = this;
     }

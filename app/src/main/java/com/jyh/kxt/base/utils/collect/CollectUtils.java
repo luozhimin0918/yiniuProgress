@@ -13,6 +13,7 @@ import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.dao.DaoSession;
 import com.jyh.kxt.base.dao.NewsJsonDao;
 import com.jyh.kxt.base.dao.VideoListJsonDao;
+import com.jyh.kxt.base.utils.AttentionUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
@@ -48,7 +49,16 @@ public class CollectUtils {
             umengObserver) {
         if (LoginUtils.isLogined(context)) {
             //登录,网路收藏
-            CollectNetUtils.collect(context, type, obj, observerData, umengObserver);
+            if (VarConstant.COLLECT_TYPE_ARTICLE.equals(type)) {
+                NewsJson news = (NewsJson) obj;
+                String newsType = news.getType();
+                if (newsType != null && newsType.equals(VarConstant.COLLECT_TYPE_BLOG)) {
+                    AttentionUtils.attention(context, news, observerData);
+                } else {
+                    CollectNetUtils.collect(context, type, obj, observerData, umengObserver);
+                }
+            } else
+                CollectNetUtils.collect(context, type, obj, observerData, umengObserver);
         } else {
             //未登录,本地收藏
             CollectLocalUtils.collect(context, type, obj, observerData, umengObserver);
@@ -68,7 +78,17 @@ public class CollectUtils {
             umengObserver) {
         if (LoginUtils.isLogined(context)) {
             //登录,网路收藏
-            CollectNetUtils.unCollect(context, type, obj, observerData, umengObserver);
+            if (VarConstant.COLLECT_TYPE_ARTICLE.equals(type)) {
+                NewsJson news = (NewsJson) obj;
+                String newsType = news.getType();
+                if (newsType != null && newsType.equals(VarConstant.COLLECT_TYPE_BLOG)) {
+                    AttentionUtils.unAttention(context, news, observerData);
+                } else {
+                    CollectNetUtils.unCollect(context, type, obj, observerData, umengObserver);
+                }
+            } else
+                CollectNetUtils.unCollect(context, type, obj, observerData, umengObserver);
+
         } else {
             //未登录,本地收藏
             CollectLocalUtils.unCollect(context, type, obj, observerData, umengObserver);
@@ -83,11 +103,11 @@ public class CollectUtils {
      * @param ids
      * @param observerData
      */
-    public static void unCollects(Context context, String type, String ids, ObserverData observerData) {
+    public static void unCollects(Context context, String type, String newsType, String ids, ObserverData observerData) {
         if (LoginUtils.isLogined(context)) {
-            CollectNetUtils.unCollects(context, type, ids, observerData);
+            CollectNetUtils.unCollects(context, type, newsType, ids, observerData);
         } else {
-            CollectLocalUtils.unCollects(context, type, ids, observerData);
+            CollectLocalUtils.unCollects(context, type, newsType, ids, observerData);
         }
     }
 
@@ -97,16 +117,8 @@ public class CollectUtils {
      * @param context
      * @param observerData
      */
-    public static void getCollectData(Context context, String type, ObserverData<List> observerData) {
-        if (LoginUtils.isLogined(context)) {
-            if (type.equals(VarConstant.COLLECT_TYPE_FLASH))
-                CollectLocalUtils.getCollectData(context, type, observerData);
-            else {
-                CollectNetUtils.getCollectData(context, type, observerData);
-            }
-        } else {
-            CollectLocalUtils.getCollectData(context, type, observerData);
-        }
+    public static void getCollectData(Context context, String type, String newsType, ObserverData<List> observerData) {
+        CollectLocalUtils.getCollectData(context, type, newsType, observerData);
     }
 
     /**
@@ -127,7 +139,7 @@ public class CollectUtils {
      * @param context
      * @param type
      */
-    public static void localToNetSynchronization(final Context context, String type, final ObserverData observerData) {
+    public static void localToNetSynchronization(final Context context, String type, String newsType, final ObserverData observerData) {
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         DaoSession dbRead = DBManager.getInstance(context).getDaoSessionRead();
@@ -135,7 +147,8 @@ public class CollectUtils {
         switch (type) {
             case VarConstant.COLLECT_TYPE_ARTICLE:
                 List<NewsJson> newsJsons = dbRead.getNewsJsonDao().queryBuilder().where
-                        (NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")).list();
+                        (NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), NewsJsonDao.Properties.Type.eq
+                                (newsType)).list();
                 for (NewsJson newsJson : newsJsons) {
                     String o_id = newsJson.getO_id();
                     if ("".equals(ids.toString())) {
@@ -157,10 +170,6 @@ public class CollectUtils {
                 }
                 break;
         }
-//
-//        if ("".equals(ids.toString())) {
-//            return;
-//        }
 
         request.doGet(getUrl(context, type, request, ids.toString()), new HttpListener<Object>() {
             @Override

@@ -8,6 +8,8 @@ import com.android.volley.toolbox.Volley;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
+import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -84,6 +86,44 @@ public class AttentionUtils {
     }
 
     /**
+     * 关注文章
+     *
+     * @param context
+     * @param newsJson
+     * @param observerData
+     */
+    public static void attention(final Context context, final NewsJson newsJson, final ObserverData<Boolean> observerData) {
+        String url = HttpConstant.EXPLORE_BLOG_ADDFAVORARTICLE;
+
+        UserJson userInfo = LoginUtils.getUserInfo(context);
+        VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
+        jsonParam.put(VarConstant.HTTP_ID, newsJson.getO_id());
+        try {
+            url += EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        request.doGet(url, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                CollectLocalUtils.collect(context, VarConstant.COLLECT_TYPE_ARTICLE, newsJson, null, null);
+                observerData.callback(null);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(null);
+            }
+        });
+
+    }
+
+    /**
      * 取消关注
      *
      * @param context
@@ -126,6 +166,42 @@ public class AttentionUtils {
                 set.remove(id);
                 SPUtils.save(context, SpConstant.ATTENTION_AUTHOR, set);
 
+                observerData.callback(null);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(null);
+            }
+        });
+    }
+
+    /**
+     * 取消关注文章
+     *
+     * @param context
+     * @param news
+     * @param observerData
+     */
+    public static void unAttention(final Context context, final NewsJson news, final ObserverData<Boolean> observerData) {
+        String url = HttpConstant.EXPLORE_BLOG_DELETEFAVORARTICLE;
+        UserJson userInfo = LoginUtils.getUserInfo(context);
+        VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
+        jsonParam.put(VarConstant.HTTP_ID, news.getO_id());
+        try {
+            url += EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        request.doGet(url, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                CollectLocalUtils.unCollect(context, VarConstant.COLLECT_TYPE_ARTICLE, news, null, null);
                 observerData.callback(null);
             }
 

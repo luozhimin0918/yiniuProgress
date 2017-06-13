@@ -8,6 +8,7 @@ import com.android.volley.toolbox.Volley;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.AttentionUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.library.base.http.HttpListener;
@@ -48,6 +49,11 @@ public class CollectNetUtils {
             case VarConstant.COLLECT_TYPE_ARTICLE:
                 collectType = VarConstant.COLLECT_TYPE_ARTICLE;
                 collectId = ((NewsJson) obj).getO_id();
+                String newsType = ((NewsJson) obj).getType();
+                if (VarConstant.COLLECT_TYPE_BLOG.equals(newsType)) {
+                    AttentionUtils.attention(context, (NewsJson) obj, observerData);
+                    return;
+                }
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
                 CollectLocalUtils.collect(context, type, obj, observerData, umengObserver);
@@ -105,6 +111,13 @@ public class CollectNetUtils {
             case VarConstant.COLLECT_TYPE_ARTICLE:
                 collectType = VarConstant.COLLECT_TYPE_ARTICLE;
                 collectId = ((NewsJson) obj).getO_id();
+
+                String newsType = ((NewsJson) obj).getType();
+                if (VarConstant.COLLECT_TYPE_BLOG.equals(newsType)) {
+                    AttentionUtils.unAttention(context, (NewsJson) obj, observerData);
+                    return;
+                }
+
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
                 CollectLocalUtils.unCollect(context, type, obj, observerData, umengObserver);
@@ -158,7 +171,7 @@ public class CollectNetUtils {
      * @param ids
      * @param observerData
      */
-    public static void unCollects(final Context context, final String type, final String ids, final ObserverData observerData) {
+    public static void unCollects(final Context context, final String type, final String newsType, final String ids, final ObserverData observerData) {
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         String collectType = "";
@@ -169,7 +182,7 @@ public class CollectNetUtils {
                 collectId = ids;
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
-                CollectLocalUtils.unCollects(context, type, ids, observerData);
+                CollectLocalUtils.unCollects(context, type,newsType, ids, observerData);
                 return;
             case VarConstant.COLLECT_TYPE_VIDEO:
                 collectType = VarConstant.COLLECT_TYPE_VIDEO;
@@ -182,7 +195,7 @@ public class CollectNetUtils {
             protected void onResponse(Boolean aBoolean) {
                 if (observerData != null)
                     observerData.callback(aBoolean);
-                CollectLocalUtils.unCollects(context, type, ids, null);
+                CollectLocalUtils.unCollects(context, type,newsType, ids, null);
             }
 
             @Override

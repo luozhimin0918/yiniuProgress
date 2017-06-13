@@ -227,7 +227,7 @@ public class AttentionArticlePresenter extends BasePresenter {
         }
 
         final String finalIds = ids;
-        CollectUtils.unCollects(mContext, VarConstant.COLLECT_TYPE_VIDEO, ids, new ObserverData() {
+        CollectUtils.unCollects(mContext, VarConstant.COLLECT_TYPE_VIDEO,"", ids, new ObserverData() {
             @Override
             public void callback(Object o) {
                 //删除取消收藏的数据

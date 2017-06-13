@@ -70,16 +70,13 @@
         <activity
             android:name=".index.ui.BrowerHistoryActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".index.ui.AttentionActivity"
-            android:screenOrientation="portrait"/>
 
         <!-- 视听 -->
         <activity
             android:name=".av.ui.VideoDetailActivity"
             android:theme="@style/VideoTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- 用户 -->
@@ -114,6 +111,9 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".user.ui.CollectActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".index.ui.AttentionActivity"
             android:screenOrientation="portrait"/>
 
         <!-- 要闻 -->

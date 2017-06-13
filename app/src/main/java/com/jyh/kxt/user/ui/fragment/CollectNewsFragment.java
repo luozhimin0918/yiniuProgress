@@ -11,13 +11,12 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.user.adapter.EditNewsAdapter;
 import com.jyh.kxt.user.presenter.CollectNewsPresenter;
-import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
@@ -48,6 +47,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
     private CollectNewsPresenter collectNewsPresenter;
 
     public EditNewsAdapter adapter;
+    private String type;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -64,15 +64,16 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsJson newsJson = adapter.dataList.get(position - 1);
-
-                JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+                JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
+                        .getHref());
             }
         });
 
         if (adapter != null)
             plvContent.setAdapter(adapter);
 
-        collectNewsPresenter.initData();
+        type = getArguments().getString(IntentConstant.TYPE);
+        collectNewsPresenter.initData(type);
     }
 
     /**
@@ -131,7 +132,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
 
     @Override
     public void OnAfreshLoad() {
-        collectNewsPresenter.initData();
+        collectNewsPresenter.initData(type);
     }
 
     /**
@@ -207,7 +208,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         }
 
         final String finalIds = ids;
-        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, ids, new ObserverData() {
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, type, ids, new ObserverData() {
             @Override
             public void callback(Object o) {
                 //删除取消收藏的数据
