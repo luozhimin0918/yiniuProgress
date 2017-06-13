@@ -2,7 +2,6 @@ package com.jyh.kxt.main.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -103,8 +102,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         inflate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (popupUtil != null && popupUtil.isShowing())
+                if (popupUtil != null && popupUtil.isShowing()) {
                     popupUtil.dismiss();
+                }
             }
         });
         ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
@@ -355,9 +355,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                         .placeholder(R.mipmap.icon_def_video)
                                         .into(new SimpleTarget<Bitmap>() {
                                             @Override
-                                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                                if (popupUtil.isShowing())
+                                            public void onResourceReady(Bitmap resource, GlideAnimation<? super
+                                                    Bitmap> glideAnimation) {
+                                                if (popupUtil.isShowing()) {
                                                     popupUtil.dismiss();
+                                                }
 
                                                 //图片尺寸
                                                 int width = resource.getWidth();
@@ -420,7 +422,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                 .placeholder(R.mipmap.icon_def_news)
                                 .into(new SimpleTarget<Bitmap>() {
                                     @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                            glideAnimation) {
                                         int width = resource.getWidth();//px
                                         int height = resource.getHeight();
                                         ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
@@ -442,7 +445,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                 });
                     }
 
-                    setOnclick(kxHolder.llMore, kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder
+                    setOnclick(kxHolder.llMore, kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder
+                                    .ivCollect, position, kxHolder
                                     .tvContent, null,
                             null, TYPE_KX);
 
@@ -459,7 +463,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
 
-                    Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
+                    Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl
+                            .getState()))).into(rlHolder
                             .ivFlag);
 
                     String time2 = "00:00";
@@ -471,7 +476,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     rlHolder.tvTime.setText(time2);
 
                     rlHolder.tvTitle.setText(getString(rl.getTitle()));
-                    rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
+                    rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore
+                            (), rl.getForecast(), rl
                             .getReality()));
                     rlHolder.tvMore.setVisibility(View.GONE);
                     rlHolder.ivMore.setVisibility(View.GONE);
@@ -502,7 +508,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             rlHolder.llExponent);
 
 
-                    setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder
+                    setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder
+                                    .ivCollect, position, rlHolder
                                     .tvContent, null,
                             null, TYPE_RL);
                     /**
@@ -529,7 +536,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_left = (FlashJson) flashJsons.get(position);
                     Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                    Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                            .icon_def_news).into
                             (leftHolder
                                     .ivFlash);
 
@@ -548,7 +556,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     setNewsTheme(leftHolder, left);
 
-                    setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position,
+                    setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare,
+                            leftHolder.ivCollect, position,
                             leftHolder
                                     .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT);
 
@@ -560,7 +569,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_right = (FlashJson) flashJsons.get(position);
                     Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                    Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                            .icon_def_news).into
                             (rightHolder
                                     .ivFlash);
 
@@ -577,7 +587,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     setNewsTheme(rightHolder, right);
 
-                    setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect,
+                    setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare,
+                            rightHolder.ivCollect,
                             position, rightHolder
                                     .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT);
 
@@ -588,7 +599,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_top = (FlashJson) flashJsons.get(position);
                     Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                    Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                            .icon_def_news).into
                             (topHolder
                                     .ivFlash);
 
@@ -604,7 +616,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     setNewsTheme(topHolder, top);
 
-                    setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position,
+                    setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder
+                                    .ivCollect, position,
                             topHolder.tvContent,
                             VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP);
 
@@ -617,7 +630,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                     Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                    Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                            .icon_def_news).into
                             (bottomHolder
                                     .ivFlash);
 
@@ -634,7 +648,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     setNewsTheme(bottomHolder, bottom);
 
-                    setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect,
+                    setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare,
+                            bottomHolder.ivCollect,
                             position, bottomHolder
                                     .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM);
 
@@ -684,8 +699,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * @param ivFlash
      * @param type
      */
-    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView
-            ivCollect, int position,
+    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView
+            ivShare, final ImageView
+                                    ivCollect, int position,
                             final TextView content,
                             String weizhi, final ImageView ivFlash, final int type) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
@@ -778,7 +794,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             break;
                     }
 
-                    UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl, discription, image, null,
+                    UmengShareTool.initUmengLayout((BaseActivity) context, new ShareJson(title, shareUrl,
+                            discription, image, null,
                             UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flash, ivShare, null);
 
                 } catch (Exception e) {
@@ -799,12 +816,14 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * @param ivFlash    图片
      * @param type       位置
      */
-    private void showMore(TextView tvMore, ImageView ivMore, boolean isShowMore, TextView content, ImageView ivFlash, int type) {
+    private void showMore(TextView tvMore, ImageView ivMore, boolean isShowMore, TextView content, ImageView ivFlash,
+                          int type) {
         if (isShowMore) {
             ivMore.setSelected(true);
             tvMore.setText("收起");
-            if (content != null)
+            if (content != null) {
                 content.setMaxLines(Integer.MAX_VALUE);
+            }
 //            switch (type) {
 //                case TYPE_TOP:
 //                    content.setVisibility(View.VISIBLE);
@@ -816,8 +835,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         } else {
             ivMore.setSelected(false);
             tvMore.setText("展开");
-            if (content != null)
+            if (content != null) {
                 content.setMaxLines(3);
+            }
 //            switch (type) {
 //                case TYPE_TOP:
 //                    content.setVisibility(View.GONE);
@@ -828,8 +848,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 //            }
         }
 
-        if (ivFlash != null)
+        if (ivFlash != null) {
             ivFlash.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -1082,8 +1103,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         for (int i = 0; i < size; i++) {
             Object obj = flashJsons.get(i);
-            if (obj instanceof String)
+            if (obj instanceof String) {
                 flashJsons.remove(obj);
+            }
         }
 
         size = flashJsons.size();
@@ -1119,10 +1141,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 if (!timeMap.containsKey(MD)) {
                     timeMap.put(MD, i);
-                    if (i < size)
+                    if (i < size) {
                         flashJsons.add(i, MD);
-                    else
+                    } else {
                         flashJsons.add(MD);
+                    }
                 }
             }
         }
@@ -1164,10 +1187,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                 if (!timeMap.containsKey(MD)) {
                     timeMap.put(MD, i);
-                    if (i < size)
+                    if (i < size) {
                         flashJsons.add(i, MD);
-                    else
+                    } else {
                         flashJsons.add(MD);
+                    }
                 }
             }
         }
@@ -1229,6 +1253,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         String[] splitTime = time.split(" ");
         String[] splitTime2 = splitTime[1].split(":");
         return splitTime2[0] + ":" + splitTime2[1];
+    }
+
+    public boolean isAdapterNullData() {
+        return flashJsons == null || flashJsons.size() == 0;
     }
 
     /**

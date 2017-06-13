@@ -27,6 +27,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.OptionLayout;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -35,6 +36,7 @@ import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -152,10 +154,19 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             case R.id.iv_right_icon2:
                 break;
             case R.id.iv_right_icon1:
-                if (currentFragment instanceof NewsFragment) {
-                    showPopWindowAdvert();
-                } else {
-                    flashFiltrate();  //快讯筛选
+                try {
+                    if (currentFragment instanceof NewsFragment) {
+                        showPopWindowAdvert();
+                    } else {
+                        FastInfoAdapter adapter = flashFrament.flashPresenter.adapter;
+                        if (adapter == null || adapter.isAdapterNullData()) {
+                            ToastView.makeText3(getContext(), "暂无可筛选数据");
+                            return;
+                        }
+                        flashFiltrate();  //快讯筛选
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -273,8 +284,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             public void onClick(View v) {
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, olContent.getSelectedMap());
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
-                SPUtils.save(getContext(),SpConstant.FLASH_FILTRATE_TOP,flashTop);
-                SPUtils.save(getContext(),SpConstant.FLASH_FILTRATE_SOUND,flashSound);
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
                 flashFrament.flashFiltrate();
                 filtratePopup.dismiss();

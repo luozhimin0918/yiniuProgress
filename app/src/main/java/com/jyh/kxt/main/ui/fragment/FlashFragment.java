@@ -46,7 +46,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.fab_top) public ImageView fabTop;
 
-    private FlashPresenter flashPresenter;
+    public FlashPresenter flashPresenter;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
