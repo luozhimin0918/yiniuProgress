@@ -58,8 +58,8 @@ public class HttpConstant {
     public static final String VIDEO_NAV = BASE_URL + "video/nav" + JWT;//视听导航
     public static final String VIDEO_LIST = BASE_URL + "video/list";//视听列表
     public static final String VIDEO_MOST_PLAY = BASE_URL + "video/list";//视听排行 最多播放
-    public static final String VIDEO_MOST_COMMENT = BASE_URL + "video/list";//视听排行 最多评论
-    public static final String VIDEO_MOST_COLLECT = BASE_URL + "video/list";//视听排行 最多收藏
+    public static final String VIDEO_MOST_COMMENT = BASE_URL + "video/most_comment";//视听排行 最多评论
+    public static final String VIDEO_MOST_COLLECT = BASE_URL + "video/most_collect";//视听排行 最多收藏
 
     /**
      * 探索

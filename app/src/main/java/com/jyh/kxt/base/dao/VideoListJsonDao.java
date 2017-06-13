@@ -31,11 +31,12 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         public final static Property Num_comment = new Property(4, String.class, "num_comment", false, "NUM_COMMENT");
         public final static Property Num_good = new Property(5, String.class, "num_good", false, "NUM_GOOD");
         public final static Property Num_play = new Property(6, String.class, "num_play", false, "NUM_PLAY");
-        public final static Property Create_time = new Property(7, String.class, "create_time", false, "CREATE_TIME");
-        public final static Property IsCollect = new Property(8, boolean.class, "isCollect", false, "IS_COLLECT");
-        public final static Property IsGood = new Property(9, boolean.class, "isGood", false, "IS_GOOD");
-        public final static Property IsSel = new Property(10, boolean.class, "isSel", false, "IS_SEL");
-        public final static Property DataType = new Property(11, int.class, "dataType", false, "DATA_TYPE");
+        public final static Property Num_favor = new Property(7, String.class, "num_favor", false, "NUM_FAVOR");
+        public final static Property Create_time = new Property(8, String.class, "create_time", false, "CREATE_TIME");
+        public final static Property IsCollect = new Property(9, boolean.class, "isCollect", false, "IS_COLLECT");
+        public final static Property IsGood = new Property(10, boolean.class, "isGood", false, "IS_GOOD");
+        public final static Property IsSel = new Property(11, boolean.class, "isSel", false, "IS_SEL");
+        public final static Property DataType = new Property(12, int.class, "dataType", false, "DATA_TYPE");
     }
 
 
@@ -58,11 +59,12 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
                 "\"NUM_COMMENT\" TEXT," + // 4: num_comment
                 "\"NUM_GOOD\" TEXT," + // 5: num_good
                 "\"NUM_PLAY\" TEXT," + // 6: num_play
-                "\"CREATE_TIME\" TEXT," + // 7: create_time
-                "\"IS_COLLECT\" INTEGER NOT NULL ," + // 8: isCollect
-                "\"IS_GOOD\" INTEGER NOT NULL ," + // 9: isGood
-                "\"IS_SEL\" INTEGER NOT NULL ," + // 10: isSel
-                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 11: dataType
+                "\"NUM_FAVOR\" TEXT," + // 7: num_favor
+                "\"CREATE_TIME\" TEXT," + // 8: create_time
+                "\"IS_COLLECT\" INTEGER NOT NULL ," + // 9: isCollect
+                "\"IS_GOOD\" INTEGER NOT NULL ," + // 10: isGood
+                "\"IS_SEL\" INTEGER NOT NULL ," + // 11: isSel
+                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 12: dataType
     }
 
     /** Drops the underlying database table. */
@@ -110,14 +112,19 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
             stmt.bindString(7, num_play);
         }
  
+        String num_favor = entity.getNum_favor();
+        if (num_favor != null) {
+            stmt.bindString(8, num_favor);
+        }
+ 
         String create_time = entity.getCreate_time();
         if (create_time != null) {
-            stmt.bindString(8, create_time);
+            stmt.bindString(9, create_time);
         }
-        stmt.bindLong(9, entity.getIsCollect() ? 1L: 0L);
-        stmt.bindLong(10, entity.getIsGood() ? 1L: 0L);
-        stmt.bindLong(11, entity.getIsSel() ? 1L: 0L);
-        stmt.bindLong(12, entity.getDataType());
+        stmt.bindLong(10, entity.getIsCollect() ? 1L: 0L);
+        stmt.bindLong(11, entity.getIsGood() ? 1L: 0L);
+        stmt.bindLong(12, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(13, entity.getDataType());
     }
 
     @Override
@@ -159,14 +166,19 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
             stmt.bindString(7, num_play);
         }
  
+        String num_favor = entity.getNum_favor();
+        if (num_favor != null) {
+            stmt.bindString(8, num_favor);
+        }
+ 
         String create_time = entity.getCreate_time();
         if (create_time != null) {
-            stmt.bindString(8, create_time);
+            stmt.bindString(9, create_time);
         }
-        stmt.bindLong(9, entity.getIsCollect() ? 1L: 0L);
-        stmt.bindLong(10, entity.getIsGood() ? 1L: 0L);
-        stmt.bindLong(11, entity.getIsSel() ? 1L: 0L);
-        stmt.bindLong(12, entity.getDataType());
+        stmt.bindLong(10, entity.getIsCollect() ? 1L: 0L);
+        stmt.bindLong(11, entity.getIsGood() ? 1L: 0L);
+        stmt.bindLong(12, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(13, entity.getDataType());
     }
 
     @Override
@@ -184,11 +196,12 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // num_comment
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // num_good
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // num_play
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // create_time
-            cursor.getShort(offset + 8) != 0, // isCollect
-            cursor.getShort(offset + 9) != 0, // isGood
-            cursor.getShort(offset + 10) != 0, // isSel
-            cursor.getInt(offset + 11) // dataType
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // num_favor
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // create_time
+            cursor.getShort(offset + 9) != 0, // isCollect
+            cursor.getShort(offset + 10) != 0, // isGood
+            cursor.getShort(offset + 11) != 0, // isSel
+            cursor.getInt(offset + 12) // dataType
         );
         return entity;
     }
@@ -202,11 +215,12 @@ public class VideoListJsonDao extends AbstractDao<VideoListJson, Void> {
         entity.setNum_comment(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setNum_good(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setNum_play(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCreate_time(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setIsCollect(cursor.getShort(offset + 8) != 0);
-        entity.setIsGood(cursor.getShort(offset + 9) != 0);
-        entity.setIsSel(cursor.getShort(offset + 10) != 0);
-        entity.setDataType(cursor.getInt(offset + 11));
+        entity.setNum_favor(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCreate_time(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setIsCollect(cursor.getShort(offset + 9) != 0);
+        entity.setIsGood(cursor.getShort(offset + 10) != 0);
+        entity.setIsSel(cursor.getShort(offset + 11) != 0);
+        entity.setDataType(cursor.getInt(offset + 12));
      }
     
     @Override

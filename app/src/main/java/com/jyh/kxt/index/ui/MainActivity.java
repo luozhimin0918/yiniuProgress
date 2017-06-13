@@ -400,6 +400,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         tvTheme.setText("白天");
                         break;
                 }
+                ThemeUtil.changeCacheActionTheme(this);
                 break;
             case R.id.ll_setting:
                 //设置

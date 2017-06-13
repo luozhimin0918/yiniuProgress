@@ -25,6 +25,7 @@ public class VideoListJson implements Parcelable {
     private String num_comment;
     private String num_good;
     private String num_play;
+    private String num_favor;
     private String create_time;
 
     private boolean isCollect;
@@ -161,25 +162,12 @@ public class VideoListJson implements Parcelable {
         this.isGood = isGood;
     }
 
-    public VideoListJson() {
+    public String getNum_favor() {
+        return num_favor;
     }
 
-    @Generated(hash = 1806680125)
-    public VideoListJson(String uid, String category_id, String title, String picture, String num_comment,
-            String num_good, String num_play, String create_time, boolean isCollect, boolean isGood,
-            boolean isSel, int dataType) {
-        this.uid = uid;
-        this.category_id = category_id;
-        this.title = title;
-        this.picture = picture;
-        this.num_comment = num_comment;
-        this.num_good = num_good;
-        this.num_play = num_play;
-        this.create_time = create_time;
-        this.isCollect = isCollect;
-        this.isGood = isGood;
-        this.isSel = isSel;
-        this.dataType = dataType;
+    public void setNum_favor(String num_favor) {
+        this.num_favor = num_favor;
     }
 
     @Override
@@ -196,6 +184,7 @@ public class VideoListJson implements Parcelable {
         dest.writeString(this.num_comment);
         dest.writeString(this.num_good);
         dest.writeString(this.num_play);
+        dest.writeString(this.num_favor);
         dest.writeString(this.create_time);
         dest.writeByte(this.isCollect ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isGood ? (byte) 1 : (byte) 0);
@@ -211,6 +200,9 @@ public class VideoListJson implements Parcelable {
         this.isSel = isSel;
     }
 
+    public VideoListJson() {
+    }
+
     protected VideoListJson(Parcel in) {
         this.uid = in.readString();
         this.category_id = in.readString();
@@ -219,6 +211,7 @@ public class VideoListJson implements Parcelable {
         this.num_comment = in.readString();
         this.num_good = in.readString();
         this.num_play = in.readString();
+        this.num_favor = in.readString();
         this.create_time = in.readString();
         this.isCollect = in.readByte() != 0;
         this.isGood = in.readByte() != 0;
@@ -226,7 +219,27 @@ public class VideoListJson implements Parcelable {
         this.dataType = in.readInt();
     }
 
-    public static final Parcelable.Creator<VideoListJson> CREATOR = new Parcelable.Creator<VideoListJson>() {
+    @Generated(hash = 1710588985)
+    public VideoListJson(String uid, String category_id, String title, String picture,
+            String num_comment, String num_good, String num_play, String num_favor,
+            String create_time, boolean isCollect, boolean isGood, boolean isSel,
+            int dataType) {
+        this.uid = uid;
+        this.category_id = category_id;
+        this.title = title;
+        this.picture = picture;
+        this.num_comment = num_comment;
+        this.num_good = num_good;
+        this.num_play = num_play;
+        this.num_favor = num_favor;
+        this.create_time = create_time;
+        this.isCollect = isCollect;
+        this.isGood = isGood;
+        this.isSel = isSel;
+        this.dataType = dataType;
+    }
+
+    public static final Creator<VideoListJson> CREATOR = new Creator<VideoListJson>() {
         @Override
         public VideoListJson createFromParcel(Parcel source) {
             return new VideoListJson(source);

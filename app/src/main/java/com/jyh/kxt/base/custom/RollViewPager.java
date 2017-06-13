@@ -90,7 +90,7 @@ public class RollViewPager extends ViewPager {
 
     public GridView getGridView() {
 
-        int bgColor = ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color);
+        int bgColor = ContextCompat.getColor(getContext(), R.color.theme1);
 
         GridView itemPageGridView = new GridView(getContext());
         itemPageGridView.setMotionEventSplittingEnabled(false);

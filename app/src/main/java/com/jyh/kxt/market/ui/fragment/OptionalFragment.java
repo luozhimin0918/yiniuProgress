@@ -25,8 +25,10 @@ import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -132,8 +134,10 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
             case EventBusClass.MARKET_OPTION_UPDATE:
 
                 List<MarketItemBean> marketList = (List<MarketItemBean>) eventBus.intentObj;
-                marketItemList.clear();
-                marketItemList.addAll(marketList);
+                if (marketItemList != marketList) {
+                    marketItemList.clear();
+                    marketItemList.addAll(marketList);
+                }
 
                 if (marketItemList.size() == 0) {
                     pllContent.loadEmptyData();
@@ -234,6 +238,8 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
                 marketItemList.addAll(MarketUtil.getMergeLocalMarket(getContext(), marketItemBeen));
                 marketMainItemAdapter.notifyDataSetChanged();
 
+                MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
+
                 requestRefresh(userInfo);
             }
 
@@ -247,29 +253,33 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
     private void requestRefresh(final UserJson userInfo) {
 
-        JSONArray jsonArray = new JSONArray();
+        StringBuffer codeBuffer = new StringBuffer();
         for (MarketItemBean marketItemBean : marketItemList) {
-            jsonArray.add(marketItemBean.getCode());
+            codeBuffer.append(marketItemBean.getCode() + ",");
         }
 
         VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
-        jsonParam.put("codes", jsonArray);
+        jsonParam.put("code", codeBuffer.toString());
 
         volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String sort) {
                 dismissWaitDialog();
-                TSnackbar snackBar = TSnackbar.make(pllContent, "已同步", TSnackbar.LENGTH_INDEFINITE,
-                        TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                snackBar.show();
+                TSnackbar.make(getView(), "同步自选行情成功", TSnackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_TOP_TO_DOWN)
+                        .setMinHeight(
+                                SystemUtil.getStatuBarHeight(getContext()),
+                                getContext().getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
+                        .setPromptThemBackground(Prompt.WARNING).show();
 
                 MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
                 EventBusClass eventBusClass = new EventBusClass(
                         EventBusClass.MARKET_OPTION_UPDATE,
                         marketItemList);
+
                 EventBus.getDefault().post(eventBusClass);
             }
 
@@ -286,8 +296,10 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         super.onResume();
         UserJson userInfo = LoginUtils.getUserInfo(getContext());
         if (userInfo == null) {
+            tvSynchronizationLabel.setText("登录立即同步");
             tvSynchronization.setText("登录");
         } else {
+            tvSynchronizationLabel.setText("同步之后将永久保存到数据库");
             tvSynchronization.setText("同步");
         }
     }

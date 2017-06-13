@@ -72,7 +72,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
                 break;
             case EventBusClass.MARKET_OPTION_UPDATE:
                 if(isMain){
-                    newsItemPresenter.addQuotes();
+//                    newsItemPresenter.addQuotes();
                 }
                 break;
         }

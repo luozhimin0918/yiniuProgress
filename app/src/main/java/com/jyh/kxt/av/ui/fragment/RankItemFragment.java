@@ -12,7 +12,6 @@ import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.utils.JumpUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -37,7 +36,7 @@ public class RankItemFragment extends BaseFragment implements PageLoadLayout.OnA
     private RankItemPresenter rankItemPresenter;
 
     private String rankUrl;
-    private String type;
+    public String type;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {

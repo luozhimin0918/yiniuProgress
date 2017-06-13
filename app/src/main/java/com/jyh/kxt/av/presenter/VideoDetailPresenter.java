@@ -105,8 +105,8 @@ public class VideoDetailPresenter extends BasePresenter {
                     videoListJson = new VideoListJson(videoDetailBean.getId(), videoDetailBean.getCategory_id(),
                             videoDetailBean.getTitle(),
                             videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean
-                            .getNum_good(), videoDetailBean
-                            .getNum_play(), videoDetailBean.getCreate_time(), false, false, false, 0);
+                            .getNum_good(),videoDetailBean
+                            .getNum_play(),"",  videoDetailBean.getCreate_time(), false, false, false, 0);
                     isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
                     isAttention = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean
                             .getId());

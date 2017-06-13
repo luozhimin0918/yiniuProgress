@@ -48,7 +48,7 @@ public class RankItemPresenter extends BasePresenter implements PullToRefreshBas
             protected void onResponse(List<VideoListJson> list) {
 
                 if (rankAdapter == null) {
-                    rankAdapter = new RankAdapter(mContext, list);
+                    rankAdapter = new RankAdapter(mContext, list,rankItemFragment.type);
                     rankItemFragment.plvContent.setAdapter(rankAdapter);
                 } else {
                     rankAdapter.setData(list);

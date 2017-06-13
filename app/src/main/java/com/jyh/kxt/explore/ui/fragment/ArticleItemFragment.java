@@ -138,4 +138,12 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
             newsAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void setInitialSavedState(SavedState state) {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    }
+
 }

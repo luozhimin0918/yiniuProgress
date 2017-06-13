@@ -58,7 +58,6 @@ public class MarketMainItemAdapter extends BaseListAdapter<MarketItemBean> {
 
         ItemMarketQuotesBinding binding = mViewHolder.getBinding();
         binding.setBean(marketItemBean);
-
         binding.setFontColor(ContextCompat.getColor(mContext, R.color.font_color5));
 
         convertView.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package com.jyh.kxt.av.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
@@ -14,15 +15,16 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.library.util.DateUtils;
 import com.library.util.SystemUtil;
-
-import org.w3c.dom.ls.LSInput;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.jyh.kxt.av.ui.fragment.RankItemFragment.RANK_MORE_COLLECT;
+import static com.jyh.kxt.av.ui.fragment.RankItemFragment.RANK_MORE_COMMENT;
+import static com.jyh.kxt.av.ui.fragment.RankItemFragment.RANK_MORE_PLAY;
 
 /**
  * 项目名:Kxt
@@ -34,10 +36,12 @@ import butterknife.ButterKnife;
 public class RankAdapter extends BaseListAdapter<VideoListJson> {
 
     private Context context;
+    private String type;
 
-    public RankAdapter(Context context, List<VideoListJson> dataList) {
+    public RankAdapter(Context context, List<VideoListJson> dataList, String type) {
         super(dataList);
         this.context = context;
+        this.type = type;
     }
 
     @Override
@@ -56,11 +60,38 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
         setTheme(viewHolder, position);
 
         VideoListJson videoBean = dataList.get(position);
-        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
-                .icon_def_video).into(viewHolder.ivPhoto);
+        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_video)
+                .placeholder(R.mipmap
+                        .icon_def_video).into(viewHolder.ivPhoto);
         viewHolder.tvTitle.setText(videoBean.getTitle());
 
-        viewHolder.tvTime.setText(videoBean.getNum_play());
+
+        String timeContent = "";
+        int timeDrawable = 0;
+        switch (type) {
+            case RANK_MORE_PLAY:
+                timeContent = videoBean.getNum_play();
+                timeDrawable = R.mipmap.icon_video_play_small;
+                break;
+            case RANK_MORE_COMMENT:
+                timeContent = videoBean.getNum_comment();
+                timeDrawable = R.mipmap.icon_video_comment;
+                break;
+            case RANK_MORE_COLLECT:
+                timeContent = videoBean.getNum_favor();
+                timeDrawable = R.mipmap.icon_nav_collect_unsel;
+                break;
+        }
+
+        viewHolder.tvTime.setText(timeContent);
+        int paddingVal = SystemUtil.dp2px(context, 4);
+        viewHolder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+
+        int drawableSize = SystemUtil.dp2px(context,12);
+        Drawable drawable = context.getResources().getDrawable(timeDrawable);
+        drawable.setBounds(0, 0, drawableSize, drawableSize);
+        TextViewCompat.setCompoundDrawablesRelative(viewHolder.tvTime, drawable, null, null, null);
+//        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(viewHolder.tvTime, timeDrawable, 0, 0, 0);
 
         return convertView;
     }
@@ -70,15 +101,13 @@ public class RankAdapter extends BaseListAdapter<VideoListJson> {
         holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
         holder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
 
-        int paddingVal = SystemUtil.dp2px(context, 4);
-        holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_play_small, 0, 0, 0);
 
         if (position < 10) {
             holder.ivRank.setVisibility(View.VISIBLE);
-            holder.ivRank.setImageDrawable(ContextCompat.getDrawable(context, context.getResources().getIdentifier("icon_rank" +
-                    (position + 1), "mipmap", context
-                    .getPackageName())));
+            holder.ivRank.setImageDrawable(ContextCompat.getDrawable(context, context.getResources().getIdentifier
+                    ("icon_rank" +
+                            (position + 1), "mipmap", context
+                            .getPackageName())));
         } else {
             holder.ivRank.setVisibility(View.GONE);
         }

@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -232,16 +231,16 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
 
-        JSONArray jsonArray = new JSONArray();
+        StringBuffer codeBuffer = new StringBuffer();
         for (MarketItemBean marketItemBean : adapterMarketItemList) {
-            jsonArray.add(marketItemBean.getCode());
+            codeBuffer.append(marketItemBean.getCode() + ",");
         }
 
         VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
-        jsonParam.put("codes", jsonArray);
+        jsonParam.put("code", codeBuffer.toString());
 
         volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
             @Override
