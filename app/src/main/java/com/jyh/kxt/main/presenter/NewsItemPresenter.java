@@ -3,9 +3,12 @@ package com.jyh.kxt.main.presenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -91,6 +95,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private RollDotViewPager mRollDotViewPager;
     private BtnAdapter btnAdapter;
     private ImageView iv_ad;
+    private TextView tvTitle;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -225,6 +230,21 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             if (homeHeadView != null) {
                 newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
             }
+            LinearLayout layout = new LinearLayout(mContext);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                    .WRAP_CONTENT);
+            tvTitle = new TextView(mContext);
+            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.WRAP_CONTENT);
+            tvTitle.setText("财经要闻");
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.content_font_size));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+            tvTitle.setGravity(Gravity.CENTER_VERTICAL);
+            tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+            tvTitle.setLayoutParams(tvParams);
+            layout.addView(tvTitle);
+            layout.setLayoutParams(params);
+            homeHeadView.addView(layout);
             newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
             newsItemFragment.plRootView.loadOver();
         }
@@ -789,12 +809,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             }
             if (mAdTextViewList != null) {
                 for (SkinnableTextView skinnableTextView : mAdTextViewList) {
-                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
+                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
                 }
             }
-            if(iv_ad!=null){
-                Glide.with(mContext).load(HttpConstant.IMG_URL + ads.getPicture()).error(R.mipmap.icon_def_news)
-                        .placeholder(R.mipmap.icon_def_news).into(iv_ad);
+            if (tvTitle != null) {
+                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+                tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 /**
+ * 可缩放拖拽的ImageView
  * Created by 13798 on 2016/6/3.
  */
 public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
@@ -288,7 +289,7 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                 }
                 matrix.postTranslate(dX, dY);
 
-                remedyXAndY(dX,dY);
+                remedyXAndY(dX, dY);
 
                 lastMovedX = nowMovingX;
                 lastMovedY = nowMovingY;
@@ -304,36 +305,39 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
 
     /**
      * 判断x方向上能不能滑动
+     *
      * @return 可以滑动返回true
      */
-    private boolean canSmoothX(){
+    private boolean canSmoothX() {
         RectF rectf = getRectf(matrix);
-        if (rectf.left >0 || rectf.right <getWidth())
+        if (rectf.left > 0 || rectf.right < getWidth())
             return false;
         return true;
     }
 
     /**
      * 判断y方向上可不可以滑动
+     *
      * @return 可以滑动返回true
      */
-    private boolean canSmoothY(){
+    private boolean canSmoothY() {
         RectF rectf = getRectf(matrix);
-        if (rectf.top>0 || rectf.bottom < getHeight())
+        if (rectf.top > 0 || rectf.bottom < getHeight())
             return false;
         return true;
     }
 
     /**
      * 纠正出界的横和众线
+     *
      * @param dx 出界偏移的横线
      * @param dy 出街便宜的众线
      */
-    private void remedyXAndY(float dx,float dy){
+    private void remedyXAndY(float dx, float dy) {
         if (!canSmoothX())
-            matrix.postTranslate(-dx,0);
+            matrix.postTranslate(-dx, 0);
         if (!canSmoothY())
-            matrix.postTranslate(0,-dy);
+            matrix.postTranslate(0, -dy);
         setImageMatrix(matrix);
     }
 }
