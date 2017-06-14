@@ -51,7 +51,7 @@ public class WebActivity extends BaseActivity {
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
         ivBarFunction.setVisibility(View.INVISIBLE);
 
-        webPresenter.addWebView(url);
+        webPresenter.addWebView(title,url);
         webPresenter.setOnJsListener(new ObserverData<Boolean>() {
             @Override
             public void callback(final Boolean showBtn) {

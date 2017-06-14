@@ -22,22 +22,23 @@ public class WebPresenter extends BasePresenter {
         super(iBaseView);
     }
 
-    public void addWebView(String url) {
+    public void addWebView(String title, String url) {
         loadX5WebView = new LoadX5WebView(mContext);
         WebBuild webBuild = loadX5WebView.build();
 
 
-        Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+        if ("联系我们".equals(title) || "意见反馈".equals(title)) {
+            Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+            String yejian = "?night=";
+            if (url.contains("?")) {
+                yejian = "&night=";
+            }
 
-        String yejian = "?yejian=";
-        if (url.contains("?")) {
-            yejian = "&yejian=";
-        }
-
-        if (isNight) {
-            url += yejian + "1";
-        } else {
-            url += yejian + "0";
+            if (isNight) {
+                url += yejian + "1";
+            } else {
+                url += yejian + "0";
+            }
         }
 
         webBuild.loadUrl(url);
