@@ -14,7 +14,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.explore.ui.fragment.AuthorFragment;
-import com.jyh.kxt.index.json.HomeHeaderJson;
+import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -47,14 +47,14 @@ public class AuthorFragmentPresenter extends BasePresenter {
 
     public void init() {
         fragment.plRootView.loadWait();
-        request.doGet(HttpConstant.EXPLORE_BLOG_WRITER, request.getJsonParam(), new HttpListener<List<HomeHeaderJson>>() {
+        request.doGet(HttpConstant.EXPLORE_BLOG_WRITER, request.getJsonParam(), new HttpListener<List<TypeDataJson>>() {
             @Override
-            protected void onResponse(List<HomeHeaderJson> data) {
+            protected void onResponse(List<TypeDataJson> data) {
 
                 if (data == null || data.size() == 0) {
                     fragment.plRootView.loadEmptyData();
                 } else {
-                    for (HomeHeaderJson json : data) {
+                    for (TypeDataJson json : data) {
                         try {
                             switch (json.getType()) {
                                 case VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER_LIST:
@@ -98,14 +98,14 @@ public class AuthorFragmentPresenter extends BasePresenter {
     public void refresh() {
         lastId = "";
 
-        request.doGet(HttpConstant.EXPLORE_BLOG_WRITER, request.getJsonParam(), new HttpListener<List<HomeHeaderJson>>() {
+        request.doGet(HttpConstant.EXPLORE_BLOG_WRITER, request.getJsonParam(), new HttpListener<List<TypeDataJson>>() {
             @Override
-            protected void onResponse(List<HomeHeaderJson> data) {
+            protected void onResponse(List<TypeDataJson> data) {
 
                 if (data == null || data.size() == 0) {
 
                 } else {
-                    for (HomeHeaderJson json : data) {
+                    for (TypeDataJson json : data) {
                         try {
                             switch (json.getType()) {
                                 case VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER_LIST:

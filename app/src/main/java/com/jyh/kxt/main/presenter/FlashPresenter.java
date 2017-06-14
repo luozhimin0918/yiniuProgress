@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 
@@ -332,100 +334,113 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      * @param newFlash
      */
     private void topNotice(FlashJson newFlash) {
-        // 1 得到通知管理器
-        NotificationManager nm = (NotificationManager) mContext
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                mContext);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setDefaults(Notification.DEFAULT_VIBRATE);
-        builder.setWhen(System.currentTimeMillis());
-        builder.setAutoCancel(true);// 点击通知之后自动消失
+        if (SystemUtil.isRunningForeground(mContext)) {
+            // 1 得到通知管理器
+            final NotificationManager nm = (NotificationManager) mContext
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    mContext);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            builder.setWhen(System.currentTimeMillis());
+            builder.setAutoCancel(true);// 点击通知之后自动消失
 
-        String content = newFlash.getContent();
-        switch (newFlash.getCode()) {
-            case VarConstant.SOCKET_FLASH_CJRL:
-                Flash_RL flash_rl = JSON.parseObject(content, Flash_RL.class);
-                RemoteViews views = new RemoteViews(mContext.getPackageName(),
-                        R.layout.text_notification);
+            String content = newFlash.getContent();
+            switch (newFlash.getCode()) {
+                case VarConstant.SOCKET_FLASH_CJRL:
+                    Flash_RL flash_rl = JSON.parseObject(content, Flash_RL.class);
+                    RemoteViews views = new RemoteViews(mContext.getPackageName(),
+                            R.layout.text_notification);
 
-                views.setTextViewText(R.id.calendar_item_listview_version2_nfi,
-                        flash_rl.getTitle());
+                    views.setTextViewText(R.id.calendar_item_listview_version2_nfi,
+                            flash_rl.getTitle());
 
-                String[] splitTime = flash_rl.getTime().split(" ");
-                String[] splitTime2 = splitTime[1].split(":");
+                    String[] splitTime = flash_rl.getTime().split(" ");
+                    String[] splitTime2 = splitTime[1].split(":");
 
-                views.setTextViewText(R.id.calendar_listview_item_tv_title_time,
-                        splitTime2[0] + ":" + splitTime2[1]);
-                views.setTextViewText(R.id.calendar_item_listview_version2_before, "前值:"
-                        + flash_rl.getBefore());
-                views.setTextViewText(R.id.calendar_item_listview_version2_forecast,
-                        "预测:" + flash_rl.getForecast());
-                views.setTextViewText(R.id.calendar_item_listview_version2_gongbu, ""
-                        + flash_rl.getReality());
+                    views.setTextViewText(R.id.calendar_listview_item_tv_title_time,
+                            splitTime2[0] + ":" + splitTime2[1]);
+                    views.setTextViewText(R.id.calendar_item_listview_version2_before, "前值:"
+                            + flash_rl.getBefore());
+                    views.setTextViewText(R.id.calendar_item_listview_version2_forecast,
+                            "预测:" + flash_rl.getForecast());
+                    views.setTextViewText(R.id.calendar_item_listview_version2_gongbu, ""
+                            + flash_rl.getReality());
 
-                String yingString = "";
+                    String yingString = "";
 
-                CjInfo cjInfo = new CjInfo();
-                String title = flash_rl.getEffect();
-                String[] titles = title.split("\\|");
-                if (titles.length > 0 && titles.length == 1) {
-                    cjInfo.setEffectGood(titles[0]);// 利空
-                } else if (titles.length > 0
-                        && titles.length == 2) {
-                    cjInfo.setEffectBad(titles[1]);// 利多
-                    cjInfo.setEffectGood(titles[0]);// 利空
-                } else {
-                    cjInfo.setEffectMid("影响较小");
-                }
-
-                if (!TextUtils.isEmpty(cjInfo.getEffectMid())) {
-                    yingString = cjInfo.getEffectMid();
-                } else {
-                    if (!TextUtils.isEmpty(cjInfo.getEffectGood())) {
-                        yingString += "利多 " + cjInfo.getEffectGood();
+                    CjInfo cjInfo = new CjInfo();
+                    String title = flash_rl.getEffect();
+                    String[] titles = title.split("\\|");
+                    if (titles.length > 0 && titles.length == 1) {
+                        cjInfo.setEffectGood(titles[0]);// 利空
+                    } else if (titles.length > 0
+                            && titles.length == 2) {
+                        cjInfo.setEffectBad(titles[1]);// 利多
+                        cjInfo.setEffectGood(titles[0]);// 利空
+                    } else {
+                        cjInfo.setEffectMid("影响较小");
                     }
-                    if (!TextUtils.isEmpty(cjInfo.getEffectBad())) {
 
+                    if (!TextUtils.isEmpty(cjInfo.getEffectMid())) {
+                        yingString = cjInfo.getEffectMid();
+                    } else {
                         if (!TextUtils.isEmpty(cjInfo.getEffectGood())) {
-                            yingString += ",";
+                            yingString += "利多 " + cjInfo.getEffectGood();
                         }
-                        yingString += "利空 " + cjInfo.getEffectBad();
+                        if (!TextUtils.isEmpty(cjInfo.getEffectBad())) {
+
+                            if (!TextUtils.isEmpty(cjInfo.getEffectGood())) {
+                                yingString += ",";
+                            }
+                            yingString += "利空 " + cjInfo.getEffectBad();
+                        }
+                    }
+
+
+                    views.setTextViewText(R.id.calendar_item_listview_version2_4main_effect, "影响：" + yingString);
+                    if (flash_rl.getImportance().equals("高")) {
+                        views.setImageViewResource(R.id.calendar_item_nature,
+                                R.mipmap.nature_high_bt);
+                    } else if (flash_rl.getImportance().equals("低")) {
+                        views.setImageViewResource(R.id.calendar_item_nature,
+                                R.mipmap.nature_low_bt);
+                    } else if (flash_rl.getImportance().equals("中")) {
+                        views.setImageViewResource(R.id.calendar_item_nature,
+                                R.mipmap.nature_mid_bt);
+                    } else {
+                        views.setImageViewResource(R.id.calendar_item_nature,
+                                R.mipmap.nature_high_bt);
+                    }
+                    builder.setContent(views);
+                    break;
+                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                    Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
+                    builder.setContentTitle(flash_kx.getTitle());
+                    builder.setContentText(flash_kx.getTitle());
+                    break;
+                case VarConstant.SOCKET_FLASH_KXTNEWS:
+                    Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
+                    builder.setContentTitle(flash_news.getTitle());
+                    builder.setContentText(flash_news.getDescription());
+                    break;
+            }
+            Notification build = builder.build();
+            build.flags |= Notification.FLAG_AUTO_CANCEL;
+            // 4发送通知
+            final int id = new Random().nextInt(1000);
+            nm.notify(id, build);
+            flashFragment.lvContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        nm.cancel(id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-
-
-                views.setTextViewText(R.id.calendar_item_listview_version2_4main_effect, "影响：" + yingString);
-                if (flash_rl.getImportance().equals("高")) {
-                    views.setImageViewResource(R.id.calendar_item_nature,
-                            R.mipmap.nature_high_bt);
-                } else if (flash_rl.getImportance().equals("低")) {
-                    views.setImageViewResource(R.id.calendar_item_nature,
-                            R.mipmap.nature_low_bt);
-                } else if (flash_rl.getImportance().equals("中")) {
-                    views.setImageViewResource(R.id.calendar_item_nature,
-                            R.mipmap.nature_mid_bt);
-                } else {
-                    views.setImageViewResource(R.id.calendar_item_nature,
-                            R.mipmap.nature_high_bt);
-                }
-                builder.setContent(views);
-                break;
-            case VarConstant.SOCKET_FLASH_KUAIXUN:
-                Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
-                builder.setContentTitle(flash_kx.getTitle());
-                builder.setContentText(flash_kx.getTitle());
-                break;
-            case VarConstant.SOCKET_FLASH_KXTNEWS:
-                Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
-                builder.setContentTitle(flash_news.getTitle());
-                builder.setContentText(flash_news.getDescription());
-                break;
+            }, 200);
         }
-        Notification build = builder.build();
-        build.flags |= Notification.FLAG_AUTO_CANCEL;
-        // 4发送通知
-        nm.notify(new Random(100000).nextInt(), build);
     }
 
     public void onDestroy() {

@@ -359,7 +359,7 @@ public class NotificationKXT {
         // builder.set
         // notification.flags = Notification.FLAG_AUTO_CANCEL;
         // 4发送通知
-        nm.notify(count + new Random(100000).nextInt(), builder.build());
+        nm.notify(count + new Random().nextInt(100000), builder.build());
 
     }
 

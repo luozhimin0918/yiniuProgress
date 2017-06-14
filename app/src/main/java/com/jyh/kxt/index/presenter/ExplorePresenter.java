@@ -12,7 +12,7 @@ import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
-import com.jyh.kxt.index.json.HomeHeaderJson;
+import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.main.json.SlideJson;
 import com.library.base.http.HttpListener;
@@ -47,9 +47,9 @@ public class ExplorePresenter extends BasePresenter {
             request = new VolleyRequest(mContext, mQueue);
             request.setTag(getClass().getName());
         }
-        request.doGet(HttpConstant.EXPLORE, new HttpListener<List<HomeHeaderJson>>() {
+        request.doGet(HttpConstant.EXPLORE, new HttpListener<List<TypeDataJson>>() {
             @Override
-            protected void onResponse(List<HomeHeaderJson> newsExplore) {
+            protected void onResponse(List<TypeDataJson> newsExplore) {
 
                 List<SlideJson> slides;
                 List<SlideJson> shortcuts;
@@ -60,11 +60,11 @@ public class ExplorePresenter extends BasePresenter {
 
                 exploreFragment.initHeadView();
 
-                for (HomeHeaderJson homeHeaderJson : newsExplore) {
-                    switch (homeHeaderJson.getType()) {
+                for (TypeDataJson typeDataJson : newsExplore) {
+                    switch (typeDataJson.getType()) {
                         case VarConstant.EXPLORE_SLIDE:
                             try {
-                                JSONArray slidesJson = (JSONArray) homeHeaderJson.getData();
+                                JSONArray slidesJson = (JSONArray) typeDataJson.getData();
                                 slides = JSON.parseArray(slidesJson.toString(), SlideJson.class);
                                 if (slides.size() != 0)
                                     exploreFragment.addSlide(slides);
@@ -74,7 +74,7 @@ public class ExplorePresenter extends BasePresenter {
                             break;
                         case VarConstant.EXPLORE_SHORTCUT:
                             try {
-                                JSONArray shortcutJson = (JSONArray) homeHeaderJson.getData();
+                                JSONArray shortcutJson = (JSONArray) typeDataJson.getData();
                                 shortcuts = JSON.parseArray(shortcutJson.toString(), SlideJson.class);
                                 if (shortcuts.size() != 0)
                                     exploreFragment.addShortcut(shortcuts);
@@ -84,7 +84,7 @@ public class ExplorePresenter extends BasePresenter {
                             break;
                         case VarConstant.EXPLORE_TOPIC:
                             try {
-                                JSONArray topicJson = (JSONArray) homeHeaderJson.getData();
+                                JSONArray topicJson = (JSONArray) typeDataJson.getData();
                                 topics = JSON.parseArray(topicJson.toString(), TopicJson.class);
                                 if (topics.size() != 0)
                                     exploreFragment.addTopic(topics);
@@ -94,7 +94,7 @@ public class ExplorePresenter extends BasePresenter {
                             break;
                         case VarConstant.EXPLORE_ACTIVITY:
                             try {
-                                JSONArray activityJson = (JSONArray) homeHeaderJson.getData();
+                                JSONArray activityJson = (JSONArray) typeDataJson.getData();
                                 activitys = JSON.parseArray(activityJson.toString(), ActivityJson.class);
                                 if (activitys.size() != 0)
                                     exploreFragment.addActivity(activitys);
@@ -104,7 +104,7 @@ public class ExplorePresenter extends BasePresenter {
                             break;
                         case VarConstant.EXPLORE_BLOG_WRITER:
                             try {
-                                JSONArray writerJson = (JSONArray) homeHeaderJson.getData();
+                                JSONArray writerJson = (JSONArray) typeDataJson.getData();
                                 authors = JSON.parseArray(writerJson.toString(), AuthorJson.class);
                                 if (authors.size() != 0)
                                     exploreFragment.addAuthor(authors);
@@ -114,7 +114,7 @@ public class ExplorePresenter extends BasePresenter {
                             break;
                         case VarConstant.EXPLORE_BLOG_ARTICLE:
                             try {
-                                JSONArray article = (JSONArray) homeHeaderJson.getData();
+                                JSONArray article = (JSONArray) typeDataJson.getData();
                                 articles = JSON.parseArray(article.toString(), AuthorNewsJson.class);
                                 if (articles.size() != 0) {
                                     exploreFragment.addArticle(articles);

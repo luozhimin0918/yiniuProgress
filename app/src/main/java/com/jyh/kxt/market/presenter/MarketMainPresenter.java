@@ -3,18 +3,22 @@ package com.jyh.kxt.market.presenter;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -27,7 +31,11 @@ import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
+import com.jyh.kxt.index.json.TypeDataJson;
+import com.jyh.kxt.index.ui.WebActivity;
+import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
@@ -36,6 +44,7 @@ import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
@@ -63,6 +72,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
     private RollDotViewPager recommendView;
     private MarketMainBean marketBean;
+    private ArrayList<SkinnableTextView> mAdTextViewList;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -98,22 +108,27 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject json = volleyRequest.getJsonParam();
         volleyRequest.setTag(marketItemFragment.navBean.getCode());
-        volleyRequest.doGet(HttpConstant.MARKET_INDEX, json, new HttpListener<List<MarketMainBean>>() {
+        volleyRequest.doGet(HttpConstant.MARKET_INDEX, json, new HttpListener<List<TypeDataJson>>() {
             @Override
-            protected void onResponse(List<MarketMainBean> marketMainList) {
+            protected void onResponse(List<TypeDataJson> marketMainList) {
 
-                for (MarketMainBean marketBean : marketMainList) {
+                for (TypeDataJson marketBean : marketMainList) {
 
                     String name = marketBean.getType();
                     switch (name) {
                         case "main":
-                            createMainView(marketBean);
+                            createMainView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
                             break;
                         case "favor":
-                            createFavorView(marketBean);
+                            createFavorView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
                             break;
                         case "hot":
-                            createHotView(marketBean);
+                            createHotView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            break;
+                        case "ad":
+                            AdJson ads = JSON.parseObject(JSON.toJSONString(marketBean.getData()), AdJson.class);
+                            if (ads != null && (ads.getPic_ad() != null || (ads.getText_ad() != null && ads.getText_ad().size() > 0)))
+                                createAdView(ads);
                             break;
                     }
                 }
@@ -131,6 +146,72 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 super.onErrorResponse(error);
             }
         });
+    }
+
+    private void createAdView(AdJson ads) {
+        createPaddingView(1);
+        LinearLayout adView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, null);
+        ImageView iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
+
+        try {
+            final AdJson.AdItemJson mPicAd = ads.getPic_ad();
+
+            String picture = mPicAd.getPicture();
+            if (RegexValidateUtil.isEmpty(picture)) {
+                iv_ad.setVisibility(View.GONE);
+            } else {
+                iv_ad.setVisibility(View.VISIBLE);
+            }
+            Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
+                    .placeholder(R.mipmap.icon_def_news).into(iv_ad);
+
+            mainHeaderView.addView(adView);
+
+            adView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra(IntentConstant.NAME, "广告");
+                    intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
+                    mContext.startActivity(intent);
+                }
+            });
+
+            mAdTextViewList = new ArrayList<>();
+            List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+
+            int itemHeight = SystemUtil.dp2px(mContext, 30);
+            int itemLeftPadding = SystemUtil.dp2px(mContext, 5);
+
+            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
+
+            for (final AdJson.AdItemJson adItemJson : mTextAd) {
+
+                SkinnableTextView mAdTextView = new SkinnableTextView(mContext);
+                mAdTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        itemHeight));
+                mAdTextView.setGravity(Gravity.CENTER_VERTICAL);
+
+                mAdTextView.setTextColor(adTextColor);
+                mAdTextView.setPadding(itemLeftPadding, 0, 0, 0);
+                mAdTextView.setText(" • " + adItemJson.getTitle());
+                mainHeaderView.addView(mAdTextView);
+                mAdTextViewList.add(mAdTextView);
+                mAdTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
+                        intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
+            createPaddingView(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -337,6 +418,11 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     public void onChangeTheme() {
 
         try {
+            if (mAdTextViewList != null) {
+                for (SkinnableTextView skinnableTextView : mAdTextViewList) {
+                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+                }
+            }
             //重新设置热门行情主题色
             if (marketMainItemAdapter != null) {
                 marketMainItemAdapter.notifyDataSetChanged();

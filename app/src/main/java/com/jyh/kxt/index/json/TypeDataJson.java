@@ -7,7 +7,7 @@ package com.jyh.kxt.index.json;
  * 创建日期:2017/4/17.
  */
 
-public class HomeHeaderJson {
+public class TypeDataJson {
     private String type;
     private Object data;
 

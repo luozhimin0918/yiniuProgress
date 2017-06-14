@@ -13,7 +13,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.index.json.HomeHeaderJson;
+import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
@@ -82,10 +82,10 @@ public class NewsPresenter extends BasePresenter {
             request.setTag(getClass().getName());
         }
 
-        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
+        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
 
             @Override
-            protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
+            protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                 List<NewsNavJson> newsNavs = null;
                 List<SlideJson> slide = null;
@@ -96,7 +96,7 @@ public class NewsPresenter extends BasePresenter {
 
                 ArrayList<String> list = new ArrayList<>();
 
-                for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                for (TypeDataJson headerJson : newsTypeDataJsons) {
                     switch (headerJson.getType()) {
                         case VarConstant.NEWS_NAV:
                             try {
@@ -170,7 +170,7 @@ public class NewsPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                List<HomeHeaderJson> cacheT = getCacheT();
+                List<TypeDataJson> cacheT = getCacheT();
                 if (cacheT != null) {
                     onResponse(cacheT);
                 } else {
@@ -193,10 +193,10 @@ public class NewsPresenter extends BasePresenter {
             request = new VolleyRequest(mContext, mQueue);
         }
 
-        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
+        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
 
             @Override
-            protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
+            protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                 List<NewsNavJson> newsNavs = null;
                 List<SlideJson> slide = null;
@@ -207,7 +207,7 @@ public class NewsPresenter extends BasePresenter {
 
                 ArrayList<String> list = new ArrayList<>();
 
-                for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                for (TypeDataJson headerJson : newsTypeDataJsons) {
                     switch (headerJson.getType()) {
                         case VarConstant.NEWS_NAV:
                             try {

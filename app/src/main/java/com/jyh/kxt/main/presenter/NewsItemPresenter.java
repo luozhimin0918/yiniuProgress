@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -41,7 +40,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
-import com.jyh.kxt.index.json.HomeHeaderJson;
+import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
@@ -56,6 +55,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
@@ -440,7 +440,13 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         try {
             final AdJson.AdItemJson mPicAd = ads.getPic_ad();
 
-            Glide.with(mContext).load(HttpConstant.IMG_URL + mPicAd.getPicture()).error(R.mipmap.icon_def_news)
+            String picture = mPicAd.getPicture();
+            if (RegexValidateUtil.isEmpty(picture)) {
+                iv_ad.setVisibility(View.GONE);
+            } else {
+                iv_ad.setVisibility(View.VISIBLE);
+            }
+            Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
                     .placeholder(R.mipmap.icon_def_news).into(iv_ad);
 
             homeHeadView.addView(adView);
@@ -519,14 +525,14 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     public void onPullDownToRefresh(final PullToRefreshBase refreshView) {
         lastId = "";
         if (isMain) {
-            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
+            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
 
                 @Override
-                protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
+                protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
                     List<NewsJson> data = new ArrayList<NewsJson>();
-                    for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                    for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
                                 JSONArray slideArray = (JSONArray) headerJson.getData();
@@ -670,14 +676,14 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     public void reLoad() {
         lastId = "";
         if (isMain) {
-            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<HomeHeaderJson>>() {
+            request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
 
                 @Override
-                protected void onResponse(List<HomeHeaderJson> newsHomeHeaderJsons) {
+                protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
                     List<NewsJson> data = new ArrayList<NewsJson>();
-                    for (HomeHeaderJson headerJson : newsHomeHeaderJsons) {
+                    for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
                                 JSONArray slideArray = (JSONArray) headerJson.getData();

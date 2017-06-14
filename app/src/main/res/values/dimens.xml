@@ -76,7 +76,7 @@
     <dimen name="index_slide_indicatorSize">6dp</dimen>
 
     <dimen name="index_ad_height">150dp</dimen>
-    <dimen name="index_ad_imgHeight">77dp</dimen>
+    <dimen name="index_ad_imgHeight">39dp</dimen>
     <dimen name="index_ad_padding">14dp</dimen>
     <dimen name="index_ad_imageTextMargin">8dp</dimen>
 
