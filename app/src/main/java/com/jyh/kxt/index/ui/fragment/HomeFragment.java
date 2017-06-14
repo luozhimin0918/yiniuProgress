@@ -17,6 +17,12 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.gifdecoder.GifDecoder;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
@@ -129,7 +135,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                 ivRightIcon1.setVisibility(View.VISIBLE);
             }
 
-            ivRightIcon1.setImageResource(R.mipmap.icon_advert);
+            setGifIcon(R.mipmap.icon_advert);
         } else {
             currentFragment = flashFrament;
 
@@ -176,7 +182,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         if (currentFragment instanceof NewsFragment) {
             isShowRightTopAdvert = true;
             ivRightIcon1.setVisibility(View.VISIBLE);
-            ivRightIcon1.setImageResource(R.mipmap.icon_advert);
+            setGifIcon(R.mipmap.icon_advert);
         }
     }
 
@@ -387,6 +393,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
+        setGifIcon(R.mipmap.icon_advert);
         if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
                 if (fragment instanceof BaseFragment) {
@@ -431,4 +438,12 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             }
         }
     }
+
+    private void setGifIcon(int resouseId) {
+        if (getContext() != null)
+            Glide.with(getContext())
+                    .load(resouseId)
+                    .into(new GlideDrawableImageViewTarget(ivRightIcon1));
+    }
+
 }

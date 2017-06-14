@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,6 +67,7 @@ import com.library.manager.ActivityManager;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.ZoomImageView;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -133,6 +133,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private FunctionAdapter functionAdapter;
     private String font;//字体大小
     private String type;
+    private String imgStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -476,7 +477,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             this.newsContentJson = newsContentJson;
             this.headView = commentPresenter.getHeadView();
 
-            isCollect= CollectLocalUtils.isCollect(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, newsContentJson.getType(), objectId);
+            isCollect = CollectLocalUtils.isCollect(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, newsContentJson.getType(), objectId);
             ivCollect.setSelected(isCollect);
 
             //头部
@@ -867,13 +868,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    class ImgClickListener {
+    class ImgClickListener implements View.OnClickListener {
         private PopupUtil popupUtil;
-        private ImageView ivPop;
+        private ZoomImageView ivPop;
+        private ImageView ivDownLoad;
 
         @JavascriptInterface
         public void imgClick(final String imgPath) {
             if (imgPath != null && (imgPath.contains("/Uploads/Editor") || imgPath.contains("/uploads/editor"))) {
+                imgStr = imgPath;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -890,15 +893,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                         if (popupUtil == null) {
                                             popupUtil = new PopupUtil(NewsContentActivity.this);
                                             View inflate = popupUtil.createPopupView(R.layout.pop_img);
-                                            inflate.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    if (popupUtil != null && popupUtil.isShowing()) {
-                                                        popupUtil.dismiss();
-                                                    }
-                                                }
-                                            });
-                                            ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+                                            ivPop = (ZoomImageView) inflate.findViewById(R.id.iv_pop);
+                                            ivDownLoad = (ImageView) inflate.findViewById(R.id.iv_download);
+                                            ivDownLoad.setVisibility(View.VISIBLE);
+                                            ivDownLoad.setOnClickListener(ImgClickListener.this);
+                                            ivPop.setOnClickListener(ImgClickListener.this);
+
                                             PopupUtil.Config config = new PopupUtil.Config();
 
                                             config.outsideTouchable = true;
@@ -915,46 +915,46 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                             popupUtil.dismiss();
                                         }
 
-                                        //图片尺寸
-                                        int width = resource.getWidth();
-                                        int height = resource.getHeight();
-                                        //屏幕尺寸
-                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay
-                                                (NewsContentActivity.this);
-                                        int widthPixels = screenDisplay.widthPixels;
-                                        int heightPixels = screenDisplay.heightPixels;
-                                        //放大1.5倍后的图片尺寸
-                                        double largeWidth = width * 1.5;
-                                        double largeHeight = height * 1.5;
-                                        //放大图片(最大1.5倍),是其宽或高全屏
-                                        if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
-                                            width *= 1.5;
-                                            height *= 1.5;
-                                        } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
-                                            double outWidth = largeWidth - widthPixels;
-                                            double outHeight = largeHeight - heightPixels;
-                                            if (outHeight > outWidth) {
-                                                float size = widthPixels / (float) width;
-                                                width = widthPixels;
-                                                height *= size;
-                                            } else {
-                                                float size = heightPixels / (float) height;
-                                                height = heightPixels;
-                                                width *= size;
-                                            }
-                                        } else if (largeWidth > widthPixels) {
-                                            float size = widthPixels / (float) width;
-                                            width = widthPixels;
-                                            height *= size;
-                                        } else {
-                                            float size = heightPixels / (float) height;
-                                            height = heightPixels;
-                                            width *= size;
-                                        }
+//                                        //图片尺寸
+//                                        int width = resource.getWidth();
+//                                        int height = resource.getHeight();
+//                                        //屏幕尺寸
+//                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay
+//                                                (NewsContentActivity.this);
+//                                        int widthPixels = screenDisplay.widthPixels;
+//                                        int heightPixels = screenDisplay.heightPixels;
+//                                        //放大1.5倍后的图片尺寸
+//                                        double largeWidth = width * 1.5;
+//                                        double largeHeight = height * 1.5;
+//                                        //放大图片(最大1.5倍),是其宽或高全屏
+//                                        if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+//                                            width *= 1.5;
+//                                            height *= 1.5;
+//                                        } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+//                                            double outWidth = largeWidth - widthPixels;
+//                                            double outHeight = largeHeight - heightPixels;
+//                                            if (outHeight > outWidth) {
+//                                                float size = widthPixels / (float) width;
+//                                                width = widthPixels;
+//                                                height *= size;
+//                                            } else {
+//                                                float size = heightPixels / (float) height;
+//                                                height = heightPixels;
+//                                                width *= size;
+//                                            }
+//                                        } else if (largeWidth > widthPixels) {
+//                                            float size = widthPixels / (float) width;
+//                                            width = widthPixels;
+//                                            height *= size;
+//                                        } else {
+//                                            float size = heightPixels / (float) height;
+//                                            height = heightPixels;
+//                                            width *= size;
+//                                        }
 
                                         ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                                        layoutParams.width = width;
-                                        layoutParams.height = height;
+                                        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
                                         ivPop.setLayoutParams(layoutParams);
 
                                         ivPop.setImageBitmap(resource);
@@ -975,9 +975,23 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     clickJson.getString("href"));
         }
 
-//        @JavascriptInterface
-//        public void urlClick(String url){
-//
-//        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.iv_download:
+                    newsContentPresenter.new SaveImage().execute(imgStr);
+                    break;
+                case R.id.iv_pop:
+
+                    break;
+                default:
+                    if (popupUtil != null && popupUtil.isShowing()) {
+                        popupUtil.dismiss();
+                    }
+                    break;
+            }
+        }
+
     }
+
 }

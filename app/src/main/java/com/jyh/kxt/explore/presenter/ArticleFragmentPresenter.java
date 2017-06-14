@@ -28,7 +28,7 @@ import java.util.List;
 public class ArticleFragmentPresenter extends BasePresenter {
     private VolleyRequest request;
     @BindObject ArticleFragment articleFragment;
-    private int index;
+    public int index;
 
     public ArticleFragmentPresenter(IBaseView iBaseView) {
         super(iBaseView);

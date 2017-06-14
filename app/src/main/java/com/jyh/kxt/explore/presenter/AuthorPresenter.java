@@ -222,8 +222,9 @@ public class AuthorPresenter extends BasePresenter {
     private String getLoadMoreUrl() {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_LIST_TYPE, VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER);
-        if (RegexValidateUtil.isEmpty(lastId))
+        if (!RegexValidateUtil.isEmpty(lastId))
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+        jsonParam.put(VarConstant.HTTP_WRITER_ID, authorId);
         try {
             return HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam
                     .toString());

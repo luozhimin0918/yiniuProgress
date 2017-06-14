@@ -223,9 +223,8 @@ public class CollectLocalUtils {
                                 (NewsJsonDao.Properties.Datetime);
                         newsJsonQueryBuilder
                                 .where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + "")
-                                );
-                        newsJsonQueryBuilder.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS),
-                                NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_DIANPING));
+                                        , newsJsonQueryBuilder.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS),
+                                                NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_DIANPING)));
                         list = newsJsonQueryBuilder.list();
                     }
                     break;
@@ -381,9 +380,9 @@ public class CollectLocalUtils {
                             bd = qb.where(NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""), NewsJsonDao
                                     .Properties.O_id.eq(id), NewsJsonDao.Properties.Type.eq(newsType)).buildDelete();
                         } else {
-                            qb.where(NewsJsonDao.Properties.O_id.eq(id), NewsJsonDao.Properties.DataType.eq(VarConstant.DB_TYPE_COLLECT_LOCAL + ""));
-                            qb.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS), NewsJsonDao
-                                    .Properties.O_id.eq(VarConstant.OCLASS_DIANPING));
+                            qb.where(NewsJsonDao.Properties.O_id.eq(id), NewsJsonDao.Properties.DataType.eq(VarConstant
+                                    .DB_TYPE_COLLECT_LOCAL + ""), qb.or(NewsJsonDao.Properties.Type.eq(VarConstant.OCLASS_NEWS), NewsJsonDao
+                                    .Properties.O_id.eq(VarConstant.OCLASS_DIANPING)));
                             bd = qb.buildDelete();
                         }
                         bd.executeDeleteWithoutDetachingEntities();

@@ -139,4 +139,12 @@ public class DpItemFragment extends BaseFragment implements PageLoadLayout.OnAfr
             newsAdapter.getView(location, view, parent);
         }
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (newsAdapter != null) {
+            newsAdapter.notifyDataSetChanged();
+        }
+    }
 }

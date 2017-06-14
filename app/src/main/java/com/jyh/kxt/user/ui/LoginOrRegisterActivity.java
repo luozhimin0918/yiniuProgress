@@ -1,5 +1,7 @@
 package com.jyh.kxt.user.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,6 +14,8 @@ import android.widget.ScrollView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.utils.UmengLoginTool;
+import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.user.ui.fragment.LoginFragment;
 import com.jyh.kxt.user.ui.fragment.RegisterFragment;
 import com.library.bean.EventBusClass;
@@ -88,6 +92,7 @@ public class LoginOrRegisterActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusClass eventBus) {
         if (eventBus.fromCode == EventBusClass.EVENT_LOGIN) {
+            setResult(Activity.RESULT_OK);
             onBackPressed();
         }
     }
@@ -100,5 +105,11 @@ public class LoginOrRegisterActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
     }
 }

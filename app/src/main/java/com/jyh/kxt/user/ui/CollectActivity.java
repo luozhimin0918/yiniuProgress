@@ -52,7 +52,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     private CollectFlashFragment flashFragment;
     private DelNumListener numListener;
 
-    private boolean isVideoEdit, isNewsEdit, isFlashEdit;
+    private boolean isVideoEdit, isNewsEdit, isFlashEdit,isAuthorEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +146,21 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                             ivBarFunction.setText("编辑");
                         }
                         break;
+                    case 3:
+                        if (authorFragment.adapter != null && authorFragment.adapter.getData().size() > 0) {
+                            isAuthorEdit = !isAuthorEdit;
+                        } else {
+                            isAuthorEdit = false;
+                        }
+                        authorFragment.edit(isAuthorEdit, numListener);
+                        if (isAuthorEdit) {
+                            llDel.setVisibility(View.VISIBLE);
+                            ivBarFunction.setText("取消");
+                        } else {
+                            llDel.setVisibility(View.GONE);
+                            ivBarFunction.setText("编辑");
+                        }
+                        break;
                 }
 
                 break;
@@ -166,6 +181,9 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     case 2:
                         flashFragment.selAll(ivSelAll.isSelected(), numListener);
                         break;
+                    case 3:
+                        authorFragment.selAll(ivSelAll.isSelected(),numListener);
+                        break;
                 }
                 break;
             case R.id.tv_del:
@@ -179,6 +197,9 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                         break;
                     case 2:
                         flashFragment.del(numListener);
+                        break;
+                    case 3:
+                        authorFragment.del(numListener);
                         break;
                 }
                 quitEdit();
@@ -198,6 +219,9 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                 break;
             case 2:
                 flashFragment.quitEdit(numListener);
+                break;
+            case 3:
+                authorFragment.quitEdit(numListener);
                 break;
         }
     }
@@ -255,6 +279,15 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     ivBarFunction.setText("编辑");
                 }
                 break;
+            case 3:
+                if (isAuthorEdit) {
+                    llDel.setVisibility(View.VISIBLE);
+                    ivBarFunction.setText("取消");
+                } else {
+                    llDel.setVisibility(View.GONE);
+                    ivBarFunction.setText("编辑");
+                }
+                break;
         }
     }
 
@@ -278,6 +311,8 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         if (videoFragment != null) {
             videoFragment.onChangeTheme();
         }
+        if(authorFragment!=null)
+            authorFragment.onChangeTheme();
         if (stlNavigationBar != null)
             stlNavigationBar.notifyDataSetChanged();
     }

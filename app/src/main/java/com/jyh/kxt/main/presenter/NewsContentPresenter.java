@@ -2,6 +2,9 @@ package com.jyh.kxt.main.presenter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -44,6 +47,12 @@ import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 
@@ -408,7 +417,7 @@ public class NewsContentPresenter extends BasePresenter {
         newsJson.setO_action(VarConstant.OACTION_DETAIL);
         if (VarConstant.OCLASS_BLOG.equals(type)) {
             newsJson.setO_class(VarConstant.OCLASS_BLOG);
-        } else{
+        } else {
             newsJson.setO_class(VarConstant.OCLASS_NEWS);
         }
         newsJson.setO_id(objectId);
@@ -527,6 +536,58 @@ public class NewsContentPresenter extends BasePresenter {
                                     .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             }, null);
+        }
+    }
+
+    /***
+     * 功能：用线程保存图片
+     *
+     * @author wangyp
+     */
+    public class SaveImage extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String result = "";
+            try {
+                String sdcard = Environment.getExternalStorageDirectory()
+                        .toString();
+                File file = new File(sdcard + "/Download");
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                String imgurl = params[0];
+                int idx = imgurl.lastIndexOf(".");
+                String ext = imgurl.substring(idx);
+                file = new File(sdcard + "/Download/" + new Date().getTime()
+                        + ext);
+                InputStream inputStream = null;
+                URL url = new URL(imgurl);
+                HttpURLConnection conn = (HttpURLConnection) url
+                        .openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(20000);
+                if (conn.getResponseCode() == 200) {
+                    inputStream = conn.getInputStream();
+                }
+                byte[] buffer = new byte[4096];
+                int len = 0;
+                FileOutputStream outStream = new FileOutputStream(file);
+                while ((len = inputStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                outStream.close();
+                result = "图片已保存至：" + file.getAbsolutePath();
+                mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.fromFile(file)));
+            } catch (Exception e) {
+                result = "保存失败！" + e.getLocalizedMessage();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            ToastView.makeText3(mContext, result);
         }
     }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.main.json.NewsNavJson;
@@ -96,5 +97,22 @@ public class DpActivity extends BaseActivity implements PageLoadLayout.OnAfreshL
         }
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         stlNavigationBar.setViewPager(vpContent, tabs, true);
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (fragmentList != null)
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof BaseFragment) {
+                    ((BaseFragment) fragment).onChangeTheme();
+                }
+            }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onChangeTheme();
     }
 }

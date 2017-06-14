@@ -25,6 +25,7 @@ public class VarConstant {
     public static final String HTTP_LASTID = "last_id";
     public static final String HTTP_CONTENT = "?content=";
     public static final String HTTP_CONTENT2 = "content";
+    public static final String HTTP_WRITER_ID = "writer_id";
 
     public static final String HTTP_USERNAME = "username";
     public static final String HTTP_PWD = "password";

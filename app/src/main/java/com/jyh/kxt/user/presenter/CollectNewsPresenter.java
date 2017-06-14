@@ -320,7 +320,12 @@ public class CollectNewsPresenter extends BasePresenter {
     }
 
     private String getUrl() {
-        String url = HttpConstant.COLLECT_NEWS;
+        String url;
+        if (newsType.equals(VarConstant.OCLASS_BLOG)) {
+            url = HttpConstant.USER_FAVOR_BLOGARTICLE;
+        } else {
+            url = HttpConstant.COLLECT_NEWS;
+        }
         JSONObject jsonParam = request.getJsonParam();
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tv_synchronization_layout"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_gravity="bottom"
+    android:background="@color/gray_btn_bg_pressed_color"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+
+        android:id="@+id/tv_synchronization_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="登录可查看所关注作者的文章"
+        android:textColor="@color/white"/>
+
+    <com.jyh.kxt.base.custom.DiscolorTextView
+        android:id="@+id/tv_synchronization"
+        app:defaultFontColor="@color/white"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shape_market_synchron"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="登录"
+        android:textSize="13sp"/>
+</RelativeLayout>

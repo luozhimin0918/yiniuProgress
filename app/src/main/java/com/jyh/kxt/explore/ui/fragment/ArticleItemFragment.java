@@ -1,17 +1,30 @@
 package com.jyh.kxt.explore.ui.fragment;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.ArticleItemPresenter;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -38,6 +51,7 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
     private String id;
     private String type;
     private NewsAdapter newsAdapter;
+    private View loginLayout;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -61,13 +75,15 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         if (VarConstant.EXPLORE_ARTICLE_LIST_TYPE_FOLLOW.equals(type)) {
             boolean isLogined = LoginUtils.isLogined(getContext());
             if (isLogined) {
+                hideLoginBar();
                 plRootView.loadWait();
                 presenter.init(id, type);
             } else {
-                plRootView.setNullText("请先登录");
                 plRootView.loadEmptyData();
+                showLoginBar();
             }
         } else {
+            hideLoginBar();
             plRootView.loadWait();
             presenter.init(id, type);
         }
@@ -96,7 +112,11 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        if (position < 1) return;
+        AuthorNewsJson authorNewsJson = newsAdapter.getData().get(position - 1);
+        JumpUtils.jump((BaseActivity) getActivity(), authorNewsJson.getO_class(), authorNewsJson.getO_action(), authorNewsJson.getO_id(),
+                authorNewsJson
+                        .getHref());
     }
 
     @Override
@@ -116,9 +136,10 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
             boolean isLogined = LoginUtils.isLogined(getContext());
             if (isLogined) {
                 presenter.init(id, type);
+                hideLoginBar();
             } else {
-                plRootView.setNullText("请先登录");
                 plRootView.loadEmptyData();
+                showLoginBar();
             }
         } else {
             presenter.init(id, type);
@@ -146,4 +167,45 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
     public void onSaveInstanceState(Bundle outState) {
     }
 
+    private void showLoginBar() {
+        loginLayout = LayoutInflater.from(getContext()).inflate(R.layout.layout_loginbar, null);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext()
+                , 50));
+        loginLayout.findViewById(R.id.tv_synchronization).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getContext(), LoginOrRegisterActivity.class), 100);
+            }
+        });
+        params.gravity = Gravity.BOTTOM;
+        loginLayout.setLayoutParams(params);
+        plRootView.addView(loginLayout);
+    }
+
+    private void hideLoginBar() {
+        if (loginLayout != null)
+            plRootView.removeView(loginLayout);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            plRootView.loadWait();
+            if (VarConstant.EXPLORE_ARTICLE_LIST_TYPE_FOLLOW.equals(type)) {
+                boolean isLogined = LoginUtils.isLogined(getContext());
+                if (isLogined) {
+                    presenter.init(id, type);
+                    hideLoginBar();
+                } else {
+                    plRootView.loadEmptyData();
+                    showLoginBar();
+                }
+            } else {
+                presenter.init(id, type);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

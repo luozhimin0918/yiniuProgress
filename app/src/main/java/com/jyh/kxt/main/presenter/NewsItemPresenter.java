@@ -90,6 +90,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private boolean isMore;
     private RollDotViewPager mRollDotViewPager;
     private BtnAdapter btnAdapter;
+    private ImageView iv_ad;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -414,7 +415,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
      */
     public void addAD() {
         LinearLayout adView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, null);
-        ImageView iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
+        iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
 
         try {
             final AdJson.AdItemJson mPicAd = ads.getPic_ad();
@@ -790,6 +791,10 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 for (SkinnableTextView skinnableTextView : mAdTextViewList) {
                     skinnableTextView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
                 }
+            }
+            if(iv_ad!=null){
+                Glide.with(mContext).load(HttpConstant.IMG_URL + ads.getPicture()).error(R.mipmap.icon_def_news)
+                        .placeholder(R.mipmap.icon_def_news).into(iv_ad);
             }
         } catch (Exception e) {
             e.printStackTrace();

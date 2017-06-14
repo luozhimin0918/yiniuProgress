@@ -157,6 +157,9 @@ public class CollectUtils {
                         ids.append(",").append(o_id);
                     }
                 }
+                if (newsJsons.equals(VarConstant.OCLASS_BLOG)) {
+                    type = VarConstant.OCLASS_BLOG;
+                }
                 break;
             case VarConstant.COLLECT_TYPE_VIDEO:
                 List<VideoListJson> videoListJsons = dbRead.getVideoListJsonDao().queryBuilder().where

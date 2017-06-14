@@ -1,5 +1,6 @@
 package com.jyh.kxt.explore.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -96,5 +97,12 @@ public class AuthorListActivity extends BaseActivity implements OnTabSelectListe
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (articleFragment != null)
+            articleFragment.onActivityResult(requestCode, resultCode, data);
     }
 }
