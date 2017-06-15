@@ -43,7 +43,7 @@ public class ExplorePresenter extends BasePresenter {
     }
 
     public void init() {
-        if (request == null){
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
             request.setTag(getClass().getName());
         }
@@ -124,10 +124,17 @@ public class ExplorePresenter extends BasePresenter {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                exploreFragment.plRootView.loadError();
                             }
                             break;
                     }
                 }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                exploreFragment.plRootView.loadError();
             }
         });
     }
@@ -162,9 +169,9 @@ public class ExplorePresenter extends BasePresenter {
                     exploreFragment.plvContent.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                           exploreFragment.plvContent.onRefreshComplete();
+                            exploreFragment.plvContent.onRefreshComplete();
                         }
-                    },200);
+                    }, 200);
                 }
             });
         } else {

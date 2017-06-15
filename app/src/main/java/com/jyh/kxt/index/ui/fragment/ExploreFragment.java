@@ -65,13 +65,13 @@ import butterknife.OnClick;
 /**
  * 首页-探索
  */
-public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener {
+public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener, PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.iv_bar_break) RoundImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
-    @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private ExplorePresenter explorePresenter;
     private LinearLayout homeHeadView;//头部布局
@@ -97,6 +97,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         explorePresenter = new ExplorePresenter(this);
         ivBarBreak.setImageResource(R.mipmap.icon_user_def_photo);
         tvBarTitle.setText("探索");
+
+        plRootView.setOnAfreshLoadListener(this);
 
         plvContent.setDividerNull();
         plvContent.setMode(PullToRefreshBase.Mode.BOTH);
@@ -539,5 +541,11 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     }
 
     public void doubleClickFragment() {
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        plRootView.loadWait();
+        explorePresenter.init();
     }
 }

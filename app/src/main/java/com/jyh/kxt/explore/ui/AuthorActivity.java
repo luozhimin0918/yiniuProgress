@@ -83,13 +83,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plContent.setOnRefreshListener(this);
         plContent.setOnItemClickListener(this);
-        plListRootView.setOnAfreshLoadListener(new PageLoadLayout.OnAfreshLoadListener() {
-            @Override
-            public void OnAfreshLoad() {
-                plListRootView.loadWait();
-                authorPresenter.reLoadListData();
-            }
-        });
+        plListRootView.setOnAfreshLoadListener(this);
 
 
         authorId = getIntent().getStringExtra(IntentConstant.O_ID);
@@ -271,12 +265,12 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 if (plContent.getRefreshableView().getHeaderViewsCount() <= 1) {
                     plContent.getRefreshableView().addHeaderView(headView);
                 }
+                loadOver();
             }
         } catch (Exception e) {
             e.printStackTrace();
             plListRootView.loadError();
         }
-        loadOver();
     }
 
     @OnClick({R.id.iv_break, R.id.v_like})

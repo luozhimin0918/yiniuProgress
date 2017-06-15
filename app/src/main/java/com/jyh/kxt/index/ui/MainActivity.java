@@ -390,13 +390,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 int theme = ThemeUtil.getAlertTheme(this);
                 switch (theme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, false);
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         tvTheme.setText("夜间");
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(this, SpConstant.SETTING_DAY_NIGHT, true);
+                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         tvTheme.setText("白天");
                         break;
                 }

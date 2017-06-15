@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,12 +18,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.gifdecoder.GifDecoder;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.load.resource.gif.GifDrawableResource;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.Target;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
@@ -31,6 +31,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.OptionLayout;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.FastInfoAdapter;
@@ -135,7 +136,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                 ivRightIcon1.setVisibility(View.VISIBLE);
             }
 
-            setGifIcon(R.mipmap.icon_advert);
+            setGifIcon();
         } else {
             currentFragment = flashFrament;
 
@@ -182,7 +183,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         if (currentFragment instanceof NewsFragment) {
             isShowRightTopAdvert = true;
             ivRightIcon1.setVisibility(View.VISIBLE);
-            setGifIcon(R.mipmap.icon_advert);
+            setGifIcon();
         }
     }
 
@@ -393,7 +394,9 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        setGifIcon(R.mipmap.icon_advert);
+        if (getContext() != null) {
+            setGifIcon();
+        }
         if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
                 if (fragment instanceof BaseFragment) {
@@ -439,11 +442,23 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         }
     }
 
-    private void setGifIcon(int resouseId) {
-        if (getContext() != null)
+    private void setGifIcon() {
+        if (getContext() != null) {
+
+            int alertTheme = ThemeUtil.getAlertTheme(getContext());
+            int resouseId = -1;
+            switch (alertTheme) {
+                case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                    resouseId = R.mipmap.icon_advert_night;
+                    break;
+                case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                    resouseId = R.mipmap.icon_advert_day;
+                    break;
+            }
             Glide.with(getContext())
                     .load(resouseId)
                     .into(new GlideDrawableImageViewTarget(ivRightIcon1));
-    }
+        }
 
+    }
 }
