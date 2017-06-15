@@ -2,10 +2,12 @@ package com.jyh.kxt.av.presenter;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
@@ -41,6 +43,9 @@ import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.jyh.kxt.base.constant.HttpConstant.VIDEO_DETAIL;
 
@@ -105,8 +110,8 @@ public class VideoDetailPresenter extends BasePresenter {
                     videoListJson = new VideoListJson(videoDetailBean.getId(), videoDetailBean.getCategory_id(),
                             videoDetailBean.getTitle(),
                             videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean
-                            .getNum_good(),videoDetailBean
-                            .getNum_play(),"",  videoDetailBean.getCreate_time(), false, false, false, 0);
+                            .getNum_good(), videoDetailBean
+                            .getNum_play(), "", videoDetailBean.getCreate_time(), false, false, false, 0);
                     isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
                     isAttention = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean
                             .getId());
@@ -118,9 +123,6 @@ public class VideoDetailPresenter extends BasePresenter {
 
                     videoDetailActivity.pllContent.loadOver();
                     playVideo();
-
-                    videoDetailActivity.tvPlayCount.setText(detailJson.getNum_play());
-                    videoDetailActivity.tvTitle.setText(detailJson.getTitle());
 
                     List<CommentBean> comment = detailJson.getComment();
                     adapterCommentList.addAll(comment);
@@ -135,6 +137,17 @@ public class VideoDetailPresenter extends BasePresenter {
                     videoDetailActivity.commentPresenter.bindListView(videoDetailActivity.rvMessage);
 
                     headView = videoDetailActivity.commentPresenter.getHeadView();
+                    View detailTitle = LayoutInflater
+                            .from(mContext)
+                            .inflate(R.layout.activity_video_detail_title, headView, false);
+                    headView.addView(detailTitle, 0);
+
+                    TextView tvTitle = ButterKnife.findById(detailTitle, R.id.tv_title);
+                    tvTitle.setText(detailJson.getTitle());
+
+                    TextView tvPlayCount = ButterKnife.findById(detailTitle, R.id.tv_playCount);
+                    tvPlayCount.setText(detailJson.getNum_play());
+
                     videoDetailActivity.commentPresenter.createMoreVideoView(detailJson.getVideo());
                     videoDetailActivity.tvCommentCount.setText(detailJson.getNum_comment());
 
@@ -147,7 +160,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
                     if (comment.size() == 0) {
-                        ToastView.makeText3(mContext,"暂无更多评论");
+                        ToastView.makeText3(mContext, "暂无更多评论");
                         return;
                     }
                     adapterCommentList.addAll(comment);
@@ -162,7 +175,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     if (adapterCommentList == null || adapterCommentList.size() == 0) {
                         videoDetailActivity.pllContent.loadError();
                     } else {
-                        ToastView.makeText3(mContext,"暂无更多评论");
+                        ToastView.makeText3(mContext, "暂无更多评论");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

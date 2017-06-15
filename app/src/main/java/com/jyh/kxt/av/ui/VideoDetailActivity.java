@@ -35,8 +35,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
     @BindView(R.id.activity_video_detail) LinearLayout llDetailContent;
-    @BindView(R.id.tv_title) public TextView tvTitle;
-    @BindView(R.id.tv_playCount) public TextView tvPlayCount;
     @BindView(R.id.rv_message) public PullToRefreshListView rvMessage;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_comment) ImageView ivComment;
@@ -58,7 +56,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 
-        int mShowFlags =
+       int mShowFlags =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -99,7 +97,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.iv_comment:
                 //回复
-                commentPresenter.showReplyMessageView(tvTitle);
+                commentPresenter.showReplyMessageView(view);
                 break;
             case R.id.iv_collect:
                 //收藏

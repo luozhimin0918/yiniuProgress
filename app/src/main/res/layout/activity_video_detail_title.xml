@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/videoTitleHeight"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/videoTitlePadding"
+    android:paddingRight="@dimen/videoTitlePadding">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/tv_playCount"
+        android:layout_toStartOf="@+id/tv_playCount"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/content_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_playCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:drawableLeft="@mipmap/icon_video_play_small"
+        android:drawablePadding="@dimen/videoTitlePlayCountPadding"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size3"/>
+</RelativeLayout>
