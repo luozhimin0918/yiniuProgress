@@ -216,7 +216,24 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
     public void changeGender(String gender) {
         String oldGender = tvGender.getText().toString();
         tvGender.setText(gender);
-        editUserInfoPresenter.postChangedInfo(gender, oldGender, VarConstant.HTTP_SEX);
+
+        String sexInt;
+        switch (gender) {
+            case "保密":
+                sexInt="0";
+                break;
+            case "男":
+                sexInt="1";
+                break;
+            case "女":
+                sexInt="2";
+                break;
+            default:
+                sexInt="0";
+                break;
+        }
+
+        editUserInfoPresenter.postChangedInfo(sexInt, oldGender, VarConstant.HTTP_SEX);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.rl_photo, R.id.rl_nickname, R.id.rl_gender, R.id.rl_birthday, R.id
