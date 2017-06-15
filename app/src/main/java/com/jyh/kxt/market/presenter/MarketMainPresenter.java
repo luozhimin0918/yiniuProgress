@@ -117,18 +117,34 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                     String name = marketBean.getType();
                     switch (name) {
                         case "main":
-                            createMainView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            try {
+                                createMainView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "favor":
-                            createFavorView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            try {
+                                createFavorView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "hot":
-                            createHotView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            try {
+                                createHotView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "ad":
-                            AdJson ads = JSON.parseObject(JSON.toJSONString(marketBean.getData()), AdJson.class);
-                            if (ads != null && (ads.getPic_ad() != null || (ads.getText_ad() != null && ads.getText_ad().size() > 0)))
-                                createAdView(ads);
+                            try {
+                                AdJson ads = JSON.parseObject(JSON.toJSONString(marketBean.getData()), AdJson.class);
+                                if (ads != null && (ads.getPic_ad() != null || (ads.getText_ad() != null && ads.getText_ad().size() > 0)))
+                                    createAdView(ads);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                     }
                 }
