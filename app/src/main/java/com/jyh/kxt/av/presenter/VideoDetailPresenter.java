@@ -160,7 +160,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
                     if (comment.size() == 0) {
-                        ToastView.makeText3(mContext, "暂无更多评论");
+                        videoDetailActivity.rvMessage.noMoreData();
                         return;
                     }
                     adapterCommentList.addAll(comment);
@@ -175,7 +175,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     if (adapterCommentList == null || adapterCommentList.size() == 0) {
                         videoDetailActivity.pllContent.loadError();
                     } else {
-                        ToastView.makeText3(mContext, "暂无更多评论");
+                        videoDetailActivity.rvMessage.noMoreData();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

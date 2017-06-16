@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -137,7 +138,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      */
     public void createMoreVideoView(List<VideoDetailVideoBean> videoList) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        if(videoList == null || videoList.size() == 0){
+        if (videoList == null || videoList.size() == 0) {
             rlRecommendLayout.setVisibility(View.GONE);
             return;
         }
@@ -149,7 +150,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
-            Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).override(100, 100).into
+            Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news)
+                    .override(100, 100).into
                     (ivVideoCover);
             ivVideoName.setText(videoDetailVideoBean.getTitle());
 
@@ -179,7 +181,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             ImageView ivVideoCover = (ImageView) moreVideoView.findViewById(R.id.iv_video_cover);
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
-            Glide.with(mContext).load(HttpConstant.IMG_URL + imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news)
+            Glide.with(mContext).load(HttpConstant.IMG_URL + imageUrl).error(R.mipmap.icon_def_news).placeholder(R
+                    .mipmap.icon_def_news)
                     .override(100, 100).into
                     (ivVideoCover);
             ivVideoName.setText(mArticleJson.getTitle());
@@ -197,7 +200,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 //                    Intent intent = new Intent(mContext, NewsContentActivity.class);
 //                    intent.putExtra(IntentConstant.O_ID, mArticleJson.getO_id());
 //                    mContext.startActivity(intent);
-                    JumpUtils.jump((BaseActivity) mContext, mArticleJson.getO_class(), mArticleJson.getO_action(), mArticleJson.getO_id()
+                    JumpUtils.jump((BaseActivity) mContext, mArticleJson.getO_class(), mArticleJson.getO_action(),
+                            mArticleJson.getO_id()
                             , mArticleJson
                                     .getHref());
                 }
@@ -209,7 +213,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      * 暂无评论
      */
     public void createNoneComment() {
-        int noneCommentHeight = SystemUtil.dp2px(mContext, 100);
+        int noneCommentHeight = SystemUtil.dp2px(mContext, 150);
         LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, noneCommentHeight);
 
@@ -217,7 +221,15 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
         TextView tvNoneComment = new TextView(mContext);
         tvNoneComment.setLayoutParams(commentParams);
-        tvNoneComment.setText("暂无评论,点击抢沙发");
+        tvNoneComment.setText("暂无评论");
+        tvNoneComment.setGravity(Gravity.CENTER);
+
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                tvNoneComment,
+                0,
+                R.mipmap.icon_comment_not,
+                0,
+                0);
 
         tvNoneComment.setGravity(Gravity.CENTER);
 
@@ -336,7 +348,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         }
     }
 
-    public void setRecommendLabel(int recommendType){
+    public void setRecommendLabel(int recommendType) {
         switch (recommendType) {
             case 0:
                 tvRecommendLabel.setText("相关文章");

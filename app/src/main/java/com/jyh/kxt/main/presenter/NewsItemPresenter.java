@@ -297,7 +297,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             SlideJson slideJson = carouselList.get(i);
             String carouselItem = slideJson.getPicture();
             carouseList.add(HttpConstant.IMG_URL + carouselItem);
-            titles.add(slideJson.getTitile());
+            titles.add(slideJson.getName());
         }
         carouseView.setViewUrls(carouseList, titles, currentItem);
         homeHeadView.addView(carouseView);

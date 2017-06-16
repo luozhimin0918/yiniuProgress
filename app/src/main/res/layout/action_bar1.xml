@@ -11,7 +11,7 @@
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentLeft="true"
-        android:padding="15dp"
+        android:padding="18dp"
         android:src="@mipmap/ico_break"/>
 
     <TextView
@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/iv_bar_function"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentRight="true"
         android:padding="15dp"

@@ -105,7 +105,7 @@ public class MainPresenter extends BasePresenter {
             @Override
             public void call(Subscriber<? super SingleThreadJson> subscriber) {
                 try {
-                    Thread.sleep(3 * 1000);
+                    Thread.sleep(1 * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

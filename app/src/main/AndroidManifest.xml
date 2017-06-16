@@ -74,9 +74,9 @@
         <!-- 视听 -->
         <activity
             android:name=".av.ui.VideoDetailActivity"
-            android:theme="@style/VideoTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/VideoTheme">
         </activity>
 
         <!-- 用户 -->
@@ -152,7 +152,6 @@
         <activity
             android:name=".datum.ui.DatumHistoryActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".market.ui.MarketEditActivity"
             android:screenOrientation="portrait">
@@ -217,7 +216,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.UMDefault"/>
 
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="537c3e0456240b761700cd92">
@@ -233,12 +231,15 @@
         <service
             android:name=".index.service.PreLoadX5Service"
             android:exported="false"/>
+
         <receiver android:name=".base.utils.NetBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
 
+        <activity android:name=".index.ui.ErrorActivity">
+        </activity>
     </application>
 
 </manifest>

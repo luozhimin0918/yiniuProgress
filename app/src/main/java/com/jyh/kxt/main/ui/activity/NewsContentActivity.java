@@ -2,9 +2,11 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,6 +87,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.library.base.http.VarConstant.APP_WEB_URL;
+import static com.taobao.accs.ACCSManager.mContext;
 
 /**
  * 项目名:Kxt
@@ -477,7 +480,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             this.newsContentJson = newsContentJson;
             this.headView = commentPresenter.getHeadView();
 
-            isCollect = CollectLocalUtils.isCollect(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, newsContentJson.getType(), objectId);
+            isCollect = CollectLocalUtils.isCollect(getContext(), VarConstant.COLLECT_TYPE_ARTICLE, newsContentJson
+                    .getType(), objectId);
             ivCollect.setSelected(isCollect);
 
             //头部
@@ -856,6 +860,20 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             if (commentPresenter != null) {
                 commentPresenter.onChangeTheme();
+            }
+            View noneComment = webViewAndHead.headView.findViewWithTag("noneComment");
+            if (noneComment != null) {
+                TextView tvNoneComment = (TextView) noneComment;
+                int color = ContextCompat.getColor(getContext(), R.color.blue);
+                tvNoneComment.setTextColor(color);
+
+                Drawable notDrawable = ContextCompat.getDrawable(getContext(), R.mipmap.icon_comment_not);
+                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        tvNoneComment,
+                        null,
+                        notDrawable,
+                        null,
+                        null);
             }
         } catch (Exception e) {
             e.printStackTrace();

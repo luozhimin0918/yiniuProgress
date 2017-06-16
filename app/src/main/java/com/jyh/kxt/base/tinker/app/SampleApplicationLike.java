@@ -27,6 +27,7 @@ import android.support.multidex.MultiDex;
 import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
+import com.jyh.kxt.base.utils.CrashHandler;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.jyh.kxt.push.KXTPushIntentService;
@@ -139,8 +140,9 @@ public class SampleApplicationLike extends DefaultApplicationLike {
             }
         });
 
-//        CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(this);
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(SampleApplicationContext.context);
+        
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
         //避免启动慢的问题
         Intent intent = new Intent(SampleApplicationContext.context, PreLoadX5Service.class);

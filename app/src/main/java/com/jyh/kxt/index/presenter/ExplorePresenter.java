@@ -43,7 +43,7 @@ public class ExplorePresenter extends BasePresenter {
     }
 
     public void init() {
-        if (request == null) {
+        if (request == null){
             request = new VolleyRequest(mContext, mQueue);
             request.setTag(getClass().getName());
         }

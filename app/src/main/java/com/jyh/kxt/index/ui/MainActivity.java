@@ -386,7 +386,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_theme:
                 //夜间模式
-
                 int theme = ThemeUtil.getAlertTheme(this);
                 switch (theme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:

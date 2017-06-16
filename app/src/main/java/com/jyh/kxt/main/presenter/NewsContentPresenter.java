@@ -145,7 +145,7 @@ public class NewsContentPresenter extends BasePresenter {
                     List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
 
                     if (comment.size() == 0) {
-                        ToastView.makeText3(mContext, "暂无更多评论");
+                        tvLoadMore.setText("暂无更多评论");
                         return;
                     }
 

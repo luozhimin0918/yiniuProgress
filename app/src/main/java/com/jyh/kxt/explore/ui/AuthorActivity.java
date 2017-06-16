@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +50,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_list_rootView) public PageLoadLayout plListRootView;
     @BindView(R.id.rl_head_title_bar) public RelativeLayout rlHeadTitleBar;
+    @BindView(R.id.error_break) public ImageView ivErrorBreak;
+
     @BindView(R.id.v_like) View vLike;
 
     private RoundImageView ivPhoto;
@@ -78,7 +81,6 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         setContentView(R.layout.activity_news_author, StatusBarColor.NO_COLOR);
 
         authorPresenter = new AuthorPresenter(this);
-        plListRootView.setOnAfreshLoadListener(this);
         plContent.setDividerNull();
         plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plContent.setOnRefreshListener(this);
@@ -246,6 +248,10 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             if (list == null || list.size() == 0) {
                 plListRootView.loadEmptyData();
             } else {
+                if (list.size() < 8) {
+                    plContent.noMoreData();
+                }
+
                 List<AuthorNewsJson> data;
                 if (list.size() > VarConstant.LIST_MAX_SIZE) {
                     authorPresenter.setMore(true);
@@ -273,7 +279,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         }
     }
 
-    @OnClick({R.id.iv_break, R.id.v_like})
+    @OnClick({R.id.iv_break, R.id.v_like, R.id.error_break})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -281,6 +287,9 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 break;
             case R.id.v_like:
                 authorPresenter.attention(vLike.isSelected());
+                break;
+            case R.id.error_break:
+                onBackPressed();
                 break;
         }
     }
@@ -371,15 +380,18 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
 
     public void loadWait() {
+        ivErrorBreak.setVisibility(View.GONE);
         plListRootView.loadWait();
     }
 
 
     public void loadError() {
+        ivErrorBreak.setVisibility(View.VISIBLE);
         plListRootView.loadError();
     }
 
     public void loadOver() {
+        ivErrorBreak.setVisibility(View.GONE);
         plListRootView.loadOver();
     }
 

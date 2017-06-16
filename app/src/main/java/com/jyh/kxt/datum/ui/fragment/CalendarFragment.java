@@ -179,7 +179,9 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         if (stateSet.size() == 0) {
             stateSet.add("全部");
         }
-
+        if (areaSet.size() == 0) {
+            areaSet.add("全部");
+        }
         if (judgeSet.size() == 0) {
             judgeSet.add("全部");
         }

@@ -17,9 +17,9 @@
     <color name="segmentTabLayout_bar_color">#242424</color>
     <color name="segmentTabLayout_indicator_color">#136aa4</color>
 
-    <color name="line_color">#2d2d2d</color>
-    <color name="line_color2">#2d2d2d</color>
-    <color name="line_color3">#2d2d2d</color>
+    <color name="line_color">#1E1E1E</color>
+    <color name="line_color2">#1E1E1E</color>
+    <color name="line_color3">#1E1E1E</color>
     <color name="line_color4">#3F484F</color>
     <color name="line_color5">#156295</color>
     <color name="line_color6">#3b3b3b</color>

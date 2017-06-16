@@ -11,7 +11,7 @@
         android:layout_width="@dimen/actionbar_height"
         android:layout_height="@dimen/actionbar_height"
         android:layout_alignParentLeft="true"
-        android:padding="15dp"
+        android:padding="18dp"
         android:src="@mipmap/ico_break"/>
 
     <TextView

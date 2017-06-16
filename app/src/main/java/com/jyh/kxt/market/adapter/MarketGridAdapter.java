@@ -70,6 +70,7 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
             }
         });
 
+        marketItemBean.setMarketFromSource(0);
         return convertView;
     }
 

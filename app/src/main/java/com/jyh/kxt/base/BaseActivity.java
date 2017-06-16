@@ -58,9 +58,11 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
         ThemeUtil.addActivityToThemeCache(this);
         Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         if (isNight) {
-            setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            updateActivityMask(AppCompatDelegate.MODE_NIGHT_YES);
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-            setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            updateActivityMask(AppCompatDelegate.MODE_NIGHT_NO);
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
@@ -268,7 +270,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
      * 增加蒙板
      * @param nightMode
      */
-    private void updateActivityMask(int nightMode) {
+    protected void updateActivityMask(int nightMode) {
         try {
             if (nightMode == AppCompatDelegate.MODE_NIGHT_YES) {
                 View decorView = getWindow().getDecorView();

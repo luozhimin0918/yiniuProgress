@@ -69,6 +69,8 @@ public class MarketMainItemAdapter extends BaseListAdapter<MarketItemBean> {
             }
         });
 
+        marketItemBean.setMarketFromSource(0);
+
         return convertView;
     }
 

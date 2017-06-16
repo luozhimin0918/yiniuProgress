@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.library.manager.ActivityManager;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -30,7 +32,8 @@ import butterknife.OnClick;
 /**
  * 视听-视屏详细页
  */
-public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener, PageLoadLayout.OnAfreshLoadListener {
+public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener,
+        PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
@@ -43,7 +46,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
-    @BindView(R.id.ll_nav) LinearLayout llNav;
+    @BindView(R.id.ll_nav) public LinearLayout llNav;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
@@ -56,12 +59,12 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 
-       int mShowFlags =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.INVISIBLE;
-        spVideo.setSystemUiVisibility(mShowFlags);
+//       int mShowFlags =
+//                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.INVISIBLE;
+//        spVideo.setSystemUiVisibility(mShowFlags);
 
         videoId = getIntent().getStringExtra(IntentConstant.O_ID);
         videoDetailPresenter = new VideoDetailPresenter(this);
@@ -81,6 +84,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         });
 
         pllContent.setOnAfreshLoadListener(this);
+        brightnessSlide();
 
         ActivityManager
                 .getInstance()
@@ -97,18 +101,30 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.iv_comment:
                 //回复
+                if (videoDetailPresenter.videoDetailBean == null) {
+                    return;
+                }
                 commentPresenter.showReplyMessageView(view);
                 break;
             case R.id.iv_collect:
                 //收藏
+                if (videoDetailPresenter.videoDetailBean == null) {
+                    return;
+                }
                 videoDetailPresenter.collect();
                 break;
             case R.id.iv_like:
                 //点赞
+                if (videoDetailPresenter.videoDetailBean == null) {
+                    return;
+                }
                 videoDetailPresenter.attention();
                 break;
             case R.id.iv_share:
                 //分享
+                if (videoDetailPresenter.videoDetailBean == null) {
+                    return;
+                }
                 videoDetailPresenter.share();
                 break;
         }
@@ -188,5 +204,32 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     public void OnAfreshLoad() {
         pllContent.loadOver();
         videoDetailPresenter.requestInitVideo(PullToRefreshBase.Mode.PULL_FROM_START);
+    }
+
+    @Override
+    protected void updateActivityMask(int nightMode) {
+
+    }
+
+    private void brightnessSlide() {
+        int theme = ThemeUtil.getAlertTheme(this);
+        switch (theme) {
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                float brightness = 0.1f;
+
+                WindowManager.LayoutParams lpa = this.getWindow().getAttributes();
+                lpa.screenBrightness = brightness;
+                if (lpa.screenBrightness > 1.0f) {
+                    lpa.screenBrightness = 1.0f;
+                } else if (lpa.screenBrightness < 0.01f) {
+                    lpa.screenBrightness = 0.01f;
+                }
+                this.getWindow().setAttributes(lpa);
+                break;
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                break;
+        }
+
+
     }
 }

@@ -2,7 +2,6 @@ package com.jyh.kxt.explore.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -17,7 +16,6 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
-import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,7 +137,7 @@ public class AuthorPresenter extends BasePresenter {
                 @Override
                 public void run() {
                     authorActivity.plContent.onRefreshComplete();
-                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+                    authorActivity.plContent.noMoreData();
                 }
             }, 500);
         }
