@@ -56,7 +56,7 @@ public class MyCommentFragment extends BaseFragment {
         Bundle arguments = getArguments();
 
         fromFragment = arguments.getInt("from");
-        requestUrl = fromFragment == 0 ? HttpConstant.MEMBER_COMMENT_MY : HttpConstant.MEMBER_COMMENT_REPLY;
+        requestUrl = fromFragment == 0 ? HttpConstant.MEMBER_COMMENT_REPLY : HttpConstant.MEMBER_COMMENT_MY;
 
         myCommentPresenter = new MyCommentPresenter(this);
 
@@ -94,7 +94,7 @@ public class MyCommentFragment extends BaseFragment {
             protected void onResponse(List<CommentBean> commentBeen) {
                 rvMessage.onRefreshComplete();
 
-               if (pullFrom == PullToRefreshBase.Mode.PULL_FROM_START) {
+                if (pullFrom == PullToRefreshBase.Mode.PULL_FROM_START) {
                     commentList.clear();
                 }
 
@@ -117,7 +117,7 @@ public class MyCommentFragment extends BaseFragment {
                 }
 
                 if (pullFrom == PullToRefreshBase.Mode.PULL_FROM_START) {
-                     if (commentAdapter == null) {
+                    if (commentAdapter == null) {
                         commentAdapter = new CommentAdapter(getContext(), commentList, myCommentPresenter);
                         commentAdapter.setAdapterFromStatus(fromFragment == 0 ? 1 : 2);
                         rvMessage.setAdapter(commentAdapter);

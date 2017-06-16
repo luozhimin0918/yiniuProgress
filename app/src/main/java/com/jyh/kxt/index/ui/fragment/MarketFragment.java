@@ -136,8 +136,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
-                    .placeholder(R.mipmap
-                            .icon_user_def_photo).into(ivLeftIcon);
+                    .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
@@ -212,7 +211,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     public void onResume() {
         super.onResume();
         try {
-            if (!isHidden()) {
+            if (isResumed()) {
                 ((MarketVPFragment) marketVPFragment).sendSocketParams();
             }
         } catch (Exception e) {

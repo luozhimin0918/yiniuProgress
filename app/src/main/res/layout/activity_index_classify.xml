@@ -10,20 +10,20 @@
 
     <include layout="@layout/action_bar3"/>
 
-    <!--<com.jyh.kxt.base.widget.OptionLayout-->
-    <!--android:id="@+id/ol_content"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_margin="10dp"-->
-    <!--app:columnSpace="25dp"-->
-    <!--app:checkBoxBackground="@drawable/bg_classify_default"-->
-    <!--app:defaultFontColor="@color/font_color5"-->
-    <!--app:selectedFontColor="@color/font_color8"-->
-    <!--app:itemHeight="40dp"-->
-    <!--app:rowSpace="15dp"-->
-    <!--/>-->
+    <com.jyh.kxt.base.widget.OptionLayout
+    android:id="@+id/ol_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    app:columnSpace="25dp"
+    app:checkBoxBackground="@drawable/bg_classify_default"
+    app:defaultFontColor="@color/font_color5"
+    app:selectedFontColor="@color/font_color8"
+    app:itemHeight="40dp"
+    app:rowSpace="15dp"
+    />
 
-    <com.library.widget.flowlayout.TagFlowLayout
+    <!--<com.library.widget.flowlayout.TagFlowLayout
         android:id="@+id/ol_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +32,6 @@
         android:paddingTop="@dimen/searchPadding3"
         zhy:auto_select_effect="false"
         zhy:max_select="-1"
-        />
+        />-->
 
 </LinearLayout>

@@ -69,4 +69,8 @@ public class RollDotViewPager extends FrameLayout implements ViewPager.OnPageCha
         rollDotView.onChangeTheme();
         rollViewPager.onChangeTheme();
     }
+
+    public void setShowPaddingLine(boolean showPaddingLine) {
+        rollViewPager.setShowPaddingLine(showPaddingLine);
+    }
 }

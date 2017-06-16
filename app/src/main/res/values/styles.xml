@@ -17,6 +17,11 @@
     <style name="VideoTheme" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
+    <style name="windowIsTranslucent" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 
     <style name="PopupWindow_Style1" mce_bogus="1" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/pop_window1_in</item>

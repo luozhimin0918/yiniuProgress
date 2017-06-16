@@ -89,8 +89,8 @@ public class RollDotView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 
-        int measureWidth = SystemUtil.dp2px(getContext(), circleSize * circleCount) + circlePadding * circleCount;
-        int measureHeight = SystemUtil.dp2px(getContext(), circleSize + circlePadding);
+        int measureWidth = (circleSize * 2) * circleCount + circlePadding * circleCount - circlePadding;
+        int measureHeight = circleSize + circleSize;
         setMeasuredDimension(measureWidth, measureHeight);
 
     }

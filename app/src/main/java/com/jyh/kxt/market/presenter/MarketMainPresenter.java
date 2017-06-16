@@ -111,7 +111,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         volleyRequest.doGet(HttpConstant.MARKET_INDEX, json, new HttpListener<List<TypeDataJson>>() {
             @Override
             protected void onResponse(List<TypeDataJson> marketMainList) {
-
+                marketItemFragment.pageLoadLayout.loadOver();
                 for (TypeDataJson marketBean : marketMainList) {
 
                     String name = marketBean.getType();
@@ -159,6 +159,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                marketItemFragment.pageLoadLayout.loadError();
                 super.onErrorResponse(error);
             }
         });

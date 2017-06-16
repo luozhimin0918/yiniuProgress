@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -58,6 +57,7 @@ import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
+import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
@@ -300,7 +300,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (DoubleClickUtils.isFastDoubleClick(2000)) {
-                try {
+                /*try {
                     int currentVersion = Build.VERSION.SDK_INT;
                     if (currentVersion > Build.VERSION_CODES.ECLAIR_MR1) {
                         Intent startMain = new Intent(Intent.ACTION_MAIN);
@@ -317,6 +317,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                */
+                ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
+                android.os.Process.killProcess(android.os.Process.myPid());
 
                 ThemeUtil.removeAllCache();
                 ActivityManager.getInstance().finishAllActivity();

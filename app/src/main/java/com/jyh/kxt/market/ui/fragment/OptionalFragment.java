@@ -27,6 +27,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -87,6 +88,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
         marketMainItemAdapter = new MarketMainItemAdapter(getContext(), marketItemList);
         ptrContent.setAdapter(marketMainItemAdapter);
+        ptrContent.setMode(PullToRefreshBase.Mode.DISABLED);
         /*
          * 开始进行Socket通信
          */

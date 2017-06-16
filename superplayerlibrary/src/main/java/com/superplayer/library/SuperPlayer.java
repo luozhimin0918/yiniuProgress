@@ -134,7 +134,7 @@ public class SuperPlayer extends RelativeLayout {
     public SuperPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        if(isInEditMode()){
+        if (isInEditMode()) {
             return;
         }
 
@@ -637,13 +637,12 @@ public class SuperPlayer extends RelativeLayout {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    int surfaceHeight ;
+                    int surfaceHeight;
 
                     setFullScreen(!portrait);
                     if (portrait) {
                         int mShowFlags =
-                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                View.SYSTEM_UI_FLAG_FULLSCREEN
                                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                         | View.INVISIBLE;
                         setSystemUiVisibility(mShowFlags);

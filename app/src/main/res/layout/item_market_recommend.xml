@@ -5,9 +5,6 @@
     <data>
 
         <variable
-            name="layoutBg"
-            type="int"/>
-        <variable
             name="nameFontColor"
             type="int"/>
 
@@ -20,7 +17,7 @@
         android:id="@+id/rl_rootView"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:background="@{layoutBg }"
+        android:background="@{bean.bgItemColor}"
         android:paddingBottom="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"

@@ -9,11 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.market.adapter.MarketGridAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ public class RollViewPager extends ViewPager {
     private ViewPagerAdapter viewPagerAdapter;
     private int mGridMaxCount;
     private List dataList;
+    private boolean showPaddingLine = true;
 
     public RollViewPager(Context context) {
         this(context, null);
@@ -86,20 +87,26 @@ public class RollViewPager extends ViewPager {
 
         viewPagerAdapter = new ViewPagerAdapter(groupViewList);
         setAdapter(viewPagerAdapter);
+
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+            }
+        },500);
+
     }
 
     public GridView getGridView() {
-
-        int bgColor = ContextCompat.getColor(getContext(), R.color.theme1);
-
         GridView itemPageGridView = new GridView(getContext());
+
         itemPageGridView.setMotionEventSplittingEnabled(false);
         itemPageGridView.setNumColumns(3);
-        itemPageGridView.setBackgroundColor(bgColor);
+        itemPageGridView.setBackgroundColor(Color.TRANSPARENT);
         itemPageGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         itemPageGridView.setCacheColorHint(0);
-        itemPageGridView.setHorizontalSpacing(1);
-        itemPageGridView.setVerticalSpacing(1);
+        itemPageGridView.setHorizontalSpacing(showPaddingLine ? 1 : 0);
+        itemPageGridView.setVerticalSpacing(showPaddingLine ? 1 : 0);
         itemPageGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         itemPageGridView.setGravity(Gravity.CENTER);
         itemPageGridView.setVerticalScrollBarEnabled(false);
@@ -167,16 +174,25 @@ public class RollViewPager extends ViewPager {
                 for (View mItemView : groupViewList) {
                     GridView mGridView = (GridView) mItemView;
                     ListAdapter adapter = mGridView.getAdapter();
-                    if (adapter instanceof BaseAdapter) {
-                        BaseAdapter gridAdapter = (BaseAdapter) adapter;
+                    if (adapter instanceof MarketGridAdapter) {
+                        MarketGridAdapter gridAdapter = (MarketGridAdapter) adapter;
                         gridAdapter.notifyDataSetChanged();
+                        gridAdapter.updateLayoutColor();
                     }
-                    mItemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
                 }
                 viewPagerAdapter.notifyDataSetChanged();
+                this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isShowPaddingLine() {
+        return showPaddingLine;
+    }
+
+    public void setShowPaddingLine(boolean showPaddingLine) {
+        this.showPaddingLine = showPaddingLine;
     }
 }

@@ -36,7 +36,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         String errorInfo = ex.getMessage() + "\n";
         try {
-            errorInfo += ex.getCause().getCause().toString() + "\n";
             StackTraceElement[] stackTrace = ex.getStackTrace();
 
             for (int i = 0; i < stackTrace.length; i++) {

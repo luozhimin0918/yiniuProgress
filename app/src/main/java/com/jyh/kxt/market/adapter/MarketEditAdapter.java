@@ -103,7 +103,7 @@ public class MarketEditAdapter extends RecyclerView.Adapter<MarketEditAdapter.It
         } else if (selectedCount == listContent.size() && !marketEditActivity.cbCompleteChecked.isChecked()) {
             marketEditActivity.cbCompleteChecked.setChecked(true);
         } else if (selectedCount != 0 && !marketEditActivity.cbCompleteChecked.isChecked()) {
-            marketEditActivity.cbCompleteChecked.setChecked(true);
+            marketEditActivity.cbCompleteChecked.setChecked(false);
         }
 
         marketEditActivity.tvSelectedCount.setText("删除(" + selectedCount + ")");

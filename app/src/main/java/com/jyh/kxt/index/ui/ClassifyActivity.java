@@ -3,7 +3,6 @@ package com.jyh.kxt.index.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,9 +13,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.widget.OptionLayout;
 import com.jyh.kxt.index.presenter.ClassifyPresenter;
-import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.flowlayout.TagAdapter;
-import com.library.widget.flowlayout.TagFlowLayout;
 
 import java.util.Arrays;
 
@@ -35,7 +32,7 @@ public class ClassifyActivity extends BaseActivity {
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
-    @BindView(R.id.ol_content) TagFlowLayout olContent;
+    @BindView(R.id.ol_content) OptionLayout olContent;
     private ClassifyPresenter classifyPresenter;
 
     private int index;
@@ -45,7 +42,7 @@ public class ClassifyActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.activity_anim2,R.anim.activity_out1);
+        overridePendingTransition(R.anim.activity_anim6, 0);
 
         setContentView(R.layout.activity_index_classify, StatusBarColor.THEME1);
         classifyPresenter = new ClassifyPresenter(this);
@@ -57,7 +54,23 @@ public class ClassifyActivity extends BaseActivity {
         index = getIntent().getIntExtra(IntentConstant.INDEX, 0);
         tabs = getIntent().getStringArrayExtra(IntentConstant.ACTIONNAV);
 
-        if (tagAdapter == null) {
+        olContent.generateCheckBox(Arrays.asList(tabs));
+        olContent.setMinSelectCount(1);
+        olContent.setMaxSelectCount(1);
+        olContent.setSelectItemIndex(index);
+
+        olContent.setSelectMode(OptionLayout.SelectMode.RadioMode);
+        olContent.setOnItemCheckBoxClick(new OptionLayout.OnItemCheckBoxClick() {
+            @Override
+            public void onItemClick(int position, CheckBox mCheckBox) {
+                Intent intent = new Intent();
+                intent.putExtra(IntentConstant.INDEX, position);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+        });
+
+       /* if (tagAdapter == null) {
             tagAdapter = new TagAdapter<String>(tabs) {
                 @Override
                 public View getView(FlowLayout parent, int position, String s) {
@@ -82,7 +95,7 @@ public class ClassifyActivity extends BaseActivity {
                 finish();
                 return false;
             }
-        });
+        });*/
 
     }
 
@@ -103,5 +116,11 @@ public class ClassifyActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.activity_anim7);
     }
 }

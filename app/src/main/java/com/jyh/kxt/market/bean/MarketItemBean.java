@@ -35,6 +35,8 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     //前一次价格
     private String aborPrice = "0";
 
+    @Bindable private int bgItemColor;
+
     public void setChange(String change) {
         this.change = change;
         notifyPropertyChanged(BR.change);
@@ -109,6 +111,15 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
 
     public void setAborPrice(String aborPrice) {
         this.aborPrice = aborPrice;
+    }
+
+    public int getBgItemColor() {
+        return bgItemColor;
+    }
+
+    public void setBgItemColor(int bgItemColor) {
+        this.bgItemColor = bgItemColor;
+        notifyPropertyChanged(BR.bgItemColor);
     }
 
     @Override

@@ -135,7 +135,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private int commentCount;
     private FunctionAdapter functionAdapter;
     private String font;//字体大小
-    private String type;
+    private String type = VarConstant.OCLASS_ARTICLE;
     private String imgStr;
 
     @Override
@@ -145,7 +145,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         setContentView(R.layout.activity_news_content, StatusBarColor.THEME1);
 
         objectId = getIntent().getStringExtra(IntentConstant.O_ID);//获取传递过来的Id
-        type = getIntent().getStringExtra(IntentConstant.TYPE);
+        String typeIntent = getIntent().getStringExtra(IntentConstant.TYPE);
+        type = typeIntent == null ? type : typeIntent;
+
         isGood = NativeStore.isThumbSucceed(this, VarConstant.GOOD_TYPE_NEWS, objectId);
         ivGood.setSelected(isGood);
 

@@ -56,7 +56,7 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
         dataBinding.setBean(marketItemBean);
 
         int bgColor = ContextCompat.getColor(mContext, R.color.theme1);
-        dataBinding.setLayoutBg(bgColor);
+        marketItemBean.setBgItemColor(bgColor);
 
         int nameFontColor = ContextCompat.getColor(mContext, R.color.font_color5);
         dataBinding.setNameFontColor(nameFontColor);
@@ -83,6 +83,13 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
 
         public void setDataBinding(ItemMarketRecommendBinding dataBinding) {
             this.dataBinding = dataBinding;
+        }
+    }
+
+    public void updateLayoutColor() {
+        int bgColor = ContextCompat.getColor(mContext, R.color.theme1);
+        for (MarketItemBean marketItemBean : dataList) {
+            marketItemBean.setBgItemColor(bgColor);
         }
     }
 }

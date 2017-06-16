@@ -118,7 +118,7 @@ def getApplyResourceMappingPath() {
 }
 
 def getTinkerIdValue() {
-    return "test1"/* hasProperty("TINKER_ID") ? TINKER_ID : gitSha()*/
+    return hasProperty("TINKER_ID") ? TINKER_ID : gitSha()
 }
 
 def buildWithTinker() {
@@ -180,7 +180,7 @@ if (buildWithTinker()) {
     }
 
     List<String> flavors = new ArrayList<>();
-    project.android.productFlavors.each {flavor ->
+    project.android.productFlavors.each { flavor ->
         flavors.add(flavor.name)
     }
     boolean hasFlavors = flavors.size() > 0

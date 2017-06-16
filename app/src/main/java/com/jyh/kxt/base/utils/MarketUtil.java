@@ -103,9 +103,14 @@ public class MarketUtil {
             double lastPrice = Double.valueOf(marketItemBean.getPrice());
 
             //大于等于上一次 涨
-            if (lastPrice >= aborPrice) {
+            if (lastPrice > aborPrice) {
                 int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
                 tvLabel.setTextColor(fontColor);
+            } else if (lastPrice < aborPrice) {
+                int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
+                tvLabel.setTextColor(fontColor);
+            } else {
+                return;
             }
 
             tvLabel.setScaleX(1.1f);

@@ -156,6 +156,7 @@ public class NewsContentPresenter extends BasePresenter {
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                newsContentActivity.pllContent.loadError();
                 try {
                     tvLoadMore.setText("暂无更多评论");
                     tvLoadMore.setTag("idle");

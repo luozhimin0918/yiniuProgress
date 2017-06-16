@@ -345,8 +345,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
-                    .placeholder(R.mipmap
-                            .icon_user_def_photo).into(ivLeftIcon);
+                    .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
         }
     }
 
@@ -405,7 +404,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     public void onResume() {
         super.onResume();
         try {
-            if (!isHidden()) { //没有被隐藏
+            if (isResumed()) { //没有被隐藏
                 if (newsFragment != null) {
                     newsFragment.sendSocketParams();
                 }

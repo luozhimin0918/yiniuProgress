@@ -35,13 +35,14 @@ import static com.jyh.kxt.R.id.iv_emoji;
 public class ReplyMessagePresenter extends BasePresenter {
 
     @BindView(R.id.tv_publish) TextView tvPublish;
-    @BindView(R.id.fl_emoje) FrameLayout flEmoJe;
+    @BindView(R.id.fl_emoje) public FrameLayout flEmoJe;
     @BindView(R.id.iv_emoji) ImageView ivEmoJeState;
     @BindView(R.id.tv_max_length) TextView tvMaxLength;
 
     @BindView(R.id.eet_content) EmoticonsEditText eetContent;
 
     public boolean isShowEmoJiView = false;
+    private boolean isAdjustEmoJeView = true;
 
     private View replyMessageView;
     private EmoticonLinearLayout emoJeContentView;
@@ -62,6 +63,7 @@ public class ReplyMessagePresenter extends BasePresenter {
         this.replyMessageView = replyMessageView;
         this.replyMessagePopup = replyMessagePopup;
         this.onCommentPublishListener = onCommentPublishListener;
+//        flEmoJe.setVisibility(View.VISIBLE);
 
         this.eetContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -130,9 +132,11 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
 
         if (isShowEmoJiView) {
+//            flEmoJe.setVisibility(View.VISIBLE);
             flEmoJe.addView(emoJeContentView);
             ivEmoJeState.setImageResource(R.mipmap.ico_keybor);
         } else {
+//            flEmoJe.setVisibility(View.GONE);
             ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
             flEmoJe.removeView(emoJeContentView);
         }
@@ -146,6 +150,7 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     public void goneEmoJeView() {
+//        flEmoJe.setVisibility(View.GONE);
         if (emoJeContentView != null) {
             flEmoJe.removeView(emoJeContentView);
             ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
@@ -155,7 +160,8 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     public void adjustEmoJeView(int height) {
-        if (flEmoJe != null) {
+        if (flEmoJe != null /*&& isAdjustEmoJeView*/) {
+            isAdjustEmoJeView = false;
             int emoJeWidth = replyMessageView.getWidth();
 
             ViewGroup.LayoutParams layoutParams = flEmoJe.getLayoutParams();

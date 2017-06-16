@@ -41,12 +41,20 @@ import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VolleySyncHttp;
+import com.library.util.FileUtils;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
 import com.library.widget.window.ToastView;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -118,6 +126,7 @@ public class MainPresenter extends BasePresenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
             }
         }).subscribeOn(Schedulers.newThread())
@@ -409,6 +418,35 @@ public class MainPresenter extends BasePresenter {
         public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
             DiskLruCacheUtils.getInstance(context).putDiskLruCache(url, bitmap);
         }
+    }
+
+    private void downPatch() {
+        String patchUrl = "http://dzs.qisuu.com/txt/%E7%BE%8E%E6%BC%AB%E8%B6%85%E8%83%BD%E5%8A%9B%E5%85%91%E6%8D%A2" +
+                "%E7%B3%BB%E7%BB%9F.txt";
+
+        try {
+            URL url = new URL(patchUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            String saveFilePath = FileUtils.getSaveFilePath(mContext);
+            File file = new File(saveFilePath);
+
+            InputStream input = conn.getInputStream();
+            if (file.exists()) {
+                System.out.println("exits");
+                return;
+            } else {
+                FileOutputStream output = new FileOutputStream(file);
+                //读取大文件
+                byte[] buffer = new byte[4 * 1024];
+                while (input.read(buffer) != -1) {
+                    output.write(buffer);
+                }
+                output.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public class getShareInfoInterface {

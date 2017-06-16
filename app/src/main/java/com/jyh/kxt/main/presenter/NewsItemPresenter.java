@@ -397,6 +397,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
 
         mRollDotViewPager = new RollDotViewPager(mContext);
+        mRollDotViewPager.setShowPaddingLine(false);
         RollViewPager recommendView = mRollDotViewPager.getRollViewPager();
         recommendView
                 .setGridMaxCount(3)
@@ -412,7 +413,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                SystemUtil.dp2px(mContext, 120));
+                SystemUtil.dp2px(mContext, 115));
 
         mRollDotViewPager.setLayoutParams(lp);
         homeHeadView.addView(mRollDotViewPager);

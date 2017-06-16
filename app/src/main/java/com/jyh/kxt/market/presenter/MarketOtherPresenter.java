@@ -47,11 +47,10 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
 
             @Override
             protected void onResponse(final List<MarketItemBean> marketList) {
+                marketItemFragment.pageLoadLayout.loadOver();
                 marketDataList.clear();
                 marketCodeList.clear();
                 marketItemFragment.marketMap.clear();
-
-                marketItemFragment.pageLoadLayout.loadOver();
 
                 if (marketMainItemAdapter == null) {
                     marketDataList.addAll(marketList);
@@ -76,7 +75,7 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
             }
 
             @Override
-            protected void onErrorResponse(VolleyError error) {
+            protected void onErrorResponse(VolleyError error) {  marketItemFragment.pageLoadLayout.loadError();
                 super.onErrorResponse(error);
             }
         });

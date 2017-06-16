@@ -69,6 +69,8 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
 
     @Override
     public void userVisibleHint() {
+        pageLoadLayout.loadWait();
+
         marketVPFragment = (MarketVPFragment) getParentFragment();
         navBean = marketVPFragment.getNavBean(this);
 

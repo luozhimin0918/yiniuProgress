@@ -59,6 +59,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".index.ui.ClassifyActivity"
+            android:theme="@style/windowIsTranslucent"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".index.ui.SearchActivity"
@@ -76,6 +77,7 @@
             android:name=".av.ui.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/VideoTheme">
         </activity>
 

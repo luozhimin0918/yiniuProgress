@@ -200,23 +200,26 @@ public class CommentAdapter extends BaseAdapter {
                 baseViewHolder.llReplyContent.removeAllViews();
 
                 List<CommentBean> reply = commentBean.getReply();
-                for (CommentBean mCommentBean : reply) {
+                if (reply != null) {
+                    for (CommentBean mCommentBean : reply) {
 
-                    View spanView = new View(mContext);
-                    spanView.setBackgroundResource(com.library.R.color.line_background1);
-                    spanView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
-                    baseViewHolder.llReplyContent.addView(spanView);
+                        View spanView = new View(mContext);
+                        spanView.setBackgroundResource(com.library.R.color.line_background1);
+                        spanView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams
+                                .MATCH_PARENT, 1));
+                        baseViewHolder.llReplyContent.addView(spanView);
 
-                    View replyContentView = LayoutInflater.from(mContext).inflate(
-                            R.layout.item_comment_type1,
-                            baseViewHolder.llReplyContent,
-                            false);
+                        View replyContentView = LayoutInflater.from(mContext).inflate(
+                                R.layout.item_comment_type1,
+                                baseViewHolder.llReplyContent,
+                                false);
 
-                    ViewHolder1 viewHolder1 = new ViewHolder1(replyContentView);
-                    holderLogic(viewHolder1, mCommentBean);
+                        ViewHolder1 viewHolder1 = new ViewHolder1(replyContentView);
+                        holderLogic(viewHolder1, mCommentBean);
 
-                    baseViewHolder.llReplyContent.addView(replyContentView);
+                        baseViewHolder.llReplyContent.addView(replyContentView);
 
+                    }
                 }
                 break;
         }

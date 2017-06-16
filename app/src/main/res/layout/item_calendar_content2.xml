@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="15dp">
+    android:paddingTop="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -46,7 +48,7 @@
             android:layout_marginRight="38dp"
             android:layout_toLeftOf="@+id/tv_time"
             android:textColor="@color/font_color5"
-            android:textSize="@dimen/describe_font_size2"/>
+            android:textSize="@dimen/describe_font_size4"/>
 
         <TextView
             android:id="@+id/tv_time"

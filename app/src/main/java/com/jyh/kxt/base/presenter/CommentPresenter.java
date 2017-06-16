@@ -306,10 +306,17 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         }
         replyMessagePresenter.isShowEmoJiView = false;
 
-        replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+//        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         InputMethodManager imm = (InputMethodManager) mBaseActivity.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+//        int mShowFlags =
+//                View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.INVISIBLE;
+//        showAtLocation.setSystemUiVisibility(mShowFlags);
 
         replyMessagePopup.showAtLocation(showAtLocation, Gravity.BOTTOM, 0, 0);
 
