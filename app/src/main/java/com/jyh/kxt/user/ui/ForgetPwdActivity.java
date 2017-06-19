@@ -1,23 +1,17 @@
 package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.util.validation.EmailValidation;
-import com.jyh.kxt.base.util.validation.PwdValidation;
-import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
-import com.library.util.RegexValidateUtil;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
 
@@ -39,7 +33,7 @@ public class ForgetPwdActivity extends BaseActivity {
     @BindView(R.id.edt_email) EditText edtEmail;
     @BindView(R.id.iv_clear) ImageView ivClear;
     @BindView(R.id.tv_error) TextView tvError;
-    @BindView(R.id.btn_send) Button btnSend;
+    @BindView(R.id.btn_send) DiscolorButton btnSend;
 
     private ForgetPwdPresenter forgetPwdPresenter;
 

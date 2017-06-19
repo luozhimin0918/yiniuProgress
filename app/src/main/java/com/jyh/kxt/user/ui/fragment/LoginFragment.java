@@ -2,9 +2,6 @@ package com.jyh.kxt.user.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,18 +18,14 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.LineEditText;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.ChangePwdActivity;
 import com.jyh.kxt.user.ui.ForgetPwdActivity;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
-import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -42,7 +35,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 /**
  * 项目名:Kxt

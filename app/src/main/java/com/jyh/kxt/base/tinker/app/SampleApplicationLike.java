@@ -42,6 +42,9 @@ import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
 import com.umeng.message.common.UmLog;
 
+import cn.magicwindow.MWConfiguration;
+import cn.magicwindow.MagicWindowSDK;
+
 
 /**
  * because you can not use any other class in your application, we need to
@@ -66,8 +69,8 @@ import com.umeng.message.common.UmLog;
  */
 @SuppressWarnings("unused")
 @DefaultLifeCycle(application = "com.jyh.kxt.KXTApplication",
-                  flags = ShareConstants.TINKER_ENABLE_ALL,
-                  loadVerifyFlag = false)
+        flags = ShareConstants.TINKER_ENABLE_ALL,
+        loadVerifyFlag = false)
 public class SampleApplicationLike extends DefaultApplicationLike {
     private static final String TAG = "Tinker.SampleApplicationLike";
 
@@ -140,13 +143,21 @@ public class SampleApplicationLike extends DefaultApplicationLike {
             }
         });
 
-        CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(SampleApplicationContext.context);
-        
+//        CrashHandler crashHandler = new CrashHandler();
+//        crashHandler.init(SampleApplicationContext.context);
+
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
         //避免启动慢的问题
         Intent intent = new Intent(SampleApplicationContext.context, PreLoadX5Service.class);
         SampleApplicationContext.context.startService(intent);
+
+        //魔窗sdk初始化
+        MWConfiguration config = new MWConfiguration(SampleApplicationContext.context);
+        config.setLogEnable(true)//开启Debug模式，显示Log，release时注意关闭
+                .setPageTrackWithFragment(true)
+                .setWebViewBroadcastOpen(true)
+                .setMLinkOpen();
+        MagicWindowSDK.initSDK(config);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

@@ -38,9 +38,12 @@ import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.BitmapUtils;
 import com.library.util.LogUtil;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -145,6 +148,14 @@ public class MarketDetailActivity extends BaseActivity {
 
             lwvContent.build();
             lwvContent.loadUrl(quotesChartUrl);
+            lwvContent.getWebView().setWebChromeClient(new WebChromeClient(){
+                @Override
+                public void onReceivedTitle(WebView webView, String s) {
+                    super.onReceivedTitle(webView, s);
+                    if(!RegexValidateUtil.isEmpty(s))
+                    tvBarTitle.setText(s);
+                }
+            });
             verifyOptionAppend();
 
             tvBarTitle.setText(marketItemBean.getName());

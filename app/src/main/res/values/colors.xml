@@ -21,7 +21,7 @@
 
     <color name="line_color">#ff888888</color>
     <color name="line_color2">#fff7f7f7</color>
-    <color name="line_color3">#EDEDED</color>
+    <color name="line_color3">#d9d9d9</color>
     <color name="line_color4">#51606A</color>
     <color name="line_color5">#0A94f1</color>
     <color name="line_color6">#ededed</color>
@@ -59,8 +59,8 @@
     <color name="font_color11">#EA492A</color>
     <color name="font_color12">#464c56</color>
     <color name="font_color13">#99ffffff</color>
-    <color name="font_color14">#CCD4CF65</color>
-    <color name="font_color15">#C2BCB8</color>
+    <color name="font_color14">#CFCDC9</color>
+    <color name="font_color15">#C6BFB9</color>
     <color name="font_color16">#2E3239</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>

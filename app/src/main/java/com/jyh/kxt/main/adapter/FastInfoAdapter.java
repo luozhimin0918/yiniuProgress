@@ -1208,7 +1208,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         holder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
         holder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
         holder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
-        holder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        holder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color3));
         holder.ivCollect.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_flash_item_collect));
 
         if (VarConstant.IMPORTANCE_HIGH.equals(news.getImportance())) {
@@ -1225,7 +1225,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         rlHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
         rlHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
         rlHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
-        rlHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        rlHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color3));
         rlHolder.ivCollect.setBackground(ContextCompat.getDrawable(context, R.drawable.sel_flash_item_collect));
     }
 
@@ -1234,7 +1234,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         kxHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
         kxHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
         kxHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
-        kxHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color2));
+        kxHolder.vLine.setBackground(ContextCompat.getDrawable(context, R.color.line_color3));
         if (VarConstant.IMPORTANCE_HIGH.equals(kx.getImportance())) {
             kxHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
         } else {

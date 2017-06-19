@@ -61,7 +61,7 @@
         android:layout_height="1px"
         android:layout_below="@id/iv_share"
         android:layout_marginTop="@dimen/flash_bottom_padding"
-        android:background="@color/line_color2"
+        android:background="@color/line_color3"
         />
 
 </RelativeLayout>

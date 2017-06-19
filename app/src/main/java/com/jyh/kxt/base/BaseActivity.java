@@ -4,6 +4,7 @@ package com.jyh.kxt.base;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,9 @@ import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 import java.util.List;
+
+import cn.magicwindow.MLinkAPIFactory;
+import cn.magicwindow.Session;
 
 
 /**
@@ -86,7 +90,19 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Uri mLink = getIntent().getData();
+        if (mLink != null) {
+            MLinkAPIFactory.createAPI(this).router(mLink);
+        } else {
+            MLinkAPIFactory.createAPI(this).checkYYB();
+        }
+    }
+
+    @Override
     protected void onResume() {
+        Session.onResume(this);
         super.onResume();
 
         boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
@@ -285,4 +301,11 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onPause() {
+        Session.onPause(this);
+        super.onPause();
+    }
+
 }

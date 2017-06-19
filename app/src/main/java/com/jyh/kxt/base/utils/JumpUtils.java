@@ -1,44 +1,36 @@
 package com.jyh.kxt.base.utils;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.databinding.tool.util.L;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.format.DateFormat;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.RadioButton;
 
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
-import com.jyh.kxt.index.ui.BrowerHistoryActivity;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.SearchActivity;
 import com.jyh.kxt.index.ui.WebActivity;
-import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.main.ui.activity.DpActivity;
 import com.jyh.kxt.main.ui.activity.FlashActivity;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
-import com.jyh.kxt.market.bean.MarketNavBean;
+import com.jyh.kxt.main.ui.fragment.NewsFragment;
+import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.library.base.http.VarConstant;
-import com.jyh.kxt.base.json.JumpJson;
 import com.library.manager.ActivityManager;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
-import com.library.util.SystemUtil;
 
-import java.util.List;
+import cn.magicwindow.MLink;
+import cn.magicwindow.MLinkAPIFactory;
 
 /**
  * 项目名:Kxt
@@ -114,26 +106,86 @@ public class JumpUtils {
      * @param o_action
      * @param o_id
      */
-    private static void jumpQuotes(BaseActivity context, String o_action, String o_id) {
+    private static void jumpQuotes(BaseActivity context, String o_action, final String o_id) throws Exception {
         if (context instanceof MainActivity) {
             switch (o_action) {
                 case VarConstant.OACTION_DETAIL:
+                    //行情详情
+                    Intent marketIntent = new Intent(context, MarketDetailActivity.class);
+                    MarketItemBean marketBean = new MarketItemBean();
+                    marketBean.setCode(o_id);
+                    marketIntent.putExtra(IntentConstant.MARKET, marketBean);
+                    context.startActivity(marketIntent);
                     break;
                 case VarConstant.OACTION_INDEX:
-                case VarConstant.OACTION_LIST:
-                    break;
-                case VarConstant.OACTION_ZX:
+                    //行情首页
                     final MainActivity mainActivity = (MainActivity) context;
                     RadioButton rbMarket = mainActivity.rbMarket;
                     boolean rbMarketChecked = rbMarket.isChecked();
                     if (rbMarketChecked) {
-                        mainActivity.marketFragment.onTabSelect(1);
+                        mainActivity.marketFragment.onTabSelect(0);
                     } else {
                         rbMarket.performClick();
                         rbMarket.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                mainActivity.marketFragment.onTabSelect(1);
+                                mainActivity.marketFragment.onTabSelect(0);
+                            }
+                        }, 200);
+                    }
+                    break;
+                case VarConstant.OACTION_LIST:
+                    //行情列表
+                    final MainActivity mainActivityList = (MainActivity) context;
+                    RadioButton rbMarketList = mainActivityList.rbMarket;
+                    boolean rbMarketCheckedList = rbMarketList.isChecked();
+                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment.marketVPFragment;
+                    if (rbMarketCheckedList) {
+                        mainActivityList.marketFragment.onTabSelect(0);
+                        String[] tabs = marketVPFragment.getTabs();
+                        if (tabs == null || tabs.length == 0) {
+                            marketVPFragment.setSelTab(o_id);
+                        } else {
+                            int length = tabs.length;
+                            for (int i = 0; i < length; i++) {
+                                if (tabs[i].equals(o_id)) {
+                                    marketVPFragment.stlNavigationBar.setCurrentTab(i);
+                                }
+                            }
+                        }
+                    } else {
+                        rbMarketList.performClick();
+                        rbMarketList.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                String[] tabs = marketVPFragment.getTabs();
+                                if (tabs == null || tabs.length == 0) {
+                                    marketVPFragment.setSelTab(o_id);
+                                } else {
+                                    int length = tabs.length;
+                                    for (int i = 0; i < length; i++) {
+                                        if (tabs[i].equals(o_id)) {
+                                            marketVPFragment.stlNavigationBar.setCurrentTab(i);
+                                        }
+                                    }
+                                }
+                            }
+                        }, 200);
+                    }
+                    break;
+                case VarConstant.OACTION_ZX:
+                    //行情自选
+                    final MainActivity mainActivityZx = (MainActivity) context;
+                    RadioButton rbMarketZx = mainActivityZx.rbMarket;
+                    boolean rbMarketCheckedZx = rbMarketZx.isChecked();
+                    if (rbMarketCheckedZx) {
+                        mainActivityZx.marketFragment.onTabSelect(1);
+                    } else {
+                        rbMarketZx.performClick();
+                        rbMarketZx.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainActivityZx.marketFragment.onTabSelect(1);
                             }
                         }, 200);
                     }
@@ -144,11 +196,86 @@ public class JumpUtils {
         } else {
             switch (o_action) {
                 case VarConstant.OACTION_DETAIL:
+                    //行情详情
+                    Intent marketIntent = new Intent(context, MarketDetailActivity.class);
+                    MarketItemBean marketBean = new MarketItemBean();
+                    marketBean.setCode(o_id);
+                    marketIntent.putExtra(IntentConstant.MARKET, marketBean);
+                    context.startActivity(marketIntent);
                     break;
                 case VarConstant.OACTION_INDEX:
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    RadioButton rbMarket = mainActivity.rbMarket;
+                    boolean rbMarketChecked = rbMarket.isChecked();
+                    if (rbMarketChecked) {
+                        mainActivity.marketFragment.onTabSelect(0);
+                    } else {
+                        rbMarket.performClick();
+                        rbMarket.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainActivity.marketFragment.onTabSelect(0);
+                            }
+                        }, 200);
+                    }
+                    break;
                 case VarConstant.OACTION_LIST:
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
+                            .class);
+                    RadioButton rbMarketList = mainActivityList.rbMarket;
+                    boolean rbMarketCheckedList = rbMarketList.isChecked();
+                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment.marketVPFragment;
+                    if (rbMarketCheckedList) {
+                        mainActivityList.marketFragment.onTabSelect(0);
+                        String[] tabs = marketVPFragment.getTabs();
+                        if (tabs == null || tabs.length == 0) {
+                            marketVPFragment.setSelTab(o_id);
+                        } else {
+                            int length = tabs.length;
+                            for (int i = 0; i < length; i++) {
+                                if (tabs[i].equals(o_id)) {
+                                    marketVPFragment.stlNavigationBar.setCurrentTab(i);
+                                }
+                            }
+                        }
+                    } else {
+                        rbMarketList.performClick();
+                        rbMarketList.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                String[] tabs = marketVPFragment.getTabs();
+                                if (tabs == null || tabs.length == 0) {
+                                    marketVPFragment.setSelTab(o_id);
+                                } else {
+                                    int length = tabs.length;
+                                    for (int i = 0; i < length; i++) {
+                                        if (tabs[i].equals(o_id)) {
+                                            marketVPFragment.stlNavigationBar.setCurrentTab(i);
+                                        }
+                                    }
+                                }
+                            }
+                        }, 200);
+                    }
                     break;
                 case VarConstant.OACTION_ZX:
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    RadioButton rbMarketZx = mainActivityZx.rbMarket;
+                    boolean rbMarketCheckedZx = rbMarketZx.isChecked();
+                    if (rbMarketCheckedZx) {
+                        mainActivityZx.marketFragment.onTabSelect(1);
+                    } else {
+                        rbMarketZx.performClick();
+                        rbMarketZx.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainActivityZx.marketFragment.onTabSelect(1);
+                            }
+                        }, 200);
+                    }
                     break;
                 default:
                     break;
@@ -163,7 +290,7 @@ public class JumpUtils {
      * @param o_action
      * @param o_id
      */
-    private static void jumpNews(BaseActivity context, String o_action, String o_id) {
+    private static void jumpNews(BaseActivity context, String o_action, final String o_id) throws Exception {
         switch (o_action) {
             case VarConstant.OACTION_DIANPING:
                 Intent dpIntent = new Intent(context, DpActivity.class);
@@ -175,6 +302,85 @@ public class JumpUtils {
                 detailIntent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
                 context.startActivity(detailIntent);
                 break;
+            case VarConstant.OACTION_INDEX:
+                MainActivity mainActivity;
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
+                            .class);
+                }
+                final MainActivity mainActivityCopy = mainActivity;
+                RadioButton rbHome = mainActivity.rbHome;
+                rbHome.performClick();
+                boolean rbHomeChecked = rbHome.isChecked();
+                if (rbHomeChecked) {
+                    mainActivity.homeFragment.onTabSelect(0);
+                } else {
+                    rbHome.performClick();
+                    rbHome.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainActivityCopy.homeFragment.onTabSelect(0);
+                        }
+                    }, 200);
+                }
+                break;
+            case VarConstant.OACTION_LIST:
+                MainActivity mainActivityList;
+                if (context instanceof MainActivity) {
+                    mainActivityList = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
+                            .class);
+                }
+                final MainActivity mainActivityListCopy = mainActivityList;
+                RadioButton rbHomeList = mainActivityList.rbHome;
+                rbHomeList.performClick();
+                boolean rbHomeCheckedList = rbHomeList.isChecked();
+
+                final NewsFragment newsFragment = mainActivityList.homeFragment.newsFragment;
+
+                if (rbHomeCheckedList) {
+                    mainActivityList.homeFragment.onTabSelect(0);
+                    if (newsFragment != null) {
+                        String[] tabs = newsFragment.getTabs();
+                        if (tabs == null || tabs.length == 0) {
+                            newsFragment.setSelTab(o_id);
+                        } else {
+                            int length = tabs.length;
+                            for (int i = 0; i < length; i++) {
+                                if (tabs[i].equals(o_id)) {
+                                    newsFragment.stlNavigationBar.setCurrentTab(i);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    rbHomeList.performClick();
+                    rbHomeList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainActivityListCopy.homeFragment.onTabSelect(0);
+                            if (newsFragment != null) {
+                                String[] tabs = newsFragment.getTabs();
+                                if (tabs == null || tabs.length == 0) {
+                                    newsFragment.setSelTab(o_id);
+                                } else {
+                                    int length = tabs.length;
+                                    for (int i = 0; i < length; i++) {
+                                        if (tabs[i].equals(o_id)) {
+                                            newsFragment.stlNavigationBar.setCurrentTab(i);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }, 200);
+                }
+                break;
         }
     }
 
@@ -185,48 +391,39 @@ public class JumpUtils {
      * @param o_action
      * @param o_id
      */
-    private static void jumpFlash(BaseActivity context, String o_action, String o_id) {
+    private static void jumpFlash(BaseActivity context, String o_action, String o_id) throws Exception {
 
-        if (context instanceof MainActivity) {
-
-            switch (o_action) {
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, FlashActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-                case VarConstant.OACTION_INDEX:
-                case VarConstant.OACTION_LIST:
-                default:
-                    try {
-                        final MainActivity mainActivity = (MainActivity) context;
-                        RadioButton rbHomeFlash = mainActivity.rbHome;
-                        boolean checkedFlash = rbHomeFlash.isChecked();
-                        if (checkedFlash) {
-                            mainActivity.homeFragment.onTabSelect(1);
-                        } else {
-                            rbHomeFlash.performClick();
-                            rbHomeFlash.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mainActivity.homeFragment.onTabSelect(1);
-                                }
-                            }, 200);
+        switch (o_action) {
+            case VarConstant.OACTION_DETAIL:
+                Intent detailIntent = new Intent(context, FlashActivity.class);
+                detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(detailIntent);
+                break;
+            case VarConstant.OACTION_INDEX:
+            case VarConstant.OACTION_LIST:
+            default:
+                MainActivity mainActivity;
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
+                final MainActivity mainActivityCopy = mainActivity;
+                RadioButton rbHomeFlash = mainActivity.rbHome;
+                boolean checkedFlash = rbHomeFlash.isChecked();
+                if (checkedFlash) {
+                    mainActivity.homeFragment.onTabSelect(1);
+                } else {
+                    rbHomeFlash.performClick();
+                    rbHomeFlash.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainActivityCopy.homeFragment.onTabSelect(1);
                         }
-                    } catch (Exception e) {
-
-                    }
-
-                    break;
-            }
-        } else {
-            switch (o_action) {
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, FlashActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-            }
+                    }, 200);
+                }
+                break;
         }
     }
 
@@ -237,48 +434,38 @@ public class JumpUtils {
      * @param o_action
      * @param o_id
      */
-    private static void jumpVideo(BaseActivity context, String o_action, final String o_id) {
-        if (context instanceof MainActivity) {
-            final MainActivity mainActivity = (MainActivity) context;
-            switch (o_action) {
-                case VarConstant.OACTION_LIST:
-                    try {
-                        RadioButton rbAudio = mainActivity.rbAudioVisual;
-                        boolean videoChecked = rbAudio.isChecked();
-                        if (videoChecked) {
+    private static void jumpVideo(BaseActivity context, String o_action, final String o_id) throws Exception {
+        switch (o_action) {
+            case VarConstant.OACTION_LIST:
+                final MainActivity mainActivity;
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
+                RadioButton rbAudio = mainActivity.rbAudioVisual;
+                boolean videoChecked = rbAudio.isChecked();
+                if (videoChecked) {
+                    mainActivity.avFragment.onTabSelect(0);
+                    mainActivity.avFragment.videoFragment.setJumpId(o_id);
+                } else {
+                    rbAudio.performClick();
+                    final MainActivity mainActivityCopy = mainActivity;
+                    rbAudio.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             mainActivity.avFragment.onTabSelect(0);
-                            VideoFragment videoFragment = mainActivity.avFragment.videoFragment;
-                            videoFragment.setJumpId(o_id);
-                        } else {
-                            rbAudio.performClick();
-                            rbAudio.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mainActivity.avFragment.onTabSelect(0);
-                                    VideoFragment videoFragment = mainActivity.avFragment.videoFragment;
-                                    videoFragment.setJumpId(o_id);
-                                }
-                            }, 200);
+                            mainActivity.avFragment.videoFragment.setJumpId(o_id);
                         }
-                    } catch (Exception e) {
-
-                    }
-
-                    break;
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, VideoDetailActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-            }
-        } else {
-            switch (o_action) {
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, VideoDetailActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-            }
+                    }, 200);
+                }
+                break;
+            case VarConstant.OACTION_DETAIL:
+                Intent detailIntent = new Intent(context, VideoDetailActivity.class);
+                detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(detailIntent);
+                break;
         }
     }
 
@@ -291,74 +478,84 @@ public class JumpUtils {
      * @throws Exception
      */
     private static void jumpData(BaseActivity context, String o_action, String o_id) throws Exception {
-        if (context instanceof MainActivity) {
-            final MainActivity mainActivity = (MainActivity) context;
-            switch (o_action) {
-                case VarConstant.OACTION_LIST:
-                    RadioButton rbDatum = mainActivity.rbDatum;
-                    boolean rbDatumChecked = rbDatum.isChecked();
-                    if (rbDatumChecked) {
-                        mainActivity.datumFragment.onTabSelect(1);
-                    } else {
-                        rbDatum.performClick();
-                        rbDatum.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    mainActivity.datumFragment.onTabSelect(1);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+        switch (o_action) {
+            case VarConstant.OACTION_LIST:
+
+                MainActivity mainActivity;
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
+
+                RadioButton rbDatum = mainActivity.rbDatum;
+                boolean rbDatumChecked = rbDatum.isChecked();
+                if (rbDatumChecked) {
+                    mainActivity.datumFragment.onTabSelect(1);
+                } else {
+                    rbDatum.performClick();
+                    final MainActivity mainActivityCopy = mainActivity;
+                    rbDatum.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mainActivityCopy.datumFragment.onTabSelect(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        }, 200);
-                    }
-                    break;
-                case VarConstant.OACTION_RL:
-                    RadioButton rlDatum = mainActivity.rbDatum;
-                    boolean rlDatumChecked = rlDatum.isChecked();
-                    if (rlDatumChecked) {
-                        mainActivity.datumFragment.onTabSelect(0);
+                        }
+                    }, 200);
+                }
+                break;
+            case VarConstant.OACTION_RL:
 
-                        long timeInMillis = System.currentTimeMillis();
-                        String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
-                        long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
+                MainActivity mainActivityRl;
+                if (context instanceof MainActivity) {
+                    mainActivityRl = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivityRl = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
 
-                        mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
-                    } else {
-                        rlDatum.performClick();
-                        rlDatum.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    mainActivity.datumFragment.onTabSelect(0);
+                RadioButton rlDatum = mainActivityRl.rbDatum;
+                boolean rlDatumChecked = rlDatum.isChecked();
+                if (rlDatumChecked) {
+                    mainActivityRl.datumFragment.onTabSelect(0);
 
-                                    long timeInMillis = System.currentTimeMillis();
-                                    String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
-                                    long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
+                    long timeInMillis = System.currentTimeMillis();
+                    String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
+                    long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
 
-                                    mainActivity.datumFragment.gotoCorrespondItem(ymdLong);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                    mainActivityRl.datumFragment.gotoCorrespondItem(ymdLong);
+                } else {
+                    rlDatum.performClick();
+                    final MainActivity mainActivityCopy = mainActivityRl;
+                    rlDatum.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mainActivityCopy.datumFragment.onTabSelect(0);
+
+                                long timeInMillis = System.currentTimeMillis();
+                                String ymdStr = DateUtils.transformTime(timeInMillis, DateUtils.TYPE_YMD);
+                                long ymdLong = Long.parseLong(DateUtils.transfromTime(ymdStr, DateUtils.TYPE_YMD));
+
+                                mainActivityCopy.datumFragment.gotoCorrespondItem(ymdLong);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        }, 200);
-                    }
-                    break;
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, DatumHistoryActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-            }
-        } else {
-            switch (o_action) {
-                case VarConstant.OACTION_DETAIL:
-                    Intent detailIntent = new Intent(context, DatumHistoryActivity.class);
-                    detailIntent.putExtra(IntentConstant.O_ID, o_id);
-                    context.startActivity(detailIntent);
-                    break;
-            }
+                        }
+                    }, 200);
+                }
+                break;
+            case VarConstant.OACTION_DETAIL:
+                Intent detailIntent = new Intent(context, DatumHistoryActivity.class);
+                detailIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(detailIntent);
+                break;
         }
+
     }
 
     /**
@@ -427,6 +624,47 @@ public class JumpUtils {
                 //活动详情
                 break;
         }
+    }
+
+    public static void MwJump(Intent intent, BaseActivity activity) {
+        if (intent.getData() != null) {
+            if (intent.getData().getHost().equals("appapi.kxt.com")) {
+
+                String idStr = intent.getData().getQueryParameter("Id");
+                if (!TextUtils.isEmpty(idStr)) {
+                    MainActivity.mwId = idStr;
+                } else {
+                    MainActivity.mwId = null;
+                }
+                String typeStr = intent.getData().getQueryParameter("Type");
+                MainActivity.mwType = typeStr;
+
+                String pathStr = intent.getData().getPath();
+                if (!TextUtils.isEmpty(pathStr)) {
+                    MainActivity.mwPath = pathStr;
+                } else {
+                    MainActivity.mwPath = null;
+                }
+
+                //跳转后结束当前activity
+                MLink.getInstance(activity).router(activity, intent.getData());
+                activity.finish();
+            }
+        } else {
+            //如果需要应用宝跳转，则调用。否则不需要
+            MLink.getInstance(activity).checkYYB();
+        }
+
+        //跳转router调用
+        if (intent.getData() != null) {
+            MLinkAPIFactory.createAPI(activity).router(activity, intent.getData());
+            //跳转后结束当前activity
+            activity.finish();
+        } else {
+            //如果需要应用宝跳转，则调用。否则不需要
+            MLinkAPIFactory.createAPI(activity).checkYYB();
+        }
+
     }
 
 //    public static void jumpDetails(Activity content, String o_class, String o_id, String href) {

@@ -16,6 +16,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.market.bean.MarketNavBean;
 import com.jyh.kxt.market.presenter.MarketVPPresenter;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -41,6 +42,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
     private List<Fragment> marketItemList;
     public List<MarketNavBean> marketNavList;
     private String[] titles;
+    private String selTab = "";
 
     @OnClick(R.id.iv_more)
     public void onViewClick(View view) {
@@ -82,13 +84,17 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
         titles = new String[fragmentSize];
 
+        int selIndex = 0;
+
         for (int i = 0; i < fragmentSize; i++) {
             MarketNavBean marketNavBean = marketNavList.get(i);
 
             MarketItemFragment marketItemFragment = new MarketItemFragment();
             marketItemList.add(marketItemFragment);
-
             titles[i] = marketNavBean.getName();
+            if (!RegexValidateUtil.isEmpty(selTab) && selTab.equals(titles[i])) {
+                selIndex = i;
+            }
         }
 
 
@@ -105,6 +111,8 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         vpContent.setAdapter(pageAdapter);
         stlNavigationBar.setViewPager(vpContent, titles);
         vpContent.addOnPageChangeListener(this);
+
+        stlNavigationBar.setCurrentTab(selIndex);
     }
 
 
@@ -175,5 +183,13 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
             int index = data.getIntExtra(IntentConstant.INDEX, 0);
             stlNavigationBar.setCurrentTab(index);
         }
+    }
+
+    public String[] getTabs() {
+        return titles;
+    }
+
+    public void setSelTab(String selTab) {
+        this.selTab = selTab;
     }
 }

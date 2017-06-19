@@ -68,29 +68,6 @@ public class KXTPushIntentService extends UmengMessageService {
                 default:
                     break;
             }
-
-//
-//            NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-//
-//
-//            mBuilder.setContentTitle(msg.title)//设置通知栏标题
-//                    .setContentText(msg.text);
-//
-//            PendingIntent pendingIntent = PendingIntent.getActivities(context, 0,
-//                    intent, PendingIntent.FLAG_ONE_SHOT);//不是Intent
-//
-//            mBuilder.setContentIntent(pendingIntent) //设置通知栏点击意图
-//                    .setTicker(msg.title) //通知首次出现在通知栏，带上升动画效果的
-//                    .setPriority(Notification.PRIORITY_DEFAULT) //设置该通知优先级
-//                    .setOngoing(false)
-//                    .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
-//
-//            int id = (int) System.currentTimeMillis();
-//
-//            Notification build = mBuilder.build();
-//            build.flags = Notification.FLAG_AUTO_CANCEL;
-//            mNotificationManager.notify(id, build);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -69,7 +69,11 @@ public class ForgetPwdPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText("邮件发送失败").setDuration(TSnackbar.LENGTH_LONG)
+                String msg = "";
+                if (error != null && error.getMessage() != null) {
+                    msg = error.getMessage();
+                }
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(msg == null ? "邮件发送失败" : msg).setDuration(TSnackbar.LENGTH_LONG)
                         .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }

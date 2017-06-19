@@ -63,6 +63,31 @@ public class ActivityManager {
     }
 
     /**
+     * 将activity之上的所有activity移除
+     *
+     * @param activity
+     */
+    public void moveToStackPeekActivity(Class<?> activity) {
+        Activity singleActivity = getSingleActivity(activity);
+        if (singleActivity != null && activityStack != null) {
+            int size = activityStack.size();
+            int index = -1;
+            for (int i = 0; i < size; i++) {
+                if (singleActivity.equals(activityStack.get(i))) {
+                    index = i;
+                }
+            }
+            if (index != -1) {
+                for (int i = 0; i < size; i++) {
+                    if (i > index) {
+                        popOneActivity(activityStack.get(i));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 移除一个activity
      */
     public void popOneActivity(Activity activity) {

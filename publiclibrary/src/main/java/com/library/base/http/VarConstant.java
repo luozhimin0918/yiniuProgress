@@ -75,7 +75,7 @@ public class VarConstant {
     public static final String OACTION_LIST = "list";//列表
     public static final String OACTION_INDEX = "index";//首页
     public static final String OACTION_ETF = "etf";//ETF
-    public static final String OACTION_DETAIL = "detail";//ETF
+    public static final String OACTION_DETAIL = "detail";//详情
     public static final String OACTION_ARTICLE = "article";//文章
     public static final String OACTION_CFTC = "cftc";
     public static final String OACTION_RL = "rili";//日历

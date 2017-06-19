@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/line_color2"
@@ -53,9 +54,28 @@
         android:paddingLeft="@dimen/forget_padding1"
         />
 
-    <Button
+    <!--<Button
         android:id="@+id/btn_send"
         android:text="发送"
+        android:gravity="center"
         style="@style/BtnStyle2"
-        />
+        />-->
+
+    <com.jyh.kxt.base.custom.DiscolorButton
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_btn_height"
+        android:layout_marginLeft="@dimen/forget_margin2"
+        android:layout_marginRight="@dimen/forget_margin2"
+        android:layout_marginTop="@dimen/login_marginTop"
+        android:gravity="center"
+        android:text="发送"
+        android:textSize="@dimen/content_font_size2"
+        app:clickBackground="@color/bg_click_color"
+        app:clickFontColor="@color/font_click_color"
+        app:cornerRadius="@dimen/btn_cornerRadius"
+        app:defaultBackground="@color/bg_enable_color"
+        app:defaultFontColor="@color/font_enable_color"
+        app:disabledBackground="@color/line_color3"
+        app:disabledFontColor="@color/font_disable_color"/>
 </LinearLayout>

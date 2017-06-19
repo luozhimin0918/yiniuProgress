@@ -47,6 +47,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     private String[] tabs;
     private BaseFragmentAdapter adapter;
     private FragmentManager childFragmentManager;
+    private String selTab;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -173,5 +174,13 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     public void sendSocketParams() {
         NewsItemFragment fragment = (NewsItemFragment) fragmentList.get(0);
         fragment.newsItemPresenter.sendSocketParams();
+    }
+
+    public String[] getTabs() {
+        return tabs;
+    }
+
+    public void setSelTab(String selTab) {
+        this.selTab = selTab;
     }
 }

@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -8,10 +9,12 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.magicwindow.MLink;
 
 /**
  * 启动-欢迎界面
@@ -33,6 +36,10 @@ public class WelcomeActivity extends BaseActivity {
         welcomePresenter.checkIsShowAdvert();
 
         welcomePresenter.initSharedPreferences();
+
+        MLink.getInstance(this).registerWithAnnotation(this);
+        Log.i("welcome",getIntent().toString());
+        JumpUtils.MwJump(getIntent(),this);
 
     }
 

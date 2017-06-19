@@ -36,7 +36,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:background="@color/line_color3"/>
 
         <LinearLayout
@@ -71,7 +71,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="1px"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"

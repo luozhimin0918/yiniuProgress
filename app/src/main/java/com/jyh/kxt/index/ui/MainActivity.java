@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,18 +28,26 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -47,14 +59,19 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
+import com.jyh.kxt.main.ui.activity.FlashActivity;
+import com.jyh.kxt.main.ui.activity.NewsContentActivity;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
+import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
@@ -63,14 +80,23 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.magicwindow.MLinkAPIFactory;
+import cn.magicwindow.mlink.annotation.MLinkDefaultRouter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 主界面
  */
+@MLinkDefaultRouter
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener {
 
     @BindView(R.id.ll_content) LinearLayout llContent;
@@ -104,6 +130,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             themeBtn, loginBtn, quitBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
+
+    //魔窗web跳转参数
+    public static String mwId = null;//跳转id
+    public static String mwType = null;//跳转类型 true 列表页
+    public static String mwPath = null;//跳转路径
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -628,5 +659,95 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvSetting.setTextColor(fontColor);
         tvAbout.setTextColor(fontColor);
         tvTheme.setTextColor(fontColor);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (!RegexValidateUtil.isEmpty(mwPath)) {
+                String oclass = null;
+                String oaction = null;
+                String oid = mwId;
+
+                switch (mwPath) {
+                    case "/comment":
+                        //todo 旧版中的点评 及现在的要闻
+                        oclass = VarConstant.OCLASS_NEWS;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/fastNews":
+                        //快讯
+                        oclass = VarConstant.OCLASS_FLASH;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/news":
+                        //要闻
+                        oclass = VarConstant.OCLASS_NEWS;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/price":
+                        //行情
+                        oclass = VarConstant.OCLASS_QUOTES;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/video":
+                        oclass = VarConstant.OCLASS_VIDEO;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/datacenter":
+                        oclass = VarConstant.OCLASS_DATA;
+                        if("true".equals(mwType)){
+                            oaction=VarConstant.OACTION_LIST;
+                        }else{
+                            oaction=VarConstant.OACTION_DETAIL;
+                        }
+                        break;
+                    case "/rili":
+                        oclass = VarConstant.OCLASS_DATA;
+                        oaction = VarConstant.OACTION_RL;
+                        break;
+                }
+
+                if (!RegexValidateUtil.isEmpty(oclass) && !RegexValidateUtil.isEmpty(oaction) && !RegexValidateUtil.isEmpty(oid)) {
+                    JumpUtils.jump(this, oclass, oaction, oid, null);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mwId = null;
+        mwPath = null;
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri mLink = intent.getData();
+        if (mLink != null) {
+            MLinkAPIFactory.createAPI(this).router(mLink);
+        } else {
+            MLinkAPIFactory.createAPI(this).checkYYB();
+        }
     }
 }
