@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.SearchActivity;
+import com.jyh.kxt.main.ui.fragment.FlashFragment;
+import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
@@ -52,14 +55,16 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     }
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
-    @BindView(R.id.vp_audio_visual) public ViewPager vpAudioVisual;
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
 
-    private VideoFragment videoFragment;
+    public VideoFragment videoFragment;
+    private RankFragment rankFragment;
 
-    private List<Fragment> fragmentList = new ArrayList<>();
+    private BaseFragment lastFragment;
+    private BaseFragment currentFragment;
+
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -70,22 +75,35 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
 
-        videoFragment = new VideoFragment();
-        fragmentList.add(videoFragment);
-        fragmentList.add(new RankFragment());
-
-        FragmentManager fm = getChildFragmentManager();
-        vpAudioVisual.setAdapter(new BaseFragmentAdapter(fm, fragmentList));
-
-        vpAudioVisual.addOnPageChangeListener(this);
-
         changeUserImg(LoginUtils.getUserInfo(getContext()));
+        onTabSelect(0);
     }
 
     @Override
     public void onTabSelect(int position) {
-        vpAudioVisual.setCurrentItem(position);
+        if (position == 0) {
+            currentFragment = videoFragment = videoFragment == null ? new VideoFragment() : videoFragment;
+        } else {
+            currentFragment = rankFragment = rankFragment == null ? new RankFragment() : rankFragment;
+        }
+        replaceFragment(currentFragment);
+        stlNavigationBar.setCurrentTab(position);
+        lastFragment = currentFragment;
     }
+
+    private void replaceFragment(BaseFragment toFragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (lastFragment != null) {
+            transaction.hide(lastFragment);
+        }
+        if (toFragment.isAdded()) {
+            transaction.show(toFragment);
+        } else {
+            transaction.add(R.id.fl_content, toFragment);
+        }
+        transaction.commitAllowingStateLoss();
+    }
+
 
     @Override
     public void onTabReselect(int position) {
@@ -127,10 +145,11 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fragment : fragmentList) {
-            if (fragment != null) {
-                fragment.onActivityResult(requestCode, resultCode, data);
-            }
+        if (videoFragment != null) {
+            videoFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        if (rankFragment != null) {
+            rankFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -183,12 +202,11 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (fragmentList != null) {
-            for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).onChangeTheme();
-                }
-            }
+        if (videoFragment != null) {
+            videoFragment.onChangeTheme();
+        }
+        if (rankFragment != null) {
+            rankFragment.onChangeTheme();
         }
     }
 

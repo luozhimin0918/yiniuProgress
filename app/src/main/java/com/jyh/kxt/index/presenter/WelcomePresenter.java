@@ -101,10 +101,22 @@ public class WelcomePresenter extends BasePresenter {
     }
 
     public void advertTimeManage() {
+
         Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                for (int i = 5; i > 0; i--) {
+                int showTime = 0;
+                try {
+
+                    String appConfig = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
+                    MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
+                    showTime = mainInitJson.getLoad_ad().getShowTime();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                showTime = showTime == 0 ? 5 : showTime;
+
+                for (int i = showTime; i > 0; i--) {
                     try {
                         subscriber.onNext("跳过" + i + "S");
                         Thread.sleep(1000);

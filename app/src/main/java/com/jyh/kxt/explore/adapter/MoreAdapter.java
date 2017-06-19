@@ -1,6 +1,8 @@
 package com.jyh.kxt.explore.adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +57,11 @@ public class MoreAdapter extends BaseListAdapter {
                 ActivityJson activity = JSON.parseObject(dataList.get(position).toString(), ActivityJson.class);
                 viewHolder.tvTitle.setText(activity.getTitle());
                 viewHolder.tvContent.setText(activity.getRemark());
-                viewHolder.tvTime.setText(activity.getStart_time());
+
+
+                long timeLong = Long.parseLong(activity.getStart_time()) * 1000;
+                viewHolder.tvTime.setText(DateFormat.format("yyyy-MM-dd", timeLong));
+
                 String status = activity.getStatus();
                 if (status != null && "1".equals(status)) {
                     viewHolder.ivTime.setSelected(true);

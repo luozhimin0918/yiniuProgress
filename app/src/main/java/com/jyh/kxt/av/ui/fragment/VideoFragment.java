@@ -34,7 +34,7 @@ import butterknife.OnClick;
 public class VideoFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.stl_navigation_bar) public SlidingTabLayout stlNavigationBar;
-    @BindView(R.id.vp_video_list) ViewPager vpVideoList;
+    @BindView(R.id.vp_video_list) public ViewPager vpVideoList;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private VideoPresenter videoPresenter;

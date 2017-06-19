@@ -63,7 +63,6 @@ public class ReplyMessagePresenter extends BasePresenter {
         this.replyMessageView = replyMessageView;
         this.replyMessagePopup = replyMessagePopup;
         this.onCommentPublishListener = onCommentPublishListener;
-//        flEmoJe.setVisibility(View.VISIBLE);
 
         this.eetContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -132,11 +131,9 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
 
         if (isShowEmoJiView) {
-//            flEmoJe.setVisibility(View.VISIBLE);
             flEmoJe.addView(emoJeContentView);
             ivEmoJeState.setImageResource(R.mipmap.ico_keybor);
         } else {
-//            flEmoJe.setVisibility(View.GONE);
             ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
             flEmoJe.removeView(emoJeContentView);
         }
@@ -150,7 +147,6 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     public void goneEmoJeView() {
-//        flEmoJe.setVisibility(View.GONE);
         if (emoJeContentView != null) {
             flEmoJe.removeView(emoJeContentView);
             ivEmoJeState.setImageResource(R.mipmap.icon_emoje);
@@ -160,7 +156,7 @@ public class ReplyMessagePresenter extends BasePresenter {
 
 
     public void adjustEmoJeView(int height) {
-        if (flEmoJe != null /*&& isAdjustEmoJeView*/) {
+        if (flEmoJe != null && isAdjustEmoJeView) {
             isAdjustEmoJeView = false;
             int emoJeWidth = replyMessageView.getWidth();
 
@@ -170,7 +166,6 @@ public class ReplyMessagePresenter extends BasePresenter {
 
             flEmoJe.setLayoutParams(layoutParams);
         }
-
     }
 
 

@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SwitchCompat;
@@ -20,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
@@ -45,10 +45,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -63,14 +61,12 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
-    @BindView(R.id.vp_content) public ViewPager vpContent;
 
-    private List<Fragment> fragmentList = new ArrayList<>();
     private NewsFragment newsFragment;
-    private FlashFragment flashFrament;
-    private BaseFragment currentFragment;
+    private FlashFragment flashFragment;
 
-    private int position = 0;
+    private BaseFragment lastFragment;
+    private BaseFragment currentFragment;
 
     private boolean isShowRightTopAdvert = false;
     private boolean flashTop;
@@ -90,29 +86,37 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         String[] mTitles = getResources().getStringArray(R.array.nav_index);
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
-
-
-        newsFragment = new NewsFragment();
-        flashFrament = new FlashFragment();
-
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-
-        fragmentList.add(newsFragment);
-        fragmentList.add(flashFrament);
-
-        currentFragment = newsFragment;
-
-        vpContent.addOnPageChangeListener(this);
-        vpContent.setAdapter(new BaseFragmentAdapter(getChildFragmentManager(), fragmentList));
         onTabSelect(0);
     }
 
 
     @Override
     public void onTabSelect(int position) {
-        this.position = position;
-        vpContent.setCurrentItem(position);
         changeRightIcon(position);
+
+        BaseFragment currentFragment;
+        if (position == 0) {
+            currentFragment = newsFragment = newsFragment == null ? new NewsFragment() : newsFragment;
+        } else {
+            currentFragment = flashFragment = flashFragment == null ? new FlashFragment() : flashFragment;
+        }
+        replaceFragment(currentFragment);
+        stlNavigationBar.setCurrentTab(position);
+        lastFragment = currentFragment;
+    }
+
+    private void replaceFragment(BaseFragment toFragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (lastFragment != null) {
+            transaction.hide(lastFragment);
+        }
+        if (toFragment.isAdded()) {
+            transaction.show(toFragment);
+        } else {
+            transaction.add(R.id.fl_content, toFragment);
+        }
+        transaction.commitAllowingStateLoss();
     }
 
     /**
@@ -133,7 +137,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
             setGifIcon();
         } else {
-            currentFragment = flashFrament;
+            currentFragment = flashFragment;
 
             ivRightIcon1.setVisibility(View.VISIBLE);
             ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
@@ -142,7 +146,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @Override
     public void onTabReselect(int position) {
-        this.position = position;
         stlNavigationBar.setCurrentTab(position);
     }
 
@@ -160,7 +163,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                     if (currentFragment instanceof NewsFragment) {
                         showPopWindowAdvert();
                     } else {
-                        FastInfoAdapter adapter = flashFrament.flashPresenter.adapter;
+                        FastInfoAdapter adapter = flashFragment.flashPresenter.adapter;
                         if (adapter == null || adapter.isAdapterNullData()) {
                             ToastView.makeText3(getContext(), "暂无可筛选数据");
                             return;
@@ -262,7 +265,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         config.height = WindowManager.LayoutParams.WRAP_CONTENT;
         filtratePopup.setConfig(config);
 
-        filtratePopup.showAtLocation(vpContent, Gravity.BOTTOM, 0, 0);
+        filtratePopup.showAtLocation(stlNavigationBar, Gravity.BOTTOM, 0, 0);
 
         filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
             @Override
@@ -289,7 +292,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
-                flashFrament.flashFiltrate();
+                flashFragment.flashFiltrate();
                 filtratePopup.dismiss();
             }
         });
@@ -391,12 +394,11 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         if (getContext() != null) {
             setGifIcon();
         }
-        if (fragmentList != null) {
-            for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).onChangeTheme();
-                }
-            }
+        if (newsFragment != null) {
+            newsFragment.onChangeTheme();
+        }
+        if (flashFragment != null) {
+            flashFragment.onChangeTheme();
         }
     }
 
@@ -427,12 +429,11 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onNetChange(int netMobile) {
         super.onNetChange(netMobile);
-        if (fragmentList != null) {
-            for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).onNetChange(netMobile);
-                }
-            }
+        if (newsFragment != null) {
+            newsFragment.onNetChange(netMobile);
+        }
+        if (flashFragment != null) {
+            flashFragment.onNetChange(netMobile);
         }
     }
 

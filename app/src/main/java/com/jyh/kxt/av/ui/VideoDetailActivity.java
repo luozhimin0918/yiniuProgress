@@ -39,7 +39,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
 
     @BindView(R.id.activity_video_detail) LinearLayout llDetailContent;
     @BindView(R.id.rv_message) public PullToRefreshListView rvMessage;
-    @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_comment) ImageView ivComment;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.iv_like) public ImageView ivLike;
@@ -58,13 +57,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
-
-//       int mShowFlags =
-//                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        | View.INVISIBLE;
-//        spVideo.setSystemUiVisibility(mShowFlags);
 
         videoId = getIntent().getStringExtra(IntentConstant.O_ID);
         videoDetailPresenter = new VideoDetailPresenter(this);
@@ -90,14 +82,23 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 .getInstance()
                 .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
 
+        int mShowFlags =
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.INVISIBLE;
+        rvMessage.setSystemUiVisibility(mShowFlags);
     }
 
 
-    @OnClick({R.id.iv_break, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
+    @OnClick({R.id.tv_comment, R.id.iv_comment, R.id.iv_collect, R.id.iv_like, R.id.iv_share})
     public void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_break:
-                onBackPressed();
+            case R.id.tv_comment:
+                //回复
+                if (videoDetailPresenter.videoDetailBean == null) {
+                    return;
+                }
+                commentPresenter.showReplyMessageView(view);
                 break;
             case R.id.iv_comment:
                 //回复

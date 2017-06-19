@@ -42,6 +42,7 @@
         android:layout_width="@dimen/flash_bottom_height"
         android:layout_height="@dimen/flash_bottom_height"
         android:layout_alignParentRight="true"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/flash_bottom_padding2"
         android:src="@mipmap/icon_flash_share"/>
 
@@ -50,6 +51,7 @@
         android:layout_width="@dimen/flash_bottom_height"
         android:layout_height="@dimen/flash_bottom_height"
         android:layout_alignParentRight="true"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/flash_bottom_padding3"
         android:background="@drawable/sel_flash_item_collect"/>
 

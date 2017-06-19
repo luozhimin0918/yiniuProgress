@@ -13,11 +13,10 @@
         android:layout_height="match_parent"
         >
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_audio_visual"
+        <FrameLayout
+            android:id="@+id/fl_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.jyh.kxt.index.ui.fragment.AvFragment"/>
+            android:layout_height="match_parent" />
 
     </com.library.widget.PageLoadLayout>
 

@@ -198,22 +198,25 @@ public class JumpUtils {
                 case VarConstant.OACTION_INDEX:
                 case VarConstant.OACTION_LIST:
                 default:
-                    final MainActivity mainActivity = (MainActivity) context;
-                    RadioButton rbHomeFlash = mainActivity.rbHome;
-                    boolean checkedFlash = rbHomeFlash.isChecked();
-                    if (checkedFlash) {
-                        ViewPager vpContent = mainActivity.homeFragment.vpContent;
-                        vpContent.setCurrentItem(1);
-                    } else {
-                        rbHomeFlash.performClick();
-                        rbHomeFlash.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                ViewPager vpContent = mainActivity.homeFragment.vpContent;
-                                vpContent.setCurrentItem(1);
-                            }
-                        }, 200);
+                    try {
+                        final MainActivity mainActivity = (MainActivity) context;
+                        RadioButton rbHomeFlash = mainActivity.rbHome;
+                        boolean checkedFlash = rbHomeFlash.isChecked();
+                        if (checkedFlash) {
+                            mainActivity.homeFragment.onTabSelect(1);
+                        } else {
+                            rbHomeFlash.performClick();
+                            rbHomeFlash.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainActivity.homeFragment.onTabSelect(1);
+                                }
+                            }, 200);
+                        }
+                    } catch (Exception e) {
+
                     }
+
                     break;
             }
         } else {
@@ -239,27 +242,28 @@ public class JumpUtils {
             final MainActivity mainActivity = (MainActivity) context;
             switch (o_action) {
                 case VarConstant.OACTION_LIST:
-                    RadioButton rbAudio = mainActivity.rbAudioVisual;
-                    boolean videoChecked = rbAudio.isChecked();
-                    if (videoChecked) {
-                        ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
-                        vpAudioVisual.setCurrentItem(0);
-                        VideoFragment videoFragment = (VideoFragment) ((FragmentPagerAdapter) vpAudioVisual
-                                .getAdapter()).getItem(0);
-                        videoFragment.setJumpId(o_id);
-                    } else {
-                        rbAudio.performClick();
-                        rbAudio.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                ViewPager vpAudioVisual = mainActivity.avFragment.vpAudioVisual;
-                                vpAudioVisual.setCurrentItem(0);
-                                VideoFragment videoFragment = (VideoFragment) ((BaseFragmentAdapter) vpAudioVisual
-                                        .getAdapter()).getItem(0);
-                                videoFragment.setJumpId(o_id);
-                            }
-                        }, 200);
+                    try {
+                        RadioButton rbAudio = mainActivity.rbAudioVisual;
+                        boolean videoChecked = rbAudio.isChecked();
+                        if (videoChecked) {
+                            mainActivity.avFragment.onTabSelect(0);
+                            VideoFragment videoFragment = mainActivity.avFragment.videoFragment;
+                            videoFragment.setJumpId(o_id);
+                        } else {
+                            rbAudio.performClick();
+                            rbAudio.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainActivity.avFragment.onTabSelect(0);
+                                    VideoFragment videoFragment = mainActivity.avFragment.videoFragment;
+                                    videoFragment.setJumpId(o_id);
+                                }
+                            }, 200);
+                        }
+                    } catch (Exception e) {
+
                     }
+
                     break;
                 case VarConstant.OACTION_DETAIL:
                     Intent detailIntent = new Intent(context, VideoDetailActivity.class);

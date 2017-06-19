@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -274,10 +276,14 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         this.commentBean = commentBean;
         this.commentWho = commentWho;
 
+//        mBaseActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        mBaseActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+
         boolean loginEd = LoginUtils.isLogined(mContext);
         if (!loginEd) {
             mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
             return;
+
         }
         if (replyMessagePopup == null) {
 
@@ -301,22 +307,16 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             config.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
             replyMessagePopup.setConfig(config);
-
             SoftKeyBoardListener.setListener(mBaseActivity, this);
         }
         replyMessagePresenter.isShowEmoJiView = false;
 
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
 //        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         InputMethodManager imm = (InputMethodManager) mBaseActivity.getSystemService(Service.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-
-//        int mShowFlags =
-//                View.SYSTEM_UI_FLAG_FULLSCREEN
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        | View.INVISIBLE;
-//        showAtLocation.setSystemUiVisibility(mShowFlags);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 
         replyMessagePopup.showAtLocation(showAtLocation, Gravity.BOTTOM, 0, 0);
 
@@ -330,6 +330,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
     @Override
     public void keyBoardShow(int height) {
+        LogUtil.e(LogUtil.TAG, "keyBoardShow() called with: height = [" + height + "]");
         if (replyMessagePresenter != null) {
             replyMessagePresenter.adjustEmoJeView(height);
         }

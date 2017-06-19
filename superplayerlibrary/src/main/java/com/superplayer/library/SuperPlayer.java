@@ -652,7 +652,6 @@ public class SuperPlayer extends RelativeLayout {
                         surfaceHeight = layoutParams.height = videoPortraitHeight;
                         setLayoutParams(layoutParams);
                         requestLayout();
-
                     } else {
                         int mHideFlags =
                                 View.SYSTEM_UI_FLAG_LOW_PROFILE

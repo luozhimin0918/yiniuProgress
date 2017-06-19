@@ -10,20 +10,20 @@
     <com.jyh.kxt.base.util.emoje.EmoticonsEditText
         android:id="@+id/eet_content"
         style="@style/EmoJe_EditText"
-        android:background="@color/white"
         android:layout_margin="10dp"
-        android:tag="issueCommentEdit"
+        android:background="@color/white"
+        android:hint="来发表你的伟大言论吧"
         android:maxLength="140"
-        android:hint="来发表你的伟大言论吧">
+        android:tag="issueCommentEdit">
 
     </com.jyh.kxt.base.util.emoje.EmoticonsEditText>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:layout_marginBottom="2dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="2dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -38,22 +38,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
             android:layout_toLeftOf="@+id/tv_publish"
             android:gravity="center"
-            android:layout_marginRight="18dp"
-            android:textColor="@color/font_color6"
-            android:text="0/140"/>
+            android:text="0/140"
+            android:textColor="@color/font_color6"/>
 
         <com.jyh.kxt.base.custom.DiscolorButton
             android:id="@+id/tv_publish"
             android:layout_width="50dp"
             android:layout_height="25dp"
 
-            android:tag="issueCommentBtn"
             android:layout_alignParentRight="true"
-
             android:layout_centerVertical="true"
+
             android:gravity="center"
+            android:tag="issueCommentBtn"
             android:text="发送"
 
             app:clickFontColor="@color/white"
@@ -69,7 +69,7 @@
     <FrameLayout
         android:id="@+id/fl_emoje"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/theme1">
     </FrameLayout>
 </LinearLayout>

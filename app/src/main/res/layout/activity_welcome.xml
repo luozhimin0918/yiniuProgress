@@ -16,7 +16,6 @@
         android:id="@+id/tv_advert_time"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:text="5s"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="15dp"

@@ -48,8 +48,8 @@ android {
         applicationId "com.jyh.kxt"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 27
+        versionName "6.0.0"
 
         buildConfigField "String", "MESSAGE", "\"补丁消息描述\""
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""

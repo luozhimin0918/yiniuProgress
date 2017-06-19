@@ -54,11 +54,6 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         flashPresenter = new FlashPresenter(this);
 
         plRootView.setOnAfreshLoadListener(this);
-    }
-
-    @Override
-    public void userVisibleHint() {
-        super.userVisibleHint();
         FastInfoPinnedListView refreshableView = lvContent.getRefreshableView();
         refreshableView.addFooterListener(flashPresenter);
         plRootView.setOnAfreshLoadListener(flashPresenter);
@@ -78,12 +73,14 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     switch (type) {
                         case VarConstant.SOCKET_FLASH_KUAIXUN:
                         case VarConstant.SOCKET_FLASH_CJRL:
-                            JumpUtils.jump(mainActivity, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL, flashJson.getUid(), null);
+                            JumpUtils.jump(mainActivity, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL,
+                                    flashJson.getUid(), null);
                             break;
                         case VarConstant.SOCKET_FLASH_KXTNEWS:
                             Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
                             Flash_NEWS.Jump url = flash_news.getUrl();
-                            JumpUtils.jump(mainActivity, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU());
+                            JumpUtils.jump(mainActivity, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU
+                                    ());
                             break;
                     }
 
@@ -114,6 +111,12 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             }
         });
         flashPresenter.init();
+    }
+
+    @Override
+    public void userVisibleHint() {
+        super.userVisibleHint();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
