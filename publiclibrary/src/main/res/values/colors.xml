@@ -60,4 +60,7 @@
     <color name="pickerview_bgColor_overlay">#60000000</color>
     <color name="pickerview_bgColor_default">#FFFFFFFF</color>
 
+    <color name="banner_title_color">#ffffff</color>
+
+    <color name="no_more_data">#1c9cf2</color>
 </resources>

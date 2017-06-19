@@ -9,6 +9,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -24,8 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.library.R;
+import com.library.util.SystemUtil;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,10 +323,11 @@ public class BannerLayout extends RelativeLayout {
         addView(pager);
         setSliderTransformDuration(scrollDuration);
         //初始化indicatorContainer
+        int pointerHeight = SystemUtil.dp2px(getContext(), 25);
         indicatorContainer = new LinearLayout(getContext());
         indicatorContainer.setGravity(Gravity.CENTER_VERTICAL);
         indicatorContainer.setBackgroundResource(R.color.transparent_black);
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, pointerHeight);
 
         switch (indicatorPosition) {
             case centerBottom:
@@ -361,13 +363,15 @@ public class BannerLayout extends RelativeLayout {
         tvTitle = new TextView(getContext());
         tvTitle.setTextSize(15);
         tvTitle.setMaxLines(1);
-        tvTitle.setTextColor(Color.parseColor("#ffffff"));
-        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                .MATCH_PARENT);
+        tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.banner_title_color));
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
         params2.weight = 1;
-        params2.setMargins(30, 0, 30, 0);
-        tvTitle.setLayoutParams(params2);
 
+        params2.setMargins(5, 0, 30, 0);
+        tvTitle.setGravity(Gravity.CENTER_VERTICAL);
+        tvTitle.setLayoutParams(params2);
+        tvTitle.setTag("tvTitle");
 
         indicatorContainer.addView(tvTitle);
         //初始化指示器，并添加到指示器容器布局
@@ -471,13 +475,14 @@ public class BannerLayout extends RelativeLayout {
      */
     private void switchIndicator(int currentPosition) {
         for (int i = 1; i < indicatorContainer.getChildCount(); i++) {
-            ((ImageView) indicatorContainer.getChildAt(i)).setImageDrawable(i - 1 == currentPosition ? selectedDrawable :
+            ((ImageView) indicatorContainer.getChildAt(i)).setImageDrawable(i - 1 == currentPosition ?
+                    selectedDrawable :
                     unSelectedDrawable);
-            try {
-                tvTitle.setText(titles.get(i - 1));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        }
+        try {
+            tvTitle.setText(titles.get(currentPosition));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -569,8 +574,12 @@ public class BannerLayout extends RelativeLayout {
                 int size = imageViews.size();
                 for (int i = 0; i < size; i++) {
                     ImageView view = imageViews.get(i);
-                    Glide.with(getContext()).load(urls.get(i)).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(view);
+                    Glide.with(getContext()).load(urls.get(i)).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                            .icon_def_news).into(view);
                 }
+            }
+            if (tvTitle != null) {
+                tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.banner_title_color));
             }
         } catch (Exception e) {
             e.printStackTrace();

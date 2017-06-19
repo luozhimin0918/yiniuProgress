@@ -27,11 +27,14 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.library.R;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.internal.EmptyViewMethodAccessor;
 import com.library.widget.handmark.internal.LoadingLayout;
 
@@ -358,9 +361,44 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
     }
 
+    private TextView tvFootTextView;
+
+    public void noMoreData() {
+        if (tvFootTextView != null) {
+            return;
+        }
+        Mode mode = getMode();
+        if (mode == Mode.BOTH) {
+            setMode(Mode.PULL_FROM_START);
+        } else if (mode == Mode.PULL_FROM_END) {
+            setMode(Mode.DISABLED);
+        }
+        tvFootTextView = new TextView(getContext());
+        tvFootTextView.setText("暂无更多数据");
+        tvFootTextView.setTag("noMoreData");
+        int footHeight = SystemUtil.dp2px(getContext(), 40);
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(
+                AbsListView.LayoutParams.MATCH_PARENT, footHeight);
+
+        tvFootTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.no_more_data));
+        tvFootTextView.setLayoutParams(layoutParams);
+
+        tvFootTextView.setGravity(Gravity.CENTER);
+        getRefreshableView().addFooterView(tvFootTextView);
+        tvFootTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
     public void onChangeTheme() {
         mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
         mRefreshableView.setDividerHeight(1);
-    }
 
+        if (tvFootTextView != null) {
+            tvFootTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.no_more_data));
+        }
+    }
 }
