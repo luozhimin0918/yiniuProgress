@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -159,6 +160,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             try {
                 connection.sendTextMessage(loginStr);
                 //发送心跳包
+                handler.removeMessages(1);
+                handler.sendEmptyMessage(1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -439,11 +442,12 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         e.printStackTrace();
                     }
                 }
-            }, 200);
+            }, 5000);
         }
     }
 
     public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
         if (connection != null && connection.isConnected()) {
             connection.disconnect();
         }
@@ -527,4 +531,17 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         }
         connect();
     }
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (connection == null)
+                connection = new WebSocketConnection();
+            Log.i("flashSocket", "" + connection.isConnected());
+            if (!connection.isConnected())
+                connect();
+            handler.sendEmptyMessageDelayed(1, 300000);
+            return false;
+        }
+    });
 }

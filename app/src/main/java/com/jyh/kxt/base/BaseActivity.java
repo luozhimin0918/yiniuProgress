@@ -35,6 +35,7 @@ import com.jyh.kxt.base.widget.night.skinnable.SkinnableViewInflater;
 import com.library.base.LibActivity;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     protected void onResume() {
         Session.onResume(this);
         super.onResume();
-
+        MobclickAgent.onResume(this);
         boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         boolean changeCurrentActionTheme = ThemeUtil.isChangeCurrentActionTheme(this);
         if (changeCurrentActionTheme) {
@@ -306,6 +307,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     protected void onPause() {
         Session.onPause(this);
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 }

@@ -674,11 +674,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     case "/comment":
                         //todo 旧版中的点评 及现在的要闻
                         oclass = VarConstant.OCLASS_NEWS;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
-                        }
+                        oaction=VarConstant.OACTION_DIANPING;
                         break;
                     case "/fastNews":
                         //快讯
