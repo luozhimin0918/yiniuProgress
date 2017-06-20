@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoNavHeight"
         android:background="@color/theme1"
+        android:layout_marginBottom="50dp"
         android:orientation="horizontal"
         >
 
