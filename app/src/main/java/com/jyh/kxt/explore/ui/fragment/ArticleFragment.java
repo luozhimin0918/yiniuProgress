@@ -16,6 +16,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.json.NewsNavJson;
 import com.jyh.kxt.explore.presenter.ArticleFragmentPresenter;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
@@ -45,6 +46,7 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     private List<Fragment> fragmentList = new ArrayList<>();
     private String[] tabs;
     private BaseFragmentAdapter adapter;
+    private String selTab;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -55,6 +57,11 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
         stlNavigationBar.setOnTabSelectListener(this);
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), screenDisplay.widthPixels / 4));
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            selTab = arguments.getString(IntentConstant.TAB);
+        }
         presenter.init();
     }
 
@@ -124,6 +131,7 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
         int size = newsNavs.size();
         tabs = new String[size];
 
+        int index = 0;
         for (int i = 0; i < size; i++) {
             NewsNavJson newsNavJson = newsNavs.get(i);
             tabs[i] = newsNavJson.getName();
@@ -135,6 +143,13 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
             args.putInt(IntentConstant.INDEX, i);
             itemFragment.setArguments(args);
             fragmentList.add(itemFragment);
+
+            if (!RegexValidateUtil.isEmpty(selTab)) {
+                if (selTab.equals(newsNavJson.getId())) {
+                    index = i;
+                }
+            }
+
         }
 
         FragmentManager childFragmentManager = getChildFragmentManager();
@@ -144,6 +159,7 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
         presenter.addOnPageChangeListener(vpNewsList);
         plRootView.loadOver();
 
+        vpNewsList.setCurrentItem(index);
     }
 
     @Override
@@ -158,5 +174,13 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
                 }
             }
         }
+    }
+
+    public String[] getTabs() {
+        return tabs;
+    }
+
+    public void setSelTab(String selTab) {
+        this.selTab = selTab;
     }
 }

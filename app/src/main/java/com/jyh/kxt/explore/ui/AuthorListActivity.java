@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.ui.fragment.ArticleFragment;
 import com.jyh.kxt.explore.ui.fragment.AuthorFragment;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 
@@ -37,15 +39,22 @@ public class AuthorListActivity extends BaseActivity implements OnTabSelectListe
     private String[] tabs = new String[]{"名家", "文章"};
     private List<Fragment> fragmentList = new ArrayList<>();
     private AuthorFragment authorFragment;
-    private ArticleFragment articleFragment;
+    public ArticleFragment articleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_authorlist, StatusBarColor.THEME1);
 
-        authorFragment = new AuthorFragment();
+        String childTab = getIntent().getStringExtra(IntentConstant.TAB);
         articleFragment = new ArticleFragment();
+        if (!RegexValidateUtil.isEmpty(childTab)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(IntentConstant.TAB, childTab);
+            articleFragment.setArguments(bundle);
+        }
+        authorFragment = new AuthorFragment();
+
         fragmentList.add(authorFragment);
         fragmentList.add(articleFragment);
 
@@ -54,6 +63,9 @@ public class AuthorListActivity extends BaseActivity implements OnTabSelectListe
         stlNavigationBar.setTabData(tabs);
         stlNavigationBar.setOnTabSelectListener(this);
         vpContent.addOnPageChangeListener(this);
+
+        int index = getIntent().getIntExtra(IntentConstant.INDEX, 0);
+        onTabSelect(index);
     }
 
     @Override

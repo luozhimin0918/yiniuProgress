@@ -1,5 +1,6 @@
 package com.jyh.kxt.base.utils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.RadioButton;
@@ -11,6 +12,7 @@ import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.explore.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.ui.activity.DpActivity;
@@ -586,10 +588,44 @@ public class JumpUtils {
     private static void jumpBlog(BaseActivity context, String o_action, String o_id) {
         switch (o_action) {
             case VarConstant.OACTION_INDEX:
-            case VarConstant.OACTION_LIST:
                 //专栏列表
                 Intent authorIntent = new Intent(context, AuthorListActivity.class);
                 context.startActivity(authorIntent);
+                break;
+            case VarConstant.OACTION_LIST:
+                AuthorListActivity authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
+                        (AuthorListActivity.class);
+                if (authorActivity == null) {
+                    Intent authorIntent2 = new Intent(context, AuthorListActivity.class);
+
+                    authorIntent2.putExtra(IntentConstant.INDEX,1);
+                    authorIntent2.putExtra(IntentConstant.TAB,o_id);
+
+                    context.startActivity(authorIntent2);
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(AuthorListActivity.class);
+                    authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity(AuthorListActivity.class);
+                    try {
+                        Thread.sleep(200);
+                        authorActivity.onTabSelect(1);
+                        ArticleFragment articleFragment = authorActivity.articleFragment;
+                        if (articleFragment != null) {
+                            String[] tabs = articleFragment.getTabs();
+                            if (tabs == null || tabs.length == 0) {
+                                articleFragment.setSelTab(o_id);
+                            } else {
+                                int length = tabs.length;
+                                for (int i = 0; i < length; i++) {
+                                    if (tabs[i].equals(o_id)) {
+                                        articleFragment.onTabSelect(i);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             case VarConstant.OACTION_DETAIL:
                 Intent detailIntent = new Intent(context, NewsContentActivity.class);
