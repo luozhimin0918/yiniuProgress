@@ -1,5 +1,6 @@
 package com.jyh.kxt.explore.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +22,13 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.AuthorPresenter;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
@@ -286,7 +290,10 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 onBackPressed();
                 break;
             case R.id.v_like:
-                authorPresenter.attention(vLike.isSelected());
+                if (LoginUtils.isLogined(this))
+                    authorPresenter.attention(vLike.isSelected());
+                else
+                    startActivity(new Intent(this, LoginOrRegisterActivity.class));
                 break;
             case R.id.error_break:
                 onBackPressed();

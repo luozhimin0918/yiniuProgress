@@ -185,7 +185,15 @@ public class AuthorPresenter extends BasePresenter {
      * @param isFollow
      */
     public void attention(final boolean isFollow) {
-        request.doPost(getFollowUrl(isFollow), getFollowMap(), new HttpListener<Object>() {
+        JSONObject jsonParam = request.getJsonParam();
+        if (LoginUtils.isLogined(mContext)) {
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+            jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN,userInfo.getToken());
+        }
+        jsonParam.put(VarConstant.HTTP_ID, authorId);
+
+        request.doGet(getFollowUrl(isFollow), jsonParam, new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
                 authorActivity.attention(isFollow);
@@ -264,21 +272,5 @@ public class AuthorPresenter extends BasePresenter {
 
     public void setMore(boolean more) {
         isMore = more;
-    }
-
-    public Map<String, String> getFollowMap() {
-        JSONObject jsonParam = request.getJsonParam();
-        if (LoginUtils.isLogined(mContext)) {
-            UserJson userInfo = LoginUtils.getUserInfo(mContext);
-            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-        }
-        jsonParam.put(VarConstant.HTTP_ID, authorId);
-        Map<String, String> map = new HashMap();
-        try {
-            map.put(VarConstant.HTTP_CONTENT2, EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
     }
 }

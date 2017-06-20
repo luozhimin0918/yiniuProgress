@@ -33,14 +33,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentBottom="true"
-                    android:padding="18dp"
+                    android:padding="15dp"
                     android:src="@mipmap/icon_news_author_break"
                     />
 
                 <View
                     android:id="@+id/v_like"
-                    android:layout_width="@dimen/newsAuthorAttentionWidth"
-                    android:layout_height="25dp"
+                    android:layout_width="66dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="9dp"
@@ -84,8 +84,10 @@
                     android:layout_width="2px"
                     android:layout_height="12dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_gravity="center"
                     android:layout_marginRight="20dp"
-                    android:background="@color/font_color14"/>
+                    android:background="@color/font_color14"
+                    />
 
                 <TextView
                     android:id="@+id/tv_article"
