@@ -46,6 +46,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -65,7 +66,8 @@ import butterknife.OnClick;
 /**
  * 首页-探索
  */
-public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener, PageLoadLayout.OnAfreshLoadListener {
+public class ExploreFragment extends BaseFragment implements PullToRefreshListView.OnRefreshListener2, AdapterView.OnItemClickListener,
+        PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.iv_bar_break) RoundImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -222,16 +224,29 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      * 添加专题
      *
      * @param topics
+     * @param title
      */
-    public void addTopic(final List<TopicJson> topics) {
+    public void addTopic(final List<TopicJson> topics, String title) {
 
         Context mContext = getContext();
         View topicView = LayoutInflater.from(mContext).inflate(R.layout.explore_header, null);
         TextView tv1 = (TextView) topicView.findViewById(R.id.tv_title1);
         TextView tv2 = (TextView) topicView.findViewById(R.id.tv_title2);
+        View vPoint = topicView.findViewById(R.id.v_point);
+        View ivMore=topicView.findViewById(R.id.iv_more);
         TextView tvMore = (TextView) topicView.findViewById(R.id.tv_more);
+        ivMore.setVisibility(View.GONE);
+        tvMore.setVisibility(View.GONE);
 
         tv1.setText("专题");
+        if (!RegexValidateUtil.isEmpty(title)) {
+            vPoint.setVisibility(View.VISIBLE);
+            tv2.setVisibility(View.VISIBLE);
+            tv2.setText(title);
+        } else {
+            vPoint.setVisibility(View.GONE);
+            tv2.setVisibility(View.GONE);
+        }
 
         RecyclerView rvContent = (RecyclerView) topicView.findViewById(R.id.rv_content);
 

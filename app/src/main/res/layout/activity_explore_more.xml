@@ -19,6 +19,7 @@
             android:overScrollMode="never"
             app:ptrShowIndicator="false"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/newsContentPadding3"
             android:padding="@dimen/newsContentPadding3"/>
     </com.library.widget.PageLoadLayout>
 </LinearLayout>

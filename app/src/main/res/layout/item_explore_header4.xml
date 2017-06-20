@@ -20,7 +20,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/explore_header_item4_marginBottom"
+        android:layout_marginBottom="4dp"
         android:layout_marginTop="@dimen/explore_header_item4_marginTop"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/describe_font_size3"/>
@@ -33,7 +33,7 @@
         <View
             android:id="@+id/v_line"
             android:layout_width="1dp"
-            android:layout_height="10dp"
+            android:layout_height="8dp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/explore_header_item4_lineMargin"
             android:layout_marginRight="@dimen/explore_header_item4_lineMargin"

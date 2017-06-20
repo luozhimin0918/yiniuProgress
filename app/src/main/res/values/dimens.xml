@@ -81,7 +81,7 @@
     <dimen name="index_ad_imageTextMargin">8dp</dimen>
 
     <dimen name="index_btn_imgSize">30dp</dimen>
-    <dimen name="index_btn_marginTop">10dp</dimen>
+    <dimen name="index_btn_marginTop">5dp</dimen>
     <dimen name="index_btn_padding">10dp</dimen>
 
     <dimen name="index_quotes_height">150dp</dimen>
@@ -287,7 +287,7 @@
     <dimen name="explore_header_item1_marginTop">5dp</dimen>
 
     <dimen name="explore_header_item2_width">160dp</dimen>
-    <dimen name="explore_header_item2_height">142.5dp</dimen>
+    <dimen name="explore_header_item2_height">150dp</dimen>
     <dimen name="explore_header_item2_imgHeight">90dp</dimen>
     <dimen name="explore_header_item2_padding">8dp</dimen>
     <dimen name="explore_header_item2_margin">5dp</dimen>

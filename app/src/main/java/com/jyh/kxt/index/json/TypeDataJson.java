@@ -10,6 +10,8 @@ package com.jyh.kxt.index.json;
 public class TypeDataJson {
     private String type;
     private Object data;
+    private String id;
+    private String title;
 
     public String getType() {
         return type;
@@ -27,11 +29,20 @@ public class TypeDataJson {
         this.data = data;
     }
 
-    @Override
-    public String toString() {
-        return "HomeHeaderJson{" +
-                "type='" + type + '\'' +
-                ", data=" + data +
-                '}';
+    public String getTitle() {
+        return title;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

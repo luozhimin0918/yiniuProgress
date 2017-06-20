@@ -87,7 +87,7 @@ public class ExplorePresenter extends BasePresenter {
                                 JSONArray topicJson = (JSONArray) typeDataJson.getData();
                                 topics = JSON.parseArray(topicJson.toString(), TopicJson.class);
                                 if (topics.size() != 0)
-                                    exploreFragment.addTopic(topics);
+                                    exploreFragment.addTopic(topics,typeDataJson.getTitle());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

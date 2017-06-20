@@ -6,6 +6,7 @@
               android:layout_marginRight="@dimen/searchItemPadding2"
               android:gravity="center"
               android:orientation="vertical"
+              android:background="@drawable/bg_contour"
               android:padding="1px">
 
     <ImageView
