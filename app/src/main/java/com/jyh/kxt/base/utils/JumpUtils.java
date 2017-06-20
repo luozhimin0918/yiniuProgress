@@ -1,15 +1,11 @@
 package com.jyh.kxt.base.utils;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.widget.RadioButton;
 
 import com.jyh.kxt.av.ui.VideoDetailActivity;
-import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
