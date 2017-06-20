@@ -48,7 +48,7 @@ android {
         applicationId "com.jyh.kxt"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 27
+        versionCode 28
         versionName "6.0.0"
 
         buildConfigField "String", "MESSAGE", "\"补丁消息描述\""
@@ -67,6 +67,16 @@ android {
 
     signingConfigs {
         release {
+            try {
+                storeFile file("./keystore/release.keystore")
+                storePassword "jinyin186"
+                keyAlias "jyh_kxt"
+                keyPassword "jinyin186"
+            } catch (ex) {
+                throw new InvalidUserDataException(ex.toString())
+            }
+        }
+        debug {
             try {
                 storeFile file("./keystore/release.keystore")
                 storePassword "jinyin186"
@@ -118,7 +128,7 @@ def getApplyResourceMappingPath() {
 }
 
 def getTinkerIdValue() {
-    return /*hasProperty("TINKER_ID") ? TINKER_ID : gitSha()*/"test"
+    return hasProperty("TINKER_ID") ? TINKER_ID : gitSha()
 }
 
 def buildWithTinker() {
@@ -286,23 +296,28 @@ dependencies {
     compile project(':playerlibrary')
     compile project(':superplayerlibrary')
     compile project(':Pushlib')
+
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
+
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile project(':Pushlib')
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile 'org.apache.httpcomponents:httpclient:4.5'
+
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
+
+    compile 'com.umeng.analytics:analytics:latest.integration'
+
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
-    compile files('libs/libammsdk.jar')
-    compile files('libs/MagicWindowSDK.jar')
-    compile 'com.umeng.analytics:analytics:latest.integration'
+
 }
 
 allprojects {
