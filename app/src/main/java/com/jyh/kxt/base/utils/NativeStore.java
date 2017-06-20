@@ -34,8 +34,8 @@ public class NativeStore {
      * @param type
      * @param id
      */
-    public static void addThumbID(final Context mContext, String type, final String id, final ObserverData observerData, final
-    ObserverData observerData2) {
+    public static void addThumbID(final Context mContext, String type, final String id, final ObserverData
+            observerData, final ObserverData observerData2) {
 
 
         String spName = "";
@@ -74,10 +74,12 @@ public class NativeStore {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                if (observerData != null)
+                if (observerData != null) {
                     observerData.onError(new VolleyError("点赞失败"));
-                if (observerData2 != null)
+                }
+                if (observerData2 != null) {
                     observerData2.onError(null);
+                }
             }
         });
     }
@@ -107,7 +109,8 @@ public class NativeStore {
         return jsonParam;
     }
 
-    private static void good(Context mContext, String id, ObserverData observerData, ObserverData observerData2, String spName) {
+    private static void good(Context mContext, String id, ObserverData observerData, ObserverData observerData2,
+                             String spName) {
         try {
             Set<String> set = SPUtils.getStringSet(mContext, spName);
             if (set == null) set = new HashSet<>();
@@ -123,10 +126,12 @@ public class NativeStore {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if (observerData != null)
+            if (observerData != null) {
                 observerData.onError(new VolleyError("点赞失败"));
-            if (observerData2 != null)
+            }
+            if (observerData2 != null) {
                 observerData2.onError(null);
+            }
         }
     }
 
@@ -189,10 +194,11 @@ public class NativeStore {
                 break;
         }
         Set<String> set = SPUtils.getStringSet(mContext, spName);
-        if (set == null)
+        if (set == null) {
             return false;
-        else
+        } else {
             return set.contains(id);
+        }
     }
 
 }

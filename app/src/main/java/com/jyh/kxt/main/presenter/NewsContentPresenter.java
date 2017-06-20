@@ -504,15 +504,15 @@ public class NewsContentPresenter extends BasePresenter {
             snackBar.addIconProgressLoading(0, true, false);
             snackBar.show();
 
-            String goodType = "";
-            switch (type) {
-                case VarConstant.OCLASS_BLOG:
-                    goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
-                    break;
-                case VarConstant.OCLASS_NEWS:
-                    goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
-                    break;
-            }
+            String goodType = VarConstant.GOOD_TYPE_NEWS; //文章点赞
+//            switch (type) {
+//                case VarConstant.OCLASS_BLOG:
+//                    goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
+//                    break;
+//                case VarConstant.OCLASS_NEWS:
+//                    goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
+//                    break;
+//            }
             NativeStore.addThumbID(mContext, goodType, objectId, new ObserverData() {
                 @Override
                 public void callback(Object o) {
@@ -528,6 +528,9 @@ public class NewsContentPresenter extends BasePresenter {
                         newsContentActivity.webViewAndHead.attention.attention();
                     }
 
+                    String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
+                    String addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+                    newsContentActivity.tvDianCount.setText(addDianZanCount);
                 }
 
                 @Override

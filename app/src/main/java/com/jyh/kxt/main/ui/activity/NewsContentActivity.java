@@ -104,7 +104,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.iv_ding) public ImageView ivGood;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) TextView tvCommentCount;
-    @BindView(R.id.tv_ding_Count) TextView tvDianCount;
+    @BindView(R.id.tv_ding_Count) public TextView tvDianCount;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;

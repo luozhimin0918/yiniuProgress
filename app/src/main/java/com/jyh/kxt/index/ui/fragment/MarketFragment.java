@@ -70,22 +70,26 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     @Override
     public void onTabSelect(int position) {
-        BaseFragment currentFragment;
-        if (position == 0) {
-            tvRightIcon1.setText("");
-            tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
-            currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
-            ((MarketVPFragment) marketVPFragment).sendSocketParams();
-        } else {
-            tvRightIcon1.setText("编辑");
-            tvRightIcon1.setBackground(null);
-            currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
-            ((OptionalFragment) optionalFragment).sendSocketParams();
+        try {
+            BaseFragment currentFragment;
+            if (position == 0) {
+                tvRightIcon1.setText("");
+                tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
+                currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
+                ((MarketVPFragment) marketVPFragment).sendSocketParams();
+            } else {
+                tvRightIcon1.setText("编辑");
+                tvRightIcon1.setBackground(null);
+                currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
+                ((OptionalFragment) optionalFragment).sendSocketParams();
+            }
+            this.position = position;
+            replaceFragment(currentFragment);
+            stlNavigationBar.setCurrentTab(position);
+            lastFragment = currentFragment;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        this.position = position;
-        replaceFragment(currentFragment);
-        stlNavigationBar.setCurrentTab(position);
-        lastFragment = currentFragment;
     }
 
     public int getTabSelectPosition() {

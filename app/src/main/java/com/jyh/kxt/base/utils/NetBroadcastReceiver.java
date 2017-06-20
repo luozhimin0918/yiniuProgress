@@ -17,16 +17,23 @@ import com.library.util.NetUtils;
  */
 
 public class NetBroadcastReceiver extends BroadcastReceiver {
-    public NetEvent event = BaseActivity.netEvent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO Auto-generated method stub
-        // 如果相等的话就说明网络状态发生了变化
-        if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            int netWorkState = NetUtils.getNetConnectState(context);
-            // 接口回调传过去状态的类型
-            event.onNetChange(netWorkState);
+        try {//考虑到程序死掉广播还在,抛出空指针的解决
+            NetEvent event = BaseActivity.netEvent;
+            if (event == null) {
+                return;
+            }
+            // TODO Auto-generated method stub
+            // 如果相等的话就说明网络状态发生了变化
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                int netWorkState = NetUtils.getNetConnectState(context);
+                // 接口回调传过去状态的类型
+                event.onNetChange(netWorkState);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

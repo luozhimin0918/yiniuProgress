@@ -10,12 +10,13 @@
         android:layout_width="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
+        android:layout_alignParentRight="true"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_more"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/flash_bottom_height"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="展开"
             android:textColor="@color/font_color6"
@@ -30,7 +31,8 @@
             android:visibility="invisible"
             android:layout_marginTop="4dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/flash_bottom_padding"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/tv_more"
             android:background="@drawable/bg_flash_show_hide"/>
     </LinearLayout>
@@ -59,7 +61,7 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/iv_share"
+        android:layout_below="@id/ll_more"
         android:layout_marginTop="@dimen/flash_bottom_padding"
         android:background="@color/line_color3"
         />

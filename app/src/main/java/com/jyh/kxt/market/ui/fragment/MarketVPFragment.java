@@ -122,11 +122,11 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
     }
 
     public void sendSocketParams() {
-        if (vpContent != null) {
-            int currentItem = vpContent.getCurrentItem();
-            MarketItemFragment marketItemFragment = (MarketItemFragment) marketItemList.get(currentItem);
-            marketItemFragment.onPageSelected();
-        }
+            if (vpContent != null) {
+                int currentItem = vpContent.getCurrentItem();
+                MarketItemFragment marketItemFragment = (MarketItemFragment) marketItemList.get(currentItem);
+                marketItemFragment.onPageSelected();
+            }
     }
 
     @Override
