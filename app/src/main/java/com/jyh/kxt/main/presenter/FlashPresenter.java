@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.alibaba.fastjson.JSON;
@@ -34,11 +32,11 @@ import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.push.json.CjInfo;
-import com.jyh.kxt.push.json.KxItemCJRL;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.NetUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -79,6 +77,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
     private WebSocketOptions options;
     private ArrayList<BasicNameValuePair> headers;
 
+    private boolean isInit = true;
+
     public FlashPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -103,6 +103,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
     /**
      * 连接Socket
+     *
      */
     private void connect() {
         options = new WebSocketOptions();
@@ -135,14 +136,20 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        flashFragment.plRootView.loadError();
+                        if (isInit){
+                            flashFragment.plRootView.loadError();
+                            isInit=false;
+                        }
                     }
                 }
 
                 @Override
                 protected void onErrorResponse(VolleyError error) {
                     super.onErrorResponse(error);
-                    flashFragment.plRootView.loadError();
+                    if (isInit){
+                        flashFragment.plRootView.loadError();
+                        isInit=false;
+                    }
                 }
             });
         } catch (Exception e) {
@@ -150,7 +157,6 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         }
     }
 
-    private long nowdate;
     private String loginStr = "{\"cmd\":\"login\",\"number\":20}";
     private String historyStr = "{\"cmd\":\"history\",\"lastid\":\"%s\",\"number\":30}";
 
@@ -174,7 +180,6 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
         @Override
         public void onTextMessage(String s) {
-            nowdate = System.currentTimeMillis();
             getNewMsg(s);
             try {
                 flashFragment.lvContent.postDelayed(new Runnable() {
@@ -538,7 +543,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             if (connection == null)
                 connection = new WebSocketConnection();
             Log.i("flashSocket", "" + connection.isConnected());
-            if (!connection.isConnected())
+            if (!connection.isConnected() && NetUtils.isNetworkAvailable(mContext))
                 connect();
             handler.sendEmptyMessageDelayed(1, 300000);
             return false;
