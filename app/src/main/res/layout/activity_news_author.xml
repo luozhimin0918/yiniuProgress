@@ -106,7 +106,7 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:visibility="gone"
-        android:padding="18dp"
+        android:padding="16dp"
         android:src="@mipmap/ico_break"
         />
 

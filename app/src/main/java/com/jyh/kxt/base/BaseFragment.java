@@ -74,7 +74,7 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
     @Override
     public void onResume() {
         super.onResume();
-        onChangeTheme();
+//        onChangeTheme();
     }
 
     @Override

@@ -69,7 +69,6 @@ public class NewsContentPresenter extends BasePresenter {
     public List<CommentBean> commentList;
     public CommentAdapter commentAdapter;
     private String type;
-    private TSnackbar snackBar;
     private AlertDialog loginPop;
 
     public NewsContentPresenter(IBaseView iBaseView) {
@@ -119,7 +118,7 @@ public class NewsContentPresenter extends BasePresenter {
                 break;
         }
 
-        volleyRequest.doGet(url, jsonParam, new HttpListener<String>() {
+        volleyRequest.doPost(url, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String json) {
                 if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
@@ -197,48 +196,25 @@ public class NewsContentPresenter extends BasePresenter {
         }
 
         if (isCheck) {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "取消关注中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN);
-            snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            snackBar.addIconProgressLoading(0, true, false);
-            snackBar.show();
+            cbLike.setSelected(!isCheck);
             AttentionUtils.unAttention(mContext, AttentionUtils.TYPE_AUTHOR, author_id, new ObserverData<Boolean>() {
                 @Override
                 public void callback(Boolean aBoolean) {
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("取消关注成功").setDuration(TSnackbar
-                            .LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    cbLike.setSelected(!isCheck);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("取消关注失败").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             });
         } else {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "关注中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN);
-            snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            snackBar.addIconProgressLoading(0, true, false);
-            snackBar.show();
+            cbLike.setSelected(!isCheck);
             AttentionUtils.attention(mContext, AttentionUtils.TYPE_AUTHOR, author_id, new ObserverData<Boolean>() {
                 @Override
                 public void callback(Boolean aBoolean) {
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("关注成功").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    cbLike.setSelected(!isCheck);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("关注失败").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             });
         }
@@ -425,57 +401,32 @@ public class NewsContentPresenter extends BasePresenter {
         newsJson.setPicture(newsContentJson.getPicture());
         newsJson.setType(newsContentJson.getType());
         if (newsContentActivity.isCollect) {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "取消收藏中...", TSnackbar
-                    .LENGTH_INDEFINITE, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN);
-            snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            snackBar.addIconProgressLoading(0, true, false);
-            snackBar.show();
+
+            newsContentActivity.ivCollect.setSelected(false);
+            newsContentActivity.isCollect = false;
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
+
             CollectUtils.unCollect(mContext, VarConstant.COLLECT_TYPE_ARTICLE, newsJson, new ObserverData() {
                 @Override
                 public void callback(Object o) {
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("取消收藏成功").setDuration(TSnackbar
-                            .LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    newsContentActivity.ivCollect.setSelected(false);
-                    newsContentActivity.isCollect = false;
-                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("取消收藏失败").setDuration(TSnackbar
-                            .LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             }, null);
         } else {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "收藏中...", TSnackbar.LENGTH_INDEFINITE,
-                    TSnackbar
-                            .APPEAR_FROM_TOP_TO_DOWN);
-            snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            snackBar.addIconProgressLoading(0, true, false);
-            snackBar.show();
+            newsContentActivity.ivCollect.setSelected(true);
+            newsContentActivity.isCollect = true;
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
+
             CollectUtils.collect(mContext, VarConstant.COLLECT_TYPE_ARTICLE, newsJson, new ObserverData() {
                 @Override
                 public void callback(Object o) {
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("收藏成功").setDuration(TSnackbar
-                            .LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    newsContentActivity.ivCollect.setSelected(true);
-                    newsContentActivity.isCollect = true;
-                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_NEWS, newsJson));
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("收藏失败").setDuration(TSnackbar
-                            .LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             }, null);
         }
@@ -488,7 +439,7 @@ public class NewsContentPresenter extends BasePresenter {
      */
     public void attention(String objectId) {
         if (newsContentActivity.isGood) {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
+            TSnackbar   snackBar = TSnackbar.make(newsContentActivity.pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
                     .APPEAR_FROM_TOP_TO_DOWN)
                     .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                             .getDimensionPixelOffset(R.dimen.actionbar_height));
@@ -498,12 +449,6 @@ public class NewsContentPresenter extends BasePresenter {
             snackBar.setPromptThemBackground(Prompt.WARNING);
             snackBar.show();
         } else {
-            snackBar = TSnackbar.make(newsContentActivity.pllContent, "点赞中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN);
-            snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            snackBar.addIconProgressLoading(0, true, false);
-            snackBar.show();
-
             String goodType = VarConstant.GOOD_TYPE_NEWS; //文章点赞
 //            switch (type) {
 //                case VarConstant.OCLASS_BLOG:
@@ -513,31 +458,26 @@ public class NewsContentPresenter extends BasePresenter {
 //                    goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
 //                    break;
 //            }
+
+            newsContentActivity.ivGood.setSelected(true);
+            newsContentActivity.isGood = true;
+            if (newsContentActivity.webViewAndHead != null && newsContentActivity.webViewAndHead.attention !=
+                    null) {
+                newsContentActivity.webViewAndHead.attention.attention();
+            }
+
+            String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
+            String addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+            newsContentActivity.tvDianCount.setText(addDianZanCount);
+
             NativeStore.addThumbID(mContext, goodType, objectId, new ObserverData() {
                 @Override
                 public void callback(Object o) {
 
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("点赞成功").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    newsContentActivity.ivGood.setSelected(true);
-                    newsContentActivity.isGood = true;
-
-                    if (newsContentActivity.webViewAndHead != null && newsContentActivity.webViewAndHead.attention !=
-                            null) {
-                        newsContentActivity.webViewAndHead.attention.attention();
-                    }
-
-                    String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
-                    String addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
-                    newsContentActivity.tvDianCount.setText(addDianZanCount);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText("点赞失败").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 }
             }, null);
         }

@@ -8,6 +8,7 @@
         android:id="@+id/rdvp_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/rdv_dot"
         android:layout_weight="1">
 
     </com.jyh.kxt.base.custom.RollViewPager>
@@ -16,7 +17,6 @@
         android:id="@+id/rdv_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"

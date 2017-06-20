@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/app_video_center_box"
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@drawable/app_video_center_bg"
-        android:visibility="visible" >
+        android:visibility="visible">
 
         <!-- 声音控制volume -->
 
@@ -19,14 +20,14 @@
             android:layout_height="80dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/app_video_volume_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_volume_up_white_36dp" />
+                android:src="@drawable/ic_volume_up_white_36dp"/>
 
             <TextView
                 android:id="@+id/app_video_volume"
@@ -34,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="50%"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
         </LinearLayout>
         <!-- 亮度控制brightness -->
 
@@ -44,14 +45,14 @@
             android:layout_height="80dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/app_video_brightness_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_brightness_6_white_36dp" />
+                android:src="@drawable/ic_brightness_6_white_36dp"/>
 
             <TextView
                 android:id="@+id/app_video_brightness"
@@ -60,7 +61,7 @@
                 android:paddingTop="8dp"
                 android:text="50%"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <!-- 快进 倒退 fast forward -->
@@ -72,7 +73,7 @@
             android:layout_margin="8dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/app_video_fastForward"
@@ -81,13 +82,13 @@
                 android:paddingTop="8dp"
                 android:text="50%"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="8dp" >
+                android:paddingTop="8dp">
 
                 <TextView
                     android:id="@+id/app_video_fastForward_target"
@@ -95,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:text="50%"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/app_video_fastForward_all"
@@ -103,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:text="50%"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
@@ -116,13 +117,13 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/view_jky_player_center_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_center_play" />
+            android:src="@drawable/ic_center_play"/>
     </LinearLayout>
 
     <!-- 网络提示 -->
@@ -134,7 +135,7 @@
         android:background="#33000000"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/view_jky_player_tip_text"
@@ -145,7 +146,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="您正在使用移动网络播放视频\n可能产生较高流量费用"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/view_jky_player_tv_continue"
@@ -158,18 +159,19 @@
             android:paddingRight="12dp"
             android:paddingTop="5dp"
             android:text="继续"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <!-- loading -->
 
     <ProgressBar
         android:id="@+id/app_video_loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:indeterminateBehavior="repeat"
         android:indeterminateOnly="true"
-        android:visibility="gone" />
-
+        android:visibility="gone"
+        />
 </RelativeLayout>

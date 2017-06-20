@@ -95,8 +95,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         Glide.with(mContext)
                 .load(HttpConstant.IMG_URL + video.getPicture())
                 .error(R.mipmap.icon_def_video)
-                .override(200, 200)
-                .thumbnail(0.6f)
+                .override(400,300)
                 .placeholder(R.mipmap.icon_def_video)
                 .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());

@@ -75,6 +75,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private static final int TYPE_BOTTOM = 6;
     private PopupUtil.Config config;
     private ImageView ivPop;
+    private ImageView ivDownView;
     private PopupUtil popupUtil;
     private int imgMaxWidth;
     private int imgMaxHeight;
@@ -108,6 +109,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
         });
         ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+        ivDownView = (ImageView) inflate.findViewById(R.id.iv_download);
         config = new PopupUtil.Config();
 
         config.outsideTouchable = true;
@@ -117,6 +119,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         config.animationStyle = R.style.PopupWindow_Style2;
 
         inspiritDateInfo(this.flashJsons);
+
+        ivDownView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -678,8 +687,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 //获取textView的行数
                 int txtPart = finalKxHolder.tvContent.getLineCount();
                 if (txtPart <= 3) {
-                    finalKxHolder.ivMore.setVisibility(View.INVISIBLE);
-                    finalKxHolder.tvMore.setVisibility(View.INVISIBLE);
+                    finalKxHolder.ivMore.setVisibility(View.GONE);
+                    finalKxHolder.tvMore.setVisibility(View.GONE);
                 } else {
                     finalKxHolder.ivMore.setVisibility(View.VISIBLE);
                     finalKxHolder.tvMore.setVisibility(View.VISIBLE);

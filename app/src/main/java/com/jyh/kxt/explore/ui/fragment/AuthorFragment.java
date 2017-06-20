@@ -3,24 +3,20 @@ package com.jyh.kxt.explore.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.custom.RollDotViewPager;
+import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.AuthorHeadContentAdapter;
-import com.jyh.kxt.explore.adapter.AuthorHeadViewAdapter;
 import com.jyh.kxt.explore.adapter.AuthorListAdapter;
 import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.explore.presenter.AuthorFragmentPresenter;
@@ -29,9 +25,7 @@ import com.jyh.kxt.index.ui.AttentionActivity;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.recycler.DividerGridItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,19 +37,18 @@ import butterknife.BindView;
  * 创建日期:2017/6/9.
  */
 
-public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2,
+public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase
+        .OnRefreshListener2,
         AdapterView.OnItemClickListener {
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     private AuthorFragmentPresenter presenter;
     public AuthorListAdapter adapter;
+    private RollDotViewPager rollDotViewPager;
 
     //头部相关
     private View headView;
     private View line;
-    private ArrayList<RecyclerView> views;
-    private ArrayList<ImageView> points;
-    private int position;
     private AuthorHeadContentAdapter headAdapter;
     private TextView tvTitle;
     private TextView tvMyAttention;
@@ -91,8 +84,9 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
             } else {
                 adapter.setData(authorList);
             }
-            if (headView != null)
+            if (headView != null) {
                 plvContent.getRefreshableView().removeHeaderView(headView);
+            }
             plvContent.getRefreshableView().addHeaderView(headView);
         }
     }
@@ -131,28 +125,15 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
      * 更改头部布局模式
      */
     private void changeHeadTheme() {
-        if (headAdapter != null)
+        if (headAdapter != null) {
             headAdapter.notifyDataSetChanged();
-        if (line != null)
-            line.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
-        if (views != null)
-            for (RecyclerView view : views) {
-                DividerGridItemDecoration decor = new DividerGridItemDecoration(getContext());
-                decor.setSpanCount(3);
-                view.addItemDecoration(decor);
-            }
-        if (points != null) {
-            int size = points.size();
-            for (int i = 0; i < size; i++) {
-                ImageView imageView = points.get(i);
-                imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.sel_dian));
-                if (i == position)
-                    imageView.setSelected(true);
-                else
-                    imageView.setSelected(false);
-            }
         }
-
+        if (line != null) {
+            line.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+        }
+        if (rollDotViewPager != null) {
+            rollDotViewPager.onChangeTheme();
+        }
     }
 
     /**
@@ -180,72 +161,23 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
             });
             ivAttention = (ImageView) headView.findViewById(R.id.iv_myattention);
         }
-        ViewPager vpContent = (ViewPager) headView.findViewById(R.id.vp_content);
-        final LinearLayout llDian = (LinearLayout) headView.findViewById(R.id.ll_dian);
-        llDian.removeAllViews();
-        int size = authors.size();
-        int pageCount = size / 6;
-        int pageNum = size % 6;
-        if (pageNum != 0)
-            pageCount++;
-        views = new ArrayList<>();
-        points = new ArrayList<>();
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                .MATCH_PARENT);
 
-        for (int i = 0; i < pageCount; i++) {
-            initPageView(authors, llDian, size, pageCount, views, params, i);
-        }
-        vpContent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
+        rollDotViewPager = (RollDotViewPager) headView.findViewById(R.id.rdvp_content);
+        rollDotViewPager.setViewPageToDotAbout();
+        rollDotViewPager.addLineTop();
+        RollViewPager rollViewPager = rollDotViewPager.getRollViewPager();
+        rollViewPager.setGridMaxCount(6).setDataList(authors).setGridViewItemData(new RollViewPager.GridViewItemData() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                AuthorFragment.this.position = position;
-                int childCount = llDian.getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    View childAt = llDian.getChildAt(i);
-                    if (i == position) {
-                        childAt.setSelected(true);
-                    } else {
-                        childAt.setSelected(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void itemData(List dataSubList, GridView gridView) {
+                headAdapter = new AuthorHeadContentAdapter(getContext(), dataSubList);
+                gridView.setAdapter(headAdapter);
             }
         });
-        vpContent.setAdapter(new AuthorHeadViewAdapter(getContext(), views));
-        int childCount = llDian.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = llDian.getChildAt(i);
-            if (i == 0) {
-                childAt.setSelected(true);
-            } else {
-                childAt.setSelected(false);
-            }
-        }
+        rollDotViewPager.build();
     }
 
-    /**
-     * 初始化头部每页布局
-     *
-     * @param authors
-     * @param llDian
-     * @param size
-     * @param pageCount
-     * @param views
-     * @param params
-     * @param i         页码
-     */
-    private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount, List<RecyclerView> views, ViewGroup
+  /*  private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount,
+  List<RecyclerView> views, ViewGroup
             .LayoutParams params, int i) {
         RecyclerView recyclerView = new RecyclerView(getContext());
         GridLayoutManager manager = new GridLayoutManager(getContext(), 3) {
@@ -296,8 +228,7 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
         });
         recyclerView.setAdapter(headAdapter);
         views.add(recyclerView);
-    }
-
+    }*/
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position > 1) {

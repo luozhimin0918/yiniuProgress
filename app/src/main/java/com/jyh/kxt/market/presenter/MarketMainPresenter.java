@@ -32,6 +32,7 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
+import com.jyh.kxt.databinding.ItemMarketRecommend2Binding;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -327,9 +328,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
             marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
 
-            ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(mInflate,
-                    R.layout.item_market_recommend,
-                    null,
+            ItemMarketRecommend2Binding dataBinding = DataBindingUtil.inflate(mInflate,
+                    R.layout.item_market_recommend2,
+                    hqLayout,
                     false);
 
             int nameFontColor = ContextCompat.getColor(mContext, R.color.font_color5);

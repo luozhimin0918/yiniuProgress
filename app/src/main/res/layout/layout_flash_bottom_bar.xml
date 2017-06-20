@@ -2,41 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/flash_bottom_padding"
+                android:paddingTop="2dp"
     >
 
     <LinearLayout
         android:id="@+id/ll_more"
         android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_height="wrap_content">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:text="展开"
             android:textColor="@color/font_color6"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:textSize="@dimen/content_font_size"/>
+            android:textSize="@dimen/content_font_size"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="@dimen/flash_bottom_imgWidth"
-            android:layout_height="@dimen/flash_bottom_imgHeight"
-            android:visibility="invisible"
-            android:layout_marginTop="4dp"
+            android:layout_width="10dp"
+            android:layout_height="5dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/tv_more"
-            android:background="@drawable/bg_flash_show_hide"/>
+            android:background="@drawable/bg_flash_show_hide"
+            android:visibility="gone"/>
     </LinearLayout>
-
 
 
     <ImageView
@@ -44,25 +44,25 @@
         android:layout_width="@dimen/flash_bottom_height"
         android:layout_height="@dimen/flash_bottom_height"
         android:layout_alignParentRight="true"
-        android:visibility="gone"
         android:layout_marginRight="@dimen/flash_bottom_padding2"
-        android:src="@mipmap/icon_flash_share"/>
+        android:src="@mipmap/icon_flash_share"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/iv_collect"
         android:layout_width="@dimen/flash_bottom_height"
         android:layout_height="@dimen/flash_bottom_height"
         android:layout_alignParentRight="true"
-        android:visibility="gone"
         android:layout_marginRight="@dimen/flash_bottom_padding3"
-        android:background="@drawable/sel_flash_item_collect"/>
+        android:background="@drawable/sel_flash_item_collect"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@id/ll_more"
-        android:layout_marginTop="@dimen/flash_bottom_padding"
+        android:layout_marginTop="2dp"
         android:background="@color/line_color3"
         />
 

@@ -20,6 +20,7 @@
         android:id="@+id/stl_navigation_bar"
         android:layout_width="@dimen/navigationBarTabLayoutWidth"
         android:layout_height="@dimen/navigationBarTabLayoutHeight"
+        tl:tl_textsize = "15sp"
         android:layout_centerInParent="true"
         tl:tl_bar_color="@color/segmentTabLayout_bar_color"
         tl:tl_indicator_color="@color/segmentTabLayout_indicator_color"

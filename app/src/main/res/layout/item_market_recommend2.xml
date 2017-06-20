@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="nameFontColor"
+            type="int"/>
+
+        <variable
+            name="bean"
+            type="com.jyh.kxt.market.bean.MarketItemBean"/>
+    </data>
+    <!-- == 0 ? R.color.theme1 : layoutBg-->
+    <RelativeLayout
+        android:id="@+id/rl_rootView"
+        android:layout_width="115dp"
+        android:layout_height="110dp"
+        android:background="@{bean.bgItemColor}"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{bean.name}"
+            android:textColor="@{nameFontColor}"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv_new_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:tag="arrows"
+            android:text="@{bean.price}"
+            android:textSize="@dimen/describe_font_size4"
+
+            app:bindingFromSource="@{bean.marketFromSource}"
+            app:bindingMarketItem="@{bean}"
+            app:bindingRange="@{bean.range}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_new_price"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/tv_change_val"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{bean.change}"
+                android:gravity="right"
+                android:textSize="@dimen/min_font_size"
+                android:maxLines="1"
+                app:bindingRange="@{bean.range}"/>
+
+            <TextView
+                android:id="@+id/tv_change_range"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:text="@{bean.range}"
+                android:textSize="@dimen/min_font_size"
+                app:bindingRange="@{bean.range}"/>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

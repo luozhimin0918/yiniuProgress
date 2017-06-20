@@ -92,8 +92,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @Override
     public void onTabSelect(int position) {
-        changeRightIcon(position);
-
         BaseFragment currentFragment;
         if (position == 0) {
             currentFragment = newsFragment = newsFragment == null ? new NewsFragment() : newsFragment;
@@ -101,8 +99,10 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             currentFragment = flashFragment = flashFragment == null ? new FlashFragment() : flashFragment;
         }
         replaceFragment(currentFragment);
+
         stlNavigationBar.setCurrentTab(position);
         lastFragment = currentFragment;
+        changeRightIcon(position);
     }
 
     private void replaceFragment(BaseFragment toFragment) {
@@ -125,15 +125,12 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
      */
     private void changeRightIcon(int position) {
         if (position == 0) {
-
             currentFragment = newsFragment;
-
             if (!isShowRightTopAdvert) {
                 ivRightIcon1.setVisibility(View.GONE);
             } else {
                 ivRightIcon1.setVisibility(View.VISIBLE);
             }
-
             setGifIcon();
         } else {
             currentFragment = flashFragment;
@@ -177,9 +174,9 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     }
 
     public void closePopWindowAdvert() {
+        isShowRightTopAdvert = true;
+        ivRightIcon1.setVisibility(View.VISIBLE);
         if (currentFragment instanceof NewsFragment) {
-            isShowRightTopAdvert = true;
-            ivRightIcon1.setVisibility(View.VISIBLE);
             setGifIcon();
         }
     }
@@ -343,11 +340,15 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     }
 
     private void changeUserImg(UserJson user) {
-        if (user == null) {
-            ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
-        } else {
-            Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
-                    .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
+        try {
+            if (user == null) {
+                ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+            } else {
+                Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
+                        .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -438,7 +439,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     private void setGifIcon() {
         if (getContext() != null) {
-
             int alertTheme = ThemeUtil.getAlertTheme(getContext());
             int resouseId = -1;
             switch (alertTheme) {

@@ -89,7 +89,6 @@ public class MarketConnectUtil {
 
                     List<BasicNameValuePair> headers = new ArrayList<>();
                     headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
-
                     mConnection.connect(url, null, new WebSocketConnectionHandler() {
                         @Override
                         public void onOpen() {
