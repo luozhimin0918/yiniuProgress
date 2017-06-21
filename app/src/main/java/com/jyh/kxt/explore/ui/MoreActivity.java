@@ -64,7 +64,7 @@ public class MoreActivity extends BaseActivity implements PageLoadLayout.OnAfres
                 name = "活动";
                 break;
             case VarConstant.EXPLORE_TOPIC:
-                name = "专题";
+                name = "全部专题";
                 break;
         }
         tvBarTitle.setText(name);

@@ -50,6 +50,7 @@ import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.recycler.DividerGridItemDecoration;
 import com.library.widget.viewpager.BannerLayout;
 import com.library.widget.window.ToastView;
 
@@ -196,6 +197,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             carouselHeight = carouselHeight / 2;
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
+        DividerGridItemDecoration decor = new DividerGridItemDecoration(mContext);
+        decor.setSpanCount(4);
+        recyclerView.addItemDecoration(decor);
         recyclerView.setLayoutParams(params);
 
         GridLayoutManager manager = new GridLayoutManager(mContext, 4) {

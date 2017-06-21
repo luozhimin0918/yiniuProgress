@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:gravity="center"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/min_font_size"/>
     </RelativeLayout>

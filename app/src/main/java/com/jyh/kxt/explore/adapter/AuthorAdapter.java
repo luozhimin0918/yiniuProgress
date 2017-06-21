@@ -80,9 +80,9 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
 
     private void setTheme(ViewHolder holder) {
         holder.tvName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
-        holder.tvCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
-        holder.tvFans.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
-        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color60));
+        holder.tvCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        holder.tvFans.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color6));
         holder.itemView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_ring));
     }
 

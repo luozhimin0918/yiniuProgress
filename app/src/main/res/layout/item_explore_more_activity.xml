@@ -12,9 +12,9 @@
         android:background="@drawable/bg_contour"
         android:orientation="vertical"
         android:paddingBottom="@dimen/explore_more_padding2"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:paddingTop="1dp"
+        android:paddingLeft="1px"
+        android:paddingRight="1px"
+        android:paddingTop="1px"
         >
 
         <ImageView

@@ -22,9 +22,7 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/explore_header_item3_marginTop"
             android:maxLines="2"
-            android:paddingTop="@dimen/explore_header_item3_padding"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/content_font_size"
             />
@@ -48,6 +46,7 @@
             android:drawableLeft="@mipmap/icon_explore_time"
             android:drawablePadding="@dimen/explore_header_item3_drawablePadding"
             android:text="2017-01-01"
+            android:gravity="center"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/min_font_size"/>
     </RelativeLayout>

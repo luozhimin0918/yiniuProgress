@@ -28,7 +28,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
     public DividerGridItemDecoration(Context mContext) {
         this.mContext = mContext;
-        int color = ContextCompat.getColor(mContext, R.color.line_background1);
+        int color = ContextCompat.getColor(mContext, R.color.line_background3);
         mDivider = new ColorDrawable(color);
     }
 
@@ -86,10 +86,10 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
 
-            final int right = child.getRight() + params.rightMargin + SystemUtil.dp2px(mContext, dividerWidth);
+            final int right = child.getRight() + params.rightMargin + dividerWidth;
             final int top = child.getBottom() + params.bottomMargin;
 
-            final int bottom = top + SystemUtil.dp2px(mContext, dividerWidth);
+            final int bottom = top + dividerWidth;
 
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
@@ -107,7 +107,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
-            final int right = left + SystemUtil.dp2px(mContext, 1f);
+            final int right = left + 1;
 
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
@@ -179,12 +179,12 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         int childCount = parent.getAdapter().getItemCount();
         if (isLastRaw(parent, itemPosition, spanCount, childCount))// 如果是最后一行，则不需要绘制底部
         {
-            outRect.set(0, 0, SystemUtil.dp2px(mContext, 1f), 0);
+            outRect.set(0, 0,  1, 0);
         } else if (isLastColum(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
         {
-            outRect.set(0, 0, 0, SystemUtil.dp2px(mContext, 1f));
+            outRect.set(0, 0, 0, 1);
         } else {
-            outRect.set(0, 0, SystemUtil.dp2px(mContext, 1f), SystemUtil.dp2px(mContext, 1f));
+            outRect.set(0, 0, 1, 1);
         }
     }
 
