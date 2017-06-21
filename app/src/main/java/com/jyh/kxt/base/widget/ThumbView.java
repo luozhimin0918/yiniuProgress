@@ -1,7 +1,6 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
@@ -13,26 +12,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
-import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.NativeStore;
-import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
-import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
-import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
-
-import butterknife.BindView;
-
-import static com.taobao.accs.ACCSManager.mContext;
 
 /**
  * Created by Mr'Dai on 2017/5/4.
@@ -53,6 +40,7 @@ public class ThumbView extends RelativeLayout {
     private CommentBean commentBean;
 
     private Animation mAnimation;
+    private ObserverData observerData;
 
     public ThumbView(Context context) {
         this(context, null);
@@ -150,23 +138,31 @@ public class ThumbView extends RelativeLayout {
                 type = VarConstant.GOOD_TYPE_COMMENT_BLOG;
                 break;
         }
-        NativeStore.addThumbID(getContext(), type, thumbId + "", null, null);
-
-        changerCount(1);
-        ivThumb.setImageResource(R.mipmap.icon_comment_like);
-
-        tvThumbAddCount.setVisibility(View.VISIBLE);
-
-        mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.thumb_anim);
-        tvThumbAddCount.startAnimation(mAnimation);
-
-        tvThumbAddCount.postDelayed(new Runnable() {
+        NativeStore.addThumbID(getContext(), type, thumbId + "", observerData, new ObserverData() {
             @Override
-            public void run() {
-                tvThumbAddCount.setVisibility(View.GONE);
+            public void callback(Object o) {
+                changerCount(1);
+                ivThumb.setImageResource(R.mipmap.icon_comment_like);
+
+                tvThumbAddCount.setVisibility(View.VISIBLE);
+
+                mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.thumb_anim);
+                tvThumbAddCount.startAnimation(mAnimation);
+
+                tvThumbAddCount.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvThumbAddCount.setVisibility(View.GONE);
+                    }
+                }, mAnimation.getDuration());
+                isThumb = true;
             }
-        }, mAnimation.getDuration());
-        isThumb = true;
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
 //        IBaseView iBaseView = (IBaseView) getContext();
 //        VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
@@ -197,9 +193,10 @@ public class ThumbView extends RelativeLayout {
         }
     }
 
-    public void setThumbCount(CommentBean commentBean, int thumbId) {
+    public void setThumbCount(CommentBean commentBean, int thumbId, ObserverData observerData) {
         this.thumbId = thumbId;
         this.commentBean = commentBean;
+        this.observerData=observerData;
         int count = commentBean.getNum_good();
 
         String type = null;

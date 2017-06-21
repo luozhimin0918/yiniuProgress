@@ -433,22 +433,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                     @Override
                                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
                                             glideAnimation) {
-                                        int width = resource.getWidth();//px
-                                        int height = resource.getHeight();
-                                        ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
-                                        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                        //等比例缩放
-                                        finalKxHolder.imageView.setAdjustViewBounds(true);
-                                        finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                        if (width > imgMaxWidth) {
-                                            layoutParams.width = imgMaxWidth;
-                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        }
-                                        if (height > imgMaxHeight) {
-                                            layoutParams.height = imgMaxHeight;
-                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        }
+//                                        int width = resource.getWidth();//px
+//                                        int height = resource.getHeight();
+//                                        ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+//                                        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                                        //等比例缩放
+//                                        finalKxHolder.imageView.setAdjustViewBounds(true);
+//                                        finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//                                        if (width > imgMaxWidth) {
+//                                            layoutParams.width = imgMaxWidth;
+//                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
+//                                        }
+//                                        if (height > imgMaxHeight) {
+//                                            layoutParams.height = imgMaxHeight;
+//                                            finalKxHolder.imageView.setLayoutParams(layoutParams);
+//                                        }
                                         finalKxHolder.imageView.setImageBitmap(resource);
                                     }
                                 });

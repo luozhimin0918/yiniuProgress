@@ -22,6 +22,7 @@ import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BasePresenter;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonTextView;
@@ -138,7 +139,15 @@ public class CommentAdapter extends BaseAdapter {
             case 1:
                 baseViewHolder = mViewHolder2;
 
-                mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean, commentBean.getParent_id());
+                mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean, commentBean.getParent_id(), new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                    }
+                });
                 mViewHolder2.tvPrimaryMessage.setText(String.valueOf(commentBean.getParent_num_reply()));
                 mViewHolder2.tvPrimaryTime.setText(getSimpleTime(commentBean.getParent_create_time()));
                 String convertContent = "@" + commentBean.getParent_member_nickname() +
@@ -250,7 +259,18 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvNickName.setText(commentBean.getMember_nickname());
         baseViewHolder.tvTime.setText(getSimpleTime(commentBean.getCreate_time()));
 
-        baseViewHolder.tvThumb.setThumbCount(commentBean, commentBean.getId());
+        baseViewHolder.tvThumb.setThumbCount(commentBean, commentBean.getId(),new ObserverData(){
+
+            @Override
+            public void callback(Object o) {
+                commentBean.setNum_good(commentBean.getNum_good()+1);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
         baseViewHolder.tvMessage.setText(String.valueOf(commentBean.getNum_reply()));
         baseViewHolder.tvContent.convertToGif(1, commentBean, 0, commentBean.getContent());

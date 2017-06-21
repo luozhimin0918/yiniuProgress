@@ -161,6 +161,15 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                         });
             }
         });
+        holder.tvCommentCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                intent.putExtra(IntentConstant.O_ID, video.getId());
+                mContext.startActivity(intent);
+            }
+        });
+
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -54,9 +54,11 @@
 
             <View
                 android:id="@+id/v_line"
-                android:layout_width="1px"
+                android:layout_width="1dp"
                 android:layout_height="15dp"
-                android:background="@color/line_color3"/>
+                android:background="@color/line_color3"
+                android:layout_marginLeft="10dp"
+                />
         </LinearLayout>
 
         <RelativeLayout

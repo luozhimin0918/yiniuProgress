@@ -252,7 +252,9 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             if (list == null || list.size() == 0) {
                 plListRootView.loadEmptyData();
             } else {
-                if (list.size() < 8) {
+                if (list.size() < 5) {
+                    plContent.setMode(PullToRefreshBase.Mode.DISABLED);
+                } else if (!authorPresenter.isMore()) {
                     plContent.noMoreData();
                 }
 
