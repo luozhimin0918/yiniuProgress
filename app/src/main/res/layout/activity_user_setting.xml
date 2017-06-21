@@ -89,7 +89,9 @@
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size2"/>
 
+
             <ImageView
+                android:id="@+id/iv_clear"
                 android:layout_width="@dimen/arrow_right_width"
                 android:layout_height="@dimen/arrow_right_height"
                 android:layout_alignParentRight="true"
@@ -97,6 +99,16 @@
                 android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
                 android:src="@mipmap/icon_comment_more"
                 />
+            <TextView
+                android:id="@+id/tv_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/content_font_size2"
+                android:textColor="@color/font_color6"
+                android:text="60M"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@id/iv_clear"/>
 
         </RelativeLayout>
 
@@ -119,6 +131,7 @@
                 android:textSize="@dimen/content_font_size2"/>
 
             <ImageView
+                android:id="@+id/iv_version"
                 android:layout_width="@dimen/arrow_right_width"
                 android:layout_height="@dimen/arrow_right_height"
                 android:layout_alignParentRight="true"
@@ -126,6 +139,16 @@
                 android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
                 android:src="@mipmap/icon_comment_more"
                 />
+
+            <View
+                android:id="@+id/v_version_point"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/bg_point_red"
+                android:layout_toLeftOf="@id/iv_version"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 

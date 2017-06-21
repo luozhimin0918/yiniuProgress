@@ -31,6 +31,7 @@
         android:layout_toRightOf="@id/iv_photo"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        android:paddingTop="5dp"
         >
 
         <TextView
@@ -47,8 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_name"
             android:layout_marginTop="@dimen/attention_padding2"
-            android:maxLines="2"
+            android:maxLines="1"
             android:textColor="@color/font_color6"
+            android:ellipsize="end"
             android:textSize="@dimen/describe_font_size1"
             />
     </LinearLayout>

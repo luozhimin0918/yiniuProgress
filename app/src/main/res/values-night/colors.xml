@@ -24,6 +24,7 @@
     <color name="line_color5">#156295</color>
     <color name="line_color6">#3b3b3b</color>
 
+    <color name="indicator_color">#115E91</color>
     <color name="bg_color">#262626</color>
 
     <color name="toolbar_spilt_line">#CDCDCD</color>

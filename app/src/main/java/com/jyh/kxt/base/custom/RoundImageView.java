@@ -73,7 +73,7 @@ public class RoundImageView extends ImageView {
         if (outsideRound) {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setStyle(Style.STROKE);
-            paint.setColor(Color.WHITE);
+            paint.setColor(Color.parseColor("#66ffffff"));
             paint.setStrokeWidth(3); //设定默认宽度3px
             canvas.drawCircle(w / 2, w / 2, w / 2 - 3, paint);
         }

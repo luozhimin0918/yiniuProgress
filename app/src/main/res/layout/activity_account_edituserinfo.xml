@@ -102,7 +102,7 @@
                             android:layout_marginRight="@dimen/item_height"
                             android:gravity="center"
                             android:src="@mipmap/ic_launcher"
-                            android:textColor="@color/font_color2"
+                            android:textColor="@color/font_color6"
                             android:textSize="@dimen/content_font_size"/>
 
                         <View
@@ -144,7 +144,7 @@
                             android:layout_marginRight="@dimen/item_height"
                             android:gravity="center"
                             android:src="@mipmap/ic_launcher"
-                            android:textColor="@color/font_color2"
+                            android:textColor="@color/font_color6"
                             android:textSize="@dimen/content_font_size"/>
 
                         <View
@@ -186,7 +186,7 @@
                             android:layout_marginRight="@dimen/item_height"
                             android:gravity="center"
                             android:src="@mipmap/ic_launcher"
-                            android:textColor="@color/font_color2"
+                            android:textColor="@color/font_color6"
                             android:textSize="@dimen/content_font_size"/>
 
                         <View
@@ -230,7 +230,7 @@
                             android:layout_toRightOf="@id/tv_address_title"
                             android:gravity="center_vertical|right"
                             android:src="@mipmap/ic_launcher"
-                            android:textColor="@color/font_color2"
+                            android:textColor="@color/font_color6"
                             android:textSize="@dimen/content_font_size"/>
 
                         <View
@@ -270,7 +270,7 @@
                             android:layout_marginRight="@dimen/item_height"
                             android:gravity="center"
                             android:src="@mipmap/ic_launcher"
-                            android:textColor="@color/font_color2"
+                            android:textColor="@color/font_color6"
                             android:textSize="@dimen/content_font_size"/>
 
                         <View

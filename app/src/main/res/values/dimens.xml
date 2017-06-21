@@ -382,7 +382,7 @@
 
     <dimen name="collect_video_height">93dp</dimen>
     <dimen name="collect_video_imgWidth">140dp</dimen>
-    <dimen name="collect_video_playImgSize">50dp</dimen>
+    <dimen name="collect_video_playImgSize">40dp</dimen>
 
     <dimen name="collect_news_height">79dp</dimen>
 

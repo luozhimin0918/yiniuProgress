@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="@color/bg_color1"
-        tl:tl_indicator_color="@color/blue"
+        tl:tl_indicator_color="@color/indicator_color"
 
         tl:tl_indicator_corner_radius="1.5dp"
         tl:tl_indicator_width="10dp"

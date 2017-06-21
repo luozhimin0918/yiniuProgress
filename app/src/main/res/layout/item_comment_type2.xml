@@ -36,13 +36,15 @@
             android:id="@+id/tv_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/describe_font_size3"
             android:textColor="@color/font_color62"/>
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:textSize="@dimen/min_font_size"
+            android:layout_marginTop="3dp"
             android:textColor="@color/font_color9"/>
     </LinearLayout>
 
@@ -59,7 +61,6 @@
             android:id="@+id/tv_thumb"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
             android:drawableLeft="@mipmap/icon_comment_unlike"
             android:drawablePadding="5dp"
             android:gravity="center"/>
@@ -68,6 +69,7 @@
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:drawableLeft="@mipmap/icon_comment_reply"
             android:drawablePadding="5dp"
             android:gravity="center"
@@ -80,11 +82,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ll_je_sao"
         android:layout_below="@+id/ll_je_sao"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:background="@color/bg_color2"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="15dp">
@@ -162,7 +164,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ll_je_sao"
         android:layout_below="@+id/ll_primary_info"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:paddingBottom="3dp"
         android:paddingTop="3dp"
@@ -175,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_content"
         android:layout_below="@+id/tv_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:visibility="gone"
         android:orientation="vertical"/>
 </RelativeLayout>

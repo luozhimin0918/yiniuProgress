@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.GlideCacheUtil;
 import com.jyh.kxt.user.presenter.SettingPresenter;
 import com.library.util.SPUtils;
 
@@ -30,7 +31,10 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.rl_sound) RelativeLayout rlSound;
     @BindView(R.id.rl_clear) RelativeLayout rlClear;
     @BindView(R.id.rl_version) RelativeLayout rlVersion;
+    @BindView(R.id.tv_clear) TextView tvClear;
+    @BindView(R.id.v_version_point) View vPoint;
     private SettingPresenter settingPresenter;
+    private String cacheSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,10 @@ public class SettingActivity extends BaseActivity {
 
         settingPresenter = new SettingPresenter(this);
         tvBarTitle.setText("设置");
+
+        cacheSize = GlideCacheUtil.getInstance().getCacheSize(this);
+        tvClear.setText(cacheSize);
+        settingPresenter.version(true);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.rl_push, R.id.iv_push, R.id.rl_sound, R.id.iv_sound, R.id.rl_clear, R.id
@@ -64,10 +72,11 @@ public class SettingActivity extends BaseActivity {
                 changeBtnStatus(view, 1);
                 break;
             case R.id.rl_clear:
-                settingPresenter.clear();
+                settingPresenter.clear(cacheSize);
+                tvClear.setText("0.00KB");
                 break;
             case R.id.rl_version:
-                settingPresenter.version();
+                settingPresenter.version(false);
                 break;
         }
     }
@@ -89,5 +98,15 @@ public class SettingActivity extends BaseActivity {
                 ivSound.setChecked(checkedSound);
                 break;
         }
+    }
+
+    public void changeVersionPointStatus(boolean isShow) {
+        vPoint.setVisibility(isShow ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(SettingPresenter.class.getName());
     }
 }

@@ -29,6 +29,7 @@
     <color name="line_background1">#2d2d2d</color>
     <color name="line_background2">#292929</color>
     <color name="line_background3">#4d4d4d</color>
+    <color name="line_background4">#2d2d2d</color>
     <color name="done_text_color_normal">#ff909090</color>
     <color name="done_text_color_disabled">#ffcccccc</color>
     <color name="blue">#115e91</color>

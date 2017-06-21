@@ -21,11 +21,12 @@
 
     <color name="line_color">#ff888888</color>
     <color name="line_color2">#fff7f7f7</color>
-    <color name="line_color3">#d9d9d9</color>
+    <color name="line_color3">#f1f1f1</color>
     <color name="line_color4">#51606A</color>
     <color name="line_color5">#0A94f1</color>
     <color name="line_color6">#ededed</color>
 
+    <color name="indicator_color">#009AFF</color>
     <color name="bg_color">#F9FAFB</color>
 
     <color name="toolbar_spilt_line">#CDCDCD</color>

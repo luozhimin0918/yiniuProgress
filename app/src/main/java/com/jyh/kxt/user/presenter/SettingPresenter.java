@@ -30,80 +30,89 @@ import com.trycatch.mysnackbar.TSnackbar;
 public class SettingPresenter extends BasePresenter {
 
     @BindObject SettingActivity mSettingActivity;
+    private VolleyRequest volleyRequest;
 
     public SettingPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        volleyRequest = new VolleyRequest(mContext, mQueue);
+        volleyRequest.setTag(getClass().getName());
     }
 
 
     /**
      * 清理缓存
      */
-    public void clear() {
-        String cacheSize = GlideCacheUtil.getInstance().getCacheSize(mContext);
-        ToastView.makeText(mContext, "成功清理" + cacheSize+"缓存");
+    public void clear(String cacheSize) {
+        ToastView.makeText(mContext, "成功清理" + cacheSize + "缓存");
         GlideCacheUtil.getInstance().clearImageAllCache(mContext);
     }
 
     /**
      * 检测版本
      */
-    public void version() {
-        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+    public void version(final boolean isInit) {
+
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        showWaitDialog("检查中...");
+        if (!isInit)
+            showWaitDialog("检查中...");
         volleyRequest.doPost(HttpConstant.VERSION_VERSION, jsonParam, new HttpListener<VersionJson>() {
             @Override
             protected void onResponse(VersionJson versionJson) {
-                dismissWaitDialog();
-                checkComparisonVersion(versionJson);
+                if (!isInit)
+                    dismissWaitDialog();
+                checkComparisonVersion(versionJson, isInit);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                dismissWaitDialog();
+                if (!isInit)
+                    dismissWaitDialog();
             }
         });
     }
 
 
-    private void checkComparisonVersion(VersionJson versionJson) {
+    private void checkComparisonVersion(VersionJson versionJson, boolean isInit) {
 
         int currentVersionCode = SystemUtil.getVersionCode(mContext);
         if (versionJson.getVersionCode() <= currentVersionCode) {
-
-            TSnackbar.make(mSettingActivity.ivBarBreak, "当前版本已是最新", TSnackbar.LENGTH_LONG, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN)
-                    .setMinHeight(SystemUtil.getStatuBarHeight(mContext),
-                            mContext.getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
-                    .setPromptThemBackground(Prompt.WARNING).show();
+            if (!isInit)
+                TSnackbar.make(mSettingActivity.ivBarBreak, "当前版本已是最新", TSnackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_TOP_TO_DOWN)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(mContext),
+                                mContext.getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
+                        .setPromptThemBackground(Prompt.WARNING).show();
+            else
+                mSettingActivity.changeVersionPointStatus(false);
             return;
         }
 
         String replaceContent = versionJson.getContent().replace("<br>", "\n");
 
-
-        new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
-                .setPositiveButton("是",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Uri uri = Uri.parse("http://gdown.baidu.com/data/wisegame/0852f6d39ee2e213/QQ_676.apk");
-                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                mContext.startActivity(intent);
-                            }
-                        })
-                .setNegativeButton("否",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                .setTitle("检查到最新安装包" + versionJson.getVersionName())
-                .setMessage(replaceContent)
-                .show();
+        if (!isInit)
+            new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
+                    .setPositiveButton("是",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Uri uri = Uri.parse("http://gdown.baidu.com/data/wisegame/0852f6d39ee2e213/QQ_676.apk");
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    mContext.startActivity(intent);
+                                }
+                            })
+                    .setNegativeButton("否",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                    .setTitle("检查到最新安装包" + versionJson.getVersionName())
+                    .setMessage(replaceContent)
+                    .show();
+        else
+            mSettingActivity.changeVersionPointStatus(true);
     }
 }

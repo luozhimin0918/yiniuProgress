@@ -73,13 +73,13 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     }
 
     private void initView(AttributeSet attrs) {
-        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(1);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
     public void setDividerNull() {
-        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
@@ -394,7 +394,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
     }
 
     public void onChangeTheme() {
-        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background1)));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(1);
 
         if (tvFootTextView != null) {

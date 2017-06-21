@@ -88,9 +88,19 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 .error(R.mipmap.icon_def_news)
                 .into(holder.ivPhoto);
 
-        String author = news.getAuthor();
-        if (author != null)
-            author = "文/" + author;
+        String author;
+        String type = news.getType();
+        if("ad".equals(type)){
+            author="广告";
+        }else{
+            author = news.getAuthor();
+            if (!RegexValidateUtil.isEmpty(author))
+                author = "文/" + author;
+            else
+                author="";
+        }
+
+
         holder.tvAuthor.setText(author);
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));

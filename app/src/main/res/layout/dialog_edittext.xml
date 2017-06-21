@@ -15,12 +15,14 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/editUserInfo_EditHeight"
         android:layout_weight="1"
+        android:background="@null"
         android:gravity="center_vertical"
-        android:textCursorDrawable="@color/font_color8"
+        android:hint="请设置用户昵称"
         android:maxLength="10"
         android:singleLine="true"
         android:textColor="@color/font_color5"
-        android:background="@null"
+        android:textColorHint="@color/font_color6"
+        android:textCursorDrawable="@color/font_color8"
         android:textSize="@dimen/content_font_size"/>
 
     <TextView
@@ -39,7 +41,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/editUserInfo_EditPadding2"
         android:paddingRight="@dimen/editUserInfo_EditPadding3"
-        android:text="确认"
+        android:text="确定"
         android:textColor="@color/font_color8"
         android:textSize="@dimen/content_font_size"
         />

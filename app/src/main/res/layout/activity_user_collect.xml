@@ -6,18 +6,61 @@
               android:background="@color/theme1"
               android:orientation="vertical">
 
-    <include layout="@layout/action_bar1"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/theme1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_bar_break"
+            android:layout_width="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentLeft="true"
+            android:padding="14dp"
+            android:src="@mipmap/ico_break"/>
+
+        <TextView
+            android:id="@+id/tv_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/iv_bar_function"
+            android:layout_toRightOf="@+id/iv_bar_break"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/actionBar_textColor1"
+            android:textSize="@dimen/content_font_size2"/>
+
+        <TextView
+            android:id="@+id/iv_bar_function"
+            android:layout_width="wrap_content"
+            android:minWidth="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentRight="true"
+            android:padding="15dp"
+            android:textColor="@color/font_color3"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color3"/>
+
+    </RelativeLayout>
 
     <com.library.widget.tablayout.SlidingTabLayout
         android:id="@+id/stl_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigationBar2Height"
         android:layout_gravity="bottom"
-        android:background="@color/line_color2"
+        android:background="@color/font_color61"
         android:paddingRight="@dimen/navigationBar2ImageWidth"
-        tl:tl_indicator_color="@color/blue"
+        tl:tl_indicator_color="@color/indicator_color"
         tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
-        tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
         tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth2"
         tl:tl_mode_scrollable="MODE_FIXED"
         tl:tl_tab_padding="10dp"

@@ -74,9 +74,17 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
                         (holder.ivPhoto);
 
         holder.tvTitle.setText(news.getTitle());
-        String author = news.getAuthor();
-        if (author != null)
-            author = "文/" + author;
+        String author;
+        String type = news.getType();
+        if("ad".equals(type)){
+            author="广告";
+        }else{
+            author = news.getAuthor();
+            if (!RegexValidateUtil.isEmpty(author))
+                author = "文/" + author;
+            else
+                author="";
+        }
         holder.tvAuthor.setText(author);
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));
