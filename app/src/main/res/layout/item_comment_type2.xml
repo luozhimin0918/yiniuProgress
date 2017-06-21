@@ -86,7 +86,6 @@
         android:background="@color/bg_color2"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="10dp"
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
