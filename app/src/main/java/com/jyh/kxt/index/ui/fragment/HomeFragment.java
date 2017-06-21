@@ -391,7 +391,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (getContext() != null) {
+        if (getContext() != null && newsFragment == currentFragment) {
             setGifIcon();
         }
         if (newsFragment != null) {

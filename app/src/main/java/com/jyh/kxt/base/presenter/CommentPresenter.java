@@ -106,6 +106,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         this.mBaseActivity = mBaseActivity;
     }
 
+    @BindView(R.id.tv_comment_count_title) public TextView tvCommentCountTitle;
     @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
     @BindView(R.id.tv_recommend_label) TextView tvRecommendLabel;
     @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
@@ -153,8 +154,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
             Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news)
-                    .override(100, 100).into
-                    (ivVideoCover);
+                    .override(100, 100).into(ivVideoCover);
+
             ivVideoName.setText(videoDetailVideoBean.getTitle());
 
             llMoreVideo.addView(moreVideoView);

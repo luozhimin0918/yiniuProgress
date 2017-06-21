@@ -61,7 +61,8 @@ import de.tavendo.autobahn.WebSocketOptions;
  * 创建日期:2017/4/21.
  */
 
-public class FlashPresenter extends BasePresenter implements FastInfoPinnedListView.FooterListener, PullToRefreshBase.OnRefreshListener2,
+public class FlashPresenter extends BasePresenter implements FastInfoPinnedListView.FooterListener, PullToRefreshBase
+        .OnRefreshListener2,
         PageLoadLayout.OnAfreshLoadListener {
 
     @BindObject FlashFragment flashFragment;
@@ -94,16 +95,17 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      * 初始化Socket
      */
     private void initSocket() {
-        if (connection == null)
+        if (connection == null) {
             connection = new WebSocketConnection();
-        if (connection.isConnected())
+        }
+        if (connection.isConnected()) {
             connection.disconnect();
+        }
         connect();
     }
 
     /**
      * 连接Socket
-     *
      */
     private void connect() {
         options = new WebSocketOptions();
@@ -112,8 +114,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         options.setSocketReceiveTimeout(10000);
         headers = new ArrayList<>();
         headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
-        if (queue == null)
+        if (queue == null) {
             queue = flashFragment.getQueue();
+        }
         if (request == null) {
             request = new VolleyRequest(mContext, queue);
             request.setTag(getClass().getName());
@@ -136,9 +139,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        if (isInit){
+                        if (isInit) {
                             flashFragment.plRootView.loadError();
-                            isInit=false;
+                            isInit = false;
                         }
                     }
                 }
@@ -146,9 +149,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                 @Override
                 protected void onErrorResponse(VolleyError error) {
                     super.onErrorResponse(error);
-                    if (isInit){
+                    if (isInit) {
                         flashFragment.plRootView.loadError();
-                        isInit=false;
+                        isInit = false;
                     }
                 }
             });
@@ -218,10 +221,11 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             org.json.JSONObject socket = new org.json.JSONObject(str);
             String cmd = socket.getString(IntentConstant.SOCKET_CMD);
             String status = socket.getString(IntentConstant.SOCKET_STATUS);
-            if ("1".equals(status))
+            if ("1".equals(status)) {
                 switch (cmd) {
                     case VarConstant.SOCKET_CMD_LOGIN:
-                        List<String> initFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG).toString(),
+                        List<String> initFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG)
+                                        .toString(),
                                 String.class);
                         List<FlashJson> initflashs = new ArrayList<>();
                         for (String initFlash : initFlashStr) {
@@ -241,7 +245,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         }
                         break;
                     case VarConstant.SOCKET_CMD_HISTORY:
-                        List<String> moreFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG).toString(),
+                        List<String> moreFlashStr = JSON.parseArray(socket.getJSONArray(IntentConstant.SOCKET_MSG)
+                                        .toString(),
                                 String.class);
                         List<FlashJson> moreFlashs = new ArrayList<>();
                         for (String s : moreFlashStr) {
@@ -256,7 +261,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         Boolean isTop = SPUtils.getBooleanTrue(mContext, SpConstant.FLASH_FILTRATE_TOP);
                         if (doWhat == null) {
                             //添加新快讯
-                            FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG).toString(), FlashJson
+                            FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG)
+                                    .toString(), FlashJson
                                     .class);
                             if (isTop) {
                                 topNotice(newFlash);
@@ -274,7 +280,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                     for (int i = 0; i < size; i++) {
                                         if (flashJsons.get(i) instanceof FlashJson) {
                                             FlashJson flashJson = flashJsons.get(i);
-                                            String id = socket.getJSONObject(IntentConstant.SOCKET_MSG).getString(IntentConstant.SOCKET_ID);
+                                            String id = socket.getJSONObject(IntentConstant.SOCKET_MSG).getString
+                                                    (IntentConstant.SOCKET_ID);
                                             if (id.equals(flashJson.getSocre())) {
                                                 flashJsons.remove(flashJson);
                                             }
@@ -288,7 +295,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                         if (flashJsons.get(i) instanceof FlashJson) {
                                             FlashJson flashJson = flashJsons.get(i);
                                             String localId = flashJson.getSocre();
-                                            FlashJson remoteFlash = JSON.parseObject(socket.getJSONObject(IntentConstant.SOCKET_MSG)
+                                            FlashJson remoteFlash = JSON.parseObject(socket.getJSONObject
+                                                    (IntentConstant.SOCKET_MSG)
                                                     .toString(), FlashJson.class);
                                             String remoteId = remoteFlash.getSocre();
                                             if (localId.equals(remoteId)) {
@@ -300,7 +308,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                     break;
                                 default:
                                     //添加新快讯
-                                    FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG).toString(), FlashJson
+                                    FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG)
+                                            .toString(), FlashJson
                                             .class);
                                     if (isTop) {
                                         topNotice(newFlash);
@@ -314,6 +323,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         }
                         break;
                 }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -330,8 +340,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         Uri uri = Uri.parse("android.resource://"
                 + mContext.getPackageName() + "/" + R.raw.kxt_notify);
         // 如果为空，才构造，不为空，说明之前有构造过
-        if (mMediaPlayer == null)
+        if (mMediaPlayer == null) {
             mMediaPlayer = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        }
         mMediaPlayer.load(mContext, R.raw.kxt_notify, 1);
         mMediaPlayer.play(1, 1, 1, 0, 0, 1);
     }
@@ -354,6 +365,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             builder.setAutoCancel(true);// 点击通知之后自动消失
 
             String content = newFlash.getContent();
+            builder.setTicker(content);
+
             switch (newFlash.getCode()) {
                 case VarConstant.SOCKET_FLASH_CJRL:
                     Flash_RL flash_rl = JSON.parseObject(content, Flash_RL.class);
@@ -434,6 +447,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                     break;
             }
             Notification build = builder.build();
+
+
             build.flags |= Notification.FLAG_AUTO_CANCEL;
             // 4发送通知
             final int id = new Random().nextInt(1000);
@@ -529,8 +544,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      * 网络断开重连
      */
     public void reConnection() {
-        if (connection == null)
+        if (connection == null) {
             connection = new WebSocketConnection();
+        }
         if (connection.isConnected()) {
             connection.disconnect();
         }
@@ -540,11 +556,13 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (connection == null)
+            if (connection == null) {
                 connection = new WebSocketConnection();
+            }
             Log.i("flashSocket", "" + connection.isConnected());
-            if (!connection.isConnected() && NetUtils.isNetworkAvailable(mContext))
+            if (!connection.isConnected() && NetUtils.isNetworkAvailable(mContext)) {
                 connect();
+            }
             handler.sendEmptyMessageDelayed(1, 300000);
             return false;
         }

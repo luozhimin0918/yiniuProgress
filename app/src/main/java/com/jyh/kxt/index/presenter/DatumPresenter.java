@@ -2,34 +2,25 @@ package com.jyh.kxt.index.presenter;
 
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.DiscolorTextView;
 import com.jyh.kxt.base.widget.OptionLayout;
+import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
+import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
-import com.library.util.SystemUtil;
 import com.library.widget.datetimepicker.fourmob.datetimepicker.date.DatePickerDialog;
-import com.library.widget.window.ToastView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,8 +33,6 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
 
     @BindObject DatumFragment datumFragment;
 
-
-    public List<String> mAreaList = new ArrayList<>();
 
     public DatumPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -64,10 +53,12 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
     @BindView(R.id.dtv_reset) DiscolorTextView dtvReset;
     @BindView(R.id.dtv_confirm) DiscolorTextView dtvConfirm;
 
-    private RotateAnimation mRotateAnimation;
-    private boolean isRotateAnimationIng = false;
+//    private RotateAnimation mRotateAnimation;
+//    private boolean isRotateAnimationIng = false;
 
-    public void registerFiltrateAgency(View filtrateView) {
+    public void registerFiltrateAgency(View filtrateView,
+                                       final CalendarFragment calendarFragment,
+                                       final CalendarItemFragment mCalendarItemFragment) {
         ButterKnife.bind(this, filtrateView);
 
         olState.setMinSelectCount(1);
@@ -85,6 +76,24 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
         olJudge.setMaxSelectCount(3);
         olJudge.setSelectMode(OptionLayout.SelectMode.CheckMode);
 
+        HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
+        HashSet<String> cityDefaultData = cityOptionMap.get(mCalendarItemFragment);
+        cityDefaultData.add("全部");
+
+        HashMap<CalendarItemFragment, HashSet<String>> citySelectMap = calendarFragment.citySelectMap;
+        HashSet<String> citySelectData = citySelectMap.get(mCalendarItemFragment);
+
+        olArea.setMinSelectCount(1);
+        olArea.generateCheckBox(cityDefaultData);
+        olArea.setMaxSelectCount(cityDefaultData.size());
+        olArea.setSelectMode(OptionLayout.SelectMode.CheckMode);
+
+        if (citySelectData.size() == 0) {
+            olArea.setSelectItemIndex(0);
+        } else {
+            olArea.setSelectItemIndex(citySelectData);
+        }
+
         //重置
         dtvReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,8 +110,10 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
             public void onClick(View v) {
                 SPUtils.save(mContext, SpConstant.DATUM_STATE, olState.getSelectedMap());
                 SPUtils.save(mContext, SpConstant.DATUM_IMPORTANCE, olImportance.getSelectedMap());
-                SPUtils.save(mContext, SpConstant.DATUM_AREA, olArea.getSelectedMap());
                 SPUtils.save(mContext, SpConstant.DATUM_JUDGE, olJudge.getSelectedMap());
+//                SPUtils.save(mContext, SpConstant.DATUM_AREA, olArea.getSelectedMap());
+
+                calendarFragment.updateSelectedCityDataFromFragment(mCalendarItemFragment, olArea.getSelectedMap());
 
                 datumFragment.filtratePopup.dismiss();
                 datumFragment.getCalendarFragment().initializeFiltrationSet();
@@ -110,8 +121,7 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
             }
         });
 
-
-        if (mAreaList.size() == 0) {
+        /*if (mAreaList.size() == 0) {
             olArea.setVisibility(View.GONE);
             ivUpdateArea.setVisibility(View.VISIBLE);
 
@@ -158,7 +168,7 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
             } else {
                 olArea.setSelectItemIndex(0);
             }
-        }
+        }*/
     }
 
 
@@ -198,7 +208,7 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
     }
 
     public void requestAreaInfo(final boolean isAlreadyDisplay) {
-        mAreaList.clear();
+        /*mAreaList.clear();
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         volleyRequest.doPost(HttpConstant.DATA_COUNTRY, jsonParam, new HttpListener<List<String>>() {
@@ -241,6 +251,8 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
                     ivUpdateArea.setVisibility(View.GONE);
                 }
             }
-        });
+        });*/
     }
+
+
 }

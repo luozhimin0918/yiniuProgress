@@ -25,6 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,10 +50,14 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     public Set<String> stateSet;
     public Set<String> importanceSet;
-    public Set<String> areaSet;
     public Set<String> judgeSet;
+    public Set<String> areaSet;
 
     private List<Fragment> fragmentList = new ArrayList<>();//内容页面Fragment
+    //全部的Option
+    public HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = new HashMap<>();
+    //城市选择的Map
+    public HashMap<CalendarItemFragment, HashSet<String>> citySelectMap = new HashMap<>();
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -64,7 +70,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         createItemFragments();
     }
 
-    private FragmentManager fm;
+    public FragmentManager fm;
     private BaseFragmentAdapter pageAdapter;
 
     public void createItemFragments() {
@@ -121,6 +127,16 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onPageSelected(int position) {
         calendarPresenter.updateSelectedColor(position);
+
+        try {//如果切换回来存在筛选数据则改变
+            Fragment fragment = fragmentList.get(position);
+            HashSet<String> citySelectSet = citySelectMap.get(fragment);
+            if (citySelectSet != null) {
+                areaSet = citySelectSet;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -132,6 +148,10 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         Long aLong = calendarPresenter.dataLongList.get(stlNavigationBar.getCurrentTab());
         String mCalendarDate = (String) DateFormat.format("yyyy-MM-dd", aLong);
         return mCalendarDate;
+    }
+
+    public Fragment getCurrentFragment() {
+        return fragmentList.get(stlNavigationBar.getCurrentTab());
     }
 
     /**
@@ -170,7 +190,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     public void initializeFiltrationSet() {
         stateSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_STATE);
         importanceSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_IMPORTANCE);
-        areaSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_AREA);
         judgeSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_JUDGE);
 
         if (importanceSet.size() == 0) {
@@ -179,30 +198,46 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
         if (stateSet.size() == 0) {
             stateSet.add("全部");
         }
-        if (areaSet.size() == 0) {
-            areaSet.add("全部");
-        }
+
         if (judgeSet.size() == 0) {
             judgeSet.add("全部");
         }
     }
 
     /**
+     * 保存Fragmnet 对应的城市信息
+     *
+     * @param calendarItemFragment
+     * @param hashSetCity
+     * @param hashSetSelectedCity
+     */
+    public void addCityDataToFragment(CalendarItemFragment calendarItemFragment,
+                                      HashSet<String> hashSetCity,
+                                      HashSet<String> hashSetSelectedCity) {
+        cityOptionMap.put(calendarItemFragment, hashSetCity);
+        citySelectMap.put(calendarItemFragment, hashSetSelectedCity);
+        areaSet = hashSetSelectedCity;
+    }
+
+    /**
+     * 保存Fragmnet 对应的城市信息
+     *
+     * @param calendarItemFragment
+     * @param hashSetSelectedCity
+     */
+    public void updateSelectedCityDataFromFragment(CalendarItemFragment calendarItemFragment,
+                                                   HashSet<String> hashSetSelectedCity) {
+        citySelectMap.put(calendarItemFragment, hashSetSelectedCity);
+        areaSet = hashSetSelectedCity;
+    }
+
+    /**
      * 开始刷新
      */
     public void updateFiltration() {
-
         try {
-            List<Fragment> fragments = fm.getFragments();
-            for (int i = 0; i < fragments.size(); i++) {
-                Fragment fragment = fragments.get(i);
-                if (fragment != null) {
-                    CalendarItemFragment calendarItemFragment = (CalendarItemFragment) fragment;
-                    if (calendarItemFragment.calendarDate != null) {
-                        calendarItemFragment.updateFiltration();
-                    }
-                }
-            }
+            CalendarItemFragment calendarItemFragment = (CalendarItemFragment) getCurrentFragment();
+            calendarItemFragment.updateFiltration();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,7 +268,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             }
         }
 
-        if (areaSet.size() != 0) {
+        if (areaSet != null && areaSet.size() != 0) {
             if (!areaSet.contains("全部")) {
                 if (!areaSet.contains(mCalendarFinanceBean.getState())) {
                     return false;
@@ -257,7 +292,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
      * @return
      */
     public boolean isImportantMeetConditions(CalendarImportantBean mCalendarImportantBean) {
-        if (areaSet != null) {
+        if (areaSet != null && areaSet != null) {
             if (!areaSet.contains("全部")) {
                 if (!areaSet.contains(mCalendarImportantBean.getState())) {
                     return false;

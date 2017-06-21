@@ -15,6 +15,7 @@ import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -38,6 +39,7 @@ import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
+import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.datum.ui.fragment.DataFragment;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
@@ -52,6 +54,7 @@ import com.library.util.SystemUtil;
 import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -62,6 +65,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -93,6 +99,16 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_datum, LibActivity.StatusBarColor.THEME1);
 
@@ -120,13 +136,38 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
             case R.id.iv_right_icon1:
+                /*HashSet<String> hashSetCity = null;
+                CalendarItemFragment mCalendarItemFragment = null;
+                try {
+                    CalendarFragment currentCalendarFragment = (CalendarFragment) calendarFragment;
+                    currentCalendarFragment.switchCityScreenData();//重置筛选数据
 
+                    Fragment currentItemFragment = currentCalendarFragment.getCurrentFragment();
+                    mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
+                    hashSetCity = mCalendarItemFragment.mCalendarItemPresenter.hashSetCity;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (hashSetCity == null) {
+                    return;
+                }*/
+                CalendarFragment calendarFragment = (CalendarFragment) this.calendarFragment;
+                Fragment currentItemFragment = calendarFragment.getCurrentFragment();
+                CalendarItemFragment mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
+
+                HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
+                HashSet<String> citySet = cityOptionMap.get(mCalendarItemFragment);
+                if (citySet == null || citySet.size() == 0) {
+                    ToastView.makeText3(getContext(), "没有可以筛选的数据");
+                    return;
+                }
                 DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
                 int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
 
                 filtratePopup = new PopupUtil(getActivity());
                 View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
-                datumPresenter.registerFiltrateAgency(filtrateView);
+                datumPresenter.registerFiltrateAgency(filtrateView, calendarFragment, mCalendarItemFragment);
 
                 PopupUtil.Config config = new PopupUtil.Config();
 
@@ -150,9 +191,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
                 break;
             case R.id.iv_right_icon2:
 
-                if (calendarFragment != null) {
-                    CalendarFragment calendarFragment = (CalendarFragment) this.calendarFragment;
-                    datumPresenter.openCalendar(calendarFragment.getCurrentTabDate());
+                if (this.calendarFragment != null) {
+                    CalendarFragment calendarFragments = (CalendarFragment) this.calendarFragment;
+                    datumPresenter.openCalendar(calendarFragments.getCurrentTabDate());
                 }
                 break;
         }
@@ -460,15 +501,6 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        try {
-            EventBus.getDefault().register(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     @Override
     public void onDestroyView() {
@@ -525,4 +557,5 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             e.printStackTrace();
         }
     }
+
 }

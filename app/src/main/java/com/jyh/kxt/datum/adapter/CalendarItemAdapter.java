@@ -152,7 +152,6 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                     mPaddingView.setLayoutParams(lp);
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
-
                 break;
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
@@ -208,6 +207,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         viewHolder1.llExponent,
                         viewHolder1.tvAlarm);
 
+                viewHolder1.vLine.setVisibility(mCalendarFinanceBean.isShowLine() ? View.VISIBLE : View.INVISIBLE);
                 break;
             case 2:
                 CalendarImportantBean mCalendarImportantBean = (CalendarImportantBean) mCalendarType;
@@ -219,7 +219,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                  * 时间
                  */
                 try {
-                    String time = mCalendarImportantBean.getTime().split(" ")[1];
+                    String time = mCalendarImportantBean.getTime();
                     viewHolder2.tvTime.setText(time);
                 } catch (Exception e) {
                     viewHolder2.tvTime.setText("");
@@ -240,6 +240,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                  */
                 viewHolder2.llStar.setImportance(mCalendarImportantBean.getImportance());
 
+                viewHolder2.vLine.setVisibility(mCalendarImportantBean.isShowLine() ? View.VISIBLE : View.INVISIBLE);
                 break;
             case 3:
                 CalendarHolidayBean mCalendarHolidayBean = (CalendarHolidayBean) mCalendarType;
@@ -267,6 +268,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         .centerCrop()
                         .into(viewHolder3.ivGuoqi);
 
+                viewHolder3.vLine.setVisibility(mCalendarHolidayBean.isShowLine() ? View.VISIBLE : View.INVISIBLE);
                 break;
             case 4:
                 CalendarNotBean mCalendarNotBean = (CalendarNotBean) mCalendarType;
@@ -591,16 +593,17 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
             } else if (realityFloat < 0) {
                 spannableString.setSpan(
-                        new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.decline_color)),
+                        new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.rise_color/*decline_color*/)),
                         index,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {
                 tvDescribe.setTextColor(ContextCompat.getColor(mContext, R.color.unaltered_color));
             }
+            tvDescribe.setText(spannableString);
         } catch (NumberFormatException e) {
-        } finally {
             tvDescribe.setText(describe);
+        } finally {
         }
     }
 

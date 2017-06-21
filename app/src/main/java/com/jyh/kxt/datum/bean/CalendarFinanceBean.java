@@ -31,6 +31,8 @@ public class CalendarFinanceBean  extends CalendarType{
     private String effect;
     private int effecttype;
 
+    private boolean isShowLine = true;
+
     public String getCode() {
         return code;
     }
@@ -109,5 +111,13 @@ public class CalendarFinanceBean  extends CalendarType{
 
     public void setEffecttype(int effecttype) {
         this.effecttype = effecttype;
+    }
+
+    public boolean isShowLine() {
+        return isShowLine;
+    }
+
+    public void setShowLine(boolean showLine) {
+        isShowLine = showLine;
     }
 }

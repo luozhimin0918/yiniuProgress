@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.impl.WebBuild;
@@ -179,6 +180,12 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
                 return true;
             }
 
+            if (url.endsWith(".apk")) {
+                Intent intent3 = new Intent(Intent.ACTION_VIEW);
+                intent3.setData(Uri.parse(url));
+                getContext().startActivity(intent3);
+                return true;
+            }
             view.loadUrl(url);
             return true;
         }
@@ -293,7 +300,8 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
 //                    "o_class":"blog",
 //                    "o_action":"detail",
 //                    "href":""
-            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString("o_action"), clickJson
+            JumpUtils.jump((BaseActivity) getContext(), clickJson.getString("o_class"), clickJson.getString
+                            ("o_action"), clickJson
                             .getString("o_id"),
                     clickJson.getString("href"));
         }

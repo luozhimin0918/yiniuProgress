@@ -357,6 +357,7 @@ public class BannerLayout extends RelativeLayout {
         }
         //设置margin
         params.setMargins(0, 0, 0, 0);
+        indicatorContainer.setPadding(0, 0, SystemUtil.dp2px(getContext(), 5), 0);
         //添加指示器容器布局到SliderLayout
         addView(indicatorContainer, params);
 

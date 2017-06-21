@@ -16,6 +16,7 @@ import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,7 +30,7 @@ public class CalendarItemFragment extends BaseFragment {
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
 
-    private CalendarItemPresenter mCalendarItemPresenter;
+    public CalendarItemPresenter mCalendarItemPresenter;
     public CalendarItemAdapter calendarItemAdapter;
 
     public String calendarDate;
@@ -85,6 +86,11 @@ public class CalendarItemFragment extends BaseFragment {
             DatumFragment parentFragment = (DatumFragment) getParentFragment().getParentFragment();
             parentFragment.showTimingWindow(time, observerCall);
         }
+    }
+
+    public void addCityData(HashSet<String> hashSetCity, HashSet<String> hashSetSelectedCity) {
+        CalendarFragment parentFragment = (CalendarFragment) getParentFragment();
+        parentFragment.addCityDataToFragment(this,hashSetCity, hashSetSelectedCity);
     }
 
     @Override

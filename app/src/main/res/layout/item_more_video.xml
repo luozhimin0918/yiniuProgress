@@ -3,21 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:layout_margin="8dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv_video_cover"
         android:layout_width="147dp"
-        android:scaleType="fitXY"
-        android:layout_height="83dp" />
+        android:layout_height="83dp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/iv_video_name"
         android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/font_color5"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:minHeight="30dp"
+        android:textSize="@dimen/describe_font_size1"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/font_color5"/>
 </LinearLayout>

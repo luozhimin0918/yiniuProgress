@@ -149,6 +149,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     tvPlayCount.setText(detailJson.getNum_play());
 
                     videoDetailActivity.commentPresenter.createMoreVideoView(detailJson.getVideo());
+                    videoDetailActivity.tvCommentCount.setVisibility(View.VISIBLE);
                     videoDetailActivity.tvCommentCount.setText(detailJson.getNum_comment());
 
                     if (adapterCommentList.size() == 0) {

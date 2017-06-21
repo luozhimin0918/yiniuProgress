@@ -54,7 +54,8 @@ public class CalendarPresenter extends BasePresenter {
 
     public void generateDateItem(long selectTimeMillis) {
         dataLongList.clear();
-
+        calendarFragment.cityOptionMap.clear();
+        calendarFragment.citySelectMap.clear();
         //保证只有年月日
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");

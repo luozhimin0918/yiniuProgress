@@ -22,6 +22,7 @@ import com.jyh.kxt.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -257,6 +258,15 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
         String[] stringArray = getContext().getResources().getStringArray(arrayRes);
         List<String> strings = Arrays.asList(stringArray);
         generateCheckBox(strings);
+    }
+
+    public void generateCheckBox(HashSet<String> hashSet) {
+        List list = new ArrayList();
+        Iterator it = hashSet.iterator();
+        while (it.hasNext()) {
+            list.add(it.next());
+        }
+        generateCheckBox(list);
     }
 
     /**

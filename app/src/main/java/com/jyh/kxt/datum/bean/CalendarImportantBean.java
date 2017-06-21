@@ -18,6 +18,7 @@ public class CalendarImportantBean extends CalendarType{
     private String time;
     private String importance;
     private String title;
+    private boolean isShowLine = true;
 
     public String getState() {
         return state;
@@ -49,5 +50,13 @@ public class CalendarImportantBean extends CalendarType{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isShowLine() {
+        return isShowLine;
+    }
+
+    public void setShowLine(boolean showLine) {
+        isShowLine = showLine;
     }
 }

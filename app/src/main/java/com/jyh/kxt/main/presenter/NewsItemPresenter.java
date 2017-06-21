@@ -231,13 +231,16 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
             }
             LinearLayout layout = new LinearLayout(mContext);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                    .WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams
+                            .WRAP_CONTENT);
             tvTitle = new TextView(mContext);
-            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
-                    .LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup
+                            .LayoutParams.WRAP_CONTENT);
             tvTitle.setText("财经要闻");
-            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.content_font_size));
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen
+                    .content_font_size));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
             tvTitle.setGravity(Gravity.CENTER_VERTICAL);
             tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
@@ -470,25 +473,23 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             mAdTextViewList = new ArrayList<>();
             List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
 
-            int itemHeight = SystemUtil.dp2px(mContext, 30);
-            int itemLeftPadding = SystemUtil.dp2px(mContext, 5);
+            LayoutInflater mInflater = LayoutInflater.from(mContext);
 
-            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
+//            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
 
             for (final AdJson.AdItemJson adItemJson : mTextAd) {
+                View adLayoutView = mInflater.inflate(R.layout.item_news_ad, homeHeadView, false);
 
-                SkinnableTextView mAdTextView = new SkinnableTextView(mContext);
-                mAdTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        itemHeight));
-                mAdTextView.setGravity(Gravity.CENTER_VERTICAL);
-
-                mAdTextView.setTextColor(adTextColor);
-                mAdTextView.setPadding(itemLeftPadding, 0, 0, 0);
+                SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_title);
                 mAdTextView.setText(" • " + adItemJson.getTitle());
-                homeHeadView.addView(mAdTextView);
+                SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_trait);
+
+                homeHeadView.addView(adLayoutView);
+
                 mAdTextViewList.add(mAdTextView);
-                mAdTextView.setOnClickListener(new View.OnClickListener() {
+                mAdTextViewList.add(mAdTraitView);
+
+                adLayoutView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, WebActivity.class);
@@ -816,11 +817,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             }
             if (mAdTextViewList != null) {
                 for (SkinnableTextView skinnableTextView : mAdTextViewList) {
-                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+                    skinnableTextView.applyDayNight();/*setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));*/
                 }
             }
             if (tvTitle != null) {
-                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0,
+                        0, 0);
                 tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
             }
         } catch (Exception e) {

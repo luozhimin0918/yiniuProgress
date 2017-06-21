@@ -61,7 +61,7 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
 
         plRootView.setOnAfreshLoadListener(this);
         plvContent.setDividerNull();
-        plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plvContent.setOnRefreshListener(this);
         plvContent.setOnItemClickListener(this);
 

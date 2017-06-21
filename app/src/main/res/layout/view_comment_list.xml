@@ -19,6 +19,7 @@
             android:id="@+id/tv_recommend_label"
             android:layout_below="@+id/view_line"
             android:layout_width="wrap_content"
+
             android:layout_height="30dp"
             android:drawableLeft="@mipmap/icon_video_line"
             android:gravity="center"
@@ -29,7 +30,7 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="136dp"
+            android:layout_height="128dp"
             android:layout_below="@+id/tv_recommend_label"
             android:scrollbars="none">
 
@@ -51,6 +52,7 @@
 
 
     <TextView
+        android:id="@+id/tv_comment_count_title"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:drawableLeft="@mipmap/icon_video_line"
@@ -64,7 +66,9 @@
         android:id="@+id/tv_reply_message"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_margin="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:background="@color/bg_color2"
         android:gravity="center"
         android:textColor="@color/font_color6"/>

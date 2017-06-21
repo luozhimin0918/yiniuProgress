@@ -1014,4 +1014,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (commentPresenter != null) {
+            commentPresenter.onResume();
+        }
+    }
 }
