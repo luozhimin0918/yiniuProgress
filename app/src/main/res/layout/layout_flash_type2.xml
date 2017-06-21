@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/flash_info_margin1"
-        android:lineSpacingExtra="@dimen/flash_info_lineSpacingExtra1"
+        android:lineSpacingExtra="2dp"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/content_font_size2"/>
 
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="影响:"
+            android:text="影响: "
             android:textColor="@color/font_color3"
             android:textSize="@dimen/describe_font_size3"/>
 

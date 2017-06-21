@@ -48,7 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="美国6月EIA WAT原油一年货币供应远期均价5000左右"
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size"/>
 

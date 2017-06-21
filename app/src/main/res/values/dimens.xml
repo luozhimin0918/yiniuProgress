@@ -249,11 +249,11 @@
 
     <dimen name="flash_type3_padding">10dp</dimen>
     <dimen name="flash_type3_margin">10dp</dimen>
-    <dimen name="flash_type3_flagSize">30dp</dimen>
+    <dimen name="flash_type3_flagSize">25dp</dimen>
     <dimen name="flash_type3_flagTop">8dp</dimen>
-    <dimen name="flash_type3_describeTop">14dp</dimen>
+    <dimen name="flash_type3_describeTop">8dp</dimen>
     <dimen name="flash_type3_publishHeight">30dp</dimen>
-    <dimen name="flash_type3_publishTop">14dp</dimen>
+    <dimen name="flash_type3_publishTop">8dp</dimen>
     <dimen name="flash_type3_starWidth">30dp</dimen>
     <dimen name="flash_type3_starHeight">10dp</dimen>
     <dimen name="flash_type3_starTop">10dp</dimen>
@@ -267,8 +267,6 @@
     <dimen name="flash_img_height">77dp</dimen>
 
     <!-- 快讯详情 -->
-    <dimen name="flash_info_lineSpacingExtra1">13dp</dimen>
-    <dimen name="flash_info_lineSpacingExtra2">11dp</dimen>
     <dimen name="flash_info_minWidth">60dp</dimen>
     <dimen name="flash_info_flagSize">25dp</dimen>
     <dimen name="flash_info_margin1">8dp</dimen>

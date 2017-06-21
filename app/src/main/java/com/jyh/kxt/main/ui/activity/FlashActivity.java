@@ -571,9 +571,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     }
 
     private TextView generateTextView() {
-        int padding = SystemUtil.dp2px(this, 5);
+        int padding = SystemUtil.dp2px(this, 4);
         int MarginsRight = SystemUtil.dp2px(this, 10);
-        int minWidth = SystemUtil.dp2px(this, 55);
+        int minWidth = SystemUtil.dp2px(this, 50);
 
         TextView itemView = new TextView(this);
 
@@ -582,6 +582,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 ViewGroup.LayoutParams.MATCH_PARENT);
         itemView.setLayoutParams(layoutParams);
 
+        layoutParams.gravity=Gravity.CENTER;
         layoutParams.setMargins(0, 0, MarginsRight, 0);
         itemView.setPadding(padding, padding, padding, padding);
         itemView.setMinWidth(minWidth);

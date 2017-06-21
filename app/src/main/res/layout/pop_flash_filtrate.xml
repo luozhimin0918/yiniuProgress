@@ -76,7 +76,7 @@
             app:columnSpace="18dp"
 
             app:defaultFontColor="@color/font_color5"
-            app:itemHeight="39dp"
+            app:itemHeight="35dp"
             app:selectedFontColor="@color/white"/>
 
     </LinearLayout>
@@ -103,7 +103,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:background="@color/line_color"/>
+            android:background="@color/line_color3"/>
 
         <TextView
             android:id="@+id/tv_sure"
