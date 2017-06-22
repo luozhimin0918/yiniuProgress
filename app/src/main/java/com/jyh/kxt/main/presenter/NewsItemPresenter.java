@@ -606,7 +606,11 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     public void onPullUpToRefresh(final PullToRefreshBase refreshView) {
 
         if (isMore) {
-            request.doGet(getUrl(code), new HttpListener<List<NewsJson>>() {
+            JSONObject jsonParam = request.getJsonParam();
+            jsonParam.put(VarConstant.HTTP_CODE, "yaowen".equals(code) ? "" : code);
+            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+
+            request.doGet(HttpConstant.NEWS_LIST, jsonParam, new HttpListener<List<NewsJson>>() {
                 @Override
                 protected void onResponse(List<NewsJson> newsJsons) {
                     newsAdapter.addData(checkNews(newsJsons));
@@ -817,7 +821,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             }
             if (mAdTextViewList != null) {
                 for (SkinnableTextView skinnableTextView : mAdTextViewList) {
-                    skinnableTextView.applyDayNight();/*setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));*/
+                    skinnableTextView.applyDayNight();/*setTextColor(ContextCompat.getColor(mContext, R.color
+                    .font_color5));*/
                 }
             }
             if (tvTitle != null) {

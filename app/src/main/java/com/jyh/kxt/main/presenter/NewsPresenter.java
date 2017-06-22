@@ -13,6 +13,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.utils.JsonUtil;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.jyh.kxt.main.json.AdJson;
@@ -137,7 +138,7 @@ public class NewsPresenter extends BasePresenter {
                             try {
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                news = JsonUtil.parseArray(newsArray.toString(), NewsJson.class);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
