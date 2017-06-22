@@ -194,38 +194,37 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                     mContext.startActivity(intent);
                 }
             });
+            try {
+                mAdTextViewList = new ArrayList<>();
+                List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+                LayoutInflater mInflater = LayoutInflater.from(mContext);
 
-            mAdTextViewList = new ArrayList<>();
-            List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+                for (final AdJson.AdItemJson adItemJson : mTextAd) {
+                    View adLayoutView = mInflater.inflate(R.layout.item_news_ad, mainHeaderView, false);
 
-            int itemHeight = SystemUtil.dp2px(mContext, 30);
-            int itemLeftPadding = SystemUtil.dp2px(mContext, 5);
+                    SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_title);
+                    mAdTextView.setText(" • " + adItemJson.getTitle());
+                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_trait);
 
-            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
+                    mainHeaderView.addView(adLayoutView);
 
-            for (final AdJson.AdItemJson adItemJson : mTextAd) {
+                    mAdTextViewList.add(mAdTextView);
+                    mAdTextViewList.add(mAdTraitView);
 
-                SkinnableTextView mAdTextView = new SkinnableTextView(mContext);
-                mAdTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        itemHeight));
-                mAdTextView.setGravity(Gravity.CENTER_VERTICAL);
-
-                mAdTextView.setTextColor(adTextColor);
-                mAdTextView.setPadding(itemLeftPadding, 0, 0, 0);
-                mAdTextView.setText(" • " + adItemJson.getTitle());
-                mainHeaderView.addView(mAdTextView);
-                mAdTextViewList.add(mAdTextView);
-                mAdTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, WebActivity.class);
-                        intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
-                        intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
-                        mContext.startActivity(intent);
-                    }
-                });
+                    adLayoutView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, WebActivity.class);
+                            intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
+                            intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
+                            mContext.startActivity(intent);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             createPaddingView(1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,7 +261,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                SystemUtil.dp2px(mContext, 230));
+                SystemUtil.dp2px(mContext, 170));
         recommendView.setLayoutParams(lp);
 
         mainHeaderView.addView(recommendView);

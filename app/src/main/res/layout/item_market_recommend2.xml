@@ -16,12 +16,10 @@
     <RelativeLayout
         android:id="@+id/rl_rootView"
         android:layout_width="115dp"
-        android:layout_height="110dp"
+        android:layout_height="80dp"
         android:background="@{bean.bgItemColor}"
-        android:paddingBottom="10dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="10dp">
+        android:paddingRight="5dp" >
 
         <TextView
             android:id="@+id/tv_name"
@@ -40,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_name"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:tag="arrows"
@@ -56,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_new_price"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="9dp">
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/tv_change_val"
