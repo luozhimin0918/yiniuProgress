@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -439,20 +440,14 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     private void setGifIcon() {
         if (getContext() != null) {
-            int alertTheme = ThemeUtil.getAlertTheme(getContext());
-            int resouseId = -1;
-            switch (alertTheme) {
-                case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    resouseId = R.mipmap.icon_advert_night;
-                    break;
-                case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                    resouseId = R.mipmap.icon_advert_day;
-                    break;
+            try {
+                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG), MainInitJson
+                            .class);
+                String icon = mainInitJson.getIndex_ad().getIcon();
+                Glide.with(getContext()).load(icon).into(new GlideDrawableImageViewTarget(ivRightIcon1));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Glide.with(getContext())
-                    .load(resouseId)
-                    .into(new GlideDrawableImageViewTarget(ivRightIcon1));
         }
-
     }
 }

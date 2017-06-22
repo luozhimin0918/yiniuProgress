@@ -129,6 +129,7 @@ public class MainInitJson {
         private int showTime;
         private String title;
         private String type;
+        private String icon;
 
         public String getHref() {
             String connector = "?";
@@ -170,6 +171,14 @@ public class MainInitJson {
 
         public String getType() {
             return type;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
 
         public void setType(String type) {
