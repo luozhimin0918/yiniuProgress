@@ -59,7 +59,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.layout_search_start) View rootSearchStart;
     @BindView(R.id.layout_search_end) View rootSearchEnd;
 
-    private final String[] tabs = new String[]{"文章", "视听"};
+    private String[] tabs = new String[]{"文章", "视听"};
     private SearchPresenter searchPresenter;
     private TagAdapter<String> tagAdapter;
     private List<String> flows;
@@ -149,21 +149,22 @@ public class SearchActivity extends BaseActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);
 
-        fragmentList.add(articleFragment = new SearchArticleFragment());
-        fragmentList.add(videoFragment = new SearchVideoFragment());
+        String type = getIntent().getStringExtra(IntentConstant.TYPE);
+        if (type != null && VarConstant.VIDEO.equals(type)) {
+            fragmentList.add(videoFragment = new SearchVideoFragment());
+            fragmentList.add(articleFragment = new SearchArticleFragment());
+            tabs = new String[]{"视听", "文章"};
+        } else {
+            fragmentList.add(articleFragment = new SearchArticleFragment());
+            fragmentList.add(videoFragment = new SearchVideoFragment());
+            tabs = new String[]{"文章", "视听"};
+        }
 
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         stlNavigationBar.setViewPager(vpContent, tabs);
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
 
-
-        String type = getIntent().getStringExtra(IntentConstant.TYPE);
-        if (type != null && VarConstant.VIDEO.equals(type)) {
-            stlNavigationBar.setCurrentTab(1);
-        } else {
-            stlNavigationBar.setCurrentTab(0);
-        }
     }
 
     @OnClick({R.id.tv_break, R.id.tv_history_more, R.id.iv_clear_history})
@@ -274,5 +275,14 @@ public class SearchActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         getQueue().cancelAll(searchPresenter.getClass().getName());
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (articleFragment != null)
+            articleFragment.onChangeTheme();
+        if (videoFragment != null)
+            videoFragment.onChangeTheme();
     }
 }

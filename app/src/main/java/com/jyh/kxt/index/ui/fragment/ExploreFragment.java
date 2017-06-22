@@ -86,6 +86,8 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     private ActivityAdapter activitysAdapter;
 
     private List<View> headLines = new ArrayList<>();
+    private RecyclerView btnRecyclerView;
+    private DividerGridItemDecoration decor;
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -167,7 +169,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
             SlideJson slideJson = slides.get(i);
             String carouselItem = slideJson.getPicture();
             carouseList.add(HttpConstant.IMG_URL + carouselItem);
-            titles.add(slideJson.getName());
+            titles.add(slideJson.getTitle());
         }
         carouseView.setViewUrls(carouseList, titles, currentItem);
         homeHeadView.addView(carouseView);
@@ -191,16 +193,16 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         if (shortcuts == null) return;
         Context mContext = getContext();
-        RecyclerView recyclerView = new RecyclerView(mContext);
+        btnRecyclerView = new RecyclerView(mContext);
         int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height);
         if (shortcuts.size() <= 4)
             carouselHeight = carouselHeight / 2;
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
-        DividerGridItemDecoration decor = new DividerGridItemDecoration(mContext);
+        decor = new DividerGridItemDecoration(mContext);
         decor.setSpanCount(4);
-        recyclerView.addItemDecoration(decor);
-        recyclerView.setLayoutParams(params);
+        btnRecyclerView.addItemDecoration(decor);
+        btnRecyclerView.setLayoutParams(params);
 
         GridLayoutManager manager = new GridLayoutManager(mContext, 4) {
             @Override
@@ -215,11 +217,11 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         };
         manager.setOrientation(GridLayoutManager.VERTICAL);
 
-        recyclerView.setLayoutManager(manager);
+        btnRecyclerView.setLayoutManager(manager);
 
-        recyclerView.setAdapter(btnAdapter = new BtnAdapter(shortcuts, mContext));
+        btnRecyclerView.setAdapter(btnAdapter = new BtnAdapter(shortcuts, mContext));
 
-        homeHeadView.addView(recyclerView);
+        homeHeadView.addView(btnRecyclerView);
 
         addLineView();
     }
@@ -237,7 +239,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         TextView tv1 = (TextView) topicView.findViewById(R.id.tv_title1);
         TextView tv2 = (TextView) topicView.findViewById(R.id.tv_title2);
         View vPoint = topicView.findViewById(R.id.v_point);
-        View ivMore=topicView.findViewById(R.id.iv_more);
+        View ivMore = topicView.findViewById(R.id.iv_more);
         TextView tvMore = (TextView) topicView.findViewById(R.id.tv_more);
         ivMore.setVisibility(View.GONE);
         tvMore.setVisibility(View.GONE);
@@ -557,6 +559,14 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         }
         if (carouseView != null)
             carouseView.onChangeTheme();
+        if (btnRecyclerView != null && decor != null) {
+            btnRecyclerView.removeItemDecoration(decor);
+            decor = null;
+            decor = new DividerGridItemDecoration(getContext());
+            decor.setSpanCount(4);
+            btnRecyclerView.addItemDecoration(decor);
+            btnRecyclerView.notify();
+        }
     }
 
     public void doubleClickFragment() {

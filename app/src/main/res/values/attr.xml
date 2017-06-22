@@ -133,4 +133,10 @@
     <declare-styleable name="SkinnableListView">
         <attr name="android:divider"/>
     </declare-styleable>
+
+    <declare-styleable name="SkinnableSearchEditText">
+        <attr name="searchBackground"/>
+        <attr name="searchTextColor"/>
+        <attr name="searchHintColor"/>
+    </declare-styleable>
 </resources>

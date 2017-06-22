@@ -116,7 +116,7 @@
         <ImageView
             android:id="@+id/iv_share"
             style="@style/Audio_RB_Style"
-            android:src="@mipmap/icon_video_more"/>
+            android:src="@mipmap/icon_nav_more"/>
 
     </LinearLayout>
 </LinearLayout>

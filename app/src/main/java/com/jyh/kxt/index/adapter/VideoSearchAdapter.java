@@ -92,11 +92,11 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
                 switch (ThemeUtil.getAlertTheme(context)) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                         defalutColor = "#909090";
-                        keyColor = "#136AA4";
+                        keyColor = "#115E91";
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         defalutColor = "#2E3239";
-                        keyColor = "#EA492A";
+                        keyColor = "#009AFF";
                         break;
                 }
 

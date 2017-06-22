@@ -27,12 +27,12 @@ public class SlideJson extends JumpJson implements Parcelable {
         this.name = name;
     }
 
-    public String getTitile() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitile(String titile) {
-        this.title = titile;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPicture() {
@@ -79,12 +79,9 @@ public class SlideJson extends JumpJson implements Parcelable {
     public String toString() {
         return "SlideJson{" +
                 "name='" + name + '\'' +
-                ", titile='" + title + '\'' +
+                ", title='" + title + '\'' +
                 ", picture='" + picture + '\'' +
                 ", href='" + href + '\'' +
-                ", o_class='" + o_class + '\'' +
-                ", o_action='" + o_action + '\'' +
-                ", o_id='" + o_id + '\'' +
                 '}';
     }
 

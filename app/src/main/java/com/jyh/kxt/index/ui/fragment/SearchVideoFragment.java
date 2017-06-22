@@ -1,9 +1,7 @@
 package com.jyh.kxt.index.ui.fragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
@@ -21,7 +19,6 @@ import com.library.widget.handmark.PullToRefreshListView;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 项目名:Kxt
@@ -133,5 +130,12 @@ public class SearchVideoFragment extends BaseFragment implements PageLoadLayout.
                 plvContent.onRefreshComplete();
             }
         }, 200);
+    }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (videoAdapter != null)
+            videoAdapter.notifyDataSetChanged();
     }
 }

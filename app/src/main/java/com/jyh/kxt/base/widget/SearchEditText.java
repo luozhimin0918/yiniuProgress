@@ -45,6 +45,7 @@ public class SearchEditText extends RelativeLayout {
     private int edtMarginRight;
 
     private boolean isShowClearBtn = true;//是否显示清除按钮
+    private ImageView searchView;
 
     public SearchEditText(Context context) {
         this(context, null);
@@ -98,7 +99,7 @@ public class SearchEditText extends RelativeLayout {
      * 搜索图标
      */
     private void drawSearchView() {
-        ImageView searchView = new ImageView(context);
+        searchView = new ImageView(context);
         searchView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search));
         LayoutParams searchParams = new LayoutParams((int) searchImgSize, (int) searchImgSize);
         searchParams.leftMargin = (int) marginLeft;
@@ -197,5 +198,27 @@ public class SearchEditText extends RelativeLayout {
                 clearView.setVisibility(VISIBLE);
             }
         }
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+        if (editText != null)
+            editText.setTextColor(textColor);
+        invalidate();
+    }
+
+    public void setHintColor(int hintColor) {
+        this.hintColor = hintColor;
+        if (editText != null)
+            editText.setHintTextColor(hintColor);
+        invalidate();
+    }
+
+    public void changeImg() {
+        if (clearView != null)
+            clearView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_clear));
+        if (searchView != null)
+            searchView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search));
+        invalidate();
     }
 }

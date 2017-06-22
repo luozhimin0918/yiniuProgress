@@ -21,7 +21,7 @@
             android:layout_width="@dimen/videoItemPlaySize"
             android:layout_height="@dimen/videoItemPlaySize"
             android:layout_gravity="center"
-            android:src="@mipmap/icon_video_play_big"/>]
+            android:src="@mipmap/icon_video_play_big"/>
 
         <TextView
             android:id="@+id/tv_title"

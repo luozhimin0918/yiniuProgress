@@ -139,4 +139,11 @@ public class SearchArticleFragment extends BaseFragment implements PageLoadLayou
         BrowerHistoryUtils.save(getContext(), newsJson);
         newsAdapter.getView(index, view, parent);
     }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+        if (newsAdapter != null)
+            newsAdapter.notifyDataSetChanged();
+    }
 }

@@ -33,6 +33,7 @@ import com.jyh.kxt.base.widget.night.heple.SkinnableRecyclerView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRelativeLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableRoundImageView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableScrollView;
+import com.jyh.kxt.base.widget.night.heple.SkinnableSearchEditText;
 import com.jyh.kxt.base.widget.night.heple.SkinnableSegmentTabLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableSlidingTabLayoutView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTabLayout;
@@ -157,6 +158,9 @@ public class SkinnableViewInflater {
                 break;
             case "com.jyh.kxt.base.custom.RoundImageView":
                 view = new SkinnableRoundImageView(context, attrs);
+                break;
+            case "com.jyh.kxt.base.widget.SearchEditText":
+                view = new SkinnableSearchEditText(context, attrs);
                 break;
             case "android.support.design.widget.TabLayout":
                 view = new SkinnableTabLayout(context, attrs);
