@@ -12,91 +12,13 @@
     <com.library.widget.PageLoadLayout
         android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/plv_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/newsContentPadding3"
-                android:text="2017-1-1 星期一"
-                android:textColor="@color/font_color6"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_color2"/>
-
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <include
-                            android:id="@+id/layout_flash"
-                            layout="@layout/layout_flash_type1"/>
-
-                        <include
-                            android:id="@+id/layout_rl"
-                            layout="@layout/layout_flash_type2"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_tj"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/line_height"
-                            android:background="@color/line_color2"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="@dimen/newsContentPadding3"
-                            android:drawableLeft="@mipmap/icon_video_line"
-                            android:gravity="center_vertical"
-                            android:text="推荐要闻"
-                            android:textColor="@color/font_color60"
-                            android:textSize="@dimen/describe_font_size4"/>
-
-                        <include
-                            android:id="@+id/layout_tj1"
-                            layout="@layout/item_news"/>
-
-                        <include
-                            android:id="@+id/layout_tj2"
-                            layout="@layout/item_news"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </ScrollView>
-
-
-        </LinearLayout>
     </com.library.widget.PageLoadLayout>
 
     <View

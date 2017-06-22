@@ -1255,7 +1255,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     private String getString(String str) {
         if (str == null) return null;
-        return str.replace("<br />", "\n").replace("<br/>", "");
+        return str.replace("<br />", "\n").replace("<br/>", "\n");
     }
 
     private String getTime(String time) throws Exception {

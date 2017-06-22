@@ -8,12 +8,13 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -26,15 +27,15 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
-import com.jyh.kxt.main.json.AdJson;
+import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.json.flash.FlashContentJson;
@@ -48,6 +49,8 @@ import com.library.util.DateUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.handmark.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -63,46 +66,17 @@ import butterknife.OnClick;
  * 创建日期:2017/5/5.
  */
 
-public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener {
+public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
-
+    @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-
-    @BindView(R.id.tv_time) TextView tvTime;
-    @BindView(R.id.tv_flash_title) TextView tvFlashTitle;
-    @BindView(R.id.tv_flash_content) TextView tvFlashContent;
-    @BindView(R.id.iv_adFlash) LinearLayout llFlashAd;
-
-    @BindView(R.id.tv_rl_title) TextView tvRlTitle;
-    @BindView(R.id.sv_star) StarView rlStar;
-    @BindView(R.id.iv_flag) ImageView ivRlFlag;
-    @BindView(R.id.ll_content) LinearLayout rlContent;
-    @BindView(R.id.tv_describe) TextView tvDescribe;
-    @BindView(R.id.iv_adRL) LinearLayout llRLAD;
-
-    @BindView(R.id.ll_tj) LinearLayout layoutTj;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.iv_collect) ImageView ivCollect;
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.iv_more) ImageView ivMore;
-
-    @BindView(R.id.layout_rl) View layoutRL;
-    @BindView(R.id.layout_flash) View layoutFlash;
-
-    @BindView(R.id.layout_tj1) View layoutTj1;
-    private ImageView ivTj1Photo;
-    private TextView tvTj1Title;
-    private TextView tvTj1Author;
-    private TextView tvTj1Time;
-
-    @BindView(R.id.layout_tj2) View layoutTj2;
-    private ImageView ivTj2Photo;
-    private TextView tvTj2Title;
-    private TextView tvTj2Author;
-    private TextView tvTj2Time;
 
     private FlashActivityPresenter flashActivityPresenter;
     private String id;
@@ -113,7 +87,22 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private String shareUrl = "";
     private String discription = "";
     private String image = "";
-    private List<NewsJson> articles;
+    private View flashHeadView;
+
+    private TextView tvTime;
+    private TextView tvFlashTitle;
+    private TextView tvFlashContent;
+    private LinearLayout llFlashAd;
+    private TextView tvRlTitle;
+    private StarView rlStar;
+    private ImageView ivRlFlag;
+    private LinearLayout rlContent;
+    private TextView tvDescribe;
+    private LinearLayout llRLAD;
+    private LinearLayout layoutTj;
+    private View layoutRL;
+    private View layoutFlash;
+    private NewsAdapter newsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +110,13 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         setContentView(R.layout.activity_flash, StatusBarColor.THEME1);
         flashActivityPresenter = new FlashActivityPresenter(this);
 
+        plvContent.setDividerNull();
+        plvContent.setMode(PullToRefreshBase.Mode.DISABLED);
+        plvContent.setOnItemClickListener(this);
         plRootView.setOnAfreshLoadListener(this);
-        initView();
+
+        ivBarBreak.setVisibility(View.INVISIBLE);
+        tvBarTitle.setText("快讯");
 
         plRootView.loadWait();
         id = getIntent().getStringExtra(IntentConstant.O_ID);
@@ -131,23 +125,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
     }
 
-    private void initView() {
-        ivBarBreak.setVisibility(View.INVISIBLE);
-
-        ivTj1Photo = (ImageView) layoutTj1.findViewById(R.id.iv_photo);
-        tvTj1Time = (TextView) layoutTj1.findViewById(R.id.tv_time);
-        tvTj1Title = (TextView) layoutTj1.findViewById(R.id.tv_title);
-        tvTj1Author = (TextView) layoutTj1.findViewById(R.id.tv_author);
-
-        ivTj2Photo = (ImageView) layoutTj2.findViewById(R.id.iv_photo);
-        tvTj2Time = (TextView) layoutTj2.findViewById(R.id.tv_time);
-        tvTj2Title = (TextView) layoutTj2.findViewById(R.id.tv_title);
-        tvTj2Author = (TextView) layoutTj2.findViewById(R.id.tv_author);
-
-        tvBarTitle.setText("快讯");
-    }
-
-    @OnClick({R.id.iv_break, R.id.iv_collect, R.id.iv_share, R.id.iv_more, R.id.layout_tj1, R.id.layout_tj2})
+    @OnClick({R.id.iv_break, R.id.iv_collect, R.id.iv_share, R.id.iv_more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -203,16 +181,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                         break;
                 }
                 break;
-            case R.id.layout_tj1:
-                //推荐1
-                NewsJson tj1 = articles.get(0);
-                JumpUtils.jump(this, tj1.getO_class(), tj1.getO_action(), tj1.getO_id(), tj1.getHref());
-                break;
-            case R.id.layout_tj2:
-                //推荐2
-                NewsJson tj2 = articles.get(1);
-                JumpUtils.jump(this, tj2.getO_class(), tj2.getO_action(), tj2.getO_id(), tj2.getHref());
-                break;
         }
     }
 
@@ -222,6 +190,49 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
      * @param flash
      */
     public void init(FlashContentJson flash) {
+        List<NewsJson> article = flash.getArticle();
+        try {
+            if (plvContent.getRefreshableView().getHeaderViewsCount() <= 1) {
+                initHeadView();
+                plvContent.getRefreshableView().addHeaderView(flashHeadView);
+            }
+            initHeadData(flash);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (newsAdapter == null) {
+            newsAdapter = new NewsAdapter(this, article);
+            plvContent.setAdapter(newsAdapter);
+        } else {
+            newsAdapter.setData(article);
+        }
+
+    }
+
+    /**
+     * 初始化头部布局
+     */
+    public void initHeadView() {
+        flashHeadView = LayoutInflater.from(this).inflate(R.layout.layout_head_flashcontent, null, false);
+
+        tvTime = (TextView) flashHeadView.findViewById(R.id.tv_time);
+        tvFlashTitle = (TextView) flashHeadView.findViewById(R.id.tv_flash_title);
+        tvFlashContent = (TextView) flashHeadView.findViewById(R.id.tv_flash_content);
+        llFlashAd = (LinearLayout) flashHeadView.findViewById(R.id.iv_adFlash);
+        tvRlTitle = (TextView) flashHeadView.findViewById(R.id.tv_rl_title);
+        rlStar = (StarView) flashHeadView.findViewById(R.id.sv_star);
+        ivRlFlag = (ImageView) flashHeadView.findViewById(R.id.iv_flag);
+        rlContent = (LinearLayout) flashHeadView.findViewById(R.id.ll_content);
+        tvDescribe = (TextView) flashHeadView.findViewById(R.id.tv_describe);
+        llRLAD = (LinearLayout) flashHeadView.findViewById(R.id.iv_adRL);
+        layoutTj = (LinearLayout) flashHeadView.findViewById(R.id.ll_tj);
+        layoutRL = flashHeadView.findViewById(R.id.layout_rl);
+        layoutFlash = flashHeadView.findViewById(R.id.layout_flash);
+
+//        84
+    }
+
+    public void initHeadData(FlashContentJson flash){
         try {
             flashJson = flash.getKuaixun();
 
@@ -235,7 +246,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
             ivCollect.setSelected(isCollect);
 
-            articles = flash.getArticle();
             List<SlideJson> ads = flash.getAd();
             String type = flashJson.getCode();
             switch (type) {
@@ -245,60 +255,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 case VarConstant.SOCKET_FLASH_CJRL:
                     initRl(flashJson.getContent(), ads);
                     break;
-            }
-            if (articles == null || articles.size() == 0) {
-                layoutTj.setVisibility(View.GONE);
-            } else {
-                int size = articles.size();
-                if (size == 1) {
-                    layoutTj2.setVisibility(View.GONE);
-                    layoutTj1.setVisibility(View.VISIBLE);
-                } else {
-                    layoutTj1.setVisibility(View.VISIBLE);
-                    layoutTj2.setVisibility(View.VISIBLE);
-                }
-                final NewsJson newsJson = articles.get(0);
-                tvTj1Author.setText(newsJson.getAuthor());
-
-                try {
-                    tvTj1Time.setText(DateUtils.transformTime(Long.parseLong(newsJson.getDatetime()) * 1000));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    tvTj1Time.setText("00:00");
-                }
-
-                tvTj1Title.setText(newsJson.getTitle());
-                Glide.with(this).load(HttpConstant.IMG_URL + newsJson.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
-                        .icon_def_news).into
-                        (ivTj1Photo);
-
-                layoutTj1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
-                                newsJson.getHref());
-                    }
-                });
-
-                final NewsJson newsJson2 = articles.get(1);
-                tvTj2Author.setText(newsJson2.getAuthor());
-                try {
-                    tvTj2Time.setText(DateUtils.transformTime(Long.parseLong(newsJson2.getDatetime()) * 1000));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    tvTj2Time.setText("00:00");
-                }
-                tvTj2Title.setText(newsJson2.getTitle());
-                Glide.with(this).load(HttpConstant.IMG_URL + newsJson2.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
-                        .icon_def_news).into
-                        (ivTj2Photo);
-                layoutTj2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, newsJson2.getO_class(), newsJson.getO_action(), newsJson2.getO_id(),
-                                newsJson2.getHref());
-                    }
-                });
             }
             plRootView.loadOver();
             isLoadOver = true;
@@ -314,7 +270,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
 
         title = flash_kx.getTitle();
-        tvTime.setText(flash_kx.getTime());
+        String time = flash_kx.getTime();
+        try {
+            String timeInMill = DateUtils.transfromTime(flash_kx.getTime(), DateUtils.TYPE_YMDHMS);
+            time = DateUtils.transformTime(Long.parseLong(timeInMill), DateUtils.TYPE_YMDE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tvTime.setText(time);
 
         String contentStr = flash_kx.getTitle();
         String[] split = contentStr.split("<br />");
@@ -582,7 +545,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 ViewGroup.LayoutParams.MATCH_PARENT);
         itemView.setLayoutParams(layoutParams);
 
-        layoutParams.gravity=Gravity.CENTER;
+        layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(0, 0, MarginsRight, 0);
         itemView.setPadding(padding, padding, padding, padding);
         itemView.setMinWidth(minWidth);
@@ -597,4 +560,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         super.onDestroy();
         getQueue().cancelAll(flashActivityPresenter.getClass().getName());
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position > 1) {
+
+        }
+    }
+
 }

@@ -21,6 +21,7 @@ public class DateUtils {
     public static final String TYPE_HMS = "HH:mm:ss"; //时分秒
     public static final String TYPE_HM = "HH:mm"; //时分
     public static final String TYPE_MS = "mm:ss"; //分秒
+    public static final String TYPE_YMDE="yyyy-MM-dd EEEE";//年月日 星期几
 
     public static int oneDayLong = 1000 * 60 * 60 * 24;//一天时间毫秒值
     public static int oneHourLong = 1000 * 60 * 60;//一小时时间毫秒值
