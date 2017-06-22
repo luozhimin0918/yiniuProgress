@@ -164,7 +164,6 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
 
         rollDotViewPager = (RollDotViewPager) headView.findViewById(R.id.rdvp_content);
         rollDotViewPager.setViewPageToDotAbout();
-        rollDotViewPager.addLineTop();
         RollViewPager rollViewPager = rollDotViewPager.getRollViewPager();
         rollViewPager.setGridMaxCount(6).setDataList(authors).setGridViewItemData(new RollViewPager.GridViewItemData() {
             @Override

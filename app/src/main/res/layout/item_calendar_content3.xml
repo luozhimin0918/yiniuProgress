@@ -38,6 +38,7 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/tv_time"
             android:textColor="@color/font_color5"
+
             android:textSize="@dimen/describe_font_size4"/>
 
         <TextView
@@ -56,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_alignLeft="@+id/rl_content"
-        android:layout_below="@+id/ll_left_gq"
+        android:layout_below="@+id/rl_content"
         android:layout_marginTop="14dp"
         android:background="@color/line_background"
         android:orientation="vertical"/>

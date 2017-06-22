@@ -416,7 +416,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                SystemUtil.dp2px(mContext, 90));
+                SystemUtil.dp2px(mContext, 85));
 
         mRollDotViewPager.setLayoutParams(lp);
         homeHeadView.addView(mRollDotViewPager);

@@ -80,17 +80,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             fragmentList.add(calendarItemFragment);
         }
 
-        fm = getChildFragmentManager();
-
-        pageAdapter = calendarPresenter.getPageAdapter(fm, fragmentList);
-        vpCalendarList.setAdapter(pageAdapter);
-        stlNavigationBar.setViewPager(vpCalendarList);
-
-        int itemPosition = calendarPresenter.generateItemCount / 2;
-        vpCalendarList.addOnPageChangeListener(this);
-        vpCalendarList.setCurrentItem(itemPosition);
-        calendarPresenter.updateSelectedColor(itemPosition);
-
         stlNavigationBar.setOnTitleNotifyData(new SlidingTabLayout.OnTitleNotifyData() {
             @Override
             public void itemTitleCreate(View tabView, int position) {
@@ -117,6 +106,17 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
             }
         });
+        fm = getChildFragmentManager();
+
+        pageAdapter = calendarPresenter.getPageAdapter(fm, fragmentList);
+        vpCalendarList.setAdapter(pageAdapter);
+        stlNavigationBar.setViewPager(vpCalendarList);
+
+        int itemPosition = calendarPresenter.generateItemCount / 2;
+        vpCalendarList.addOnPageChangeListener(this);
+        vpCalendarList.setCurrentItem(itemPosition);
+        calendarPresenter.updateSelectedColor(itemPosition);
+
     }
 
     @Override

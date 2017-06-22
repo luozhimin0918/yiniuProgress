@@ -25,7 +25,7 @@ public class EventBusClass {
 
     public static final int MARKET_OPTION_UPDATE = 13;//行情自选,编辑中删除或者增加
 
-    public static final int EVENT_CALENDAR_UPDATE_CITY = 14;//日历,PopupWindow 城市刷新
+    public static final int EVENT_ATTENTION_OTHER = 14;//关注别人
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

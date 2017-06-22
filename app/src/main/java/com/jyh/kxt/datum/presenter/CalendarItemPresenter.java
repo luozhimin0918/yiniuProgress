@@ -167,7 +167,7 @@ public class CalendarItemPresenter extends BasePresenter {
         for (int i = 0; i < data.size(); i++) {
             String objData = data.get(i);
             CalendarImportantBean mCalendarImportantBean = JSONObject.parseObject(objData, CalendarImportantBean.class);
-            boolean isMeetConditions = parentFragment.isImportantMeetConditions(mCalendarImportantBean);
+            boolean isMeetConditions = /*parentFragment.isImportantMeetConditions(mCalendarImportantBean)*/true;
             if (status == 0) {
                 hashSetCity.add(mCalendarImportantBean.getState());
             }

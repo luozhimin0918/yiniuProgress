@@ -35,7 +35,8 @@ import butterknife.OnClick;
  * 创建日期:2017/6/9.
  */
 
-public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, ViewPager.OnPageChangeListener,
+public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, ViewPager
+        .OnPageChangeListener,
         OnTabSelectListener {
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
     @BindView(R.id.iv_more) ImageView ivMore;
@@ -114,8 +115,9 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
         super.onChangeTheme();
         if (fragmentList != null) {
             for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment)
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).onChangeTheme();
+                }
             }
         }
     }
@@ -123,8 +125,9 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (presenter != null)
+        if (presenter != null) {
             getQueue().cancelAll(presenter.getClass().getName());
+        }
     }
 
     public void init(List<NewsNavJson> newsNavs) {
@@ -165,9 +168,12 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100)
+        if (data == null) {
+            return;
+        }
+        if (requestCode == 100) {
             stlNavigationBar.setCurrentTab(data.getIntExtra(IntentConstant.INDEX, presenter.index));
-        else {
+        } else {
             if (fragmentList != null) {
                 for (Fragment fragment : fragmentList) {
                     fragment.onActivityResult(requestCode, resultCode, data);

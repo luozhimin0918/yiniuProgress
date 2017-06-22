@@ -43,8 +43,8 @@ public class RollDotView extends View {
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setStyle(Paint.Style.FILL);
 
-        circleSize = SystemUtil.dp2px(getContext(), 3);
-        circlePadding = SystemUtil.dp2px(getContext(), 3);
+        circleSize = SystemUtil.dp2px(getContext(), 2.5f);
+        circlePadding = SystemUtil.dp2px(getContext(), 2.5f);
 
     }
 

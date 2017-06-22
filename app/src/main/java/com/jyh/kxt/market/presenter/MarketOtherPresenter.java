@@ -1,14 +1,20 @@
 package com.jyh.kxt.market.presenter;
 
+import android.support.v4.content.ContextCompat;
+import android.view.View;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
+import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
+import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
@@ -75,7 +81,8 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
             }
 
             @Override
-            protected void onErrorResponse(VolleyError error) {  marketItemFragment.pageLoadLayout.loadError();
+            protected void onErrorResponse(VolleyError error) {
+                marketItemFragment.pageLoadLayout.loadError();
                 super.onErrorResponse(error);
             }
         });
@@ -104,6 +111,17 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
             marketItemBean.setSwitchTarget(
                     marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
+        }
+    }
+
+    public void onChangeTheme() {
+        try {
+            //重新设置热门行情主题色
+            if (marketMainItemAdapter != null) {
+                marketMainItemAdapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -151,6 +151,7 @@ public class NewsContentPresenter extends BasePresenter {
                     commentList.addAll(comment);
                     commentAdapter.notifyDataSetChanged();
                 }
+                newsContentActivity.pllContent.loadOver();
             }
 
             @Override
@@ -194,6 +195,9 @@ public class NewsContentPresenter extends BasePresenter {
             loginPop.show();
             return;
         }
+
+        EventBusClass event = new EventBusClass(EventBusClass.EVENT_ATTENTION_OTHER, !isCheck);
+        EventBus.getDefault().post(event);
 
         if (isCheck) {
             cbLike.setSelected(!isCheck);
@@ -363,7 +367,8 @@ public class NewsContentPresenter extends BasePresenter {
 //                    snackBar.setPromptThemBackground(Prompt.SUCCESS);
 //                    snackBar.addIconProgressLoading(0, true, false);
 //                    snackBar.show();
-//                    AttentionUtils.attention(mContext, AttentionUtils.TYPE_NEWS, objectId, new ObserverData<Boolean>() {
+//                    AttentionUtils.attention(mContext, AttentionUtils.TYPE_NEWS, objectId, new
+// ObserverData<Boolean>() {
 //                        @Override
 //                        public void callback(Boolean aBoolean) {
 //                            snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("关注成功").setDuration(TSnackbar
@@ -439,8 +444,9 @@ public class NewsContentPresenter extends BasePresenter {
      */
     public void attention(String objectId) {
         if (newsContentActivity.isGood) {
-            TSnackbar   snackBar = TSnackbar.make(newsContentActivity.pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
-                    .APPEAR_FROM_TOP_TO_DOWN)
+            TSnackbar snackBar = TSnackbar.make(newsContentActivity.pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG,
+                    TSnackbar
+                            .APPEAR_FROM_TOP_TO_DOWN)
                     .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                             .getDimensionPixelOffset(R.dimen.actionbar_height));
 

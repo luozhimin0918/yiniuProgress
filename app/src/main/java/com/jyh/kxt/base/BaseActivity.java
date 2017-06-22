@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -37,6 +39,8 @@ import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.umeng.analytics.MobclickAgent;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import cn.magicwindow.MLinkAPIFactory;
@@ -69,6 +73,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
             updateActivityMask(AppCompatDelegate.MODE_NIGHT_NO);
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
     }
 
 
@@ -284,6 +289,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
 
     /**
      * 增加蒙板
+     *
      * @param nightMode
      */
     protected void updateActivityMask(int nightMode) {

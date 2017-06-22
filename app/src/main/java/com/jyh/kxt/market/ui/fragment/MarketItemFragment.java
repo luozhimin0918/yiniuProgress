@@ -115,10 +115,14 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
 
     @OnClick(R.id.rl_target_nav)
     public void navClick(View view) {
-        if (isZhuYePage) {
-            marketMainPresenter.switchItemContent();
-        } else {
-            marketOtherPresenter.switchItemContent();
+        try {
+            if (isZhuYePage) {
+                marketMainPresenter.switchItemContent();
+            } else {
+                marketOtherPresenter.switchItemContent();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -206,6 +210,9 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
         super.onChangeTheme();
         if (marketMainPresenter != null) {
             marketMainPresenter.onChangeTheme();
+        }
+        if (marketOtherPresenter != null) {
+            marketOtherPresenter.onChangeTheme();
         }
         if (ptrlvContent != null) {
             ptrlvContent.onChangeTheme();

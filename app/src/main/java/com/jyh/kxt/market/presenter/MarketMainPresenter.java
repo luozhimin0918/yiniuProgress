@@ -361,7 +361,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         mainHeaderView.addView(titleBlue);
 
         View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);
-        navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
+        navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background2));
         navigationView.findViewById(R.id.view_line).setVisibility(View.GONE);
         tvTargetNav = (TextView) navigationView.findViewById(R.id.tv_target_nav);
         tvTargetNav.setOnClickListener(new View.OnClickListener() {
@@ -463,7 +463,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                         int paddingColor = ContextCompat.getColor(mContext, R.color.bg_color2);
                         childAt.setBackgroundColor(paddingColor);
                     } else if ("navigationView".equals(childAt.getTag())) {
-                        childAt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.font_color61));
+                        childAt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background2));
                     }
                 }
             }
@@ -471,7 +471,5 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }

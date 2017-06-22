@@ -411,8 +411,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             TextView textView = generateTextView();
             textView.setText("未公布");
 
-            effectDrawable.setStroke(R.color.line_color);
-            textView.setTextColor(ContextCompat.getColor(mContext, R.color.line_color));
+            effectDrawable.setStroke(R.color.font_color3);
+            textView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
             textView.setBackground(effectDrawable);
 
             llExponent.addView(textView);

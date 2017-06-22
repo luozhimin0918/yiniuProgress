@@ -2,6 +2,7 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -468,6 +470,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_news_type) TextView tvNewsType;
         @BindView(R.id.tv_news_time) TextView tvNewsTime;
         @BindView(R.id.wv_content) public WebView wvContent;
+        @BindView(R.id.fl_web_content) FrameLayout flWebContent;
 
         public LinearLayout headView;
         private NewsContentJson newsContentJson;
@@ -478,7 +481,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         /**
          * ----------------创建顶部的Head
          */
-        public void createWebViewAndHead(NewsContentJson newsContentJson) {
+        public void createWebViewAndHead(final NewsContentJson newsContentJson) {
             this.newsContentJson = newsContentJson;
             this.headView = commentPresenter.getHeadView();
 
@@ -487,7 +490,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             ivCollect.setSelected(isCollect);
 
             //头部
-            LinearLayout llFullContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
+            final LinearLayout llFullContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
                     inflate(R.layout.layout_news_content_head_title, headView, false);
 
             ButterKnife.bind(this, llFullContent);
@@ -533,24 +536,23 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             });
 
             tvTitle.setText(newsContentJson.getTitle());
+
+            flWebContent.setForeground(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.theme1)));
             /**
              * ----------  创建WebView
              */
-            String webContent = newsContentJson.getContent();
-
-            WebSettings settings = wvContent.getSettings();
+            final WebSettings settings = wvContent.getSettings();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             }
 
-            settings.setBlockNetworkImage(false);
+//            settings.setBlockNetworkImage(true);
 
             settings.setJavaScriptEnabled(true);
             settings.setAppCacheEnabled(true);
 
             settings.setDefaultTextEncodingName("utf-8");
             settings.setLoadWithOverviewMode(true);
-
 
             int alertTheme = ThemeUtil.getAlertTheme(getContext());
             String source = "";
@@ -656,6 +658,17 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             "}");
                     view.loadUrl("javascript:clickImg()");
 
+//                    settings.setBlockNetworkImage(false);
+//                    if (!settings.getLoadsImagesAutomatically()) { //判断webview是否加载了，图片资源
+//                        //设置wenView加载图片资源
+//                        settings.setLoadsImagesAutomatically(true);
+//                    }
+                    flWebContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            flWebContent.setForeground(null);
+                        }
+                    },150);
 //                    view.loadUrl("javascript:function urlClick()" +
 //                            "{" +
 //                            "   var urls = document.getElementsByTagName(\"a\");" +
@@ -668,12 +681,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 //                            "   }" +
 //                            "}");
 //                    view.loadUrl("javascript:urlClick()");
-                    pllContent.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pllContent.loadOver();
-                        }
-                    }, 500);
                 }
             });
             headView.addView(llFullContent, 0);

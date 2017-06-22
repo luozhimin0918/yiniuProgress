@@ -43,7 +43,7 @@ public class ExplorePresenter extends BasePresenter {
     }
 
     public void init() {
-        if (request == null){
+        if (request == null) {
             request = new VolleyRequest(mContext, mQueue);
             request.setTag(getClass().getName());
         }
@@ -66,8 +66,9 @@ public class ExplorePresenter extends BasePresenter {
                             try {
                                 JSONArray slidesJson = (JSONArray) typeDataJson.getData();
                                 slides = JSON.parseArray(slidesJson.toString(), SlideJson.class);
-                                if (slides.size() != 0)
+                                if (slides.size() != 0) {
                                     exploreFragment.addSlide(slides);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -76,8 +77,9 @@ public class ExplorePresenter extends BasePresenter {
                             try {
                                 JSONArray shortcutJson = (JSONArray) typeDataJson.getData();
                                 shortcuts = JSON.parseArray(shortcutJson.toString(), SlideJson.class);
-                                if (shortcuts.size() != 0)
+                                if (shortcuts.size() != 0) {
                                     exploreFragment.addShortcut(shortcuts);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -86,8 +88,9 @@ public class ExplorePresenter extends BasePresenter {
                             try {
                                 JSONArray topicJson = (JSONArray) typeDataJson.getData();
                                 topics = JSON.parseArray(topicJson.toString(), TopicJson.class);
-                                if (topics.size() != 0)
-                                    exploreFragment.addTopic(topics,typeDataJson.getTitle());
+                                if (topics.size() != 0) {
+                                    exploreFragment.addTopic(topics, typeDataJson.getTitle());
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -96,8 +99,9 @@ public class ExplorePresenter extends BasePresenter {
                             try {
                                 JSONArray activityJson = (JSONArray) typeDataJson.getData();
                                 activitys = JSON.parseArray(activityJson.toString(), ActivityJson.class);
-                                if (activitys.size() != 0)
+                                if (activitys.size() != 0) {
                                     exploreFragment.addActivity(activitys);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -106,8 +110,9 @@ public class ExplorePresenter extends BasePresenter {
                             try {
                                 JSONArray writerJson = (JSONArray) typeDataJson.getData();
                                 authors = JSON.parseArray(writerJson.toString(), AuthorJson.class);
-                                if (authors.size() != 0)
+                                if (authors.size() != 0) {
                                     exploreFragment.addAuthor(authors);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -156,7 +161,11 @@ public class ExplorePresenter extends BasePresenter {
                 request = new VolleyRequest(mContext, mQueue);
                 request.setTag(getClass().getName());
             }
-            request.doGet(getLoadMoreUrl(request), new HttpListener<List<AuthorNewsJson>>() {
+            JSONObject jsonParam = request.getJsonParam();
+            if (!RegexValidateUtil.isEmpty(lastId)) {
+                jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+            }
+            request.doPost(HttpConstant.EXPLORE_BLOG_LIST, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
                 @Override
                 protected void onResponse(List<AuthorNewsJson> newsJsons) {
                     exploreFragment.loadMore(newsJsons);
@@ -180,10 +189,11 @@ public class ExplorePresenter extends BasePresenter {
     }
 
     private String getLoadMoreUrl(VolleyRequest request) {
-        String url = HttpConstant.EXPLORE_LOAD_MORE;
+        String url = HttpConstant.EXPLORE_BLOG_LIST;
         JSONObject jsonParam = request.getJsonParam();
-        if (!RegexValidateUtil.isEmpty(lastId))
+        if (!RegexValidateUtil.isEmpty(lastId)) {
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+        }
         try {
             url += VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
         } catch (Exception e) {
@@ -200,8 +210,9 @@ public class ExplorePresenter extends BasePresenter {
      */
     public String getLastId(List<AuthorNewsJson> article) {
 
-        if (article == null)
+        if (article == null) {
             return lastId = "";
+        }
         try {
             int size = article.size();
             if (size > VarConstant.LIST_MAX_SIZE) {

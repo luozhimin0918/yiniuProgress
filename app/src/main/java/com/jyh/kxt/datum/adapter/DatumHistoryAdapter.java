@@ -1,6 +1,7 @@
 package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
     private Context mContext;
     private List<HistoryListBean.DataBean> data;
 
+    private int listType = 0;
     private LayoutInflater mInflater;
 
     public DatumHistoryAdapter(Context mContext, List<HistoryListBean.DataBean> data) {
@@ -104,16 +106,19 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
                         mViewHolder0.tvTitle1.setText("前值(%)");
                         mViewHolder0.tvTitle2.setText("预测值(%)");
                         mViewHolder0.tvTitle3.setText("公布值(%)");
+                        listType = 0;
                         break;
                     case "etf":
                         mViewHolder0.tvTitle1.setText("净持仓量(盎司)");
                         mViewHolder0.tvTitle2.setText("净持仓量(吨)");
                         mViewHolder0.tvTitle3.setText("增减(吨)");
+                        listType = 1;
                         break;
                     case "cftc":
                         mViewHolder0.tvTitle1.setText("多投持仓");
                         mViewHolder0.tvTitle2.setText("空头持仓");
                         mViewHolder0.tvTitle3.setText("多空净投仓");
+                        listType = 2;
                         break;
                 }
 
@@ -125,6 +130,28 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
                 mViewHolder1.tvQian.setText(itemDataBean.getBefore());
                 mViewHolder1.tvYuce.setText(itemDataBean.getForecast());
                 mViewHolder1.tvGongbu.setText(itemDataBean.getReality());
+
+                if (listType == 1) {
+                    try {
+                        String reality = itemDataBean.getReality();
+                        double realityDouble = Double.parseDouble(reality);
+                        int color;
+                        if (realityDouble < 0) {
+                            color = ContextCompat.getColor(mContext, R.color.decline_color);
+                        }
+                        else if (realityDouble > 0) {
+                            color = ContextCompat.getColor(mContext, R.color.rise_color);
+                        }else{
+                            color = ContextCompat.getColor(mContext, R.color.font_color60);
+                        }
+                        mViewHolder1.tvTime.setTextColor(color);
+                        mViewHolder1.tvQian.setTextColor(color);
+                        mViewHolder1.tvYuce.setTextColor(color);
+                        mViewHolder1.tvGongbu.setTextColor(color);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
         return convertView;

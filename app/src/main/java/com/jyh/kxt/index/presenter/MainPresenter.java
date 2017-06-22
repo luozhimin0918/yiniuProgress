@@ -219,7 +219,7 @@ public class MainPresenter extends BasePresenter {
         contentView.startAnimation(animation);
 
 
-        View topView = contentView.findViewById(R.id.tv_top);
+        final View topView = contentView.findViewById(R.id.tv_top);
         View bottomView = contentView.findViewById(R.id.tv_bottom);
         FrameLayout flMengBan = (FrameLayout) contentView.findViewById(R.id.fl_mengban);
 
@@ -235,8 +235,7 @@ public class MainPresenter extends BasePresenter {
                 flMengBan.setBackgroundColor(0x00000000);
                 break;
         }
-        if ("normal".equals(indexAd.getType()) || "download".equals(indexAd.getType())) {
-
+        if ("normal".equals(indexAd.getType())) {
             topView.setVisibility(View.VISIBLE);
             bottomView.setVisibility(View.VISIBLE);
 
@@ -265,12 +264,51 @@ public class MainPresenter extends BasePresenter {
                 @Override
                 public void onClick(View v) {
                     String title = indexAd.getTitle();
+                    if (title == null || "".equals(title)) {
+                        topView.performClick();
+                    } else {
+                        ClipboardManager clipboard = (ClipboardManager) mMainActivity
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("title", title);
+                        clipboard.setPrimaryClip(clip);    //把clip对象放在剪贴板中
+                        ToastView.makeText3(mContext, "复制成功");
+                    }
+                }
+            });
+        } else if ("download".equals(indexAd.getType())) {
+            topView.setVisibility(View.VISIBLE);
+            bottomView.setVisibility(View.VISIBLE);
 
-                    ClipboardManager clipboard = (ClipboardManager) mMainActivity
-                            .getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("title", title);
-                    clipboard.setPrimaryClip(clip);    //把clip对象放在剪贴板中
-                    ToastView.makeText3(mContext, "复制成功");
+            imgAdView.setVisibility(View.VISIBLE);
+            String pictureUrl = HttpConstant.IMG_URL + indexAd.getPicture();
+            Glide.with(mContext).load(pictureUrl).into(imgAdView);
+
+            topView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (indexAd.getHref() == null || indexAd.getHref().trim().length() == 0) {
+                        return;
+                    }
+
+                    Intent intent3 = new Intent(Intent.ACTION_VIEW);
+                    intent3.setData(Uri.parse(indexAd.getHref()));
+                    mContext.startActivity(intent3);
+                }
+            });
+
+            bottomView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String title = indexAd.getTitle();
+                    if (title == null || "".equals(title)) {
+                        topView.performClick();
+                    } else {
+                        ClipboardManager clipboard = (ClipboardManager) mMainActivity
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("title", title);
+                        clipboard.setPrimaryClip(clip);    //把clip对象放在剪贴板中
+                        ToastView.makeText3(mContext, "复制成功");
+                    }
                 }
             });
         } else {

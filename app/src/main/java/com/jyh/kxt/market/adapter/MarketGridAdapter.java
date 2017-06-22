@@ -39,7 +39,7 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
             ItemMarketRecommendBinding dataBinding = DataBindingUtil.inflate(
                     mInflater,
                     R.layout.item_market_recommend,
-                    null,
+                    parent,
                     false);
 
             convertView = dataBinding.getRoot();

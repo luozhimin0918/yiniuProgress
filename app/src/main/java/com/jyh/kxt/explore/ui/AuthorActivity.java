@@ -23,18 +23,22 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.presenter.AuthorPresenter;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,8 +141,20 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
         });
         statusHeight = SystemUtil.getStatusHeight(this);
         rlHeadTitleBar.getBackground().setAlpha(0);
+
+        EventBus.getDefault().register(this);
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_ATTENTION_OTHER:
+                boolean isAttentionOther = (boolean) eventBus.intentObj;
+                vLike.setSelected(isAttentionOther);
+                break;
+        }
+    }
 
     private void startHeadAnimation() {
         listUpdateScroll();
@@ -163,8 +179,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 tvName.setScaleY(scaleVal);
             }
 
-            ivPhoto.setTranslationX(scrollY);
-            tvName.setTranslationX(scrollY);
+//            ivPhoto.setTranslationX(scrollY);
+            tvName.setTranslationX(-scrollY / 2);
 
             if (actionBarHeight - SystemUtil.dp2px(this, 15) >= scrollY) {
                 Log.e(TAG, "ivPhoto: " + scrollY);
@@ -190,8 +206,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             ivPhoto.setTranslationY(-(actionBarHeight - SystemUtil.dp2px(this, 15)));
             tvName.setTranslationY(-(actionBarHeight - SystemUtil.dp2px(this, 30)));
 
-            ivPhoto.setTranslationX(actionBarHeight);
-            tvName.setTranslationX(actionBarHeight);
+//            ivPhoto.setTranslationX(actionBarHeight);
+//            tvName.setTranslationX(-actionBarHeight);
 
             llLayoutDesc.setAlpha(0);
             tvInfo.setAlpha(0);
@@ -204,7 +220,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             tvName.setScaleX(1);
             tvName.setScaleY(1);
 
-            ivPhoto.setTranslationX(0);
+//            ivPhoto.setTranslationX(0);
             tvName.setTranslationX(0);
 
             ivPhoto.setTranslationY(0);
@@ -384,6 +400,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         mQueue.cancelAll(authorPresenter.getClass().getName());
     }
 

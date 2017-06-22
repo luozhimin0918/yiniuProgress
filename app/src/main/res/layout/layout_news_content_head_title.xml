@@ -32,9 +32,9 @@
                 android:id="@+id/iv_photo"
                 android:layout_width="@dimen/newsAuthorPhotoSize"
                 android:layout_height="@dimen/newsAuthorPhotoSize"
-                android:src="@mipmap/icon_user_def_photo"
                 android:layout_marginRight="@dimen/newsContentMargin"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_user_def_photo"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -124,9 +124,16 @@
         android:layout_marginRight="@dimen/newsContentPadding1"
         android:background="@color/line_color3"/>
 
-
-    <WebView
-        android:id="@+id/wv_content"
+    <FrameLayout
+        android:id="@+id/fl_web_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></WebView>
+        android:minHeight="500dp"
+        android:layout_height="wrap_content">
+
+        <WebView
+            android:id="@+id/wv_content"
+            android:layout_width="match_parent"
+            android:minHeight="500dp"
+            android:layout_height="wrap_content"></WebView>
+    </FrameLayout>
 </LinearLayout>
