@@ -321,7 +321,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         switch (type) {
             case TYPE_TIME:
                 timeHolder.tvTime.setText(flashJsons.get(position).toString());
-                timeHolder.tvTime.setBackgroundColor(ContextCompat.getColor(context,R.color.line_color2));
+                timeHolder.tvTime.setBackgroundColor(ContextCompat.getColor(context,R.color.timeBarColor));
                 timeHolder.tvTime.setTextColor(ContextCompat.getColor(context,R.color.font_color3));
                 break;
             case TYPE_KX:

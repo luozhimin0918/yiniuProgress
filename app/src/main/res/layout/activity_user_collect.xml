@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:background="@color/line_color3"/>
+            android:background="@color/line_color7"/>
 
     </RelativeLayout>
 
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigationBar2Height"
         android:layout_gravity="bottom"
-        android:background="@color/font_color61"
+        android:background="@color/slidingTabLayout_bgColor"
         android:paddingRight="@dimen/navigationBar2ImageWidth"
         tl:tl_indicator_color="@color/indicator_color"
         tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"

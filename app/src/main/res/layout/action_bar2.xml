@@ -43,4 +43,9 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color7"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

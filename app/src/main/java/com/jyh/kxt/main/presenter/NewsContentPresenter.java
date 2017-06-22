@@ -467,7 +467,13 @@ public class NewsContentPresenter extends BasePresenter {
             }
 
             String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
-            String addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+            String addDianZanCount = null;
+            try {
+                addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                addDianZanCount="1";
+            }
             newsContentActivity.tvDianCount.setText(addDianZanCount);
 
             NativeStore.addThumbID(mContext, goodType, objectId, new ObserverData() {

@@ -60,6 +60,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         lvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) return;
                 List source = flashPresenter.adapter.getSource();
                 Object obj = source.get(position - 1);
                 if (obj != null && obj instanceof FlashJson) {

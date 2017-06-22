@@ -27,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/navigationBar2Height"
                 tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+                android:background="@color/slidingTabLayout_bgColor"
                 tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
                 tl:tl_indicator_color="@color/indicator_color"
                 tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"

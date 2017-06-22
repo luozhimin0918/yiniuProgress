@@ -10,7 +10,7 @@
         android:id="@+id/stl_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigationBar2Height"
-        android:background="@color/bg_color"
+        android:background="@color/slidingTabLayout_bgColor"
         android:paddingRight="@dimen/navigationBar2ImageWidth"
         tl:tl_indicator_color="@color/indicator_color"
         tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"

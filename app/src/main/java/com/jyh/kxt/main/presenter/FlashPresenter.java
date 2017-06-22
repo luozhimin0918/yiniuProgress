@@ -365,7 +365,6 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             builder.setAutoCancel(true);// 点击通知之后自动消失
 
             String content = newFlash.getContent();
-            builder.setTicker(content);
 
             switch (newFlash.getCode()) {
                 case VarConstant.SOCKET_FLASH_CJRL:
@@ -433,17 +432,20 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         views.setImageViewResource(R.id.calendar_item_nature,
                                 R.mipmap.nature_high_bt);
                     }
+                    builder.setTicker(flash_rl.getTitle());
                     builder.setContent(views);
                     break;
                 case VarConstant.SOCKET_FLASH_KUAIXUN:
                     Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
                     builder.setContentTitle(flash_kx.getTitle());
                     builder.setContentText(flash_kx.getTitle());
+                    builder.setTicker(flash_kx.getTitle());
                     break;
                 case VarConstant.SOCKET_FLASH_KXTNEWS:
                     Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
                     builder.setContentTitle(flash_news.getTitle());
                     builder.setContentText(flash_news.getDescription());
+                    builder.setTicker(flash_news.getTitle());
                     break;
             }
             Notification build = builder.build();

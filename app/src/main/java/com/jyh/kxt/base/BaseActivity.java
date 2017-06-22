@@ -203,7 +203,6 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
         }
 
         Glide.with(this).load(R.mipmap.loading).asGif().into(ivProgress);
-
         waitPopup = new PopupWindow(waitView);
 
         waitPopup.setWidth(SystemUtil.dp2px(this, 80));

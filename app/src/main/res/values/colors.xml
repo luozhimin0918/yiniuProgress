@@ -16,6 +16,7 @@
     <!-- 半透明 -->
     <color name="translucent_color">#66000000</color>
 
+    <color name="slidingTabLayout_bgColor">#F9FAFB</color>
     <color name="segmentTabLayout_bar_color">#ffffff</color>
     <color name="segmentTabLayout_indicator_color">#2C97DE</color>
 
@@ -25,9 +26,11 @@
     <color name="line_color4">#51606A</color>
     <color name="line_color5">#0A94f1</color>
     <color name="line_color6">#ededed</color>
+    <color name="line_color7">#dbdbdb</color>
 
     <color name="indicator_color">#009AFF</color>
     <color name="bg_color">#F9FAFB</color>
+    <color name="timeBarColor">#F9FAFB</color>
 
     <color name="toolbar_spilt_line">#CDCDCD</color>
     <color name="toolbar_btn_select">#D9D9D9</color>

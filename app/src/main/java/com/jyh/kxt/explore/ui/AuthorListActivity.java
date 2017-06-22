@@ -114,7 +114,7 @@ public class AuthorListActivity extends BaseActivity implements OnTabSelectListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (articleFragment != null)
+        if (articleFragment != null && data != null)
             articleFragment.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/browerHistoryTimeHeight"
     android:orientation="vertical"
-    android:background="@color/theme1">
+    android:background="@color/timeBarColor">
 
     <TextView
         android:id="@+id/tv_time"
