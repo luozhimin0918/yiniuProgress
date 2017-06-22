@@ -8,9 +8,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -26,6 +24,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.ShareJson;
+import com.library.util.JsonUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -36,7 +35,6 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
-import com.library.widget.window.ToastView;
 import com.superplayer.library.SuperPlayer;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -44,10 +42,7 @@ import com.trycatch.mysnackbar.TSnackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.jyh.kxt.base.constant.HttpConstant.VIDEO_DETAIL;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -158,7 +153,7 @@ public class VideoDetailPresenter extends BasePresenter {
                         videoDetailActivity.rvMessage.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
                     }
                 } else {
-                    List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
+                    List<CommentBean> comment = JsonUtil.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
                     if (comment.size() == 0) {
                         videoDetailActivity.rvMessage.noMoreData();

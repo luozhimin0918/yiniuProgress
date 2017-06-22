@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -27,6 +26,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.AttentionUtils;
+import com.library.util.JsonUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -141,7 +141,7 @@ public class NewsContentPresenter extends BasePresenter {
                 } else {
                     tvLoadMore.setText("加载更多评论");
                     tvLoadMore.setTag("idle");
-                    List<CommentBean> comment = JSONArray.parseArray(json, CommentBean.class);
+                    List<CommentBean> comment = JsonUtil.parseArray(json, CommentBean.class);
 
                     if (comment.size() == 0) {
                         tvLoadMore.setText("暂无更多评论");

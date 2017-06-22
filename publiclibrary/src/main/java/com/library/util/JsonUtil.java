@@ -1,4 +1,4 @@
-package com.jyh.kxt.base.utils;
+package com.library.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

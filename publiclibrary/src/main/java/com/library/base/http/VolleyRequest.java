@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.library.util.EncryptionUtils;
+import com.library.util.JsonUtil;
 import com.library.util.LogUtil;
 import com.library.widget.window.ToastView;
 
@@ -144,7 +145,7 @@ public class VolleyRequest {
                                         } else if (superclassTypeParameter.parseType == 2) {
 
                                             Type classType = superclassTypeParameter.classType;
-                                            resultT = (T) JSON.parseArray(data, (Class) classType);
+                                            resultT = (T) JsonUtil.parseArray(data, (Class) classType);
                                         }
                                         mHttpListener.onResponse(resultT);
                                     } else {

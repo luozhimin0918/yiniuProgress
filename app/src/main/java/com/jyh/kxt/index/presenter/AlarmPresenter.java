@@ -3,8 +3,8 @@ package com.jyh.kxt.index.presenter;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.library.util.JsonUtil;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.library.util.SPUtils;
 
@@ -30,7 +30,7 @@ public class AlarmPresenter {
         String calendarAlarm = SPUtils.getString(mContext, SpConstant.CALENDAR_ALARM_LIST);
 
         if (!"".equals(calendarAlarm)) {
-            List<AlarmJson> alarmList = JSONArray.parseArray(calendarAlarm, AlarmJson.class);
+            List<AlarmJson> alarmList = JsonUtil.parseArray(calendarAlarm, AlarmJson.class);
 
             for (AlarmJson alarmJson : alarmList) {
                 alarmHashMap.put(alarmJson.getCode(), alarmJson);
@@ -61,7 +61,7 @@ public class AlarmPresenter {
 
         List<AlarmJson> alarmList;
         if (!"".equals(calendarAlarm)) {
-            alarmList = JSONArray.parseArray(calendarAlarm, AlarmJson.class);
+            alarmList = JsonUtil.parseArray(calendarAlarm, AlarmJson.class);
         } else {
             alarmList = new ArrayList<>();
         }
