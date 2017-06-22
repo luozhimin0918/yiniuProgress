@@ -33,6 +33,12 @@
             />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
     <LinearLayout
         android:id="@+id/ll_tj"
         android:layout_width="match_parent"
@@ -48,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="@dimen/newsContentPadding3"
+            android:layout_marginTop="8dp"
             android:drawableLeft="@mipmap/icon_video_line"
             android:gravity="center_vertical"
             android:text="相关文章"

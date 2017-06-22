@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.json.flash.FlashContentJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
+import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.presenter.FlashActivityPresenter;
 import com.library.base.http.VarConstant;
@@ -207,6 +209,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             newsAdapter.setData(article);
         }
 
+        plRootView.loadOver();
+
     }
 
     /**
@@ -229,10 +233,15 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutRL = flashHeadView.findViewById(R.id.layout_rl);
         layoutFlash = flashHeadView.findViewById(R.id.layout_flash);
 
-//        84
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
+        int headHeight = screenDisplay.heightPixels - SystemUtil.dp2px(this, 266)-SystemUtil.getStatuBarHeight(this);//两个item高度84*2 + 上下导航栏高度(48+50)
+        flashHeadView.setMinimumHeight(headHeight);
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                .WRAP_CONTENT);
+        flashHeadView.setLayoutParams(layoutParams);
     }
 
-    public void initHeadData(FlashContentJson flash){
+    public void initHeadData(FlashContentJson flash) {
         try {
             flashJson = flash.getKuaixun();
 
@@ -564,7 +573,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position > 1) {
-
+            NewsJson newsJson = newsAdapter.getData().get(position - 2);
+            JumpUtils.jump(this,newsJson.getO_class(),newsJson.getO_action(),newsJson.getO_id(),newsJson.getHref());
         }
     }
 
