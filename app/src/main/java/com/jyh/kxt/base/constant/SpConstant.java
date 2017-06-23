@@ -21,6 +21,8 @@ public class SpConstant {
 
     public static final String USERINFO = "userinfo";
 
+    public static final String WEBFONTSIZE = "webfontsize";//网页文本字体大小
+
     /**
      * 快讯筛选
      */
@@ -33,6 +35,7 @@ public class SpConstant {
      * 收藏
      */
     public static final String COLLECT_FLASH = "collect_flash";
+
 
     /**
      * EmoJe表情是否初始化

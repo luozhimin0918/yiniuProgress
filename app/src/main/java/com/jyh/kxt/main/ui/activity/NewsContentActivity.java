@@ -278,6 +278,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         font = fontB;
                         break;
                 }
+                SPUtils.save(NewsContentActivity.this, SpConstant.WEBFONTSIZE, position + "");
                 int alertTheme = ThemeUtil.getAlertTheme(getContext());
                 switch (alertTheme) {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
@@ -301,13 +302,17 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         tvTheme.setText("夜间模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, false);
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
+
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html",
+                                "utf-8", "");
+
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         tvTheme.setText("白天模式");
                         setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         SPUtils.save(NewsContentActivity.this, SpConstant.SETTING_DAY_NIGHT, true);
-                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html",
+
+                        webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html",
                                 "utf-8", "");
                         break;
                 }
@@ -415,10 +420,27 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         title = newsContentJson.getTitle();
         shareUrl = newsContentJson.getUrl_share();
         shareImg = HttpConstant.IMG_URL + newsContentJson.getPicture();
+
         fontS = newsContentJson.getFont_small();
         fontM = newsContentJson.getFont_mid();
-        font = fontM;
         fontB = newsContentJson.getFont_big();
+
+        //设置默认文本大小
+        String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
+        if (RegexValidateUtil.isEmpty(fontSizeStr))
+            font = fontM;
+        switch (fontSizeStr) {
+            case "0":
+                font = fontS;
+                break;
+            case "1":
+                font = fontM;
+                break;
+            case "2":
+                font = fontB;
+                break;
+        }
+
         content = newsContentJson.getContent();
         night = newsContentJson.getNight_style();
 
@@ -562,13 +584,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + content, "text/html", "utf-8",
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html", "utf-8",
                             "");
                     source = "<font color='#2E3239'>文章来源:</font><font color='#A1ABB2'>" + sourceStr +
                             "</font>";
                     break;
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, content, "text/html", "utf-8", "");
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, font + content, "text/html", "utf-8", "");
                     source = "<font color='#909090'>文章来源:</font><font color='#4D4D4D'>" + sourceStr +
                             "</font>";
                     break;
@@ -668,7 +690,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         public void run() {
                             flWebContent.setForeground(null);
                         }
-                    },150);
+                    }, 150);
 //                    view.loadUrl("javascript:function urlClick()" +
 //                            "{" +
 //                            "   var urls = document.getElementsByTagName(\"a\");" +

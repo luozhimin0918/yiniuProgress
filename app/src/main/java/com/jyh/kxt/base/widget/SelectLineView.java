@@ -36,7 +36,7 @@ public class SelectLineView extends LinearLayout {
     private View line1;
     private View line2;
 
-    private int position;
+    private int position=1;
 
     public SelectLineView(Context context) {
         this(context, null);

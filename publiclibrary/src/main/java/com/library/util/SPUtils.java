@@ -146,5 +146,4 @@ public class SPUtils {
         sp = mContext.getSharedPreferences(fileName, 0);
     }
 
-
 }
