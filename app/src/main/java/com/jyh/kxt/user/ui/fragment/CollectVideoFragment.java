@@ -234,21 +234,25 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
      * 退出编辑
      */
     public void quitEdit(DelNumListener observerData) {
-        adapter.setEdit(false);
-        List<VideoListJson> data = adapter.getData();
-        //还原删除按钮数字
-        if (observerData != null)
-            observerData.delItem(0);
-        //空数据处理
-        if (data == null || data.size() == 0) {
-            plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText(getString(R.string.error_collect_null));
-            plRootView.loadEmptyData();
-            return;
-        }
-        //还原选中状态
-        for (VideoListJson videoListJson : data) {
-            videoListJson.setSel(false);
+        try {
+            adapter.setEdit(false);
+            List<VideoListJson> data = adapter.getData();
+            //还原删除按钮数字
+            if (observerData != null)
+                observerData.delItem(0);
+            //空数据处理
+            if (data == null || data.size() == 0) {
+                plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                plRootView.setNullText(getString(R.string.error_collect_null));
+                plRootView.loadEmptyData();
+                return;
+            }
+            //还原选中状态
+            for (VideoListJson videoListJson : data) {
+                videoListJson.setSel(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -58,10 +58,13 @@ import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
+import com.library.util.NetUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UmengTool;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
@@ -422,15 +425,32 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.iv_qq:
                 //QQ
-                UmengLoginTool.umenglogin(this, SHARE_MEDIA.QQ);
+                if (NetUtils.isNetworkAvailable(this)) {
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ))
+                        UmengLoginTool.umenglogin(this, SHARE_MEDIA.QQ);
+                    else
+                        ToastView.makeText3(this, "未安装QQ");
+                } else {
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
+                }
+
                 break;
             case R.id.iv_sina:
                 //新浪
-                UmengLoginTool.umenglogin(this, SHARE_MEDIA.SINA);
+                if (NetUtils.isNetworkAvailable(this))
+                    UmengLoginTool.umenglogin(this, SHARE_MEDIA.SINA);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_wx:
                 //微信
-                UmengLoginTool.umenglogin(this, SHARE_MEDIA.WEIXIN);
+                if (NetUtils.isNetworkAvailable(this)) {
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN))
+                        UmengLoginTool.umenglogin(this, SHARE_MEDIA.WEIXIN);
+                    else
+                        ToastView.makeText3(this, "未安装微信");
+                } else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.ll_login:
                 //登录
@@ -655,49 +675,49 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     case "/comment":
                         //todo 旧版中的点评 及现在的要闻
                         oclass = VarConstant.OCLASS_NEWS;
-                        oaction=VarConstant.OACTION_DIANPING;
+                        oaction = VarConstant.OACTION_DIANPING;
                         break;
                     case "/fastNews":
                         //快讯
                         oclass = VarConstant.OCLASS_FLASH;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
+                        if ("true".equals(mwType)) {
+                            oaction = VarConstant.OACTION_LIST;
+                        } else {
+                            oaction = VarConstant.OACTION_DETAIL;
                         }
                         break;
                     case "/news":
                         //要闻
                         oclass = VarConstant.OCLASS_NEWS;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
+                        if ("true".equals(mwType)) {
+                            oaction = VarConstant.OACTION_LIST;
+                        } else {
+                            oaction = VarConstant.OACTION_DETAIL;
                         }
                         break;
                     case "/price":
                         //行情
                         oclass = VarConstant.OCLASS_QUOTES;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
+                        if ("true".equals(mwType)) {
+                            oaction = VarConstant.OACTION_LIST;
+                        } else {
+                            oaction = VarConstant.OACTION_DETAIL;
                         }
                         break;
                     case "/video":
                         oclass = VarConstant.OCLASS_VIDEO;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
+                        if ("true".equals(mwType)) {
+                            oaction = VarConstant.OACTION_LIST;
+                        } else {
+                            oaction = VarConstant.OACTION_DETAIL;
                         }
                         break;
                     case "/datacenter":
                         oclass = VarConstant.OCLASS_DATA;
-                        if("true".equals(mwType)){
-                            oaction=VarConstant.OACTION_LIST;
-                        }else{
-                            oaction=VarConstant.OACTION_DETAIL;
+                        if ("true".equals(mwType)) {
+                            oaction = VarConstant.OACTION_LIST;
+                        } else {
+                            oaction = VarConstant.OACTION_DETAIL;
                         }
                         break;
                     case "/rili":

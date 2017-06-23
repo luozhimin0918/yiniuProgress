@@ -29,7 +29,7 @@ public class HttpConstant {
 
     }
 
-    public static final String OFFICIAL = "https://www.kxt.com";//官网
+    public static final String OFFICIAL = "http://www.kxt.com";//官网
 
     public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
     //    public static final String IMG_URL = "http://img.kxt.com/";
@@ -83,9 +83,9 @@ public class HttpConstant {
     // ?id={}&last_id={0}&uid={0}&accessToken={0}
     public static final String EXPLORE_TOPIC = BASE_URL + "topic/list";//专题
     public static final String EXPLORE_ACTIVITY = BASE_URL + "activity/list";//活动
-    public static final String EXPLORE_BLOG_WRITER = BASE_URL + "blog/writer"+ VarConstant.HTTP_CONTENT;//专栏作者列表
-    public static final String EXPLORE_BLOG_WRITER_LIST = BASE_URL + "blog/writer_list"+ VarConstant.HTTP_CONTENT;//专栏作者列表
-    public static final String EXPLORE_BLOG_NAV = BASE_URL + "blog/blog_nav"+ VarConstant.HTTP_CONTENT;//专栏作者列表
+    public static final String EXPLORE_BLOG_WRITER = BASE_URL + "blog/writer" + VarConstant.HTTP_CONTENT;//专栏作者列表
+    public static final String EXPLORE_BLOG_WRITER_LIST = BASE_URL + "blog/writer_list" + VarConstant.HTTP_CONTENT;//专栏作者列表
+    public static final String EXPLORE_BLOG_NAV = BASE_URL + "blog/blog_nav" + VarConstant.HTTP_CONTENT;//专栏作者列表
 
     /**
      * socket
@@ -141,6 +141,7 @@ public class HttpConstant {
 
     public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video
     // | article
+    public static final String COLLECT_DELS = BASE_URL + "member/favor_delete";
 
     /**
      * 点评

@@ -31,6 +31,7 @@ import com.library.util.avalidations.ValidationModel;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.HashMap;
@@ -87,7 +88,10 @@ public class LoginFragment extends BaseFragment {
             case R.id.iv_qq:
                 //qq
                 if (NetUtils.isNetworkAvailable(getContext()))
-                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                    if (UMShareAPI.get(getContext()).isInstall(getActivity(), SHARE_MEDIA.QQ))
+                        UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                    else
+                        ToastView.makeText3(getContext(), "未安装QQ");
                 else
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
@@ -101,7 +105,10 @@ public class LoginFragment extends BaseFragment {
             case R.id.iv_wx:
                 //微信
                 if (NetUtils.isNetworkAvailable(getContext()))
-                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                    if (UMShareAPI.get(getContext()).isInstall(getActivity(), SHARE_MEDIA.WEIXIN))
+                        UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                    else
+                        ToastView.makeText3(getContext(), "未安装微信");
                 else
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;

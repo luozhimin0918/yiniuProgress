@@ -368,7 +368,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                                     .this, title, shareUrl, "",
                                             shareImg, SHARE_MEDIA.QZONE);
                                 } else {
-                                    ToastView.makeText3(NewsContentActivity.this, "未安装QQ控件");
+                                    ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
                                 }
                                 break;
                         }

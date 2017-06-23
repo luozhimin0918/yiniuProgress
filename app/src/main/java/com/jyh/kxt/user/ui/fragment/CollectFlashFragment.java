@@ -204,23 +204,27 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      * @param observerData
      */
     public void quitEdit(DelNumListener observerData) {
-        adapter.setEdit(false);
-        List souces = adapter.getSoucesData();
-        List data = adapter.getData();
-        //还原删除按钮数字
-        if (observerData != null)
-            observerData.delItem(0);
-        //空数据处理
-        if (data == null || data.size() == 0) {
-            plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText(getString(R.string.error_collect_null));
-            plRootView.loadEmptyData();
-            return;
-        }
-        //还原选中状态
-        for (Object flash : souces) {
-            if (flash instanceof FlashJson)
-                ((FlashJson) flash).setSel(false);
+        try {
+            adapter.setEdit(false);
+            List souces = adapter.getSoucesData();
+            List data = adapter.getData();
+            //还原删除按钮数字
+            if (observerData != null)
+                observerData.delItem(0);
+            //空数据处理
+            if (data == null || data.size() == 0) {
+                plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                plRootView.setNullText(getString(R.string.error_collect_null));
+                plRootView.loadEmptyData();
+                return;
+            }
+            //还原选中状态
+            for (Object flash : souces) {
+                if (flash instanceof FlashJson)
+                    ((FlashJson) flash).setSel(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

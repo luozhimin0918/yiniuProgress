@@ -92,10 +92,12 @@ public class SettingActivity extends BaseActivity {
             case 0:
                 boolean checkedPush = view instanceof CheckBox ? ivPush.isChecked() : !ivPush.isChecked();
                 ivPush.setChecked(checkedPush);
+                SPUtils.save(this, SpConstant.SETTING_PUSH, checkedPush);
                 break;
             case 1:
                 boolean checkedSound = view instanceof CheckBox ? ivSound.isChecked() : !ivSound.isChecked();
                 ivSound.setChecked(checkedSound);
+                SPUtils.save(this, SpConstant.SETTING_SOUND, checkedSound);
                 break;
         }
     }

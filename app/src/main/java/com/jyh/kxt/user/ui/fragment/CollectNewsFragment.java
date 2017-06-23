@@ -231,28 +231,32 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      * @param observerData
      */
     public void quitEdit(DelNumListener observerData) {
-        adapter.setEdit(false);
-        List<NewsJson> data = adapter.getData();
-        //还原删除按钮数字
-        if (observerData != null)
-            observerData.delItem(0);
-        //空数据处理
-        if (data == null || data.size() == 0) {
-            plRootView.setNullImgId(R.mipmap.icon_collect_null);
-            plRootView.setNullText(getString(R.string.error_collect_null));
-            plRootView.loadEmptyData();
-            return;
-        }
-        //还原选中状态
-        for (NewsJson newsJson : data) {
-            newsJson.setSel(false);
+        try {
+            adapter.setEdit(false);
+            List<NewsJson> data = adapter.getData();
+            //还原删除按钮数字
+            if (observerData != null)
+                observerData.delItem(0);
+            //空数据处理
+            if (data == null || data.size() == 0) {
+                plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                plRootView.setNullText(getString(R.string.error_collect_null));
+                plRootView.loadEmptyData();
+                return;
+            }
+            //还原选中状态
+            for (NewsJson newsJson : data) {
+                newsJson.setSel(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onDestroyView() {
-        getQueue().cancelAll(CollectNewsPresenter.class.getName());
         super.onDestroyView();
+//        getQueue().cancelAll(CollectNewsPresenter.class.getName());
         try {
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
@@ -268,6 +272,11 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         }
         if (plvContent != null)
             plvContent.setDividerNull();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override

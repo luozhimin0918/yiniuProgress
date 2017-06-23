@@ -3,6 +3,7 @@ package com.jyh.kxt.base.utils.collect;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.ObjectArraySerializer;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.jyh.kxt.av.json.VideoListJson;
@@ -15,6 +16,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.RegexValidateUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -171,31 +173,37 @@ public class CollectNetUtils {
      * @param ids
      * @param observerData
      */
-    public static void unCollects(final Context context, final String type, final String newsType, final String ids, final ObserverData observerData) {
+    public static void unCollects(final Context context, final String type, final String newsType, final String ids, final ObserverData
+            observerData) {
         VolleyRequest request = new VolleyRequest(context, Volley.newRequestQueue(context));
 
         String collectType = "";
         String collectId = "";
         switch (type) {
             case VarConstant.COLLECT_TYPE_ARTICLE:
-                collectType = VarConstant.COLLECT_TYPE_ARTICLE;
+                collectType = "2";
                 collectId = ids;
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
-                CollectLocalUtils.unCollects(context, type,newsType, ids, observerData);
+                CollectLocalUtils.unCollects(context, type, newsType, ids, observerData);
                 return;
             case VarConstant.COLLECT_TYPE_VIDEO:
-                collectType = VarConstant.COLLECT_TYPE_VIDEO;
+                collectType = "1";
                 collectId = ids;
                 break;
         }
 
-        request.doPost(HttpConstant.COLLECT_DEL, getMap(context, request, collectId, collectType), new HttpListener<Boolean>() {
+        String url = HttpConstant.COLLECT_DELS;
+        if (!RegexValidateUtil.isEmpty(newsType) && newsType.equals(VarConstant.OCLASS_BLOG)) {
+            url=HttpConstant.EXPLORE_BLOG_DELETEFAVORARTICLE;
+        }
+
+        request.doPost(url, getMap(context, request, collectId, collectType), new HttpListener<Object>() {
             @Override
-            protected void onResponse(Boolean aBoolean) {
+            protected void onResponse(Object aBoolean) {
                 if (observerData != null)
-                    observerData.callback(aBoolean);
-                CollectLocalUtils.unCollects(context, type,newsType, ids, null);
+                    observerData.callback(null);
+                CollectLocalUtils.unCollects(context, type, newsType, ids, null);
             }
 
             @Override
@@ -211,6 +219,7 @@ public class CollectNetUtils {
         Map<String, String> map = new HashMap<>();
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(context).getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, LoginUtils.getUserInfo(context).getToken());
         jsonParam.put(VarConstant.HTTP_ID, id);
         jsonParam.put(VarConstant.HTTP_TYPE, type);
 

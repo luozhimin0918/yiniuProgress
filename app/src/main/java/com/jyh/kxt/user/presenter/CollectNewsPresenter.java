@@ -44,7 +44,7 @@ public class CollectNewsPresenter extends BasePresenter {
     public CollectNewsPresenter(IBaseView iBaseView) {
         super(iBaseView);
         request = new VolleyRequest(mContext, mQueue);
-        request.setTag(getClass().getName());
+//        request.setTag(getClass().getName());
     }
 
     /**
