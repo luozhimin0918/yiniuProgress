@@ -131,71 +131,75 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
 
     @OnClick({R.id.iv_right_icon1, R.id.iv_right_icon2, R.id.iv_left_icon})
     public void onNavClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_left_icon:
-                ((MainActivity) getActivity()).showUserCenter();
-                break;
-            case R.id.iv_right_icon1:
-                /*HashSet<String> hashSetCity = null;
-                CalendarItemFragment mCalendarItemFragment = null;
-                try {
-                    CalendarFragment currentCalendarFragment = (CalendarFragment) calendarFragment;
-                    currentCalendarFragment.switchCityScreenData();//重置筛选数据
+        try {
+            switch (view.getId()) {
+                case R.id.iv_left_icon:
+                    ((MainActivity) getActivity()).showUserCenter();
+                    break;
+                case R.id.iv_right_icon1:
+                    /*HashSet<String> hashSetCity = null;
+                    CalendarItemFragment mCalendarItemFragment = null;
+                    try {
+                        CalendarFragment currentCalendarFragment = (CalendarFragment) calendarFragment;
+                        currentCalendarFragment.switchCityScreenData();//重置筛选数据
 
-                    Fragment currentItemFragment = currentCalendarFragment.getCurrentFragment();
-                    mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
-                    hashSetCity = mCalendarItemFragment.mCalendarItemPresenter.hashSetCity;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if (hashSetCity == null) {
-                    return;
-                }*/
-                CalendarFragment calendarFragment = (CalendarFragment) this.calendarFragment;
-                Fragment currentItemFragment = calendarFragment.getCurrentFragment();
-                CalendarItemFragment mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
-
-                HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
-                HashSet<String> citySet = cityOptionMap.get(mCalendarItemFragment);
-                if (citySet == null || citySet.size() == 0) {
-                    ToastView.makeText3(getContext(), "没有可以筛选的数据");
-                    return;
-                }
-                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
-                int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
-
-                filtratePopup = new PopupUtil(getActivity());
-                View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
-                datumPresenter.registerFiltrateAgency(filtrateView, calendarFragment, mCalendarItemFragment);
-
-                PopupUtil.Config config = new PopupUtil.Config();
-
-                config.outsideTouchable = true;
-                config.alpha = 0.5f;
-                config.bgColor = 0X00000000;
-
-                config.animationStyle = R.style.PopupWindow_Style2;
-                config.width = WindowManager.LayoutParams.MATCH_PARENT;
-                config.height = popHeight;
-                filtratePopup.setConfig(config);
-
-                filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-
-                filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-
+                        Fragment currentItemFragment = currentCalendarFragment.getCurrentFragment();
+                        mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
+                        hashSetCity = mCalendarItemFragment.mCalendarItemPresenter.hashSetCity;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-                break;
-            case R.id.iv_right_icon2:
 
-                if (this.calendarFragment != null) {
-                    CalendarFragment calendarFragments = (CalendarFragment) this.calendarFragment;
-                    datumPresenter.openCalendar(calendarFragments.getCurrentTabDate());
-                }
-                break;
+                    if (hashSetCity == null) {
+                        return;
+                    }*/
+                    CalendarFragment calendarFragment = (CalendarFragment) this.calendarFragment;
+                    Fragment currentItemFragment = calendarFragment.getCurrentFragment();
+                    CalendarItemFragment mCalendarItemFragment = (CalendarItemFragment) currentItemFragment;
+
+                    HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
+                    HashSet<String> citySet = cityOptionMap.get(mCalendarItemFragment);
+                    if (citySet == null || citySet.size() == 0) {
+                        ToastView.makeText3(getContext(), "没有可以筛选的数据");
+                        return;
+                    }
+                    DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
+                    int popHeight = screenDisplay.heightPixels - SystemUtil.dp2px(getContext(), 115);
+
+                    filtratePopup = new PopupUtil(getActivity());
+                    View filtrateView = filtratePopup.createPopupView(R.layout.pop_calendar_filtrate);
+                    datumPresenter.registerFiltrateAgency(filtrateView, calendarFragment, mCalendarItemFragment);
+
+                    PopupUtil.Config config = new PopupUtil.Config();
+
+                    config.outsideTouchable = true;
+                    config.alpha = 0.5f;
+                    config.bgColor = 0X00000000;
+
+                    config.animationStyle = R.style.PopupWindow_Style2;
+                    config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    config.height = popHeight;
+                    filtratePopup.setConfig(config);
+
+                    filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+
+                    filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
+                        @Override
+                        public void onDismiss() {
+
+                        }
+                    });
+                    break;
+                case R.id.iv_right_icon2:
+
+                    if (this.calendarFragment != null) {
+                        CalendarFragment calendarFragments = (CalendarFragment) this.calendarFragment;
+                        datumPresenter.openCalendar(calendarFragments.getCurrentTabDate());
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -202,6 +202,12 @@ public class FastInfoPinnedListView extends ListView {
         footView.setGravity(Gravity.CENTER);
         footView.setLayoutParams(layoutParams);
         footView.setVisibility(View.INVISIBLE);
+        footView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         this.addFooterView(footView);
     }
 
@@ -601,55 +607,59 @@ public class FastInfoPinnedListView extends ListView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        final float x = ev.getX();
-        final float y = ev.getY();
-        final int action = ev.getAction();
+        try {
+            final float x = ev.getX();
+            final float y = ev.getY();
+            final int action = ev.getAction();
 
-        if (action == MotionEvent.ACTION_DOWN
-                && mTouchTarget == null
-                && mPinnedSection != null
-                && isPinnedViewTouched(mPinnedSection.view, x, y)) { // create touch target
+            if (action == MotionEvent.ACTION_DOWN
+                    && mTouchTarget == null
+                    && mPinnedSection != null
+                    && isPinnedViewTouched(mPinnedSection.view, x, y)) { // create touch target
 
-            // user touched pinned view
-            mTouchTarget = mPinnedSection.view;
-            mTouchPoint.x = x;
-            mTouchPoint.y = y;
+                // user touched pinned view
+                mTouchTarget = mPinnedSection.view;
+                mTouchPoint.x = x;
+                mTouchPoint.y = y;
 
-            // copy down event for eventually be used later
-            mDownEvent = MotionEvent.obtain(ev);
-        }
-
-        if (mTouchTarget != null) {
-            if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
-                mTouchTarget.dispatchTouchEvent(ev);
+                // copy down event for eventually be used later
+                mDownEvent = MotionEvent.obtain(ev);
             }
 
-            if (action == MotionEvent.ACTION_UP) { // perform onClick on pinned view
-                super.dispatchTouchEvent(ev);
-                performPinnedItemClick();
-                clearTouchTarget();
+            if (mTouchTarget != null) {
+                if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
+                    mTouchTarget.dispatchTouchEvent(ev);
+                }
 
-            } else if (action == MotionEvent.ACTION_CANCEL) { // cancel
-                clearTouchTarget();
-
-            } else if (action == MotionEvent.ACTION_MOVE) {
-                if (Math.abs(y - mTouchPoint.y) > mTouchSlop) {
-
-                    // cancel sequence on touch target
-                    MotionEvent event = MotionEvent.obtain(ev);
-                    event.setAction(MotionEvent.ACTION_CANCEL);
-                    mTouchTarget.dispatchTouchEvent(event);
-                    event.recycle();
-
-                    // provide correct sequence to super class for further handling
-                    super.dispatchTouchEvent(mDownEvent);
+                if (action == MotionEvent.ACTION_UP) { // perform onClick on pinned view
                     super.dispatchTouchEvent(ev);
+                    performPinnedItemClick();
                     clearTouchTarget();
 
-                }
-            }
+                } else if (action == MotionEvent.ACTION_CANCEL) { // cancel
+                    clearTouchTarget();
 
-            return true;
+                } else if (action == MotionEvent.ACTION_MOVE) {
+                    if (Math.abs(y - mTouchPoint.y) > mTouchSlop) {
+
+                        // cancel sequence on touch target
+                        MotionEvent event = MotionEvent.obtain(ev);
+                        event.setAction(MotionEvent.ACTION_CANCEL);
+                        mTouchTarget.dispatchTouchEvent(event);
+                        event.recycle();
+
+                        // provide correct sequence to super class for further handling
+                        super.dispatchTouchEvent(mDownEvent);
+                        super.dispatchTouchEvent(ev);
+                        clearTouchTarget();
+
+                    }
+                }
+
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // call super if this was not our pinned view

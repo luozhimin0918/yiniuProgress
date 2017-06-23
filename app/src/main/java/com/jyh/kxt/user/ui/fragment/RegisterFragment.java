@@ -22,6 +22,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.NetUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
@@ -78,13 +79,22 @@ public class RegisterFragment extends BaseFragment {
                     register();
                 break;
             case R.id.iv_qq:
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_sina:
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.SINA);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.SINA);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_wx:
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
         }
     }
@@ -109,7 +119,8 @@ public class RegisterFragment extends BaseFragment {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText(error == null ? "" : error.getMessage()).setDuration(TSnackbar.LENGTH_LONG)
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(getContext()) ? (error == null ? "" :
+                        error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
                         .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }

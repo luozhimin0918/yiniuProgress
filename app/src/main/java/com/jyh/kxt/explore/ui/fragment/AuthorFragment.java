@@ -175,59 +175,59 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
         rollDotViewPager.build();
     }
 
-  /*  private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount,
-  List<RecyclerView> views, ViewGroup
-            .LayoutParams params, int i) {
-        RecyclerView recyclerView = new RecyclerView(getContext());
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 3) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
+    /*  private void initPageView(List<AuthorJson> authors, LinearLayout llDian, int size, int pageCount,
+    List<RecyclerView> views, ViewGroup
+              .LayoutParams params, int i) {
+          RecyclerView recyclerView = new RecyclerView(getContext());
+          GridLayoutManager manager = new GridLayoutManager(getContext(), 3) {
+              @Override
+              public boolean canScrollHorizontally() {
+                  return false;
+              }
 
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        manager.setOrientation(GridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setLayoutParams(params);
+              @Override
+              public boolean canScrollVertically() {
+                  return false;
+              }
+          };
+          manager.setOrientation(GridLayoutManager.VERTICAL);
+          recyclerView.setLayoutManager(manager);
+          recyclerView.setLayoutParams(params);
 
-        List<AuthorJson> authorJsons = null;
-        if (i == pageCount - 1) {
-            //最后一页
-            authorJsons = authors.subList(i * 6, size);
-        } else {
-            authorJsons = authors.subList(i * 6, (i + 1) * 6);
-        }
+          List<AuthorJson> authorJsons = null;
+          if (i == pageCount - 1) {
+              //最后一页
+              authorJsons = authors.subList(i * 6, size);
+          } else {
+              authorJsons = authors.subList(i * 6, (i + 1) * 6);
+          }
 
-        ImageView dian = new ImageView(getContext());
-        dian.setImageResource(R.drawable.sel_dian);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(8, 8);
-        layoutParams.rightMargin = 10;
-        dian.setLayoutParams(layoutParams);
+          ImageView dian = new ImageView(getContext());
+          dian.setImageResource(R.drawable.sel_dian);
+          LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(8, 8);
+          layoutParams.rightMargin = 10;
+          dian.setLayoutParams(layoutParams);
 
-        llDian.addView(dian);
-        points.add(dian);
+          llDian.addView(dian);
+          points.add(dian);
 
-        DividerGridItemDecoration decor = new DividerGridItemDecoration(getContext());
-        decor.setSpanCount(3);
-        recyclerView.addItemDecoration(decor);
+          DividerGridItemDecoration decor = new DividerGridItemDecoration(getContext());
+          decor.setSpanCount(3);
+          recyclerView.addItemDecoration(decor);
 
-        headAdapter = new AuthorHeadContentAdapter(getContext(), authorJsons);
-        headAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                String authorId = headAdapter.getData().get(position).getId();
-                Intent authorIntent = new Intent(getContext(), AuthorActivity.class);
-                authorIntent.putExtra(IntentConstant.O_ID, authorId);
-                startActivity(authorIntent);
-            }
-        });
-        recyclerView.setAdapter(headAdapter);
-        views.add(recyclerView);
-    }*/
+          headAdapter = new AuthorHeadContentAdapter(getContext(), authorJsons);
+          headAdapter.setOnItemClickListener(new OnItemClickListener() {
+              @Override
+              public void onItemClick(int position, View view) {
+                  String authorId = headAdapter.getData().get(position).getId();
+                  Intent authorIntent = new Intent(getContext(), AuthorActivity.class);
+                  authorIntent.putExtra(IntentConstant.O_ID, authorId);
+                  startActivity(authorIntent);
+              }
+          });
+          recyclerView.setAdapter(headAdapter);
+          views.add(recyclerView);
+      }*/
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position > 1) {
@@ -236,5 +236,11 @@ public class AuthorFragment extends BaseFragment implements PageLoadLayout.OnAfr
             authorIntent.putExtra(IntentConstant.O_ID, authorId);
             startActivity(authorIntent);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(AuthorFragmentPresenter.class.getName());
     }
 }

@@ -50,6 +50,7 @@ import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,11 +86,20 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
 
-        for (FlashJson flash : flashJsons) {
-            if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
-                flash.setColloct(true);
-            } else {
-                flash.setColloct(false);
+        if (flashJsons != null) {
+            Iterator<FlashJson> iterator = flashJsons.iterator();
+            while (iterator.hasNext()) {
+                FlashJson next = iterator.next();
+                if (next == null || next.getContent() == null)
+                    iterator.remove();
+            }
+
+            for (FlashJson flash : flashJsons) {
+                if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
+                    flash.setColloct(true);
+                } else {
+                    flash.setColloct(false);
+                }
             }
         }
 
@@ -131,6 +141,15 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private Map<String, Integer> timeMap = new HashMap<>();
 
     public void setData(List<FlashJson> flashJsons) {
+
+        if (flashJsons == null) return;
+        Iterator<FlashJson> iterator = flashJsons.iterator();
+        while (iterator.hasNext()) {
+            FlashJson next = iterator.next();
+            if (next == null || next.getContent() == null)
+                iterator.remove();
+        }
+
         for (FlashJson flash : flashJsons) {
             if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
                 flash.setColloct(true);
@@ -138,6 +157,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 flash.setColloct(false);
             }
         }
+
         this.flashJsons.clear();
         this.flashJsons.addAll(flashJsons);
         inspiritDateInfo(this.flashJsons);
@@ -146,6 +166,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
 
     public void addData(FlashJson flashJson) {
+
+        if (flashJson == null || flashJson.getContent() == null)
+            return;
 
         if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flashJson)) {
             flashJson.setColloct(true);
@@ -158,6 +181,16 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     public void addData(List<FlashJson> flashJsons) {
+
+        if (flashJsons == null) return;
+
+        Iterator<FlashJson> iterator = flashJsons.iterator();
+        while (iterator.hasNext()) {
+            FlashJson next = iterator.next();
+            if (next == null || next.getContent() == null)
+                iterator.remove();
+        }
+
 
         for (FlashJson flash : flashJsons) {
             if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {

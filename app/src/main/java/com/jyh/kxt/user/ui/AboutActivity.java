@@ -15,6 +15,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.WebActivity;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 
 import butterknife.BindView;
@@ -43,8 +44,12 @@ public class AboutActivity extends BaseActivity {
         tvBarTitle.setText("关于我们");
         ivBarFunction.setVisibility(View.INVISIBLE);
 
-        String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
-        config = JSON.parseObject(configStr, MainInitJson.class);
+        try {
+            String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
+            config = JSON.parseObject(configStr, MainInitJson.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -64,16 +69,26 @@ public class AboutActivity extends BaseActivity {
                 //联系我们
                 Intent contactIntent = new Intent(this, WebActivity.class);
                 contactIntent.putExtra(IntentConstant.NAME, "联系我们");
-                contactIntent.putExtra(IntentConstant.WEBURL, config.getUrl_contact() != null ? config.getUrl_contact() : HttpConstant
-                        .CONTACT_US_URL);
+                String url;
+                if (config == null || RegexValidateUtil.isEmpty(config.getUrl_contact()))
+                    url = HttpConstant
+                            .CONTACT_US_URL;
+                else
+                    url = config.getUrl_contact();
+                contactIntent.putExtra(IntentConstant.WEBURL, url);
                 startActivity(contactIntent);
                 break;
             case R.id.rl_feedback:
                 //意见反馈
                 Intent feedbackIntent = new Intent(this, WebActivity.class);
                 feedbackIntent.putExtra(IntentConstant.NAME, "意见反馈");
-                feedbackIntent.putExtra(IntentConstant.WEBURL, config.getUrl_feedback() != null ? config.getUrl_feedback() :
-                        HttpConstant.FEEDBACK_URL);
+                String feedBackUrl;
+                if (config == null || RegexValidateUtil.isEmpty(config.getUrl_feedback()))
+                    feedBackUrl = HttpConstant
+                            .FEEDBACK_URL;
+                else
+                    feedBackUrl = config.getUrl_feedback();
+                feedbackIntent.putExtra(IntentConstant.WEBURL, feedBackUrl);
                 startActivity(feedbackIntent);
                 break;
             case R.id.rl_visit:

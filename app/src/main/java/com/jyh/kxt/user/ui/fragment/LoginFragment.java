@@ -15,6 +15,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.util.validation.PwdValidation;
 import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.LineEditText;
 import com.jyh.kxt.user.json.UserJson;
@@ -23,9 +24,11 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
+import com.library.util.NetUtils;
 import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -83,15 +86,24 @@ public class LoginFragment extends BaseFragment {
                 break;
             case R.id.iv_qq:
                 //qq
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.QQ);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_sina:
                 //新浪
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.SINA);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.SINA);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_wx:
                 //微信
-                UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                if (NetUtils.isNetworkAvailable(getContext()))
+                    UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.WEIXIN);
+                else
+                    ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
         }
     }
@@ -118,7 +130,8 @@ public class LoginFragment extends BaseFragment {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText(error == null ? "" : error.getMessage()).setDuration(TSnackbar.LENGTH_LONG)
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(getContext()) ? (error == null ? "" :
+                        error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
                         .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
             }

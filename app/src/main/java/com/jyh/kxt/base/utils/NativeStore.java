@@ -176,6 +176,7 @@ public class NativeStore {
      */
     public static boolean isThumbSucceed(Context mContext, String type, String id) {
         String spName = "";
+        if (mContext == null || type == null || id == null) return false;
         switch (type) {
             case VarConstant.GOOD_TYPE_NEWS:
                 spName = SpConstant.GOOD_NEWS;

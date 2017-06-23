@@ -146,7 +146,7 @@ public class KXTPushIntentService extends UmengMessageService {
                             notification.sendUmenPush(
                                     KXTPushIntentService.this,
                                     msg.icon,
-                                    "快讯通财经【要闻】",
+                                    "快讯通财经【视听】",
                                     object.getString("title"),
                                     push_sound,
                                     randow.nextInt(1000000), video);

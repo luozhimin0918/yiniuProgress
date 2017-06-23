@@ -12,8 +12,10 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.util.validation.EmailValidation;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
+import com.library.util.NetUtils;
 import com.library.util.avalidations.EditTextValidator;
 import com.library.util.avalidations.ValidationModel;
+import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,7 +29,7 @@ import butterknife.OnClick;
 
 public class ForgetPwdActivity extends BaseActivity {
 
-    @BindView(R.id.iv_bar_break)public ImageView ivBarBreak;
+    @BindView(R.id.iv_bar_break) public ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.edt_email) EditText edtEmail;
@@ -69,10 +71,13 @@ public class ForgetPwdActivity extends BaseActivity {
                 edtEmail.setText("");
                 break;
             case R.id.btn_send:
-                if (editTextValidator.validate()) {
-                    showWaitDialog(null);
-                    forgetPwdPresenter.sendInfo(edtEmail.getText().toString());
-                }
+                if (NetUtils.isNetworkAvailable(this)) {
+                    if (editTextValidator.validate()) {
+                        showWaitDialog(null);
+                        forgetPwdPresenter.sendInfo(edtEmail.getText().toString());
+                    }
+                } else
+                    ToastView.makeText3(this, "暂无网络,请稍后再试");
                 break;
         }
     }

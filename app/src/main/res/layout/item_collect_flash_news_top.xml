@@ -43,8 +43,8 @@
             <ImageView
                 android:id="@+id/iv_flash"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/flash_type4_imgHeight"
-                android:layout_marginTop="@dimen/flash_type4_imgTop"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 />
 
             <TextView
