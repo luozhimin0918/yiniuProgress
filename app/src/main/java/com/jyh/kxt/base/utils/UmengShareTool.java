@@ -170,7 +170,6 @@ public class UmengShareTool {
                         platformStr = "新浪微博";
                         break;
                 }
-                ToastView.makeText3(activity, platformStr + "分享已取消");
             }
         };
         PopupUtil.Config config = new PopupUtil.Config();

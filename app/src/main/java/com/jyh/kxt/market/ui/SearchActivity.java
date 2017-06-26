@@ -135,11 +135,14 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         });
     }
 
-    @OnClick({R.id.tv_break})
+    @OnClick({R.id.tv_break, R.id.iv_clear_history})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_break:
                 onBackPressed();
+                break;
+            case R.id.iv_clear_history:
+                presenter.clearSearchHistory();
                 break;
         }
     }

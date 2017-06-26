@@ -118,4 +118,9 @@ public class SearchPresenter extends BasePresenter {
         }
         return searchUrl;
     }
+
+    public void clearSearchHistory() {
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_MARKET, "");
+        initHotSearch();
+    }
 }
