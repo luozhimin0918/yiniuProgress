@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
+import com.library.util.RegexValidateUtil;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -28,6 +30,7 @@ public class NewsJson implements Parcelable {
     private String o_action;
     private String o_class;
     private String o_id;
+    private String create_time;
     private boolean isSel;
 
     public boolean isSel() {
@@ -45,6 +48,14 @@ public class NewsJson implements Parcelable {
      * DB_TYPE_COLLECT_NETTOLOCAL 登录之后本地收藏
      */
     private int dataType;
+
+    public String getCreate_time() {
+        return RegexValidateUtil.isEmpty(create_time)?datetime:create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
+    }
 
     public String getTitle() {
         return title;
@@ -71,7 +82,7 @@ public class NewsJson implements Parcelable {
     }
 
     public String getDatetime() {
-        return datetime;
+        return RegexValidateUtil.isEmpty(datetime)?create_time:datetime;
     }
 
     public void setDatetime(String datetime) {
@@ -126,9 +137,9 @@ public class NewsJson implements Parcelable {
         this.dataType = dataType;
     }
 
-    @Generated(hash = 1690725197)
+    @Generated(hash = 124312310)
     public NewsJson(String title, String picture, String author, String datetime, String type, String href, String o_action, String o_class,
-            String o_id, boolean isSel, int dataType) {
+            String o_id, String create_time, boolean isSel, int dataType) {
         this.title = title;
         this.picture = picture;
         this.author = author;
@@ -138,6 +149,7 @@ public class NewsJson implements Parcelable {
         this.o_action = o_action;
         this.o_class = o_class;
         this.o_id = o_id;
+        this.create_time = create_time;
         this.isSel = isSel;
         this.dataType = dataType;
     }
