@@ -157,7 +157,7 @@ public class CollectUtils {
                         ids.append(",").append(o_id);
                     }
                 }
-                if (newsJsons.equals(VarConstant.OCLASS_BLOG)) {
+                if (newsType.equals(VarConstant.OCLASS_BLOG)) {
                     type = VarConstant.OCLASS_BLOG;
                 }
                 break;
@@ -229,9 +229,19 @@ public class CollectUtils {
         JSONObject jsonParam = request.getJsonParam();
         UserJson userInfo = LoginUtils.getUserInfo(context);
         jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-        jsonParam.put(VarConstant.HTTP_TYPE, type);
-
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN,userInfo.getToken());
         jsonParam.put(VarConstant.HTTP_ID, id);
+        if(VarConstant.OCLASS_BLOG.equals(type)){
+            try {
+                return HttpConstant.EXPLORE_BLOG_ADDFAVORARTICLE+EncryptionUtils.createJWT(VarConstant.KEY,jsonParam.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return url;
+            }
+        }else{
+            jsonParam.put(VarConstant.HTTP_TYPE, type);
+        }
+
 
         try {
             return url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
