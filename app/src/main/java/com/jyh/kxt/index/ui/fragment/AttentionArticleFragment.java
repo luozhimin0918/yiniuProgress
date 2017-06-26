@@ -177,6 +177,11 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
     }
 
     @Override
+    public void quitEdit() {
+
+    }
+
+    @Override
     public void onChangeTheme() {
         super.onChangeTheme();
         if (adapter != null) {

@@ -13,4 +13,6 @@ public interface DelNumListener {
     void delError();
 
     void delAll(boolean isAll);
+
+    void quitEdit();
 }

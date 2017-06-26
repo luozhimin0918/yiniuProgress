@@ -207,23 +207,29 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         }
     }
 
-    private void quitEdit() {
+    @Override
+    public void quitEdit() {
         llDel.setVisibility(View.GONE);
         ivSelAll.setSelected(false);
         switch (vpContent.getCurrentItem()) {
             case 0:
+                isVideoEdit = false;
                 videoFragment.quitEdit(numListener);
                 break;
             case 1:
+                isNewsEdit = false;
                 newsFragment.quitEdit(numListener);
                 break;
             case 2:
+                isFlashEdit = false;
                 flashFragment.quitEdit(numListener);
                 break;
             case 3:
+                isAuthorEdit = false;
                 authorFragment.quitEdit(numListener);
                 break;
         }
+        ivBarFunction.setText("编辑");
     }
 
     @Override
@@ -238,7 +244,6 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     public void delItem(Integer num) {
         try {
             tvDel.setText("删除(" + num + ")");
-            ivBarFunction.setText("编辑");
         } catch (Exception e) {
             e.printStackTrace();
         }
