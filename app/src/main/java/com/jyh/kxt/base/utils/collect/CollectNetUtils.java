@@ -181,14 +181,14 @@ public class CollectNetUtils {
         String collectId = "";
         switch (type) {
             case VarConstant.COLLECT_TYPE_ARTICLE:
-                collectType = "2";
+                collectType = "1";
                 collectId = ids;
                 break;
             case VarConstant.COLLECT_TYPE_FLASH:
                 CollectLocalUtils.unCollects(context, type, newsType, ids, observerData);
                 return;
             case VarConstant.COLLECT_TYPE_VIDEO:
-                collectType = "1";
+                collectType = "2";
                 collectId = ids;
                 break;
         }
