@@ -99,7 +99,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private StarView rlStar;
     private ImageView ivRlFlag;
     private LinearLayout rlContent;
-    private TextView tvDescribe;
+    private TextView tvContentBefore;
+    private  TextView tvContentForecast;
+    private  TextView tvContentReality;
     private LinearLayout llRLAD;
     private LinearLayout layoutTj;
     private View layoutRL;
@@ -227,7 +229,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         rlStar = (StarView) flashHeadView.findViewById(R.id.sv_star);
         ivRlFlag = (ImageView) flashHeadView.findViewById(R.id.iv_flag);
         rlContent = (LinearLayout) flashHeadView.findViewById(R.id.ll_content);
-        tvDescribe = (TextView) flashHeadView.findViewById(R.id.tv_describe);
+        tvContentBefore = (TextView) flashHeadView.findViewById(R.id.tv_describe_Before);
+        tvContentForecast = (TextView) flashHeadView.findViewById(R.id.tv_describe_Forecast);
+        tvContentReality = (TextView) flashHeadView.findViewById(R.id.tv_describe_Reality);
         llRLAD = (LinearLayout) flashHeadView.findViewById(R.id.iv_adRL);
         layoutTj = (LinearLayout) flashHeadView.findViewById(R.id.ll_tj);
         layoutRL = flashHeadView.findViewById(R.id.layout_rl);
@@ -366,19 +370,18 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         }
         tvTime.setText(time2);
 
-        tvDescribe.setText(getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
-                .getReality()));
+       tvContentBefore.setText(this.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
+       tvContentForecast.setText(this.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
+       tvContentReality.setText(this.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
 
         /**
          * 前值 后值 等
          */
-        String describe = getResources().getString(R.string.date_describe,
-                rl.getBefore(),
-                rl.getForecast(),
-                rl.getReality());
+        String describe = this.getResources().getString(R.string.date_describe_Reality, rl.getReality());
+
 
         String reality = rl.getReality();
-        setDescribeForegroundColor(tvDescribe, describe, reality);
+        setDescribeForegroundColor(tvContentReality, describe, reality);
 
         /**
          *  重要程度
@@ -423,6 +426,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                         index,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvDescribe.setTextColor(ContextCompat.getColor(this, R.color.rise_color));
 
 
             } else if (realityFloat < 0) {
@@ -431,6 +435,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                         index,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvDescribe.setTextColor(ContextCompat.getColor(this, R.color.decline_color));
             } else {
                 tvDescribe.setTextColor(ContextCompat.getColor(this, R.color.unaltered_color));
             }
