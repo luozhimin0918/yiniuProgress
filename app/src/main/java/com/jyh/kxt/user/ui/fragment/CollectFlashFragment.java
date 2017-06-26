@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -49,6 +50,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
     public CollectFlashAdapter adapter;
 
     private CollectFlashPresenter collectFlashPresenter;
+    private DelNumListener delNumListener;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -67,27 +69,42 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         lvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                List source = adapter.getSource();
-                Object obj = source.get(position - 1);
-                if (obj != null && obj instanceof FlashJson) {
-                    FlashJson flashJson = (FlashJson) obj;
-                    String type = flashJson.getCode();
-                    String content = flashJson.getContent();
+                try {
+                    List source = adapter.getSource();
+                    Object obj = source.get(position - 1);
+                    if (obj != null && obj instanceof FlashJson) {
+                        FlashJson flashJson = (FlashJson) obj;
 
-                    CollectActivity ac = (CollectActivity) getActivity();
+                        if (adapter.isEdit()) {
+                            adapter.delClick(((CollectFlashAdapter.BaseBaseViewHolder) view.getTag()).ivDel, flashJson);
+                            if(delNumListener!=null){
+                                int delSize = adapter.getDelIds().size();
+                                int allSize = adapter.getData().size();
+                                delNumListener.delItem(delSize);
+                                delNumListener.delAll(delSize == allSize);
+                            }
+                        } else {
+                            String type = flashJson.getCode();
+                            String content = flashJson.getContent();
 
-                    switch (type) {
-                        case VarConstant.SOCKET_FLASH_KUAIXUN:
-                        case VarConstant.SOCKET_FLASH_CJRL:
-                            JumpUtils.jump(ac, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL, flashJson.getUid(), null);
-                            break;
-                        case VarConstant.SOCKET_FLASH_KXTNEWS:
-                            Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
-                            Flash_NEWS.Jump url = flash_news.getUrl();
-                            JumpUtils.jump(ac, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU());
-                            break;
+                            CollectActivity ac = (CollectActivity) getActivity();
+
+                            switch (type) {
+                                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                                case VarConstant.SOCKET_FLASH_CJRL:
+                                    JumpUtils.jump(ac, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL, flashJson.getUid(), null);
+                                    break;
+                                case VarConstant.SOCKET_FLASH_KXTNEWS:
+                                    Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
+                                    Flash_NEWS.Jump url = flash_news.getUrl();
+                                    JumpUtils.jump(ac, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU());
+                                    break;
+                            }
+                        }
+
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -103,6 +120,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      */
     public void edit(boolean isFlashEdit, DelNumListener observerData) {
         try {
+            delNumListener=observerData;
             adapter.setEdit(isFlashEdit);
             adapter.setObserverData(observerData);
         } catch (Exception e) {
@@ -120,11 +138,13 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         if (selected) {
             //全选
             List data = adapter.getSoucesData();
+            Set<String> delIds = adapter.getDelIds();
             int size = 0;
             for (Object flash : data) {
                 if (flash instanceof FlashJson) {
                     FlashJson flashJson = (FlashJson) flash;
                     flashJson.setSel(true);
+                    delIds.add(flashJson.getSocre());
                     size++;
                 }
             }
@@ -138,10 +158,15 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         } else {
             //取消全选
             List data = adapter.getSoucesData();
+            Set<String> delIds = adapter.getDelIds();
             for (Object flash : data) {
                 if (flash instanceof FlashJson) {
                     FlashJson flashJson = (FlashJson) flash;
                     flashJson.setSel(false);
+                    String socre = flashJson.getSocre();
+                    if (delIds.contains(socre)) {
+                        delIds.remove(socre);
+                    }
                 }
             }
             //还原选中数量
@@ -179,7 +204,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         }
 
         final String finalIds = ids;
-        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_FLASH,"", ids, new ObserverData() {
+        CollectUtils.unCollects(getContext(), VarConstant.COLLECT_TYPE_FLASH, "", ids, new ObserverData() {
             @Override
             public void callback(Object o) {
                 //删除取消收藏的数据

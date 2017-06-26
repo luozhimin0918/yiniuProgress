@@ -321,8 +321,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         switch (type) {
             case TYPE_TIME:
                 timeHolder.tvTime.setText(flashJsons.get(position).toString());
-                timeHolder.tvTime.setBackgroundColor(ContextCompat.getColor(context,R.color.timeBarColor));
-                timeHolder.tvTime.setTextColor(ContextCompat.getColor(context,R.color.font_color3));
+                timeHolder.tvTime.setBackgroundColor(ContextCompat.getColor(context, R.color.timeBarColor));
+                timeHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
                 break;
             case TYPE_KX:
                 FlashJson flash = (FlashJson) flashJsons.get(position);
@@ -444,7 +444,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setKxTheme(kxHolder, kx);
 
-                setOnclick(kxHolder.llMore,kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder.tvContent, null,
+                setOnclick(kxHolder.llMore, kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder
+                        .tvContent, null,
                         null, TYPE_KX, kxHolder.flDel, kxHolder.ivDel);
 
                 setShowMoreBtn(kxHolder);
@@ -501,7 +502,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                         rlHolder.llExponent);
 
 
-                setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder.tvContent, null,
+                setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder
+                        .tvContent, null,
                         null, TYPE_RL, rlHolder.flDel, rlHolder.ivDel);
 //                /**
 //                 * 重要性判断
@@ -542,7 +544,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(leftHolder, left);
 
-                setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position, leftHolder
+                setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position,
+                        leftHolder
                         .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
 
                 leftHolder.ivCollect.setSelected(flash_left.isColloct());
@@ -553,7 +556,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
                 Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(rightHolder
+                Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
+                        (rightHolder
                         .ivFlash);
 
                 String time4 = "00:00";
@@ -569,7 +573,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(rightHolder, right);
 
-                setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect, position, rightHolder
+                setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect,
+                        position, rightHolder
                         .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
 
                 rightHolder.ivCollect.setSelected(flash_right.isColloct());
@@ -594,7 +599,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(topHolder, top);
 
-                setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position, topHolder.tvContent,
+                setOnclick(topHolder.llMore, topHolder.tvMore, topHolder.ivMore, topHolder.ivShare, topHolder.ivCollect, position,
+                        topHolder.tvContent,
                         VarConstant.SOCKET_FLASH_TOP, topHolder.ivFlash, TYPE_TOP, topHolder.flDel, topHolder.ivDel);
 
                 topHolder.ivCollect.setSelected(flash_top.isColloct());
@@ -623,7 +629,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setNewsTheme(bottomHolder, bottom);
 
-                setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect, position, bottomHolder
+                setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect,
+                        position, bottomHolder
                         .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel, bottomHolder
                         .ivDel);
 
@@ -735,7 +742,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
      * @param ivFlash
      * @param type
      */
-    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView ivCollect, int position,
+    private void setOnclick(LinearLayout llMore, final TextView tvMore, final ImageView ivMore, final ImageView ivShare, final ImageView
+            ivCollect, int position,
                             final TextView content,
                             String weizhi, final ImageView ivFlash, final int type, FrameLayout flDel, final ImageView ivDel) {
         final FlashJson flash = (FlashJson) flashJsons.get(position);
@@ -812,27 +820,37 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             @Override
             public void onClick(View v) {
                 //添加或移除选中状态
-                if (ivDel.isSelected()) {
-                    ivDel.setSelected(false);
-                    try {
-                        delIds.remove(flash.getSocre());
-                        flash.setSel(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    ivDel.setSelected(true);
-                    try {
-                        delIds.add(flash.getSocre());
-                        flash.setSel(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (observerData != null)
-                    observerData.delItem(delIds.size());
+                delClick(ivDel, flash);
             }
         });
+    }
+
+    /**
+     * 添加或移除选中状态
+     *
+     * @param ivDel
+     * @param flash
+     */
+    public void delClick(ImageView ivDel, FlashJson flash) {
+        if (ivDel.isSelected()) {
+            ivDel.setSelected(false);
+            try {
+                delIds.remove(flash.getSocre());
+                flash.setSel(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            ivDel.setSelected(true);
+            try {
+                delIds.add(flash.getSocre());
+                flash.setSel(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (observerData != null)
+            observerData.delItem(delIds.size());
     }
 
     /**
@@ -1240,7 +1258,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     /**
      * 普通快讯
      */
-    class KXViewHolder extends BaseViewHolder {
+    public class KXViewHolder extends BaseViewHolder {
 
         @BindView(R.id.iv_flash) ImageView imageView;
         @BindView(R.id.ll_content) LinearLayout llContent;
@@ -1253,7 +1271,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     /**
      * 图文
      */
-    class NEWViewHolder extends BaseViewHolder {
+    public class NEWViewHolder extends BaseViewHolder {
         @BindView(R.id.iv_flash)
         ImageView ivFlash;
 
@@ -1265,7 +1283,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     /**
      * 日历
      */
-    class RLViewHolder {
+    public class RLViewHolder extends BaseBaseViewHolder{
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.tv_describe) TextView tvContent;
         @BindView(R.id.tv_more) TextView tvMore;
@@ -1277,8 +1295,6 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.ll_exponent) LinearLayout llExponent;
         @BindView(R.id.ll_star) StarView star;
         @BindView(R.id.iv_guoqi) ImageView ivFlag;
-        @BindView(R.id.fl_del) FrameLayout flDel;
-        @BindView(R.id.iv_del) ImageView ivDel;
         @BindView(R.id.ll_more) LinearLayout llMore;
 
         public RLViewHolder(View view) {
@@ -1286,7 +1302,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         }
     }
 
-    class BaseViewHolder {
+    public class BaseViewHolder extends BaseBaseViewHolder {
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.tv_content) TextView tvContent;
         @BindView(R.id.tv_more) TextView tvMore;
@@ -1294,10 +1310,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
         @BindView(R.id.iv_share) ImageView ivShare;
         @BindView(R.id.iv_collect) ImageView ivCollect;
         @BindView(R.id.v_line) View vLine;
-        @BindView(R.id.fl_del) FrameLayout flDel;
-        @BindView(R.id.iv_del) ImageView ivDel;
         @BindView(R.id.ll_more) LinearLayout llMore;
     }
 
-
+    public class BaseBaseViewHolder {
+        public @BindView(R.id.fl_del) FrameLayout flDel;
+        public @BindView(R.id.iv_del) ImageView ivDel;
+    }
 }

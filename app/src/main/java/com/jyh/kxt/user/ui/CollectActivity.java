@@ -52,7 +52,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     private CollectFlashFragment flashFragment;
     private DelNumListener numListener;
 
-    private boolean isVideoEdit, isNewsEdit, isFlashEdit,isAuthorEdit;
+    private boolean isVideoEdit, isNewsEdit, isFlashEdit, isAuthorEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +77,15 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         videoFragment = new CollectVideoFragment();
         fragmentList.add(videoFragment);
         newsFragment = new CollectNewsFragment();
-        Bundle newsBundle=new Bundle();
-        newsBundle.putString(IntentConstant.TYPE,VarConstant.OCLASS_NEWS);
+        Bundle newsBundle = new Bundle();
+        newsBundle.putString(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
         newsFragment.setArguments(newsBundle);
         fragmentList.add(newsFragment);
         flashFragment = new CollectFlashFragment();
         fragmentList.add(flashFragment);
-        authorFragment=new CollectNewsFragment();
-        Bundle flashBundle=new Bundle();
-        flashBundle.putString(IntentConstant.TYPE,VarConstant.OCLASS_BLOG);
+        authorFragment = new CollectNewsFragment();
+        Bundle flashBundle = new Bundle();
+        flashBundle.putString(IntentConstant.TYPE, VarConstant.OCLASS_BLOG);
         authorFragment.setArguments(flashBundle);
         fragmentList.add(authorFragment);
 
@@ -182,7 +182,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                         flashFragment.selAll(ivSelAll.isSelected(), numListener);
                         break;
                     case 3:
-                        authorFragment.selAll(ivSelAll.isSelected(),numListener);
+                        authorFragment.selAll(ivSelAll.isSelected(), numListener);
                         break;
                 }
                 break;
@@ -250,6 +250,11 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     }
 
     @Override
+    public void delAll(boolean isAll) {
+        ivSelAll.setSelected(isAll);
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         switch (position) {
             case 0:
@@ -311,7 +316,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         if (videoFragment != null) {
             videoFragment.onChangeTheme();
         }
-        if(authorFragment!=null)
+        if (authorFragment != null)
             authorFragment.onChangeTheme();
         if (stlNavigationBar != null)
             stlNavigationBar.notifyDataSetChanged();

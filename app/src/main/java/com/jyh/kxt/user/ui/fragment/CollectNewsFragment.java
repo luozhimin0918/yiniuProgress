@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -48,6 +49,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
 
     public EditNewsAdapter adapter;
     private String type;
+    private DelNumListener delNumListener;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -63,9 +65,24 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NewsJson newsJson = adapter.dataList.get(position - 1);
-                JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson
-                        .getHref());
+                try {
+                    NewsJson newsJson = adapter.dataList.get(position - 1);
+                    if (adapter.isEdit()) {
+                        adapter.delClick((EditNewsAdapter.ViewHolder) view.getTag(), newsJson);
+                        if (delNumListener != null) {
+                            int delSize = adapter.getDelIds().size();
+                            int allSize = adapter.dataList.size();
+                            delNumListener.delItem(delSize);
+                            delNumListener.delAll(delSize == allSize);
+                        }
+                    } else {
+                        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                                newsJson
+                                        .getHref());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -143,6 +160,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
      */
     public void edit(boolean isNewsEdit, DelNumListener observerData) {
         try {
+            this.delNumListener = observerData;
             adapter.setEdit(isNewsEdit);
             adapter.setSelListener(observerData);
         } catch (Exception e) {
@@ -160,7 +178,9 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         if (selected) {
             //全选
             List<NewsJson> data = adapter.getData();
+            Set<String> delIds = adapter.getDelIds();
             for (NewsJson newsJson : data) {
+                delIds.add(newsJson.getO_id());
                 newsJson.setSel(true);
             }
             try {
@@ -173,8 +193,13 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         } else {
             //取消全选
             List<NewsJson> data = adapter.getData();
+            Set<String> delIds = adapter.getDelIds();
             for (NewsJson newsJson : data) {
                 newsJson.setSel(false);
+                String o_id = newsJson.getO_id();
+                if (delIds.contains(o_id))
+                    delIds.remove(o_id);
+
             }
             //还原选中数量
             observerData.delItem(0);

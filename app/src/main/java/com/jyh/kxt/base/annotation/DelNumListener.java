@@ -11,4 +11,6 @@ public interface DelNumListener {
     void delItem(Integer num);
 
     void delError();
+
+    void delAll(boolean isAll);
 }

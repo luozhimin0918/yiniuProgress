@@ -98,29 +98,38 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
             @Override
             public void onClick(View v) {
                 //添加或移除选中状态
-                if (finalHolder.ivDel.isSelected()) {
-                    finalHolder.ivDel.setSelected(false);
-                    try {
-                        delIds.remove(news.getO_id());
-                        news.setSel(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    finalHolder.ivDel.setSelected(true);
-                    try {
-                        delIds.add(news.getO_id());
-                        news.setSel(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (observerData != null)
-                    observerData.delItem(delIds.size());
+                delClick(finalHolder, news);
             }
         });
 
         return convertView;
+    }
+
+    /**
+     * 添加或移除选中状态
+     * @param finalHolder
+     * @param news
+     */
+    public void delClick(ViewHolder finalHolder, NewsJson news) {
+        if (finalHolder.ivDel.isSelected()) {
+            finalHolder.ivDel.setSelected(false);
+            try {
+                delIds.remove(news.getO_id());
+                news.setSel(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            finalHolder.ivDel.setSelected(true);
+            try {
+                delIds.add(news.getO_id());
+                news.setSel(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (observerData != null)
+            observerData.delItem(delIds.size());
     }
 
     private void setTheme(ViewHolder holder, NewsJson news) {
@@ -198,7 +207,7 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         return dataList;
     }
 
-    static class ViewHolder {
+    public static class ViewHolder {
         @BindView(R.id.iv_photo) ImageView ivPhoto;
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.tv_author) TextView tvAuthor;

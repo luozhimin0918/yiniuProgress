@@ -98,25 +98,7 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 //添加或移除选中状态
-                if (finalViewHolder.ivDel.isSelected()) {
-                    finalViewHolder.ivDel.setSelected(false);
-                    try {
-                        delIds.remove(videoBean.getId());
-                        videoBean.setSel(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    finalViewHolder.ivDel.setSelected(true);
-                    try {
-                        delIds.add(videoBean.getId());
-                        videoBean.setSel(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (observerData != null)
-                    observerData.delItem(delIds.size());
+                delClick(finalViewHolder, videoBean);
             }
         });
 
@@ -128,6 +110,33 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         }
 
         return convertView;
+    }
+
+    /**
+     * 添加或移除选中状态
+     * @param finalViewHolder
+     * @param videoBean
+     */
+    public void delClick(ViewHolder finalViewHolder, VideoListJson videoBean) {
+        if (finalViewHolder.ivDel.isSelected()) {
+            finalViewHolder.ivDel.setSelected(false);
+            try {
+                delIds.remove(videoBean.getId());
+                videoBean.setSel(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            finalViewHolder.ivDel.setSelected(true);
+            try {
+                delIds.add(videoBean.getId());
+                videoBean.setSel(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (observerData != null)
+            observerData.delItem(delIds.size());
     }
 
     private void changeTheme(ViewHolder holder) {
@@ -215,7 +224,7 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         notifyDataSetChanged();
     }
 
-    static class ViewHolder {
+    public static class ViewHolder {
         @BindView(R.id.iv_photo) ImageView ivPhoto;
         @BindView(R.id.fl_photo) FrameLayout flPhoto;
         @BindView(R.id.tv_title) TextView tvTitle;

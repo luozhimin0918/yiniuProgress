@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -52,6 +53,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
 
     public CollectVideoAdapter adapter;
     private boolean isRefresh;
+    private DelNumListener delNumListener;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -67,10 +69,24 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                VideoListJson video = adapter.getData().get(position - 1);
-                Intent videoIntent = new Intent(getContext(), VideoDetailActivity.class);
-                videoIntent.putExtra(IntentConstant.O_ID, video.getId());
-                startActivity(videoIntent);
+                try {
+                    VideoListJson video = adapter.getData().get(position - 1);
+                    if (adapter.isEdit()) {
+                        adapter.delClick((CollectVideoAdapter.ViewHolder) view.getTag(), video);
+                        if (delNumListener != null) {
+                            int delSize = adapter.getDelIds().size();
+                            int allSize = adapter.getData().size();
+                            delNumListener.delItem(delSize);
+                            delNumListener.delAll(delSize == allSize);
+                        }
+                    } else {
+                        Intent videoIntent = new Intent(getContext(), VideoDetailActivity.class);
+                        videoIntent.putExtra(IntentConstant.O_ID, video.getId());
+                        startActivity(videoIntent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -147,6 +163,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
      */
     public void edit(boolean isVideoEdit, DelNumListener observerData) {
         try {
+            delNumListener=observerData;
             adapter.setEdit(isVideoEdit);
             adapter.setSelListener(observerData);
         } catch (Exception e) {
@@ -163,8 +180,10 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         if (selected) {
             //全选
             List<VideoListJson> data = adapter.getData();
+            Set<String> delIds = adapter.getDelIds();
             for (VideoListJson videoListJson : data) {
                 videoListJson.setSel(true);
+                delIds.add(videoListJson.getId());
             }
             try {
                 //设置选中数量
@@ -176,8 +195,12 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         } else {
             //取消全选
             List<VideoListJson> data = adapter.getData();
+            Set<String> delIds = adapter.getDelIds();
             for (VideoListJson videoListJson : data) {
                 videoListJson.setSel(false);
+                String id = videoListJson.getId();
+                if (delIds.contains(id))
+                    delIds.remove(id);
             }
             //还原选中数量
             observerData.delItem(0);
