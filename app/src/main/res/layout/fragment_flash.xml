@@ -20,6 +20,6 @@
         android:layout_marginBottom="60dp"
         android:layout_marginRight="20dp"
         android:src="@mipmap/kxt_to_top_arrow"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </com.library.widget.PageLoadLayout>

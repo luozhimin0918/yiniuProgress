@@ -1,5 +1,7 @@
 package com.jyh.kxt.market.presenter;
 
+import android.app.Activity;
+
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -16,6 +18,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +59,7 @@ public class SearchPresenter extends BasePresenter {
                 activity.plRootView.loadEmptyData();
             }
         });
+        SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
 
     /**

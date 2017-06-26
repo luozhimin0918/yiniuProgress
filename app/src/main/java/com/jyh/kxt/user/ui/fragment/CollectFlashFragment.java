@@ -192,6 +192,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             @Override
             public void onError(Exception e) {
                 //退出编辑状态
+                ToastView.makeText3(getContext(), "删除失败");
                 quitEdit(observerData);
             }
         });
