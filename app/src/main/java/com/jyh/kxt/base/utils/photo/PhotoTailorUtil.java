@@ -61,9 +61,11 @@ public class PhotoTailorUtil {
         if (cameraTempFile.exists()) {
             cameraTempFile.delete();
         }
-
-        cameraUri24 = FileProvider.getUriForFile(mActivity, AUTHORITY, cameraTempFile);
-        cameraUri22 = Uri.fromFile(cameraTempFile);
+        if (Build.VERSION.SDK_INT < 23) {//6.0以下调用的拍照方法
+            cameraUri22 = Uri.fromFile(cameraTempFile);
+        } else {
+            cameraUri24 = FileProvider.getUriForFile(mActivity, AUTHORITY, cameraTempFile);
+        }
 
         cameraPath = cameraTempFile.getAbsolutePath();
 
