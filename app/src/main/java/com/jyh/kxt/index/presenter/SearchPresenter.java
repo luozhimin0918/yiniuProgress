@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -16,6 +17,7 @@ import com.jyh.kxt.main.json.NewsJson;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -99,6 +101,7 @@ public class SearchPresenter extends BasePresenter {
             searchActivity.videoFragment.search(searchKey);
         if(searchActivity.articleFragment!=null)
             searchActivity.articleFragment.search(searchKey);
+        SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
 
     /**
