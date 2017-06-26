@@ -39,6 +39,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:layout_marginRight="@dimen/flash_type1_marginRight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -51,17 +52,46 @@
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size"/>
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/tv_describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_title"
-                android:layout_marginTop="@dimen/flash_type3_describeTop"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="@dimen/describe_font_size3"
-                android:text="@string/date_describe"
-                android:textColor="@color/font_color3"/>
+                android:layout_marginTop="@dimen/flash_type3_describeTop">
+                <TextView
+                    android:id="@+id/tv_describe_Before"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="@dimen/describe_font_size3"
+                    android:text="@string/date_describe_Before"
+                    android:textColor="@color/font_color3"/>
+                <TextView
+                    android:id="@+id/tv_describe_Forecast"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/describe_font_size3"
+                    android:text="@string/date_describe_Forecast"
+                    android:textColor="@color/font_color3"/>
+                <TextView
+                    android:id="@+id/tv_describe_Reality"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:gravity="right"
+                    android:textSize="@dimen/describe_font_size3"
+                    android:text="@string/date_describe_Reality"
+                    android:textColor="@color/font_color3"/>
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/ll_publish"

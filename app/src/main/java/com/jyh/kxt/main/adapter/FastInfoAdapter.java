@@ -518,9 +518,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     rlHolder.tvTime.setText(time2);
 
                     rlHolder.tvTitle.setText(getString(rl.getTitle()));
-                    rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore
-                            (), rl.getForecast(), rl
-                            .getReality()));
+                    rlHolder.tvContentBefore.setText(context.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
+                    rlHolder.tvContentForecast.setText(context.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
+                    rlHolder.tvContentReality.setText(context.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
                     rlHolder.tvMore.setVisibility(View.GONE);
                     rlHolder.ivMore.setVisibility(View.GONE);
 
@@ -529,13 +529,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     /**
                      * 前值 后值 等
                      */
-                    String describe = context.getResources().getString(R.string.date_describe,
-                            rl.getBefore(),
-                            rl.getForecast(),
-                            rl.getReality());
+                    String describe = context.getResources().getString(R.string.date_describe_Reality, rl.getReality());
 
                     String reality = rl.getReality();
-                    setDescribeForegroundColor(rlHolder.tvContent, describe, reality);
+                    setDescribeForegroundColor(rlHolder.tvContentReality, describe, reality);
 
                     /**
                      *  重要程度
@@ -552,7 +549,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
                     setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder
                                     .ivCollect, position, rlHolder
-                                    .tvContent, null,
+                                    .tvContentBefore, null,
                             null, TYPE_RL);
                     /**
                      * 重要性判断
@@ -914,7 +911,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         index,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+                tvDescribe.setTextColor(ContextCompat.getColor(context, R.color.rise_color));
 
             } else if (realityFloat < 0) {
                 spannableString.setSpan(
@@ -922,6 +919,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         index,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvDescribe.setTextColor(ContextCompat.getColor(context, R.color.decline_color));
             } else {
                 tvDescribe.setTextColor(ContextCompat.getColor(context, R.color.unaltered_color));
             }
@@ -1263,7 +1261,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private void setRlTheme(RLViewHolder rlHolder) {
         rlHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
         rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
-        rlHolder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        rlHolder.tvContentBefore.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        rlHolder.tvContentForecast.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
+        rlHolder.tvContentReality.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
         rlHolder.tvMore.setTextColor(ContextCompat.getColor(context, R.color.font_color6));
         rlHolder.ivMore.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_flash_show_hide));
         rlHolder.ivShare.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_flash_share));
@@ -1349,7 +1349,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      */
     class RLViewHolder {
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.tv_describe) TextView tvContent;
+        @BindView(R.id.tv_describe_Before) TextView tvContentBefore;
+        @BindView(R.id.tv_describe_Forecast) TextView tvContentForecast;
+        @BindView(R.id.tv_describe_Reality) TextView tvContentReality;
         @BindView(R.id.tv_more) TextView tvMore;
         @BindView(R.id.iv_more) ImageView ivMore;
         @BindView(R.id.iv_share) ImageView ivShare;
