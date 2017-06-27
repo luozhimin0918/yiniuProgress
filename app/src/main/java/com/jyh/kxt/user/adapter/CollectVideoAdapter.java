@@ -93,14 +93,14 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         viewHolder.tvTitle.setText(videoBean.getTitle());
         viewHolder.tvPlayCount.setText(videoBean.getNum_play());
 
-        final ViewHolder finalViewHolder = viewHolder;
-        viewHolder.flDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //添加或移除选中状态
-                delClick(finalViewHolder, videoBean);
-            }
-        });
+//        final ViewHolder finalViewHolder = viewHolder;
+//        viewHolder.flDel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //添加或移除选中状态
+//                delClick(finalViewHolder, videoBean);
+//            }
+//        });
 
         try {
             viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(videoBean.getCreate_time()) * 1000, DateUtils.TYPE_YMD));
@@ -114,6 +114,7 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
 
     /**
      * 添加或移除选中状态
+     *
      * @param finalViewHolder
      * @param videoBean
      */
@@ -217,6 +218,9 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
             for (String id : list) {
                 if (id.equals(next.getId())) {
                     iterator.remove();
+                    if (delIds.contains(id)) {
+                        delIds.remove(id);
+                    }
                 }
             }
         }

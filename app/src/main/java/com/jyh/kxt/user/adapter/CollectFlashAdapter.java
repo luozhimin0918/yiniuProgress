@@ -701,6 +701,9 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             for (String id : list) {
                 if (id.equals(flash.getSocre())) {
                     iterator.remove();
+                    if (delIds.contains(id)) {
+                        delIds.remove(id);
+                    }
                 }
             }
         }
@@ -816,13 +819,13 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             flDel.setVisibility(View.GONE);
         }
         ivDel.setSelected(flash.isSel());
-        flDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //添加或移除选中状态
-                delClick(ivDel, flash);
-            }
-        });
+//        flDel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //添加或移除选中状态
+//                delClick(ivDel, flash);
+//            }
+//        });
     }
 
     /**

@@ -57,48 +57,50 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
      * @param view
      */
     public void clear(View view) {
+        if (adapter != null && adapter.dataList != null && adapter.dataList.size() > 0) {
+            //有数据可点击删除,无数据时不做处理
+            if (popupWindow == null) {
+                popupWindow = new PopupUtil((Activity) mContext);
+                View rootView = popupWindow.createPopupView(R.layout.pop_brower_clear);
 
-        if (popupWindow == null) {
-            popupWindow = new PopupUtil((Activity) mContext);
-            View rootView = popupWindow.createPopupView(R.layout.pop_brower_clear);
-
-            TextView tvCancel = (TextView) rootView.findViewById(R.id.tv_cancel);
-            TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
-            tvCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindow.dismiss();
-                }
-            });
-            tvSure.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BrowerHistoryUtils.clear(mContext);
-                    if (adapter != null) {
-                        adapter.setData(null);
-                        adapter.notifyDataSetChanged();
-                        browerHistoryActivity.loadEmptyData();
+                TextView tvCancel = (TextView) rootView.findViewById(R.id.tv_cancel);
+                TextView tvSure = (TextView) rootView.findViewById(R.id.tv_sure);
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
                     }
-                    popupWindow.dismiss();
-                }
-            });
+                });
+                tvSure.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BrowerHistoryUtils.clear(mContext);
+                        if (adapter != null) {
+                            adapter.setData(null);
+                            adapter.notifyDataSetChanged();
+                            browerHistoryActivity.loadEmptyData();
+                        }
+                        popupWindow.dismiss();
+                    }
+                });
 
-            PopupUtil.Config config = new PopupUtil.Config();
-            config.outsideTouchable = true;
-            config.alpha = 0.5f;
-            config.bgColor = 0X00000000;
+                PopupUtil.Config config = new PopupUtil.Config();
+                config.outsideTouchable = true;
+                config.alpha = 0.5f;
+                config.bgColor = 0X00000000;
 
-            config.animationStyle = R.style.PopupWindow_Style2;
-            config.width = WindowManager.LayoutParams.MATCH_PARENT;
-            config.height = WindowManager.LayoutParams.MATCH_PARENT;
+                config.animationStyle = R.style.PopupWindow_Style2;
+                config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                config.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-            popupWindow.setConfig(config);
+                popupWindow.setConfig(config);
 
+            }
+            if (popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         }
-        if (popupWindow.isShowing()) {
-            popupWindow.dismiss();
-        }
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
     /**

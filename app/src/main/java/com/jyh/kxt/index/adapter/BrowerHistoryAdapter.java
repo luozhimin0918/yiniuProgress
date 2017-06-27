@@ -102,22 +102,17 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
 
                 String author;
                 String type = newsBean.getType();
-                if("ad".equals(type)){
-                    author="广告";
-                }else{
+                if ("ad".equals(type)) {
+                    author = "广告";
+                } else {
                     author = newsBean.getAuthor();
                     if (!RegexValidateUtil.isEmpty(author))
                         author = "文/" + author;
                     else
-                        author="";
+                        author = "";
                 }
 
-                if (RegexValidateUtil.isEmpty(author)) {
-                    newsHolder.tvAuthor.setVisibility(View.GONE);
-                } else {
-                    newsHolder.tvAuthor.setVisibility(View.VISIBLE);
-                    newsHolder.tvAuthor.setText("文/" + author);
-                }
+                newsHolder.tvAuthor.setText(author);
 
                 String time = "00:00";
                 try {

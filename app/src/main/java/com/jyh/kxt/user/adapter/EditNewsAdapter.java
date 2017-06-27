@@ -93,14 +93,14 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
             holder.tvTime.setText("00:00");
         }
 
-        final ViewHolder finalHolder = holder;
-        holder.flDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //添加或移除选中状态
-                delClick(finalHolder, news);
-            }
-        });
+//        final ViewHolder finalHolder = holder;
+//        holder.flDel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //添加或移除选中状态
+//                delClick(finalHolder, news);
+//            }
+//        });
 
         return convertView;
     }
@@ -196,6 +196,9 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
             for (String id : list) {
                 if (id.equals(next.getO_id())) {
                     iterator.remove();
+                    if (delIds.contains(id)) {
+                        delIds.remove(id);
+                    }
                 }
             }
         }
