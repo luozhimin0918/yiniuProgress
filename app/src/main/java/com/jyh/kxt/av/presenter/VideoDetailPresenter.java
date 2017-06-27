@@ -409,6 +409,17 @@ public class VideoDetailPresenter extends BasePresenter {
                             public void callback(Object o) {
                                 isAttention = true;
                                 videoDetailActivity.ivLike.setSelected(true);
+
+                                String dianZanCount = videoDetailActivity.tvZanCount.getText().toString();
+                                String addDianZanCount = null;
+                                try {
+                                    addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                    addDianZanCount="1";
+                                }
+                                videoDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
+                                videoDetailActivity.tvZanCount.setText(addDianZanCount);
                             }
 
                             @Override
