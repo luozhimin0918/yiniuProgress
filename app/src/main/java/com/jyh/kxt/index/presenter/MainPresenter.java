@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -33,21 +36,30 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.base.http.VolleySyncHttp;
 import com.library.util.FileUtils;
+import com.library.util.LogUtil;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 import com.library.util.disklrucache.DiskLruCacheUtils;
 import com.library.widget.window.ToastView;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.tencent.tinker.lib.tinker.Tinker;
+import com.tencent.tinker.lib.tinker.TinkerInstaller;
+import com.tencent.tinker.lib.util.TinkerLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,10 +120,11 @@ public class MainPresenter extends BasePresenter {
      * 发送一个延迟请求, 放一些不重要的 但是必须要请求的网络信息
      */
     public void postDelayRequest() {
-
-        Observable.create(new Observable.OnSubscribe<SingleThreadJson>() {
+        Observable<SingleThreadJson> observable = Observable.create(new Observable
+                .OnSubscribe<SingleThreadJson>() {
             @Override
             public void call(Subscriber<? super SingleThreadJson> subscriber) {
+
                 try {
                     Thread.sleep(1 * 1000);
                 } catch (InterruptedException e) {
@@ -119,17 +132,28 @@ public class MainPresenter extends BasePresenter {
                 }
 
                 VolleySyncHttp volleySyncHttp = VolleySyncHttp.getInstance();
+
+                SingleThreadJson configJson = null;
                 try {
                     String result1 = volleySyncHttp.syncGet(mQueue, HttpConstant.CONFIG);
-                    SingleThreadJson singleThreadJson = new SingleThreadJson(0, result1);
-                    subscriber.onNext(singleThreadJson);
+                    configJson = new SingleThreadJson(0, result1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+                subscriber.onNext(configJson);
 
+                try {
+                    Thread.sleep(1000);
+                    SingleThreadJson patchJson = new SingleThreadJson(1, "");
+                    subscriber.onNext(patchJson);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.newThread())
+        });
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SingleThreadJson>() {
                     @Override
@@ -144,9 +168,17 @@ public class MainPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(SingleThreadJson jsonStr) {
+                        if (jsonStr.json == null) {
+                            return;
+                        }
+                        LogUtil.e(LogUtil.TAG, "onNext() called with: jsonStr = [" + jsonStr + "]");
+
                         switch (jsonStr.code) {
                             case 0: //初始配置信息
                                 initLoadAppConfig(jsonStr.json);
+                                break;
+                            case 1://补丁
+                                httpRequestPatchInfo();
                                 break;
                             default:
                                 break;
@@ -155,27 +187,120 @@ public class MainPresenter extends BasePresenter {
                 });
     }
 
+    private void httpRequestPatchInfo() {
+        String versionCode = SystemUtil.getVersionName(mContext);
+
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        String pjUrl = "?versionCode=" + versionCode;
+
+        volleyRequest.setDefaultDecode(false);
+        volleyRequest.doGet(HttpConstant.DOWN_PATCH + pjUrl, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String patchInfo) {
+                JSONObject patchJson = JSONObject.parseObject(patchInfo);
+                String status = patchJson.getString("status");
+                if (status == null) {
+                    SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
+                    newThreadDownPatch();
+                }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
+    }
+
+    private void newThreadDownPatch() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File patchFile = null;
+                try {
+                    String patchInfo = SPUtils.getString(mMainActivity, SpConstant.PATCH_INFO);
+                    PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
+
+                    String saveFilePath = FileUtils.getVersionNameFilePath(mMainActivity);
+                    patchFile = new File(saveFilePath + patchJson.getPatch_code() + ".patch");
+
+//                    patchJson.setDownload_url("http:\\/\\/appapi.dyhjw.com\\/uploads\\/patch\\/2.1.3\\/1.patch");
+//                    String sdAbsolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                    patchFile = new File(sdAbsolutePath + "/1.patch");
+
+                    if (patchFile.exists()) {
+                        return;
+                    } else {
+                        patchFile.createNewFile();
+                    }
+                    int patchSize;
+
+                    URL url = new URL(patchJson.getDownload_url());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(5 * 1000);
+                    InputStream input = conn.getInputStream();
+
+                    FileOutputStream output = new FileOutputStream(patchFile);
+                    //读取大文件
+                    byte[] buffer = new byte[/*1 * 1024*/500];
+                    while ((patchSize = input.read(buffer)) != -1) {
+                        output.write(buffer, 0, patchSize);
+                    }
+                    output.flush();
+
+                    input.close();
+                    output.close();
+                    conn.disconnect();
+
+                    final String absolutePath = patchFile.getAbsolutePath();
+
+                    new Handler(mMainActivity.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            TinkerInstaller.onReceiveUpgradePatch(mMainActivity.getApplicationContext(), absolutePath);
+                        }
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    try {
+                        if (patchFile != null) {
+                            patchFile.delete();
+                        }
+                    } catch (Exception ex) {
+
+                    }
+
+                }
+            }
+        }).start();
+    }
+
     /**
      * 初始加载App 的配置信息
      *
      * @param jsonStr
      */
     private void initLoadAppConfig(String jsonStr) {
-        SPUtils.save(mContext, SpConstant.INIT_LOAD_APP_CONFIG, jsonStr);
+        try {
+            SPUtils.save(mContext, SpConstant.INIT_LOAD_APP_CONFIG, jsonStr);
 
-        MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
-        MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-        showPopAdvertisement(indexAd);
+            MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
+            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
+            showPopAdvertisement(indexAd);
 
-        MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
-        String pictureUrl = HttpConstant.IMG_URL + loadAd.getPicture();
+            MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
+            String pictureUrl = HttpConstant.IMG_URL + loadAd.getPicture();
 
-        Bitmap diskLruCache1 = DiskLruCacheUtils.getInstance(mContext).getDiskLruCache(pictureUrl);
-        if (diskLruCache1 == null) {
-            Glide.with(mContext)
-                    .load(pictureUrl)
-                    .asBitmap()
-                    .into(new MySimpleTarget(mContext, pictureUrl));
+            Bitmap diskLruCache1 = DiskLruCacheUtils.getInstance(mContext).getDiskLruCache(pictureUrl);
+            if (diskLruCache1 == null) {
+                Glide.with(mContext)
+                        .load(pictureUrl)
+                        .asBitmap()
+                        .into(new MySimpleTarget(mContext, pictureUrl));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -456,35 +581,6 @@ public class MainPresenter extends BasePresenter {
         public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
             DiskLruCacheUtils.getInstance(context).putDiskLruCache(url, bitmap);
         }
-    }
-
-    private void downPatch() {
-        String patchUrl = "http://dzs.qisuu.com/txt/%E7%BE%8E%E6%BC%AB%E8%B6%85%E8%83%BD%E5%8A%9B%E5%85%91%E6%8D%A2" +
-                "%E7%B3%BB%E7%BB%9F.txt";
-
-        try {
-            URL url = new URL(patchUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            String saveFilePath = FileUtils.getSaveFilePath(mContext);
-            File file = new File(saveFilePath);
-
-            InputStream input = conn.getInputStream();
-            if (file.exists()) {
-                System.out.println("exits");
-                return;
-            } else {
-                FileOutputStream output = new FileOutputStream(file);
-                //读取大文件
-                byte[] buffer = new byte[4 * 1024];
-                while (input.read(buffer) != -1) {
-                    output.write(buffer);
-                }
-                output.flush();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public class getShareInfoInterface {

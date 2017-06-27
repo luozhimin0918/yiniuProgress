@@ -2,6 +2,7 @@ package com.jyh.kxt.base.widget.night.heple;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +42,12 @@ public class SkinnableFrameLayout extends FrameLayout implements Skinnable {
 
     @Override
     public void applyDayNight() {
+
+//        BitmapDrawable bd = (BitmapDrawable)tgs.getBackground();
+//        mBtn.setBackgroundResource(0);//别忘了把背景设为null，避免onDraw刷新背景时候出现used a recycled bitmap错误
+//        bd.setCallback(null);
+//        bd.getBitmap().recycle();
+
         Context context = getContext();
         int key;
 

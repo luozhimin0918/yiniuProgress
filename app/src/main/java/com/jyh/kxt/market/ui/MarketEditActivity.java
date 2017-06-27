@@ -131,7 +131,7 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
 
     @Override
     public void onBackPressed() {
-        if (defaultInitMarketList.size() != adapterMarketItemList.size()) {
+       /* if (defaultInitMarketList.size() != adapterMarketItemList.size()) {
             openTipWindow();
             return;
         }
@@ -140,32 +140,15 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
                 openTipWindow();
                 return;
             }
-        }
-        super.onBackPressed();
-    }
-
-    private void openTipWindow() {
+        }*/
         onSaveAndExit();
-      /*  new AlertDialog.Builder(this).setTitle("提示")
-                .setMessage("自选数据发生改变,是否保存并且退出?")
-                .setPositiveButton("保存并退出",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                .setNegativeButton("直接退出",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                MarketEditActivity.this.finish();
-                            }
-                        }).show();*/
+        super.onBackPressed();
     }
 
     private void onSaveAndExit() {
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo != null) {
+            postEventBean();
             requestRefresh(userInfo);
         } else {
             postEventBean();
@@ -180,7 +163,6 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
                 EventBusClass.MARKET_OPTION_UPDATE,
                 adapterMarketItemList);
         EventBus.getDefault().post(eventBusClass);
-        finish();
     }
 
     private void requestSynchronization(UserJson userInfo) {
@@ -200,6 +182,10 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
                 adapterMarketItemList.addAll(MarketUtil.getMergeLocalMarket(getContext(), marketItemBeen));
                 defaultInitMarketList.addAll(adapterMarketItemList);
                 initEditInfo();
+
+                if (adapterMarketItemList.size() == 0) {
+                    pllContent.loadEmptyData();
+                }
             }
 
             @Override
@@ -225,18 +211,13 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
      */
     private void requestRefresh(final UserJson userInfo) {
 
-        final TSnackbar snackBar = TSnackbar.make(tvBarTitle, "同步中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
-                .APPEAR_FROM_TOP_TO_DOWN);
-        snackBar.setPromptThemBackground(Prompt.SUCCESS);
-        snackBar.addIconProgressLoading(0, true, false);
-        snackBar.show();
-
-        StringBuffer codeBuffer = new StringBuffer();
+        StringBuffer codeBuffer = new StringBuffer("");
         for (MarketItemBean marketItemBean : adapterMarketItemList) {
             codeBuffer.append(marketItemBean.getCode() + ",");
         }
 
         VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
+        volleyRequest.setTag("edit");
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
@@ -245,18 +226,13 @@ public class MarketEditActivity extends BaseActivity implements OnStartDragListe
         volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String sort) {
-                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("同步成功").setDuration(TSnackbar
-                        .LENGTH_LONG)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                postEventBean();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                postEventBean();
             }
         });
+        finish();
     }
 }

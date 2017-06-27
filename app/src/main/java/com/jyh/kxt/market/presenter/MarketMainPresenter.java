@@ -2,6 +2,7 @@ package com.jyh.kxt.market.presenter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.jyh.kxt.databinding.ItemMarketRecommend2Binding;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.WebActivity;
+import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
@@ -43,6 +45,7 @@ import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketMainBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
+import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
@@ -141,8 +144,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                         case "ad":
                             try {
                                 AdJson ads = JSON.parseObject(JSON.toJSONString(marketBean.getData()), AdJson.class);
-                                if (ads != null && (ads.getPic_ad() != null || (ads.getText_ad() != null && ads.getText_ad().size() > 0)))
+                                if (ads != null && (ads.getPic_ad() != null || (ads.getText_ad() != null && ads
+                                        .getText_ad().size() > 0))) {
                                     createAdView(ads);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -202,9 +207,11 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 for (final AdJson.AdItemJson adItemJson : mTextAd) {
                     View adLayoutView = mInflater.inflate(R.layout.item_news_ad, mainHeaderView, false);
 
-                    SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_title);
+                    SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                            .tv_news_ad_title);
                     mAdTextView.setText(" • " + adItemJson.getTitle());
-                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_trait);
+                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                            .tv_news_ad_trait);
 
                     mainHeaderView.addView(adLayoutView);
 
@@ -303,6 +310,15 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         tvTitle.setText("我的自选");
         hqLayoutView.addView(titleBlue);
 
+        titleBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MarketVPFragment marketVPFragment = (MarketVPFragment) marketItemFragment.getParentFragment();
+                MarketFragment marketFragment = (MarketFragment) marketVPFragment.getParentFragment();
+                marketFragment.onTabSelect(1);
+            }
+        });
+
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(mContext);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -358,6 +374,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("热门行情");
+
+        Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.iocn_blue_sx);
+        tvTitle.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
+
         mainHeaderView.addView(titleBlue);
 
         View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);

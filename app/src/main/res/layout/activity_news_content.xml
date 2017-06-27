@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.library.widget.PageLoadLayout
@@ -16,10 +16,10 @@
         <com.library.widget.handmark.PullToRefreshListView
             android:id="@+id/rv_message"
             android:layout_width="match_parent"
-            android:overScrollMode="never"
-            app:ptrShowIndicator="false"
             android:layout_height="match_parent"
-            android:background="@color/theme1"/>
+            android:background="@color/theme1"
+            android:overScrollMode="never"
+            app:ptrShowIndicator="false"/>
 
 
     </com.library.widget.PageLoadLayout>
@@ -70,8 +70,10 @@
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/view_zw"
                 android:background="@drawable/shape_read_count"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="@dimen/min_min_font_size"
+                android:textSize="7sp"
                 android:visibility="gone"/>
         </RelativeLayout>
 
@@ -106,13 +108,16 @@
                 android:id="@+id/tv_ding_Count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/view_zw1"
                 android:background="@drawable/shape_read_count"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="@dimen/min_min_font_size"/>
+                android:textSize="7sp"
+                android:visibility="gone"/>
         </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_share"
             style="@style/Audio_RB_Style"

@@ -142,6 +142,7 @@ public class CommentAdapter extends BaseAdapter {
                 mViewHolder2.tvPrimaryThumb.setThumbCount(commentBean, commentBean.getParent_id(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
+//                        commentBean.setNum_good(commentBean.getNum_good() + 1);
                     }
 
                     @Override
@@ -259,11 +260,10 @@ public class CommentAdapter extends BaseAdapter {
         baseViewHolder.tvNickName.setText(commentBean.getMember_nickname());
         baseViewHolder.tvTime.setText(getSimpleTime(commentBean.getCreate_time()));
 
-        baseViewHolder.tvThumb.setThumbCount(commentBean, commentBean.getId(),new ObserverData(){
-
+        baseViewHolder.tvThumb.setThumbCount(commentBean, commentBean.getId(), new ObserverData() {
             @Override
             public void callback(Object o) {
-                commentBean.setNum_good(commentBean.getNum_good()+1);
+//                commentBean.setNum_good(commentBean.getNum_good() + 1);
             }
 
             @Override

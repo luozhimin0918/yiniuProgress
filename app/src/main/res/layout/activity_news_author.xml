@@ -65,6 +65,8 @@
                 android:layout_alignTop="@+id/iv_photo"
                 android:layout_toRightOf="@id/iv_photo"
                 android:textColor="@color/white"
+                android:maxLength="10"
+                android:ellipsize="end"
                 android:textSize="@dimen/title_font_size2"/>
 
             <LinearLayout

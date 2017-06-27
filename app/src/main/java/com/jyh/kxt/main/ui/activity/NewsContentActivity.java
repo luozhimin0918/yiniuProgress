@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -140,6 +141,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private String type = VarConstant.OCLASS_ARTICLE;
     private String imgStr;
 
+    private boolean isScrollToComment = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +184,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.rl_comment:
                 //回复
-                ptrLvMessage.getRefreshableView().setSelection(2);
+                if (isScrollToComment) {
+                    ptrLvMessage.getRefreshableView().setSelection(2);
+                } else {
+                    commentPresenter.showReplyMessageView(view);
+                }
+                isScrollToComment = false;
                 break;
             case R.id.iv_collect:
                 //收藏
@@ -428,8 +436,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         //设置默认文本大小
         String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
-        if (RegexValidateUtil.isEmpty(fontSizeStr))
+        if (RegexValidateUtil.isEmpty(fontSizeStr)) {
             font = fontM;
+        }
         switch (fontSizeStr) {
             case "0":
                 font = fontS;
@@ -591,7 +600,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             switch (alertTheme) {
                 case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html", "utf-8",
+                    webViewAndHead.wvContent.loadDataWithBaseURL(APP_WEB_URL, night + font + content, "text/html",
+                            "utf-8",
                             "");
                     source = "<font color='#2E3239'>文章来源:</font><font color='#A1ABB2'>" + sourceStr +
                             "</font>";
@@ -816,11 +826,17 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
                                     .getDimensionPixelOffset(R.dimen.actionbar_height))
                             .show();
+                    if (popupWindow instanceof PopupUtil) {
+                        ((PopupUtil) popupWindow).addLock(false);
+                    }
                 }
 
                 @Override
                 protected void onErrorResponse(VolleyError error) {
                     super.onErrorResponse(error);
+                    if (popupWindow instanceof PopupUtil) {
+                        ((PopupUtil) popupWindow).addLock(false);
+                    }
                 }
             });
         }

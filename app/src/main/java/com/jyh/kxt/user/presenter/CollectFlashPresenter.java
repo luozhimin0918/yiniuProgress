@@ -50,8 +50,8 @@ public class CollectFlashPresenter extends BasePresenter {
             collectFlashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    collectFlashFragment.lvContent.getRefreshableView().goneFoot2();
-                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+                    collectFlashFragment.lvContent.getRefreshableView().noMoreData();
+//                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                 }
             }, 500);
         }

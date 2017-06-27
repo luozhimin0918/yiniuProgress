@@ -159,12 +159,12 @@ public class BrowerHistoryPresenter extends BasePresenter implements FastInfoPin
     public void startLoadMore() {
         current++;
         if (current >= count) {
-            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+//            ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
             browerHistoryActivity.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        browerHistoryActivity.lvContent.getRefreshableView().goneFoot2();
+                        browerHistoryActivity.lvContent.getRefreshableView().noMoreData();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

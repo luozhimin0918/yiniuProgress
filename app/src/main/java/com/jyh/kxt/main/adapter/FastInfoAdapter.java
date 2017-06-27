@@ -126,7 +126,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         config.alpha = 0.5f;
         config.bgColor = 0X00000000;
 
-        config.animationStyle = R.style.PopupWindow_Style2;
+        config.animationStyle = R.style.PopupWindow_Style1;
 
         inspiritDateInfo(this.flashJsons);
 
@@ -468,7 +468,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                             glideAnimation) {
 //                                        int width = resource.getWidth();//px
 //                                        int height = resource.getHeight();
-//                                        ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+//                                        ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView
+// .getLayoutParams();
 //                                        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
 //                                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 //                                        //等比例缩放
@@ -559,7 +560,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color11));
                         } else {
                             rlHolder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.font_color1));
-                            return null;
+//                            return null;
                         }
                     } else {
                         if (VarConstant.IMPORTANCE_HIGH.equals(rl.getImportance())) {
@@ -696,12 +697,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     setShowMoreBtn(bottomHolder);
                     break;
             }
-
-            return convertView;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return convertView;
     }
 
     /**
@@ -722,6 +721,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 } else {
                     finalKxHolder.ivMore.setVisibility(View.VISIBLE);
                     finalKxHolder.tvMore.setVisibility(View.VISIBLE);
+//                    finalKxHolder.tvContent.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
                 }
             }
         });

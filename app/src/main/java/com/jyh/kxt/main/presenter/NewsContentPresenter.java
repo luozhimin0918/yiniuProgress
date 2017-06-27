@@ -444,16 +444,6 @@ public class NewsContentPresenter extends BasePresenter {
      */
     public void attention(String objectId) {
         if (newsContentActivity.isGood) {
-            TSnackbar snackBar = TSnackbar.make(newsContentActivity.pllContent, "已经赞过了喔", Snackbar.LENGTH_LONG,
-                    TSnackbar
-                            .APPEAR_FROM_TOP_TO_DOWN)
-                    .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                            .getDimensionPixelOffset(R.dimen.actionbar_height));
-
-            int color = ContextCompat.getColor(mContext, R.color.red_btn_bg_color);
-            snackBar.setBackgroundColor(color);
-            snackBar.setPromptThemBackground(Prompt.WARNING);
-            snackBar.show();
         } else {
             String goodType = VarConstant.GOOD_TYPE_NEWS; //文章点赞
 //            switch (type) {

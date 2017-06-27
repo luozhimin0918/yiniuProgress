@@ -19,18 +19,6 @@ def javaVersion = JavaVersion.VERSION_1_7
 
 android {
     useLibrary 'org.apache.http.legacy'
-    signingConfigs {
-        release {
-            try {
-                storeFile file("./keystore/release.keystore")
-                storePassword "jinyin186"
-                keyAlias "jyh_kxt"
-                keyPassword "jinyin186"
-            } catch (ex) {
-                throw new InvalidUserDataException(ex.toString())
-            }
-        }
-    }
 
     compileOptions {
         sourceCompatibility javaVersion
@@ -85,6 +73,19 @@ android {
             } catch (ex) {
                 throw new InvalidUserDataException(ex.toString())
             }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
         }
     }
     productFlavors {
@@ -318,10 +319,4 @@ dependencies {
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
 
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
 }

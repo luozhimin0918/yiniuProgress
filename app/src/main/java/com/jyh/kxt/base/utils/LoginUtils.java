@@ -31,6 +31,7 @@ public class LoginUtils {
     public static void login(Context context, UserJson userInfo) {
         SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
+        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MARKET_LOGIN_GONG, userInfo));
     }
 
     /**
@@ -52,6 +53,7 @@ public class LoginUtils {
         SPUtils.save(context, SpConstant.USERINFO, "");
         UmengLoginTool.logout((Activity) context);
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGOUT, null));
+        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MARKET_LOGIN_GONG, null));
     }
 
     /**
@@ -62,10 +64,11 @@ public class LoginUtils {
      */
     public static boolean isLogined(Context context) {
         String userInfo = SPUtils.getString(context, SpConstant.USERINFO);
-        if (TextUtils.isEmpty(userInfo))
+        if (TextUtils.isEmpty(userInfo)) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     /**

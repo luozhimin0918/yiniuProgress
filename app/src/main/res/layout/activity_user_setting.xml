@@ -156,5 +156,11 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/line_color3"/>
+
+        <TextView
+            android:id="@+id/tv_introduce_patch"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </LinearLayout>

@@ -179,8 +179,8 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 tvName.setScaleY(scaleVal);
             }
 
-//            ivPhoto.setTranslationX(scrollY);
-            tvName.setTranslationX(-scrollY / 2);
+            ivPhoto.setTranslationX(scrollY / 6);
+            tvName.setTranslationX(-scrollY / 3);
 
             if (actionBarHeight - SystemUtil.dp2px(this, 15) >= scrollY) {
                 Log.e(TAG, "ivPhoto: " + scrollY);
@@ -220,7 +220,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
             tvName.setScaleX(1);
             tvName.setScaleY(1);
 
-//            ivPhoto.setTranslationX(0);
+            ivPhoto.setTranslationX(0);
             tvName.setTranslationX(0);
 
             ivPhoto.setTranslationY(0);

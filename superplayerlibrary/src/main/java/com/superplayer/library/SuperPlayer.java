@@ -598,7 +598,7 @@ public class SuperPlayer extends RelativeLayout {
     public void onPause() {
         pauseTime = System.currentTimeMillis();
         show(0);// 把系统状态栏显示出来
-        if (status == STATUS_PLAYING) {
+        if (status == STATUS_PLAYING || status == STATUS_LOADING) {
             videoView.pause();
             if (!isLive) {
                 currentPosition = videoView.getCurrentPosition();
@@ -608,7 +608,7 @@ public class SuperPlayer extends RelativeLayout {
 
     public void onResume() {
         pauseTime = 0;
-        if (status == STATUS_PLAYING) {
+        if (status == STATUS_PLAYING || status == STATUS_LOADING) {
             if (isLive) {
                 videoView.seekTo(0);
             } else {

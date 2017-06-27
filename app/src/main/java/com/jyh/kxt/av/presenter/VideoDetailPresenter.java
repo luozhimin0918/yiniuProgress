@@ -24,6 +24,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.library.util.JsonUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -144,8 +146,22 @@ public class VideoDetailPresenter extends BasePresenter {
                     tvPlayCount.setText(detailJson.getNum_play());
 
                     videoDetailActivity.commentPresenter.createMoreVideoView(detailJson.getVideo());
+
                     videoDetailActivity.tvCommentCount.setVisibility(View.VISIBLE);
                     videoDetailActivity.tvCommentCount.setText(detailJson.getNum_comment());
+
+                    videoDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
+                    videoDetailActivity.tvZanCount.setText(detailJson.getNum_good());
+
+                    try {
+                        boolean isGoneCommentCount = Integer.parseInt(detailJson.getNum_comment()) == 0;
+                        videoDetailActivity.tvCommentCount.setVisibility(isGoneCommentCount ? View.GONE : View.VISIBLE);
+
+                        boolean isGoneZanCount = Integer.parseInt(detailJson.getNum_good()) == 0;
+                        videoDetailActivity.tvZanCount.setVisibility(isGoneZanCount ? View.GONE : View.VISIBLE);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
 
                     if (adapterCommentList.size() == 0) {
                         videoDetailActivity.commentPresenter.createNoneComment();
@@ -246,11 +262,17 @@ public class VideoDetailPresenter extends BasePresenter {
                         .show();
 
                 commentCommit(mCommentBean);
+                if (popupWindow instanceof PopupUtil) {
+                    ((PopupUtil) popupWindow).addLock(false);
+                }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (popupWindow instanceof PopupUtil) {
+                    ((PopupUtil) popupWindow).addLock(false);
+                }
             }
         });
     }
@@ -318,10 +340,6 @@ public class VideoDetailPresenter extends BasePresenter {
                 .onInfo(new SuperPlayer.OnInfoListener() {
                     @Override
                     public void onInfo(int what, int extra) {
-                        /**
-                         * 监听视频的相关信息。
-                         */
-
                     }
                 })
                 .onError(new SuperPlayer.OnErrorListener() {
@@ -384,7 +402,6 @@ public class VideoDetailPresenter extends BasePresenter {
     public void attention() {
         if (videoDetailBean != null) {
             if (isAttention) {
-                showMsg("已经赞过了喔");
             } else {
                 NativeStore.addThumbID(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean.getId(), new
                         ObserverData() {
@@ -396,7 +413,6 @@ public class VideoDetailPresenter extends BasePresenter {
 
                             @Override
                             public void onError(Exception e) {
-                                showMsg("点赞失败");
                             }
                         }, null);
             }

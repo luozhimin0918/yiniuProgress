@@ -6,10 +6,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -59,6 +61,8 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     //城市选择的Map
     public HashMap<CalendarItemFragment, HashSet<String>> citySelectMap = new HashMap<>();
 
+    private View currentTimeTextView;
+
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_calendar);
@@ -95,6 +99,8 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
                         Bitmap rqBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rili);
                         tabView.setBackground(new BitmapDrawable(rqBitmap));
+
+                        CalendarFragment.this.currentTimeTextView = tabView;
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -312,14 +318,28 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (fragmentList != null) {
-            for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).onChangeTheme();
+        try {
+            if (fragmentList != null) {
+                for (Fragment fragment : fragmentList) {
+                    if (fragment instanceof BaseFragment) {
+                        ((BaseFragment) fragment).onChangeTheme();
+                    }
                 }
             }
-        }
+            stlNavigationBar.notifyDataSetChanged();
 
-        stlNavigationBar.notifyDataSetChanged();
+            //改变背景色图片
+            Bitmap rqBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rili);
+            currentTimeTextView.setBackground(new BitmapDrawable(rqBitmap));
+
+            stlNavigationBar.setIndicatorColor(ContextCompat.getColor(getContext(), R.color.indicator_color));
+
+            int currentTab = stlNavigationBar.getCurrentTab();
+            calendarPresenter.updateSelectedColor(currentTab, true);
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

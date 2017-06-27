@@ -26,6 +26,7 @@ public class EventBusClass {
     public static final int MARKET_OPTION_UPDATE = 13;//行情自选,编辑中删除或者增加
 
     public static final int EVENT_ATTENTION_OTHER = 14;//关注别人
+    public static final int EVENT_MARKET_LOGIN_GONG = 15;//登录之后，行情自选下方登录隐藏
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

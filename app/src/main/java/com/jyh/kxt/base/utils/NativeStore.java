@@ -65,10 +65,12 @@ public class NativeStore {
         }
         VolleyRequest request = new VolleyRequest(mContext, Volley.newRequestQueue(mContext));
         final String finalSpName = spName;
+
+        good(mContext, id, observerData, observerData2, finalSpName);
+
         request.doGet(url, getParam(request, type, id), new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                good(mContext, id, observerData, observerData2, finalSpName);
             }
 
             @Override

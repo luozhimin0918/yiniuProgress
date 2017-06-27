@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -333,11 +334,24 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     e.printStackTrace();
                 }
                 */
-                ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
-                android.os.Process.killProcess(android.os.Process.myPid());
+               /* ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
+                android.os.Process.killProcess(android.os.Process.myPid());*/
+                try {
+                    int currentVersion = Build.VERSION.SDK_INT;
+                    if (currentVersion > Build.VERSION_CODES.ECLAIR_MR1) {
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
+                        System.exit(0);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 ThemeUtil.removeAllCache();
                 ActivityManager.getInstance().finishAllActivity();
+
                 super.onBackPressed();
             } else {
                 ToastView.makeText3(this, "双击退出应用");
@@ -426,10 +440,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.iv_qq:
                 //QQ
                 if (NetUtils.isNetworkAvailable(this)) {
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ))
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ)) {
                         UmengLoginTool.umenglogin(this, SHARE_MEDIA.QQ);
-                    else
+                    } else {
                         ToastView.makeText3(this, "未安装QQ");
+                    }
                 } else {
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 }
@@ -437,20 +452,23 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.iv_sina:
                 //新浪
-                if (NetUtils.isNetworkAvailable(this))
+                if (NetUtils.isNetworkAvailable(this)) {
                     UmengLoginTool.umenglogin(this, SHARE_MEDIA.SINA);
-                else
+                } else {
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
+                }
                 break;
             case R.id.iv_wx:
                 //微信
                 if (NetUtils.isNetworkAvailable(this)) {
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN))
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN)) {
                         UmengLoginTool.umenglogin(this, SHARE_MEDIA.WEIXIN);
-                    else
+                    } else {
                         ToastView.makeText3(this, "未安装微信");
-                } else
+                    }
+                } else {
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
+                }
                 break;
             case R.id.ll_login:
                 //登录
@@ -726,7 +744,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         break;
                 }
 
-                if (!RegexValidateUtil.isEmpty(oclass) && !RegexValidateUtil.isEmpty(oaction) && !RegexValidateUtil.isEmpty(oid)) {
+                if (!RegexValidateUtil.isEmpty(oclass) && !RegexValidateUtil.isEmpty(oaction) && !RegexValidateUtil
+                        .isEmpty(oid)) {
                     JumpUtils.jump(this, oclass, oaction, oid, null);
                 }
             }

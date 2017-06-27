@@ -544,6 +544,10 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         if (filtratePopup != null) {
             filtratePopup = null;
         }
+        ivFiltrate.setImageResource(R.mipmap.icon_rili_sx);
+
+        stlNavigationBar.setBarStrokeColor(
+                ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
     }
 
     public void doubleClickFragment() {

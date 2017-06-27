@@ -37,6 +37,22 @@ public class FileUtils {
         return cachePath;
     }
 
+    /**
+     * 得到文件当前版本存储路径
+     */
+    public static String getVersionNameFilePath(Context context) {
+
+        String versionName = SystemUtil.getVersionName(context);
+
+        String cachePath;
+        cachePath = context.getApplicationContext().getFilesDir().getPath() + "/" + versionName + "/";
+        File file = new File(cachePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return cachePath;
+    }
+
     public static String getSDSaveFilePath(Context context) {
         String sdCachePath = "";
         if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||

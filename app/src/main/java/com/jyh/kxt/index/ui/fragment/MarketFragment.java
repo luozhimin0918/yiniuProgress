@@ -75,12 +75,14 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
             if (position == 0) {
                 tvRightIcon1.setText("");
                 tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
-                currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() : marketVPFragment;
+                currentFragment = marketVPFragment = marketVPFragment == null ? new MarketVPFragment() :
+                        marketVPFragment;
                 ((MarketVPFragment) marketVPFragment).sendSocketParams();
             } else {
                 tvRightIcon1.setText("编辑");
                 tvRightIcon1.setBackground(null);
-                currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() : optionalFragment;
+                currentFragment = optionalFragment = optionalFragment == null ? new OptionalFragment() :
+                        optionalFragment;
                 ((OptionalFragment) optionalFragment).sendSocketParams();
             }
             this.position = position;
@@ -120,7 +122,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     private void replaceFragment(BaseFragment toFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        if(!toFragment.isAdded()){
+        if (!toFragment.isAdded()) {
             transaction.setCustomAnimations(R.anim.fragment_anim2, R.anim.fragment_anim1);
         }
 
@@ -200,6 +202,17 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         if (optionalFragment != null) {
             optionalFragment.onChangeTheme();
         }
+
+        if (position == 0) {
+            tvRightIcon1.setText("");
+            tvRightIcon1.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
+        } else {
+            tvRightIcon1.setText("编辑");
+            tvRightIcon1.setBackground(null);
+        }
+
+        stlNavigationBar.setBarStrokeColor(
+                ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
     }
 
     public void doubleClickFragment() {

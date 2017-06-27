@@ -104,15 +104,6 @@ public class ThumbView extends RelativeLayout {
                 if (!isThumb) {
                     requestClickThumb();
                 } else {
-                    TSnackbar tSnackbar = TSnackbar.make(v, "已经赞过了喔", Snackbar.LENGTH_LONG, TSnackbar
-                            .APPEAR_FROM_TOP_TO_DOWN)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height));
-
-                    int color = ContextCompat.getColor(getContext(), R.color.red_btn_bg_color);
-                    tSnackbar.setBackgroundColor(color);
-                    tSnackbar.setPromptThemBackground(Prompt.WARNING);
-                    tSnackbar.show();
                 }
             }
         });
@@ -196,7 +187,7 @@ public class ThumbView extends RelativeLayout {
     public void setThumbCount(CommentBean commentBean, int thumbId, ObserverData observerData) {
         this.thumbId = thumbId;
         this.commentBean = commentBean;
-        this.observerData=observerData;
+        this.observerData = observerData;
         int count = commentBean.getNum_good();
 
         String type = null;
@@ -220,7 +211,10 @@ public class ThumbView extends RelativeLayout {
 
         if (isThumb) {
             ivThumb.setImageResource(R.mipmap.icon_comment_like);
-            count = count + (commentBean.isTemporaryClickFavour() ? 1 : 0);
+            if (count == 0) {
+                count = 1;
+            }
+//            count = count + (commentBean.isTemporaryClickFavour() ? 1 : 0);
         } else {
             ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
         }

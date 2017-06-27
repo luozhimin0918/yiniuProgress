@@ -95,7 +95,12 @@ public class ReplyMessagePresenter extends BasePresenter {
                 showOrHideEmoJiView();
                 break;
             case R.id.tv_publish:
+
                 if (onCommentPublishListener != null) {
+                    if (replyMessagePopup.isLock()) {
+                        return;
+                    }
+                    replyMessagePopup.addLock(true);
                     onCommentPublishListener.onPublish(replyMessagePopup, eetContent, commentBean, commentWho);
                 }
                 break;

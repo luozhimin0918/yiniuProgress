@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -208,6 +209,10 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         if (rankFragment != null) {
             rankFragment.onChangeTheme();
         }
+
+        ivRightIcon1.setImageResource(R.mipmap.icon_search);
+        stlNavigationBar.setBarStrokeColor(
+                ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
     }
 
     public void doubleClickFragment() {

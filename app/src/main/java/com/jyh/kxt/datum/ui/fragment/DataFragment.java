@@ -57,6 +57,7 @@ public class DataFragment extends BaseFragment implements DataPresenter.TopTabVi
     public void onChangeTheme() {
         super.onChangeTheme();
         dataPresenter.onChangeTheme();
+
         int childCount = llDataNav.getChildCount();
         for (int i = 0; i < childCount; i++) {
             TextView tvNav = (TextView) llDataNav.getChildAt(i);

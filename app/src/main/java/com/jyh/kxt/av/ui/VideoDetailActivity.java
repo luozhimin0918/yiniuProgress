@@ -45,10 +45,13 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.iv_share) ImageView ivShare;
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
+    @BindView(R.id.tv_zanCount) public TextView tvZanCount;
     @BindView(R.id.ll_nav) public LinearLayout llNav;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
+
+    private boolean isFrontDisplay = true;
 
     //视频ID
     public String videoId;
@@ -82,11 +85,11 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
                 .getInstance()
                 .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
 
-        int mShowFlags =
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.INVISIBLE;
-        rvMessage.setSystemUiVisibility(mShowFlags);
+//        int mShowFlags =
+//                View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.INVISIBLE;
+//        rvMessage.setSystemUiVisibility(mShowFlags);
     }
 
 

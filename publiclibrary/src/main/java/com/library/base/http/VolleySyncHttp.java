@@ -38,6 +38,7 @@ public class VolleySyncHttp {
         return mVolleySyncHttp;
     }
 
+
     public String syncGet(RequestQueue mQueue, String url) {
         try {
             String response = syncGet(mQueue, url, null, "sync").get();
@@ -75,6 +76,17 @@ public class VolleySyncHttp {
         return null;
     }
 
+    public String syncGet2(RequestQueue mQueue, String url) {
+        try {
+            String response = syncGet(mQueue, url, null, "sync").get();
+
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public com.alibaba.fastjson.JSONObject getJsonParam() {
         com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
         jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
@@ -84,6 +96,8 @@ public class VolleySyncHttp {
 
 
     public RequestFuture<String> syncGet(RequestQueue mQueue, String url, Map<String, String> mParams, String tag) {
+        LogUtil.e(LogUtil.TAG, "syncGet() called with: url = [" + url + "], mParams = [" +
+                mParams + "], tag = [" + tag + "]");
         RequestFuture<String> futureA = RequestFuture.newFuture();
 
         ResponseResult responseResult = new ResponseResult(futureA);

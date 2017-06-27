@@ -114,4 +114,17 @@ public class PopupUtil extends PopupWindow {
         public int softInputMode;
         public int softInputMode2;
     }
+
+    /**
+     * 是否可以再次点击
+     */
+    private boolean isLock = false;
+
+    public void addLock(boolean isLock) {
+        this.isLock = isLock;
+    }
+
+    public boolean isLock() {
+        return isLock;
+    }
 }

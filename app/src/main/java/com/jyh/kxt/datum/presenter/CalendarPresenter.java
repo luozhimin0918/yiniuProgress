@@ -126,6 +126,10 @@ public class CalendarPresenter extends BasePresenter {
     }
 
     public void updateSelectedColor(int position) {
+        updateSelectedColor(position, false);
+    }
+
+    public void updateSelectedColor(int position, boolean changeTheme) {
         SlidingTabLayout stlNavigationBar = calendarFragment.stlNavigationBar;
         TextView tvTitle = stlNavigationBar.getTitleView(position);
         String title = tvTitle.getText().toString();
@@ -144,7 +148,7 @@ public class CalendarPresenter extends BasePresenter {
 
         //改变右上角日期
         String month = (String) DateFormat.format("MM", dataLongList.get(position));
-        if (!month.equals(currentMonth)) {
+        if (!month.equals(currentMonth) || changeTheme) {
             Bitmap txtBitmap = generateMonthBitmap(month);
             DatumFragment datumFragment = (DatumFragment) calendarFragment.getParentFragment();
             datumFragment.setMonthToImageView(txtBitmap);

@@ -184,7 +184,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
     private void setTheme(ViewHolder holder) {
         holder.ivPlay.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_video_play_big));
-        holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
+        holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color10));
         holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         int paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);

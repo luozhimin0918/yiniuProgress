@@ -14,6 +14,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.fragment.MyCommentFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -106,11 +107,17 @@ public class MyCommentPresenter extends BasePresenter implements CommentPresente
                         .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height))
                         .show();
+                if (popupWindow instanceof PopupUtil) {
+                    ((PopupUtil) popupWindow).addLock(false);
+                }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (popupWindow instanceof PopupUtil) {
+                    ((PopupUtil) popupWindow).addLock(false);
+                }
             }
         });
     }

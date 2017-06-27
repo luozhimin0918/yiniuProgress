@@ -157,6 +157,13 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
                         marketCodeList,
                         this);
                 break;
+            case EventBusClass.EVENT_MARKET_LOGIN_GONG:
+                UserJson userInfo = LoginUtils.getUserInfo(getContext());
+                if(userInfo != null){
+                    requestSynchronization(userInfo);
+                }
+                onResume();
+                break;
         }
     }
 
@@ -226,8 +233,6 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
     }
 
     private void requestSynchronization(final UserJson userInfo) {
-        showWaitDialog("同步中...");
-
         VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
@@ -269,14 +274,6 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         volleyRequest.doPost(HttpConstant.QUOTES_SORT, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String sort) {
-                dismissWaitDialog();
-                TSnackbar.make(getView(), "同步自选行情成功", TSnackbar.LENGTH_LONG, TSnackbar
-                        .APPEAR_FROM_TOP_TO_DOWN)
-                        .setMinHeight(
-                                SystemUtil.getStatuBarHeight(getContext()),
-                                getContext().getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
-                        .setPromptThemBackground(Prompt.WARNING).show();
-
                 MarketUtil.saveMarketEditOption(getContext(), marketItemList, 2);
                 EventBusClass eventBusClass = new EventBusClass(
                         EventBusClass.MARKET_OPTION_UPDATE,
@@ -296,13 +293,18 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
     @Override
     public void onResume() {
         super.onResume();
-        UserJson userInfo = LoginUtils.getUserInfo(getContext());
-        if (userInfo == null) {
-            tvSynchronizationLabel.setText("登录立即同步");
-            tvSynchronization.setText("登录");
-        } else {
-            tvSynchronizationLabel.setText("同步之后将永久保存到数据库");
-            tvSynchronization.setText("同步");
+        try {
+            UserJson userInfo = LoginUtils.getUserInfo(getContext());
+            if (userInfo == null) {
+                tvSynchronizationLayout.setVisibility(View.VISIBLE);
+                tvSynchronizationLabel.setText("登录立即同步");
+                tvSynchronization.setText("登录");
+            } else {
+    //            tvSynchronizationLabel.setText("同步之后将永久保存到数据库");
+    //            tvSynchronization.setText("同步");
+                tvSynchronizationLayout.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
         }
     }
 }

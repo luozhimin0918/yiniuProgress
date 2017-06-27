@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -401,6 +402,9 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         if (flashFragment != null) {
             flashFragment.onChangeTheme();
         }
+
+        stlNavigationBar.setBarStrokeColor(
+                ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
     }
 
     @Override
@@ -441,10 +445,26 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     private void setGifIcon() {
         if (getContext() != null) {
             try {
-                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG), MainInitJson
-                            .class);
+                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(), SpConstant
+                        .INIT_LOAD_APP_CONFIG), MainInitJson
+                        .class);
                 String icon = mainInitJson.getIndex_ad().getIcon();
-                Glide.with(getContext()).load(icon).into(new GlideDrawableImageViewTarget(ivRightIcon1));
+                if (TextUtils.isEmpty(icon)) {
+                    int theme = ThemeUtil.getAlertTheme(getContext());
+                    switch (theme) {
+                        case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                            Glide.with(getContext()).load(R.mipmap.icon_advert_night).into(new GlideDrawableImageViewTarget
+                                    (ivRightIcon1));
+                            break;
+                        case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                            Glide.with(getContext()).load(R.mipmap.icon_advert_day).into(new GlideDrawableImageViewTarget
+                                    (ivRightIcon1));
+                            break;
+                    }
+
+                } else {
+                    Glide.with(getContext()).load(icon).into(new GlideDrawableImageViewTarget(ivRightIcon1));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

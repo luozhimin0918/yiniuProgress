@@ -87,4 +87,6 @@ public class SpConstant {
 
     public static final String SETTING_PUSH = "setting_push";//推送
     public static final String SETTING_SOUND = "setting_sound";//声音
+
+    public static final String PATCH_INFO = "patch_info";//补丁信息
 }

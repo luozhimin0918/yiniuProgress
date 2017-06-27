@@ -17,10 +17,12 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.library.util.SPUtils;
 import com.library.widget.datetimepicker.fourmob.datetimepicker.date.DatePickerDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,14 +80,15 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
 
         HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
         HashSet<String> cityDefaultData = cityOptionMap.get(mCalendarItemFragment);
-        cityDefaultData.add("全部");
+        List myCityList = new ArrayList(cityDefaultData);
+        myCityList.add(0,"全部");
 
         HashMap<CalendarItemFragment, HashSet<String>> citySelectMap = calendarFragment.citySelectMap;
         HashSet<String> citySelectData = citySelectMap.get(mCalendarItemFragment);
 
         olArea.setMinSelectCount(1);
-        olArea.generateCheckBox(cityDefaultData);
-        olArea.setMaxSelectCount(cityDefaultData.size());
+        olArea.generateCheckBox(myCityList);
+        olArea.setMaxSelectCount(myCityList.size());
         olArea.setSelectMode(OptionLayout.SelectMode.CheckMode);
 
         if (citySelectData.size() == 0) {
