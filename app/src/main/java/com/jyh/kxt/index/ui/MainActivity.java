@@ -367,14 +367,15 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (v.getId()) {
             case R.id.riv_avatar:
                 //个人中心
-                Pair[] pairs = {
-                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
-                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
-
-                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation
-                        (this, pairs);
-                Intent intent = new Intent(this, EditUserInfoActivity.class);
-                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
+//                Pair[] pairs = {
+//                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
+//                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
+//
+//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation
+//                        (this, pairs);
+//                Intent intent = new Intent(this, EditUserInfoActivity.class);
+//                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
+                startActivity(new Intent(this, EditUserInfoActivity.class));
                 break;
             case R.id.ll_collect:
                 //收藏

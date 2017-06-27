@@ -165,8 +165,8 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 });
 
 
-        ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
-        ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
+//        ViewCompat.setTransitionName(ivPhoto, VIEW_NAME_IMG);
+//        ViewCompat.setTransitionName(tvNickname, VIEW_NAME_TITLE);
 
         tvTitle.setText("个人中心");
     }

@@ -1,97 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingLeft="@dimen/lr_padding_horizontal"
-              android:paddingRight="@dimen/lr_padding_horizontal"
-              android:paddingTop="@dimen/lr_content_marginTop">
-
-    <com.jyh.kxt.base.widget.LineEditText
-        android:id="@+id/edt_name"
-        style="@style/LoginEditStyle"
-        android:hint="设置用户名"/>
-
-    <TextView
-        android:id="@+id/tv_error_name"
-        style="@style/errorTvStyle"/>
-
-    <com.jyh.kxt.base.widget.LineEditText
-        android:id="@+id/edt_email"
-        style="@style/LoginEditStyle"
-        android:hint="使用Email注册"/>
-
-    <TextView
-        android:id="@+id/tv_error_email"
-        style="@style/errorTvStyle"/>
-
-    <com.jyh.kxt.base.widget.LineEditText
-        android:id="@+id/edt_pwd"
-        style="@style/LoginEditStyle"
-        android:inputType="textPassword"
-        android:hint="输入密码"/>
-
-    <TextView
-        android:id="@+id/tv_error_pwd"
-        style="@style/errorTvStyle"/>
-
-
-    <com.jyh.kxt.base.custom.DiscolorButton
-        android:id="@+id/db_login"
-        style="@style/BtnStyle1"
-        android:layout_marginTop="@dimen/login_marginTop"
-        android:text="注册"
-        />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/lr_content_marginTop">
-
-        <ImageView
-            android:id="@+id/iv_qq"
-            android:layout_width="@dimen/lr_umengImgSize"
-            android:layout_height="@dimen/lr_umengImgSize"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="left"
-            android:src="@mipmap/icon_user_login_qq"/>
-
-        <ImageView
-            android:id="@+id/iv_sina"
-            android:layout_width="@dimen/lr_umengImgSize"
-            android:layout_height="@dimen/lr_umengImgSize"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:src="@mipmap/icon_user_login_sina"/>
-
-        <ImageView
-            android:id="@+id/iv_wx"
-            android:layout_width="@dimen/lr_umengImgSize"
-            android:layout_height="@dimen/lr_umengImgSize"
-            android:layout_gravity="right"
-            android:src="@mipmap/icon_user_login_wx"/>
-    </RelativeLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/newsContentPadding3"
-        android:layout_marginTop="@dimen/newsContentPadding3"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/lr_padding_horizontal"
+        android:paddingRight="@dimen/lr_padding_horizontal"
+        android:paddingTop="@dimen/lr_content_marginTop">
+
+        <com.jyh.kxt.base.widget.LineEditText
+            android:id="@+id/edt_name"
+            style="@style/LoginEditStyle"
+            android:hint="设置用户名"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="11dp"
-            android:text="社交账户登录"
-            android:textColor="@color/font_color8"/>
+            android:id="@+id/tv_error_name"
+            style="@style/errorTvStyle"/>
+
+        <com.jyh.kxt.base.widget.LineEditText
+            android:id="@+id/edt_email"
+            style="@style/LoginEditStyle"
+            android:hint="使用Email注册"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_error_email"
+            style="@style/errorTvStyle"/>
+
+        <com.jyh.kxt.base.widget.LineEditText
+            android:id="@+id/edt_pwd"
+            style="@style/LoginEditStyle"
+            android:hint="输入密码"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:id="@+id/tv_error_pwd"
+            style="@style/errorTvStyle"/>
+
+
+        <com.jyh.kxt.base.custom.DiscolorButton
+            android:id="@+id/db_login"
+            style="@style/BtnStyle1"
+            android:layout_marginTop="@dimen/login_marginTop"
+            android:text="注册"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="更快更简单"
-            android:textColor="@color/font_color3"/>
+            android:layout_marginTop="@dimen/lr_content_marginTop">
+
+            <ImageView
+                android:id="@+id/iv_qq"
+                android:layout_width="@dimen/lr_umengImgSize"
+                android:layout_height="@dimen/lr_umengImgSize"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="left"
+                android:src="@mipmap/icon_user_login_qq"/>
+
+            <ImageView
+                android:id="@+id/iv_sina"
+                android:layout_width="@dimen/lr_umengImgSize"
+                android:layout_height="@dimen/lr_umengImgSize"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:src="@mipmap/icon_user_login_sina"/>
+
+            <ImageView
+                android:id="@+id/iv_wx"
+                android:layout_width="@dimen/lr_umengImgSize"
+                android:layout_height="@dimen/lr_umengImgSize"
+                android:layout_gravity="right"
+                android:src="@mipmap/icon_user_login_wx"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/newsContentPadding3"
+            android:layout_marginTop="@dimen/newsContentPadding3"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="11dp"
+                android:text="社交账户登录"
+                android:textColor="@color/font_color8"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更快更简单"
+                android:textColor="@color/font_color3"/>
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+
+</ScrollView>
