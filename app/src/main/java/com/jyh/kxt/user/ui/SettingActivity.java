@@ -73,7 +73,8 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rl_clear:
                 settingPresenter.clear(cacheSize);
-                tvClear.setText("0.00KB");
+                cacheSize = GlideCacheUtil.getInstance().getCacheSize(this);
+                tvClear.setText(cacheSize);
                 break;
             case R.id.rl_version:
                 settingPresenter.version(false);
