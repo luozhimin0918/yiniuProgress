@@ -238,6 +238,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             public void callback(Object o) {
                 //删除取消收藏的数据
                 adapter.removeById(finalIds);
+                observerData.delSuccessed();
                 //退出编辑状态
                 quitEdit(observerData);
             }
@@ -245,7 +246,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             @Override
             public void onError(Exception e) {
                 //退出编辑状态
-                ToastView.makeText3(getContext(), "删除失败");
+                observerData.delError();
                 quitEdit(observerData);
             }
         });
@@ -261,8 +262,10 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             adapter.setEdit(false);
             List<NewsJson> data = adapter.getData();
             //还原删除按钮数字
-            if (observerData != null)
+            if (observerData != null) {
                 observerData.delItem(0);
+                observerData.quitEdit();
+            }
             //空数据处理
             if (data == null || data.size() == 0) {
                 plRootView.setNullImgId(R.mipmap.icon_collect_null);

@@ -172,6 +172,11 @@ public class AttentionArticleFragment extends BaseFragment implements PageLoadLa
     }
 
     @Override
+    public void delSuccessed() {
+
+    }
+
+    @Override
     public void delAll(boolean isAll) {
         ivSelAll.setSelected(isAll);
     }

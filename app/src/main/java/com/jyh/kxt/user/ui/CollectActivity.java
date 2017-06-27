@@ -20,6 +20,8 @@ import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,8 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     private DelNumListener numListener;
 
     private boolean isVideoEdit, isNewsEdit, isFlashEdit, isAuthorEdit;
+    private boolean isVideoAllSel, isNewsAllSel, isFlashAllSel, isAuthorAllSel;
+    private TSnackbar snackBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,94 +104,105 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                 break;
             case R.id.iv_bar_function:
                 //编辑
-                switch (vpContent.getCurrentItem()) {
-                    case 0:
-                        if (videoFragment.adapter != null && videoFragment.adapter.getData().size() > 0) {
-                            isVideoEdit = !isVideoEdit;
-                        } else {
-                            isVideoEdit = false;
-                        }
-                        videoFragment.edit(isVideoEdit, numListener);
-                        if (isVideoEdit) {
-                            llDel.setVisibility(View.VISIBLE);
-                            ivBarFunction.setText("取消");
-                        } else {
-                            llDel.setVisibility(View.GONE);
-                            ivBarFunction.setText("编辑");
-                        }
-                        break;
-                    case 1:
-                        if (newsFragment.adapter != null && newsFragment.adapter.getData().size() > 0) {
-                            isNewsEdit = !isNewsEdit;
-                        } else {
-                            isNewsEdit = false;
-                        }
-                        newsFragment.edit(isNewsEdit, numListener);
-                        if (isNewsEdit) {
-                            llDel.setVisibility(View.VISIBLE);
-                            ivBarFunction.setText("取消");
-                        } else {
-                            llDel.setVisibility(View.GONE);
-                            ivBarFunction.setText("编辑");
-                        }
-                        break;
-                    case 2:
-                        if (flashFragment.adapter != null && flashFragment.adapter.getData().size() > 0) {
-                            isFlashEdit = !isFlashEdit;
-                        } else {
-                            isFlashEdit = false;
-                        }
-                        flashFragment.edit(isFlashEdit, numListener);
-                        if (isFlashEdit) {
-                            llDel.setVisibility(View.VISIBLE);
-                            ivBarFunction.setText("取消");
-                        } else {
-                            llDel.setVisibility(View.GONE);
-                            ivBarFunction.setText("编辑");
-                        }
-                        break;
-                    case 3:
-                        if (authorFragment.adapter != null && authorFragment.adapter.getData().size() > 0) {
-                            isAuthorEdit = !isAuthorEdit;
-                        } else {
-                            isAuthorEdit = false;
-                        }
-                        authorFragment.edit(isAuthorEdit, numListener);
-                        if (isAuthorEdit) {
-                            llDel.setVisibility(View.VISIBLE);
-                            ivBarFunction.setText("取消");
-                        } else {
-                            llDel.setVisibility(View.GONE);
-                            ivBarFunction.setText("编辑");
-                        }
-                        break;
+                if (snackBar != null && snackBar.isShownOrQueued()) {
+
+                } else {
+
+                    switch (vpContent.getCurrentItem()) {
+                        case 0:
+                            if (videoFragment.adapter != null && videoFragment.adapter.getData().size() > 0) {
+                                isVideoEdit = !isVideoEdit;
+                            } else {
+                                isVideoEdit = false;
+                            }
+                            videoFragment.edit(isVideoEdit, numListener);
+                            if (isVideoEdit) {
+                                llDel.setVisibility(View.VISIBLE);
+                                ivBarFunction.setText("取消");
+                            } else {
+                                llDel.setVisibility(View.GONE);
+                                ivBarFunction.setText("编辑");
+                            }
+                            break;
+                        case 1:
+                            if (newsFragment.adapter != null && newsFragment.adapter.getData().size() > 0) {
+                                isNewsEdit = !isNewsEdit;
+                            } else {
+                                isNewsEdit = false;
+                            }
+                            newsFragment.edit(isNewsEdit, numListener);
+                            if (isNewsEdit) {
+                                llDel.setVisibility(View.VISIBLE);
+                                ivBarFunction.setText("取消");
+                            } else {
+                                llDel.setVisibility(View.GONE);
+                                ivBarFunction.setText("编辑");
+                            }
+                            break;
+                        case 2:
+                            if (flashFragment.adapter != null && flashFragment.adapter.getData().size() > 0) {
+                                isFlashEdit = !isFlashEdit;
+                            } else {
+                                isFlashEdit = false;
+                            }
+                            flashFragment.edit(isFlashEdit, numListener);
+                            if (isFlashEdit) {
+                                llDel.setVisibility(View.VISIBLE);
+                                ivBarFunction.setText("取消");
+                            } else {
+                                llDel.setVisibility(View.GONE);
+                                ivBarFunction.setText("编辑");
+                            }
+                            break;
+                        case 3:
+                            if (authorFragment.adapter != null && authorFragment.adapter.getData().size() > 0) {
+                                isAuthorEdit = !isAuthorEdit;
+                            } else {
+                                isAuthorEdit = false;
+                            }
+                            authorFragment.edit(isAuthorEdit, numListener);
+                            if (isAuthorEdit) {
+                                llDel.setVisibility(View.VISIBLE);
+                                ivBarFunction.setText("取消");
+                            } else {
+                                llDel.setVisibility(View.GONE);
+                                ivBarFunction.setText("编辑");
+                            }
+                            break;
+                    }
                 }
 
                 break;
             case R.id.ll_selAll:
                 //全选
-                if (ivSelAll.isSelected()) {
-                    ivSelAll.setSelected(false);
-                } else {
-                    ivSelAll.setSelected(true);
-                }
+                boolean selected = ivSelAll.isSelected();
+                ivSelAll.setSelected(!selected);
                 switch (vpContent.getCurrentItem()) {
                     case 0:
-                        videoFragment.selAll(ivSelAll.isSelected(), numListener);
+                        isVideoAllSel = !selected;
+                        videoFragment.selAll(isVideoAllSel, numListener);
                         break;
                     case 1:
-                        newsFragment.selAll(ivSelAll.isSelected(), numListener);
+                        isNewsAllSel = !selected;
+                        newsFragment.selAll(isNewsAllSel, numListener);
                         break;
                     case 2:
-                        flashFragment.selAll(ivSelAll.isSelected(), numListener);
+                        isFlashAllSel = !selected;
+                        flashFragment.selAll(isFlashAllSel, numListener);
                         break;
                     case 3:
-                        authorFragment.selAll(ivSelAll.isSelected(), numListener);
+                        isAuthorAllSel = !selected;
+                        authorFragment.selAll(isAuthorAllSel, numListener);
                         break;
                 }
+
                 break;
             case R.id.tv_del:
                 //删除
+                snackBar = TSnackbar.make(tvDel, "删除收藏中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                snackBar.setPromptThemBackground(Prompt.SUCCESS);
+                snackBar.addIconProgressLoading(0, true, false);
+                snackBar.show();
                 switch (vpContent.getCurrentItem()) {
                     case 0:
                         videoFragment.del(numListener);
@@ -202,7 +217,6 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                         authorFragment.del(numListener);
                         break;
                 }
-                quitEdit();
                 break;
         }
     }
@@ -214,19 +228,23 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         switch (vpContent.getCurrentItem()) {
             case 0:
                 isVideoEdit = false;
-                videoFragment.quitEdit(numListener);
+                isVideoAllSel = false;
+//                videoFragment.quitEdit(numListener);
                 break;
             case 1:
                 isNewsEdit = false;
-                newsFragment.quitEdit(numListener);
+                isNewsAllSel = false;
+//                newsFragment.quitEdit(numListener);
                 break;
             case 2:
                 isFlashEdit = false;
-                flashFragment.quitEdit(numListener);
+                isFlashAllSel = false;
+//                flashFragment.quitEdit(numListener);
                 break;
             case 3:
                 isAuthorEdit = false;
-                authorFragment.quitEdit(numListener);
+                isAuthorAllSel = false;
+//                authorFragment.quitEdit(numListener);
                 break;
         }
         ivBarFunction.setText("编辑");
@@ -235,7 +253,20 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     @Override
     public void onBackPressed() {
         if (llDel.getVisibility() == View.VISIBLE) {
-            quitEdit();
+            switch (vpContent.getCurrentItem()) {
+                case 0:
+                    videoFragment.quitEdit(numListener);
+                    break;
+                case 1:
+                    newsFragment.quitEdit(numListener);
+                    break;
+                case 2:
+                    flashFragment.quitEdit(numListener);
+                    break;
+                case 3:
+                    authorFragment.quitEdit(numListener);
+                    break;
+            }
         } else
             super.onBackPressed();
     }
@@ -251,11 +282,34 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
 
     @Override
     public void delError() {
+        snackBar.setPromptThemBackground(Prompt.ERROR).setText("删除收藏失败").setDuration(TSnackbar.LENGTH_LONG)
+                .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                        .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+    }
 
+    @Override
+    public void delSuccessed() {
+        snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("删除收藏成功").setDuration(TSnackbar.LENGTH_LONG)
+                .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
+                        .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
     }
 
     @Override
     public void delAll(boolean isAll) {
+        switch (vpContent.getCurrentItem()) {
+            case 0:
+                isVideoAllSel = isAll;
+                break;
+            case 1:
+                isNewsAllSel = isAll;
+                break;
+            case 2:
+                isFlashAllSel = isAll;
+                break;
+            case 3:
+                isAuthorAllSel = isAll;
+                break;
+        }
         ivSelAll.setSelected(isAll);
     }
 
@@ -270,6 +324,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     llDel.setVisibility(View.GONE);
                     ivBarFunction.setText("编辑");
                 }
+                ivSelAll.setSelected(isVideoAllSel);
                 break;
             case 1:
                 if (isNewsEdit) {
@@ -279,6 +334,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     llDel.setVisibility(View.GONE);
                     ivBarFunction.setText("编辑");
                 }
+                ivSelAll.setSelected(isNewsAllSel);
                 break;
             case 2:
                 if (isFlashEdit) {
@@ -288,6 +344,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     llDel.setVisibility(View.GONE);
                     ivBarFunction.setText("编辑");
                 }
+                ivSelAll.setSelected(isFlashAllSel);
                 break;
             case 3:
                 if (isAuthorEdit) {
@@ -297,6 +354,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     llDel.setVisibility(View.GONE);
                     ivBarFunction.setText("编辑");
                 }
+                ivSelAll.setSelected(isAuthorAllSel);
                 break;
         }
     }

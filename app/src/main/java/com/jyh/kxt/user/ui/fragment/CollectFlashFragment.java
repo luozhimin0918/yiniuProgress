@@ -77,7 +77,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
 
                         if (adapter.isEdit()) {
                             adapter.delClick(((CollectFlashAdapter.BaseBaseViewHolder) view.getTag()).ivDel, flashJson);
-                            if(delNumListener!=null){
+                            if (delNumListener != null) {
                                 int delSize = adapter.getDelIds().size();
                                 int allSize = adapter.getData().size();
                                 delNumListener.delItem(delSize);
@@ -120,7 +120,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
      */
     public void edit(boolean isFlashEdit, DelNumListener observerData) {
         try {
-            delNumListener=observerData;
+            delNumListener = observerData;
             adapter.setEdit(isFlashEdit);
             adapter.setObserverData(observerData);
         } catch (Exception e) {
@@ -209,6 +209,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             public void callback(Object o) {
                 //删除取消收藏的数据
                 adapter.removeById(finalIds);
+                observerData.delSuccessed();
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH, null));
                 //退出编辑状态
                 quitEdit(observerData);
@@ -217,7 +218,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             @Override
             public void onError(Exception e) {
                 //退出编辑状态
-                ToastView.makeText3(getContext(), "删除失败");
+                observerData.delError();
                 quitEdit(observerData);
             }
         });
@@ -235,8 +236,10 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
             List souces = adapter.getSoucesData();
             List data = adapter.getData();
             //还原删除按钮数字
-            if (observerData != null)
+            if (observerData != null) {
                 observerData.delItem(0);
+                observerData.quitEdit();
+            }
             //空数据处理
             if (data == null || data.size() == 0) {
                 plRootView.setNullImgId(R.mipmap.icon_collect_null);
