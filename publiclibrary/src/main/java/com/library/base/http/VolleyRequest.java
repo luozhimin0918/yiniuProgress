@@ -159,7 +159,11 @@ public class VolleyRequest {
                                 mHttpListener.onResponse((T) response);
                             }
                         } catch (Exception e) {
-                            mHttpListener.onErrorResponse(null);
+                            try {
+                                mHttpListener.onErrorResponse(null);
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                             e.printStackTrace();
                         }
 
@@ -167,9 +171,13 @@ public class VolleyRequest {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mHttpListener.onErrorResponse(error);
-                        if (!isToastFailed) {
-                            ToastView.makeText3(mContext, "网络出错:" + error.getMessage());
+                        try {
+                            mHttpListener.onErrorResponse(error);
+                            if (!isToastFailed) {
+                                ToastView.makeText3(mContext, "网络出错:" + error.getMessage());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });

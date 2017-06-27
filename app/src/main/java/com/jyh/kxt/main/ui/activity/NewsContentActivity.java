@@ -99,7 +99,7 @@ import static com.taobao.accs.ACCSManager.mContext;
  */
 
 public class NewsContentActivity extends BaseActivity implements CommentPresenter.OnCommentClickListener,
-        CommentPresenter.OnCommentPublishListener {
+        CommentPresenter.OnCommentPublishListener, PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
@@ -154,6 +154,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         ivGood.setSelected(isGood);
 
         newsContentPresenter = new NewsContentPresenter(this);
+        pllContent.setOnAfreshLoadListener(this);
         ptrLvMessage.setMode(PullToRefreshBase.Mode.DISABLED);
 
         commentPresenter = new CommentPresenter(this);//初始化评论相关
@@ -476,6 +477,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @Override
     public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId) {
         webViewAndHead.requestIssueComment(popupWindow, etContent, commentBean, parentId);
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        newsContentPresenter.requestInitComment(PullToRefreshBase.Mode.PULL_FROM_START, type);
+        pllContent.loadWait();
     }
 
     public class WebViewAndHead implements View.OnClickListener {

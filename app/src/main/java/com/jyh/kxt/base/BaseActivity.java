@@ -110,6 +110,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     protected void onResume() {
         Session.onResume(this);
         super.onResume();
+        Glide.with(this).resumeRequests();
         MobclickAgent.onResume(this);
         boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
         boolean changeCurrentActionTheme = ThemeUtil.isChangeCurrentActionTheme(this);
@@ -312,6 +313,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     protected void onPause() {
         Session.onPause(this);
         super.onPause();
+        Glide.with(this).pauseRequests();
         MobclickAgent.onPause(this);
     }
 

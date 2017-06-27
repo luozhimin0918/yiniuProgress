@@ -108,10 +108,11 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         marketItemFragment.switchItemType = marketItemFragment.switchItemType == 0 ? 1 : 0;
         marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
 
-        for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
-            marketItemBean.setSwitchTarget(
-                    marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
-        }
+        if (marketMainItemAdapter != null && marketMainItemAdapter.dataList != null)
+            for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
+                marketItemBean.setSwitchTarget(
+                        marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
+            }
     }
 
     public void onChangeTheme() {
