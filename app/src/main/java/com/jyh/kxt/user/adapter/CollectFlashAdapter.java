@@ -38,6 +38,7 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -585,8 +586,22 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
                 Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(topHolder
-                        .ivFlash);
+                final NEWViewHolder finalTopHolder = topHolder;
+                Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
+                        (new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = resource.getWidth();
+                                int height = resource.getHeight();
+                                int viewWidth = finalTopHolder.ivFlash.getWidth();
+                                float viewHeight = (int) (((float) viewWidth) / width * height);
+                                ViewGroup.LayoutParams layoutParams = finalTopHolder.ivFlash.getLayoutParams();
+                                layoutParams.height = (int) viewHeight;
+                                finalTopHolder.ivFlash.setLayoutParams(layoutParams);
+                                finalTopHolder.ivFlash.setImageBitmap(resource);
+                            }
+                        });
 
                 String time5 = "00:00";
                 try {
@@ -612,10 +627,22 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_BOTTOM:
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                 Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
-
-                Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
-                        (bottomHolder
-                                .ivFlash);
+                final NEWViewHolder finalBottomHolder = bottomHolder;
+                Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
+                        (new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = resource.getWidth();
+                                int height = resource.getHeight();
+                                int viewWidth = finalBottomHolder.ivFlash.getWidth();
+                                float viewHeight = (int) (((float) viewWidth) / width * height);
+                                ViewGroup.LayoutParams layoutParams = finalBottomHolder.ivFlash.getLayoutParams();
+                                layoutParams.height = (int) viewHeight;
+                                finalBottomHolder.ivFlash.setLayoutParams(layoutParams);
+                                finalBottomHolder.ivFlash.setImageBitmap(resource);
+                            }
+                        });
 
                 String time6 = "00:00";
                 try {

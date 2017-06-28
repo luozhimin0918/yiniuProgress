@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -532,7 +533,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                      */
                     String describe = context.getResources().getString(R.string.date_describe_Reality, rl.getReality());
 
-                    String reality = rl.getReality();
+                    final String reality = rl.getReality();
                     setDescribeForegroundColor(rlHolder.tvContentReality, describe, reality);
 
                     /**
@@ -639,10 +640,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_top = (FlashJson) flashJsons.get(position);
                     Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    final NEWViewHolder finalTopHolder = topHolder;
+                    Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
                             .icon_def_news).into
-                            (topHolder
-                                    .ivFlash);
+                            (new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();
+                                    int height = resource.getHeight();
+                                    int viewWidth = finalTopHolder.ivFlash.getWidth();
+                                    float viewHeight = (int) (((float) viewWidth) / width * height);
+                                    ViewGroup.LayoutParams layoutParams = finalTopHolder.ivFlash.getLayoutParams();
+                                    layoutParams.height = (int) viewHeight;
+                                    finalTopHolder.ivFlash.setLayoutParams(layoutParams);
+                                    finalTopHolder.ivFlash.setImageBitmap(resource);
+                                }
+                            });
 
                     String time5 = "00:00";
                     try {
@@ -670,10 +683,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                     Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    final NEWViewHolder finalBottomHolder = bottomHolder;
+                    Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
                             .icon_def_news).into
-                            (bottomHolder
-                                    .ivFlash);
+                            (new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();
+                                    int height = resource.getHeight();
+                                    int viewWidth = finalBottomHolder.ivFlash.getWidth();
+                                    float viewHeight = (int) (((float) viewWidth) / width * height);
+                                    ViewGroup.LayoutParams layoutParams = finalBottomHolder.ivFlash.getLayoutParams();
+                                    layoutParams.height = (int) viewHeight;
+                                    finalBottomHolder.ivFlash.setLayoutParams(layoutParams);
+                                    finalBottomHolder.ivFlash.setImageBitmap(resource);
+                                }
+                            });
 
                     String time6 = "00:00";
                     try {

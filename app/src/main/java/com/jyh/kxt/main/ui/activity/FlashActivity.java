@@ -387,13 +387,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             }
         }
 
-        String time2 = "00:00";
+        String time = rl.getTime();
         try {
-            time2 = getTime(rl.getTime());
+            String timeInMill = DateUtils.transfromTime(rl.getTime(), DateUtils.TYPE_YMDHMS);
+            time = DateUtils.transformTime(Long.parseLong(timeInMill), DateUtils.TYPE_YMDE);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tvTime.setText(time2);
+        tvTime.setText(time);
 
         tvContentBefore.setText(this.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
         tvContentForecast.setText(this.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
