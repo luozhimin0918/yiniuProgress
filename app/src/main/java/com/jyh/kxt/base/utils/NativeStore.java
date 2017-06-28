@@ -5,6 +5,7 @@ import android.content.Context;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
@@ -63,7 +64,8 @@ public class NativeStore {
                 url = HttpConstant.GOOD_COMMENT;
                 break;
         }
-        VolleyRequest request = new VolleyRequest(mContext, Volley.newRequestQueue(mContext));
+        BaseActivity baseActivity = (BaseActivity) mContext;
+        VolleyRequest request = new VolleyRequest(mContext, baseActivity.getQueue());
         final String finalSpName = spName;
 
         good(mContext, id, observerData, observerData2, finalSpName);
