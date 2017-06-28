@@ -542,13 +542,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     .error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap.icon_user_def_photo)
 
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                glideAnimation) {
-                            loginPhoto.setImageBitmap(resource);
-                        }
-                    });
+                    .into(loginPhoto);
 
             Glide.with(getContext())
                     .load(pictureStr)
