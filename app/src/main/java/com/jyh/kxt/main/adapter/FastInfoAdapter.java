@@ -403,41 +403,41 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                                     popupUtil.dismiss();
                                                 }
 
-                                                //图片尺寸
-                                                int width = resource.getWidth();
-                                                int height = resource.getHeight();
-                                                //屏幕尺寸
-                                                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
-                                                int widthPixels = screenDisplay.widthPixels;
-                                                int heightPixels = screenDisplay.heightPixels;
-                                                //放大1.5倍后的图片尺寸
-                                                double largeWidth = width * 1.5;
-                                                double largeHeight = height * 1.5;
-                                                //放大图片(最大1.5倍),是其宽或高全屏
-                                                if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
-                                                    width *= 1.5;
-                                                    height *= 1.5;
-                                                } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
-                                                    double outWidth = largeWidth - widthPixels;
-                                                    double outHeight = largeHeight - heightPixels;
-                                                    if (outHeight > outWidth) {
-                                                        float size = widthPixels / (float) width;
-                                                        width = widthPixels;
-                                                        height *= size;
-                                                    } else {
-                                                        float size = heightPixels / (float) height;
-                                                        height = heightPixels;
-                                                        width *= size;
-                                                    }
-                                                } else if (largeWidth > widthPixels) {
-                                                    float size = widthPixels / (float) width;
-                                                    width = widthPixels;
-                                                    height *= size;
-                                                } else {
-                                                    float size = heightPixels / (float) height;
-                                                    height = heightPixels;
-                                                    width *= size;
-                                                }
+//                                                //图片尺寸
+//                                                int width = resource.getWidth();
+//                                                int height = resource.getHeight();
+//                                                //屏幕尺寸
+//                                                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+//                                                int widthPixels = screenDisplay.widthPixels;
+//                                                int heightPixels = screenDisplay.heightPixels;
+//                                                //放大1.5倍后的图片尺寸
+//                                                double largeWidth = width * 1.5;
+//                                                double largeHeight = height * 1.5;
+//                                                //放大图片(最大1.5倍),是其宽或高全屏
+//                                                if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+//                                                    width *= 1.5;
+//                                                    height *= 1.5;
+//                                                } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+//                                                    double outWidth = largeWidth - widthPixels;
+//                                                    double outHeight = largeHeight - heightPixels;
+//                                                    if (outHeight > outWidth) {
+//                                                        float size = widthPixels / (float) width;
+//                                                        width = widthPixels;
+//                                                        height *= size;
+//                                                    } else {
+//                                                        float size = heightPixels / (float) height;
+//                                                        height = heightPixels;
+//                                                        width *= size;
+//                                                    }
+//                                                } else if (largeWidth > widthPixels) {
+//                                                    float size = widthPixels / (float) width;
+//                                                    width = widthPixels;
+//                                                    height *= size;
+//                                                } else {
+//                                                    float size = heightPixels / (float) height;
+//                                                    height = heightPixels;
+//                                                    width *= size;
+//                                                }
 
                                                 config.width = WindowManager.LayoutParams.MATCH_PARENT;
                                                 config.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -445,8 +445,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                                 popupUtil.setConfig(config);
 
                                                 ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                                                layoutParams.width = width;
-                                                layoutParams.height = height;
+                                                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                                                 ivPop.setLayoutParams(layoutParams);
 
                                                 ivPop.setImageBitmap(resource);

@@ -162,6 +162,11 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         try {
             this.delNumListener = observerData;
             adapter.setEdit(isNewsEdit);
+            if (isNewsEdit) {
+                plvContent.setMode(PullToRefreshBase.Mode.DISABLED);
+            } else {
+                plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+            }
             adapter.setSelListener(observerData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -260,6 +265,7 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
     public void quitEdit(DelNumListener observerData) {
         try {
             adapter.setEdit(false);
+            plvContent.setMode(PullToRefreshBase.Mode.BOTH);
             List<NewsJson> data = adapter.getData();
             //还原删除按钮数字
             if (observerData != null) {
