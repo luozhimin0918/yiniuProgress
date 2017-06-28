@@ -213,9 +213,13 @@ public class DataPresenter extends BasePresenter {
             dataFragment.ivLeftContent.post(new Runnable() {
                 @Override
                 public void run() {
-                    View childAt = dataFragment.ivLeftContent.getChildAt(0);
-                    RadioButton rbName = (RadioButton) childAt.findViewById(R.id.tv_name);
-                    rbName.performClick();
+                    try {
+                        View childAt = dataFragment.ivLeftContent.getChildAt(0);
+                        RadioButton rbName = (RadioButton) childAt.findViewById(R.id.tv_name);
+                        rbName.performClick();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception e) {

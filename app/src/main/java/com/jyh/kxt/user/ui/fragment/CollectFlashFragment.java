@@ -122,6 +122,11 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
         try {
             delNumListener = observerData;
             adapter.setEdit(isFlashEdit);
+            if(isFlashEdit){
+                lvContent.setMode(PullToRefreshBase.Mode.DISABLED);
+            }else{
+                lvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            }
             adapter.setObserverData(observerData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -233,6 +238,7 @@ public class CollectFlashFragment extends BaseFragment implements FastInfoPinned
     public void quitEdit(DelNumListener observerData) {
         try {
             adapter.setEdit(false);
+            lvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
             List souces = adapter.getSoucesData();
             List data = adapter.getData();
             //还原删除按钮数字

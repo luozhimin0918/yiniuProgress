@@ -27,6 +27,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 
 import java.io.File;
 
@@ -146,7 +147,7 @@ public class PhotoTailorUtil {
                         }
                     });
         } catch (Exception ex) {
-            com.library.widget.window.ToastView.makeText(mActivity, "上传图片失败");
+            ToastView.makeText3(mActivity, "选择图片失败");
         }
     }
 

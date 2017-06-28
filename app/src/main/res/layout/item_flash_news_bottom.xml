@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/flash_type4_marginRight"
         android:maxLines="3"
-        android:text="16:30"
         android:textSize="@dimen/describe_font_size2"
         />
 
@@ -26,15 +25,14 @@
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="哈哈哈"
             android:textSize="@dimen/content_font_size"/>
 
         <ImageView
             android:id="@+id/iv_flash"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_test"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY"
             />
 
         <include layout="@layout/layout_flash_bottom_bar"/>

@@ -13,7 +13,6 @@
         android:layout_height="26dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/navigationBarLeftImageViewMarginLeft"
-        android:src="@mipmap/icon_user_def_photo"
         />
 
     <com.library.widget.tablayout.SegmentTabLayout

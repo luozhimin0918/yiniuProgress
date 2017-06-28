@@ -38,6 +38,7 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;
@@ -357,41 +358,41 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                                             if (popupUtil.isShowing())
                                                 popupUtil.dismiss();
 
-                                            //图片尺寸
-                                            int width = resource.getWidth();
-                                            int height = resource.getHeight();
-                                            //屏幕尺寸
-                                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
-                                            int widthPixels = screenDisplay.widthPixels;
-                                            int heightPixels = screenDisplay.heightPixels;
-                                            //放大1.5倍后的图片尺寸
-                                            double largeWidth = width * 1.5;
-                                            double largeHeight = height * 1.5;
-                                            //放大图片(最大1.5倍),是其宽或高全屏
-                                            if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
-                                                width *= 1.5;
-                                                height *= 1.5;
-                                            } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
-                                                double outWidth = largeWidth - widthPixels;
-                                                double outHeight = largeHeight - heightPixels;
-                                                if (outHeight > outWidth) {
-                                                    float size = widthPixels / (float) width;
-                                                    width = widthPixels;
-                                                    height *= size;
-                                                } else {
-                                                    float size = heightPixels / (float) height;
-                                                    height = heightPixels;
-                                                    width *= size;
-                                                }
-                                            } else if (largeWidth > widthPixels) {
-                                                float size = widthPixels / (float) width;
-                                                width = widthPixels;
-                                                height *= size;
-                                            } else {
-                                                float size = heightPixels / (float) height;
-                                                height = heightPixels;
-                                                width *= size;
-                                            }
+//                                            //图片尺寸
+//                                            int width = resource.getWidth();
+//                                            int height = resource.getHeight();
+//                                            //屏幕尺寸
+//                                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+//                                            int widthPixels = screenDisplay.widthPixels;
+//                                            int heightPixels = screenDisplay.heightPixels;
+//                                            //放大1.5倍后的图片尺寸
+//                                            double largeWidth = width * 1.5;
+//                                            double largeHeight = height * 1.5;
+//                                            //放大图片(最大1.5倍),是其宽或高全屏
+//                                            if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+//                                                width *= 1.5;
+//                                                height *= 1.5;
+//                                            } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+//                                                double outWidth = largeWidth - widthPixels;
+//                                                double outHeight = largeHeight - heightPixels;
+//                                                if (outHeight > outWidth) {
+//                                                    float size = widthPixels / (float) width;
+//                                                    width = widthPixels;
+//                                                    height *= size;
+//                                                } else {
+//                                                    float size = heightPixels / (float) height;
+//                                                    height = heightPixels;
+//                                                    width *= size;
+//                                                }
+//                                            } else if (largeWidth > widthPixels) {
+//                                                float size = widthPixels / (float) width;
+//                                                width = widthPixels;
+//                                                height *= size;
+//                                            } else {
+//                                                float size = heightPixels / (float) height;
+//                                                height = heightPixels;
+//                                                width *= size;
+//                                            }
 
                                             config.width = WindowManager.LayoutParams.MATCH_PARENT;
                                             config.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -399,8 +400,8 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                                             popupUtil.setConfig(config);
 
                                             ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                                            layoutParams.width = width;
-                                            layoutParams.height = height;
+                                            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                                             ivPop.setLayoutParams(layoutParams);
 
                                             ivPop.setImageBitmap(resource);
@@ -420,24 +421,25 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                             .into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    int width = resource.getWidth();//px
-                                    int height = resource.getHeight();
-                                    ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
-                                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                    //等比例缩放
-                                    finalKxHolder.imageView.setAdjustViewBounds(true);
-                                    finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                    if (width > imgMaxWidth) {
-                                        layoutParams.width = imgMaxWidth;
-                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        finalKxHolder.imageView.setImageBitmap(resource);
-                                    }
-                                    if (height > imgMaxHeight) {
-                                        layoutParams.height = imgMaxHeight;
-                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
-                                        finalKxHolder.imageView.setImageBitmap(resource);
-                                    }
+//                                    int width = resource.getWidth();//px
+//                                    int height = resource.getHeight();
+//                                    ViewGroup.LayoutParams layoutParams = finalKxHolder.imageView.getLayoutParams();
+//                                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                                    //等比例缩放
+//                                    finalKxHolder.imageView.setAdjustViewBounds(true);
+//                                    finalKxHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//                                    if (width > imgMaxWidth) {
+//                                        layoutParams.width = imgMaxWidth;
+//                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+//                                        finalKxHolder.imageView.setImageBitmap(resource);
+//                                    }
+//                                    if (height > imgMaxHeight) {
+//                                        layoutParams.height = imgMaxHeight;
+//                                        finalKxHolder.imageView.setLayoutParams(layoutParams);
+//                                        finalKxHolder.imageView.setImageBitmap(resource);
+//                                    }
+                                    finalKxHolder.imageView.setImageBitmap(resource);
                                 }
                             });
                 }
@@ -445,7 +447,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 setKxTheme(kxHolder, kx);
 
                 setOnclick(kxHolder.llMore, kxHolder.tvMore, kxHolder.ivMore, kxHolder.ivShare, kxHolder.ivCollect, position, kxHolder
-                        .tvContent, null,
+                                .tvContent, null,
                         null, TYPE_KX, kxHolder.flDel, kxHolder.ivDel);
 
                 setShowMoreBtn(kxHolder);
@@ -503,7 +505,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
 
                 setOnclick(rlHolder.llMore, rlHolder.tvMore, rlHolder.ivMore, rlHolder.ivShare, rlHolder.ivCollect, position, rlHolder
-                        .tvContent, null,
+                                .tvContent, null,
                         null, TYPE_RL, rlHolder.flDel, rlHolder.ivDel);
 //                /**
 //                 * 重要性判断
@@ -546,7 +548,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setOnclick(leftHolder.llMore, leftHolder.tvMore, leftHolder.ivMore, leftHolder.ivShare, leftHolder.ivCollect, position,
                         leftHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
+                                .tvContent, VarConstant.SOCKET_FLASH_LEFT, null, TYPE_LEFT, leftHolder.flDel, leftHolder.ivDel);
 
                 leftHolder.ivCollect.setSelected(flash_left.isColloct());
 
@@ -558,7 +560,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                         (rightHolder
-                        .ivFlash);
+                                .ivFlash);
 
                 String time4 = "00:00";
                 try {
@@ -575,7 +577,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setOnclick(rightHolder.llMore, rightHolder.tvMore, rightHolder.ivMore, rightHolder.ivShare, rightHolder.ivCollect,
                         position, rightHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
+                                .tvContent, VarConstant.SOCKET_FLASH_RIGHT, null, TYPE_RIGHT, rightHolder.flDel, rightHolder.ivDel);
 
                 rightHolder.ivCollect.setSelected(flash_right.isColloct());
                 setShowMoreBtn(rightHolder);
@@ -584,8 +586,22 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
                 Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(topHolder
-                        .ivFlash);
+                final NEWViewHolder finalTopHolder = topHolder;
+                Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
+                        (new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = resource.getWidth();
+                                int height = resource.getHeight();
+                                int viewWidth = finalTopHolder.ivFlash.getWidth();
+                                float viewHeight = (int) (((float) viewWidth) / width * height);
+                                ViewGroup.LayoutParams layoutParams = finalTopHolder.ivFlash.getLayoutParams();
+                                layoutParams.height = (int) viewHeight;
+                                finalTopHolder.ivFlash.setLayoutParams(layoutParams);
+                                finalTopHolder.ivFlash.setImageBitmap(resource);
+                            }
+                        });
 
                 String time5 = "00:00";
                 try {
@@ -611,10 +627,22 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_BOTTOM:
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                 Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
-
-                Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
-                        (bottomHolder
-                                .ivFlash);
+                final NEWViewHolder finalBottomHolder = bottomHolder;
+                Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                        .icon_def_news).into
+                        (new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                int width = resource.getWidth();
+                                int height = resource.getHeight();
+                                int viewWidth = finalBottomHolder.ivFlash.getWidth();
+                                float viewHeight = (int) (((float) viewWidth) / width * height);
+                                ViewGroup.LayoutParams layoutParams = finalBottomHolder.ivFlash.getLayoutParams();
+                                layoutParams.height = (int) viewHeight;
+                                finalBottomHolder.ivFlash.setLayoutParams(layoutParams);
+                                finalBottomHolder.ivFlash.setImageBitmap(resource);
+                            }
+                        });
 
                 String time6 = "00:00";
                 try {
@@ -631,8 +659,9 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
 
                 setOnclick(bottomHolder.llMore, bottomHolder.tvMore, bottomHolder.ivMore, bottomHolder.ivShare, bottomHolder.ivCollect,
                         position, bottomHolder
-                        .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel, bottomHolder
-                        .ivDel);
+                                .tvContent, VarConstant.SOCKET_FLASH_BOTTOM, bottomHolder.ivFlash, TYPE_BOTTOM, bottomHolder.flDel,
+                        bottomHolder
+                                .ivDel);
 
                 bottomHolder.ivCollect.setSelected(flash_bottom.isColloct());
                 setShowMoreBtn(bottomHolder);
@@ -1286,7 +1315,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     /**
      * 日历
      */
-    public class RLViewHolder extends BaseBaseViewHolder{
+    public class RLViewHolder extends BaseBaseViewHolder {
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.tv_describe) TextView tvContent;
         @BindView(R.id.tv_more) TextView tvMore;

@@ -20,6 +20,7 @@ import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -57,6 +58,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     private boolean isVideoEdit, isNewsEdit, isFlashEdit, isAuthorEdit;
     private boolean isVideoAllSel, isNewsAllSel, isFlashAllSel, isAuthorAllSel;
     private TSnackbar snackBar;
+    private int delNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,23 +201,27 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                 break;
             case R.id.tv_del:
                 //删除
-                snackBar = TSnackbar.make(tvDel, "删除收藏中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                snackBar.setPromptThemBackground(Prompt.SUCCESS);
-                snackBar.addIconProgressLoading(0, true, false);
-                snackBar.show();
-                switch (vpContent.getCurrentItem()) {
-                    case 0:
-                        videoFragment.del(numListener);
-                        break;
-                    case 1:
-                        newsFragment.del(numListener);
-                        break;
-                    case 2:
-                        flashFragment.del(numListener);
-                        break;
-                    case 3:
-                        authorFragment.del(numListener);
-                        break;
+                if (delNum != 0) {
+                    snackBar = TSnackbar.make(tvDel, "删除收藏中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS);
+                    snackBar.addIconProgressLoading(0, true, false);
+                    snackBar.show();
+                    switch (vpContent.getCurrentItem()) {
+                        case 0:
+                            videoFragment.del(numListener);
+                            break;
+                        case 1:
+                            newsFragment.del(numListener);
+                            break;
+                        case 2:
+                            flashFragment.del(numListener);
+                            break;
+                        case 3:
+                            authorFragment.del(numListener);
+                            break;
+                    }
+                } else {
+                    ToastView.makeText3(this, "请选中至少一项");
                 }
                 break;
         }
@@ -275,6 +281,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     public void delItem(Integer num) {
         try {
             tvDel.setText("删除(" + num + ")");
+            this.delNum = num;
         } catch (Exception e) {
             e.printStackTrace();
         }

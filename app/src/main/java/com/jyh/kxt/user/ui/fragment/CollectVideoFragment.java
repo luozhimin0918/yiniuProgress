@@ -165,6 +165,11 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
         try {
             delNumListener = observerData;
             adapter.setEdit(isVideoEdit);
+            if (isVideoEdit) {
+                plvContent.setMode(PullToRefreshBase.Mode.DISABLED);
+            } else {
+                plvContent.setMode(PullToRefreshBase.Mode.BOTH);
+            }
             adapter.setSelListener(observerData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,6 +266,7 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     public void quitEdit(DelNumListener observerData) {
         try {
             adapter.setEdit(false);
+            plvContent.setMode(PullToRefreshBase.Mode.BOTH);
             List<VideoListJson> data = adapter.getData();
             //还原删除按钮数字
             if (observerData != null) {

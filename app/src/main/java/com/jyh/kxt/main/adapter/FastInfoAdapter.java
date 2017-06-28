@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -403,41 +404,41 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                                     popupUtil.dismiss();
                                                 }
 
-                                                //图片尺寸
-                                                int width = resource.getWidth();
-                                                int height = resource.getHeight();
-                                                //屏幕尺寸
-                                                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
-                                                int widthPixels = screenDisplay.widthPixels;
-                                                int heightPixels = screenDisplay.heightPixels;
-                                                //放大1.5倍后的图片尺寸
-                                                double largeWidth = width * 1.5;
-                                                double largeHeight = height * 1.5;
-                                                //放大图片(最大1.5倍),是其宽或高全屏
-                                                if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
-                                                    width *= 1.5;
-                                                    height *= 1.5;
-                                                } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
-                                                    double outWidth = largeWidth - widthPixels;
-                                                    double outHeight = largeHeight - heightPixels;
-                                                    if (outHeight > outWidth) {
-                                                        float size = widthPixels / (float) width;
-                                                        width = widthPixels;
-                                                        height *= size;
-                                                    } else {
-                                                        float size = heightPixels / (float) height;
-                                                        height = heightPixels;
-                                                        width *= size;
-                                                    }
-                                                } else if (largeWidth > widthPixels) {
-                                                    float size = widthPixels / (float) width;
-                                                    width = widthPixels;
-                                                    height *= size;
-                                                } else {
-                                                    float size = heightPixels / (float) height;
-                                                    height = heightPixels;
-                                                    width *= size;
-                                                }
+//                                                //图片尺寸
+//                                                int width = resource.getWidth();
+//                                                int height = resource.getHeight();
+//                                                //屏幕尺寸
+//                                                DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
+//                                                int widthPixels = screenDisplay.widthPixels;
+//                                                int heightPixels = screenDisplay.heightPixels;
+//                                                //放大1.5倍后的图片尺寸
+//                                                double largeWidth = width * 1.5;
+//                                                double largeHeight = height * 1.5;
+//                                                //放大图片(最大1.5倍),是其宽或高全屏
+//                                                if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
+//                                                    width *= 1.5;
+//                                                    height *= 1.5;
+//                                                } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
+//                                                    double outWidth = largeWidth - widthPixels;
+//                                                    double outHeight = largeHeight - heightPixels;
+//                                                    if (outHeight > outWidth) {
+//                                                        float size = widthPixels / (float) width;
+//                                                        width = widthPixels;
+//                                                        height *= size;
+//                                                    } else {
+//                                                        float size = heightPixels / (float) height;
+//                                                        height = heightPixels;
+//                                                        width *= size;
+//                                                    }
+//                                                } else if (largeWidth > widthPixels) {
+//                                                    float size = widthPixels / (float) width;
+//                                                    width = widthPixels;
+//                                                    height *= size;
+//                                                } else {
+//                                                    float size = heightPixels / (float) height;
+//                                                    height = heightPixels;
+//                                                    width *= size;
+//                                                }
 
                                                 config.width = WindowManager.LayoutParams.MATCH_PARENT;
                                                 config.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -445,8 +446,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                                 popupUtil.setConfig(config);
 
                                                 ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                                                layoutParams.width = width;
-                                                layoutParams.height = height;
+                                                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
                                                 ivPop.setLayoutParams(layoutParams);
 
                                                 ivPop.setImageBitmap(resource);
@@ -532,7 +533,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                      */
                     String describe = context.getResources().getString(R.string.date_describe_Reality, rl.getReality());
 
-                    String reality = rl.getReality();
+                    final String reality = rl.getReality();
                     setDescribeForegroundColor(rlHolder.tvContentReality, describe, reality);
 
                     /**
@@ -639,10 +640,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_top = (FlashJson) flashJsons.get(position);
                     Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(top.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    final NEWViewHolder finalTopHolder = topHolder;
+                    Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
                             .icon_def_news).into
-                            (topHolder
-                                    .ivFlash);
+                            (new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();
+                                    int height = resource.getHeight();
+                                    int viewWidth = finalTopHolder.ivFlash.getWidth();
+                                    float viewHeight = (int) (((float) viewWidth) / width * height);
+                                    ViewGroup.LayoutParams layoutParams = finalTopHolder.ivFlash.getLayoutParams();
+                                    layoutParams.height = (int) viewHeight;
+                                    finalTopHolder.ivFlash.setLayoutParams(layoutParams);
+                                    finalTopHolder.ivFlash.setImageBitmap(resource);
+                                }
+                            });
 
                     String time5 = "00:00";
                     try {
@@ -670,10 +683,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
                     Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
-                    Glide.with(context).load(bottom.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    final NEWViewHolder finalBottomHolder = bottomHolder;
+                    Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
                             .icon_def_news).into
-                            (bottomHolder
-                                    .ivFlash);
+                            (new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = resource.getWidth();
+                                    int height = resource.getHeight();
+                                    int viewWidth = finalBottomHolder.ivFlash.getWidth();
+                                    float viewHeight = (int) (((float) viewWidth) / width * height);
+                                    ViewGroup.LayoutParams layoutParams = finalBottomHolder.ivFlash.getLayoutParams();
+                                    layoutParams.height = (int) viewHeight;
+                                    finalBottomHolder.ivFlash.setLayoutParams(layoutParams);
+                                    finalBottomHolder.ivFlash.setImageBitmap(resource);
+                                }
+                            });
 
                     String time6 = "00:00";
                     try {

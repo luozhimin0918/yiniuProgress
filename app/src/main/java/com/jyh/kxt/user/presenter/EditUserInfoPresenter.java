@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +26,8 @@ import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.GetJsonDataUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.photo.PhotoTailorUtil;
+import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
+import com.jyh.kxt.base.widget.pickerview.TimePickerView;
 import com.jyh.kxt.user.json.CityBean;
 import com.jyh.kxt.user.json.ProvinceJson;
 import com.jyh.kxt.user.json.UserJson;
@@ -40,9 +41,6 @@ import com.library.util.DateUtils;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
-import com.jyh.kxt.base.widget.pickerview.TimePickerView;
-import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -511,7 +509,6 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      * @param type
      */
     private void postError(String type, String oldValue) {
-        ToastView.makeText3(mContext, "信息提交失败");
         switch (type) {
             case VarConstant.HTTP_NICKNAME:
                 activity.restoreNickName(oldValue);
