@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,24 +29,24 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         new WebView(this);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome, StatusBarColor.NO_COLOR);
 
         welcomePresenter = new WelcomePresenter(this);
         welcomePresenter.checkIsShowAdvert();
+        welcomePresenter.requestMainData();
 
         welcomePresenter.initSharedPreferences();
 
         MLink.getInstance(this).registerWithAnnotation(this);
-        Log.i("welcome",getIntent().toString());
-        JumpUtils.MwJump(getIntent(),this);
-
+        Log.i("welcome", getIntent().toString());
+        JumpUtils.MwJump(getIntent(), this);
     }
 
-    @OnClick({R.id.tv_advert_time })
-    public void onTimeClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.tv_advert_time})
+    public void onTimeClick(View view) {
+        switch (view.getId()) {
             case R.id.tv_advert_time:
                 welcomePresenter.startToActivity(MainActivity.class);
                 break;

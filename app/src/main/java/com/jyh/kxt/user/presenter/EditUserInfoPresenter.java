@@ -1,10 +1,12 @@
 package com.jyh.kxt.user.presenter;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
@@ -65,7 +67,8 @@ import java.util.Map;
  * 创建日期:2017/4/6.
  */
 
-public class EditUserInfoPresenter extends BasePresenter implements View.OnClickListener, PhotoTailorUtil.OnCompleteListener {
+public class EditUserInfoPresenter extends BasePresenter implements View.OnClickListener, PhotoTailorUtil
+        .OnCompleteListener {
 
     @BindObject
     EditUserInfoActivity activity;
@@ -344,7 +347,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                             City_AreaList.add("");
                         } else {
 
-                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
+                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++)
+                            {//该城市对应地区所有数据
                                 String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
 
                                 City_AreaList.add(AreaName);//添加该城市所有地区数据
@@ -444,7 +448,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     private TSnackbar snackBar;
 
     public void postChangedInfo(final String newValue, final String oldValue, final String type) {
-        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar = TSnackbar.make(activity.plRootView, "信息更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
+                .APPEAR_FROM_TOP_TO_DOWN);
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
@@ -474,7 +479,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                     }
                     LoginUtils.changeUserInfo(mContext, newUser);
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_CHANGEUSERINFO, newUser));
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("信息更改成功").setDuration(TSnackbar.LENGTH_LONG)
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("信息更改成功").setDuration(TSnackbar
+                            .LENGTH_LONG)
                             .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
                                     .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                 } catch (Exception e) {
@@ -492,7 +498,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                 postError(type, oldValue);
                 snackBar.setPromptThemBackground(Prompt.ERROR).setText("信息更改失败")
                         .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).setDuration(TSnackbar.LENGTH_LONG).show();
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).setDuration(TSnackbar
+                        .LENGTH_LONG).show();
             }
         });
 
@@ -554,8 +561,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      * @param rlPhoto
      */
     public void showPop(Context context, RelativeLayout rlPhoto) {
-        if (popupWindow == null)
+        if (popupWindow == null) {
             initPhotoPop(context);
+        }
         popupWindow.showAtLocation(rlPhoto, Gravity.BOTTOM, 0, 0);
 
     }
@@ -599,8 +607,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
         photoTailorUtil.startToCamera();
     }
 
-    public void onActivityResult(EditUserInfoActivity editUserInfoActivity, int requestCode, int resultCode, Intent data, RoundImageView
-            ivPhoto, Bitmap lastBmp, byte[] lastByte, String photoFolderAddress) {
+    public void onActivityResult(EditUserInfoActivity editUserInfoActivity, int requestCode, int resultCode, Intent
+            data, RoundImageView
+                                         ivPhoto, Bitmap lastBmp, byte[] lastByte, String photoFolderAddress) {
         photoTailorUtil.onActivityResult(requestCode, resultCode, data);
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
@@ -647,7 +656,8 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
      */
     public void postBitmap(byte[] lastByte) {
         final String bitmapStr = BitmapUtils.drawableToByte(lastByte);
-        snackBar = TSnackbar.make(activity.plRootView, "头像更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        snackBar = TSnackbar.make(activity.plRootView, "头像更改中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar
+                .APPEAR_FROM_TOP_TO_DOWN);
         snackBar.setPromptThemBackground(Prompt.SUCCESS);
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
@@ -656,9 +666,9 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
             protected void onResponse(String o) {
 //                {"headimgurl2":"http://img.kxt.com/Member/55887/picture/5930df721cf5b.png","uid":"55887"}
                 try {
-                    JSONObject object=new JSONObject(o);
+                    JSONObject object = new JSONObject(o);
                     String headImgUrl = object.optString("headimgurl2");
-                    if(headImgUrl!=null){
+                    if (headImgUrl != null) {
                         UserJson newUser = LoginUtils.getUserInfo(mContext);
                         newUser.setPicture(headImgUrl);
                         LoginUtils.changeUserInfo(mContext, newUser);

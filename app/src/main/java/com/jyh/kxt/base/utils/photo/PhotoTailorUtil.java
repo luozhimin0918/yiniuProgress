@@ -1,5 +1,6 @@
 package com.jyh.kxt.base.utils.photo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -82,6 +84,7 @@ public class PhotoTailorUtil {
         try {
             Camera.open().release();
         } catch (Exception e) {
+
             new AlertDialog.Builder(mActivity, ThemeUtil.getAlertTheme(mActivity))
                     .setPositiveButton("是",
                             new DialogInterface.OnClickListener() {

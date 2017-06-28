@@ -48,7 +48,7 @@ public class DownPatchService extends Service {
                 return;
             }
 
-            URL url = new URL(patchJson.getDownload_url());
+            URL url = new URL(patchJson.getUrl());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             InputStream input = conn.getInputStream();
             FileOutputStream output = new FileOutputStream(file);

@@ -195,7 +195,7 @@ public class MainPresenter extends BasePresenter {
         String versionCode = SystemUtil.getVersionName(mContext);
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-        String pjUrl = "?versionCode=" + versionCode;
+        String pjUrl = "?version=" + versionCode;
 
         volleyRequest.setDefaultDecode(false);
         volleyRequest.doGet(HttpConstant.DOWN_PATCH + pjUrl, new HttpListener<String>() {
@@ -227,11 +227,8 @@ public class MainPresenter extends BasePresenter {
 
                     String saveFilePath = FileUtils.getVersionNameFilePath(mMainActivity);
                     patchFile = new File(saveFilePath + patchJson.getPatch_code() + ".patch");
-
-//                    patchJson.setDownload_url("http:\\/\\/appapi.dyhjw.com\\/uploads\\/patch\\/2.1.3\\/1.patch");
 //                    String sdAbsolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                    patchFile = new File(sdAbsolutePath + "/1.patch");
-
+//                    patchFile = new File(sdAbsolutePath + "/" + patchJson.getPatch_code() + ".patch");
                     if (patchFile.exists()) {
                         return;
                     } else {
@@ -239,10 +236,9 @@ public class MainPresenter extends BasePresenter {
                     }
                     int patchSize;
 
-                    URL url = new URL(patchJson.getDownload_url());
+                    URL url = new URL(patchJson.getUrl());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setConnectTimeout(5 * 1000);
-                    conn.setRequestProperty("Content-type", "application/octet-stream");
 
                     InputStream input = conn.getInputStream();
 
@@ -393,6 +389,7 @@ public class MainPresenter extends BasePresenter {
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         mContext.startActivity(intent);
                     }
+                    alertDialog.dismiss();
                 }
             });
 
@@ -429,6 +426,7 @@ public class MainPresenter extends BasePresenter {
                     Intent intent3 = new Intent(Intent.ACTION_VIEW);
                     intent3.setData(Uri.parse(indexAd.getHref()));
                     mContext.startActivity(intent3);
+                    alertDialog.dismiss();
                 }
             });
 

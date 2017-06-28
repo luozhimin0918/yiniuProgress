@@ -5,28 +5,16 @@ package com.jyh.kxt.index.json;
  */
 
 public class PatchJson {
-    private String download_url;
-    private String description;
+    private String url;
     private String patch_code;
+    private String description;
 
-    //补丁路径
-    private String patch_path;
-
-
-    public String getDownload_url() {
-        return download_url;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDownload_url(String download_url) {
-        this.download_url = download_url;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getPatch_code() {
@@ -37,21 +25,20 @@ public class PatchJson {
         this.patch_code = patch_code;
     }
 
-    public String getPatch_path() {
-        return patch_path;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPatch_path(String patch_path) {
-        this.patch_path = patch_path;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
         return "PatchJson{" +
-                "download_url='" + download_url + '\'' +
-                ", description='" + description + '\'' +
+                "url='" + url + '\'' +
                 ", patch_code='" + patch_code + '\'' +
-                ", patch_path='" + patch_path + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

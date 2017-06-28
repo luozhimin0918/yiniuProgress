@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.gifdecoder.GifDecoder;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -24,8 +26,15 @@ import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
+import com.library.util.EncryptionUtils;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -205,5 +214,22 @@ public class WelcomePresenter extends BasePresenter {
             SPUtils.save(mContext, SpConstant.SETTING_PUSH, true);
             SPUtils.save(mContext, SpConstant.SETTING_SOUND, true);
         }
+    }
+
+    public void requestMainData() {
+//        VolleyRequest request = new VolleyRequest(mContext, mQueue);
+//        JSONObject jsonParam = request.getJsonParam();
+//        request.setTag("mainRequest");
+//        request.doGet(HttpConstant.INDEX_MAIN, jsonParam, new HttpListener<Object>() {
+//            @Override
+//            protected void onResponse(Object o) {
+//
+//            }
+//
+//            @Override
+//            protected void onErrorResponse(VolleyError error) {
+//                super.onErrorResponse(error);
+//            }
+//        });
     }
 }

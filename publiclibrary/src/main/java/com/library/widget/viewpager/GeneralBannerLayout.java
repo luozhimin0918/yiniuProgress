@@ -280,8 +280,7 @@ public class GeneralBannerLayout extends RelativeLayout {
         });
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (defaultImage != 0) {
-            Glide.with(getContext()
-                    .getApplicationContext())
+            Glide.with(getContext() )
                     .load(url)
                     .thumbnail(0.6f)
                     .override(500, 500)
@@ -290,8 +289,7 @@ public class GeneralBannerLayout extends RelativeLayout {
                     .placeholder(defaultImage)
                     .into(imageView);
         } else {
-            Glide.with(getContext()
-                    .getApplicationContext())
+            Glide.with(getContext() )
                     .load(url)
                     .thumbnail(0.6f)
                     .override(500, 500)

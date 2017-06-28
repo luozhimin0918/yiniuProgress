@@ -96,10 +96,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/view_zw"
-                    android:background="@drawable/shape_read_count"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/white"
+                    android:textColor="@color/font_color5"
                     android:textSize="7sp"
                     android:visibility="gone"/>
             </RelativeLayout>
@@ -134,10 +133,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/view_zan"
-                    android:background="@drawable/shape_read_count"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/white"
+                    android:textColor="@color/font_color5"
                     android:textSize="7sp"
                     android:visibility="gone"/>
             </RelativeLayout>

@@ -453,11 +453,11 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                     int theme = ThemeUtil.getAlertTheme(getContext());
                     switch (theme) {
                         case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                            Glide.with(getContext().getApplicationContext()).load(R.mipmap.icon_advert_night).into(new GlideDrawableImageViewTarget
+                            Glide.with(getContext() ).load(R.mipmap.icon_advert_night).into(new GlideDrawableImageViewTarget
                                     (ivRightIcon1));
                             break;
                         case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                            Glide.with(getContext().getApplicationContext()).load(R.mipmap.icon_advert_day).into(new GlideDrawableImageViewTarget
+                            Glide.with(getContext() ).load(R.mipmap.icon_advert_day).into(new GlideDrawableImageViewTarget
                                     (ivRightIcon1));
                             break;
                     }

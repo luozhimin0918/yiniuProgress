@@ -67,7 +67,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         llLoadView.setOnClickListener(null);
 
         ImageView ivProgress = (ImageView) llLoadView.findViewById(R.id.iv_progress);
-        Glide.with(getContext().getApplicationContext()).load(R.mipmap.loading).asGif().into(ivProgress);
+        Glide.with(getContext()).load(R.mipmap.loading).asGif().into(ivProgress);
 
         TextView tvDesc = (TextView) llLoadView.findViewById(R.id.tv_desc);
         if (desc == null) {

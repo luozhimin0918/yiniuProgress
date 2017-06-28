@@ -117,7 +117,7 @@ public class RequestQueueUtil {
      */
     public static RequestQueue newRequestQueue(Context context) {
 //        OkHttpClient okClient = getUnsafeOkHttpClient();
-        return newRequestQueue(context, /*new OkHttpStack(okClient)*/null);
+        return newRequestQueue(context.getApplicationContext(), /*new OkHttpStack(okClient)*/null);
     }
 
     /*private static OkHttpClient getUnsafeOkHttpClient() {

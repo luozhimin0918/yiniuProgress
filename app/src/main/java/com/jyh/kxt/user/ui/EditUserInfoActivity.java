@@ -1,11 +1,13 @@
 package com.jyh.kxt.user.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -125,6 +127,9 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
 
         initView();
 
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA,
+                        Manifest.permission.CAMERA}, 1000);
     }
 
     private void initView() {
