@@ -2,7 +2,9 @@ package com.library.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -43,7 +45,9 @@ public class StatusBarCompat {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     getStatusBarHeight(activity));
 
-            statusBarView.setBackgroundResource(statusColor);
+            Drawable drawable = ContextCompat.getDrawable(activity, statusColor);
+            statusBarView.setBackground(drawable);
+
             replaceLayout.addView(statusBarView, lp);
 
             replaceLayout.addView(userContentView);
@@ -78,7 +82,9 @@ public class StatusBarCompat {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     getStatusBarHeight(mContext));
 
-            statusBarView.setBackgroundResource(statusColor);
+            Drawable drawable = ContextCompat.getDrawable(mContext, statusColor);
+            statusBarView.setBackground(drawable);
+//            statusBarView.setBackgroundResource(statusColor);
             replaceLayout.addView(statusBarView, lp);
         }
     }

@@ -1,6 +1,7 @@
 package com.jyh.kxt.base;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -21,6 +22,11 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
     private boolean isUserVisible = false;
     private boolean isCreateView = false;
     private boolean isViewPagerToCurrentLocate = false;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //不保存状态
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,8 +67,12 @@ public abstract class BaseFragment extends LibFragment implements IBaseView {
         if (replaceLayout != null) {
             View fragmentStatusBar = replaceLayout.findViewWithTag("fragment_statusBar");
             if (fragmentStatusBar != null) {
-                int bgColor = ContextCompat.getColor(getContext(), statusBarColor.color);
-                fragmentStatusBar.setBackgroundColor(bgColor);
+//                int bgColor = ContextCompat.getColor(getContext(), statusBarColor.color);
+//                fragmentStatusBar.setBackgroundColor(bgColor);
+
+
+                Drawable drawable = ContextCompat.getDrawable(getContext(), statusBarColor.color);
+                fragmentStatusBar.setBackground(drawable);
             }
         }
     }

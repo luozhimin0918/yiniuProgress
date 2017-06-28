@@ -1,10 +1,8 @@
 package com.library.base;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -28,18 +26,18 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
     protected final String TAG = this.getClass().getName();
 
     public enum StatusBarColor {
-        NO_COLOR(-1), BLACK(R.color.black), THEME1(R.color.statusColor);
+        NO_COLOR(-1), BLACK(R.color.black), THEME1(R.color.theme1);
 
         public int color;
 
         StatusBarColor(int color) {
-            if (color == R.color.statusColor) {
+            if (color == R.color.theme1) {
                 if (Build.VERSION.SDK_INT < 23) {//6.0以下调用的拍照方法
-                    this.color = color;
+                    this.color = R.color.statusColor;
                 } else {
-                    this.color = R.color.theme1;
+                    this.color = color;
                 }
-            }else{
+            } else {
                 this.color = color;
             }
         }
@@ -58,7 +56,6 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LayoutInflaterCompat.setFactory(layoutInflater, this);
-
         super.onCreate(savedInstanceState);
         ActivityManager.getInstance().pushOneActivity(this);
     }

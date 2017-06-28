@@ -13,6 +13,8 @@ public class SpConstant {
      * 第一次安装
      */
     public static final String INIT_SP = "init_sp";
+    //如果Activity 被销毁了进入的, 则快速读取缓存信息
+    public static final String MAIN_ACTIVITY_FROM = "main_activity_from";
 
     /**
      * 主题
@@ -89,4 +91,5 @@ public class SpConstant {
     public static final String SETTING_SOUND = "setting_sound";//声音
 
     public static final String PATCH_INFO = "patch_info";//补丁信息
+    public static final String PATCH_PATH = "patch_path";//补丁路径
 }

@@ -48,10 +48,6 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         json.put("code", marketItemFragment.navBean.getCode());
         volleyRequest.doGet(HttpConstant.MARKET_LIST, json, new HttpListener<List<MarketItemBean>>() {
             @Override
-            protected void onStart() {
-            }
-
-            @Override
             protected void onResponse(final List<MarketItemBean> marketList) {
                 marketItemFragment.pageLoadLayout.loadOver();
                 marketDataList.clear();

@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Process;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.ui.ErrorActivity;
 import com.library.manager.ActivityManager;
+import com.library.widget.window.ToastView;
 
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {

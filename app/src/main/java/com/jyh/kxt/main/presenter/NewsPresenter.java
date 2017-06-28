@@ -13,6 +13,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.library.util.JsonUtil;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
@@ -75,7 +76,6 @@ public class NewsPresenter extends BasePresenter {
     }
 
     public void init() {
-
         newsFragment.plRootView.loadWait();
 
         if (request == null) {
@@ -84,6 +84,16 @@ public class NewsPresenter extends BasePresenter {
         }
 
         request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
+            @Override
+            protected boolean onStart() {
+                MainActivity mainActivity = (MainActivity) newsFragment.getActivity();
+                int mActivityFrom = mainActivity.mActivityFrom;
+                if (mActivityFrom == 1) {
+                    onResponse(getCacheT());
+                    return false;
+                }
+                return true;
+            }
 
             @Override
             protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {

@@ -242,7 +242,7 @@
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Channel ID">
+            android:value="NewKxt">
         </meta-data>
         <meta-data
             android:name="com.jyh.kxt.base.utils.MyGlideModule"

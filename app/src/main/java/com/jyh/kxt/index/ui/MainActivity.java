@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
@@ -72,6 +73,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.magicwindow.MLinkAPIFactory;
@@ -121,21 +124,39 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public static String mwType = null;//跳转类型 true 列表页
     public static String mwPath = null;//跳转路径
 
+    public int mActivityFrom = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.activity_anim3, R.anim.activity_out1);
-        setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             savedInstanceState.clear();
 
+            try {
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                for (int i = 0; i < fragments.size(); i++) {
+                    getSupportFragmentManager().beginTransaction().remove(fragments.get(i)).commitAllowingStateLoss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             ThemeUtil.removeAllCache();
             ActivityManager.getInstance().finishAllActivity();
+            this.finish();
 
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra(SpConstant.MAIN_ACTIVITY_FROM, 1);
+            startActivity(intent);
             return;
         }
 
+
+        overridePendingTransition(R.anim.activity_anim3, R.anim.activity_out1);
+        setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
+
+        mActivityFrom = getIntent().getIntExtra(SpConstant.MAIN_ACTIVITY_FROM, 0);
         mainPresenter = new MainPresenter(this);
 
         //侧边栏相关控件

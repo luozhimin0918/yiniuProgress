@@ -4,6 +4,7 @@ package com.jyh.kxt.base;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
@@ -37,6 +39,7 @@ import com.jyh.kxt.base.widget.night.skinnable.SkinnableViewInflater;
 import com.library.base.LibActivity;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -146,8 +149,11 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
 
         View statusBar = decorView.findViewWithTag("statusBar");
         if (statusBar != null) {
-            int bgColor = ContextCompat.getColor(this, statusBarColor.color);
-            statusBar.setBackgroundColor(bgColor);
+//            int bgColor = ContextCompat.getColor(this, statusBarColor.color);
+//            statusBar.setBackgroundResource(bgColor);
+
+            Drawable drawable = ContextCompat.getDrawable(this, statusBarColor.color);
+            statusBar.setBackground(drawable);
         }
         try {
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -316,5 +322,4 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
         Glide.with(this).pauseRequests();
         MobclickAgent.onPause(this);
     }
-
 }

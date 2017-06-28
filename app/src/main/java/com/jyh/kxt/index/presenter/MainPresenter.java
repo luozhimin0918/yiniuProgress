@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -120,6 +121,9 @@ public class MainPresenter extends BasePresenter {
      * 发送一个延迟请求, 放一些不重要的 但是必须要请求的网络信息
      */
     public void postDelayRequest() {
+        if (mMainActivity.mActivityFrom == 1) {
+            return;
+        }
         Observable<SingleThreadJson> observable = Observable.create(new Observable
                 .OnSubscribe<SingleThreadJson>() {
             @Override
@@ -238,6 +242,8 @@ public class MainPresenter extends BasePresenter {
                     URL url = new URL(patchJson.getDownload_url());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setConnectTimeout(5 * 1000);
+                    conn.setRequestProperty("Content-type", "application/octet-stream");
+
                     InputStream input = conn.getInputStream();
 
                     FileOutputStream output = new FileOutputStream(patchFile);
@@ -257,6 +263,11 @@ public class MainPresenter extends BasePresenter {
                     new Handler(mMainActivity.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
+                            String info = "文件路径: " + absolutePath +
+                                    "\n文件大小:" + new File(absolutePath).length() +
+                                    "\n下载时间:" + DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis());
+
+                            SPUtils.save(mContext, SpConstant.PATCH_PATH, info);
                             TinkerInstaller.onReceiveUpgradePatch(mMainActivity.getApplicationContext(), absolutePath);
                         }
                     });

@@ -22,8 +22,8 @@ public abstract class HttpListener<T> {
     private RequestQueue mQueue;
     private VolleyRequest.MyType superclassTypeParameter;
 
-    protected void onStart() {
-
+    protected boolean onStart() {
+        return true;
     }
 
     protected abstract void onResponse(T t);

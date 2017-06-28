@@ -17,19 +17,29 @@
 package com.jyh.kxt.base.tinker.app;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
+import com.jyh.kxt.base.utils.CrashHandler;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.jyh.kxt.push.KXTPushIntentService;
+import com.library.util.LogUtil;
+import com.library.widget.window.ToastView;
 import com.tencent.tinker.anno.DefaultLifeCycle;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
@@ -68,8 +78,8 @@ import cn.magicwindow.MagicWindowSDK;
  */
 @SuppressWarnings("unused")
 @DefaultLifeCycle(application = "com.jyh.kxt.KXTApplication",
-        flags = ShareConstants.TINKER_ENABLE_ALL,
-        loadVerifyFlag = false)
+                  flags = ShareConstants.TINKER_ENABLE_ALL,
+                  loadVerifyFlag = false)
 public class SampleApplicationLike extends DefaultApplicationLike {
     private static final String TAG = "Tinker.SampleApplicationLike";
 
@@ -141,8 +151,8 @@ public class SampleApplicationLike extends DefaultApplicationLike {
             }
         });
 
-//        CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(SampleApplicationContext.context);
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(SampleApplicationContext.context);
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
         //避免启动慢的问题

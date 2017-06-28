@@ -586,7 +586,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             if (realityFloat > 0) {
                 spannableString.setSpan(
                         new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.rise_color)),
-                        index,
+                        index-3,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -594,7 +594,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             } else if (realityFloat < 0) {
                 spannableString.setSpan(
                         new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.rise_color/*decline_color*/)),
-                        index,
+                        index-3,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {

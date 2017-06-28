@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -68,7 +69,8 @@ import butterknife.OnClick;
  * 创建日期:2017/5/5.
  */
 
-public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, AdapterView.OnItemClickListener {
+public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, AdapterView
+        .OnItemClickListener {
 
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
@@ -95,13 +97,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private TextView tvFlashTitle;
     private TextView tvFlashContent;
     private LinearLayout llFlashAd;
+    private ImageView ivFlashImage;
     private TextView tvRlTitle;
     private StarView rlStar;
     private ImageView ivRlFlag;
     private LinearLayout rlContent;
     private TextView tvContentBefore;
-    private  TextView tvContentForecast;
-    private  TextView tvContentReality;
+    private TextView tvContentForecast;
+    private TextView tvContentReality;
     private LinearLayout llRLAD;
     private LinearLayout layoutTj;
     private View layoutRL;
@@ -136,14 +139,15 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 onBackPressed();
                 break;
             case R.id.iv_collect:
-                if (isLoadOver)
+                if (isLoadOver) {
                     if (isCollect) {
                         CollectUtils.unCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson, new ObserverData() {
                             @Override
                             public void callback(Object o) {
                                 ivCollect.setSelected(false);
                                 isCollect = false;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH, flashJson));
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH,
+                                        flashJson));
                             }
 
                             @Override
@@ -157,7 +161,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                             public void callback(Object o) {
                                 ivCollect.setSelected(true);
                                 isCollect = true;
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH, flashJson));
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH,
+                                        flashJson));
                             }
 
                             @Override
@@ -166,6 +171,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                             }
                         }, null);
                     }
+                }
 
                 break;
             case R.id.iv_share:
@@ -225,6 +231,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         tvFlashTitle = (TextView) flashHeadView.findViewById(R.id.tv_flash_title);
         tvFlashContent = (TextView) flashHeadView.findViewById(R.id.tv_flash_content);
         llFlashAd = (LinearLayout) flashHeadView.findViewById(R.id.iv_adFlash);
+
+        ivFlashImage = (ImageView) flashHeadView.findViewById(R.id.iv_flash_image);
         tvRlTitle = (TextView) flashHeadView.findViewById(R.id.tv_rl_title);
         rlStar = (StarView) flashHeadView.findViewById(R.id.sv_star);
         ivRlFlag = (ImageView) flashHeadView.findViewById(R.id.iv_flag);
@@ -238,11 +246,14 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutFlash = flashHeadView.findViewById(R.id.layout_flash);
 
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
-        int headHeight = screenDisplay.heightPixels - SystemUtil.dp2px(this, 266)-SystemUtil.getStatuBarHeight(this);//两个item高度84*2 + 上下导航栏高度(48+50)
+        int headHeight = screenDisplay.heightPixels - SystemUtil.dp2px(this, 266) - SystemUtil.getStatuBarHeight
+                (this);//两个item高度84*2 + 上下导航栏高度(48+50)
         flashHeadView.setMinimumHeight(headHeight);
-        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                .WRAP_CONTENT);
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams
+                        .WRAP_CONTENT);
         flashHeadView.setLayoutParams(layoutParams);
+
     }
 
     public void initHeadData(FlashContentJson flash) {
@@ -299,8 +310,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             tvFlashTitle.setText(split[0]);
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < length; i++) {
-                if (i >= 1)
+                if (i >= 1) {
                     buffer.append(split[i]);
+                }
             }
             tvFlashContent.setText(buffer.toString().replace("<br/>", "\n").replace("<br />", "\n"));
         } else {
@@ -313,16 +325,19 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         if (ads != null && ads.size() > 0) {
             for (final SlideJson ad : ads) {
                 ImageView ivAd = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
-                        .LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup
+                                .LayoutParams.WRAP_CONTENT);
                 ivAd.setLayoutParams(params);
                 llFlashAd.addView(ivAd);
-                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
-                        .icon_def_video).into(ivAd);
+                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video)
+                        .placeholder(R.mipmap
+                                .icon_def_video).into(ivAd);
                 ivAd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, ad.getO_class(), ad.getO_action(), ad.getO_id(), ad.getHref());
+                        JumpUtils.jump(FlashActivity.this, ad.getO_class(), ad.getO_action(), ad.getO_id(), ad
+                                .getHref());
                     }
                 });
             }
@@ -334,6 +349,13 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         } else {
             tvFlashTitle.setTextColor(ContextCompat.getColor(this, R.color.font_color1));
             tvFlashContent.setTextColor(ContextCompat.getColor(this, R.color.font_color1));
+        }
+        String image = flash_kx.getImage();
+        if (!TextUtils.isEmpty(image)) {
+            ivFlashImage.setVisibility(View.VISIBLE);
+            Glide.with(this).load(image).error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    .icon_def_news).into(ivFlashImage);
+        } else {
         }
     }
 
@@ -348,17 +370,20 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 rl.getReality());
         tvRlTitle.setText(rl.getTitle());
 
-        Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(ivRlFlag);
+        Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into
+                (ivRlFlag);
 
         if (ads != null && ads.size() > 0) {
             for (SlideJson ad : ads) {
                 ImageView ivAd = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
-                        .LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup
+                                .LayoutParams.WRAP_CONTENT);
                 ivAd.setLayoutParams(params);
                 llRLAD.addView(ivAd);
-                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap
-                        .icon_def_video).into(ivAd);
+                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video)
+                        .placeholder(R.mipmap
+                                .icon_def_video).into(ivAd);
             }
         }
 
@@ -370,9 +395,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         }
         tvTime.setText(time2);
 
-       tvContentBefore.setText(this.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
-       tvContentForecast.setText(this.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
-       tvContentReality.setText(this.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
+        tvContentBefore.setText(this.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
+        tvContentForecast.setText(this.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
+        tvContentReality.setText(this.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
 
         /**
          * 前值 后值 等
@@ -579,7 +604,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position > 1) {
             NewsJson newsJson = newsAdapter.getData().get(position - 2);
-            JumpUtils.jump(this,newsJson.getO_class(),newsJson.getO_action(),newsJson.getO_id(),newsJson.getHref());
+            JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
         }
     }
 

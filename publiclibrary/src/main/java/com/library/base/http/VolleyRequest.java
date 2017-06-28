@@ -118,7 +118,10 @@ public class VolleyRequest {
         long delayRequestTime = mHttpListener.getDelayRequestTime();
         new Handler(mContext.getMainLooper()).postDelayed(new Runnable() {
             public void run() {
-                mHttpListener.onStart();
+                boolean isContinue = mHttpListener.onStart();
+                if (!isContinue) {
+                    return;
+                }
                 StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

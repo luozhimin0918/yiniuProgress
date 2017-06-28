@@ -8,9 +8,8 @@
         <item name="colorControlNormal">@color/white</item><!--搜索按钮 PopWindow菜单按钮颜色-->
 
         <item name="android:windowBackground">@color/white</item><!-- 窗口的背景颜色 -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/darker_gray</item>
 
-        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
     </style>

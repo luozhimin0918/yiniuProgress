@@ -199,18 +199,14 @@ public class SettingActivity extends BaseActivity {
                                 tvIntroducePatch.setText("已清除这个版本已经应用的补丁 ");
                                 break;
                             case 3:
-                                String patchInfo = SPUtils.getString(SettingActivity.this, SpConstant.PATCH_INFO);
-                                if (patchInfo != null) {
-                                    try {
-                                        PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
-                                        tvIntroducePatch.setText(patchJson.toString());
-                                    } catch (Exception e) {
-                                        tvIntroducePatch.setText("解析错误");
-                                    }
-                                } else {
-                                    tvIntroducePatch.setText("暂无数据");
+                                String patchPath = SPUtils.getString(SettingActivity.this, SpConstant.PATCH_PATH);
+                                try {
+                                    tvIntroducePatch.setText(patchPath);
+                                } catch (Exception e) {
+                                    tvIntroducePatch.setText("解析错误");
                                 }
                                 break;
+
                         }
                         dialog.dismiss();
                     }
