@@ -334,6 +334,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                if(flash.getIsSel()){
+                    kxHolder.flDel.setSelected(true);
+                }else{
+                    kxHolder.flDel.setSelected(false);
+                }
                 kxHolder.tvTime.setText(time);
                 kxHolder.tvContent.setText(getString(kx.getTitle()));
 
@@ -458,7 +463,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_RL:
                 FlashJson flash_rl = (FlashJson) flashJsons.get(position);
                 Flash_RL rl = JSON.parseObject(flash_rl.getContent().toString(), Flash_RL.class);
-
+                if(flash_rl.getIsSel()){
+                    rlHolder.flDel.setSelected(true);
+                }else{
+                    rlHolder.flDel.setSelected(false);
+                }
 //                boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
 
                 Glide.with(context).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into(rlHolder
@@ -530,7 +539,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_LEFT:
                 FlashJson flash_left = (FlashJson) flashJsons.get(position);
                 Flash_NEWS left = JSON.parseObject(flash_left.getContent().toString(), Flash_NEWS.class);
-
+                if(flash_left.getIsSel()){
+                    leftHolder.flDel.setSelected(true);
+                }else{
+                    leftHolder.flDel.setSelected(false);
+                }
                 Glide.with(context).load(left.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into(leftHolder
                         .ivFlash);
                 String time3 = "00:00";
@@ -557,7 +570,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_RIGHT:
                 FlashJson flash_right = (FlashJson) flashJsons.get(position);
                 Flash_NEWS right = JSON.parseObject(flash_right.getContent().toString(), Flash_NEWS.class);
-
+                if(flash_right.getIsSel()){
+                    rightHolder.flDel.setSelected(true);
+                }else{
+                    rightHolder.flDel.setSelected(false);
+                }
                 Glide.with(context).load(right.getImage()).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news).into
                         (rightHolder
                                 .ivFlash);
@@ -585,7 +602,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
             case TYPE_TOP:
                 FlashJson flash_top = (FlashJson) flashJsons.get(position);
                 Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
-
+                if(flash_top.getIsSel()){
+                    topHolder.flDel.setSelected(true);
+                }else{
+                    topHolder.flDel.setSelected(false);
+                }
                 final NEWViewHolder finalTopHolder = topHolder;
                 Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
                         .icon_def_news).into
@@ -626,6 +647,11 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 break;
             case TYPE_BOTTOM:
                 FlashJson flash_bottom = (FlashJson) flashJsons.get(position);
+                if(flash_bottom.getIsSel()){
+                    bottomHolder.flDel.setSelected(true);
+                }else{
+                    bottomHolder.flDel.setSelected(false);
+                }
                 Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
                 final NEWViewHolder finalBottomHolder = bottomHolder;
                 Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
@@ -1348,5 +1374,19 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
     public class BaseBaseViewHolder {
         public @BindView(R.id.fl_del) FrameLayout flDel;
         public @BindView(R.id.iv_del) ImageView ivDel;
+    }
+
+    public void notifyDefaul(){
+        for(int j=0;j<flashJsons.size();j++){
+            try{
+                FlashJson flashJson = (FlashJson) flashJsons.get(j);
+                flashJson.setSel(false);
+            }catch (Exception e){
+
+            }
+
+        }
+        delIds.clear();
+        notifyDataSetChanged();
     }
 }

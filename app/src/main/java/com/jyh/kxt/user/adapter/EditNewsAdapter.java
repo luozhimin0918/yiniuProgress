@@ -223,4 +223,12 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
             ButterKnife.bind(this, view);
         }
     }
+
+    public void notifyDefaul(){
+        for(NewsJson jj:dataList){
+            jj.setSel(false);
+        }
+        delIds.clear();
+        notifyDataSetChanged();
+    }
 }

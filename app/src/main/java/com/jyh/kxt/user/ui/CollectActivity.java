@@ -322,6 +322,24 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if(videoFragment!=null&&videoFragment.adapter!=null){
+            videoFragment.adapter.notifyDefaul();
+        }
+        if(newsFragment!=null&&newsFragment.adapter!=null){
+            newsFragment.adapter.notifyDefaul();
+        }
+        if(flashFragment!=null&&flashFragment.adapter!=null){
+            flashFragment.adapter.notifyDefaul();
+        }
+        if(authorFragment!=null&&authorFragment.adapter!=null){
+            authorFragment.adapter.notifyDefaul();
+        }
+        delNum=0;
+        tvDel.setText("删除(" + delNum + ")");
+        isAuthorAllSel=false;
+        isFlashAllSel=false;
+        isNewsAllSel=false;
+        isVideoAllSel=false;
         switch (position) {
             case 0:
                 if (isVideoEdit) {

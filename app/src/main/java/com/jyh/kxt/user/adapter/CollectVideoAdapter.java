@@ -169,6 +169,14 @@ public class CollectVideoAdapter extends BaseListAdapter<VideoListJson> {
         notifyDataSetChanged();
     }
 
+    public void notifyDefaul(){
+        for(VideoListJson jj:dataList){
+            jj.setSel(false);
+        }
+        delIds.clear();
+        notifyDataSetChanged();
+    }
+
     /**
      * 获取删除id
      *
