@@ -160,6 +160,7 @@ public class CollectVideoPresenter extends BasePresenter {
                             lastId = "";
                         }
                         collectVideoFragment.initData(o);
+                        CollectUtils.netToLocalSynchronization(mContext, VarConstant.COLLECT_TYPE_VIDEO, o);
                         collectVideoFragment.plRootView.loadOver();
                     }
                 } catch (Exception e) {
