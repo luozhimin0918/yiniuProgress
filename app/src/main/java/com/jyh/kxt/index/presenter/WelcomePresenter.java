@@ -8,12 +8,14 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -71,21 +73,22 @@ public class WelcomePresenter extends BasePresenter {
                         welcomeActivity.ivWelcome.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = null;
-                                if (TextUtils.isEmpty(loadAd.getHref())) {
-                                    //跳转至应用中的某一模块
-                                    intent = new Intent(mContext, MainActivity.class);
-                                    intent.putExtra(IntentConstant.O_CLASS, loadAd.getO_class());
-                                    intent.putExtra(IntentConstant.O_ACTION, loadAd.getO_action());
-                                    intent.putExtra(IntentConstant.O_ID, loadAd.getO_id());
-                                } else {
-                                    //跳转至广告页
-                                    intent = new Intent(mContext, WebActivity.class);
-                                    intent.putExtra(IntentConstant.NAME, loadAd.getTitle());
-                                    intent.putExtra(IntentConstant.WEBURL, loadAd.getHref());
-                                    intent.putExtra(IntentConstant.SOURCE, WelcomeActivity.class.getName());
-                                }
-                                mContext.startActivity(intent);
+//                                Intent intent = null;
+//                                if (TextUtils.isEmpty(loadAd.getHref())) {
+//                                    //跳转至应用中的某一模块
+//                                    intent = new Intent(mContext, MainActivity.class);
+//                                    intent.putExtra(IntentConstant.O_CLASS, loadAd.getO_class());
+//                                    intent.putExtra(IntentConstant.O_ACTION, loadAd.getO_action());
+//                                    intent.putExtra(IntentConstant.O_ID, loadAd.getO_id());
+//                                } else {
+//                                    //跳转至广告页
+//                                    intent = new Intent(mContext, WebActivity.class);
+//                                    intent.putExtra(IntentConstant.NAME, loadAd.getTitle());
+//                                    intent.putExtra(IntentConstant.WEBURL, loadAd.getHref());
+//                                    intent.putExtra(IntentConstant.SOURCE, WelcomeActivity.class.getName());
+//                                }
+//                                mContext.startActivity(intent);
+                                JumpUtils.jump(welcomeActivity,loadAd.getO_class(),loadAd.getO_action(),loadAd.getO_id(),loadAd.getHref());
                             }
                         });
                         advertTimeManage();

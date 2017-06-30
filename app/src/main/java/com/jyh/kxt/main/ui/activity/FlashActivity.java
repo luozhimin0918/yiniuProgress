@@ -213,17 +213,27 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 plvContent.getRefreshableView().addHeaderView(flashHeadView);
             }
             initHeadData(flash);
+
+            if (newsAdapter == null) {
+                newsAdapter = new NewsAdapter(this, article);
+                plvContent.setAdapter(newsAdapter);
+            } else {
+                newsAdapter.setData(article);
+            }
+            plRootView.loadOver();
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (TextUtils.isEmpty(flash.getKuaixun().getContent())) {
+                    plRootView.setNullText("这条数据不存在");
+                    plRootView.loadEmptyData();
+                } else
+                    plRootView.loadError();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                plRootView.loadError();
+            }
         }
-        if (newsAdapter == null) {
-            newsAdapter = new NewsAdapter(this, article);
-            plvContent.setAdapter(newsAdapter);
-        } else {
-            newsAdapter.setData(article);
-        }
-
-        plRootView.loadOver();
 
     }
 
@@ -267,36 +277,31 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
     }
 
-    public void initHeadData(FlashContentJson flash) {
-        try {
-            flashJson = flash.getKuaixun();
+    public void initHeadData(FlashContentJson flash) throws Exception {
+        flashJson = flash.getKuaixun();
 
-            isCollect = CollectUtils.isCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson);
+        isCollect = CollectUtils.isCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson);
 
-            String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
-            MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
-            String url_kx_share = config.getUrl_kx_share();
+        String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
+        MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
+        String url_kx_share = config.getUrl_kx_share();
 
-            shareUrl = url_kx_share.replace("{id}", flashJson.getSocre());
+        shareUrl = url_kx_share.replace("{id}", flashJson.getSocre());
 
-            ivCollect.setSelected(isCollect);
+        ivCollect.setSelected(isCollect);
 
-            List<SlideJson> ads = flash.getAd();
-            String type = flashJson.getCode();
-            switch (type) {
-                case VarConstant.SOCKET_FLASH_KUAIXUN:
-                    initFlash(flashJson.getContent(), ads);
-                    break;
-                case VarConstant.SOCKET_FLASH_CJRL:
-                    initRl(flashJson.getContent(), ads);
-                    break;
-            }
-            plRootView.loadOver();
-            isLoadOver = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            plRootView.loadError();
+        List<SlideJson> ads = flash.getAd();
+        String type = flashJson.getCode();
+        switch (type) {
+            case VarConstant.SOCKET_FLASH_KUAIXUN:
+                initFlash(flashJson.getContent(), ads);
+                break;
+            case VarConstant.SOCKET_FLASH_CJRL:
+                initRl(flashJson.getContent(), ads);
+                break;
         }
+        plRootView.loadOver();
+        isLoadOver = true;
     }
 
     private void initFlash(String content, List<SlideJson> ads) throws Exception {

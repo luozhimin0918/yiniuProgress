@@ -271,7 +271,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
             int width = getWidth();
             if (width > sumWidth) {
                 if (getWidth() / titles.length < maxTextLenght) {
-                    itemSpaceEqualWidth=maxTextLenght;
+                    itemSpaceEqualWidth = maxTextLenght;
                 }
                 setTabSpaceEqual(true);
             }
@@ -364,21 +364,23 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         tabView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = mTabsContainer.indexOfChild(v);
-                if (position != -1) {
-                    if (mViewPager.getCurrentItem() != position) {
-                        if (mSnapOnTabClick) {
-                            mViewPager.setCurrentItem(position, false);
-                        } else {
-                            mViewPager.setCurrentItem(position);
-                        }
+                if (isClickable) {
+                    int position = mTabsContainer.indexOfChild(v);
+                    if (position != -1) {
+                        if (mViewPager.getCurrentItem() != position) {
+                            if (mSnapOnTabClick) {
+                                mViewPager.setCurrentItem(position, false);
+                            } else {
+                                mViewPager.setCurrentItem(position);
+                            }
 
-                        if (mListener != null) {
-                            mListener.onTabSelect(position);
-                        }
-                    } else {
-                        if (mListener != null) {
-                            mListener.onTabReselect(position);
+                            if (mListener != null) {
+                                mListener.onTabSelect(position);
+                            }
+                        } else {
+                            if (mListener != null) {
+                                mListener.onTabReselect(position);
+                            }
                         }
                     }
                 }
@@ -394,6 +396,18 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         }
 
         mTabsContainer.addView(tabView, position, lp_tab);
+    }
+
+    private boolean isClickable = true;
+
+    @Override
+    public boolean isClickable() {
+        return isClickable;
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        isClickable = clickable;
     }
 
     protected void updateTabStyles() {
