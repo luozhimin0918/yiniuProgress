@@ -256,14 +256,14 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         adapter.addData(moreFlashs);
                         break;
                     case VarConstant.SOCKET_CMD_TIMELY:
-                        String doWhat = socket.optString(IntentConstant.SOCKET_DO);
                         Boolean isSound = SPUtils.getBooleanTrue(mContext, SpConstant.FLASH_FILTRATE_SOUND);
                         Boolean isTop = SPUtils.getBooleanTrue(mContext, SpConstant.FLASH_FILTRATE_TOP);
+                        FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG)
+                                .toString(), FlashJson
+                                .class);
+                        String doWhat = newFlash.getDoWhat();
                         if (doWhat == null) {
                             //添加新快讯
-                            FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG)
-                                    .toString(), FlashJson
-                                    .class);
                             if (isTop) {
                                 topNotice(newFlash);
                             }
@@ -274,14 +274,16 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         } else {
                             List<FlashJson> flashJsons = adapter.getData();
                             int size = flashJsons.size();
+                            Log.i("快讯", str);
+                            Log.i("快讯", "do=" + doWhat);
                             switch (doWhat) {
                                 case VarConstant.SOCKET_DO_DELETE:
                                     //删除
+                                    Log.i("快讯", "delete");
                                     for (int i = 0; i < size; i++) {
                                         if (flashJsons.get(i) instanceof FlashJson) {
                                             FlashJson flashJson = flashJsons.get(i);
-                                            String id = socket.getJSONObject(IntentConstant.SOCKET_MSG).getString
-                                                    (IntentConstant.SOCKET_ID);
+                                            String id = newFlash.getSocre();
                                             if (id.equals(flashJson.getSocre())) {
                                                 flashJsons.remove(flashJson);
                                             }
@@ -291,16 +293,14 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                     break;
                                 case VarConstant.SOCKET_DO_MODIFY:
                                     //修改
+                                    Log.i("快讯", "modify");
                                     for (int i = 0; i < size; i++) {
                                         if (flashJsons.get(i) instanceof FlashJson) {
                                             FlashJson flashJson = flashJsons.get(i);
                                             String localId = flashJson.getSocre();
-                                            FlashJson remoteFlash = JSON.parseObject(socket.getJSONObject
-                                                    (IntentConstant.SOCKET_MSG)
-                                                    .toString(), FlashJson.class);
-                                            String remoteId = remoteFlash.getSocre();
+                                            String remoteId = newFlash.getSocre();
                                             if (localId.equals(remoteId)) {
-                                                flashJsons.set(i, remoteFlash);
+                                                flashJsons.set(i, newFlash);
                                             }
                                         }
                                     }
@@ -308,9 +308,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                                     break;
                                 default:
                                     //添加新快讯
-                                    FlashJson newFlash = JSON.parseObject(socket.getString(IntentConstant.SOCKET_MSG)
-                                            .toString(), FlashJson
-                                            .class);
+                                    Log.i("快讯", "default");
                                     if (isTop) {
                                         topNotice(newFlash);
                                     }
@@ -327,6 +325,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.i("快讯", "异常");
         }
     }
 

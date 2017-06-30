@@ -26,8 +26,18 @@ public class FlashJson implements Parcelable {
     private boolean isColloct;//是否收藏
     private boolean isShowMore;//是否显示更多
     private String time;
+    @JSONField(name = "do")
+    private String doWhat;
 
     private boolean isSel;
+
+    public String getDoWhat() {
+        return doWhat;
+    }
+
+    public void setDoWhat(String doWhat) {
+        this.doWhat = doWhat;
+    }
 
     public boolean isSel() {
         return isSel;
@@ -162,9 +172,9 @@ public class FlashJson implements Parcelable {
         this.dataType = in.readInt();
     }
 
-    @Generated(hash = 595772489)
+    @Generated(hash = 992995267)
     public FlashJson(String uid, String socre, String code, String content, boolean isColloct,
-                     boolean isShowMore, String time, boolean isSel, int dataType) {
+            boolean isShowMore, String time, String doWhat, boolean isSel, int dataType) {
         this.uid = uid;
         this.socre = socre;
         this.code = code;
@@ -172,6 +182,7 @@ public class FlashJson implements Parcelable {
         this.isColloct = isColloct;
         this.isShowMore = isShowMore;
         this.time = time;
+        this.doWhat = doWhat;
         this.isSel = isSel;
         this.dataType = dataType;
     }
