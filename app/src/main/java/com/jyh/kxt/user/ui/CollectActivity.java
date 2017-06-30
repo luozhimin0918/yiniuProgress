@@ -3,6 +3,7 @@ package com.jyh.kxt.user.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+import com.library.widget.viewpager.ControllableViewPager;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -45,7 +47,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
-    @BindView(R.id.vp_content) ViewPager vpContent;
+    @BindView(R.id.vp_content) ControllableViewPager vpContent;
     @BindView(R.id.iv_selAll) ImageView ivSelAll;
     @BindView(R.id.tv_del) TextView tvDel;
     @BindView(R.id.ll_del) LinearLayout llDel;
@@ -110,7 +112,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
             case R.id.iv_bar_function:
                 //编辑
                 if (snackBar != null && snackBar.isShownOrQueued()) {
-
+                    editMode(false);
                 } else {
 
                     switch (vpContent.getCurrentItem()) {
@@ -128,6 +130,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                                 llDel.setVisibility(View.GONE);
                                 ivBarFunction.setText("编辑");
                             }
+                            editMode(isVideoEdit);
                             break;
                         case 1:
                             if (newsFragment.adapter != null && newsFragment.adapter.getData().size() > 0) {
@@ -143,6 +146,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                                 llDel.setVisibility(View.GONE);
                                 ivBarFunction.setText("编辑");
                             }
+                            editMode(isNewsEdit);
                             break;
                         case 2:
                             if (flashFragment.adapter != null && flashFragment.adapter.getData().size() > 0) {
@@ -158,6 +162,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                                 llDel.setVisibility(View.GONE);
                                 ivBarFunction.setText("编辑");
                             }
+                            editMode(isFlashEdit);
                             break;
                         case 3:
                             if (authorFragment.adapter != null && authorFragment.adapter.getData().size() > 0) {
@@ -173,6 +178,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                                 llDel.setVisibility(View.GONE);
                                 ivBarFunction.setText("编辑");
                             }
+                            editMode(isAuthorEdit);
                             break;
                     }
                 }
@@ -257,6 +263,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                 break;
         }
         ivBarFunction.setText("编辑");
+        editMode(false);
     }
 
     @Override
@@ -325,24 +332,24 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if(videoFragment!=null&&videoFragment.adapter!=null){
+        if (videoFragment != null && videoFragment.adapter != null) {
             videoFragment.adapter.notifyDefaul();
         }
-        if(newsFragment!=null&&newsFragment.adapter!=null){
+        if (newsFragment != null && newsFragment.adapter != null) {
             newsFragment.adapter.notifyDefaul();
         }
-        if(flashFragment!=null&&flashFragment.adapter!=null){
+        if (flashFragment != null && flashFragment.adapter != null) {
             flashFragment.adapter.notifyDefaul();
         }
-        if(authorFragment!=null&&authorFragment.adapter!=null){
+        if (authorFragment != null && authorFragment.adapter != null) {
             authorFragment.adapter.notifyDefaul();
         }
-        delNum=0;
+        delNum = 0;
         tvDel.setText("删除(" + delNum + ")");
-        isAuthorAllSel=false;
-        isFlashAllSel=false;
-        isNewsAllSel=false;
-        isVideoAllSel=false;
+        isAuthorAllSel = false;
+        isFlashAllSel = false;
+        isNewsAllSel = false;
+        isVideoAllSel = false;
         switch (position) {
             case 0:
                 if (isVideoEdit) {
@@ -353,6 +360,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     ivBarFunction.setText("编辑");
                 }
                 ivSelAll.setSelected(isVideoAllSel);
+                editMode(isVideoEdit);
                 break;
             case 1:
                 if (isNewsEdit) {
@@ -363,6 +371,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     ivBarFunction.setText("编辑");
                 }
                 ivSelAll.setSelected(isNewsAllSel);
+                editMode(isNewsEdit);
                 break;
             case 2:
                 if (isFlashEdit) {
@@ -373,6 +382,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     ivBarFunction.setText("编辑");
                 }
                 ivSelAll.setSelected(isFlashAllSel);
+                editMode(isFlashEdit);
                 break;
             case 3:
                 if (isAuthorEdit) {
@@ -383,6 +393,7 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                     ivBarFunction.setText("编辑");
                 }
                 ivSelAll.setSelected(isAuthorAllSel);
+                editMode(isAuthorEdit);
                 break;
         }
     }
@@ -411,6 +422,11 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
             authorFragment.onChangeTheme();
         if (stlNavigationBar != null)
             stlNavigationBar.notifyDataSetChanged();
+    }
+
+    private void editMode(boolean isEdit) {
+        stlNavigationBar.setClickable(!isEdit);
+        vpContent.setScrollable(!isEdit);
     }
 
     @Override

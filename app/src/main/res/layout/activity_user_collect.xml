@@ -69,7 +69,7 @@
         tl:tl_textsize="@dimen/describe_font_size4"
         />
 
-    <android.support.v4.view.ViewPager
+    <com.library.widget.viewpager.ControllableViewPager
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
