@@ -468,6 +468,7 @@ public class NewsContentPresenter extends BasePresenter {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 addDianZanCount = "1";
+                newsContentActivity.tvDianCount.setVisibility(View.VISIBLE);
             }
             newsContentActivity.tvDianCount.setText(addDianZanCount);
 

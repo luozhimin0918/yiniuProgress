@@ -254,51 +254,55 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                isFirstMoved = false;
-                downX = event.getX();
-                downY = event.getY();
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                isFirstMoved = false;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                nowMovingX = event.getX();
-                nowMovingY = event.getY();
-                if (!isFirstMoved) {
-                    isFirstMoved = true;
+        try {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                    isFirstMoved = false;
+                    downX = event.getX();
+                    downY = event.getY();
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    isFirstMoved = false;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    nowMovingX = event.getX();
+                    nowMovingY = event.getY();
+                    if (!isFirstMoved) {
+                        isFirstMoved = true;
+                        lastMovedX = nowMovingX;
+                        lastMovedY = nowMovingY;
+                    }
+                    float dX = 0.0f;
+                    float dY = 0.0f;
+                    RectF rectf = getRectf(matrix);
+                    // 判断滑动方向
+                    final float scrollX = nowMovingX - lastMovedX;
+                    // 判断滑动方向
+                    final float scrollY = nowMovingY - lastMovedY;
+                    // 图片高度大于控件高度
+                    if (rectf.height() > mHeight && canSmoothY()) {
+                        dY = nowMovingY - lastMovedY;
+                    }
+
+                    // 图片宽度大于控件宽度
+                    if (rectf.width() > mWidth && canSmoothX()) {
+                        dX = nowMovingX - lastMovedX;
+                    }
+                    matrix.postTranslate(dX, dY);
+
+                    remedyXAndY(dX, dY);
+
                     lastMovedX = nowMovingX;
                     lastMovedY = nowMovingY;
-                }
-                float dX = 0.0f;
-                float dY = 0.0f;
-                RectF rectf = getRectf(matrix);
-                // 判断滑动方向
-                final float scrollX = nowMovingX - lastMovedX;
-                // 判断滑动方向
-                final float scrollY = nowMovingY - lastMovedY;
-                // 图片高度大于控件高度
-                if (rectf.height() > mHeight && canSmoothY()) {
-                    dY = nowMovingY - lastMovedY;
-                }
-
-                // 图片宽度大于控件宽度
-                if (rectf.width() > mWidth && canSmoothX()) {
-                    dX = nowMovingX - lastMovedX;
-                }
-                matrix.postTranslate(dX, dY);
-
-                remedyXAndY(dX, dY);
-
-                lastMovedX = nowMovingX;
-                lastMovedY = nowMovingY;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                isFirstMoved = false;
-                break;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    isFirstMoved = false;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return scaleGestureDetector.onTouchEvent(event);
     }

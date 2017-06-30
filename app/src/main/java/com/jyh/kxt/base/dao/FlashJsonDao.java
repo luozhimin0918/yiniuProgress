@@ -31,8 +31,9 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
         public final static Property IsColloct = new Property(4, boolean.class, "isColloct", false, "IS_COLLOCT");
         public final static Property IsShowMore = new Property(5, boolean.class, "isShowMore", false, "IS_SHOW_MORE");
         public final static Property Time = new Property(6, String.class, "time", false, "TIME");
-        public final static Property IsSel = new Property(7, boolean.class, "isSel", false, "IS_SEL");
-        public final static Property DataType = new Property(8, int.class, "dataType", false, "DATA_TYPE");
+        public final static Property DoWhat = new Property(7, String.class, "doWhat", false, "DO_WHAT");
+        public final static Property IsSel = new Property(8, boolean.class, "isSel", false, "IS_SEL");
+        public final static Property DataType = new Property(9, int.class, "dataType", false, "DATA_TYPE");
     }
 
 
@@ -55,8 +56,9 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
                 "\"IS_COLLOCT\" INTEGER NOT NULL ," + // 4: isColloct
                 "\"IS_SHOW_MORE\" INTEGER NOT NULL ," + // 5: isShowMore
                 "\"TIME\" TEXT," + // 6: time
-                "\"IS_SEL\" INTEGER NOT NULL ," + // 7: isSel
-                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 8: dataType
+                "\"DO_WHAT\" TEXT," + // 7: doWhat
+                "\"IS_SEL\" INTEGER NOT NULL ," + // 8: isSel
+                "\"DATA_TYPE\" INTEGER NOT NULL );"); // 9: dataType
     }
 
     /** Drops the underlying database table. */
@@ -95,8 +97,13 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
         if (time != null) {
             stmt.bindString(7, time);
         }
-        stmt.bindLong(8, entity.getIsSel() ? 1L: 0L);
-        stmt.bindLong(9, entity.getDataType());
+ 
+        String doWhat = entity.getDoWhat();
+        if (doWhat != null) {
+            stmt.bindString(8, doWhat);
+        }
+        stmt.bindLong(9, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(10, entity.getDataType());
     }
 
     @Override
@@ -129,8 +136,13 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
         if (time != null) {
             stmt.bindString(7, time);
         }
-        stmt.bindLong(8, entity.getIsSel() ? 1L: 0L);
-        stmt.bindLong(9, entity.getDataType());
+ 
+        String doWhat = entity.getDoWhat();
+        if (doWhat != null) {
+            stmt.bindString(8, doWhat);
+        }
+        stmt.bindLong(9, entity.getIsSel() ? 1L: 0L);
+        stmt.bindLong(10, entity.getDataType());
     }
 
     @Override
@@ -148,8 +160,9 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
             cursor.getShort(offset + 4) != 0, // isColloct
             cursor.getShort(offset + 5) != 0, // isShowMore
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // time
-            cursor.getShort(offset + 7) != 0, // isSel
-            cursor.getInt(offset + 8) // dataType
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // doWhat
+            cursor.getShort(offset + 8) != 0, // isSel
+            cursor.getInt(offset + 9) // dataType
         );
         return entity;
     }
@@ -163,8 +176,9 @@ public class FlashJsonDao extends AbstractDao<FlashJson, Void> {
         entity.setIsColloct(cursor.getShort(offset + 4) != 0);
         entity.setIsShowMore(cursor.getShort(offset + 5) != 0);
         entity.setTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setIsSel(cursor.getShort(offset + 7) != 0);
-        entity.setDataType(cursor.getInt(offset + 8));
+        entity.setDoWhat(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setIsSel(cursor.getShort(offset + 8) != 0);
+        entity.setDataType(cursor.getInt(offset + 9));
      }
     
     @Override

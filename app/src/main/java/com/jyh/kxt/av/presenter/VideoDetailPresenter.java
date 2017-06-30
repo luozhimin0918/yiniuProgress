@@ -2,6 +2,9 @@ package com.jyh.kxt.av.presenter;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -144,6 +147,49 @@ public class VideoDetailPresenter extends BasePresenter {
 
                     TextView tvPlayCount = ButterKnife.findById(detailTitle, R.id.tv_playCount);
                     tvPlayCount.setText(detailJson.getNum_play());
+
+                    TextView tvCreateTime = ButterKnife.findById(detailTitle, R.id.tv_createTime);
+                    long timeLong = Long.parseLong(detailJson.getCreate_time()) * 1000;
+                    CharSequence formatData = DateFormat.format("yyyy-MM-dd", timeLong);
+                    tvCreateTime.setText(formatData);
+
+                    TextView tvSynopsisBtn = ButterKnife.findById(detailTitle, R.id.tv_synopsis_btn);
+                    tvSynopsisBtn.setTag("n");
+
+                    final TextView tvSynopsisContent = ButterKnife.findById(detailTitle, R.id.tv_synopsis_content);
+
+                    if (TextUtils.isEmpty(detailJson.getIntroduce())) {
+                        detailJson.setIntroduce("暂无介绍");
+                    }
+
+                    tvSynopsisContent.setText(detailJson.getIntroduce());
+
+                    tvSynopsisBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TextView tvSynopsisBtn = (TextView) v;
+                            if ("n".equals(v.getTag())) {
+                                v.setTag("y");
+                                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                        tvSynopsisBtn,
+                                        0,
+                                        0,
+                                        R.mipmap.icon_flash_arrow_top,
+                                        0);
+                                tvSynopsisContent.setVisibility(View.VISIBLE);
+                            } else {
+                                v.setTag("n");
+                                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                        tvSynopsisBtn,
+                                        0,
+                                        0,
+                                        R.mipmap.icon_flash_arrow_down,
+                                        0);
+                                tvSynopsisContent.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+
 
                     videoDetailActivity.commentPresenter.createMoreVideoView(detailJson.getVideo());
 
@@ -416,7 +462,7 @@ public class VideoDetailPresenter extends BasePresenter {
                                     addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    addDianZanCount="1";
+                                    addDianZanCount = "1";
                                 }
                                 videoDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
                                 videoDetailActivity.tvZanCount.setText(addDianZanCount);

@@ -368,8 +368,8 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
 
         SoftKeyBoardListener.setListener(this, this);
 
-        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-
+        popupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @Override

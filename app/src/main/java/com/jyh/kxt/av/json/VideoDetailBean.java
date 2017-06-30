@@ -28,6 +28,7 @@ public class VideoDetailBean {
     private String picture;
     private String title;
     private String url;
+    private String introduce;
     private List<VideoDetailVideoBean> video;
 
     public String getCategory_id() {
@@ -116,5 +117,13 @@ public class VideoDetailBean {
 
     public void setVideo(List<VideoDetailVideoBean> video) {
         this.video = video;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 }

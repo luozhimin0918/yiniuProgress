@@ -61,8 +61,9 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
         }
 
         VideoListJson videoBean = dataList.get(position);
-        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_news).placeholder(R.mipmap
-                .icon_def_news).into(viewHolder.ivPhoto);
+        Glide.with(context).load(HttpConstant.IMG_URL + videoBean.getPicture()).error(R.mipmap.icon_def_news)
+                .placeholder(R.mipmap
+                        .icon_def_news).into(viewHolder.ivPhoto);
         setContent(viewHolder, videoBean);
 
         try {
@@ -81,8 +82,11 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
         String content = videoBean.getTitle();
         if (RegexValidateUtil.isEmpty(searchKey)) {
         } else {
-            if (content.contains(searchKey)) {
+            if (content.contains(searchKey) || content.contains(searchKey.toUpperCase())) {
                 int searchKeyIndex = content.indexOf(searchKey);
+                if (searchKeyIndex == -1) {
+                    searchKeyIndex = content.indexOf(searchKey.toUpperCase());
+                }
                 String before = content.substring(0, searchKeyIndex);
                 String end = content.substring(searchKeyIndex + searchKey.length());
 
@@ -100,7 +104,8 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
                         break;
                 }
 
-                content = "<font color='" + defalutColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
+                content = "<font color='" + defalutColor + "'>" + before + "</font><font color='" + keyColor + "'>" +
+                        searchKey +
                         "</font><font " +
                         "color='" + defalutColor +
                         "'>" + end + "</font>";
@@ -108,17 +113,19 @@ public class VideoSearchAdapter extends BaseListAdapter<VideoListJson> {
         }
         viewHolder.tvTitle.setText(Html.fromHtml(content));
 
-        viewHolder.ivPlay.setImageDrawable(ContextCompat.getDrawable(context,R.mipmap.icon_video_play_big));
+        viewHolder.ivPlay.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_video_play_big));
 
         viewHolder.tvTime.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
         int paddingVal = SystemUtil.dp2px(context, 4);
         viewHolder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(viewHolder.tvTime, R.mipmap.icon_video_time, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(viewHolder.tvTime, R.mipmap.icon_video_time,
+                0, 0, 0);
 
         viewHolder.tvPlayCount.setTextColor(ContextCompat.getColor(context, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(context, 4);
         viewHolder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(viewHolder.tvPlayCount, R.mipmap.icon_video_play_small, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(viewHolder.tvPlayCount, R.mipmap
+                .icon_video_play_small, 0, 0, 0);
     }
 
     public void setData(List<VideoListJson> list) {

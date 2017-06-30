@@ -66,9 +66,13 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (isShowTitle)
-            if (position == 0) holder.tv.setVisibility(View.VISIBLE);
-            else holder.tv.setVisibility(View.GONE);
+        if (isShowTitle) {
+            if (position == 0) {
+                holder.tv.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv.setVisibility(View.GONE);
+            }
+        }
 
         final NewsJson news = dataList.get(position);
 
@@ -76,10 +80,10 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         String picture;
         String picture1 = news.getPicture();
-        if(isSplice){
-            picture=HttpConstant.IMG_URL + picture1;
-        }else{
-            picture= picture1;
+        if (isSplice) {
+            picture = HttpConstant.IMG_URL + picture1;
+        } else {
+            picture = picture1;
         }
 
         Glide.with(mContext).load(picture)
@@ -90,14 +94,15 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         String author;
         String type = news.getType();
-        if("ad".equals(type)){
-            author="广告";
-        }else{
+        if ("ad".equals(type)) {
+            author = "广告";
+        } else {
             author = news.getAuthor();
-            if (!RegexValidateUtil.isEmpty(author))
+            if (!RegexValidateUtil.isEmpty(author)) {
                 author = "文/" + author;
-            else
-                author="";
+            } else {
+                author = "";
+            }
         }
 
 
@@ -128,8 +133,11 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
             }
         } else {
-            if (content.contains(searchKey)) {
+            if (content.contains(searchKey) || content.contains(searchKey.toUpperCase())) {
                 int searchKeyIndex = content.indexOf(searchKey);
+                if (searchKeyIndex == -1) {
+                    searchKeyIndex = content.indexOf(searchKey.toUpperCase());
+                }
                 String before = content.substring(0, searchKeyIndex);
                 String end = content.substring(searchKeyIndex + searchKey.length());
 
@@ -141,29 +149,31 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
                         defalutColor = "#909090";
                         keyColor = "#115E91";
-                        browerColor="#4D4D4D";
+                        browerColor = "#4D4D4D";
                         break;
                     case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
                         defalutColor = "#2E3239";
                         keyColor = "#009AFF";
-                        browerColor="#A1ABB2";
+                        browerColor = "#A1ABB2";
                         break;
                 }
 
                 String textColor;
                 if (browered) {
                     textColor = browerColor;
-                } else
+                } else {
                     textColor = defalutColor;
+                }
 
-                content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
+                content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" +
+                        searchKey +
                         "</font><font " +
                         "color='" + textColor +
                         "'>" + end + "</font>";
             }
         }
         holder.tvTitle.setText(Html.fromHtml(content));
-        holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext,R.color.font_color6));
+        holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
     }
 
     public void addData(List<NewsJson> newsJsons) {

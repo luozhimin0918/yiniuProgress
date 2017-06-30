@@ -2,30 +2,67 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/videoTitleHeight"
-    android:paddingLeft="@dimen/videoTitlePadding"
-    android:paddingRight="@dimen/videoTitlePadding">
+    android:layout_height="wrap_content"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/tv_synopsis_btn"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_toLeftOf="@+id/tv_playCount"
+        android:layout_alignParentLeft="true"
+        android:maxLines="3"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/content_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_synopsis_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:ellipsize="end"
+        android:drawableRight="@mipmap/icon_flash_arrow_down"
+        android:text="简介"
+        android:layout_marginLeft="8dp"
+        android:maxLines="1"
+        android:drawablePadding="5dp"
+        android:layout_alignBottom="@+id/tv_title"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <TextView
+        android:id="@+id/tv_synopsis_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_below="@+id/tv_title"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size2"/>
+
 
     <TextView
         android:id="@+id/tv_playCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_synopsis_content"
+        android:layout_marginTop="10dp"
         android:drawableLeft="@mipmap/icon_video_play_small"
+        android:drawablePadding="3dp"
+        android:textColor="@color/font_color6"
+        android:textSize="@dimen/describe_font_size1"/>
+
+    <TextView
+        android:id="@+id/tv_createTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_playCount"
+        android:layout_alignTop="@+id/tv_playCount"
+        android:layout_marginLeft="30dp"
+        android:drawableLeft="@mipmap/icon_explore_time"
         android:drawablePadding="3dp"
         android:textColor="@color/font_color6"
         android:textSize="@dimen/describe_font_size1"/>
