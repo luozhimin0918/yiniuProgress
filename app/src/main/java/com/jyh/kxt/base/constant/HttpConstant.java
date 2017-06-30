@@ -149,6 +149,7 @@ public class HttpConstant {
      * 点评
      */
     public static final String GOOD_NEWS = BASE_URL + "news/addGood" + VarConstant.HTTP_CONTENT;//点赞-文章 ?id={}
+    public static final String GOOD_BLOG = BASE_URL + "blog/addGood" + VarConstant.HTTP_CONTENT;//点赞-文章 ?id={}
     public static final String GOOD_VIDEO = BASE_URL + "video/addGood" + VarConstant.HTTP_CONTENT;//点赞-视听 ?id={}
     public static final String GOOD_COMMENT = BASE_URL + "comment/addGood" + VarConstant.HTTP_CONTENT;//点赞-评论
     // ?id={}&type

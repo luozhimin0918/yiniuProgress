@@ -20,6 +20,7 @@ import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
+import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
  * 创建日期:2017/5/2.
  */
 
-public class CollectActivity extends BaseActivity implements DelNumListener, ViewPager.OnPageChangeListener {
+public class CollectActivity extends BaseActivity implements DelNumListener, ViewPager.OnPageChangeListener, OnTabSelectListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -74,8 +75,10 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
         initFragments();
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vpContent.addOnPageChangeListener(this);
+        vpContent.setOffscreenPageLimit(4);
         stlNavigationBar.setViewPager(vpContent, tabs);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 4));
+        stlNavigationBar.setOnTabSelectListener(this);
     }
 
     private void initFragments() {
@@ -408,5 +411,15 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
             authorFragment.onChangeTheme();
         if (stlNavigationBar != null)
             stlNavigationBar.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onTabSelect(int position) {
+
+    }
+
+    @Override
+    public void onTabReselect(int position) {
+
     }
 }

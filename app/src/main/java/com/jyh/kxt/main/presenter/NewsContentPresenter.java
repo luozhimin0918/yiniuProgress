@@ -445,21 +445,20 @@ public class NewsContentPresenter extends BasePresenter {
     public void attention(String objectId) {
         if (newsContentActivity.isGood) {
         } else {
-            String goodType = VarConstant.GOOD_TYPE_NEWS; //文章点赞
-//            switch (type) {
-//                case VarConstant.OCLASS_BLOG:
-//                    goodType = VarConstant.GOOD_TYPE_COMMENT_BLOG;
-//                    break;
-//                case VarConstant.OCLASS_NEWS:
-//                    goodType = VarConstant.GOOD_TYPE_COMMENT_NEWS;
-//                    break;
-//            }
-
+            String goodType/* = VarConstant.GOOD_TYPE_NEWS*/ = null; //文章点赞
+            switch (type) {
+                case VarConstant.OCLASS_BLOG:
+                    goodType = VarConstant.GOOD_TYPE_BLOG;
+                    break;
+                case VarConstant.OCLASS_NEWS:
+                    goodType = VarConstant.GOOD_TYPE_NEWS;
+                    break;
+            }
             newsContentActivity.ivGood.setSelected(true);
             newsContentActivity.isGood = true;
-            if (newsContentActivity.webViewAndHead != null && newsContentActivity.webViewAndHead.attention !=
-                    null) {
-                newsContentActivity.webViewAndHead.attention.attention();
+            if (newsContentActivity.webViewAndHead != null &&
+                    newsContentActivity.webViewAndHead.attention != null) {
+                newsContentActivity.webViewAndHead.attention.attention2();//这里再发送网络请求就是重复请求了!
             }
 
             String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
@@ -468,7 +467,7 @@ public class NewsContentPresenter extends BasePresenter {
                 addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                addDianZanCount="1";
+                addDianZanCount = "1";
             }
             newsContentActivity.tvDianCount.setText(addDianZanCount);
 

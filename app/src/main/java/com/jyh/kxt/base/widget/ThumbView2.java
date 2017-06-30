@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.utils.NativeStore;
-import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 
 /**
@@ -95,9 +94,13 @@ public class ThumbView2 extends RelativeLayout {
 
     /**
      * 请求点赞
+     *
+     * @param i
      */
-    private void requestClickThumb() {
-        NativeStore.addThumbID(getContext(), type, id, null, null);
+    private void requestClickThumb(int requestType) {
+        if (requestType == 0) {
+            NativeStore.addThumbID(getContext(), type, id, null, null);
+        }
         changerCount(1);
         ivThumb.setImageResource(R.mipmap.icon_share_ding_sel);
         tvThumbAddCount.setVisibility(View.VISIBLE);
@@ -122,8 +125,8 @@ public class ThumbView2 extends RelativeLayout {
     }
 
     public void setThumbCount(int count, String id, String type, boolean isThumb) {
-        this.id=id;
-        this.type=type;
+        this.id = id;
+        this.type = type;
         this.isThumb = isThumb;
         if (isThumb) {
             ivThumb.setImageResource(R.mipmap.icon_share_ding_sel);
@@ -143,8 +146,13 @@ public class ThumbView2 extends RelativeLayout {
     }
 
     public void attention() {
-        requestClickThumb();
+        requestClickThumb(0);
     }
+
+    public void attention2() {
+        requestClickThumb(1);
+    }
+
 
     public void onChangeTheme() {
         if (isThumb) {

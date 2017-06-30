@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
@@ -35,6 +36,16 @@ import okhttp3.OkHttpClient;
  * @Description:
  */
 public class RequestQueueUtil {
+  /*  public static RequestQueue requestQueue;
+
+    public static RequestQueue newInstance(Context mContext) {
+        if (requestQueue != null) {
+            return requestQueue;
+        }
+        requestQueue = newRequestQueue(mContext);
+        return requestQueue;
+    }*/
+
     /**
      * Default on-disk cache directory.
      */

@@ -156,7 +156,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
 
-                viewHolder1.tvTitle.setText(mCalendarFinanceBean.getTitle());
+                viewHolder1.tvTitle.setText(mCalendarFinanceBean.getState()+mCalendarFinanceBean.getTitle());
                 viewHolder1.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder1.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder1.tvAlarm.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
@@ -211,7 +211,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 break;
             case 2:
                 CalendarImportantBean mCalendarImportantBean = (CalendarImportantBean) mCalendarType;
-                viewHolder2.tvTitle.setText(mCalendarImportantBean.getTitle());
+                viewHolder2.tvTitle.setText(mCalendarImportantBean.getState()+mCalendarImportantBean.getTitle());
                 viewHolder2.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder2.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder2.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
@@ -244,7 +244,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 break;
             case 3:
                 CalendarHolidayBean mCalendarHolidayBean = (CalendarHolidayBean) mCalendarType;
-                viewHolder3.tvTitle.setText(mCalendarHolidayBean.getTitle());
+                viewHolder3.tvTitle.setText(mCalendarHolidayBean.getState()+mCalendarHolidayBean.getTitle());
                 viewHolder3.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder3.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder3.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));

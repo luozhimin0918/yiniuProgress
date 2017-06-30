@@ -26,5 +26,5 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext {
-    bakApkName = 'app-release-0628-16-18-48'
+    bakApkName = 'app-release-0630-09-16-24'
 }

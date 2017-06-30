@@ -38,31 +38,41 @@ public class ShareActivity extends BaseActivity {
 
     @OnClick({R.id.iv_bar_break, R.id.rl_wx, R.id.rl_pyq, R.id.rl_sina, R.id.rl_qq})
     public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
+        }
         if (NetUtils.isNetworkAvailable(this)) {
             switch (view.getId()) {
-                case R.id.iv_bar_break:
-                    onBackPressed();
-                    break;
                 case R.id.rl_wx:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN))
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA.WEIXIN);
-                    else
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN)) {
+                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
+                                SHARE_MEDIA.WEIXIN);
+                    } else {
                         ToastView.makeText3(getContext(), "未安装微信");
+                    }
                     break;
                 case R.id.rl_pyq:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN))
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA.WEIXIN_CIRCLE);
-                    else
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN)) {
+                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
+                                SHARE_MEDIA.WEIXIN_CIRCLE);
+                    } else {
                         ToastView.makeText3(getContext(), "未安装微信");
+                    }
                     break;
                 case R.id.rl_sina:
-                    UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA.SINA);
+                    UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA
+                            .SINA);
                     break;
                 case R.id.rl_qq:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ))
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA.QQ);
-                    else
+                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ)) {
+                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
+                                SHARE_MEDIA.QQ);
+                    } else {
                         ToastView.makeText3(getContext(), "未安装QQ");
+                    }
                     break;
             }
         } else {

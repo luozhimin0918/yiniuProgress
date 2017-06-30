@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -21,13 +20,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.impl.WebBuild;
 import com.library.base.http.VarConstant;
 import com.library.util.RegexValidateUtil;
-import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
@@ -55,6 +51,8 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     public String sharePic;
     public String shareUrl;
     private ObserverData<Boolean> jsListener;
+
+    private WebChromeClient overWriteWebChromeClient;
 
     public LoadX5WebView(Context context) {
         super(context);
@@ -245,7 +243,14 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
                 wvContent.loadUrl("about:blank");
                 showFailureView();
             }
+            if (overWriteWebChromeClient != null) {
+                overWriteWebChromeClient.onReceivedTitle(view, title);
+            }
         }
+    }
+
+    public void setOverWriteWebChromeClient(WebChromeClient overWriteWebChromeClient) {
+        this.overWriteWebChromeClient = overWriteWebChromeClient;
     }
 
     private void showFailureView() {

@@ -153,7 +153,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         String typeIntent = getIntent().getStringExtra(IntentConstant.TYPE);
         type = typeIntent == null ? type : typeIntent;
 
-        isGood = NativeStore.isThumbSucceed(this, VarConstant.GOOD_TYPE_NEWS, objectId);
+        String contentType = "blog".equals(type) ? VarConstant.GOOD_TYPE_BLOG : VarConstant.GOOD_TYPE_NEWS;
+        isGood = NativeStore.isThumbSucceed(this, contentType, objectId);
         ivGood.setSelected(isGood);
 
         newsContentPresenter = new NewsContentPresenter(this);

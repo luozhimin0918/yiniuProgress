@@ -139,6 +139,7 @@ public class DataPresenter extends BasePresenter {
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                dataFragment.pllRightContent.loadEmptyData();
             }
         });
 

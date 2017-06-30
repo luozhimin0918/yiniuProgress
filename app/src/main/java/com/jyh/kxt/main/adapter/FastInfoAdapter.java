@@ -91,8 +91,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             Iterator<FlashJson> iterator = flashJsons.iterator();
             while (iterator.hasNext()) {
                 FlashJson next = iterator.next();
-                if (next == null || next.getContent() == null)
+                if (next == null || next.getContent() == null) {
                     iterator.remove();
+                }
             }
 
             for (FlashJson flash : flashJsons) {
@@ -147,8 +148,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         Iterator<FlashJson> iterator = flashJsons.iterator();
         while (iterator.hasNext()) {
             FlashJson next = iterator.next();
-            if (next == null || next.getContent() == null)
+            if (next == null || next.getContent() == null) {
                 iterator.remove();
+            }
         }
 
         for (FlashJson flash : flashJsons) {
@@ -168,8 +170,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     public void addData(FlashJson flashJson) {
 
-        if (flashJson == null || flashJson.getContent() == null)
+        if (flashJson == null || flashJson.getContent() == null) {
             return;
+        }
 
         if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flashJson)) {
             flashJson.setColloct(true);
@@ -188,8 +191,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         Iterator<FlashJson> iterator = flashJsons.iterator();
         while (iterator.hasNext()) {
             FlashJson next = iterator.next();
-            if (next == null || next.getContent() == null)
+            if (next == null || next.getContent() == null) {
                 iterator.remove();
+            }
         }
 
 
@@ -519,10 +523,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     }
                     rlHolder.tvTime.setText(time2);
 
-                    rlHolder.tvTitle.setText(getString(rl.getTitle()));
-                    rlHolder.tvContentBefore.setText(context.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
-                    rlHolder.tvContentForecast.setText(context.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
-                    rlHolder.tvContentReality.setText(context.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
+                    rlHolder.tvTitle.setText(rl.getState() + getString(rl.getTitle()));
+                    rlHolder.tvContentBefore.setText(context.getResources().getString(R.string.date_describe_Before,
+                            rl.getBefore()));
+                    rlHolder.tvContentForecast.setText(context.getResources().getString(R.string
+                            .date_describe_Forecast, rl.getForecast()));
+                    rlHolder.tvContentReality.setText(context.getResources().getString(R.string
+                            .date_describe_Reality, rl.getReality()));
                     rlHolder.tvMore.setVisibility(View.GONE);
                     rlHolder.ivMore.setVisibility(View.GONE);
 
@@ -641,11 +648,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     Flash_NEWS top = JSON.parseObject(flash_top.getContent().toString(), Flash_NEWS.class);
 
                     final NEWViewHolder finalTopHolder = topHolder;
-                    Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
+                    Glide.with(context).load(top.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R
+                            .mipmap
                             .icon_def_news).into
                             (new SimpleTarget<Bitmap>() {
                                 @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                        glideAnimation) {
                                     int width = resource.getWidth();
                                     int height = resource.getHeight();
                                     int viewWidth = finalTopHolder.ivFlash.getWidth();
@@ -684,11 +693,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     Flash_NEWS bottom = JSON.parseObject(flash_bottom.getContent().toString(), Flash_NEWS.class);
 
                     final NEWViewHolder finalBottomHolder = bottomHolder;
-                    Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder(R.mipmap
-                            .icon_def_news).into
+                    Glide.with(context).load(bottom.getImage()).asBitmap().error(R.mipmap.icon_def_news).placeholder
+                            (R.mipmap
+                                    .icon_def_news).into
                             (new SimpleTarget<Bitmap>() {
                                 @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                        glideAnimation) {
                                     int width = resource.getWidth();
                                     int height = resource.getHeight();
                                     int viewWidth = finalBottomHolder.ivFlash.getWidth();

@@ -192,6 +192,7 @@ public class VarConstant {
      * 点赞状态
      */
     public static final String GOOD_TYPE_NEWS = "good_type_news";//文章
+    public static final String GOOD_TYPE_BLOG = "good_type_blog";//文章攒
     public static final String GOOD_TYPE_VIDEO = "good_type_video";//视听
     public static final String GOOD_TYPE_COMMENT_NEWS = "good_type_comment_news";//文章评论
     public static final String GOOD_TYPE_COMMENT_VIDEO = "good_type_comment_video";//视听评论

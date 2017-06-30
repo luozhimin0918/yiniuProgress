@@ -114,7 +114,12 @@ public class KXTPushIntentService extends UmengMessageService {
                     PushBean2 news = JSON.parseObject(object.toString(), PushBean2.class);
                     if (push && news != null && news.getUrl() != null) {
                         String url = news.getUrl();
-                        String id = url.substring(url.indexOf("/id") + 3);
+                          String id;
+                        if(!TextUtils.isEmpty(url)){
+                            id = url.substring(url.indexOf("/id") + 3);
+                        }else{
+                            id = news.id;
+                        }
                         news.title = msg.title;
                         news.tvContent = msg.text;
                         if (!RegexValidateUtil.isEmpty(id)) {

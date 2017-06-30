@@ -30,11 +30,13 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.base.http.VolleySyncHttp;
 import com.library.bean.EventBusClass;
 import com.library.util.BitmapUtils;
 import com.library.util.LogUtil;
@@ -54,6 +56,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MarketDetailActivity extends BaseActivity {
 
@@ -122,6 +128,10 @@ public class MarketDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detail, StatusBarColor.THEME1);
 
+        loadMarketUrl();
+    }
+
+    private void loadMarketUrl(){
         try {
             marketItemList = MarketUtil.getMarketEditOption(getContext());
             if (marketItemList == null) {
@@ -148,12 +158,13 @@ public class MarketDetailActivity extends BaseActivity {
 
             lwvContent.build();
             lwvContent.loadUrl(quotesChartUrl);
-            lwvContent.getWebView().setWebChromeClient(new WebChromeClient(){
+            lwvContent.setOverWriteWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onReceivedTitle(WebView webView, String s) {
                     super.onReceivedTitle(webView, s);
-                    if(!RegexValidateUtil.isEmpty(s))
-                    tvBarTitle.setText(s);
+                    if (!RegexValidateUtil.isEmpty(s)) {
+                        tvBarTitle.setText(s);
+                    }
                 }
             });
             verifyOptionAppend();
@@ -161,15 +172,19 @@ public class MarketDetailActivity extends BaseActivity {
             tvBarTitle.setText(marketItemBean.getName());
         } catch (Exception e) {
             e.printStackTrace();
+
             pageLoadLayout.setNullText("加载行情地址可能为空");
             pageLoadLayout.loadEmptyData();
+
+
         }
     }
 
     private void addOrDeleteMarket() {
         if (updateAddStatus) {
-            if(marketItemList.size() > 30){
-                TSnackbar.make(ivBarBreak, "自选行情数量太多,超出30条了喔,添加失败", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+            if (marketItemList.size() > 30) {
+                TSnackbar.make(ivBarBreak, "自选行情数量太多,超出30条了喔,添加失败", TSnackbar.LENGTH_LONG, TSnackbar
+                        .APPEAR_FROM_TOP_TO_DOWN)
                         .setPromptThemBackground(Prompt.WARNING).show();
                 return;
             }

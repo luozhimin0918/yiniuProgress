@@ -47,6 +47,10 @@ public class NativeStore {
                 spName = SpConstant.GOOD_NEWS;
                 url = HttpConstant.GOOD_NEWS;
                 break;
+            case VarConstant.GOOD_TYPE_BLOG:
+                spName = SpConstant.GOOD_BLOG;
+                url = HttpConstant.GOOD_BLOG;
+                break;
             case VarConstant.GOOD_TYPE_VIDEO:
                 spName = SpConstant.GOOD_VIDEO;
                 url = HttpConstant.GOOD_VIDEO;
@@ -66,9 +70,8 @@ public class NativeStore {
         }
         BaseActivity baseActivity = (BaseActivity) mContext;
         VolleyRequest request = new VolleyRequest(mContext, baseActivity.getQueue());
-        final String finalSpName = spName;
 
-        good(mContext, id, observerData, observerData2, finalSpName);
+        good(mContext, id, observerData, observerData2, spName);
 
         request.doGet(url, getParam(request, type, id), new HttpListener<Object>() {
             @Override
@@ -92,6 +95,7 @@ public class NativeStore {
         JSONObject jsonParam = request.getJsonParam();
         switch (type) {
             case VarConstant.GOOD_TYPE_NEWS:
+            case VarConstant.GOOD_TYPE_BLOG:
                 jsonParam.put(VarConstant.HTTP_ID, id);
                 break;
             case VarConstant.GOOD_TYPE_VIDEO:
@@ -184,6 +188,9 @@ public class NativeStore {
         switch (type) {
             case VarConstant.GOOD_TYPE_NEWS:
                 spName = SpConstant.GOOD_NEWS;
+                break;
+            case VarConstant.GOOD_TYPE_BLOG:
+                spName = SpConstant.GOOD_BLOG;
                 break;
             case VarConstant.GOOD_TYPE_VIDEO:
                 spName = SpConstant.GOOD_VIDEO;

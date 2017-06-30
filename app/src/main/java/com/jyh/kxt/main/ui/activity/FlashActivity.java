@@ -1,5 +1,7 @@
 package com.jyh.kxt.main.ui.activity;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -21,6 +24,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
@@ -29,6 +34,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
@@ -226,7 +232,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
      */
     public void initHeadView() {
         flashHeadView = LayoutInflater.from(this).inflate(R.layout.layout_head_flashcontent, null, false);
+        flashHeadView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         tvTime = (TextView) flashHeadView.findViewById(R.id.tv_time);
         tvFlashTitle = (TextView) flashHeadView.findViewById(R.id.tv_flash_title);
         tvFlashContent = (TextView) flashHeadView.findViewById(R.id.tv_flash_content);
@@ -350,9 +361,54 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             tvFlashTitle.setTextColor(ContextCompat.getColor(this, R.color.font_color1));
             tvFlashContent.setTextColor(ContextCompat.getColor(this, R.color.font_color1));
         }
-        String image = flash_kx.getImage();
+        final String image = flash_kx.getImage();
         if (!TextUtils.isEmpty(image)) {
             ivFlashImage.setVisibility(View.VISIBLE);
+            ivFlashImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final PopupUtil popupUtil = new PopupUtil(FlashActivity.this);
+                    View inflate = popupUtil.createPopupView(R.layout.pop_img);
+                    inflate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (popupUtil != null && popupUtil.isShowing()) {
+                                popupUtil.dismiss();
+                            }
+                        }
+                    });
+                    final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+                    ImageView ivDownView = (ImageView) inflate.findViewById(R.id.iv_download);
+                    PopupUtil.Config config = new PopupUtil.Config();
+
+                    config.outsideTouchable = true;
+                    config.alpha = 0.5f;
+                    config.bgColor = 0X00000000;
+
+                    config.animationStyle = R.style.PopupWindow_Style1;
+                    config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    config.height = WindowManager.LayoutParams.MATCH_PARENT;
+                    popupUtil.setConfig(config);
+
+                    ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    ivPop.setLayoutParams(layoutParams);
+
+                    popupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
+
+                    Glide.with(FlashActivity.this).load(image)
+                            .asBitmap()
+                            .error(R.mipmap.icon_def_news)
+                            .placeholder(R.mipmap.icon_def_news)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    ivPop.setImageBitmap(resource);
+                                }
+                            });
+                }
+            });
             Glide.with(this).load(image).error(R.mipmap.icon_def_news).placeholder(R.mipmap
                     .icon_def_news).into(ivFlashImage);
         } else {
@@ -368,8 +424,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 rl.getBefore(),
                 rl.getForecast(),
                 rl.getReality());
-        tvRlTitle.setText(rl.getTitle());
-
+        tvRlTitle.setText(rl.getState() + rl.getTitle());
         Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into
                 (ivRlFlag);
 

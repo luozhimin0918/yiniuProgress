@@ -64,6 +64,7 @@ public class SpConstant {
      * 点赞
      */
     public static final String GOOD_NEWS = "good_news";
+    public static final String GOOD_BLOG = "good_blog";
     public static final String GOOD_VIDEO = "good_video";
     public static final String GOOD_COMMENT_NEWS = "good_comment_news";
     public static final String GOOD_COMMENT_VIDEO = "good_comment_video";
