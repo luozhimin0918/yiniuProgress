@@ -293,8 +293,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             replyMessagePresenter = new ReplyMessagePresenter(iBaseView);
             View replyMessageView = replyMessagePopup.createPopupView(R.layout.view_reply_message);
 
-            replyMessagePresenter.setCommentBean(commentBean);
-            replyMessagePresenter.setCommentWho(commentWho);
             replyMessagePresenter.initView(replyMessageView, replyMessagePopup, onCommentPublishListener);
 
             PopupUtil.Config config = new PopupUtil.Config();
@@ -310,6 +308,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             replyMessagePopup.setConfig(config);
             SoftKeyBoardListener.setListener(mBaseActivity, this);
         }
+        replyMessagePresenter.setCommentBean(commentBean);
+        replyMessagePresenter.setCommentWho(commentWho);
         replyMessagePresenter.isShowEmoJiView = false;
 
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);

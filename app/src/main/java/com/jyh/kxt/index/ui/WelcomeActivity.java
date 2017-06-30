@@ -16,6 +16,7 @@ import com.jyh.kxt.index.presenter.WelcomePresenter;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.magicwindow.MLink;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 启动-欢迎界面

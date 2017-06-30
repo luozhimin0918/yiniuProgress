@@ -2,19 +2,11 @@ package com.jyh.kxt.index.presenter;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.gifdecoder.GifDecoder;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.Target;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -26,16 +18,14 @@ import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VarConstant;
-import com.library.base.http.VolleyRequest;
-import com.library.util.EncryptionUtils;
+import com.library.util.LogUtil;
 import com.library.util.SPUtils;
 import com.library.util.disklrucache.DiskLruCacheUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -158,42 +148,80 @@ public class WelcomePresenter extends BasePresenter {
 
     private void showGif() {
         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
-        Glide
+
+        GifDrawable drawable = null;
+        try {
+            drawable = new GifDrawable(mContext.getResources(), R.raw.qidong);
+            welcomeActivity.ivWelcome.setImageDrawable(drawable);
+            welcomeActivity.ivWelcome.getDrawable();
+
+            drawable.setLoopCount(1);
+            drawable.addAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationCompleted(int loopNumber) {
+                    startToActivity(MainActivity.class);
+                }
+            });
+            drawable.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+       /* Glide
                 .with(welcomeActivity)
                 .load(R.raw.qidong)
-                .listener(new RequestListener<Integer, GlideDrawable>() {
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(
+                new GlideDrawableImageViewTarget(welcomeActivity.ivWelcome, 1) {
                     @Override
-                    public boolean onException(Exception e,
-                                               Integer model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
+                    public void onStart() {
+                        super.onStart();
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource,
-                                                   Integer model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-
-                        int duration = 0;
-                        GifDrawable drawable = (GifDrawable) resource;
-                        GifDecoder decoder = drawable.getDecoder();
-                        for (int i = 0; i < drawable.getFrameCount(); i++) {
-                            duration += decoder.getDelay(i);
-                        }
-
-                        welcomeActivity.ivWelcome.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startToActivity(MainActivity.class);
-                            }
-                        }, duration - 300);
-
-                        return false;
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
                     }
-                }).into(new GlideDrawableImageViewTarget(welcomeActivity.ivWelcome, 1));
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                    }
+
+                    @Override
+                    public void onDestroy() {
+                        super.onDestroy();
+                    }
+
+                    @Override
+                    public void onStop() {
+                        super.onStop();
+                    }
+
+                    @Override
+                    public void onLoadCleared(Drawable placeholder) {
+                        super.onLoadCleared(placeholder);
+                    }
+
+                    @Override
+                    public void onResourceReady(GlideDrawable resource,
+                                                GlideAnimation<? super GlideDrawable> animation) {
+                        super.onResourceReady(resource, animation);
+
+//                        int duration = 0;
+//                        GifDrawable drawable = (GifDrawable) resource;
+//                        GifDecoder decoder = drawable.getDecoder();
+//                        for (int i = 0; i < drawable.getFrameCount(); i++) {
+//                            duration += decoder.getDelay(i);
+//                        }
+//
+//                        welcomeActivity.ivWelcome.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                startToActivity(MainActivity.class);
+//                            }
+//                        }, duration*//* - 300*//*);
+                    }
+                });*/
     }
 
     public void startToActivity(Class<?> activityClass) {

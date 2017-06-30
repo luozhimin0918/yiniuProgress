@@ -26,5 +26,6 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext {
+    // isProtectedApp 一定要改成true 之后打补丁包
     bakApkName = 'app-release-0630-09-16-24'
 }

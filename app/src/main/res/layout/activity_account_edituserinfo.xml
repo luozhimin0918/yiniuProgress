@@ -60,7 +60,6 @@
                             android:layout_marginBottom="1px"
                             android:layout_marginRight="@dimen/item_height"
                             android:padding="@dimen/editUserInfo_padding2"
-                            android:src="@mipmap/icon_user_def_photo"
                             app:outsideRound="true"/>
 
                         <View
