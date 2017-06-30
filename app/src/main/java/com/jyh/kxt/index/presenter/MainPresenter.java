@@ -46,6 +46,7 @@ import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.json.VersionJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.base.http.VolleySyncHttp;
@@ -61,6 +62,8 @@ import com.tencent.smtt.sdk.WebViewClient;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.lib.util.TinkerLog;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -180,6 +183,11 @@ public class MainPresenter extends BasePresenter {
                         switch (jsonStr.code) {
                             case 0: //初始配置信息
                                 initLoadAppConfig(jsonStr.json);
+                                try {
+                                    version();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case 1://补丁
                                 httpRequestPatchInfo();
@@ -572,6 +580,57 @@ public class MainPresenter extends BasePresenter {
             loginPop.dismiss();
         }
         loginPop.show();
+    }
+
+    /**
+     * 检测版本
+     */
+    public void version() {
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        volleyRequest.doPost(HttpConstant.VERSION_VERSION, jsonParam, new HttpListener<VersionJson>() {
+            @Override
+            protected void onResponse(VersionJson versionJson) {
+                try {
+                    checkComparisonVersion(versionJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+            }
+        });
+    }
+
+
+    private void checkComparisonVersion(VersionJson versionJson) {
+        int currentVersionCode = SystemUtil.getVersionCode(mContext);
+        if (versionJson.getVersionCode() <= currentVersionCode) {
+            return;
+        }
+        String replaceContent = versionJson.getContent().replace("<br>", "\n");
+        new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
+                .setPositiveButton("是",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Uri uri = Uri.parse("http://gdown.baidu.com/data/wisegame/0852f6d39ee2e213/QQ_676.apk");
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                mContext.startActivity(intent);
+                            }
+                        })
+                .setNegativeButton("否",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setTitle("检查到最新安装包" + versionJson.getVersionName())
+                .setMessage(replaceContent)
+                .show();
     }
 
     /**
