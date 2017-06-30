@@ -15,7 +15,8 @@ import android.widget.ImageView;
  * 可缩放拖拽的ImageView
  * Created by 13798 on 2016/6/3.
  */
-public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnScaleGestureListener, View
+        .OnTouchListener {
     /**
      * 控件宽度
      */
@@ -97,8 +98,9 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
 
                 //通过getDrawable获得Src的图片
                 mDrawable = getDrawable();
-                if (mDrawable == null)
+                if (mDrawable == null) {
                     return;
+                }
                 mDrawableWidth = mDrawable.getIntrinsicWidth();
                 mDrawableHeight = mDrawable.getIntrinsicHeight();
                 initImageViewSize();
@@ -111,23 +113,28 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
      * 初始化资源图片宽高
      */
     private void initImageViewSize() {
-        if (mDrawable == null)
+        if (mDrawable == null) {
             return;
+        }
 
         // 缩放值
         float scale = 1.0f;
         // 图片宽度大于控件宽度，图片高度小于控件高度
-        if (mDrawableWidth > mWidth && mDrawableHeight < mHeight)
+        if (mDrawableWidth > mWidth && mDrawableHeight < mHeight) {
             scale = mWidth * 1.0f / mDrawableWidth;
-            // 图片高度度大于控件宽高，图片宽度小于控件宽度
-        else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth)
+        }
+        // 图片高度度大于控件宽高，图片宽度小于控件宽度
+        else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth) {
             scale = mHeight * 1.0f / mDrawableHeight;
-            // 图片宽度大于控件宽度，图片高度大于控件高度
-        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth)
+        }
+        // 图片宽度大于控件宽度，图片高度大于控件高度
+        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth) {
             scale = Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
-            // 图片宽度小于控件宽度，图片高度小于控件高度
-        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth)
+        }
+        // 图片宽度小于控件宽度，图片高度小于控件高度
+        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth) {
             scale = Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+        }
         mScale = scale;
         mMaxScale = mScale * 8.0f;
         mMinScale = mScale * 0.5f;
@@ -162,8 +169,9 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
      */
     private RectF getRectf(Matrix matrix) {
         RectF f = new RectF();
-        if (mDrawable == null)
+        if (mDrawable == null) {
             return null;
+        }
         f.set(0, 0, mDrawableWidth, mDrawableHeight);
         matrix.mapRect(f);
         return f;
@@ -179,10 +187,12 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
         // 获取已经缩放的值
         float scale = getmScale();
         float scaleResult = scale * scaleFactor;
-        if (scaleResult >= mMaxScale && scaleFactor > 1.0f)
+        if (scaleResult >= mMaxScale && scaleFactor > 1.0f) {
             scaleFactor = mMaxScale / scale;
-        if (scaleResult <= mMinScale && scaleFactor < 1.0f)
+        }
+        if (scaleResult <= mMinScale && scaleFactor < 1.0f) {
             scaleFactor = mMinScale / scale;
+        }
 
         matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
 
@@ -301,10 +311,12 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                     isFirstMoved = false;
                     break;
             }
+
+            return scaleGestureDetector.onTouchEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return scaleGestureDetector.onTouchEvent(event);
     }
 
     /**
@@ -314,8 +326,9 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
      */
     private boolean canSmoothX() {
         RectF rectf = getRectf(matrix);
-        if (rectf.left > 0 || rectf.right < getWidth())
+        if (rectf.left > 0 || rectf.right < getWidth()) {
             return false;
+        }
         return true;
     }
 
@@ -326,8 +339,9 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
      */
     private boolean canSmoothY() {
         RectF rectf = getRectf(matrix);
-        if (rectf.top > 0 || rectf.bottom < getHeight())
+        if (rectf.top > 0 || rectf.bottom < getHeight()) {
             return false;
+        }
         return true;
     }
 
@@ -338,10 +352,12 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
      * @param dy 出街便宜的众线
      */
     private void remedyXAndY(float dx, float dy) {
-        if (!canSmoothX())
+        if (!canSmoothX()) {
             matrix.postTranslate(-dx, 0);
-        if (!canSmoothY())
+        }
+        if (!canSmoothY()) {
             matrix.postTranslate(0, -dy);
+        }
         setImageMatrix(matrix);
     }
 }

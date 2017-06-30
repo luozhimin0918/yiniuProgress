@@ -3,8 +3,11 @@ package com.jyh.kxt.av.presenter;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -161,8 +164,14 @@ public class VideoDetailPresenter extends BasePresenter {
                     if (TextUtils.isEmpty(detailJson.getIntroduce())) {
                         detailJson.setIntroduce("暂无介绍");
                     }
-
-                    tvSynopsisContent.setText(detailJson.getIntroduce());
+                    String introduce = detailJson.getIntroduce();
+                    SpannableString introduceSpannable = new SpannableString("简介： " + introduce);
+                    introduceSpannable.setSpan(
+                            new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.font_color6)),
+                            0,
+                            3,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    tvSynopsisContent.setText(introduceSpannable);
 
                     tvSynopsisBtn.setOnClickListener(new View.OnClickListener() {
                         @Override

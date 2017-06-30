@@ -40,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:visibility="gone"
         android:layout_below="@+id/tv_title"
-        android:textColor="@color/font_color6"
+        android:textColor="@color/font_color2"
         android:textSize="@dimen/describe_font_size2"/>
 
 
@@ -62,7 +62,7 @@
         android:layout_toRightOf="@+id/tv_playCount"
         android:layout_alignTop="@+id/tv_playCount"
         android:layout_marginLeft="30dp"
-        android:drawableLeft="@mipmap/icon_explore_time"
+        android:drawableLeft="@mipmap/icon_video_time"
         android:drawablePadding="3dp"
         android:textColor="@color/font_color6"
         android:textSize="@dimen/describe_font_size1"/>
