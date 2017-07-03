@@ -29,4 +29,5 @@ ext {
     // isProtectedApp 一定要改成true 之后打补丁包
     bakApkName = 'app-release-0630-17-57-34'
     versionName = '6.0.0'
+    versionCode = 28
 }

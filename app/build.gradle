@@ -36,7 +36,7 @@ android {
         applicationId "com.jyh.kxt"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 28
+        versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
         buildConfigField "String", "MESSAGE", "\"补丁消息描述\""
