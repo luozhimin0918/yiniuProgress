@@ -146,8 +146,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_news_content, StatusBarColor.THEME1);
+        ActivityManager
+                .getInstance()
+                .finishNoCurrentActivity(NewsContentActivity.class, NewsContentActivity.this);  //保证只有一个
 
         objectId = getIntent().getStringExtra(IntentConstant.O_ID);//获取传递过来的Id
         String typeIntent = getIntent().getStringExtra(IntentConstant.TYPE);
@@ -172,9 +174,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         commentPresenter.setOnCommentClickListener(this);
         commentPresenter.setOnCommentPublishListener(this);
 
-        ActivityManager
-                .getInstance()
-                .finishNoCurrentActivity(NewsContentActivity.class, NewsContentActivity.this);  //保证只有一个
     }
 
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share})
@@ -803,9 +802,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             TSnackbar.APPEAR_FROM_TOP_TO_DOWN
                     );
 
+
+
             VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
             JSONObject jsonParam = volleyRequest.getJsonParam();
-            jsonParam.put("type", "article");
             jsonParam.put("object_id", objectId);
             jsonParam.put("uid", userInfo.getUid());
             jsonParam.put("accessToken", userInfo.getToken());
@@ -813,6 +813,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             if (parentId != 0) {
                 jsonParam.put("parent_id", parentId);
             }
+            if("blog".equals(type)){
+                jsonParam.put("type", "blog_article");
+            }else{
+                jsonParam.put("type", "article");
+            }
+
             volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
                 @Override
                 protected void onResponse(CommentBean mCommentBean) {

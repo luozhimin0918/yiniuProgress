@@ -61,6 +61,11 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail, StatusBarColor.NO_COLOR);
 
+
+        ActivityManager
+                .getInstance()
+                .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
+
         videoId = getIntent().getStringExtra(IntentConstant.O_ID);
         videoDetailPresenter = new VideoDetailPresenter(this);
         commentPresenter = new CommentPresenter(this);
@@ -80,10 +85,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
 
         pllContent.setOnAfreshLoadListener(this);
         brightnessSlide();
-
-        ActivityManager
-                .getInstance()
-                .finishNoCurrentActivity(VideoDetailActivity.class, VideoDetailActivity.this);  //保证只有一个Video界面
 
 //        int mShowFlags =
 //                View.SYSTEM_UI_FLAG_FULLSCREEN

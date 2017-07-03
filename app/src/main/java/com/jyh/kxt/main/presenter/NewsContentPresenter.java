@@ -98,7 +98,7 @@ public class NewsContentPresenter extends BasePresenter {
                 jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
             }
         }
-        jsonParam.put("type", "article");
+
         jsonParam.put("object_id", newsContentActivity.objectId);
 
         this.type = type;
@@ -106,9 +106,11 @@ public class NewsContentPresenter extends BasePresenter {
         switch (type) {
             case VarConstant.OCLASS_BLOG:
                 url = HttpConstant.EXPLORE_BLOG_CONTENT;
+                jsonParam.put("type", "blog_article");
                 break;
             case VarConstant.OCLASS_NEWS:
                 url = HttpConstant.NEWS_CONTENT;
+                jsonParam.put("type", "article");
                 break;
         }
 

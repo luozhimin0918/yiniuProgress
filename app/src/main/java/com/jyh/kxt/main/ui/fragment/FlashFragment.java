@@ -60,30 +60,34 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         lvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) return;
-                List source = flashPresenter.adapter.getSource();
-                Object obj = source.get(position - 1);
-                if (obj != null && obj instanceof FlashJson) {
-                    FlashJson flashJson = (FlashJson) obj;
-                    String type = flashJson.getCode();
-                    String content = flashJson.getContent();
+                try {
+                    if (position == 0) return;
+                    List source = flashPresenter.adapter.getSource();
+                    Object obj = source.get(position - 1);
+                    if (obj != null && obj instanceof FlashJson) {
+                        FlashJson flashJson = (FlashJson) obj;
+                        String type = flashJson.getCode();
+                        String content = flashJson.getContent();
 
-                    MainActivity mainActivity = (MainActivity) getActivity();
+                        MainActivity mainActivity = (MainActivity) getActivity();
 
-                    switch (type) {
-                        case VarConstant.SOCKET_FLASH_KUAIXUN:
-                        case VarConstant.SOCKET_FLASH_CJRL:
-                            JumpUtils.jump(mainActivity, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL,
-                                    flashJson.getUid(), null);
-                            break;
-                        case VarConstant.SOCKET_FLASH_KXTNEWS:
-                            Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
-                            Flash_NEWS.Jump url = flash_news.getUrl();
-                            JumpUtils.jump(mainActivity, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU
-                                    ());
-                            break;
+                        switch (type) {
+                            case VarConstant.SOCKET_FLASH_KUAIXUN:
+                            case VarConstant.SOCKET_FLASH_CJRL:
+                                JumpUtils.jump(mainActivity, VarConstant.OCLASS_FLASH, VarConstant.OACTION_DETAIL,
+                                        flashJson.getUid(), null);
+                                break;
+                            case VarConstant.SOCKET_FLASH_KXTNEWS:
+                                Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
+                                Flash_NEWS.Jump url = flash_news.getUrl();
+                                JumpUtils.jump(mainActivity, url.getC(), VarConstant.OACTION_DETAIL, url.getI(), url.getU
+                                        ());
+                                break;
+                        }
+
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

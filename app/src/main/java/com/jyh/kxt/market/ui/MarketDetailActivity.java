@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
@@ -98,15 +99,19 @@ public class MarketDetailActivity extends BaseActivity {
                 getScreenBitmap(new ObserverData<Bitmap>() {
                     @Override
                     public void callback(Bitmap bitmap) {
-                        if (bitmap != null) {
-                            UmengShareTool.initUmengLayout(MarketDetailActivity.this, new ShareJson(marketItemBean
-                                            .getName(),
-                                            quotesChartUrl, "", null, bitmap,
-                                            UmengShareTool.TYPE_MARKET, null, null, null, false, false), null,
-                                    ivBarBreak,
-                                    null);
-                        } else {
-                            ToastView.makeText3(MarketDetailActivity.this, "截图失败无法分享,请重试");
+                        try {
+                            if (bitmap != null) {
+                                UmengShareTool.initUmengLayout(MarketDetailActivity.this, new ShareJson(marketItemBean
+                                                .getName(),
+                                                quotesChartUrl, "", null, bitmap,
+                                                UmengShareTool.TYPE_MARKET, null, null, null, false, false), null,
+                                        ivBarBreak,
+                                        null);
+                            } else {
+                                ToastView.makeText3(MarketDetailActivity.this, "截图失败无法分享,请重试");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -140,6 +145,10 @@ public class MarketDetailActivity extends BaseActivity {
             String appConfig = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
             marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
+
+            if(TextUtils.isEmpty(marketItemBean.getName())){
+                marketItemBean.setName("");
+            }
 
             quotesChartUrl = mainInitJson.getQuotes_chart_url();
             quotesChartUrl = quotesChartUrl.replaceAll("\\{code\\}", marketItemBean.getCode());

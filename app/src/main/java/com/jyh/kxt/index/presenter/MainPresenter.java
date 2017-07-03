@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -200,28 +202,51 @@ public class MainPresenter extends BasePresenter {
     }
 
     private void httpRequestPatchInfo() {
-        String versionCode = SystemUtil.getVersionName(mContext);
+        String resultData = "";
+        try {
+            PackageManager packageManager = mMainActivity.getPackageManager();
+            if (packageManager != null) {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(
+                        mMainActivity.getPackageName(),
+                        PackageManager.GET_META_DATA);
 
-        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-        String pjUrl = "?version=" + versionCode;
-
-        volleyRequest.setDefaultDecode(false);
-        volleyRequest.doGet(HttpConstant.DOWN_PATCH + pjUrl, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String patchInfo) {
-                JSONObject patchJson = JSONObject.parseObject(patchInfo);
-                String status = patchJson.getString("status");
-                if (status == null) {
-                    SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
-                    newThreadDownPatch();
+                if (applicationInfo != null) {
+                    if (applicationInfo.metaData != null) {
+                        resultData = applicationInfo.metaData.getString("UMENG_CHANNEL");
+                    }
                 }
             }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
+            String patchType = "1";
+            switch (resultData) {
+                case "":
+                    break;
             }
-        });
+
+
+            String versionCode = SystemUtil.getVersionName(mContext);
+            VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+            String pjUrl = "?version=" + versionCode + "&type=" + patchType;
+            volleyRequest.setDefaultDecode(false);
+            volleyRequest.doGet(HttpConstant.DOWN_PATCH + pjUrl, new HttpListener<String>() {
+                @Override
+                protected void onResponse(String patchInfo) {
+                    JSONObject patchJson = JSONObject.parseObject(patchInfo);
+                    String status = patchJson.getString("status");
+                    if (status == null) {
+                        SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
+                        newThreadDownPatch();
+                    }
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                }
+            });
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void newThreadDownPatch() {
@@ -582,6 +607,7 @@ public class MainPresenter extends BasePresenter {
         loginPop.show();
     }
 
+
     /**
      * 检测版本
      */
@@ -605,7 +631,7 @@ public class MainPresenter extends BasePresenter {
     }
 
 
-    private void checkComparisonVersion(VersionJson versionJson) {
+    private void checkComparisonVersion(final VersionJson versionJson) {
         int currentVersionCode = SystemUtil.getVersionCode(mContext);
         if (versionJson.getVersionCode() <= currentVersionCode) {
             return;
@@ -616,7 +642,7 @@ public class MainPresenter extends BasePresenter {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Uri uri = Uri.parse("http://gdown.baidu.com/data/wisegame/0852f6d39ee2e213/QQ_676.apk");
+                                Uri uri = Uri.parse(versionJson.getUrl());
                                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                                 mContext.startActivity(intent);
                             }

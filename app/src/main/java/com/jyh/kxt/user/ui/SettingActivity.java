@@ -138,7 +138,7 @@ public class SettingActivity extends BaseActivity {
      * 显示补丁相关信息
      */
     private void showPatchDialog() {
-        CharSequence[] charSequences = {"查看补丁信息", "清空本地补丁", "清空已应用补丁", "SP文件"};
+        CharSequence[] charSequences = {"查看补丁信息1", "清空本地补丁", "清空已应用补丁", "SP文件"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("关闭")

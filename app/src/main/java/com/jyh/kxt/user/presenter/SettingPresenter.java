@@ -74,7 +74,7 @@ public class SettingPresenter extends BasePresenter {
     }
 
 
-    private void checkComparisonVersion(VersionJson versionJson, boolean isInit) {
+    private void checkComparisonVersion(final VersionJson versionJson, boolean isInit) {
 
         int currentVersionCode = SystemUtil.getVersionCode(mContext);
         if (versionJson.getVersionCode() <= currentVersionCode) {
@@ -97,7 +97,7 @@ public class SettingPresenter extends BasePresenter {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Uri uri = Uri.parse("http://gdown.baidu.com/data/wisegame/0852f6d39ee2e213/QQ_676.apk");
+                                    Uri uri = Uri.parse(versionJson.getUrl());
                                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                                     mContext.startActivity(intent);
                                 }

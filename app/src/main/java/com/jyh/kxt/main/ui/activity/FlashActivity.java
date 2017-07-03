@@ -227,8 +227,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 if (TextUtils.isEmpty(flash.getKuaixun().getContent())) {
                     plRootView.setNullText("这条数据不存在");
                     plRootView.loadEmptyData();
-                } else
+                } else {
                     plRootView.loadError();
+                }
             } catch (Exception e1) {
                 e1.printStackTrace();
                 plRootView.loadError();
@@ -395,21 +396,21 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                     config.height = WindowManager.LayoutParams.MATCH_PARENT;
                     popupUtil.setConfig(config);
 
-                    ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    ivPop.setLayoutParams(layoutParams);
-
-                    popupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
-
                     Glide.with(FlashActivity.this).load(image)
                             .asBitmap()
                             .error(R.mipmap.icon_def_news)
                             .placeholder(R.mipmap.icon_def_news)
                             .into(new SimpleTarget<Bitmap>() {
                                 @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                        glideAnimation) {
+                                    ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+                                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                                    ivPop.setLayoutParams(layoutParams);
                                     ivPop.setImageBitmap(resource);
+
+                                    popupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
                                 }
                             });
                 }

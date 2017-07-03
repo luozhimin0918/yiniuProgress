@@ -37,7 +37,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 28
-        versionName "6.0.0"
+        versionName rootProject.ext.versionName
 
         buildConfigField "String", "MESSAGE", "\"补丁消息描述\""
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
@@ -129,7 +129,7 @@ def getApplyResourceMappingPath() {
 }
 
 def getTinkerIdValue() {
-    return hasProperty("TINKER_ID") ? TINKER_ID : gitSha()
+    return /*hasProperty("TINKER_ID") ? TINKER_ID : gitSha()*/rootProject.ext.versionName/*"9c6a2b0"*/
 }
 
 def buildWithTinker() {
@@ -153,7 +153,7 @@ if (buildWithTinker()) {
             applyResourceMapping = getApplyResourceMappingPath()
             tinkerId = getTinkerIdValue()
             keepDexApply = false
-            isProtectedApp = true
+            isProtectedApp = false
         }
         dex {
             dexMode = "jar"
