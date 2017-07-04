@@ -491,7 +491,7 @@ public class VideoDetailPresenter extends BasePresenter {
     public void share() {
         if (videoDetailBean != null) {
             UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(videoDetailBean.getTitle(),
-                            videoDetailBean.getUrl(),
+                            videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()),
                             "", HttpConstant.IMG_URL + videoDetailBean
                             .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null,
                             false, false),

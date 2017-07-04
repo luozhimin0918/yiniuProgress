@@ -28,6 +28,7 @@ public class VideoDetailBean {
     private String picture;
     private String title;
     private String url;
+    private String url_share;
     private String introduce;
     private List<VideoDetailVideoBean> video;
 
@@ -125,5 +126,13 @@ public class VideoDetailBean {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public String getUrl_share() {
+        return url_share;
+    }
+
+    public void setUrl_share(String url_share) {
+        this.url_share = url_share;
     }
 }
