@@ -10,13 +10,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -39,7 +40,6 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
@@ -61,11 +61,7 @@ import com.library.widget.window.ToastView;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
-import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
-import com.tencent.tinker.lib.util.TinkerLog;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -219,7 +215,8 @@ public class MainPresenter extends BasePresenter {
 
             String patchType = "1";
             switch (resultData) {
-                case "":
+                case "360":
+                    patchType = "2";
                     break;
             }
 
@@ -384,6 +381,17 @@ public class MainPresenter extends BasePresenter {
         contentView.startAnimation(animation);
 
 
+        View advertContent = contentView.findViewById(R.id.arl_content);
+        //计算广告内容 宽度 和高度
+        ViewGroup.LayoutParams layoutParams = advertContent.getLayoutParams();
+
+        //协定350为后台参考比例  例如50则为7分之1
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
+        float widthDpi = (float) screenDisplay.widthPixels / SystemUtil.getDpi(mMainActivity);
+        int left = SystemUtil.dp2px(mContext, widthDpi / 350 * indexAd.getLeft_screen_size());
+        layoutParams.width = screenDisplay.widthPixels - left *2;
+        layoutParams.height = (int) (layoutParams.width * ((float) 4 / (float) 3));
+
         final View topView = contentView.findViewById(R.id.tv_top);
         View bottomView = contentView.findViewById(R.id.tv_bottom);
         FrameLayout flMengBan = (FrameLayout) contentView.findViewById(R.id.fl_mengban);
@@ -403,6 +411,7 @@ public class MainPresenter extends BasePresenter {
         if ("normal".equals(indexAd.getType())) {
             topView.setVisibility(View.VISIBLE);
             bottomView.setVisibility(View.VISIBLE);
+
 
             imgAdView.setVisibility(View.VISIBLE);
             String pictureUrl = HttpConstant.IMG_URL + indexAd.getPicture();

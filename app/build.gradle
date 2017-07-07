@@ -39,7 +39,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
-        buildConfigField "String", "MESSAGE", "\"补丁消息描述\""
+        buildConfigField "String", "MESSAGE", "\"BuildConfigMessage\""
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
         buildConfigField "String", "PLATFORM", "\"all\""
 
@@ -113,7 +113,7 @@ ext {
     tinkerApplyResourcePath = "${bakPath}/${project.bakApkName}-R.txt"
 
     //only use for build all flavor, if not, just ignore this field
-    tinkerBuildFlavorDirectory = "${bakPath}/app-1018-17-32-47"
+    tinkerBuildFlavorDirectory = "${bakPath}/${project.bakApkName}"
 }
 
 def getOldApkPath() {
@@ -129,7 +129,7 @@ def getApplyResourceMappingPath() {
 }
 
 def getTinkerIdValue() {
-    return /*hasProperty("TINKER_ID") ? TINKER_ID : gitSha()*/rootProject.ext.versionName/*"9c6a2b0"*/
+    return rootProject.ext.versionName
 }
 
 def buildWithTinker() {
@@ -176,7 +176,7 @@ if (buildWithTinker()) {
         }
 
         packageConfig {
-            configField("patchMessage", "tinker is sample to use")
+            configField("patchMessage", rootProject.ext.patchMessage)
             configField("platform", "all")
             configField("patchVersion", "1.0")
         }

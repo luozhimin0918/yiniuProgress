@@ -51,8 +51,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;
 
-    private boolean isFrontDisplay = true;
-
     //视频ID
     public String videoId;
 

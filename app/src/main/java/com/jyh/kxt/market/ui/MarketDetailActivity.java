@@ -1,12 +1,9 @@
 package com.jyh.kxt.market.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,12 +12,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
@@ -31,20 +24,16 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
-import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.base.http.VolleySyncHttp;
 import com.library.bean.EventBusClass;
-import com.library.util.BitmapUtils;
 import com.library.util.LogUtil;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
-import com.library.widget.window.ToastView;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 import com.trycatch.mysnackbar.Prompt;
@@ -57,10 +46,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MarketDetailActivity extends BaseActivity {
 
@@ -85,6 +70,8 @@ public class MarketDetailActivity extends BaseActivity {
      */
     private boolean updateAddStatus = true;
 
+    private ShareJson shareBean;
+
     @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
     public void onOptionClick(View view) {
         switch (view.getId()) {
@@ -92,7 +79,7 @@ public class MarketDetailActivity extends BaseActivity {
                 addOrDeleteMarket();
                 break;
             case R.id.ll_market_detail_share:
-                if (oldBitmap != null && !oldBitmap.isRecycled()) {
+                /*if (oldBitmap != null && !oldBitmap.isRecycled()) {
                     oldBitmap.recycle();
                     oldBitmap = null;
                 }
@@ -101,10 +88,12 @@ public class MarketDetailActivity extends BaseActivity {
                     public void callback(Bitmap bitmap) {
                         try {
                             if (bitmap != null) {
-                                UmengShareTool.initUmengLayout(MarketDetailActivity.this, new ShareJson(marketItemBean
-                                                .getName(),
-                                                quotesChartUrl, "", null, bitmap,
-                                                UmengShareTool.TYPE_MARKET, null, null, null, false, false), null,
+                                shareBean = new ShareJson(marketItemBean
+                                        .getName(),
+                                        quotesChartUrl, "", null, bitmap,
+                                        UmengShareTool.TYPE_MARKET, null, null, null, false, false);
+                                shareBean.setShareFromSource(1);
+                                UmengShareTool.initUmengLayout(MarketDetailActivity.this, shareBean, null,
                                         ivBarBreak,
                                         null);
                             } else {
@@ -120,7 +109,18 @@ public class MarketDetailActivity extends BaseActivity {
                         ToastView.makeText3(MarketDetailActivity.this, "截图失败无法分享,请重试");
                     }
 
-                }, this);
+                }, this);*/
+
+                String title = tvBarTitle.getText().toString();
+                ShareJson shareBean = new ShareJson(title,
+                        quotesChartUrl,
+                        "", null, null, UmengShareTool.TYPE_DEFAULT, null, null, null,
+                        false, false);
+                shareBean.setShareFromSource(2);
+                UmengShareTool.initUmengLayout(MarketDetailActivity.this,
+                        shareBean,
+                        marketItemBean,
+                        view, null);
                 break;
             case R.id.iv_bar_break:
                 onBackPressed();
@@ -136,7 +136,7 @@ public class MarketDetailActivity extends BaseActivity {
         loadMarketUrl();
     }
 
-    private void loadMarketUrl(){
+    private void loadMarketUrl() {
         try {
             marketItemList = MarketUtil.getMarketEditOption(getContext());
             if (marketItemList == null) {
@@ -146,7 +146,7 @@ public class MarketDetailActivity extends BaseActivity {
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
             marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
 
-            if(TextUtils.isEmpty(marketItemBean.getName())){
+            if (TextUtils.isEmpty(marketItemBean.getName())) {
                 marketItemBean.setName("");
             }
 
@@ -239,7 +239,7 @@ public class MarketDetailActivity extends BaseActivity {
         }
     }
 
-    private Bitmap oldBitmap;
+    /*private Bitmap oldBitmap;
 
     public void getScreenBitmap(final ObserverData<Bitmap> observerData, Activity activity) {
         // 获取windows中最顶层的view
@@ -264,7 +264,8 @@ public class MarketDetailActivity extends BaseActivity {
         final Bitmap bitmap = view.getDrawingCache();
         byte[] drawCacheBitmapBytes = BitmapUtils.Bitmap2Bytes(bitmap, Bitmap.CompressFormat.JPEG);
 
-        Glide.with(activity).load(drawCacheBitmapBytes).asBitmap().override(widths / 2, height / 2).into(new SimpleTarget<Bitmap>() {
+        Glide.with(activity).load(drawCacheBitmapBytes).asBitmap().override(widths / 2, height / 2).into(new
+        SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 // 销毁缓存信息
@@ -273,7 +274,7 @@ public class MarketDetailActivity extends BaseActivity {
                 observerData.callback(resource);
             }
         });
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -334,7 +335,20 @@ public class MarketDetailActivity extends BaseActivity {
                 super.onErrorResponse(error);
             }
         });
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (shareBean != null) {
+                Bitmap shareBitmap = shareBean.getBitmap();
+                if (shareBitmap != null && !shareBitmap.isRecycled()) {
+                    shareBitmap.recycle();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -31,7 +31,6 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.util.PopupUtil;
-import com.library.util.JsonUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
@@ -40,6 +39,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.util.JsonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.superplayer.library.SuperPlayer;
@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Created by Mr'Dai on 2017/3/31.
@@ -490,11 +489,14 @@ public class VideoDetailPresenter extends BasePresenter {
      */
     public void share() {
         if (videoDetailBean != null) {
-            UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(videoDetailBean.getTitle(),
-                            videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()),
-                            "", HttpConstant.IMG_URL + videoDetailBean
-                            .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null,
-                            false, false),
+            ShareJson shareBean = new ShareJson(videoDetailBean.getTitle(),
+                    videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()),
+                    videoDetailBean.getIntroduce(), HttpConstant.IMG_URL + videoDetailBean
+                    .getPicture(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean.getId(), null, null,
+                    false, false);
+            shareBean.setShareFromSource(2);
+            UmengShareTool.initUmengLayout((BaseActivity) mContext,
+                    shareBean,
                     videoDetailBean,
                     videoDetailActivity.spVideo, null);
         }

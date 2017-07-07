@@ -80,6 +80,9 @@ public class CalendarItemPresenter extends BasePresenter {
     }
 
 
+    /**
+     * @param status 默认状态为0  选择规则之后刷新为1  重置所有不执行过滤为2
+     */
     public void updateOrAddAdapter(int status) {
         calendarTypeList.clear();
         if (status == 0) {
@@ -128,7 +131,12 @@ public class CalendarItemPresenter extends BasePresenter {
         for (int i = 0; i < data.size(); i++) {
             String objData = data.get(i);
             CalendarFinanceBean mCalendarFinanceBean = JSONObject.parseObject(objData, CalendarFinanceBean.class);
-            boolean isMeetConditions = parentFragment.isFinanceMeetConditions(mCalendarFinanceBean);
+            boolean isMeetConditions;
+            if (status == 2) {
+                isMeetConditions = true;
+            } else {
+                isMeetConditions = parentFragment.isFinanceMeetConditions(mCalendarFinanceBean);
+            }
 
             if (status == 0) {
                 hashSetCity.add(mCalendarFinanceBean.getState());

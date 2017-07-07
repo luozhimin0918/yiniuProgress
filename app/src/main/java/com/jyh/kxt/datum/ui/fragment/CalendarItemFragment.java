@@ -115,7 +115,16 @@ public class CalendarItemFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+
     public void updateFiltration() {
         mCalendarItemPresenter.updateOrAddAdapter(1);
+    }
+
+    public void resetFiltration() {
+        mCalendarItemPresenter.updateOrAddAdapter(2);
     }
 }

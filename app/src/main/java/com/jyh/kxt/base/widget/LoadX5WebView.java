@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +44,8 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     private View failureView;
     private WebView wvContent;
     private ProgressBar pbLoading;
-
     private WebSettings mSettings;
+    private boolean isDefaultJavaScriptEnabled = true;
 
     private String webUrl;
     public String shareTitle;
@@ -86,8 +87,9 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         mSettings.setSupportZoom(false);
 
 //        mSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        mSettings.setJavaScriptEnabled(true);
         mSettings.setAppCacheEnabled(true);
+        mSettings.setJavaScriptEnabled(isDefaultJavaScriptEnabled);
+
         mSettings.setUserAgent("kxtapp" + "_" + VarConstant.HTTP_SYSTEM_VALUE + "_" + VarConstant.HTTP_VERSION_VALUE);
 
         wvContent.setWebViewClient(new MyWebViewClient());
@@ -195,6 +197,11 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
                     "window.jsinfo.getShareInfo(shareVal);" +
                     "}");
             view.loadUrl("javascript:getShareInfo()");
+
+            if(!mSettings.getJavaScriptEnabled()){
+                mSettings.setJavaScriptEnabled(true);
+                wvContent.reload();
+            }
             wvContent.setForeground(null);
         }
 
@@ -215,7 +222,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     public class MyWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-
+            Log.e("onProgressChanged", "onProgressChanged: "+newProgress );
             pbLoading.setProgress(newProgress);
 
             if (newProgress == 100) {
@@ -312,5 +319,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         }
     }
 
-
+    public void setDefaultJavaScriptEnabled(boolean defaultJavaScriptEnabled) {
+        isDefaultJavaScriptEnabled = defaultJavaScriptEnabled;
+    }
 }

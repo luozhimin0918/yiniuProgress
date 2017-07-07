@@ -81,7 +81,7 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
         HashMap<CalendarItemFragment, HashSet<String>> cityOptionMap = calendarFragment.cityOptionMap;
         HashSet<String> cityDefaultData = cityOptionMap.get(mCalendarItemFragment);
         List myCityList = new ArrayList(cityDefaultData);
-        myCityList.add(0,"全部");
+        myCityList.add(0, "全部");
 
         HashMap<CalendarItemFragment, HashSet<String>> citySelectMap = calendarFragment.citySelectMap;
         HashSet<String> citySelectData = citySelectMap.get(mCalendarItemFragment);
@@ -111,15 +111,18 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
         dtvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SPUtils.save(mContext, SpConstant.DATUM_STATE, olState.getSelectedMap());
-                SPUtils.save(mContext, SpConstant.DATUM_IMPORTANCE, olImportance.getSelectedMap());
-                SPUtils.save(mContext, SpConstant.DATUM_JUDGE, olJudge.getSelectedMap());
+                datumFragment.getCalendarFragment().stateSet = olState.getSelectedMap();
+                datumFragment.getCalendarFragment().importanceSet = olImportance.getSelectedMap();
+                datumFragment.getCalendarFragment().judgeSet = olJudge.getSelectedMap();
+//                SPUtils.save(mContext, SpConstant.DATUM_STATE, olState.getSelectedMap());
+//                SPUtils.save(mContext, SpConstant.DATUM_IMPORTANCE, olImportance.getSelectedMap());
+//                SPUtils.save(mContext, SpConstant.DATUM_JUDGE, olJudge.getSelectedMap());
 //                SPUtils.save(mContext, SpConstant.DATUM_AREA, olArea.getSelectedMap());
 
                 calendarFragment.updateSelectedCityDataFromFragment(mCalendarItemFragment, olArea.getSelectedMap());
 
                 datumFragment.filtratePopup.dismiss();
-                datumFragment.getCalendarFragment().initializeFiltrationSet();
+//                datumFragment.getCalendarFragment().initializeFiltrationSet();
                 datumFragment.getCalendarFragment().updateFiltration();
             }
         });

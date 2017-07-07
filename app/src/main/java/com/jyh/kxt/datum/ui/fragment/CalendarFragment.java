@@ -50,9 +50,13 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private CalendarPresenter calendarPresenter;
 
-    public Set<String> stateSet;
-    public Set<String> importanceSet;
-    public Set<String> judgeSet;
+    //状态临时数据
+    public HashSet<String> stateSet = new HashSet<>();
+    //重要程度临时数据
+    public HashSet<String> importanceSet = new HashSet<>();
+    //多空判断临时数据
+    public HashSet<String> judgeSet = new HashSet<>();
+
     public Set<String> areaSet;
 
     private List<Fragment> fragmentList = new ArrayList<>();//内容页面Fragment
@@ -93,10 +97,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                     String format = simpleDateFormat.format(date);
                     long time = simpleDateFormat.parse(format).getTime();
                     if (calendarPresenter.dataLongList.get(position) == time) {
-
-//                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.shape_calendar_today);
-//                        tabView.setBackground(drawable);
-
                         Bitmap rqBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rili);
                         tabView.setBackground(new BitmapDrawable(rqBitmap));
 
@@ -130,12 +130,27 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     }
 
+    private CalendarItemFragment oldCalendarItemFragment;
+
     @Override
     public void onPageSelected(int position) {
+        if (oldCalendarItemFragment != null) {
+            oldCalendarItemFragment.resetFiltration();//重置刷新一下
+            HashSet<String> oldCityMap = citySelectMap.get(oldCalendarItemFragment);
+            oldCityMap.clear();
+
+            stateSet.clear();
+            importanceSet.clear();
+            judgeSet.clear();
+            initializeFiltrationSet();
+        }
+
         calendarPresenter.updateSelectedColor(position);
 
         try {//如果切换回来存在筛选数据则改变
             Fragment fragment = fragmentList.get(position);
+            oldCalendarItemFragment = (CalendarItemFragment) fragment;
+
             HashSet<String> citySelectSet = citySelectMap.get(fragment);
             if (citySelectSet != null) {
                 areaSet = citySelectSet;
@@ -194,17 +209,13 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
      * 初始化过滤的Set集合
      */
     public void initializeFiltrationSet() {
-        stateSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_STATE);
-        importanceSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_IMPORTANCE);
-        judgeSet = SPUtils.getStringSet(getContext(), SpConstant.DATUM_JUDGE);
 
-        if (importanceSet.size() == 0) {
-            importanceSet.add("全部");
-        }
         if (stateSet.size() == 0) {
             stateSet.add("全部");
         }
-
+        if (importanceSet.size() == 0) {
+            importanceSet.add("全部");
+        }
         if (judgeSet.size() == 0) {
             judgeSet.add("全部");
         }
@@ -257,7 +268,6 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
      */
     public boolean isFinanceMeetConditions(CalendarFinanceBean mCalendarFinanceBean) {
         if (stateSet.size() != 0) {
-
             boolean isPublished;
             try {
                 Float.parseFloat(mCalendarFinanceBean.getReality().replace("%", ""));
@@ -337,7 +347,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             int currentTab = stlNavigationBar.getCurrentTab();
             calendarPresenter.updateSelectedColor(currentTab, true);
 
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

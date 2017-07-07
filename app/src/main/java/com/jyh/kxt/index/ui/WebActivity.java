@@ -35,33 +35,34 @@ public class WebActivity extends BaseActivity {
     private String title;
     private String url;
     private String source;
+    public boolean javaScriptEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web, StatusBarColor.THEME1);
-
-        webPresenter = new WebPresenter(this);
-
         getExtra(getIntent());
 
-        if (title != null)
+        webPresenter = new WebPresenter(this);
+        if (title != null) {
             tvBarTitle.setText(title);
+        }
 
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
         ivBarFunction.setVisibility(View.INVISIBLE);
 
-        webPresenter.addWebView(title,url);
+        webPresenter.addWebView(title, url);
         webPresenter.setOnJsListener(new ObserverData<Boolean>() {
             @Override
             public void callback(final Boolean showBtn) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (showBtn)
+                        if (showBtn) {
                             ivBarFunction.setVisibility(View.VISIBLE);
-                        else
+                        } else {
                             ivBarFunction.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
             }
@@ -89,6 +90,8 @@ public class WebActivity extends BaseActivity {
         url = intent.getStringExtra(IntentConstant.WEBURL);
 //        url = "http://test.kxtadi.kuaixun56.com/Webview/view/id/2966";
         source = intent.getStringExtra(IntentConstant.SOURCE);
+
+        javaScriptEnabled = intent.getBooleanExtra(IntentConstant.JAVASCRIPTENABLED, true);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function})
@@ -101,7 +104,8 @@ public class WebActivity extends BaseActivity {
                 if (webPresenter != null && webPresenter.loadX5WebView != null) {
                     LoadX5WebView x5WebView = webPresenter.loadX5WebView;
                     if (!RegexValidateUtil.isEmpty(x5WebView.shareUrl)) {
-                        UmengShareTool.initUmengLayout(this, new ShareJson(x5WebView.shareTitle, x5WebView.shareUrl, "", x5WebView
+                        UmengShareTool.initUmengLayout(this, new ShareJson(x5WebView.shareTitle, x5WebView.shareUrl,
+                                "", x5WebView
                                 .sharePic, null,
                                 UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), null, ivBarBreak, null);
                     }

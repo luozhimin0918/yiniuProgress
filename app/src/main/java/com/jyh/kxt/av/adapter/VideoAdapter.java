@@ -123,13 +123,16 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                                     .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                     return;
                 }
-                UmengShareTool.initUmengLayout((BaseActivity) mContext, new ShareJson(video.getTitle(), url_video_share.replace("{id}",
+                ShareJson shareBean = new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
-                                "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
-                                video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore.isThumbSucceed(mContext,
+                        "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
+                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore
+                        .isThumbSucceed(mContext,
                         VarConstant.GOOD_TYPE_VIDEO, video
                                 .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
-                        video)),
+                        video));
+                shareBean.setShareFromSource(2);
+                UmengShareTool.initUmengLayout((BaseActivity) mContext, shareBean,
                         video, holder.ivMore, new ObserverData<Map<String, Boolean>>() {
                             @Override
                             public void callback(Map<String, Boolean> o) {

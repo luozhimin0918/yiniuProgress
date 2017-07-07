@@ -56,6 +56,9 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public String getName() {
+        if(name == null){
+            name = "";
+        }
         return name;
     }
 

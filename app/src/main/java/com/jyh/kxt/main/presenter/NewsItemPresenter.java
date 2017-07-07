@@ -158,11 +158,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         NewsJson newsJson = newsAdapter.getData().get(position);
         JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
                 newsJson.getHref());
-        //保存浏览记录
-        BrowerHistoryUtils.save(mContext, newsJson);
-
-        //单条刷新,改变浏览状态
-        newsAdapter.getView(position, view, parent);
+        if(!"ad".equals(newsJson.getType())){
+            //保存浏览记录
+            BrowerHistoryUtils.save(mContext, newsJson);
+            //单条刷新,改变浏览状态
+            newsAdapter.getView(position, view, parent);
+        }
     }
 
     /**

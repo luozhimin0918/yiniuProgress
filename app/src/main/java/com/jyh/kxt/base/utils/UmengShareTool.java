@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -76,7 +77,8 @@ public class UmengShareTool {
      * @param view
      * @param observerData
      */
-    public static void initUmengLayout(final BaseActivity activity, ShareJson shareBean, Object o, View view, ObserverData observerData) {
+    public static void initUmengLayout(final BaseActivity activity, ShareJson shareBean, Object o, View view,
+                                       ObserverData observerData) {
 
         shareLayout = new PopupUtil(activity);
         View rootView = shareLayout.createPopupView(R.layout.dialog_umeng_share);
@@ -239,8 +241,18 @@ public class UmengShareTool {
      * @param bitmap      分享图片
      * @param share_media 分享平台
      */
-    public static void setShareContent(Activity activity, Bitmap
-            bitmap, SHARE_MEDIA share_media) {
+    public static void setShareContent(Activity activity, Bitmap bitmap, SHARE_MEDIA share_media) {
+        setShareContent(activity, bitmap, share_media, null);
+    }
+
+    /**
+     * 纯图片分享
+     *
+     * @param activity
+     * @param bitmap      分享图片
+     * @param share_media 分享平台
+     */
+    public static void setShareContent(Activity activity, Bitmap bitmap, SHARE_MEDIA share_media, String shareTitle) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -250,7 +262,17 @@ public class UmengShareTool {
                 urlImage = new UMImage(activity, R.mipmap.ic_launcher);
             }
 
-            new ShareAction(activity)
+
+            ShareAction shareAction = new ShareAction(activity);
+
+            if (shareTitle == null) {
+//                ShareContent shareContent = new ShareContent();
+//                shareContent.mText = shareTitle;
+//                shareContent.mMedia = urlImage;
+//                shareAction.setShareContent(shareContent);
+            }
+
+            shareAction
                     .withMedia(urlImage)
                     .setPlatform(share_media)
                     .setCallback(umShareListener)
@@ -311,14 +333,15 @@ public class UmengShareTool {
 
         boolean isHq = false;
 
-        if (shareBean.getType() == null)
+        if (shareBean.getType() == null) {
             shareBean.setType(TYPE_DEFAULT);
+        }
 
         switch (shareBean.getType()) {
             case TYPE_DEFAULT:
+                isHq = false;
                 line.setVisibility(View.GONE);
                 rvFunction.setVisibility(View.GONE);
-                isHq = false;
                 break;
             case TYPE_MARKET:
                 isHq = true;
@@ -326,13 +349,12 @@ public class UmengShareTool {
                 rvFunction.setVisibility(View.GONE);
                 break;
             case TYPE_VIDEO:
+                isHq = false;
                 line.setVisibility(View.VISIBLE);
                 rvFunction.setVisibility(View.VISIBLE);
-                isHq = false;
                 break;
         }
 
-        final boolean finalIsHq = isHq;
         functionAdapter.setOnClickListener(new FunctionAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -340,13 +362,9 @@ public class UmengShareTool {
                     case 0:
                         //朋友圈
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                            if (finalIsHq) {
-                                setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA
-                                        .WEIXIN_CIRCLE);
-                            } else {
-                                setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean.getDiscription(),
-                                        shareBean.getThumb(), SHARE_MEDIA.WEIXIN_CIRCLE);
-                            }
+                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                            .getDiscription(),
+                                    shareBean.getThumb(), SHARE_MEDIA.WEIXIN_CIRCLE);
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
                         }
@@ -354,34 +372,38 @@ public class UmengShareTool {
                     case 1:
                         //微信
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
-                            if (finalIsHq) {
-                                setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.WEIXIN);
-                            } else {
-                                setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean.getDiscription(),
-                                        shareBean.getThumb(), SHARE_MEDIA.WEIXIN);
-                            }
+                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                            .getDiscription(),
+                                    shareBean.getThumb(), SHARE_MEDIA.WEIXIN);
                         } else {
                             ToastView.makeText3(activity, "未安装微信");
                         }
                         break;
                     case 2:
-                        //新浪
-                        if (finalIsHq) {
-                            setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA);
-                        } else {
-                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean.getDiscription(),
-                                    shareBean.getThumb(), SHARE_MEDIA.SINA);
+                        //如果是行情或者视听, 并且是分享到新浪的则分享默认图片推广二维码
+                        if (shareBean.getShareFromSource() == 1 || shareBean.getShareFromSource() == 2) {
+                            Bitmap screenShotBitmap = shareBean.getBitmap();
+                            if (screenShotBitmap != null && !screenShotBitmap.isRecycled()) {
+                                screenShotBitmap.recycle();
+                            }
+                            //分享默认的
+                            Bitmap defaultWeiBoShareBitmap =
+                                    BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_weibo);
+                            shareBean.setBitmap(defaultWeiBoShareBitmap);
+                            setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean.getTitle());
+                            break;
                         }
+
+                        setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                        .getDiscription(),
+                                shareBean.getThumb(), SHARE_MEDIA.SINA);
                         break;
                     case 3:
                         //QQ
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QQ)) {
-                            if (finalIsHq) {
-                                setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.QQ);
-                            } else {
-                                setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean.getDiscription(),
-                                        shareBean.getThumb(), SHARE_MEDIA.QQ);
-                            }
+                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                            .getDiscription(),
+                                    shareBean.getThumb(), SHARE_MEDIA.QQ);
                         } else {
                             ToastView.makeText3(activity, "未安装QQ");
                         }
@@ -389,12 +411,9 @@ public class UmengShareTool {
                     case 4:
                         //QQ空间
                         if (umShareAPI.isInstall(activity, SHARE_MEDIA.QZONE)) {
-                            if (finalIsHq) {
-                                setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.QZONE);
-                            } else {
-                                setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean.getDiscription(),
-                                        shareBean.getThumb(), SHARE_MEDIA.QZONE);
-                            }
+                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                            .getDiscription(),
+                                    shareBean.getThumb(), SHARE_MEDIA.QZONE);
                         } else {
                             ToastView.makeText3(activity, "未安装QQ控件");
                         }
@@ -418,7 +437,8 @@ public class UmengShareTool {
                             ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context
                                     .CLIPBOARD_SERVICE);
                             //然后把数据放在ClipData对象中
-//                            ClipData clip = ClipData.newUri(activity.getContentResolver(), "URI", Uri.parse(shareBean.getShareUrl()));
+//                            ClipData clip = ClipData.newUri(activity.getContentResolver(), "URI", Uri.parse
+// (shareBean.getShareUrl()));
                             ClipData clip = ClipData.newPlainText("simple text", shareBean.getShareUrl());
                             //把clip对象放在剪贴板中
                             clipboard.setPrimaryClip(clip);
@@ -450,7 +470,7 @@ public class UmengShareTool {
                                                     ToastView.makeText3(activity, "收藏失败");
                                                 }
                                             });
-                        } else
+                        } else {
                             CollectUtils.collect(activity, VarConstant.COLLECT_TYPE_VIDEO, o,
                                     observerData, new
                                             ObserverData<Boolean>() {
@@ -465,27 +485,30 @@ public class UmengShareTool {
                                                     ToastView.makeText3(activity, "收藏失败");
                                                 }
                                             });
+                        }
                         break;
                     case 2:
                         //赞
                         if (functionAdapter2.getBtnStatus(position)) {
                             ToastView.makeText3(activity, "已点赞");
                             return;
-                        } else
-                            NativeStore.addThumbID(activity, shareBean.getGoodType(), shareBean.getId(), observerData, new
-                                    ObserverData<Boolean>() {
+                        } else {
+                            NativeStore.addThumbID(activity, shareBean.getGoodType(), shareBean.getId(),
+                                    observerData, new
+                                            ObserverData<Boolean>() {
 
-                                        @Override
-                                        public void callback(Boolean aBoolean) {
-                                            //改变umeng面板点赞按钮状态
-                                            functionAdapter2.changeStatus(position, aBoolean);
-                                        }
+                                                @Override
+                                                public void callback(Boolean aBoolean) {
+                                                    //改变umeng面板点赞按钮状态
+                                                    functionAdapter2.changeStatus(position, aBoolean);
+                                                }
 
-                                        @Override
-                                        public void onError(Exception e) {
-                                            ToastView.makeText3(activity, "点赞失败");
-                                        }
-                                    });
+                                                @Override
+                                                public void onError(Exception e) {
+                                                    ToastView.makeText3(activity, "点赞失败");
+                                                }
+                                            });
+                        }
                         break;
                     case 3:
                         //取消

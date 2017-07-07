@@ -90,6 +90,7 @@ public class JumpUtils {
                 //网页跳转
                 Intent intent = new Intent(context, WebActivity.class);
                 intent.putExtra(IntentConstant.WEBURL, url);
+                intent.putExtra(IntentConstant.JAVASCRIPTENABLED, false);
                 context.startActivity(intent);
             }
         } catch (Exception e) {
@@ -137,7 +138,8 @@ public class JumpUtils {
                     final MainActivity mainActivityList = (MainActivity) context;
                     RadioButton rbMarketList = mainActivityList.rbMarket;
                     boolean rbMarketCheckedList = rbMarketList.isChecked();
-                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment.marketVPFragment;
+                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment
+                            .marketVPFragment;
                     if (rbMarketCheckedList) {
                         mainActivityList.marketFragment.onTabSelect(0);
                         String[] tabs = marketVPFragment.getTabs();
@@ -203,7 +205,8 @@ public class JumpUtils {
                     break;
                 case VarConstant.OACTION_INDEX:
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
-                    final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity
+                            (MainActivity.class);
                     RadioButton rbMarket = mainActivity.rbMarket;
                     boolean rbMarketChecked = rbMarket.isChecked();
                     if (rbMarketChecked) {
@@ -220,11 +223,13 @@ public class JumpUtils {
                     break;
                 case VarConstant.OACTION_LIST:
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
-                    final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
-                            .class);
+                    final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance()
+                            .getSingleActivity(MainActivity
+                                    .class);
                     RadioButton rbMarketList = mainActivityList.rbMarket;
                     boolean rbMarketCheckedList = rbMarketList.isChecked();
-                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment.marketVPFragment;
+                    final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment
+                            .marketVPFragment;
                     if (rbMarketCheckedList) {
                         mainActivityList.marketFragment.onTabSelect(0);
                         String[] tabs = marketVPFragment.getTabs();
@@ -260,7 +265,8 @@ public class JumpUtils {
                     break;
                 case VarConstant.OACTION_ZX:
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
-                    final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance()
+                            .getSingleActivity(MainActivity.class);
                     RadioButton rbMarketZx = mainActivityZx.rbMarket;
                     boolean rbMarketCheckedZx = rbMarketZx.isChecked();
                     if (rbMarketCheckedZx) {
@@ -598,13 +604,14 @@ public class JumpUtils {
                 if (authorActivity == null) {
                     Intent authorIntent2 = new Intent(context, AuthorListActivity.class);
 
-                    authorIntent2.putExtra(IntentConstant.INDEX,1);
-                    authorIntent2.putExtra(IntentConstant.TAB,o_id);
+                    authorIntent2.putExtra(IntentConstant.INDEX, 1);
+                    authorIntent2.putExtra(IntentConstant.TAB, o_id);
 
                     context.startActivity(authorIntent2);
                 } else {
                     ActivityManager.getInstance().moveToStackPeekActivity(AuthorListActivity.class);
-                    authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity(AuthorListActivity.class);
+                    authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
+                            (AuthorListActivity.class);
                     try {
                         Thread.sleep(200);
                         authorActivity.onTabSelect(1);

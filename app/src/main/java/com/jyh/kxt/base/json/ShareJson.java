@@ -2,8 +2,6 @@ package com.jyh.kxt.base.json;
 
 import android.graphics.Bitmap;
 
-import com.library.base.http.VarConstant;
-
 /**
  * 项目名:Kxt
  * 类描述:分享bean
@@ -23,6 +21,7 @@ public class ShareJson {
     private String goodType;//点赞类型
     private boolean isGood;//点赞状态
     private boolean isFavor;//收藏状态
+    private int shareFromSource = -1;//分享来源自哪里 1 行情  2 视听 。。。。自己扩展
 
     /**
      * @param title       分享标题
@@ -37,8 +36,15 @@ public class ShareJson {
      * @param isGood      点赞状态
      * @param isFavor     收藏状态
      */
-    public ShareJson(String title, String shareUrl, String discription, String thumb, Bitmap bitmap, String type, String id, String
-            collectType, String goodType, boolean isGood, boolean isFavor) {
+    public ShareJson(String title, String shareUrl, String discription, String thumb, Bitmap bitmap, String type,
+                     String id, String
+                             collectType, String goodType, boolean isGood, boolean isFavor) {
+        this(title, shareUrl, discription, thumb, bitmap, type, id, collectType, goodType, isGood, isFavor, -1);
+    }
+
+    public ShareJson(String title, String shareUrl, String discription, String thumb, Bitmap bitmap, String type,
+                     String id, String
+                             collectType, String goodType, boolean isGood, boolean isFavor, int shareFromSource) {
         this.title = title;
         this.shareUrl = shareUrl;
         this.discription = discription;
@@ -50,6 +56,7 @@ public class ShareJson {
         this.goodType = goodType;
         this.isGood = isGood;
         this.isFavor = isFavor;
+        this.shareFromSource = shareFromSource;
     }
 
     public boolean isGood() {
@@ -139,5 +146,13 @@ public class ShareJson {
 
     public void setCollectType(String collectType) {
         this.collectType = collectType;
+    }
+
+    public int getShareFromSource() {
+        return shareFromSource;
+    }
+
+    public void setShareFromSource(int shareFromSource) {
+        this.shareFromSource = shareFromSource;
     }
 }

@@ -25,7 +25,7 @@ public class WebPresenter extends BasePresenter {
     public void addWebView(String title, String url) {
         loadX5WebView = new LoadX5WebView(mContext);
         WebBuild webBuild = loadX5WebView.build();
-
+        loadX5WebView.setDefaultJavaScriptEnabled(webActivity.javaScriptEnabled);
 
         if ("联系我们".equals(title) || "意见反馈".equals(title)) {
             Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
