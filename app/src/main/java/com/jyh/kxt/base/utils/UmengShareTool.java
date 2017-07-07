@@ -27,6 +27,7 @@ import com.library.widget.window.ToastView;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareConfig;
 import com.umeng.socialize.UMShareListener;
@@ -241,18 +242,7 @@ public class UmengShareTool {
      * @param bitmap      分享图片
      * @param share_media 分享平台
      */
-    public static void setShareContent(Activity activity, Bitmap bitmap, SHARE_MEDIA share_media) {
-        setShareContent(activity, bitmap, share_media, null);
-    }
-
-    /**
-     * 纯图片分享
-     *
-     * @param activity
-     * @param bitmap      分享图片
-     * @param share_media 分享平台
-     */
-    public static void setShareContent(Activity activity, Bitmap bitmap, SHARE_MEDIA share_media, String shareTitle) {
+    public static void setShareContent(Activity activity, Bitmap bitmap, SHARE_MEDIA share_media, ShareJson shareBean) {
         try {
             application = activity.getApplication();
             UMImage urlImage;
@@ -265,12 +255,10 @@ public class UmengShareTool {
 
             ShareAction shareAction = new ShareAction(activity);
 
-            if (shareTitle == null) {
-//                ShareContent shareContent = new ShareContent();
-//                shareContent.mText = shareTitle;
-//                shareContent.mMedia = urlImage;
-//                shareAction.setShareContent(shareContent);
-            }
+            ShareContent shareContent = new ShareContent();
+            shareContent.mText = shareBean.getTitle() + " " + shareBean.getShareUrl();
+            shareContent.mMedia = urlImage;
+            shareAction.setShareContent(shareContent);
 
             shareAction
                     .withMedia(urlImage)
@@ -390,13 +378,12 @@ public class UmengShareTool {
                             Bitmap defaultWeiBoShareBitmap =
                                     BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_weibo);
                             shareBean.setBitmap(defaultWeiBoShareBitmap);
-                            setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean.getTitle());
+                            setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean);
                             break;
-                        }
-
-                        setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
-                                        .getDiscription(),
-                                shareBean.getThumb(), SHARE_MEDIA.SINA);
+                        } else
+                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+                                            .getDiscription(),
+                                    shareBean.getThumb(), SHARE_MEDIA.SINA);
                         break;
                     case 3:
                         //QQ

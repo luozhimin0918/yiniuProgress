@@ -71,6 +71,7 @@ public class MarketDetailActivity extends BaseActivity {
     private boolean updateAddStatus = true;
 
     private ShareJson shareBean;
+    private String quotesShareUrl;
 
     @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
     public void onOptionClick(View view) {
@@ -113,7 +114,7 @@ public class MarketDetailActivity extends BaseActivity {
 
                 String title = tvBarTitle.getText().toString();
                 ShareJson shareBean = new ShareJson(title,
-                        quotesChartUrl,
+                        quotesShareUrl,
                         "", null, null, UmengShareTool.TYPE_DEFAULT, null, null, null,
                         false, false);
                 shareBean.setShareFromSource(2);
@@ -151,7 +152,9 @@ public class MarketDetailActivity extends BaseActivity {
             }
 
             quotesChartUrl = mainInitJson.getQuotes_chart_url();
+            quotesShareUrl=mainInitJson.getUrl_quotes_share();
             quotesChartUrl = quotesChartUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
+            quotesShareUrl = quotesShareUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
             quotesChartUrl = quotesChartUrl.replaceAll("\\{system\\}", VarConstant.HTTP_SYSTEM_VALUE);
             quotesChartUrl = quotesChartUrl.replaceAll("\\{version\\}", VarConstant.HTTP_VERSION_VALUE);
 

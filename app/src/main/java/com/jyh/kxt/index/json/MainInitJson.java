@@ -47,6 +47,15 @@ public class MainInitJson {
     private String url_feedback;
     private String url_kx_share;
     private String url_video_share;
+    private String url_quotes_share;
+
+    public String getUrl_quotes_share() {
+        return url_quotes_share;
+    }
+
+    public void setUrl_quotes_share(String url_quotes_share) {
+        this.url_quotes_share = url_quotes_share;
+    }
 
     public String getIcon() {
         return icon;
