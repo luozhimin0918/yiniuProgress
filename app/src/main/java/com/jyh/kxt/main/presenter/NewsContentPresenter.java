@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -26,7 +25,6 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.AttentionUtils;
-import com.library.util.JsonUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -39,11 +37,10 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.JsonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.window.ToastView;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -445,45 +442,52 @@ public class NewsContentPresenter extends BasePresenter {
      * 点赞
      */
     public void attention(String objectId) {
-        if (newsContentActivity.isGood) {
-        } else {
-            String goodType/* = VarConstant.GOOD_TYPE_NEWS*/ = null; //文章点赞
-            switch (type) {
-                case VarConstant.OCLASS_BLOG:
-                    goodType = VarConstant.GOOD_TYPE_BLOG;
-                    break;
-                case VarConstant.OCLASS_NEWS:
-                    goodType = VarConstant.GOOD_TYPE_NEWS;
-                    break;
+        try {
+            if (objectId == null) {
+                return;
             }
-            newsContentActivity.ivGood.setSelected(true);
-            newsContentActivity.isGood = true;
-            if (newsContentActivity.webViewAndHead != null &&
-                    newsContentActivity.webViewAndHead.attention != null) {
-                newsContentActivity.webViewAndHead.attention.attention2();//这里再发送网络请求就是重复请求了!
-            }
-
-            String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
-            String addDianZanCount = null;
-            try {
-                addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                addDianZanCount = "1";
-                newsContentActivity.tvDianCount.setVisibility(View.VISIBLE);
-            }
-            newsContentActivity.tvDianCount.setText(addDianZanCount);
-
-            NativeStore.addThumbID(mContext, goodType, objectId, new ObserverData() {
-                @Override
-                public void callback(Object o) {
-
+            if (newsContentActivity.isGood) {
+            } else {
+                String goodType/* = VarConstant.GOOD_TYPE_NEWS*/ = null; //文章点赞
+                switch (type) {
+                    case VarConstant.OCLASS_BLOG:
+                        goodType = VarConstant.GOOD_TYPE_BLOG;
+                        break;
+                    case VarConstant.OCLASS_NEWS:
+                        goodType = VarConstant.GOOD_TYPE_NEWS;
+                        break;
+                }
+                newsContentActivity.ivGood.setSelected(true);
+                newsContentActivity.isGood = true;
+                if (newsContentActivity.webViewAndHead != null &&
+                        newsContentActivity.webViewAndHead.attention != null) {
+                    newsContentActivity.webViewAndHead.attention.attention2();//这里再发送网络请求就是重复请求了!
                 }
 
-                @Override
-                public void onError(Exception e) {
+                String dianZanCount = newsContentActivity.tvDianCount.getText().toString();
+                String addDianZanCount = null;
+                try {
+                    addDianZanCount = String.valueOf(Integer.parseInt(dianZanCount) + 1);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    addDianZanCount = "1";
+                    newsContentActivity.tvDianCount.setVisibility(View.VISIBLE);
                 }
-            }, null);
+                newsContentActivity.tvDianCount.setText(addDianZanCount);
+
+                NativeStore.addThumbID(mContext, goodType, objectId, new ObserverData() {
+                    @Override
+                    public void callback(Object o) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                    }
+                }, null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

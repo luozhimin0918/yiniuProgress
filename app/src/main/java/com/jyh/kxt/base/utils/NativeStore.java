@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -14,9 +13,6 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
 
-import org.android.spdy.SpdyVersion;
-
-import java.text.BreakIterator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,56 +35,60 @@ public class NativeStore {
             observerData, final ObserverData observerData2) {
 
 
-        String spName = "";
-        String url = "";
+        try {
+            String spName = "";
+            String url = "";
 
-        switch (type) {
-            case VarConstant.GOOD_TYPE_NEWS:
-                spName = SpConstant.GOOD_NEWS;
-                url = HttpConstant.GOOD_NEWS;
-                break;
-            case VarConstant.GOOD_TYPE_BLOG:
-                spName = SpConstant.GOOD_BLOG;
-                url = HttpConstant.GOOD_BLOG;
-                break;
-            case VarConstant.GOOD_TYPE_VIDEO:
-                spName = SpConstant.GOOD_VIDEO;
-                url = HttpConstant.GOOD_VIDEO;
-                break;
-            case VarConstant.GOOD_TYPE_COMMENT_NEWS:
-                spName = SpConstant.GOOD_COMMENT_NEWS;
-                url = HttpConstant.GOOD_COMMENT;
-                break;
-            case VarConstant.GOOD_TYPE_COMMENT_VIDEO:
-                spName = SpConstant.GOOD_COMMENT_VIDEO;
-                url = HttpConstant.GOOD_COMMENT;
-                break;
-            case VarConstant.GOOD_TYPE_COMMENT_BLOG:
-                spName = SpConstant.GOOD_COMMENT_BLOG;
-                url = HttpConstant.GOOD_COMMENT;
-                break;
+            switch (type) {
+                case VarConstant.GOOD_TYPE_NEWS:
+                    spName = SpConstant.GOOD_NEWS;
+                    url = HttpConstant.GOOD_NEWS;
+                    break;
+                case VarConstant.GOOD_TYPE_BLOG:
+                    spName = SpConstant.GOOD_BLOG;
+                    url = HttpConstant.GOOD_BLOG;
+                    break;
+                case VarConstant.GOOD_TYPE_VIDEO:
+                    spName = SpConstant.GOOD_VIDEO;
+                    url = HttpConstant.GOOD_VIDEO;
+                    break;
+                case VarConstant.GOOD_TYPE_COMMENT_NEWS:
+                    spName = SpConstant.GOOD_COMMENT_NEWS;
+                    url = HttpConstant.GOOD_COMMENT;
+                    break;
+                case VarConstant.GOOD_TYPE_COMMENT_VIDEO:
+                    spName = SpConstant.GOOD_COMMENT_VIDEO;
+                    url = HttpConstant.GOOD_COMMENT;
+                    break;
+                case VarConstant.GOOD_TYPE_COMMENT_BLOG:
+                    spName = SpConstant.GOOD_COMMENT_BLOG;
+                    url = HttpConstant.GOOD_COMMENT;
+                    break;
+            }
+            BaseActivity baseActivity = (BaseActivity) mContext;
+            VolleyRequest request = new VolleyRequest(mContext, baseActivity.getQueue());
+
+            good(mContext, id, observerData, observerData2, spName);
+
+            request.doGet(url, getParam(request, type, id), new HttpListener<Object>() {
+                @Override
+                protected void onResponse(Object o) {
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    if (observerData != null) {
+                        observerData.onError(new VolleyError("点赞失败"));
+                    }
+                    if (observerData2 != null) {
+                        observerData2.onError(null);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        BaseActivity baseActivity = (BaseActivity) mContext;
-        VolleyRequest request = new VolleyRequest(mContext, baseActivity.getQueue());
-
-        good(mContext, id, observerData, observerData2, spName);
-
-        request.doGet(url, getParam(request, type, id), new HttpListener<Object>() {
-            @Override
-            protected void onResponse(Object o) {
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                if (observerData != null) {
-                    observerData.onError(new VolleyError("点赞失败"));
-                }
-                if (observerData2 != null) {
-                    observerData2.onError(null);
-                }
-            }
-        });
     }
 
     private static JSONObject getParam(VolleyRequest request, String type, String id) {

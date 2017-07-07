@@ -307,7 +307,6 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         int updateEventId = -1;
         //首先查询是替换还是增加
         Cursor existCursor = getActivity().getContentResolver().query(calenderEventURL, null, null, null, null);
-        existCursor.getCount();
         if (existCursor != null) {
             while (existCursor.moveToNext()) {
                 try {

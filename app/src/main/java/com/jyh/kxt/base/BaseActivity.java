@@ -20,13 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
@@ -39,11 +36,8 @@ import com.jyh.kxt.base.widget.night.skinnable.SkinnableViewInflater;
 import com.library.base.LibActivity;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
-import com.library.widget.window.ToastView;
 import com.umeng.analytics.MobclickAgent;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import cn.magicwindow.MLinkAPIFactory;
@@ -204,6 +198,11 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
 
     @Override
     public void showWaitDialog(final String tipInfo) {
+
+        if (this.isFinishing()) {
+            return;
+        }
+
         View waitView = LayoutInflater.from(this).inflate(R.layout.dialog_wait, null);
         ImageView ivProgress = (ImageView) waitView.findViewById(R.id.iv_progress);
         TextView tvDesc = (TextView) waitView.findViewById(R.id.tv_desc);
@@ -233,6 +232,9 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
 
     @Override
     public void dismissWaitDialog() {
+        if (this.isFinishing()) {
+            return;
+        }
         if (waitPopup != null && waitPopup.isShowing() && !isFinishing()) {
             waitPopup.dismiss();
         }

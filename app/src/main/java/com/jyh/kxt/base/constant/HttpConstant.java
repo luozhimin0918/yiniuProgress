@@ -37,6 +37,7 @@ public class HttpConstant {
     public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
     public static final String DOWN_PATCH = BASE_URL + "patch/find";//请求下载补丁
+    public static final String DOWNLOAD_NUM = BASE_URL + "patch/download_num";//增加数量
 
     public static final String CONTACT_US_URL = BASE_URL + "statement/contact_us";//联系我们
     public static final String FEEDBACK_URL = BASE_URL + "statement/feedback";//意见反馈

@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -223,7 +224,7 @@ public class MainPresenter extends BasePresenter {
 
             String versionCode = SystemUtil.getVersionName(mContext);
             VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-            String pjUrl = "?version=" + versionCode + "&type=" + patchType;
+            String pjUrl = "?version=" + versionCode + "&type=" + patchType + "&from=" + resultData;
             volleyRequest.setDefaultDecode(false);
             volleyRequest.doGet(HttpConstant.DOWN_PATCH + pjUrl, new HttpListener<String>() {
                 @Override
@@ -232,6 +233,8 @@ public class MainPresenter extends BasePresenter {
                     String status = patchJson.getString("status");
                     if (status == null) {
                         SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
+
+                        requestPatchDownNotify();
                         newThreadDownPatch();
                     }
                 }
@@ -246,6 +249,28 @@ public class MainPresenter extends BasePresenter {
         }
     }
 
+    private void requestPatchDownNotify() {
+        String versionCode = SystemUtil.getVersionName(mContext);
+
+        String patchInfo = SPUtils.getString(mMainActivity, SpConstant.PATCH_INFO);
+        PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
+
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        String pjUrl = "?version=" + versionCode + "&code=" + patchJson.getPatch_code();
+        volleyRequest.setDefaultDecode(false);
+        volleyRequest.doGet(HttpConstant.DOWNLOAD_NUM + pjUrl, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String patchInfo) {
+                Log.e("@@", "onResponse: "  );
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                Log.e("@@", "onResponse: "  );
+            }
+        });
+    }
+
     private void newThreadDownPatch() {
         new Thread(new Runnable() {
             @Override
@@ -257,8 +282,6 @@ public class MainPresenter extends BasePresenter {
 
                     String saveFilePath = FileUtils.getVersionNameFilePath(mMainActivity);
                     patchFile = new File(saveFilePath + patchJson.getPatch_code() + ".patch");
-//                    String sdAbsolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                    patchFile = new File(sdAbsolutePath + "/" + patchJson.getPatch_code() + ".patch");
                     if (patchFile.exists()) {
                         return;
                     } else {
@@ -389,7 +412,7 @@ public class MainPresenter extends BasePresenter {
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         float widthDpi = (float) screenDisplay.widthPixels / SystemUtil.getDpi(mMainActivity);
         int left = SystemUtil.dp2px(mContext, widthDpi / 350 * indexAd.getLeft_screen_size());
-        layoutParams.width = screenDisplay.widthPixels - left *2;
+        layoutParams.width = screenDisplay.widthPixels - left * 2;
         layoutParams.height = (int) (layoutParams.width * ((float) 4 / (float) 3));
 
         final View topView = contentView.findViewById(R.id.tv_top);
