@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/rl_wx"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -29,7 +29,7 @@
             android:gravity="center_vertical"
             android:text="微信好友"
             android:textColor="@color/font_color5"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="@dimen/arrow_right_width"
@@ -49,7 +49,7 @@
     <RelativeLayout
         android:id="@+id/rl_pyq"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -68,7 +68,7 @@
             android:gravity="center_vertical"
             android:text="微信朋友圈"
             android:textColor="@color/font_color5"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="@dimen/arrow_right_width"
@@ -88,7 +88,7 @@
     <RelativeLayout
         android:id="@+id/rl_sina"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -107,7 +107,7 @@
             android:gravity="center_vertical"
             android:text="新浪微博"
             android:textColor="@color/font_color5"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="@dimen/arrow_right_width"
@@ -127,7 +127,7 @@
     <RelativeLayout
         android:id="@+id/rl_qq"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -146,7 +146,7 @@
             android:gravity="center_vertical"
             android:text="QQ好友"
             android:textColor="@color/font_color5"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="@dimen/arrow_right_width"

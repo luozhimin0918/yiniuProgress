@@ -18,26 +18,13 @@ import com.library.util.NetUtils;
  * Created by DaiYao on 2016/5/21 0021.
  */
 public class PageLoadLayout extends FrameLayout implements View.OnClickListener {
-    public enum BgColor {
-        WHITE(Color.WHITE), TRANSPARENT8(Color.parseColor("#88000000")), TRANSPARENT(Color.TRANSPARENT);
-
-        int bgColor;
-
-        BgColor(int bgColor) {
-            this.bgColor = bgColor;
-        }
-    }
-
     private View llLoadView;
     private Context context;
-
-    public interface OnAfreshLoadListener {
-        void OnAfreshLoad();
-    }
-
+    private boolean isSuccessLoadOver = false;
     private OnAfreshLoadListener onAfreshLoadListener;
-
     private LayoutInflater mInflater;
+    private int nullImgId = 0;
+    private String nullText = null;
 
     public PageLoadLayout(Context context) {
         this(context, null);
@@ -99,9 +86,6 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         updateView();
     }
 
-    private int nullImgId = 0;
-    private String nullText = null;
-
     public void loadEmptyData() {
         removeLoading();
         llLoadView = mInflater.inflate(R.layout.volley_load_nodata, null);
@@ -122,6 +106,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
 
     public void loadOver() {
         removeLoading();
+        setSuccessLoadOver(true);
     }
 
     private void removeLoading() {
@@ -130,11 +115,9 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         }
     }
 
-
     private void updateView() {
         addView(llLoadView);
     }
-
 
     public void addCustomView(int viewRes) {
         llLoadView = mInflater.inflate(viewRes, null);
@@ -168,5 +151,27 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
 
     public void setNullText(String nullText) {
         this.nullText = nullText;
+    }
+
+    public boolean isSuccessLoadOver() {
+        return isSuccessLoadOver;
+    }
+
+    public void setSuccessLoadOver(boolean successLoadOver) {
+        isSuccessLoadOver = successLoadOver;
+    }
+
+    public enum BgColor {
+        WHITE(Color.WHITE), TRANSPARENT8(Color.parseColor("#88000000")), TRANSPARENT(Color.TRANSPARENT);
+
+        int bgColor;
+
+        BgColor(int bgColor) {
+            this.bgColor = bgColor;
+        }
+    }
+
+    public interface OnAfreshLoadListener {
+        void OnAfreshLoad();
     }
 }

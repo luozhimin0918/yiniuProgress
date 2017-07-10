@@ -17,23 +17,19 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
-import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
-import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.LogUtil;
 import com.library.util.RegexValidateUtil;
-import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
@@ -72,20 +68,32 @@ public class MarketDetailActivity extends BaseActivity {
     private boolean updateAddStatus = true;
 
     private ShareJson shareBean;
-    private String quotesShareUrl;
-    private int loadUrlCount = 0;
+
+    private MarketDetailBean.ShareBean mDetailShare;
 
     @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
     public void onOptionClick(View view) {
         switch (view.getId()) {
             case R.id.ll_market_detail_optional:
+                if (!pageLoadLayout.isSuccessLoadOver()) {
+                    return;
+                }
                 addOrDeleteMarket();
                 break;
             case R.id.ll_market_detail_share:
+                if (!pageLoadLayout.isSuccessLoadOver()) {
+                    return;
+                }
                 String title = tvBarTitle.getText().toString();
                 ShareJson shareBean = new ShareJson(title,
-                        quotesShareUrl,
-                        "", null, null, UmengShareTool.TYPE_DEFAULT, null, null, null,
+                        mDetailShare.getUrl(),
+                        mDetailShare.getDescript(),
+                        null,
+                        null,
+                        UmengShareTool.TYPE_DEFAULT,
+                        null,
+                        null,
+                        null,
                         false, false);
                 shareBean.setShareFromSource(2);
                 UmengShareTool.initUmengLayout(MarketDetailActivity.this,
@@ -104,15 +112,55 @@ public class MarketDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detail, StatusBarColor.THEME1);
 
-        loadMarketUrl();
+//        loadMarketUrl();
+        requestInitDetail();
     }
 
-    private void loadMarketUrl() {
-        try {
-            if (loadUrlCount > 3) {
+    private void requestInitDetail() {
+        pageLoadLayout.loadWait();
+        marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
+        VolleyRequest volleyRequest = new VolleyRequest(this, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("code", marketItemBean.getCode());
+        volleyRequest.doGet(HttpConstant.MARKET_DETAIL, jsonParam, new HttpListener<MarketDetailBean>() {
+            @Override
+            protected void onResponse(MarketDetailBean mMarketDetailBean) {
+
+                marketItemList = MarketUtil.getMarketEditOption(getContext());
+                if (marketItemList == null) {
+                    marketItemList = new ArrayList<>();
+                }
+                marketItemBean = null;
+                marketItemBean = mMarketDetailBean.getData();
+
+                quotesChartUrl = mMarketDetailBean.getQuotes_chart_url();
+                mDetailShare = mMarketDetailBean.getShare();
+
+                lwvContent.build();
+                lwvContent.loadUrl(quotesChartUrl);
+                lwvContent.setOverWriteWebChromeClient(new WebChromeClient() {
+                    @Override
+                    public void onReceivedTitle(WebView webView, String s) {
+                        super.onReceivedTitle(webView, s);
+                        if (!RegexValidateUtil.isEmpty(s)) {
+                            tvBarTitle.setText(s);
+                        }
+                    }
+                });
+                verifyOptionAppend();
                 pageLoadLayout.loadOver();
-                return;
             }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                pageLoadLayout.loadError();
+            }
+        });
+    }
+
+    /*private void loadMarketUrl() {
+        try {
             marketItemList = MarketUtil.getMarketEditOption(getContext());
             if (marketItemList == null) {
                 marketItemList = new ArrayList<>();
@@ -127,15 +175,6 @@ public class MarketDetailActivity extends BaseActivity {
             quotesShareUrl = quotesShareUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
             quotesChartUrl = quotesChartUrl.replaceAll("\\{system\\}", VarConstant.HTTP_SYSTEM_VALUE);
             quotesChartUrl = quotesChartUrl.replaceAll("\\{version\\}", VarConstant.HTTP_VERSION_VALUE);
-
-            ThemeUtil.addActivityToThemeCache(this);
-
-//            Boolean isNight = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
-//            if (isNight) {
-//                quotesChartUrl += "&yejian=1";
-//            } else {
-//                quotesChartUrl += "&yejian=0";
-//            }
 
             lwvContent.build();
             lwvContent.loadUrl(quotesChartUrl);
@@ -152,7 +191,7 @@ public class MarketDetailActivity extends BaseActivity {
             pageLoadLayout.loadOver();
         } catch (Exception e) {
             e.printStackTrace();
-            loadUrlCount++;
+
             pageLoadLayout.loadWait();
 
             VolleyRequest volleyRequest = new VolleyRequest(this, mQueue);
@@ -171,7 +210,7 @@ public class MarketDetailActivity extends BaseActivity {
             });
 
         }
-    }
+    }*/
 
     private void addOrDeleteMarket() {
         if (TextUtils.isEmpty(marketItemBean.getName()) || TextUtils.isEmpty(marketItemBean.getCode())) {

@@ -256,7 +256,7 @@ public class UmengShareTool {
             ShareAction shareAction = new ShareAction(activity);
 
             ShareContent shareContent = new ShareContent();
-            shareContent.mText = shareBean.getTitle() + " " + shareBean.getShareUrl();
+            shareContent.mText = shareBean.getDiscription() /*+ " " + shareBean.getShareUrl()*/ ;
             shareContent.mMedia = urlImage;
             shareAction.setShareContent(shareContent);
 

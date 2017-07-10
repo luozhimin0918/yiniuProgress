@@ -33,7 +33,6 @@ public class HttpConstant {
 
     public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
-//public static final String BASE_URL = "https://test.kxtadi.kuaixun56.com/";
 
 
     //    public static final String IMG_URL = "http://img.kxt.com/";
@@ -114,6 +113,8 @@ public class HttpConstant {
     public static final String MARKET_NAV = BASE_URL + "quotes/nav" + VarConstant.HTTP_CONTENT;
     public static final String MARKET_INDEX = BASE_URL + "quotes/index" + VarConstant.HTTP_CONTENT;
     public static final String MARKET_LIST = BASE_URL + "quotes/list" + VarConstant.HTTP_CONTENT;
+    public static final String MARKET_DETAIL = BASE_URL + "quotes/detail" + VarConstant.HTTP_CONTENT;
+
 
     public static final String VIDEO_DETAIL = BASE_URL + "video/detail" + VarConstant.HTTP_CONTENT;
     public static final String COMMENT_LIST = BASE_URL + "comment/list" + VarConstant.HTTP_CONTENT;

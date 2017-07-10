@@ -39,12 +39,15 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.JsonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.superplayer.library.SuperPlayer;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -426,6 +429,8 @@ public class VideoDetailPresenter extends BasePresenter {
                     public void callback(Object o) {
                         isCollect = false;
                         videoDetailActivity.ivCollect.setSelected(false);
+
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_VIDEO, videoListJson));
                     }
 
                     @Override
@@ -439,6 +444,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     public void callback(Object o) {
                         isCollect = true;
                         videoDetailActivity.ivCollect.setSelected(true);
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_VIDEO, videoListJson));
                     }
 
                     @Override
