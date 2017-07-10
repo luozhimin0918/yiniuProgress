@@ -23,18 +23,6 @@ public class DBManager {
 
     }
 
-    public DaoSession getDaoSessionRead() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        return daoSession;
-    }
-
-    public DaoSession getDaoSessionWrit() {
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        return daoSession;
-    }
-
     /**
      * 获取单例引用
      *
@@ -54,6 +42,17 @@ public class DBManager {
         return mInstance;
     }
 
+    public DaoSession getDaoSessionRead() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession;
+    }
+
+    public DaoSession getDaoSessionWrit() {
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession;
+    }
 
     /**
      * 获取可读数据库
@@ -117,32 +116,12 @@ public class DBManager {
         }
 
         private void upgradeToVersion1(Database db) {
-           /* try
-            {
-                String sql1 = "ALTER TABLE MAJOR_CAROUSEL ADD COLUMN URL VARCHAR";
+            try {
+                String sql1 = "ALTER TABLE VIDEO_BEAN ADD COLUMN SHARE_IMAGE VARCHAR";
                 db.execSQL(sql1);
-            } catch (SQLException e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            try
-            {
-                String sql2 = "ALTER TABLE MAJOR_ITEM_CONTENT2 ADD COLUMN URL VARCHAR";
-                db.execSQL(sql2);
-            } catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-
-            try
-            {
-                String sql3 = "ALTER TABLE MAJOR_ITEM_CONTENT ADD COLUMN URL VARCHAR";
-                db.execSQL(sql3);
-            } catch (SQLException e)
-            {
-                e.printStackTrace();
-            }*/
         }
     }
 }
