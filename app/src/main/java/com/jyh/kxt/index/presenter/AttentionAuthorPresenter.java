@@ -40,15 +40,19 @@ public class AttentionAuthorPresenter extends BasePresenter {
         request.setTag(getClass().getName());
     }
 
-    public void init() {
+    /**
+     * @param fromSource 0 初始化
+     */
+    public void resumeRequest(final int fromSource) {
         request.doGet(getUrl(), new HttpListener<List<AuthorDetailsJson>>() {
             @Override
             protected void onResponse(List<AuthorDetailsJson> authors) {
                 if (authors == null || authors.size() == 0) {
                     fragment.plRootView.loadEmptyData();
                 } else {
-                    int size = authors.size();
                     List<AuthorDetailsJson> authorDetails = null;
+
+                    int size = authors.size();
                     if (size > VarConstant.LIST_MAX_SIZE) {
                         authorDetails = new ArrayList<>(authors.subList(0, VarConstant.LIST_MAX_SIZE));
                         lastId = authors.get(VarConstant.LIST_MAX_SIZE - 1).getId();
@@ -58,8 +62,8 @@ public class AttentionAuthorPresenter extends BasePresenter {
                         lastId = "";
                         isMore = false;
                     }
-                    fragment.init(authorDetails);
 
+                    fragment.init(authorDetails, fromSource);
                 }
             }
 
@@ -113,7 +117,7 @@ public class AttentionAuthorPresenter extends BasePresenter {
     }
 
     public void loadMore() {
-        if (isMore)
+        if (isMore) {
             request.doGet(getUrl(), new HttpListener<List<AuthorDetailsJson>>() {
                 @Override
                 protected void onResponse(List<AuthorDetailsJson> authorDetailsJsons) {
@@ -151,7 +155,7 @@ public class AttentionAuthorPresenter extends BasePresenter {
                     }, 200);
                 }
             });
-        else {
+        } else {
             fragment.plvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -168,8 +172,9 @@ public class AttentionAuthorPresenter extends BasePresenter {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
         jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
-        if (!RegexValidateUtil.isEmpty(lastId))
+        if (!RegexValidateUtil.isEmpty(lastId)) {
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+        }
         try {
             return url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam.toString());
         } catch (Exception e) {
@@ -177,4 +182,5 @@ public class AttentionAuthorPresenter extends BasePresenter {
         }
         return url;
     }
+
 }

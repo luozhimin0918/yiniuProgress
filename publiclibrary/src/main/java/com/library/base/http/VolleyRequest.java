@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.library.util.EncryptionUtils;
 import com.library.util.JsonUtil;
 import com.library.util.LogUtil;
+import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.lang.reflect.ParameterizedType;
@@ -235,6 +236,7 @@ public class VolleyRequest {
 
     public JSONObject getJsonParam() {
         JSONObject jsonObject = new JSONObject();
+        SystemUtil.getVersionName(mContext);
         jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
         jsonObject.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
         return jsonObject;

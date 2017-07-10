@@ -199,6 +199,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
             view.loadUrl("javascript:getShareInfo()");
 
             if(!mSettings.getJavaScriptEnabled()){
+                isDefaultJavaScriptEnabled = true;
                 mSettings.setJavaScriptEnabled(true);
                 wvContent.reload();
             }

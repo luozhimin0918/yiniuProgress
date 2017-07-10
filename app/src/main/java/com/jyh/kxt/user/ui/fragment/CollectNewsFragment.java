@@ -40,7 +40,8 @@ import butterknife.BindView;
  * 创建日期:2017/5/2.
  */
 
-public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener2 {
+public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener,
+        PullToRefreshBase.OnRefreshListener2 {
 
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
@@ -76,7 +77,8 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
                             delNumListener.delAll(delSize == allSize);
                         }
                     } else {
-                        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
+                        JumpUtils.jump((BaseActivity) getActivity(), newsJson.getO_class(), newsJson.getO_action(),
+                                newsJson.getO_id(),
                                 newsJson
                                         .getHref());
                     }
@@ -86,8 +88,9 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             }
         });
 
-        if (adapter != null)
+        if (adapter != null) {
             plvContent.setAdapter(adapter);
+        }
 
         type = getArguments().getString(IntentConstant.TYPE);
         collectNewsPresenter.initData(type);
@@ -202,8 +205,9 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
             for (NewsJson newsJson : data) {
                 newsJson.setSel(false);
                 String o_id = newsJson.getO_id();
-                if (delIds.contains(o_id))
+                if (delIds.contains(o_id)) {
                     delIds.remove(o_id);
+                }
 
             }
             //还原选中数量
@@ -305,8 +309,9 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (plvContent != null)
+        if (plvContent != null) {
             plvContent.setDividerNull();
+        }
     }
 
     @Override
@@ -327,25 +332,22 @@ public class CollectNewsFragment extends BaseFragment implements PageLoadLayout.
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusClass eventBus) {
         if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_NEWS) {
-            if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_FLASH) {
-                NewsJson flash = (NewsJson) eventBus.intentObj;
-                List<NewsJson> data = adapter.getData();
-                for (NewsJson flashJson : data) {
-                    if (flash.getO_id().equals(flashJson.getO_id())) {
-                        adapter.removeById(flashJson.getO_id());
-                        adapter.notifyDataSetChanged();
-                        List<NewsJson> data1 = adapter.getData();
-                        if (data1 == null || data1.size() == 0) {
-                            plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                            plRootView.setNullText(getString(R.string.error_collect_null));
-                            plRootView.loadEmptyData();
-                        }
-                        return;
+            NewsJson flash = (NewsJson) eventBus.intentObj;
+            List<NewsJson> data = adapter.getData();
+            for (NewsJson flashJson : data) {
+                if (flash.getO_id().equals(flashJson.getO_id())) {
+                    adapter.removeById(flashJson.getO_id());
+                    adapter.notifyDataSetChanged();
+                    List<NewsJson> data1 = adapter.getData();
+                    if (data1 == null || data1.size() == 0) {
+                        plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        plRootView.setNullText(getString(R.string.error_collect_null));
+                        plRootView.loadEmptyData();
                     }
+                    return;
                 }
-                collectNewsPresenter.refresh();
             }
+            collectNewsPresenter.refresh();
         }
-
     }
 }

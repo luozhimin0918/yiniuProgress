@@ -107,6 +107,7 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
     protected void onResume() {
         Session.onResume(this);
         super.onResume();
+
         Glide.with(this).resumeRequests();
         MobclickAgent.onResume(this);
         boolean isNightTheme = SPUtils.getBoolean(this, SpConstant.SETTING_DAY_NIGHT);
@@ -118,6 +119,10 @@ public class BaseActivity extends LibActivity implements IBaseView, NetEvent {
                 setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
             ThemeUtil.changeCacheActionTheme(this);
+        }
+
+        if(waitPopup != null && waitPopup.isShowing()){
+            waitPopup.dismiss();
         }
     }
 

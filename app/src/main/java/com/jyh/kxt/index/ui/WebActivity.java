@@ -17,6 +17,8 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.presenter.WebPresenter;
 import com.library.util.RegexValidateUtil;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,9 +46,6 @@ public class WebActivity extends BaseActivity {
         getExtra(getIntent());
 
         webPresenter = new WebPresenter(this);
-        if (title != null) {
-            tvBarTitle.setText(title);
-        }
 
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
         ivBarFunction.setVisibility(View.INVISIBLE);
@@ -77,7 +76,19 @@ public class WebActivity extends BaseActivity {
                 });
             }
         });
-
+        if (title != null) {
+            tvBarTitle.setText(title);
+        }else{
+            webPresenter.loadX5WebView.setOverWriteWebChromeClient(new WebChromeClient(){
+                @Override
+                public void onReceivedTitle(WebView webView, String s) {
+                    super.onReceivedTitle(webView, s);
+                    if (!RegexValidateUtil.isEmpty(s)) {
+                        tvBarTitle.setText(s);
+                    }
+                }
+            });
+        }
     }
 
     /**

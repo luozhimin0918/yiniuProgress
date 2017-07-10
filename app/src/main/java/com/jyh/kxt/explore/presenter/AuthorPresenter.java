@@ -14,13 +14,14 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 项目名:Kxt
@@ -95,8 +96,9 @@ public class AuthorPresenter extends BasePresenter {
 
         if (isMore) {
 
-            if (request == null)
+            if (request == null) {
                 request = new VolleyRequest(mContext, mQueue);
+            }
             request.doGet(getLoadMoreUrl(), new HttpListener<List<AuthorNewsJson>>() {
                 @Override
                 protected void onResponse(List<AuthorNewsJson> newsJsons) {
@@ -189,7 +191,7 @@ public class AuthorPresenter extends BasePresenter {
         if (LoginUtils.isLogined(mContext)) {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-            jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN,userInfo.getToken());
+            jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userInfo.getToken());
         }
         jsonParam.put(VarConstant.HTTP_ID, authorId);
 
@@ -197,6 +199,11 @@ public class AuthorPresenter extends BasePresenter {
             @Override
             protected void onResponse(Object o) {
                 authorActivity.attention(isFollow);
+                if (isFollow) {
+                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
+                } else {
+                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, authorId));
+                }
             }
 
             @Override
@@ -228,11 +235,13 @@ public class AuthorPresenter extends BasePresenter {
     private String getLoadMoreUrl() {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_LIST_TYPE, VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER);
-        if (!RegexValidateUtil.isEmpty(lastId))
+        if (!RegexValidateUtil.isEmpty(lastId)) {
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+        }
         jsonParam.put(VarConstant.HTTP_WRITER_ID, authorId);
         try {
-            return HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam
+            return HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant
+                    .KEY, jsonParam
                     .toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,8 +263,9 @@ public class AuthorPresenter extends BasePresenter {
             jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
         }
         try {
-            return HttpConstant.EXPLORE_BLOG_PROFILE + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, jsonParam
-                    .toString());
+            return HttpConstant.EXPLORE_BLOG_PROFILE + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT
+                    (VarConstant.KEY, jsonParam
+                            .toString());
         } catch (Exception e) {
             e.printStackTrace();
             return HttpConstant.EXPLORE_BLOG_PROFILE;

@@ -1,7 +1,6 @@
 package com.jyh.kxt.user.ui.fragment;
 
 import android.content.Intent;
-import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,8 @@ import com.jyh.kxt.base.annotation.DelNumListener;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.user.adapter.CollectVideoAdapter;
 import com.jyh.kxt.user.presenter.CollectVideoPresenter;
-import com.jyh.kxt.user.ui.CollectActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
@@ -90,8 +87,9 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
             }
         });
 
-        if (adapter != null)
+        if (adapter != null) {
             plvContent.setAdapter(adapter);
+        }
 
         collectVideoPresenter.initData();
     }
@@ -204,8 +202,9 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
             for (VideoListJson videoListJson : data) {
                 videoListJson.setSel(false);
                 String id = videoListJson.getId();
-                if (delIds.contains(id))
+                if (delIds.contains(id)) {
                     delIds.remove(id);
+                }
             }
             //还原选中数量
             observerData.delItem(0);
@@ -313,33 +312,33 @@ public class CollectVideoFragment extends BaseFragment implements PageLoadLayout
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (adapter != null)
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
-        if (plvContent != null)
+        }
+        if (plvContent != null) {
             plvContent.setDividerNull();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusClass eventBus) {
         if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_VIDEO) {
-            if (eventBus.fromCode == EventBusClass.EVENT_COLLECT_FLASH) {
-                VideoListJson flash = (VideoListJson) eventBus.intentObj;
-                List<VideoListJson> data = adapter.getData();
-                for (VideoListJson flashJson : data) {
-                    if (flash.getId().equals(flashJson.getId())) {
-                        adapter.removeById(flashJson.getId());
-                        adapter.notifyDataSetChanged();
-                        List<VideoListJson> data1 = adapter.getData();
-                        if (data1 == null || data1.size() == 0) {
-                            plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                            plRootView.setNullText(getString(R.string.error_collect_null));
-                            plRootView.loadEmptyData();
-                        }
-                        return;
+            VideoListJson flash = (VideoListJson) eventBus.intentObj;
+            List<VideoListJson> data = adapter.getData();
+            for (VideoListJson flashJson : data) {
+                if (flash.getId().equals(flashJson.getId())) {
+                    adapter.removeById(flashJson.getId());
+                    adapter.notifyDataSetChanged();
+                    List<VideoListJson> data1 = adapter.getData();
+                    if (data1 == null || data1.size() == 0) {
+                        plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        plRootView.setNullText(getString(R.string.error_collect_null));
+                        plRootView.loadEmptyData();
                     }
+                    return;
                 }
-                collectVideoPresenter.refresh();
             }
+            collectVideoPresenter.refresh();
         }
     }
 

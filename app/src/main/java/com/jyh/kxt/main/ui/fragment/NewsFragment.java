@@ -53,10 +53,9 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_news);
         newsPresenter = new NewsPresenter(this);
-
         newsPresenter.init();
-
         plRootView.setOnAfreshLoadListener(this);
+//        EventBus.getDefault().register(this);
     }
 
     @OnClick(R.id.iv_more)
@@ -67,6 +66,15 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                 break;
         }
     }
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEvent(EventBusClass eventBus) {
+//        switch (eventBus.fromCode) {
+//            case EventBusClass.EVENT_REQUEST_MAIN_INIT://初始化程序,无论成功与否都发送
+//
+//                break;
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,6 +146,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+//        EventBus.getDefault().unregister(this);
         getQueue().cancelAll(newsPresenter.getClass().getName());
     }
 

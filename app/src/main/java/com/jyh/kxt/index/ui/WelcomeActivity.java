@@ -3,7 +3,6 @@ package com.jyh.kxt.index.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import com.jyh.kxt.index.presenter.WelcomePresenter;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.magicwindow.MLink;
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 启动-欢迎界面
@@ -49,6 +47,7 @@ public class WelcomeActivity extends BaseActivity {
     public void onTimeClick(View view) {
         switch (view.getId()) {
             case R.id.tv_advert_time:
+                welcomePresenter.isClickToWebAd = true;
                 welcomePresenter.startToActivity(MainActivity.class);
                 break;
         }

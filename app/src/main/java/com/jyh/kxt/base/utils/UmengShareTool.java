@@ -380,10 +380,11 @@ public class UmengShareTool {
                             shareBean.setBitmap(defaultWeiBoShareBitmap);
                             setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean);
                             break;
-                        } else
+                        } else {
                             setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
                                             .getDiscription(),
                                     shareBean.getThumb(), SHARE_MEDIA.SINA);
+                        }
                         break;
                     case 3:
                         //QQ

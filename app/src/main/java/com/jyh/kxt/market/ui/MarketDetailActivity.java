@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -72,6 +73,7 @@ public class MarketDetailActivity extends BaseActivity {
 
     private ShareJson shareBean;
     private String quotesShareUrl;
+    private int loadUrlCount = 0;
 
     @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
     public void onOptionClick(View view) {
@@ -80,38 +82,6 @@ public class MarketDetailActivity extends BaseActivity {
                 addOrDeleteMarket();
                 break;
             case R.id.ll_market_detail_share:
-                /*if (oldBitmap != null && !oldBitmap.isRecycled()) {
-                    oldBitmap.recycle();
-                    oldBitmap = null;
-                }
-                getScreenBitmap(new ObserverData<Bitmap>() {
-                    @Override
-                    public void callback(Bitmap bitmap) {
-                        try {
-                            if (bitmap != null) {
-                                shareBean = new ShareJson(marketItemBean
-                                        .getName(),
-                                        quotesChartUrl, "", null, bitmap,
-                                        UmengShareTool.TYPE_MARKET, null, null, null, false, false);
-                                shareBean.setShareFromSource(1);
-                                UmengShareTool.initUmengLayout(MarketDetailActivity.this, shareBean, null,
-                                        ivBarBreak,
-                                        null);
-                            } else {
-                                ToastView.makeText3(MarketDetailActivity.this, "截图失败无法分享,请重试");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        ToastView.makeText3(MarketDetailActivity.this, "截图失败无法分享,请重试");
-                    }
-
-                }, this);*/
-
                 String title = tvBarTitle.getText().toString();
                 ShareJson shareBean = new ShareJson(title,
                         quotesShareUrl,
@@ -139,6 +109,10 @@ public class MarketDetailActivity extends BaseActivity {
 
     private void loadMarketUrl() {
         try {
+            if (loadUrlCount > 3) {
+                pageLoadLayout.loadOver();
+                return;
+            }
             marketItemList = MarketUtil.getMarketEditOption(getContext());
             if (marketItemList == null) {
                 marketItemList = new ArrayList<>();
@@ -147,17 +121,12 @@ public class MarketDetailActivity extends BaseActivity {
             MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
             marketItemBean = getIntent().getParcelableExtra(IntentConstant.MARKET);
 
-            if (TextUtils.isEmpty(marketItemBean.getName())) {
-                marketItemBean.setName("");
-            }
-
             quotesChartUrl = mainInitJson.getQuotes_chart_url();
-            quotesShareUrl=mainInitJson.getUrl_quotes_share();
+            quotesShareUrl = mainInitJson.getUrl_quotes_share();
             quotesChartUrl = quotesChartUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
             quotesShareUrl = quotesShareUrl.replaceAll("\\{code\\}", marketItemBean.getCode());
             quotesChartUrl = quotesChartUrl.replaceAll("\\{system\\}", VarConstant.HTTP_SYSTEM_VALUE);
             quotesChartUrl = quotesChartUrl.replaceAll("\\{version\\}", VarConstant.HTTP_VERSION_VALUE);
-
 
             ThemeUtil.addActivityToThemeCache(this);
 
@@ -180,19 +149,36 @@ public class MarketDetailActivity extends BaseActivity {
                 }
             });
             verifyOptionAppend();
-
-            tvBarTitle.setText(marketItemBean.getName());
+            pageLoadLayout.loadOver();
         } catch (Exception e) {
             e.printStackTrace();
+            loadUrlCount++;
+            pageLoadLayout.loadWait();
 
-            pageLoadLayout.setNullText("加载行情地址可能为空");
-            pageLoadLayout.loadEmptyData();
+            VolleyRequest volleyRequest = new VolleyRequest(this, mQueue);
+            volleyRequest.doGet(HttpConstant.CONFIG, new HttpListener<String>() {
+                @Override
+                protected void onResponse(String patchInfo) {
+                    SPUtils.save(MarketDetailActivity.this, SpConstant.INIT_LOAD_APP_CONFIG, patchInfo);
+                    loadMarketUrl();
+                }
 
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    pageLoadLayout.loadEmptyData();
+                }
+            });
 
         }
     }
 
     private void addOrDeleteMarket() {
+        if (TextUtils.isEmpty(marketItemBean.getName()) || TextUtils.isEmpty(marketItemBean.getCode())) {
+            Toast.makeText(this, "数据不全操作失败", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (updateAddStatus) {
             if (marketItemList.size() > 30) {
                 TSnackbar.make(ivBarBreak, "自选行情数量太多,超出30条了喔,添加失败", TSnackbar.LENGTH_LONG, TSnackbar
@@ -241,43 +227,6 @@ public class MarketDetailActivity extends BaseActivity {
             tvOptional.setText("删除自选");
         }
     }
-
-    /*private Bitmap oldBitmap;
-
-    public void getScreenBitmap(final ObserverData<Bitmap> observerData, Activity activity) {
-        // 获取windows中最顶层的view
-        final View view = activity.getWindow().getDecorView();
-        view.buildDrawingCache();
-
-        // 获取状态栏高度
-        Rect rect = new Rect();
-        view.getWindowVisibleDisplayFrame(rect);
-        final int statusBarHeights = rect.top;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-
-        // 获取屏幕宽和高
-        final int widths = display.getWidth();
-        final int heights = display.getHeight();
-        final int height = heights - statusBarHeights;
-
-        // 允许当前窗口保存缓存信息
-        view.setDrawingCacheEnabled(true);
-
-        // 去掉状态栏
-        final Bitmap bitmap = view.getDrawingCache();
-        byte[] drawCacheBitmapBytes = BitmapUtils.Bitmap2Bytes(bitmap, Bitmap.CompressFormat.JPEG);
-
-        Glide.with(activity).load(drawCacheBitmapBytes).asBitmap().override(widths / 2, height / 2).into(new
-        SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                // 销毁缓存信息
-                oldBitmap = resource;
-                view.destroyDrawingCache();
-                observerData.callback(resource);
-            }
-        });
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

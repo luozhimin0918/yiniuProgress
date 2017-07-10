@@ -93,4 +93,6 @@ public class SpConstant {
 
     public static final String PATCH_INFO = "patch_info";//补丁信息
     public static final String PATCH_PATH = "patch_path";//补丁路径
+
+    public static final String AD_IMAGE_URL = "ad_image_url" ;
 }

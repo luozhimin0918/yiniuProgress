@@ -3,17 +3,14 @@ package com.jyh.kxt.index.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -64,9 +61,7 @@ import com.library.util.NetUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
-import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UmengTool;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
@@ -124,7 +119,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public static String mwType = null;//跳转类型 true 列表页
     public static String mwPath = null;//跳转路径
 
-    public int mActivityFrom = 0;
+    public int mActivityFrom = 0;//如果为0 则为默认进入  1 则表示内存回收重启,不显示广告弹窗  2 表示welcom界面已经加载完成数据
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +141,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             ActivityManager.getInstance().finishAllActivity();
             this.finish();
 
-            Intent intent = new Intent(this,MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(SpConstant.MAIN_ACTIVITY_FROM, 1);
             startActivity(intent);
             return;
@@ -770,6 +765,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
         mwId = null;
         mwPath = null;
+    }
+
+    //读写权限检查
+    public void initPermission() {
+        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED
+                || readPermission != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, 2000);
+        }
     }
 
     @Override

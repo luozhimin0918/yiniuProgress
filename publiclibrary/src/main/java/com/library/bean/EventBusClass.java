@@ -27,6 +27,7 @@ public class EventBusClass {
 
     public static final int EVENT_ATTENTION_OTHER = 14;//关注别人
     public static final int EVENT_MARKET_LOGIN_GONG = 15;//登录之后，行情自选下方登录隐藏
+    public static final int EVENT_REQUEST_MAIN_INIT = 16;//请求完成之后发送Event
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

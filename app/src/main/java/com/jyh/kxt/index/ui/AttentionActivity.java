@@ -2,7 +2,6 @@ package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -48,6 +47,8 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
     private AttentionAuthorPresenter presenter;
     private AttentionAuthorAdapter adapter;
 
+    private boolean isOnResume = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +66,7 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
         tvBarTitle.setText("我的关注");
 
         plRootView.loadWait();
-        presenter.init();
-
+        presenter.resumeRequest(0);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
     @Override
     public void OnAfreshLoad() {
         plRootView.loadWait();
-        presenter.init();
+        presenter.resumeRequest(0);
     }
 
     @Override
@@ -104,18 +104,22 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
         startActivity(intent);
     }
 
-    public void init(List<AuthorDetailsJson> authors) {
+    public void init(List<AuthorDetailsJson> authors, int fromSource) {
         if (authors == null || authors.size() == 0) {
             plRootView.loadEmptyData();
         } else {
-            if (adapter == null) {
-                adapter = new AttentionAuthorAdapter(getContext(), authors);
-                plvContent.setAdapter(adapter);
-                adapter.setRequest(presenter.request);
+            if (fromSource == 0) {
+                if (adapter == null) {
+                    adapter = new AttentionAuthorAdapter(getContext(), authors);
+                    plvContent.setAdapter(adapter);
+                    adapter.setRequest(presenter.request);
+                } else {
+                    adapter.setData(authors);
+                }
+                plRootView.loadOver();
             } else {
                 adapter.setData(authors);
             }
-            plRootView.loadOver();
         }
     }
 
@@ -155,8 +159,10 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
             case EventBusClass.EVENT_ATTENTION_AUTHOR_DEL:
                 //删除关注、若数据为空则显示空布局
                 List<AuthorDetailsJson> data = adapter.getData();
-                if (data == null || data.size() == 0)
+                if (data == null || data.size() == 0) {
                     plRootView.loadEmptyData();
+                }
+
                 break;
             case EventBusClass.EVENT_ATTENTION_AUTHOR_ADD:
                 break;
@@ -166,8 +172,9 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (adapter != null)
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -179,6 +186,13 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
             if (data == null || data.size() == 0) {
                 plRootView.loadEmptyData();
             }
+        }
+
+        if (isOnResume) {
+            presenter.resumeRequest(1);
+        }
+        if (!isOnResume) {
+            isOnResume = true;
         }
     }
 

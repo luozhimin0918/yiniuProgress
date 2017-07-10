@@ -11,16 +11,13 @@ import android.support.v4.view.ViewPager;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarImportantBean;
 import com.jyh.kxt.datum.presenter.CalendarPresenter;
-import com.library.util.SPUtils;
 import com.library.widget.tablayout.SlidingTabLayout;
 
 import java.text.ParseException;
@@ -82,6 +79,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     private BaseFragmentAdapter pageAdapter;
 
     public void createItemFragments() {
+        oldCalendarItemFragment = null;
         String[] navTitles = calendarPresenter.navTitleList;
         for (int i = 0; i < navTitles.length; i++) {
             CalendarItemFragment calendarItemFragment = new CalendarItemFragment();
@@ -134,20 +132,24 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        if (oldCalendarItemFragment != null) {
-            oldCalendarItemFragment.resetFiltration();//重置刷新一下
-            HashSet<String> oldCityMap = citySelectMap.get(oldCalendarItemFragment);
-            oldCityMap.clear();
-
-            stateSet.clear();
-            importanceSet.clear();
-            judgeSet.clear();
-            initializeFiltrationSet();
-        }
-
-        calendarPresenter.updateSelectedColor(position);
-
         try {//如果切换回来存在筛选数据则改变
+            try {
+                if (oldCalendarItemFragment != null) {
+                    HashSet<String> oldCityMap = citySelectMap.get(oldCalendarItemFragment);
+                    oldCityMap.clear();
+                    stateSet.clear();
+
+                    importanceSet.clear();
+                    judgeSet.clear();
+
+                    initializeFiltrationSet();
+                    oldCalendarItemFragment.resetFiltration();//重置刷新一下
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            calendarPresenter.updateSelectedColor(position);
+
             Fragment fragment = fragmentList.get(position);
             oldCalendarItemFragment = (CalendarItemFragment) fragment;
 
@@ -191,14 +193,12 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
     public void gotoCorrespondItem(long timeInMillis) {
         int indexOf = calendarPresenter.dataLongList.indexOf(timeInMillis);
         if (indexOf != -1) {
-
             vpCalendarList.setCurrentItem(indexOf);
             calendarPresenter.updateSelectedColor(indexOf);
 
         } else {//重新所有数据
             fragmentList.clear();
             vpCalendarList.removeAllViews();
-
             calendarPresenter.generateDateItem(timeInMillis);
             createItemFragments();
         }

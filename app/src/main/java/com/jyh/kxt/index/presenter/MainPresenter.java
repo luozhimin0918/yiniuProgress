@@ -31,6 +31,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -130,7 +131,6 @@ public class MainPresenter extends BasePresenter {
                 .OnSubscribe<SingleThreadJson>() {
             @Override
             public void call(Subscriber<? super SingleThreadJson> subscriber) {
-
                 try {
                     Thread.sleep(1 * 1000);
                 } catch (InterruptedException e) {
@@ -150,7 +150,7 @@ public class MainPresenter extends BasePresenter {
                 subscriber.onNext(configJson);
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(5 * 1000);
                     SingleThreadJson patchJson = new SingleThreadJson(1, "");
                     subscriber.onNext(patchJson);
                 } catch (InterruptedException e) {
@@ -199,6 +199,7 @@ public class MainPresenter extends BasePresenter {
     }
 
     private void httpRequestPatchInfo() {
+        mMainActivity.initPermission();
         String resultData = "";
         try {
             PackageManager packageManager = mMainActivity.getPackageManager();
@@ -233,9 +234,8 @@ public class MainPresenter extends BasePresenter {
                     String status = patchJson.getString("status");
                     if (status == null) {
                         SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
-
-                        requestPatchDownNotify();
                         newThreadDownPatch();
+                        requestPatchDownNotify();
                     }
                 }
 
@@ -250,25 +250,29 @@ public class MainPresenter extends BasePresenter {
     }
 
     private void requestPatchDownNotify() {
-        String versionCode = SystemUtil.getVersionName(mContext);
+        try {
+            String versionCode = SystemUtil.getVersionName(mContext);
 
-        String patchInfo = SPUtils.getString(mMainActivity, SpConstant.PATCH_INFO);
-        PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
+            String patchInfo = SPUtils.getString(mMainActivity, SpConstant.PATCH_INFO);
+            PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
 
-        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-        String pjUrl = "?version=" + versionCode + "&code=" + patchJson.getPatch_code();
-        volleyRequest.setDefaultDecode(false);
-        volleyRequest.doGet(HttpConstant.DOWNLOAD_NUM + pjUrl, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String patchInfo) {
-                Log.e("@@", "onResponse: "  );
-            }
+            VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+            String pjUrl = "?version=" + versionCode + "&code=" + patchJson.getPatch_code();
+            volleyRequest.setDefaultDecode(false);
+            volleyRequest.doGet(HttpConstant.DOWNLOAD_NUM + pjUrl, new HttpListener<String>() {
+                @Override
+                protected void onResponse(String patchInfo) {
+                    Log.e("@@", "onResponse: ");
+                }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                Log.e("@@", "onResponse: "  );
-            }
-        });
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    Log.e("@@", "onResponse: ");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void newThreadDownPatch() {
@@ -294,7 +298,6 @@ public class MainPresenter extends BasePresenter {
                     conn.setConnectTimeout(5 * 1000);
 
                     InputStream input = conn.getInputStream();
-
                     FileOutputStream output = new FileOutputStream(patchFile);
                     //读取大文件
                     byte[] buffer = new byte[/*1 * 1024*/500];
@@ -302,7 +305,6 @@ public class MainPresenter extends BasePresenter {
                         output.write(buffer, 0, patchSize);
                     }
                     output.flush();
-
                     input.close();
                     output.close();
                     conn.disconnect();
@@ -345,19 +347,28 @@ public class MainPresenter extends BasePresenter {
         try {
             SPUtils.save(mContext, SpConstant.INIT_LOAD_APP_CONFIG, jsonStr);
 
-            MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
+            final MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
             MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
             showPopAdvertisement(indexAd);
 
-            MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
-            String pictureUrl = HttpConstant.IMG_URL + loadAd.getPicture();
+            String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
+            if (indexAd.getPicture() != null && !adImageUrl.equals(indexAd.getPicture())) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
+                            FutureTarget<File> future = Glide.with(mContext)
+                                    .load(loadAd.getPicture())
+                                    .downloadOnly(720, 1080);
+                            future.get();
 
-            Bitmap diskLruCache1 = DiskLruCacheUtils.getInstance(mContext).getDiskLruCache(pictureUrl);
-            if (diskLruCache1 == null) {
-                Glide.with(mContext)
-                        .load(pictureUrl)
-                        .asBitmap()
-                        .into(new MySimpleTarget(mContext, pictureUrl));
+                            SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -366,37 +377,14 @@ public class MainPresenter extends BasePresenter {
 
 
     public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd) {
-
-        /*final PopupWindow popWnd = new PopupWindow(mContext);
-        popWnd.setContentView(contentView);
-        popWnd.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        popWnd.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popWnd.setFocusable(true);
-
-        popWnd.setOutsideTouchable(true);
-        popWnd.showAtLocation(contentView, Gravity.CENTER, 0, 0);*/
-
-
-      /*  final PopupUtil popWnd = new PopupUtil(mMainActivity);
-        View contentView = popWnd.createPopupView(R.layout.pop_index_ad);
-        PopupUtil.Config config = new PopupUtil.Config();
-
-        config.outsideTouchable = true;
-        config.alpha = 0.5f;
-        config.bgColor = 0X00000000;
-
-        config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = WindowManager.LayoutParams.MATCH_PARENT;
-        config.height = WindowManager.LayoutParams.MATCH_PARENT;
-        popWnd.setConfig(config);
-        popWnd.showAtLocation(mMainActivity.rbHome, Gravity.BOTTOM, 0, 0);*/
-
+        if (indexAd == null) {
+            return;
+        }
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
 
         AlertDialog.Builder advertBuilderDialog = new AlertDialog.Builder(mContext, R.style.dialog3);
         final AlertDialog alertDialog = advertBuilderDialog.create();
         alertDialog.setView(contentView);
-        alertDialog.show();
 
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
         animation.setDuration(1 * 1000);
@@ -446,14 +434,7 @@ public class MainPresenter extends BasePresenter {
                     if (indexAd.getHref() == null || indexAd.getHref().trim().length() == 0) {
                         return;
                     }
-
-                    if ("normal".equals(indexAd.getType())) {
-                        JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
-                    } else {
-                        Uri uri = Uri.parse(indexAd.getHref());
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        mContext.startActivity(intent);
-                    }
+                    JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
                     alertDialog.dismiss();
                 }
             });
@@ -523,6 +504,7 @@ public class MainPresenter extends BasePresenter {
 
             settings.setJavaScriptEnabled(true);
             settings.setAppCacheEnabled(true);
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
             settings.setDefaultTextEncodingName("utf-8");
             settings.setLoadWithOverviewMode(true);
@@ -557,16 +539,6 @@ public class MainPresenter extends BasePresenter {
                 alertDialog.dismiss();
             }
         });
-
-//        popWnd.setOnDismissListener(new PopupUtil.OnDismissListener() {
-//            @Override
-//            public void onDismiss() {
-//                mMainActivity.homeFragment.closePopWindowAdvert();
-//                WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
-//                lp.alpha = 1.0f;
-//                mMainActivity.getWindow().setAttributes(lp);
-//            }
-//        });
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -583,6 +555,8 @@ public class MainPresenter extends BasePresenter {
                 alertDialog.dismiss();
             }
         });
+
+        alertDialog.show();
     }
 
     /**

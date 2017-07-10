@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
-import android.os.Bundle;
 
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
@@ -17,16 +16,6 @@ import com.android.volley.toolbox.HurlStack;
 import com.library.util.FileUtils;
 
 import java.io.File;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import okhttp3.OkHttpClient;
 
 /**
  * @author Mr'Dai
@@ -50,6 +39,8 @@ public class RequestQueueUtil {
      * Default on-disk cache directory.
      */
     private static final String DEFAULT_CACHE_DIR = "volley";
+
+    private static int DEFAULT_NETWORK_THREAD_POOL_SIZE = 2;
 
     /**
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
@@ -86,10 +77,10 @@ public class RequestQueueUtil {
         RequestQueue queue;
         if (maxDiskCacheBytes <= -1) {
             // No maximum size specified
-            queue = new RequestQueue(new DiskBasedCache(cacheDir), network);
+            queue = new RequestQueue(new DiskBasedCache(cacheDir), network, DEFAULT_NETWORK_THREAD_POOL_SIZE);
         } else {
             // Disk cache size specified
-            queue = new RequestQueue(new DiskBasedCache(cacheDir, maxDiskCacheBytes), network);
+            queue = new RequestQueue(new DiskBasedCache(cacheDir, maxDiskCacheBytes), network, DEFAULT_NETWORK_THREAD_POOL_SIZE);
         }
 
         queue.start();

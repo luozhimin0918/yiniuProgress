@@ -1,6 +1,5 @@
 package com.jyh.kxt.base.utils;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.RadioButton;

@@ -1,28 +1,21 @@
 package com.jyh.kxt.index.presenter;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
-import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
-import com.library.util.LogUtil;
 import com.library.util.SPUtils;
-import com.library.util.disklrucache.DiskLruCacheUtils;
 
 import java.io.IOException;
 
@@ -43,6 +36,7 @@ import rx.schedulers.Schedulers;
 public class WelcomePresenter extends BasePresenter {
 
     @BindObject WelcomeActivity welcomeActivity;
+    public boolean isClickToWebAd = false;
 
     public WelcomePresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -56,41 +50,33 @@ public class WelcomePresenter extends BasePresenter {
             if (!"".equals(indexConfig)) {
                 MainInitJson initConfig = JSONObject.parseObject(indexConfig, MainInitJson.class);
                 final MainInitJson.LoadAdBean loadAd = initConfig.getLoad_ad();
+                if (loadAd != null) {
+                    String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
 
-                DiskLruCacheUtils instance = DiskLruCacheUtils.getInstance(mContext);
-                if (loadAd.getPicture() != null && !"".equals(loadAd.getHref())) {
+                    if (loadAd.getPicture() != null &&
+                            !"".equals(adImageUrl) &&
+                            adImageUrl.equals(loadAd.getPicture())) {
 
-                    String pictureUrl = HttpConstant.IMG_URL + loadAd.getPicture();
-
-                    Bitmap diskLruCache = instance.getDiskLruCache(pictureUrl);
-                    if (diskLruCache != null && !diskLruCache.isRecycled()) {
                         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
-                        welcomeActivity.ivWelcome.setImageBitmap(diskLruCache);
-
                         welcomeActivity.tvAdvertTime.setVisibility(View.VISIBLE);
 
+                        Glide.with(welcomeActivity)
+                                .load(adImageUrl)
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .into(welcomeActivity.ivWelcome);
 
                         welcomeActivity.ivWelcome.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                Intent intent = null;
-//                                if (TextUtils.isEmpty(loadAd.getHref())) {
-//                                    //跳转至应用中的某一模块
-//                                    intent = new Intent(mContext, MainActivity.class);
-//                                    intent.putExtra(IntentConstant.O_CLASS, loadAd.getO_class());
-//                                    intent.putExtra(IntentConstant.O_ACTION, loadAd.getO_action());
-//                                    intent.putExtra(IntentConstant.O_ID, loadAd.getO_id());
-//                                } else {
-//                                    //跳转至广告页
-//                                    intent = new Intent(mContext, WebActivity.class);
-//                                    intent.putExtra(IntentConstant.NAME, loadAd.getTitle());
-//                                    intent.putExtra(IntentConstant.WEBURL, loadAd.getHref());
-//                                    intent.putExtra(IntentConstant.SOURCE, WelcomeActivity.class.getName());
-//                                }
-//                                mContext.startActivity(intent);
-                                JumpUtils.jump(welcomeActivity,loadAd.getO_class(),loadAd.getO_action(),loadAd.getO_id(),loadAd.getHref());
+                                isClickToWebAd = true;
+
+                                startToActivity(MainActivity.class);
+                                JumpUtils.jump(welcomeActivity,
+                                        loadAd,
+                                        loadAd.getHref());
                             }
                         });
+
                         advertTimeManage();
                         return;
                     }
@@ -103,8 +89,7 @@ public class WelcomePresenter extends BasePresenter {
     }
 
     public void advertTimeManage() {
-
-        Observable.create(new Observable.OnSubscribe<String>() {
+        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 int showTime = 0;
@@ -128,12 +113,15 @@ public class WelcomePresenter extends BasePresenter {
                 }
                 subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.newThread())
+        });
+        stringObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        startToActivity(MainActivity.class);
+                        if (!isClickToWebAd) {
+                            startToActivity(MainActivity.class);
+                        }
                     }
 
                     @Override
@@ -169,62 +157,6 @@ public class WelcomePresenter extends BasePresenter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-       /* Glide
-                .with(welcomeActivity)
-                .load(R.raw.qidong)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(
-                new GlideDrawableImageViewTarget(welcomeActivity.ivWelcome, 1) {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                    }
-
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                    }
-
-                    @Override
-                    public void onDestroy() {
-                        super.onDestroy();
-                    }
-
-                    @Override
-                    public void onStop() {
-                        super.onStop();
-                    }
-
-                    @Override
-                    public void onLoadCleared(Drawable placeholder) {
-                        super.onLoadCleared(placeholder);
-                    }
-
-                    @Override
-                    public void onResourceReady(GlideDrawable resource,
-                                                GlideAnimation<? super GlideDrawable> animation) {
-                        super.onResourceReady(resource, animation);
-
-//                        int duration = 0;
-//                        GifDrawable drawable = (GifDrawable) resource;
-//                        GifDecoder decoder = drawable.getDecoder();
-//                        for (int i = 0; i < drawable.getFrameCount(); i++) {
-//                            duration += decoder.getDelay(i);
-//                        }
-//
-//                        welcomeActivity.ivWelcome.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                startToActivity(MainActivity.class);
-//                            }
-//                        }, duration*//* - 300*//*);
-                    }
-                });*/
     }
 
     public void startToActivity(Class<?> activityClass) {
@@ -251,15 +183,17 @@ public class WelcomePresenter extends BasePresenter {
 //        VolleyRequest request = new VolleyRequest(mContext, mQueue);
 //        JSONObject jsonParam = request.getJsonParam();
 //        request.setTag("mainRequest");
-//        request.doGet(HttpConstant.INDEX_MAIN, jsonParam, new HttpListener<Object>() {
+//        request.doGet(HttpConstant.INDEX_MAIN, jsonParam, new HttpListener<List<TypeDataJson>>() {
 //            @Override
-//            protected void onResponse(Object o) {
-//
+//            protected void onResponse(List<TypeDataJson> mTypeDataList) {
+//                PreloadIndex.getInstance().setTypeDataList(mTypeDataList);
+//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_REQUEST_MAIN_INIT, mTypeDataList));
 //            }
 //
 //            @Override
 //            protected void onErrorResponse(VolleyError error) {
 //                super.onErrorResponse(error);
+//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_REQUEST_MAIN_INIT, null));
 //            }
 //        });
     }
