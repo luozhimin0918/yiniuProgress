@@ -95,7 +95,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         Glide.with(mContext)
                 .load(HttpConstant.IMG_URL + video.getPicture())
                 .error(R.mipmap.icon_def_video)
-                .override(400,300)
+                .override(400, 300)
                 .placeholder(R.mipmap.icon_def_video)
                 .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());
@@ -111,7 +111,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(url_video_share == null){
+                if (url_video_share == null) {
 
 
                     TSnackbar.make(v,
@@ -125,11 +125,11 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 }
                 ShareJson shareBean = new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
-                        "", HttpConstant.IMG_URL + video.getPicture(), null, UmengShareTool.TYPE_VIDEO,
+                        "", video.getShare_image(), null, UmengShareTool.TYPE_VIDEO,
                         video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore
                         .isThumbSucceed(mContext,
-                        VarConstant.GOOD_TYPE_VIDEO, video
-                                .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
+                                VarConstant.GOOD_TYPE_VIDEO, video
+                                        .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
                         video));
                 shareBean.setShareFromSource(2);
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, shareBean,

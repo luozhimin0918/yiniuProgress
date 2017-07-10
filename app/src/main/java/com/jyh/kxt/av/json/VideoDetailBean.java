@@ -29,8 +29,17 @@ public class VideoDetailBean {
     private String title;
     private String url;
     private String url_share;
+    private String share_image;
     private String introduce;
     private List<VideoDetailVideoBean> video;
+
+    public String getShare_image() {
+        return share_image;
+    }
+
+    public void setShare_image(String share_image) {
+        this.share_image = share_image;
+    }
 
     public String getCategory_id() {
         return category_id;

@@ -287,7 +287,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
         String url_kx_share = config.getUrl_kx_share();
 
-        shareUrl = url_kx_share.replace("{id}", flashJson.getSocre());
+        shareUrl = url_kx_share.replace("{id}", flashJson.getUid());
 
         ivCollect.setSelected(isCollect);
 

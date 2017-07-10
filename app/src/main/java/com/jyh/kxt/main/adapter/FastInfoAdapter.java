@@ -842,7 +842,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     MainInitJson config = JSON.parseObject(appConfig, MainInitJson.class);
                     String url_kx_share = config.getUrl_kx_share();
 
-                    String shareUrl = url_kx_share.replace("{id}", flash.getSocre());
+                    String shareUrl = url_kx_share.replace("{id}", flash.getUid());
                     String code = flash.getCode();
                     String title = "";
                     String discription = "";
