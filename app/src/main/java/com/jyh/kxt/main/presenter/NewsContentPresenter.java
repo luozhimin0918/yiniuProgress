@@ -68,6 +68,8 @@ public class NewsContentPresenter extends BasePresenter {
     private String type;
     private AlertDialog loginPop;
 
+    public NewsContentJson newsContentJson;
+
     public NewsContentPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -122,7 +124,7 @@ public class NewsContentPresenter extends BasePresenter {
             protected void onResponse(String json) {
                 if (pullMode == PullToRefreshBase.Mode.PULL_FROM_START) {
 
-                    NewsContentJson newsContentJson = JSONObject.parseObject(json, NewsContentJson.class);
+                    newsContentJson = JSONObject.parseObject(json, NewsContentJson.class);
 
                     commentList = newsContentJson.getComment();
                     //创建相关文章

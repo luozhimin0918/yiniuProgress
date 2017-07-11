@@ -1,6 +1,5 @@
 package com.jyh.kxt.main.ui.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
-import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -49,7 +47,6 @@ import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.json.flash.FlashContentJson;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
-import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.presenter.FlashActivityPresenter;
 import com.library.base.http.VarConstant;
@@ -117,6 +114,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private View layoutFlash;
     private NewsAdapter newsAdapter;
 
+    private FlashContentJson mFlashContentJson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,8 +180,21 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
                 break;
             case R.id.iv_share:
-                UmengShareTool.initUmengLayout(this, new ShareJson(title, shareUrl, discription, image, null,
-                        UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), flashJson, ivShare, null);
+                try {
+                    ShareJson shareBean = new ShareJson(title, shareUrl, discription, image, null,
+                            UmengShareTool.TYPE_DEFAULT, null, null, null, false, false);
+                    shareBean.setShareFromSource(2);
+
+                    if (mFlashContentJson != null && !TextUtils.isEmpty(mFlashContentJson.getShare_sina_title())) {
+                        shareBean.setWeiBoDiscript(mFlashContentJson.getShare_sina_title());
+                    } else {
+                        shareBean.setWeiBoDiscript(title + shareUrl + " @快讯通财经");
+                    }
+
+                    UmengShareTool.initUmengLayout(this, shareBean, flashJson, ivShare, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.iv_more:
                 int theme = ThemeUtil.getAlertTheme(getContext());
@@ -206,6 +218,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
      * @param flash
      */
     public void init(FlashContentJson flash) {
+        mFlashContentJson = flash;
         List<NewsJson> article = flash.getArticle();
         try {
             if (plvContent.getRefreshableView().getHeaderViewsCount() <= 1) {
@@ -430,7 +443,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 rl.getBefore(),
                 rl.getForecast(),
                 rl.getReality());
-        tvRlTitle.setText(rl.getState() + rl.getTitle());
+        title = rl.getState() + rl.getTitle();
+        tvRlTitle.setText(title);
+
         Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into
                 (ivRlFlag);
 

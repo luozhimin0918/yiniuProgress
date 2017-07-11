@@ -68,7 +68,7 @@ public class MarketDetailActivity extends BaseActivity {
     private boolean updateAddStatus = true;
 
     private ShareJson shareBean;
-
+    private MarketDetailBean mMarketDetailBean;
     private MarketDetailBean.ShareBean mDetailShare;
 
     @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
@@ -84,8 +84,7 @@ public class MarketDetailActivity extends BaseActivity {
                 if (!pageLoadLayout.isSuccessLoadOver()) {
                     return;
                 }
-                String title = tvBarTitle.getText().toString();
-                ShareJson shareBean = new ShareJson(title,
+                ShareJson shareBean = new ShareJson(mDetailShare.getTitle(),
                         mDetailShare.getUrl(),
                         mDetailShare.getDescript(),
                         null,
@@ -96,6 +95,7 @@ public class MarketDetailActivity extends BaseActivity {
                         null,
                         false, false);
                 shareBean.setShareFromSource(2);
+                shareBean.setWeiBoDiscript(mMarketDetailBean.getShare_sina_title());
                 UmengShareTool.initUmengLayout(MarketDetailActivity.this,
                         shareBean,
                         marketItemBean,
@@ -125,7 +125,7 @@ public class MarketDetailActivity extends BaseActivity {
         volleyRequest.doGet(HttpConstant.MARKET_DETAIL, jsonParam, new HttpListener<MarketDetailBean>() {
             @Override
             protected void onResponse(MarketDetailBean mMarketDetailBean) {
-
+                MarketDetailActivity.this.mMarketDetailBean = mMarketDetailBean;
                 marketItemList = MarketUtil.getMarketEditOption(getContext());
                 if (marketItemList == null) {
                     marketItemList = new ArrayList<>();

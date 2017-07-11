@@ -281,7 +281,7 @@ if (buildWithTinker()) {
 
 
 greendao {
-    schemaVersion 2
+    schemaVersion 1
     daoPackage 'com.jyh.kxt.base.dao'
     targetGenDir 'src/main/java'
 }

@@ -32,6 +32,7 @@ public class VideoDetailBean {
     private String share_image;
     private String introduce;
     private List<VideoDetailVideoBean> video;
+    private String share_sina_title;
 
     public String getShare_image() {
         return share_image;
@@ -143,5 +144,13 @@ public class VideoDetailBean {
 
     public void setUrl_share(String url_share) {
         this.url_share = url_share;
+    }
+
+    public String getShare_sina_title() {
+        return share_sina_title;
+    }
+
+    public void setShare_sina_title(String share_sina_title) {
+        this.share_sina_title = share_sina_title;
     }
 }

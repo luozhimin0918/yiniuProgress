@@ -100,7 +100,8 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());
         try {
-            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils.TYPE_YMD));
+            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils
+                    .TYPE_YMD));
         } catch (Exception e) {
             e.printStackTrace();
             holder.tvTime.setText("2017-1-1");
@@ -125,13 +126,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 }
                 ShareJson shareBean = new ShareJson(video.getTitle(), url_video_share.replace("{id}",
                         video.getId()),
-                        "", video.getShare_image(), null, UmengShareTool.TYPE_VIDEO,
+                        video.getIntroduce(), video.getShare_image(), null, UmengShareTool.TYPE_VIDEO,
                         video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore
                         .isThumbSucceed(mContext,
                                 VarConstant.GOOD_TYPE_VIDEO, video
                                         .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
                         video));
                 shareBean.setShareFromSource(2);
+                shareBean.setWeiBoDiscript(video.getShare_sina_title());
                 UmengShareTool.initUmengLayout((BaseActivity) mContext, shareBean,
                         video, holder.ivMore, new ObserverData<Map<String, Boolean>>() {
                             @Override
@@ -191,17 +193,20 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         int paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvTime.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_time, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvTime, R.mipmap.icon_video_time, 0, 0,
+                0);
 
         holder.tvCommentCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvCommentCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvCommentCount, R.mipmap.icon_video_comment, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvCommentCount, R.mipmap
+                .icon_video_comment, 0, 0, 0);
 
         holder.tvPlayCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap.icon_video_play_small, 0, 0, 0);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap
+                .icon_video_play_small, 0, 0, 0);
 
         holder.ivMore.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_video_more));
 

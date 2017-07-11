@@ -12,7 +12,6 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable2;
 import com.jyh.kxt.market.bean.MarketItemBean;
-import com.library.util.JsonUtil;
 import com.library.util.SPUtils;
 
 import java.math.BigDecimal;
@@ -232,7 +231,7 @@ public class MarketUtil {
         if (option == null || "".equals(option)) {
             return new ArrayList<>();
         }
-        List<MarketItemBean> list = JsonUtil.parseArray(option, MarketItemBean.class);
+        List<MarketItemBean> list = JSON.parseArray(option, MarketItemBean.class);
         return list;
     }
 

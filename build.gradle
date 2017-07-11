@@ -33,6 +33,6 @@ ext {
     bakApkName = 'app-release-0630-17-57-34'
     patchMessage = '补丁表述字段'
 
-    versionName = '6.0.1'
+    versionName = '6.1.0'
     versionCode = 29
 }

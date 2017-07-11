@@ -125,6 +125,15 @@ public class CalendarItemFragment extends BaseFragment {
     }
 
     public void resetFiltration() {
-        mCalendarItemPresenter.updateOrAddAdapter(2);
+        try {
+            pllContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCalendarItemPresenter.updateOrAddAdapter(2);
+                }
+            },500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

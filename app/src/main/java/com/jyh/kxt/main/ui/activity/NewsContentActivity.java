@@ -2,6 +2,7 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -29,7 +30,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -50,6 +50,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.json.ShareBtnJson;
+import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -72,8 +73,8 @@ import com.library.manager.ActivityManager;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
-import com.library.widget.ZoomImageView;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.ZoomImageView;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
@@ -90,7 +91,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.library.base.http.VarConstant.APP_WEB_URL;
-import static com.taobao.accs.ACCSManager.mContext;
 
 /**
  * 项目名:Kxt
@@ -333,62 +333,72 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 new FunctionAdapter.OnClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        UMShareAPI umShareAPI = UMShareAPI.get(NewsContentActivity.this);
-                        switch (position) {
-                            case 0:
-                                //朋友圈
-                                if (umShareAPI.isInstall(NewsContentActivity.this,
-                                        SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                                    UmengShareTool.setShareContent(NewsContentActivity
-                                                    .this, title, shareUrl, "",
-                                            shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
-                                } else {
-                                    ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                                }
-                                break;
-                            case 1:
-                                //微信
-                                if (umShareAPI.isInstall(NewsContentActivity.this,
-                                        SHARE_MEDIA.WEIXIN)) {
-                                    UmengShareTool.setShareContent(NewsContentActivity
-                                                    .this, title, shareUrl, "",
-                                            shareImg, SHARE_MEDIA.WEIXIN);
-                                } else {
-                                    ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                                }
-                                break;
-                            case 2:
-                                //新浪
-                                UmengShareTool.setShareContent(NewsContentActivity.this,
-                                        title, shareUrl, "",
-                                        shareImg, SHARE_MEDIA.SINA);
-                                break;
-                            case 3:
-                                //QQ
-                                if (umShareAPI.isInstall(NewsContentActivity.this,
-                                        SHARE_MEDIA.QQ)) {
-                                    UmengShareTool.setShareContent(NewsContentActivity
-                                                    .this, title, shareUrl, "",
-                                            shareImg, SHARE_MEDIA.QQ);
-                                } else {
-                                    ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
-                                }
-                                break;
-                            case 4:
-                                //QQ空间
-                                if (umShareAPI.isInstall(NewsContentActivity.this,
-                                        SHARE_MEDIA.QZONE)) {
-                                    UmengShareTool.setShareContent(NewsContentActivity
-                                                    .this, title, shareUrl, "",
-                                            shareImg, SHARE_MEDIA.QZONE);
-                                } else {
-                                    ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
-                                }
-                                break;
-                        }
                         try {
+                            UMShareAPI umShareAPI = UMShareAPI.get(NewsContentActivity.this);
+                            switch (position) {
+                                case 0:
+                                    //朋友圈
+                                    if (umShareAPI.isInstall(NewsContentActivity.this,
+                                            SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                                        UmengShareTool.setShareContent(NewsContentActivity
+                                                        .this, title, shareUrl, "",
+                                                shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
+                                    } else {
+                                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
+                                    }
+                                    break;
+                                case 1:
+                                    //微信
+                                    if (umShareAPI.isInstall(NewsContentActivity.this,
+                                            SHARE_MEDIA.WEIXIN)) {
+                                        UmengShareTool.setShareContent(NewsContentActivity
+                                                        .this, title, shareUrl, "",
+                                                shareImg, SHARE_MEDIA.WEIXIN);
+                                    } else {
+                                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
+                                    }
+                                    break;
+                                case 2:
+                                    //分享默认的
+                                    ShareJson shareBean = new ShareJson();
+
+                                    Bitmap defaultWeiBoShareBitmap =
+                                            BitmapFactory.decodeResource(NewsContentActivity.this.getResources(), R
+                                                    .mipmap.share_weibo);
+                                    shareBean.setBitmap(defaultWeiBoShareBitmap);
+                                    shareBean.setDiscription(newsContentPresenter.newsContentJson.getShare_sina_title
+                                            ());//替换微博的
+
+                                    UmengShareTool.setShareContent(NewsContentActivity.this, shareBean.getBitmap(),
+                                            SHARE_MEDIA.SINA, shareBean);
+                                    break;
+                                case 3:
+                                    //QQ
+                                    if (umShareAPI.isInstall(NewsContentActivity.this,
+                                            SHARE_MEDIA.QQ)) {
+                                        UmengShareTool.setShareContent(NewsContentActivity
+                                                        .this, title, shareUrl, "",
+                                                shareImg, SHARE_MEDIA.QQ);
+                                    } else {
+                                        ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
+                                    }
+                                    break;
+                                case 4:
+                                    //QQ空间
+                                    if (umShareAPI.isInstall(NewsContentActivity.this,
+                                            SHARE_MEDIA.QZONE)) {
+                                        UmengShareTool.setShareContent(NewsContentActivity
+                                                        .this, title, shareUrl, "",
+                                                shareImg, SHARE_MEDIA.QZONE);
+                                    } else {
+                                        ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
+                                    }
+                                    break;
+                            }
+
                             sharePop.dismiss();
                         } catch (Exception e) {
+                            sharePop.dismiss();
                             e.printStackTrace();
                         }
                     }
@@ -803,7 +813,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     );
 
 
-
             VolleyRequest volleyRequest = new VolleyRequest(getContext(), getQueue());
             JSONObject jsonParam = volleyRequest.getJsonParam();
             jsonParam.put("object_id", objectId);
@@ -813,9 +822,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             if (parentId != 0) {
                 jsonParam.put("parent_id", parentId);
             }
-            if("blog".equals(type)){
+            if ("blog".equals(type)) {
                 jsonParam.put("type", "blog_article");
-            }else{
+            } else {
                 jsonParam.put("type", "article");
             }
 

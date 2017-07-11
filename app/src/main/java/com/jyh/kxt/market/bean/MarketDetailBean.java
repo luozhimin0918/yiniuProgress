@@ -8,6 +8,7 @@ public class MarketDetailBean {
     private MarketItemBean data;
     private String quotes_chart_url;
     private ShareBean share;
+    private String share_sina_title;
 
     public MarketItemBean getData() {
         return data;
@@ -61,5 +62,13 @@ public class MarketDetailBean {
         public void setUrl(String url) {
             this.url = url;
         }
+    }
+
+    public String getShare_sina_title() {
+        return share_sina_title;
+    }
+
+    public void setShare_sina_title(String share_sina_title) {
+        this.share_sina_title = share_sina_title;
     }
 }

@@ -13,7 +13,7 @@ import org.junit.Test;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        String str = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJ2ZXJzaW9uXCI6XCI2LjAuMFwiLFwic3lzdGVtXCI6XCJhbmRyb2lkXCJ9In0.aiXlxNgKLe_C6Phg5_OXZOq66IU5tzBrgw7_1GnDdHw";
+        String str = "";
         System.out.print(EncryptionUtils.parseJWT(str, VarConstant.KEY));
     }
 }

@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.json;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.jyh.kxt.av.json.CommentBean;
 
 import java.util.List;
@@ -29,6 +30,10 @@ public class NewsContentJson {
     private String num_good;        //点赞数
     private String num_comment;     //评论数
     private String url_share;       //分享地址
+
+    @JSONField(name = "share_sina_title")
+    private String share_sina_title;
+
     private String author_id;       //作者
     private String author_name;
     private String author_image;
@@ -47,42 +52,6 @@ public class NewsContentJson {
     private String font_mid;//中等字体
     private String font_small;//最小字体
     private String night_style;//夜间模式
-
-    public NewsContentJson() {
-    }
-
-    public NewsContentJson(String id, String category_id, String type, String typeName, String title, String picture, String content,
-                           String create_time, String num_good, String num_comment, String url_share, String author_id, String
-                                   author_name, String author_image, String author_profile, String is_good, String is_favor, String
-                                   source, List<CommentBean> comment, List<NewsJson> article, String is_follow, String font_big, String
-                                   font_mid, String font_small, String night_style) {
-
-        this.id = id;
-        this.category_id = category_id;
-        this.type = type;
-        this.typeName = typeName;
-        this.title = title;
-        this.picture = picture;
-        this.content = content;
-        this.create_time = create_time;
-        this.num_good = num_good;
-        this.num_comment = num_comment;
-        this.url_share = url_share;
-        this.author_id = author_id;
-        this.author_name = author_name;
-        this.author_image = author_image;
-        this.author_profile = author_profile;
-        this.is_good = is_good;
-        this.is_favor = is_favor;
-        this.source = source;
-        this.comment = comment;
-        this.article = article;
-        this.is_follow = is_follow;
-        this.font_big = font_big;
-        this.font_mid = font_mid;
-        this.font_small = font_small;
-        this.night_style = night_style;
-    }
 
     public String getId() {
 
@@ -283,5 +252,13 @@ public class NewsContentJson {
 
     public void setNight_style(String night_style) {
         this.night_style = night_style;
+    }
+
+    public String getShare_sina_title() {
+        return share_sina_title;
+    }
+
+    public void setShare_sina_title(String share_sina_title) {
+        this.share_sina_title = share_sina_title;
     }
 }

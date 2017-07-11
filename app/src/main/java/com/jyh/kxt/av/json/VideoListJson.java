@@ -7,6 +7,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * 项目名:Kxt
@@ -27,15 +28,13 @@ public class VideoListJson implements Parcelable {
     private String num_play;
     private String num_favor;
     private String create_time;
+
+    @Transient
     private String share_image;
-
-    public String getShare_image() {
-        return share_image;
-    }
-
-    public void setShare_image(String share_image) {
-        this.share_image = share_image;
-    }
+    @Transient
+    private String share_sina_title;
+    @Transient
+    private String introduce;
 
     private boolean isCollect;
     private boolean isGood;
@@ -179,6 +178,34 @@ public class VideoListJson implements Parcelable {
         this.num_favor = num_favor;
     }
 
+
+    public String getShare_image() {
+        return share_image;
+    }
+
+    public void setShare_image(String share_image) {
+        this.share_image = share_image;
+    }
+
+    public String getShare_sina_title() {
+        if(share_sina_title == null){
+
+        }
+        return share_sina_title;
+    }
+
+    public void setShare_sina_title(String share_sina_title) {
+        this.share_sina_title = share_sina_title;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -228,11 +255,10 @@ public class VideoListJson implements Parcelable {
         this.dataType = in.readInt();
     }
 
-    @Generated(hash = 2102170513)
+    @Generated(hash = 1710588985)
     public VideoListJson(String uid, String category_id, String title, String picture,
-            String num_comment, String num_good, String num_play, String num_favor,
-            String create_time, String share_image, boolean isCollect, boolean isGood,
-            boolean isSel, int dataType) {
+                         String num_comment, String num_good, String num_play, String num_favor, String create_time,
+                         boolean isCollect, boolean isGood, boolean isSel, int dataType) {
         this.uid = uid;
         this.category_id = category_id;
         this.title = title;
@@ -242,7 +268,6 @@ public class VideoListJson implements Parcelable {
         this.num_play = num_play;
         this.num_favor = num_favor;
         this.create_time = create_time;
-        this.share_image = share_image;
         this.isCollect = isCollect;
         this.isGood = isGood;
         this.isSel = isSel;

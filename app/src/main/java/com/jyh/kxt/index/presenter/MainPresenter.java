@@ -349,26 +349,28 @@ public class MainPresenter extends BasePresenter {
 
             final MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
             MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-            showPopAdvertisement(indexAd);
+            if (indexAd != null) {
+                showPopAdvertisement(indexAd);
 
-            String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
-            if (indexAd.getPicture() != null && !adImageUrl.equals(indexAd.getPicture())) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
-                            FutureTarget<File> future = Glide.with(mContext)
-                                    .load(loadAd.getPicture())
-                                    .downloadOnly(720, 1080);
-                            future.get();
+                String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
+                if (indexAd.getPicture() != null && !adImageUrl.equals(indexAd.getPicture())) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
+                                FutureTarget<File> future = Glide.with(mContext)
+                                        .load(loadAd.getPicture())
+                                        .downloadOnly(720, 1080);
+                                future.get();
 
-                            SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                                SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

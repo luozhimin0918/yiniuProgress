@@ -22,6 +22,10 @@ public class ShareJson {
     private boolean isGood;//点赞状态
     private boolean isFavor;//收藏状态
     private int shareFromSource = -1;//分享来源自哪里 1 行情  2 视听 。。。。自己扩展
+    private String weiBoDiscript;
+
+    public ShareJson() {
+    }
 
     /**
      * @param title       分享标题
@@ -93,6 +97,9 @@ public class ShareJson {
     }
 
     public String getShareUrl() {
+        if(shareUrl == null){
+            shareUrl = "http://www.kxt.com/";
+        }
         return shareUrl;
     }
 
@@ -154,5 +161,13 @@ public class ShareJson {
 
     public void setShareFromSource(int shareFromSource) {
         this.shareFromSource = shareFromSource;
+    }
+
+    public String getWeiBoDiscript() {
+        return weiBoDiscript;
+    }
+
+    public void setWeiBoDiscript(String weiBoDiscript) {
+        this.weiBoDiscript = weiBoDiscript;
     }
 }

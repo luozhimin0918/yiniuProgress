@@ -116,7 +116,9 @@ public class VideoDetailPresenter extends BasePresenter {
                             videoDetailBean.getTitle(),
                             videoDetailBean.getPicture(), videoDetailBean.getNum_comment(), videoDetailBean
                             .getNum_good(), videoDetailBean
-                            .getNum_play(), "", videoDetailBean.getCreate_time(), videoDetailBean.getShare_image(), false, false, false, 0);
+                            .getNum_play(), "", videoDetailBean.getCreate_time(), false, false, false, 0);
+                    videoListJson.setShare_image(videoDetailBean.getShare_image());
+
                     isCollect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, videoListJson);
                     isAttention = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean
                             .getId());
@@ -497,10 +499,12 @@ public class VideoDetailPresenter extends BasePresenter {
         if (videoDetailBean != null) {
             ShareJson shareBean = new ShareJson(videoDetailBean.getTitle(),
                     videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()),
-                    videoDetailBean.getIntroduce(), videoDetailBean.getShare_image(), null, UmengShareTool.TYPE_DEFAULT, videoDetailBean
+                    videoDetailBean.getIntroduce(), videoDetailBean.getShare_image(), null, UmengShareTool
+                    .TYPE_DEFAULT, videoDetailBean
                     .getId(), null, null,
                     false, false);
             shareBean.setShareFromSource(2);
+            shareBean.setWeiBoDiscript(videoDetailBean.getShare_sina_title());
             UmengShareTool.initUmengLayout((BaseActivity) mContext,
                     shareBean,
                     videoDetailBean,

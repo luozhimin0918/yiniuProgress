@@ -136,7 +136,9 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
             try {
                 if (oldCalendarItemFragment != null) {
                     HashSet<String> oldCityMap = citySelectMap.get(oldCalendarItemFragment);
-                    oldCityMap.clear();
+                    if (oldCityMap != null) {
+                        oldCityMap.clear();
+                    }
                     stateSet.clear();
 
                     importanceSet.clear();

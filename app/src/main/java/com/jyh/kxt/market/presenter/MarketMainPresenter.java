@@ -2,6 +2,7 @@ package com.jyh.kxt.market.presenter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -291,11 +292,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private void createFavorView(MarketMainBean marketBean, LinearLayout hqLayoutView) {
         if (hqLayoutView == null) {
             hqLayoutView = new LinearLayout(mContext);
-            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
-                    .LayoutParams.WRAP_CONTENT));
+            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup
+                    .LayoutParams.WRAP_CONTENT ));
             hqLayoutView.setTag("hqLayoutView");
             hqLayoutView.setOrientation(LinearLayout.VERTICAL);
-
             mainHeaderView.addView(hqLayoutView);
         }
 
@@ -304,10 +304,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
             return;
         }
 
-
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
         tvTitle.setText("我的自选");
+
         hqLayoutView.addView(titleBlue);
 
         titleBlue.setOnClickListener(new View.OnClickListener() {

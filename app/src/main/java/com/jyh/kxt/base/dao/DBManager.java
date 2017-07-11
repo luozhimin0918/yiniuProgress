@@ -116,12 +116,12 @@ public class DBManager {
         }
 
         private void upgradeToVersion1(Database db) {
-            try {
+          /*  try {
                 String sql1 = "ALTER TABLE VIDEO_BEAN ADD COLUMN SHARE_IMAGE VARCHAR";
                 db.execSQL(sql1);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 }

@@ -3,7 +3,6 @@ package com.jyh.kxt.main.json.flash;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 
@@ -21,6 +20,8 @@ public class FlashContentJson implements Parcelable {
     private FlashJson kuaixun;
     private List<SlideJson> ad;
     private List<NewsJson> article;//推荐列表
+
+    private String share_sina_title;
 
     public FlashJson getKuaixun() {
         return kuaixun;
@@ -46,6 +47,14 @@ public class FlashContentJson implements Parcelable {
         this.article = article;
     }
 
+    public String getShare_sina_title() {
+        return share_sina_title;
+    }
+
+    public void setShare_sina_title(String share_sina_title) {
+        this.share_sina_title = share_sina_title;
+    }
+
     public FlashContentJson() {
     }
 
@@ -59,15 +68,17 @@ public class FlashContentJson implements Parcelable {
         dest.writeParcelable(this.kuaixun, flags);
         dest.writeTypedList(this.ad);
         dest.writeTypedList(this.article);
+        dest.writeString(this.share_sina_title);
     }
 
     protected FlashContentJson(Parcel in) {
         this.kuaixun = in.readParcelable(FlashJson.class.getClassLoader());
         this.ad = in.createTypedArrayList(SlideJson.CREATOR);
         this.article = in.createTypedArrayList(NewsJson.CREATOR);
+        this.share_sina_title = in.readString();
     }
 
-    public static final Parcelable.Creator<FlashContentJson> CREATOR = new Parcelable.Creator<FlashContentJson>() {
+    public static final Creator<FlashContentJson> CREATOR = new Creator<FlashContentJson>() {
         @Override
         public FlashContentJson createFromParcel(Parcel source) {
             return new FlashContentJson(source);

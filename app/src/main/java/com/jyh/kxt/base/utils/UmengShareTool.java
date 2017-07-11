@@ -378,6 +378,7 @@ public class UmengShareTool {
                             Bitmap defaultWeiBoShareBitmap =
                                     BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_weibo);
                             shareBean.setBitmap(defaultWeiBoShareBitmap);
+                            shareBean.setDiscription(shareBean.getWeiBoDiscript());//替换微博的
                             setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean);
                             break;
                         } else {
