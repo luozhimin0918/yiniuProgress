@@ -332,6 +332,11 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
         if (videoFragment != null && videoFragment.adapter != null) {
             videoFragment.adapter.notifyDefaul();
         }
@@ -396,11 +401,6 @@ public class CollectActivity extends BaseActivity implements DelNumListener, Vie
                 editMode(isAuthorEdit);
                 break;
         }
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
     }
 
     @Override
