@@ -58,10 +58,7 @@ public class CollectActivity extends BaseActivity {
     public CollectNewsFragment newsFragment, authorFragment;
     public CollectFlashFragment flashFragment;
 
-    public boolean isVideoEdit, isNewsEdit, isFlashEdit, isAuthorEdit;
-    public boolean isVideoAllSel, isNewsAllSel, isFlashAllSel, isAuthorAllSel;
-    public TSnackbar snackBar;
-    public int delNum;
+
     public CollectActityPresenter collectActityPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

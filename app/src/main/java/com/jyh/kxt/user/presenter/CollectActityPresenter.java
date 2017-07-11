@@ -26,6 +26,10 @@ import com.trycatch.mysnackbar.TSnackbar;
 public class CollectActityPresenter extends BasePresenter implements DelNumListener,  ViewPager.OnPageChangeListener, OnTabSelectListener {
     @BindObject CollectActivity collectActivity;
 
+    private boolean isVideoEdit, isNewsEdit, isFlashEdit, isAuthorEdit;
+    private boolean isVideoAllSel, isNewsAllSel, isFlashAllSel, isAuthorAllSel;
+    private TSnackbar snackBar;
+    private int delNum;
     public CollectActityPresenter(IBaseView iBaseView) {super(iBaseView);}
 
     public void onChangeTheme(){
@@ -76,7 +80,7 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
      */
     public void editOpe(){
         //编辑
-        if (collectActivity.snackBar != null && collectActivity.snackBar.isShownOrQueued()) {
+        if (snackBar != null && snackBar.isShownOrQueued()) {
 
             editMode(false);
         } else {
@@ -84,67 +88,67 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
             switch (collectActivity.vpContent.getCurrentItem()) {
                 case 0:
                     if (collectActivity.videoFragment.adapter != null && collectActivity.videoFragment.adapter.getData().size() > 0) {
-                        collectActivity.isVideoEdit = !collectActivity.isVideoEdit;
+                        isVideoEdit = !isVideoEdit;
                     } else {
-                        collectActivity.isVideoEdit = false;
+                        isVideoEdit = false;
                     }
-                    collectActivity.videoFragment.edit(collectActivity.isVideoEdit, this);
-                    if (collectActivity.isVideoEdit) {
+                    collectActivity.videoFragment.edit(isVideoEdit, this);
+                    if (isVideoEdit) {
                         collectActivity.llDel.setVisibility(View.VISIBLE);
                         collectActivity.ivBarFunction.setText("取消");
                     } else {
                         collectActivity.llDel.setVisibility(View.GONE);
                         collectActivity.ivBarFunction.setText("编辑");
                     }
-                    editMode(collectActivity.isVideoEdit);
+                    editMode(isVideoEdit);
                     break;
                 case 1:
                     if (collectActivity.newsFragment.adapter != null && collectActivity.newsFragment.adapter.getData().size() > 0) {
-                        collectActivity.isNewsEdit = !collectActivity.isNewsEdit;
+                        isNewsEdit = !isNewsEdit;
                     } else {
-                        collectActivity.isNewsEdit = false;
+                        isNewsEdit = false;
                     }
-                    collectActivity.newsFragment.edit(collectActivity.isNewsEdit, this);
-                    if (collectActivity.isNewsEdit) {
+                    collectActivity.newsFragment.edit(isNewsEdit, this);
+                    if (isNewsEdit) {
                         collectActivity.llDel.setVisibility(View.VISIBLE);
                         collectActivity.ivBarFunction.setText("取消");
                     } else {
                         collectActivity.llDel.setVisibility(View.GONE);
                         collectActivity.ivBarFunction.setText("编辑");
                     }
-                    editMode(collectActivity.isNewsEdit);
+                    editMode(isNewsEdit);
                     break;
                 case 2:
                     if (collectActivity.flashFragment.adapter != null && collectActivity.flashFragment.adapter.getData().size() > 0) {
-                        collectActivity.isFlashEdit = !collectActivity.isFlashEdit;
+                        isFlashEdit = !isFlashEdit;
                     } else {
-                        collectActivity.isFlashEdit = false;
+                        isFlashEdit = false;
                     }
-                    collectActivity.flashFragment.edit(collectActivity.isFlashEdit, this);
-                    if (collectActivity.isFlashEdit) {
+                    collectActivity.flashFragment.edit(isFlashEdit, this);
+                    if (isFlashEdit) {
                         collectActivity.llDel.setVisibility(View.VISIBLE);
                         collectActivity.ivBarFunction.setText("取消");
                     } else {
                         collectActivity.llDel.setVisibility(View.GONE);
                         collectActivity.ivBarFunction.setText("编辑");
                     }
-                    editMode(collectActivity.isFlashEdit);
+                    editMode(isFlashEdit);
                     break;
                 case 3:
                     if (collectActivity.authorFragment.adapter != null && collectActivity.authorFragment.adapter.getData().size() > 0) {
-                        collectActivity.isAuthorEdit = !collectActivity.isAuthorEdit;
+                        isAuthorEdit = !isAuthorEdit;
                     } else {
-                        collectActivity.isAuthorEdit = false;
+                        isAuthorEdit = false;
                     }
-                    collectActivity.authorFragment.edit(collectActivity.isAuthorEdit, this);
-                    if (collectActivity.isAuthorEdit) {
+                    collectActivity.authorFragment.edit(isAuthorEdit, this);
+                    if (isAuthorEdit) {
                         collectActivity.llDel.setVisibility(View.VISIBLE);
                         collectActivity.ivBarFunction.setText("取消");
                     } else {
                         collectActivity.llDel.setVisibility(View.GONE);
                         collectActivity.ivBarFunction.setText("编辑");
                     }
-                    editMode(collectActivity.isAuthorEdit);
+                    editMode(isAuthorEdit);
                     break;
             }
         }
@@ -159,20 +163,20 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
         collectActivity.ivSelAll.setSelected(!selected);
         switch (collectActivity.vpContent.getCurrentItem()) {
             case 0:
-                collectActivity.isVideoAllSel = !selected;
-                collectActivity.videoFragment.selAll(collectActivity.isVideoAllSel, this);
+                isVideoAllSel = !selected;
+                collectActivity.videoFragment.selAll(isVideoAllSel, this);
                 break;
             case 1:
-                collectActivity.isNewsAllSel = !selected;
-                collectActivity.newsFragment.selAll(collectActivity.isNewsAllSel, this);
+                isNewsAllSel = !selected;
+                collectActivity.newsFragment.selAll(isNewsAllSel, this);
                 break;
             case 2:
-                collectActivity.isFlashAllSel = !selected;
-                collectActivity.flashFragment.selAll(collectActivity.isFlashAllSel, this);
+                isFlashAllSel = !selected;
+                collectActivity.flashFragment.selAll(isFlashAllSel, this);
                 break;
             case 3:
-                collectActivity.isAuthorAllSel = !selected;
-                collectActivity.authorFragment.selAll(collectActivity.isAuthorAllSel, this);
+                isAuthorAllSel = !selected;
+                collectActivity.authorFragment.selAll(isAuthorAllSel, this);
                 break;
         }
     }
@@ -182,11 +186,11 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
      */
     public void deleteOpe(){
         //删除
-        if (collectActivity.delNum != 0) {
-            collectActivity.snackBar = TSnackbar.make(collectActivity.tvDel, "删除收藏中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-            collectActivity.snackBar.setPromptThemBackground(Prompt.SUCCESS);
-            collectActivity.snackBar.addIconProgressLoading(0, true, false);
-            collectActivity.snackBar.show();
+        if (delNum != 0) {
+            snackBar = TSnackbar.make(collectActivity.tvDel, "删除收藏中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+            snackBar.setPromptThemBackground(Prompt.SUCCESS);
+            snackBar.addIconProgressLoading(0, true, false);
+            snackBar.show();
             switch (collectActivity.vpContent.getCurrentItem()) {
                 case 0:
                     collectActivity.videoFragment.del(this);
@@ -210,7 +214,7 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
     public void delItem(Integer num) {
         try {
             collectActivity.tvDel.setText("删除(" + num + ")");
-            collectActivity.delNum = num;
+            delNum = num;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,14 +222,14 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
 
     @Override
     public void delError() {
-        collectActivity.snackBar.setPromptThemBackground(Prompt.ERROR).setText("删除收藏失败").setDuration(TSnackbar.LENGTH_LONG)
+        snackBar.setPromptThemBackground(Prompt.ERROR).setText("删除收藏失败").setDuration(TSnackbar.LENGTH_LONG)
                 .setMinHeight(SystemUtil.getStatuBarHeight(collectActivity.getContext()), collectActivity.getResources()
                         .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
     }
 
     @Override
     public void delSuccessed() {
-        collectActivity.snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("删除收藏成功").setDuration(TSnackbar.LENGTH_LONG)
+        snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("删除收藏成功").setDuration(TSnackbar.LENGTH_LONG)
                 .setMinHeight(SystemUtil.getStatuBarHeight(collectActivity.getContext()),collectActivity.getResources()
                         .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
     }
@@ -234,16 +238,16 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
     public void delAll(boolean isAll) {
         switch (collectActivity.vpContent.getCurrentItem()) {
             case 0:
-                collectActivity.isVideoAllSel = isAll;
+                isVideoAllSel = isAll;
                 break;
             case 1:
-                collectActivity.isNewsAllSel = isAll;
+                isNewsAllSel = isAll;
                 break;
             case 2:
-                collectActivity.isFlashAllSel = isAll;
+                isFlashAllSel = isAll;
                 break;
             case 3:
-                collectActivity.isAuthorAllSel = isAll;
+                isAuthorAllSel = isAll;
                 break;
         }
         collectActivity.ivSelAll.setSelected(isAll);
@@ -255,23 +259,23 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
         collectActivity.ivSelAll.setSelected(false);
         switch (collectActivity.vpContent.getCurrentItem()) {
             case 0:
-                collectActivity.isVideoEdit = false;
-                collectActivity.isVideoAllSel = false;
+                isVideoEdit = false;
+                isVideoAllSel = false;
 //                videoFragment.quitEdit(numListener);
                 break;
             case 1:
-                collectActivity.isNewsEdit = false;
-                collectActivity.isNewsAllSel = false;
+                isNewsEdit = false;
+                isNewsAllSel = false;
 //                newsFragment.quitEdit(numListener);
                 break;
             case 2:
-                collectActivity.isFlashEdit = false;
-                collectActivity.isFlashAllSel = false;
+                isFlashEdit = false;
+                isFlashAllSel = false;
 //                flashFragment.quitEdit(numListener);
                 break;
             case 3:
-                collectActivity.isAuthorEdit = false;
-                collectActivity.isAuthorAllSel = false;
+                isAuthorEdit = false;
+                isAuthorAllSel = false;
 //                authorFragment.quitEdit(numListener);
                 break;
         }
@@ -298,56 +302,56 @@ public class CollectActityPresenter extends BasePresenter implements DelNumListe
         if (collectActivity.authorFragment != null && collectActivity.authorFragment.adapter != null) {
             collectActivity.authorFragment.adapter.notifyDefaul();
         }
-        collectActivity.delNum = 0;
-        collectActivity.tvDel.setText("删除(" + collectActivity.delNum + ")");
-        collectActivity.isAuthorAllSel = false;
-        collectActivity.isFlashAllSel = false;
-        collectActivity.isNewsAllSel = false;
-        collectActivity.isVideoAllSel = false;
+        delNum = 0;
+        collectActivity.tvDel.setText("删除(" + delNum + ")");
+        isAuthorAllSel = false;
+        isFlashAllSel = false;
+        isNewsAllSel = false;
+        isVideoAllSel = false;
         switch (position) {
             case 0:
-                if (collectActivity.isVideoEdit) {
+                if (isVideoEdit) {
                     collectActivity.llDel.setVisibility(View.VISIBLE);
                     collectActivity.ivBarFunction.setText("取消");
                 } else {
                     collectActivity.llDel.setVisibility(View.GONE);
                     collectActivity.ivBarFunction.setText("编辑");
                 }
-                collectActivity.ivSelAll.setSelected(collectActivity.isVideoAllSel);
-                editMode(collectActivity.isVideoEdit);
+                collectActivity.ivSelAll.setSelected(isVideoAllSel);
+                editMode(isVideoEdit);
                 break;
             case 1:
-                if (collectActivity.isNewsEdit) {
+                if (isNewsEdit) {
                     collectActivity.llDel.setVisibility(View.VISIBLE);
                     collectActivity.ivBarFunction.setText("取消");
                 } else {
                     collectActivity.llDel.setVisibility(View.GONE);
                     collectActivity.ivBarFunction.setText("编辑");
                 }
-                collectActivity.ivSelAll.setSelected(collectActivity.isNewsAllSel);
-                editMode(collectActivity.isNewsEdit);
+                collectActivity.ivSelAll.setSelected(isNewsAllSel);
+                editMode(isNewsEdit);
                 break;
             case 2:
-                if (collectActivity.isFlashEdit) {
+                if (isFlashEdit) {
                     collectActivity.llDel.setVisibility(View.VISIBLE);
                     collectActivity.ivBarFunction.setText("取消");
                 } else {
                     collectActivity.llDel.setVisibility(View.GONE);
                     collectActivity.ivBarFunction.setText("编辑");
                 }
-                collectActivity.ivSelAll.setSelected(collectActivity.isFlashAllSel);
-                editMode(collectActivity.isFlashEdit);
+                collectActivity.ivSelAll.setSelected(isFlashAllSel);
+                editMode(isFlashEdit);
                 break;
             case 3:
-                if (collectActivity.isAuthorEdit) {
+                if (isAuthorEdit) {
                     collectActivity.llDel.setVisibility(View.VISIBLE);
                     collectActivity.ivBarFunction.setText("取消");
                 } else {
                     collectActivity.llDel.setVisibility(View.GONE);
                     collectActivity.ivBarFunction.setText("编辑");
                 }
-                collectActivity.ivSelAll.setSelected(collectActivity.isAuthorAllSel);
-                editMode(collectActivity.isAuthorEdit);
+                collectActivity.ivSelAll.setSelected(isAuthorAllSel);
+                editMode(isAuthorEdit);
                 break;
         }
     }
