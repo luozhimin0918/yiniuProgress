@@ -42,6 +42,7 @@ public class AdJson implements Parcelable {
         private int position;
         private String title;
         private String type;
+       private int imageHeight;
 
         public String getAuthor() {
             return author;
@@ -99,8 +100,15 @@ public class AdJson implements Parcelable {
             this.type = type;
         }
 
+       public int getImageHeight() {
+           return imageHeight;
+       }
 
-        @Override
+       public void setImageHeight(int imageHeight) {
+           this.imageHeight = imageHeight;
+       }
+
+       @Override
         public int describeContents() {
             return 0;
         }

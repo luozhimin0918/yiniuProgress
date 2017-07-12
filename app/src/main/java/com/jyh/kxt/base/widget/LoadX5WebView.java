@@ -198,7 +198,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
                     "}");
             view.loadUrl("javascript:getShareInfo()");
 
-            if(!mSettings.getJavaScriptEnabled()){
+            if (!mSettings.getJavaScriptEnabled()) {
                 isDefaultJavaScriptEnabled = true;
                 mSettings.setJavaScriptEnabled(true);
                 wvContent.reload();
@@ -223,7 +223,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
     public class MyWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            Log.e("onProgressChanged", "onProgressChanged: "+newProgress );
+            Log.e("onProgressChanged", "onProgressChanged: " + newProgress);
             pbLoading.setProgress(newProgress);
 
             if (newProgress == 100) {

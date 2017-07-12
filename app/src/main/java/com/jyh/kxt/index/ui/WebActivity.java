@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,8 @@ import com.tencent.smtt.sdk.WebView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.jyh.kxt.base.constant.IntentConstant.AUTOOBTAINTITLE;
+
 /**
  * 公用WebActivity
  */
@@ -36,14 +39,21 @@ public class WebActivity extends BaseActivity {
     private WebPresenter webPresenter;
     private String title;
     private String url;
-    private String source;
     public boolean javaScriptEnabled = true;
+    private boolean autoObtainTitle = false;
+    private boolean initialLoadTitle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web, StatusBarColor.THEME1);
-        getExtra(getIntent());
+
+        Intent intent = getIntent();
+
+        title = intent.getStringExtra(IntentConstant.NAME);
+        url = intent.getStringExtra(IntentConstant.WEBURL);
+        javaScriptEnabled = intent.getBooleanExtra(IntentConstant.JAVASCRIPTENABLED, true);
+        autoObtainTitle = intent.getBooleanExtra(AUTOOBTAINTITLE, false);
 
         webPresenter = new WebPresenter(this);
 
@@ -76,33 +86,27 @@ public class WebActivity extends BaseActivity {
                 });
             }
         });
-        if (title != null) {
+        if (!TextUtils.isEmpty(title)) {
             tvBarTitle.setText(title);
-        }else{
-            webPresenter.loadX5WebView.setOverWriteWebChromeClient(new WebChromeClient(){
+        } else {
+            autoObtainTitle = true;//没有传入Title 则自动匹配
+        }
+
+        if (autoObtainTitle) {
+            webPresenter.loadX5WebView.setOverWriteWebChromeClient(new WebChromeClient() {
                 @Override
-                public void onReceivedTitle(WebView webView, String s) {
-                    super.onReceivedTitle(webView, s);
-                    if (!RegexValidateUtil.isEmpty(s)) {
-                        tvBarTitle.setText(s);
+                public void onReceivedTitle(WebView webView, String pageTitle) {
+                    super.onReceivedTitle(webView, pageTitle);
+                    if (!RegexValidateUtil.isEmpty(pageTitle)) {
+                        tvBarTitle.setText(pageTitle);
+                        if (initialLoadTitle) {
+                            initialLoadTitle = false;
+                            title = pageTitle;
+                        }
                     }
                 }
             });
         }
-    }
-
-    /**
-     * 获取参数
-     *
-     * @param intent
-     */
-    private void getExtra(Intent intent) {
-        title = intent.getStringExtra(IntentConstant.NAME);
-        url = intent.getStringExtra(IntentConstant.WEBURL);
-//        url = "http://test.kxtadi.kuaixun56.com/Webview/view/id/2966";
-        source = intent.getStringExtra(IntentConstant.SOURCE);
-
-        javaScriptEnabled = intent.getBooleanExtra(IntentConstant.JAVASCRIPTENABLED, true);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function})
@@ -127,10 +131,20 @@ public class WebActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (source != null && WelcomeActivity.class.getName().equals(source)) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
+        try {
+            if (tvBarTitle.getText().toString().equals(title)) {
+                super.onBackPressed();
+            } else {
+                WebView webView = webPresenter.loadX5WebView.getWebView();
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            super.onBackPressed();
         }
-        super.onBackPressed();
     }
 }

@@ -52,6 +52,17 @@ public class JumpUtils {
      * @param url
      */
     public static void jump(final BaseActivity context, JumpJson jumpJson, String url) {
+        jump(context, jumpJson, "", url);
+    }
+
+    /**
+     * 跳转
+     *
+     * @param context
+     * @param jumpJson
+     * @param url
+     */
+    public static void jump(final BaseActivity context, JumpJson jumpJson, String webTitle, String url) {
         try {
             if (RegexValidateUtil.isEmpty(url)) {
                 String o_class = jumpJson.getO_class();
@@ -88,6 +99,11 @@ public class JumpUtils {
             } else {
                 //网页跳转
                 Intent intent = new Intent(context, WebActivity.class);
+
+                if(TextUtils.isEmpty(webTitle)){
+                    intent.putExtra(IntentConstant.NAME, webTitle);
+                }
+
                 intent.putExtra(IntentConstant.WEBURL, url);
                 intent.putExtra(IntentConstant.JAVASCRIPTENABLED, false);
                 context.startActivity(intent);

@@ -517,7 +517,7 @@ public class MainPresenter extends BasePresenter {
             wvContent.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    JumpUtils.jump(mMainActivity, indexAd, url);
+                    JumpUtils.jump(mMainActivity, indexAd, indexAd.getTitle(), url);
                     alertDialog.dismiss();
                     return true;
                 }

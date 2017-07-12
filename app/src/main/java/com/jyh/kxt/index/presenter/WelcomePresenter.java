@@ -73,6 +73,7 @@ public class WelcomePresenter extends BasePresenter {
                                 startToActivity(MainActivity.class);
                                 JumpUtils.jump(welcomeActivity,
                                         loadAd,
+                                        loadAd.getTitle(),
                                         loadAd.getHref());
                             }
                         });

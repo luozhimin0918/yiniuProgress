@@ -158,7 +158,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         NewsJson newsJson = newsAdapter.getData().get(position);
         JumpUtils.jump((MainActivity) mContext, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(),
                 newsJson.getHref());
-        if(!"ad".equals(newsJson.getType())){
+        if (!"ad".equals(newsJson.getType())) {
             //保存浏览记录
             BrowerHistoryUtils.save(mContext, newsJson);
             //单条刷新,改变浏览状态
@@ -444,27 +444,31 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         try {
             final AdJson.AdItemJson mPicAd = ads.getPic_ad();
+            iv_ad.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
 
-            String picture = mPicAd.getPicture();
-            if (RegexValidateUtil.isEmpty(picture)) {
-                iv_ad.setVisibility(View.GONE);
-            } else {
-                iv_ad.setVisibility(View.VISIBLE);
-            }
-            Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                    .placeholder(R.mipmap.icon_def_news).into(iv_ad);
-
-            homeHeadView.addView(adView);
-
-            adView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, WebActivity.class);
-                    intent.putExtra(IntentConstant.NAME, "广告");
-                    intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
-                    mContext.startActivity(intent);
+            if (mPicAd != null) {
+                String picture = mPicAd.getPicture();
+                if (RegexValidateUtil.isEmpty(picture)) {
+                    iv_ad.setVisibility(View.GONE);
+                } else {
+                    iv_ad.setVisibility(View.VISIBLE);
                 }
-            });
+                Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
+                        .placeholder(R.mipmap.icon_def_news).into(iv_ad);
+
+                homeHeadView.addView(adView);
+
+                adView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
+                        intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
+                        intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -473,11 +477,10 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         try {
             mAdTextViewList = new ArrayList<>();
             List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
-
+            if (mTextAd != null) {
+                return;
+            }
             LayoutInflater mInflater = LayoutInflater.from(mContext);
-
-//            int adTextColor = ContextCompat.getColor(mContext, R.color.font_color5);
-
             for (final AdJson.AdItemJson adItemJson : mTextAd) {
                 View adLayoutView = mInflater.inflate(R.layout.item_news_ad, homeHeadView, false);
 

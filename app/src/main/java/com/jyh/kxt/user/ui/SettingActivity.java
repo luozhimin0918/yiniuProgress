@@ -1,6 +1,8 @@
 package com.jyh.kxt.user.ui;
 
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -9,17 +11,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.tinker.app.BaseBuildInfo;
 import com.jyh.kxt.base.tinker.app.BuildInfo;
 import com.jyh.kxt.base.utils.GlideCacheUtil;
-import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.user.presenter.SettingPresenter;
 import com.library.util.FileUtils;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
@@ -46,6 +47,7 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.tv_clear) TextView tvClear;
     @BindView(R.id.v_version_point) View vPoint;
     @BindView(R.id.tv_introduce_patch) TextView tvIntroducePatch;
+    @BindView(R.id.tv_version_name) TextView tvVersionName;
 
     private SettingPresenter settingPresenter;
     private String cacheSize;
@@ -67,9 +69,13 @@ public class SettingActivity extends BaseActivity {
         settingPresenter = new SettingPresenter(this);
         tvBarTitle.setText("设置");
 
+        String versionName = SystemUtil.getVersionName(this);
+        tvVersionName.setText("当前版本V" + versionName);
+
         cacheSize = GlideCacheUtil.getInstance().getCacheSize(this);
         tvClear.setText(cacheSize);
         settingPresenter.version(true);
+
     }
 
     @OnClick({R.id.iv_bar_break, R.id.rl_push, R.id.iv_push, R.id.rl_sound, R.id.iv_sound, R.id.rl_clear, R.id
@@ -138,7 +144,7 @@ public class SettingActivity extends BaseActivity {
      * 显示补丁相关信息
      */
     private void showPatchDialog() {
-        CharSequence[] charSequences = {"查看补丁信息1", "清空本地补丁", "清空已应用补丁", "SP文件"};
+        CharSequence[] charSequences = {"查看补丁信息(测试投放)", "清空本地补丁", "清空已应用补丁", "SP文件"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("关闭")
@@ -151,7 +157,30 @@ public class SettingActivity extends BaseActivity {
                             case 0:
                                 StringBuilder sb = new StringBuilder();
                                 Tinker tinker = Tinker.with(getApplicationContext());
+
+                                PackageManager packageManager = SettingActivity.this.getPackageManager();
+                                if (packageManager != null) {
+                                    try {
+                                        ApplicationInfo applicationInfo;
+                                        applicationInfo = packageManager.getApplicationInfo(
+                                                SettingActivity.this.getPackageName(),
+                                                PackageManager.GET_META_DATA);
+
+                                        if (applicationInfo != null) {
+                                            if (applicationInfo.metaData != null) {
+                                                String resultData = applicationInfo.metaData.getString
+                                                        ("UMENG_CHANNEL");
+                                                sb.append("来源渠道:" + resultData+"\n");
+                                            }
+                                        }
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
                                 if (tinker.isTinkerLoaded()) {
+
                                     sb.append(String.format("[patch is loaded] \n"));
                                     sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
                                     sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo

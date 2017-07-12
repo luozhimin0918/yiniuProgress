@@ -71,6 +71,7 @@
         </activity>
         <activity
             android:name=".index.ui.WebActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".index.ui.ClassifyActivity"

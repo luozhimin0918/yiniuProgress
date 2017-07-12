@@ -2,7 +2,6 @@ package com.jyh.kxt.av.presenter;
 
 import android.text.TextUtils;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.adapter.VideoAdapter;
@@ -59,12 +58,14 @@ public class VideoItemPresenter extends BasePresenter {
                     videoAdapter = new VideoAdapter(mContext, videoListJsons);
                     videoItemFragment.plvContent.setAdapter(videoAdapter);
                     videoItemFragment.plRootView.loadOver();
-                    if (refreshView != null)
+                    if (refreshView != null) {
                         refreshView.onRefreshComplete();
+                    }
                 } else {
                     onErrorResponse(null);
-                    if (refreshView != null)
+                    if (refreshView != null) {
                         refreshView.onRefreshComplete();
+                    }
                 }
             }
 
@@ -73,8 +74,9 @@ public class VideoItemPresenter extends BasePresenter {
                 super.onErrorResponse(error);
                 try {
 
-                    if (refreshView != null)
+                    if (refreshView != null) {
                         refreshView.onRefreshComplete();
+                    }
                     videoItemFragment.plRootView.loadError();
 
                 } catch (Exception e) {
@@ -89,8 +91,9 @@ public class VideoItemPresenter extends BasePresenter {
         try {
             com.alibaba.fastjson.JSONObject object = volleyRequest.getJsonParam();
             object.put(VarConstant.HTTP_ID, id);
-            if (!TextUtils.isEmpty(lastId))
+            if (!TextUtils.isEmpty(lastId)) {
                 object.put(VarConstant.HTTP_LASTID, lastId);
+            }
             url = url + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant.KEY, object.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,8 +119,7 @@ public class VideoItemPresenter extends BasePresenter {
      */
     public void onPullUpToRefresh(final PullToRefreshBase refreshView) {
 
-        if (isMore)
-
+        if (isMore) {
             request.doGet(getUrl(request), new HttpListener<List<VideoListJson>>() {
                 @Override
                 protected void onResponse(List<VideoListJson> list) {
@@ -134,7 +136,7 @@ public class VideoItemPresenter extends BasePresenter {
                     refreshView.onRefreshComplete();
                 }
             });
-        else {
+        } else {
             refreshView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -155,18 +157,18 @@ public class VideoItemPresenter extends BasePresenter {
             lastId = "";
             return;
         }
-        int size = list.size();
-        lastId = list.get(size - 1).getId();
-        if (size <= VarConstant.LIST_MAX_SIZE) {
+        if (list.size() <= VarConstant.LIST_MAX_SIZE) {
             isMore = false;
         } else {
             isMore = true;
-            list.remove(size - 1);
+            list.remove(list.size() - 1);
         }
+        lastId = list.get(list.size() - 1).getId();//上面涉及到Remove 所以得通过.size方法
     }
 
     public void onChangeTheme() {
-        if (videoAdapter != null)
+        if (videoAdapter != null) {
             videoAdapter.notifyDataSetChanged();
+        }
     }
 }

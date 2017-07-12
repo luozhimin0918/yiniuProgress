@@ -2,10 +2,8 @@ package com.jyh.kxt.market.presenter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,6 @@ import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.databinding.ItemMarketRecommend2Binding;
-import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
@@ -179,64 +176,72 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         try {
             final AdJson.AdItemJson mPicAd = ads.getPic_ad();
+            if (mPicAd != null) {
+                iv_ad.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
 
-            String picture = mPicAd.getPicture();
-            if (RegexValidateUtil.isEmpty(picture)) {
-                iv_ad.setVisibility(View.GONE);
-            } else {
-                iv_ad.setVisibility(View.VISIBLE);
-            }
-            Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                    .placeholder(R.mipmap.icon_def_news).into(iv_ad);
-
-            mainHeaderView.addView(adView);
-
-            adView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, WebActivity.class);
-                    intent.putExtra(IntentConstant.NAME, "广告");
-                    intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
-                    mContext.startActivity(intent);
+                String picture = mPicAd.getPicture();
+                if (RegexValidateUtil.isEmpty(picture)) {
+                    iv_ad.setVisibility(View.GONE);
+                } else {
+                    iv_ad.setVisibility(View.VISIBLE);
                 }
-            });
-            try {
-                mAdTextViewList = new ArrayList<>();
-                List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
-                LayoutInflater mInflater = LayoutInflater.from(mContext);
+                Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
+                        .placeholder(R.mipmap.icon_def_news).into(iv_ad);
 
-                for (final AdJson.AdItemJson adItemJson : mTextAd) {
-                    View adLayoutView = mInflater.inflate(R.layout.item_news_ad, mainHeaderView, false);
+                mainHeaderView.addView(adView);
 
-                    SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                            .tv_news_ad_title);
-                    mAdTextView.setText(" • " + adItemJson.getTitle());
-                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                            .tv_news_ad_trait);
-
-                    mainHeaderView.addView(adLayoutView);
-
-                    mAdTextViewList.add(mAdTextView);
-                    mAdTextViewList.add(mAdTraitView);
-
-                    adLayoutView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext, WebActivity.class);
-                            intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
-                            intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
-                            mContext.startActivity(intent);
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                adView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
+                        intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
+                        intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
+                        mContext.startActivity(intent);
+                    }
+                });
             }
-
-            createPaddingView(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            mAdTextViewList = new ArrayList<>();
+            List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+            if (mTextAd != null) {
+                return;
+            }
+            LayoutInflater mInflater = LayoutInflater.from(mContext);
+
+            for (final AdJson.AdItemJson adItemJson : mTextAd) {
+                View adLayoutView = mInflater.inflate(R.layout.item_news_ad, mainHeaderView, false);
+
+                SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                        .tv_news_ad_title);
+                mAdTextView.setText(" • " + adItemJson.getTitle());
+                SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                        .tv_news_ad_trait);
+
+                mainHeaderView.addView(adLayoutView);
+
+                mAdTextViewList.add(mAdTextView);
+                mAdTextViewList.add(mAdTraitView);
+
+                adLayoutView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
+                        intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        createPaddingView(1);
+
     }
 
     /*
@@ -292,8 +297,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private void createFavorView(MarketMainBean marketBean, LinearLayout hqLayoutView) {
         if (hqLayoutView == null) {
             hqLayoutView = new LinearLayout(mContext);
-            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup
-                    .LayoutParams.WRAP_CONTENT ));
+            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.WRAP_CONTENT));
             hqLayoutView.setTag("hqLayoutView");
             hqLayoutView.setOrientation(LinearLayout.VERTICAL);
             mainHeaderView.addView(hqLayoutView);

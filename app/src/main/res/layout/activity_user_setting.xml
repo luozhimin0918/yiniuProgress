@@ -103,7 +103,7 @@
                 android:id="@+id/tv_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/content_font_size2"
+                android:textSize="@dimen/describe_font_size2"
                 android:textColor="@color/font_color6"
                 android:text="60M"
                 android:layout_centerVertical="true"
@@ -129,6 +129,16 @@
                 android:text="版本推送"
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size2"/>
+
+            <TextView
+                android:id="@+id/tv_version_name"
+                android:layout_width="wrap_content"
+                android:textSize="@dimen/describe_font_size2"
+                android:textColor="@color/font_color6"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/iv_version"
+                android:layout_height="wrap_content"/>
 
             <ImageView
                 android:id="@+id/iv_version"

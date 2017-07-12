@@ -24,6 +24,7 @@ public class IntentConstant {
 
     public static final String SEARCH_KEY = "search_key";//搜索关键字
     public static final String JAVASCRIPTENABLED = "JavaScriptEnabled";//JS开启
+    public static final String AUTOOBTAINTITLE = "autoObtainTitle";//自动获取标题
 
     /**
      * 要闻首页
