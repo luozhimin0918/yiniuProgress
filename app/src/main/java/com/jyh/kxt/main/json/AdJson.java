@@ -101,6 +101,9 @@ public class AdJson implements Parcelable {
         }
 
        public int getImageHeight() {
+           if(imageHeight == 0){
+               imageHeight = 60;
+           }
            return imageHeight;
        }
 

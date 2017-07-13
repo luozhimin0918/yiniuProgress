@@ -170,6 +170,9 @@ public class SettingActivity extends BaseActivity {
                                             if (applicationInfo.metaData != null) {
                                                 String resultData = applicationInfo.metaData.getString
                                                         ("UMENG_CHANNEL");
+                                                if(resultData == null){
+                                                    resultData = "360";
+                                                }
                                                 sb.append("来源渠道:" + resultData+"\n");
                                             }
                                         }

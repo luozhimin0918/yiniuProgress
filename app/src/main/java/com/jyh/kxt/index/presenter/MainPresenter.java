@@ -214,7 +214,9 @@ public class MainPresenter extends BasePresenter {
                     }
                 }
             }
-
+            if(resultData == null){
+                resultData = "360";
+            }
             String patchType = "1";
             switch (resultData) {
                 case "360":
@@ -234,8 +236,14 @@ public class MainPresenter extends BasePresenter {
                     String status = patchJson.getString("status");
                     if (status == null) {
                         SPUtils.save(mMainActivity, SpConstant.PATCH_INFO, patchInfo);
-                        newThreadDownPatch();
-                        requestPatchDownNotify();
+
+                        PatchJson patchBean = JSONObject.parseObject(patchInfo, PatchJson.class);
+
+                        String saveFilePath = FileUtils.getVersionNameFilePath(mMainActivity);
+                        File patchFile = new File(saveFilePath + patchBean.getPatch_code() + ".patch");
+                        if (!patchFile.exists()) {
+                            newThreadDownPatch();
+                        }
                     }
                 }
 
@@ -318,6 +326,8 @@ public class MainPresenter extends BasePresenter {
                                     "\n文件大小:" + new File(absolutePath).length() +
                                     "\n下载时间:" + DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis());
 
+                            requestPatchDownNotify();
+
                             SPUtils.save(mContext, SpConstant.PATCH_PATH, info);
                             TinkerInstaller.onReceiveUpgradePatch(mMainActivity.getApplicationContext(), absolutePath);
                         }
@@ -349,28 +359,27 @@ public class MainPresenter extends BasePresenter {
 
             final MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
             MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-            if (indexAd != null) {
-                showPopAdvertisement(indexAd);
+            showPopAdvertisement(indexAd);
 
-                String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
-                if (indexAd.getPicture() != null && !adImageUrl.equals(indexAd.getPicture())) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
-                                FutureTarget<File> future = Glide.with(mContext)
-                                        .load(loadAd.getPicture())
-                                        .downloadOnly(720, 1080);
-                                future.get();
+            String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
 
-                                SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+            final MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
+            if (loadAd != null && loadAd.getPicture() != null && !adImageUrl.equals(loadAd.getPicture())) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            FutureTarget<File> future = Glide.with(mContext)
+                                    .load(loadAd.getPicture())
+                                    .downloadOnly(720, 1080);
+                            future.get();
+
+                            SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }).start();
-                }
+                    }
+                }).start();
             }
         } catch (Exception e) {
             e.printStackTrace();

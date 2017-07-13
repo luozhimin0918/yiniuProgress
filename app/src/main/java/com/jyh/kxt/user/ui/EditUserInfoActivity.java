@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -153,7 +152,7 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 break;
         }
 
-        int imgSize = (int) getResources().getDimension(R.dimen.item_height);
+        int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
         Glide.with(getContext())
                 .load(userInfo.getPicture())
                 .asBitmap()
