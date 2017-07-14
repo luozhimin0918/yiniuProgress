@@ -34,6 +34,7 @@ import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -77,8 +78,11 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
             holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
             holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
+            holder.tvZanCount = (TextView) convertView.findViewById(R.id.tv_zanCount);
             holder.ivPlay = (ImageView) convertView.findViewById(R.id.iv_playBtn);
             holder.vLine = convertView.findViewById(R.id.v_line);
+
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -99,6 +103,8 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 .placeholder(R.mipmap.icon_def_video)
                 .into(holder.iv);
         holder.tvTitle.setText(video.getTitle());
+        holder.tvZanCount.setText(video.getNum_good());
+
         try {
             holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils
                     .TYPE_YMD));
@@ -107,7 +113,17 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             holder.tvTime.setText("2017-1-1");
         }
         holder.tvCommentCount.setText(video.getNum_comment());
-        holder.tvPlayCount.setText(video.getNum_play());
+
+        int numPlay = Integer.parseInt(video.getNum_play());
+        if (numPlay < 10000) {
+            holder.tvPlayCount.setText(String.valueOf(numPlay));
+        } else {
+            float wanPlay = (float) numPlay / 10000;
+            BigDecimal b = new BigDecimal(wanPlay);
+            float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            holder.tvPlayCount.setText(f1 + "万");
+        }
+
 
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,13 +214,20 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
         holder.tvCommentCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
-        holder.tvCommentCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        holder.tvCommentCount.setPadding(0, paddingVal, 0, paddingVal);
         TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvCommentCount, R.mipmap
                 .icon_video_comment, 0, 0, 0);
 
+        holder.tvZanCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+        paddingVal = SystemUtil.dp2px(mContext, 6);
+        holder.tvZanCount.setPadding(0, paddingVal, 0, paddingVal);
+        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
+                .icon_video_list_zan, 0, 0, 0);
+
+
         holder.tvPlayCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
-        holder.tvPlayCount.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+        holder.tvPlayCount.setPadding(0, paddingVal, 0, paddingVal);
         TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvPlayCount, R.mipmap
                 .icon_video_play_small, 0, 0, 0);
 
@@ -232,7 +255,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
     class ViewHolder {
         public ImageView iv, ivPlay;
-        public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount;
+        public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount, tvZanCount;
         public ImageView ivMore;
         public View vLine;
     }

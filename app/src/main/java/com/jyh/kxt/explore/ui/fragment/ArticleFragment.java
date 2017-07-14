@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,9 +14,7 @@ import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.json.NewsNavJson;
 import com.jyh.kxt.explore.presenter.ArticleFragmentPresenter;
-import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 import com.library.util.RegexValidateUtil;
-import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
@@ -56,8 +53,8 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
 
         plRootView.setOnAfreshLoadListener(this);
         stlNavigationBar.setOnTabSelectListener(this);
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
-        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), screenDisplay.widthPixels / 4));
+//        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(getContext());
+//        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), screenDisplay.widthPixels / 4));
 
         Bundle arguments = getArguments();
         if (arguments != null) {

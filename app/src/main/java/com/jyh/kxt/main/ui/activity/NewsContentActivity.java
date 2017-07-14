@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -543,6 +544,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             ButterKnife.bind(this, llFullContent);
 
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvType, R.mipmap.icon_new_bq, 0, 0, 0);
             tvType.setText(newsContentJson.getTypeName());
 
             long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
@@ -563,7 +565,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         }
                     });
 
-            tvName.setText(newsContentJson.getAuthor_name());
+            String author_name = newsContentJson.getAuthor_name();
+            if(TextUtils.isEmpty(author_name)){
+                tvName.getLayoutParams().height = 5;
+            }else{
+                tvName.setText(author_name);
+            }
 
             isAllowAttention = "blog".equals(newsContentJson.getType());
             if (isAllowAttention) {
@@ -1002,43 +1009,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                         if (popupUtil.isShowing()) {
                                             popupUtil.dismiss();
                                         }
-
-//                                        //图片尺寸
-//                                        int width = resource.getWidth();
-//                                        int height = resource.getHeight();
-//                                        //屏幕尺寸
-//                                        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay
-//                                                (NewsContentActivity.this);
-//                                        int widthPixels = screenDisplay.widthPixels;
-//                                        int heightPixels = screenDisplay.heightPixels;
-//                                        //放大1.5倍后的图片尺寸
-//                                        double largeWidth = width * 1.5;
-//                                        double largeHeight = height * 1.5;
-//                                        //放大图片(最大1.5倍),是其宽或高全屏
-//                                        if (largeWidth <= widthPixels && largeHeight <= heightPixels) {
-//                                            width *= 1.5;
-//                                            height *= 1.5;
-//                                        } else if (largeWidth > widthPixels && largeHeight > heightPixels) {
-//                                            double outWidth = largeWidth - widthPixels;
-//                                            double outHeight = largeHeight - heightPixels;
-//                                            if (outHeight > outWidth) {
-//                                                float size = widthPixels / (float) width;
-//                                                width = widthPixels;
-//                                                height *= size;
-//                                            } else {
-//                                                float size = heightPixels / (float) height;
-//                                                height = heightPixels;
-//                                                width *= size;
-//                                            }
-//                                        } else if (largeWidth > widthPixels) {
-//                                            float size = widthPixels / (float) width;
-//                                            width = widthPixels;
-//                                            height *= size;
-//                                        } else {
-//                                            float size = heightPixels / (float) height;
-//                                            height = heightPixels;
-//                                            width *= size;
-//                                        }
 
                                         ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
                                         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;

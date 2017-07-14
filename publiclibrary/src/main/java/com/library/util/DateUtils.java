@@ -1,5 +1,7 @@
 package com.library.util;
 
+import android.text.format.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +23,7 @@ public class DateUtils {
     public static final String TYPE_HMS = "HH:mm:ss"; //时分秒
     public static final String TYPE_HM = "HH:mm"; //时分
     public static final String TYPE_MS = "mm:ss"; //分秒
-    public static final String TYPE_YMDE="yyyy-MM-dd EEEE";//年月日 星期几
+    public static final String TYPE_YMDE = "yyyy-MM-dd EEEE";//年月日 星期几
 
     public static int oneDayLong = 1000 * 60 * 60 * 24;//一天时间毫秒值
     public static int oneHourLong = 1000 * 60 * 60;//一小时时间毫秒值
@@ -114,8 +116,8 @@ public class DateUtils {
      * @return
      * @throws Exception
      */
-    public static String transformTime(long selTimeMillis) throws Exception {
-        long currentTimeMillis = System.currentTimeMillis();
+    public static String transformTime(long dateTimeLong) throws Exception {
+       /* long currentTimeMillis = System.currentTimeMillis();
         long differenceTime = currentTimeMillis - selTimeMillis;
 
         String timeStr;
@@ -137,8 +139,42 @@ public class DateUtils {
         } else {
             //一年前
             timeStr = transformTime(selTimeMillis, TYPE_YMDHM);
+        }*/
+        long currentTimeMillis = System.currentTimeMillis();
+        long compareDifference = (currentTimeMillis - dateTimeLong) / 1000;
+
+        String dateTransform;
+        if (compareDifference >= 0 && compareDifference < 60) {
+            dateTransform = "刚刚";
+        } else if (compareDifference >= (60) && compareDifference < (60 * 60)) { //相差小时
+            dateTransform = (compareDifference / 60) + "分钟前";
+        } else if (differenceDay(currentTimeMillis, dateTimeLong) == 0) {
+            //相差小时compareDifference >= (60 * 60) && compareDifference < (60 * 60 * 24)
+            dateTransform = "今天 " + transformTime(dateTimeLong, TYPE_HM);
+        } else if (differenceDay(currentTimeMillis, dateTimeLong) == 1) {//相差天
+            dateTransform = "昨天 " + transformTime(dateTimeLong, TYPE_HM);
+        } else {
+            dateTransform = transformTime(dateTimeLong, TYPE_MDHM);
         }
-        return timeStr;
+
+        return dateTransform;
+    }
+
+    /**
+     * 选择的时间是否在当前时间的正负天数内
+     * parameter1 传入的比对值比 parameter2多几天或者少几天
+     *
+     * @return
+     */
+    public static int differenceDay(long parameter1, long parameter2) throws Exception {
+        String parameterYmd1 = DateFormat.format(TYPE_YMD, parameter1).toString();
+        String parameterYmd2 = DateFormat.format(TYPE_YMD, parameter2).toString();
+
+        SimpleDateFormat format = new SimpleDateFormat(TYPE_YMD);
+        long time1 = format.parse(parameterYmd1).getTime();
+        long time2 = format.parse(parameterYmd2).getTime();
+
+        return (int) ((time1 - time2) / (60 * 60 * 24 * 1000));
     }
 
     /**

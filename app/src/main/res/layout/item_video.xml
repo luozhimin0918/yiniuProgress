@@ -51,7 +51,8 @@
             android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/icon_video_more"/>
@@ -59,19 +60,29 @@
         <TextView
             android:id="@+id/tv_playCount"
             style="@style/VideoItemStyle"
+            android:text="1554"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/iv_more"
             android:drawableLeft="@mipmap/icon_video_play_small"/>
 
         <TextView
             android:id="@+id/tv_commentCount"
+            android:text="1"
             style="@style/VideoItemStyle"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/videoItemTextPadding"
+            android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/tv_playCount"
             android:drawableLeft="@mipmap/icon_video_comment"/>
 
+        <TextView
+            android:id="@+id/tv_zanCount"
+            android:text="1554"
+            style="@style/VideoItemStyle"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@id/tv_commentCount"
+            android:drawableLeft="@mipmap/icon_video_comment"/>
     </RelativeLayout>
 
     <View

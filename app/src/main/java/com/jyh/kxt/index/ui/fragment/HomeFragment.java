@@ -127,18 +127,21 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     private void changeRightIcon(int position) {
         if (position == 0) {
             currentFragment = newsFragment;
-            if (!isShowRightTopAdvert) {
-                ivRightIcon1.setVisibility(View.GONE);
-            } else {
-                ivRightIcon1.setVisibility(View.VISIBLE);
-            }
-            setGifIcon();
+            ivRightIcon2.setVisibility(View.GONE);
         } else {
             currentFragment = flashFragment;
 
             ivRightIcon1.setVisibility(View.VISIBLE);
-            ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
+            ivRightIcon2.setVisibility(View.VISIBLE);
+            ivRightIcon2.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
         }
+
+        if (!isShowRightTopAdvert) {
+            ivRightIcon1.setVisibility(View.GONE);
+        } else {
+            ivRightIcon1.setVisibility(View.VISIBLE);
+        }
+        setGifIcon();
     }
 
     @Override
@@ -154,19 +157,21 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
             case R.id.iv_right_icon2:
+
+                try {
+                    FastInfoAdapter adapter = flashFragment.flashPresenter.adapter;
+                    if (adapter == null || adapter.isAdapterNullData()) {
+                        ToastView.makeText3(getContext(), "暂无可筛选数据");
+                        return;
+                    }
+                    flashFiltrate();  //快讯筛选
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.iv_right_icon1:
                 try {
-                    if (currentFragment instanceof NewsFragment) {
-                        showPopWindowAdvert();
-                    } else {
-                        FastInfoAdapter adapter = flashFragment.flashPresenter.adapter;
-                        if (adapter == null || adapter.isAdapterNullData()) {
-                            ToastView.makeText3(getContext(), "暂无可筛选数据");
-                            return;
-                        }
-                        flashFiltrate();  //快讯筛选
-                    }
+                    showPopWindowAdvert();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -177,9 +182,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     public void closePopWindowAdvert() {
         isShowRightTopAdvert = true;
         ivRightIcon1.setVisibility(View.VISIBLE);
-        if (currentFragment instanceof NewsFragment) {
-            setGifIcon();
-        }
+
+//        if (currentFragment instanceof NewsFragment) {
+//            setGifIcon();
+//        } else if (currentFragment instanceof FlashFragment) {
+//            setGifIcon();
+//        }
+        setGifIcon();
     }
 
     public void showPopWindowAdvert() {
@@ -452,11 +461,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                     int theme = ThemeUtil.getAlertTheme(getContext());
                     switch (theme) {
                         case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                            Glide.with(getContext() ).load(R.mipmap.icon_advert_night).into(new GlideDrawableImageViewTarget
+                            Glide.with(getContext()).load(R.mipmap.icon_advert_night).into(new
+                                    GlideDrawableImageViewTarget
                                     (ivRightIcon1));
                             break;
                         case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                            Glide.with(getContext() ).load(R.mipmap.icon_advert_day).into(new GlideDrawableImageViewTarget
+                            Glide.with(getContext()).load(R.mipmap.icon_advert_day).into(new
+                                    GlideDrawableImageViewTarget
                                     (ivRightIcon1));
                             break;
                     }

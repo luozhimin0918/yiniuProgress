@@ -13,7 +13,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">@dimen/videoItemDrawablePadding</item>
         <item name="android:textColor">@color/font_color3</item>
-        <item name="android:textSize">@dimen/describe_font_size2</item>
+        <item name="android:textSize">@dimen/describe_font_size1</item>
     </style>
 
     <style name="LoginEditStyle">

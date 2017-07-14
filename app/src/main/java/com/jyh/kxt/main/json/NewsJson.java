@@ -50,7 +50,7 @@ public class NewsJson implements Parcelable {
     private int dataType;
 
     public String getCreate_time() {
-        return RegexValidateUtil.isEmpty(create_time)?datetime:create_time;
+        return RegexValidateUtil.isEmpty(create_time) ? datetime : create_time;
     }
 
     public void setCreate_time(String create_time) {
@@ -82,7 +82,7 @@ public class NewsJson implements Parcelable {
     }
 
     public String getDatetime() {
-        return RegexValidateUtil.isEmpty(datetime)?create_time:datetime;
+        return RegexValidateUtil.isEmpty(datetime) ? create_time : datetime;
     }
 
     public void setDatetime(String datetime) {
@@ -138,8 +138,9 @@ public class NewsJson implements Parcelable {
     }
 
     @Generated(hash = 124312310)
-    public NewsJson(String title, String picture, String author, String datetime, String type, String href, String o_action, String o_class,
-            String o_id, String create_time, boolean isSel, int dataType) {
+    public NewsJson(String title, String picture, String author, String datetime, String type, String href, String
+            o_action, String o_class,
+                    String o_id, String create_time, boolean isSel, int dataType) {
         this.title = title;
         this.picture = picture;
         this.author = author;
@@ -165,12 +166,17 @@ public class NewsJson implements Parcelable {
         if (obj == null) return false;
         if (obj instanceof NewsJson) {
             NewsJson newsJson = (NewsJson) obj;
-            return Objects.equals(title, newsJson.title) && Objects.equals(picture, newsJson.getPicture()) && Objects.equals(author,
-                    newsJson.getAuthor()) && Objects.equals(datetime, newsJson.getDatetime()) && Objects.equals(type, newsJson.getType())
-                    && Objects.equals(href, newsJson.getHref()) && Objects.equals(o_class, newsJson.getO_class()) && Objects.equals
-                    (o_action, newsJson.getO_action()) && Objects.equals(o_id, newsJson.getO_id());
-        } else
+            return Objects.equals(title, newsJson.title) && Objects.equals(picture, newsJson.getPicture()) && Objects
+                    .equals(author,
+                            newsJson.getAuthor()) && Objects.equals(datetime, newsJson.getDatetime()) && Objects
+                    .equals(type,
+                            newsJson.getType())
+                    && Objects.equals(href, newsJson.getHref()) && Objects.equals(o_class, newsJson.getO_class()) &&
+                    Objects.equals
+                            (o_action, newsJson.getO_action()) && Objects.equals(o_id, newsJson.getO_id());
+        } else {
             return false;
+        }
     }
 
     @Override

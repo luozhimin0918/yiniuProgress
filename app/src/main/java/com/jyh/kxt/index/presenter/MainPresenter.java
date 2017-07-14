@@ -150,7 +150,7 @@ public class MainPresenter extends BasePresenter {
                 subscriber.onNext(configJson);
 
                 try {
-                    Thread.sleep(5 * 1000);
+                    Thread.sleep(1 * 1000);
                     SingleThreadJson patchJson = new SingleThreadJson(1, "");
                     subscriber.onNext(patchJson);
                 } catch (InterruptedException e) {
@@ -214,7 +214,7 @@ public class MainPresenter extends BasePresenter {
                     }
                 }
             }
-            if(resultData == null){
+            if (resultData == null) {
                 resultData = "360";
             }
             String patchType = "1";
@@ -359,7 +359,14 @@ public class MainPresenter extends BasePresenter {
 
             final MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
             MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-            showPopAdvertisement(indexAd);
+
+            if (indexAd != null) {
+                if (indexAd.getShow() == 1) {
+                    showPopAdvertisement(indexAd);
+                } else {
+                    mMainActivity.homeFragment.closePopWindowAdvert();
+                }
+            }
 
             String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
 

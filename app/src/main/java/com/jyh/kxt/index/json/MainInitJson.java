@@ -140,6 +140,7 @@ public class MainInitJson {
         private String type;
         private String icon;
         private int left_screen_size;
+        private int show;//0不主动显示   1 主动显示
 
         public String getHref() {
             String connector = "?";
@@ -201,6 +202,14 @@ public class MainInitJson {
 
         public void setLeft_screen_size(int left_screen_size) {
             this.left_screen_size = left_screen_size;
+        }
+
+        public int getShow() {
+            return show;
+        }
+
+        public void setShow(int show) {
+            this.show = show;
         }
     }
 
