@@ -63,7 +63,7 @@ public class MarketDetailActivity extends BaseActivity {
     private String quotesChartUrl;
     private boolean defaultUpdateAddStatus = false;
     /**
-     * 是否允许添加, true 表示可以添加  图标为+  网络请求为删除
+     * 是否允许添加, true 表示可以添加  图标为+  网络请求为删除  K线图修改的
      */
     private boolean updateAddStatus = true;
 
