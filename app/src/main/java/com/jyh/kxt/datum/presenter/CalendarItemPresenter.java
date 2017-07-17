@@ -59,7 +59,6 @@ public class CalendarItemPresenter extends BasePresenter {
                 CalendarItemPresenter.this.calendarBeen = calendarBeen;
 
                 calendarItemFragment.pllContent.loadOver();
-
                 updateOrAddAdapter(0);
             }
 
@@ -84,33 +83,37 @@ public class CalendarItemPresenter extends BasePresenter {
      * @param status 默认状态为0  选择规则之后刷新为1  重置所有不执行过滤为2
      */
     public void updateOrAddAdapter(int status) {
-        calendarTypeList.clear();
-        if (status == 0) {
-            CalendarFragment parentFragment = (CalendarFragment) calendarItemFragment.getParentFragment();
-            parentFragment.areaSet = null;
-        }
-
-        for (CalendarBean calendarItemBean : calendarBeen) {
-            String type = calendarItemBean.getType();
-            List<String> objectList = calendarItemBean.getData();
-
-            if ("finance".equals(type)) {//财经数据
-                generateFinanceListData(objectList, status);
-            } else if ("important".equals(type)) {//事件数据
-                generateImportantListData(objectList, status);
-            } else if ("holiday".equals(type)) { //假期数据
-                generateHolidayListData(objectList, status);
+        try {
+            calendarTypeList.clear();
+            if (status == 0) {
+                CalendarFragment parentFragment = (CalendarFragment) calendarItemFragment.getParentFragment();
+                parentFragment.areaSet = null;
             }
-        }
 
-        if (status == 0) {
-            calendarItemFragment.setCalendarAdapter(calendarTypeList);
-            calendarItemFragment.addCityData(hashSetCity, hashSetSelectedCity);
+            for (CalendarBean calendarItemBean : calendarBeen) {
+                String type = calendarItemBean.getType();
+                List<String> objectList = calendarItemBean.getData();
 
-        } else {
-            calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
+                if ("finance".equals(type)) {//财经数据
+                    generateFinanceListData(objectList, status);
+                } else if ("important".equals(type)) {//事件数据
+                    generateImportantListData(objectList, status);
+                } else if ("holiday".equals(type)) { //假期数据
+                    generateHolidayListData(objectList, status);
+                }
+            }
+
+            if (status == 0) {
+                calendarItemFragment.setCalendarAdapter(calendarTypeList);
+                calendarItemFragment.addCityData(hashSetCity, hashSetSelectedCity);
+
+            } else {
+                calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
+            }
+            calendarItemFragment.ptrlvContent.onRefreshComplete();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        calendarItemFragment.ptrlvContent.onRefreshComplete();
     }
 
 

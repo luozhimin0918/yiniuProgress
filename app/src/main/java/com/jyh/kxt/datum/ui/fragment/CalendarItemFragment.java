@@ -90,7 +90,7 @@ public class CalendarItemFragment extends BaseFragment {
 
     public void addCityData(HashSet<String> hashSetCity, HashSet<String> hashSetSelectedCity) {
         CalendarFragment parentFragment = (CalendarFragment) getParentFragment();
-        parentFragment.addCityDataToFragment(this,hashSetCity, hashSetSelectedCity);
+        parentFragment.addCityDataToFragment(this, hashSetCity, hashSetSelectedCity);
     }
 
     @Override
@@ -121,7 +121,9 @@ public class CalendarItemFragment extends BaseFragment {
     }
 
     public void updateFiltration() {
-        mCalendarItemPresenter.updateOrAddAdapter(1);
+        if (mCalendarItemPresenter != null) {
+            mCalendarItemPresenter.updateOrAddAdapter(1);
+        }
     }
 
     public void resetFiltration() {
@@ -129,9 +131,11 @@ public class CalendarItemFragment extends BaseFragment {
             pllContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mCalendarItemPresenter.updateOrAddAdapter(2);
+                    if (mCalendarItemPresenter != null) {
+                        mCalendarItemPresenter.updateOrAddAdapter(2);
+                    }
                 }
-            },500);
+            }, 500);
         } catch (Exception e) {
             e.printStackTrace();
         }
