@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <!-- 魔窗权限 -->
-    <!--判断程序是否在前台运行,必须 -->
+    <!-- 判断程序是否在前台运行,必须 -->
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <!-- 缓存资源优先存入SDcard -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -50,9 +50,9 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Start">
-
             <intent-filter>
                 <data android:scheme="kxtapp"/>
+
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -91,9 +91,9 @@
         <!-- 视听 -->
         <activity
             android:name=".av.ui.VideoDetailActivity"
-            android:theme="@style/VideoTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:theme="@style/VideoTheme"
             android:windowSoftInputMode="adjustPan">
         </activity>
 
@@ -250,16 +250,16 @@
             android:name="com.jyh.kxt.base.utils.MyGlideModule"
             android:value="GlideModule"/>
 
-        <!--总的activity，必须注册！！！ -->
+        <!-- 总的activity，必须注册！！！ -->
         <activity
             android:name="cn.magicwindow.common.base.MWActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|navigation"
             android:exported="true"/>
-        <!--MW sdk ID 此处跟activity同级，需要放在Application内，MW_APPID（也就是后台的” 魔窗AppKey”）不能更改 -->
+        <!-- MW sdk ID 此处跟activity同级，需要放在Application内，MW_APPID（也就是后台的” 魔窗AppKey”）不能更改 -->
         <meta-data
             android:name="MW_APPID"
             android:value="9VWTNL31MA6V7O6L5U3BIE2VKFB8CWAN"/>
-        <!--渠道名称MW_CHANNEL不能更改 -->
+        <!-- 渠道名称MW_CHANNEL不能更改 -->
         <meta-data
             android:name="MW_CHANNEL"
             android:value="官方KxtApp"/>
@@ -278,6 +278,8 @@
         </receiver>
 
         <activity android:name=".index.ui.ErrorActivity">
+        </activity>
+        <activity android:name=".market.ui.MarketDetailChartActivity">
         </activity>
     </application>
 

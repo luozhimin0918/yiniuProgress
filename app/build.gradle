@@ -297,25 +297,19 @@ dependencies {
     compile project(':playerlibrary')
     compile project(':superplayerlibrary')
     compile project(':Pushlib')
-
+    compile project(':MPChartLib')
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
-
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile project(':Pushlib')
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile 'org.apache.httpcomponents:httpclient:4.5'
-
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
-
     compile 'com.umeng.analytics:analytics:latest.integration'
-
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
 }

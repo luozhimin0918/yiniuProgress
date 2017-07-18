@@ -117,4 +117,19 @@
     <!-- 搜索 -->
     <color name="search_high_color">#EA492A</color>
     <color name="search_default_color">#2E3239</color>
+
+
+    <!--行情表-->
+    <color name="minute_grayLine">#E7E7E7</color>
+    <color name="minute_blue">#00D0FC</color>
+    <color name="minute_yellow">#E7B448</color>
+    <color name="minute_black">#E7E7E7</color>
+    <color name="minute_jizhun">#7F9976</color>
+    <color name="minute_zhoutv">#858D93</color>
+    <color name="marker_bg">#ffffff</color>
+
+    <color name="ma5">#AAAA00</color>
+    <color name="ma10">#FF0000</color>
+    <color name="ma30">#AA33AA</color>
+
 </resources>
