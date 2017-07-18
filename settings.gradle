@@ -1,1 +1,1 @@
-include ':app', ':publiclibrary', ':superplayerlibrary', ':playerlibrary', ':Pushlib'
+include ':app', ':publiclibrary', ':superplayerlibrary', ':playerlibrary', ':Pushlib', ':MPChartLib'
