@@ -66,8 +66,8 @@ public class MarketDetailActivity extends BaseActivity {
      * 是否允许添加, true 表示可以添加  图标为+  网络请求为删除  K线图修改的
      */
     private boolean updateAddStatus = true;
+    private ShareJson shareJson;
 
-    private ShareJson shareBean;
     private MarketDetailBean mMarketDetailBean;
     private MarketDetailBean.ShareBean mDetailShare;
 
@@ -84,7 +84,7 @@ public class MarketDetailActivity extends BaseActivity {
                 if (!pageLoadLayout.isSuccessLoadOver()) {
                     return;
                 }
-                ShareJson shareBean = new ShareJson(mDetailShare.getTitle(),
+                shareJson = new ShareJson(mDetailShare.getTitle(),
                         mDetailShare.getUrl(),
                         mDetailShare.getDescript(),
                         null,
@@ -94,10 +94,10 @@ public class MarketDetailActivity extends BaseActivity {
                         null,
                         null,
                         false, false);
-                shareBean.setShareFromSource(2);
-                shareBean.setWeiBoDiscript(mMarketDetailBean.getShare_sina_title());
+                shareJson.setShareFromSource(2);
+                shareJson.setWeiBoDiscript(mMarketDetailBean.getShare_sina_title());
                 UmengShareTool.initUmengLayout(MarketDetailActivity.this,
-                        shareBean,
+                        shareJson,
                         marketItemBean,
                         view, null);
                 break;
@@ -111,8 +111,6 @@ public class MarketDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detail, StatusBarColor.THEME1);
-
-//        loadMarketUrl();
         requestInitDetail();
     }
 
@@ -332,8 +330,8 @@ public class MarketDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if (shareBean != null) {
-                Bitmap shareBitmap = shareBean.getBitmap();
+            if (shareJson != null) {
+                Bitmap shareBitmap = shareJson.getBitmap();
                 if (shareBitmap != null && !shareBitmap.isRecycled()) {
                     shareBitmap.recycle();
                 }
