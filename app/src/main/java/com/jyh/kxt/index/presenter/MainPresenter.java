@@ -411,22 +411,29 @@ public class MainPresenter extends BasePresenter {
 
 
         View advertContent = contentView.findViewById(R.id.arl_content);
-        //计算广告内容 宽度 和高度
-        ViewGroup.LayoutParams layoutParams = advertContent.getLayoutParams();
 
         //协定350为后台参考比例  例如50则为7分之1
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         float widthDpi = (float) screenDisplay.widthPixels / SystemUtil.getDpi(mMainActivity);
         int left = SystemUtil.dp2px(mContext, widthDpi / 350 * indexAd.getLeft_screen_size());
-        layoutParams.width = screenDisplay.widthPixels - left * 2;
-        layoutParams.height = (int) (layoutParams.width * ((float) 4 / (float) 3));
+        int contentWidth = screenDisplay.widthPixels - left * 2;
+        int contentHeight = (int) (contentWidth * ((float) 4 / (float) 3));
+        dynamicUpdateViewSize(advertContent, contentWidth, contentHeight);
 
         final View topView = contentView.findViewById(R.id.tv_top);
+        dynamicUpdateViewSize(topView, contentWidth, (int) (contentHeight * ((float) 2 / (float) 3)));
+
         View bottomView = contentView.findViewById(R.id.tv_bottom);
+        dynamicUpdateViewSize(bottomView, contentWidth, (int) (contentHeight * ((float) 1 / (float) 3)));
+
         FrameLayout flMengBan = (FrameLayout) contentView.findViewById(R.id.fl_mengban);
+        dynamicUpdateViewSize(flMengBan, contentWidth, contentHeight);
 
         ImageView imgAdView = (ImageView) contentView.findViewById(R.id.iv_adimg);
+        dynamicUpdateViewSize(imgAdView, contentWidth, contentHeight);
+
         WebView wvContent = (WebView) contentView.findViewById(R.id.wv_ad_content);
+        dynamicUpdateViewSize(wvContent, contentWidth, contentHeight);
 
         int theme = ThemeUtil.getAlertTheme(mContext);
         switch (theme) {
@@ -575,6 +582,14 @@ public class MainPresenter extends BasePresenter {
         });
 
         alertDialog.show();
+    }
+
+    private void dynamicUpdateViewSize(View view, int viewWidth, int viewHeight) {
+
+        //计算广告内容 宽度 和高度
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.width = viewWidth;
+        layoutParams.height = viewHeight;
     }
 
     /**
