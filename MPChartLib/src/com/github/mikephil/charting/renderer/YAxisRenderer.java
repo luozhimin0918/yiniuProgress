@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
+import android.graphics.RectF;
 
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
@@ -391,9 +392,24 @@ public class YAxisRenderer extends AxisRenderer {
                 if (position == LimitLine.LimitLabelPosition.RIGHT_TOP) {
 
                     mLimitLinePaint.setTextAlign(Align.RIGHT);
+
+                    float labelLineWidth = Utils.calcTextWidth(mLimitLinePaint, label);
+
+                    float right = mViewPortHandler.contentRight() - xOffset;
+                    float bottom = pts[1] - yOffset + labelLineHeight;
+
+                    int textPadding = 3;
+                    mLimitLinePaint.setColor(Color.GRAY);
+                    c.drawRect(new RectF(right - labelLineWidth - textPadding,
+                                    bottom - labelLineHeight-textPadding,
+                                    right+textPadding,
+                                    bottom+textPadding),
+                            mLimitLinePaint);
+
+                    mLimitLinePaint.setColor(l.getTextColor());
                     c.drawText(label,
-                            mViewPortHandler.contentRight() - xOffset,
-                            pts[1] - yOffset + labelLineHeight, mLimitLinePaint);
+                            right,
+                            bottom, mLimitLinePaint);
 
                 } else if (position == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
 

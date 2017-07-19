@@ -778,12 +778,17 @@ public class LineChartRenderer extends LineRadarRenderer {
                 mChart.getTransformer(set.getAxisDependency()).pointValuesToPixel(pts);
 
                 // draw the lines
-                drawHighlightLines(c, pts, set);
+                try {
+                    List<String> timeList = lineData.getXVals();
+                    drawHighlightLines(c, pts, set, timeList.get(xIndex));
+                } catch (Exception e) {
+                    drawHighlightLines(c, pts, set);
+                }
                 lineData.setPts(pts);
                 ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler =
                         mViewPortHandler.getOnLongPressIndicatorHandler();
                 if (onLongPressIndicatorHandler != null) {
-                    onLongPressIndicatorHandler.longPressIndicator(xIndex,lineData);
+                    onLongPressIndicatorHandler.longPressIndicator(xIndex, lineData);
                 }
             }
         }

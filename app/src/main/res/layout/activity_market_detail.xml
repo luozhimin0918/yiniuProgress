@@ -2,28 +2,265 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_market_detail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jyh.kxt.market.ui.MarketDetailActivity">
-
-    <include
-        android:id="@+id/ab_title"
-        layout="@layout/action_bar1"/>
+    android:layout_height="match_parent">
 
     <com.library.widget.PageLoadLayout
         android:id="@+id/pll_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@+id/ll_nav"
-        android:layout_below="@+id/ab_title">
+        android:layout_below="@+id/ab_title"
+        android:layout_height="match_parent">
 
-        <com.jyh.kxt.base.widget.LoadX5WebView
-            android:id="@+id/lwv_content"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </com.jyh.kxt.base.widget.LoadX5WebView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.4"
+                android:background="#FA5534"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:id="@+id/market_chart_actionbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/iv_bar_break"
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:src="@mipmap/icon_news_author_break"/>
+
+                    <TextView
+                        android:id="@+id/tv_bar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="白银T+D"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/iv_bar_function"
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:src="@mipmap/icon_market_update"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/market_chart_low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/market_chart_actionbar"
+                    android:text=" "
+                    android:textColor="@color/white"
+                    android:textSize="32sp"/>
+
+                <TextView
+                    android:id="@+id/market_chart_zde"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/market_chart_low"
+                    android:layout_marginTop="15dp"
+                    android:text=" "
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/market_chart_zdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/market_chart_zde"
+                    android:layout_below="@+id/market_chart_low"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/market_chart_zde"
+                    android:text=" "
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/market_chart_zde"
+                    android:layout_marginTop="15dp"
+                    android:text="最后更新时间：15:30:25"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
+
+
+                <LinearLayout
+                    android:id="@+id/market_chart_ll1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/market_chart_actionbar"
+                    android:layout_toLeftOf="@+id/market_chart_ll2"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:text="昨收"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/market_chart_zuoshou"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text=" "
+                        android:textColor="@color/white"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text="今开"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/market_chart_jinkai"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text=" "
+                        android:textColor="@color/white"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/market_chart_ll2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/market_chart_actionbar"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:text="最高"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/market_chart_zuigao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text=" "
+                        android:textColor="@color/white"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text="最低"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/market_chart_zuidi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/market_chart_zde"
+                        android:layout_marginTop="10dp"
+                        android:text=" "
+                        android:textColor="@color/white"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:id="@+id/market_chart_fenshi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="分时"
+                    android:textColor="@color/red2"/>
+
+                <TextView
+                    android:id="@+id/market_chart_fen5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="5分"
+                    android:textColor="@color/font_color2"/>
+
+                <TextView
+                    android:id="@+id/market_chart_fen30"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="30分"
+                    android:textColor="@color/font_color2"/>
+
+                <TextView
+                    android:id="@+id/market_chart_rik"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="日K"
+                    android:textColor="@color/font_color2"/>
+
+                <TextView
+                    android:id="@+id/market_chart_zhouk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="周K"
+                    android:textColor="@color/font_color2"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view_select_sign"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/red2"></View>
+
+            <FrameLayout
+                android:id="@+id/market_chart_frame"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+            </FrameLayout>
+
+        </LinearLayout>
     </com.library.widget.PageLoadLayout>
 
     <LinearLayout

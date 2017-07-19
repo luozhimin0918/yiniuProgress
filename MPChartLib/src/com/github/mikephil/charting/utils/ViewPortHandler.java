@@ -6,7 +6,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.View;
 
-import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 
 /**
  * Class that contains information about the charts current viewport settings, including offsets, scale & translation
@@ -17,7 +17,7 @@ import com.github.mikephil.charting.data.LineData;
 public class ViewPortHandler {
 
     public interface OnLongPressIndicatorHandler {
-        void longPressIndicator(int xIndex, LineData lineData);
+        void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData);
     }
 
 

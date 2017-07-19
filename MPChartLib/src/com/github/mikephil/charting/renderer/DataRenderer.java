@@ -36,6 +36,7 @@ public abstract class DataRenderer extends Renderer {
      * paint used for highlighting values
      */
     protected Paint mHighlightPaint;
+    protected Paint mHighlightDatePaint;
 
     protected Paint mDrawPaint;
 
@@ -58,6 +59,12 @@ public abstract class DataRenderer extends Renderer {
         mValuePaint.setColor(Color.rgb(63, 63, 63));
         mValuePaint.setTextAlign(Align.CENTER);
         mValuePaint.setTextSize(Utils.convertDpToPixel(9f));
+
+        mHighlightDatePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mHighlightDatePaint.setStyle(Style.FILL);
+        mHighlightDatePaint.setColor(Color.WHITE);
+        mHighlightDatePaint.setStrokeWidth(0.5f);
+        mHighlightDatePaint.setTextSize(Utils.convertDpToPixel(10));
 
         mHighlightPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mHighlightPaint.setStyle(Style.STROKE);

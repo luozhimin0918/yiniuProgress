@@ -23,7 +23,7 @@ import com.jyh.kxt.market.kline.mychart.MyLeftMarkerView;
 import com.jyh.kxt.market.kline.mychart.MyRightMarkerView;
 import com.jyh.kxt.market.kline.mychart.MyXAxis;
 import com.jyh.kxt.market.kline.mychart.MyYAxis;
-import com.jyh.kxt.market.ui.MarketDetailChartActivity;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MinutePresenter extends BasePresenter {
 
-    @BindObject MarketDetailChartActivity chartActivity;
+    @BindObject MarketDetailActivity chartActivity;
 
     private MyXAxis xAxisLine;
     private MyYAxis axisRightLine;
@@ -62,6 +62,10 @@ public class MinutePresenter extends BasePresenter {
         xAxisLine = chartActivity.minuteChartView.getXAxis();
         xAxisLine.setDrawLabels(true);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        xAxisLine.enableGridDashedLine(10f, 5f, 0f);
+        xAxisLine.setAxisLineColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
         // xAxisLine.setLabelsToSkip(59);
 
         //隐藏左边的Y轴数据
@@ -85,16 +89,13 @@ public class MinutePresenter extends BasePresenter {
         axisRightLine.setDrawGridLines(true);
         axisRightLine.setDrawAxisLine(false);
 
+        axisRightLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
         axisRightLine.setAxisLineColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
         axisRightLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
-        //背景线
-        xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
-        xAxisLine.enableGridDashedLine(10f, 5f, 0f);
-        xAxisLine.setAxisLineColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
-        xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
+
     }
 
-    public void setMinuteData(List<MarketTrendBean> minuteList) {
+    public void setData(List<MarketTrendBean> minuteList) {
         MinuteParse mMinuteParse = new MinuteParse();
         mMinuteParse.setMarketTrendBeanList(minuteList);
         mMinuteParse.parseMinuteList();
@@ -114,13 +115,18 @@ public class MinutePresenter extends BasePresenter {
         ll.setLineWidth(1f);
         ll.setLineColor(ContextCompat.getColor(mContext, R.color.line_color));
         ll.enableDashedLine(10f, 10f, 0f);
+        ll.setTextSize(10);
+        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        ll.setLabel(mMinuteParse.getBaseValue() + "");
         axisRightLine.addLimitLine(ll);
 
+        ArrayList<String> xLabelList = new ArrayList<>();
         ArrayList<Entry> lineCJEntries = new ArrayList<>();
 
         for (int i = 0, j = 0; i < mMinuteParse.getMarketTrendBeanList().size(); i++, j++) {
             MarketTrendBean marketTrendBean = mMinuteParse.getMarketTrendBeanList().get(j);
-
+            xLabelList.add(marketTrendBean.getQuotetime());
             if (marketTrendBean == null) {
                 lineCJEntries.add(new Entry(Float.NaN, i));
                 continue;
@@ -141,7 +147,7 @@ public class MinutePresenter extends BasePresenter {
         sets.add(lineDataSet1);
 
         /*注老版本LineData参数可以为空，最新版本会报错，修改进入ChartData加入if判断*/
-        LineData cd = new LineData(new String[mMinuteParse.getMarketTrendBeanList().size()], sets);
+        LineData cd = new LineData(xLabelList, sets);
         chartActivity.minuteChartView.setData(cd);
         chartActivity.minuteChartView.invalidate();//刷新图
     }

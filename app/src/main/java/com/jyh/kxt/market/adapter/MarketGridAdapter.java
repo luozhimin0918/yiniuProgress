@@ -12,7 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.databinding.ItemMarketRecommendBinding;
 import com.jyh.kxt.market.bean.MarketItemBean;
-import com.jyh.kxt.market.ui.MarketDetailChartActivity;
+import com.jyh.kxt.market.ui.MarketDetailActivity;
 
 import java.util.List;
 
@@ -64,7 +64,7 @@ public class MarketGridAdapter extends BaseListAdapter<MarketItemBean> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MarketDetailChartActivity.class);
+                Intent intent = new Intent(mContext, MarketDetailActivity.class);
                 intent.putExtra("market", marketItemBean);
                 mContext.startActivity(intent);
             }

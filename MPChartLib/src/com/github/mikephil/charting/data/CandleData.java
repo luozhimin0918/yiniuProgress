@@ -7,6 +7,8 @@ import java.util.List;
 
 public class CandleData extends BarLineScatterCandleBubbleData<ICandleDataSet> {
 
+    private float[] pts;
+
     public CandleData() {
         super();
     }
@@ -39,5 +41,13 @@ public class CandleData extends BarLineScatterCandleBubbleData<ICandleDataSet> {
         List<ICandleDataSet> sets = new ArrayList<>();
         sets.add(dataSet);
         return sets;
+    }
+
+    public void setPts(float[] pts) {
+        this.pts = pts;
+    }
+
+    public float[] getPts() {
+        return pts;
     }
 }

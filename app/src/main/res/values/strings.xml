@@ -27,4 +27,8 @@
     <string name="error_email">邮箱不合法</string>
     <string name="error_pwd_null">密码不能为空</string>
 
+
+    <string name="ma5">● MA5 %.2f</string>
+    <string name="ma10">● MA10 %.2f</string>
+    <string name="ma30">● MA30 %.2f</string>
 </resources>

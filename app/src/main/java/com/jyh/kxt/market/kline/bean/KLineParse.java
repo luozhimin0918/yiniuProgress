@@ -20,6 +20,6 @@ public class KLineParse {
 
     public float getBaseValue() {
         MarketTrendBean marketTrendBean = KLineList.get(KLineList.size() - 1);
-        return (float) marketTrendBean.getLow();
+        return (float) marketTrendBean.getClose();
     }
 }

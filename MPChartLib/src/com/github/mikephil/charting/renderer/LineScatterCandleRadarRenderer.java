@@ -1,10 +1,13 @@
 package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.RectF;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
+import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 /**
@@ -22,15 +25,7 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
         super(animator, viewPortHandler);
     }
 
-    /**
-     * Draws vertical & horizontal highlight-lines if enabled.
-     *
-     * @param c
-     * @param pts the transformed x- and y-position of the lines
-     * @param set the currently drawn dataset
-     */
-    protected void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set) {
-
+    public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set, String label) {
         // set color and stroke-width
         mHighlightPaint.setColor(set.getHighLightColor());
         mHighlightPaint.setStrokeWidth(set.getHighlightLineWidth());
@@ -45,6 +40,46 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
             mHighlightLinePath.lineTo(pts[0], mViewPortHandler.contentBottom());
 
             c.drawPath(mHighlightLinePath, mHighlightPaint);
+
+            if (label != null) {
+                /*try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date parseDate = simpleDateFormat.parse(label);
+
+                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm:ss");
+                    label = simpleDateFormat1.format(parseDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }*/
+                label = label.split(" ")[1];//读取后面一部分
+
+                //增加日期
+                float right = pts[0];
+                float bottom = mViewPortHandler.contentBottom();
+
+                int textPadding = 3;
+                float labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, label);
+                float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, label);
+
+
+                //如果在最左边或者最右边,则不要遮挡
+                if (right < labelLineWidth ) { //最左边了
+
+                } else if (right - labelLineWidth < 0) {
+
+                }
+                mHighlightDatePaint.setColor(Color.GRAY);
+                c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding ,
+                                bottom - labelLineHeight - textPadding ,
+                                right + labelLineWidth / 2 + textPadding ,
+                                bottom + textPadding ),
+                        mHighlightDatePaint);
+
+                mHighlightDatePaint.setColor(Color.WHITE);
+                c.drawText(label,
+                        right - labelLineWidth / 2,
+                        bottom, mHighlightDatePaint);
+            }
         }
 
         // draw horizontal highlight lines
@@ -66,7 +101,19 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
      * @param pts the transformed x- and y-position of the lines
      * @param set the currently drawn dataset
      */
-    protected void drawHighlightLines(Canvas c,int index, float[] pts, ILineScatterCandleRadarDataSet set) {
+    protected void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set) {
+        drawHighlightLines(c, pts, set, null);
+    }
+
+
+    /**
+     * Draws vertical & horizontal highlight-lines if enabled.
+     *
+     * @param c
+     * @param pts the transformed x- and y-position of the lines
+     * @param set the currently drawn dataset
+     */
+    protected void drawHighlightLines(Canvas c, int index, float[] pts, ILineScatterCandleRadarDataSet set) {
 
         // set color and stroke-width
         mHighlightPaint.setColor(set.getHighLightColor());

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <com.jyh.kxt.market.kline.mychart.MyLineChart
+        android:id="@+id/minute_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.jyh.kxt.market.kline.mychart.MyLineChart>
+
+    <RelativeLayout
+        android:id="@+id/rl_describe_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_current_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+</FrameLayout>
