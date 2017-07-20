@@ -32,7 +32,7 @@ public class MarketDetailChartPresenter extends BasePresenter {
         String marketDataUrl;
 
         if (fromSource == 0) {
-            marketDataUrl = String.format(url, "1", "areas", "800", code);
+            marketDataUrl = String.format(url, "1", "areas", "500", code);
         } else {
             String time = "1";
             switch (fromSource) {
@@ -50,7 +50,7 @@ public class MarketDetailChartPresenter extends BasePresenter {
                     break;
             }
 
-            marketDataUrl = String.format(url, time  , "candlestick", "800", code);
+            marketDataUrl = String.format(url, time  , "candlestick", "500", code);
         }
 
         volleyRequest.setDefaultDecode(false);

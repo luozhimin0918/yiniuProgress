@@ -1,6 +1,5 @@
 package com.jyh.kxt.market.presenter;
 
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -45,6 +44,9 @@ public class KLinePresenter extends BasePresenter {
     private YAxis axisRightK;
 
     private KLineParse mKLineParse;
+
+    private ArrayList<Entry> line5Entries, line10Entries, line30Entries;
+
     private ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler;
 
     public KLinePresenter(IBaseView iBaseView) {
@@ -98,11 +100,12 @@ public class KLinePresenter extends BasePresenter {
         ArrayList<String> xLabelList = new ArrayList<>();
         ArrayList<CandleEntry> candleEntries = new ArrayList<>();
 
-        ArrayList<Entry> line5Entries = new ArrayList<>();
-        ArrayList<Entry> line10Entries = new ArrayList<>();
-        ArrayList<Entry> line30Entries = new ArrayList<>();
+        line5Entries = new ArrayList<>();
+        line10Entries = new ArrayList<>();
+        line30Entries = new ArrayList<>();
 
-        for (int i = 0, j = 0; i < kLineList.size(); i++, j++) {
+        for (int i = 0; i < kLineList.size(); i++) {
+
             xLabelList.add(kLineList.get(i).getQuotetime());
 
             candleEntries.add(
@@ -113,13 +116,13 @@ public class KLinePresenter extends BasePresenter {
                             (float) kLineList.get(i).getClose()));
 
             if (i >= 4) { //MA 5
-                line5Entries.add(new Entry(getMaValueSum(i - 4, i) / 5, i));
+                line5Entries.add(new Entry(getMaValueSum(i - 4, i) / (float) 5, i));
             }
             if (i >= 9) {//MA 10
-                line10Entries.add(new Entry(getMaValueSum(i - 9, i) / 10, i));
+                line10Entries.add(new Entry(getMaValueSum(i - 9, i) / (float) 10, i));
             }
             if (i >= 29) {//MA 30
-                line30Entries.add(new Entry(getMaValueSum(i - 29, i) / 30, i));
+                line30Entries.add(new Entry(getMaValueSum(i - 29, i) / (float) 30, i));
             }
         }
 
@@ -134,11 +137,12 @@ public class KLinePresenter extends BasePresenter {
         candleDataSet.setDrawValues(false);
         candleDataSet.setShadowColorSameAsCandle(true);
 
-        candleDataSet.setDecreasingColor(Color.GREEN);
-        candleDataSet.setIncreasingColor(Color.RED);
+        candleDataSet.setNeutralColor(ContextCompat.getColor(mContext, R.color.decline_color));
+        candleDataSet.setDecreasingColor(ContextCompat.getColor(mContext, R.color.decline_color));
+        candleDataSet.setIncreasingColor(ContextCompat.getColor(mContext, R.color.rise_color));
 
         candleDataSet.setDecreasingPaintStyle(Paint.Style.FILL);
-        candleDataSet.setIncreasingPaintStyle(Paint.Style.FILL);
+        candleDataSet.setIncreasingPaintStyle(Paint.Style.STROKE);
 
         candleDataSet.setShadowWidth(1f);
         candleDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -211,7 +215,7 @@ public class KLinePresenter extends BasePresenter {
     };
 
     private float getMaValueSum(Integer a, Integer b) {
-        int sum = 0;
+        float sum = 0;
         for (int i = a; i <= b; i++) {
             sum += mKLineParse.getKLineList().get(i).getClose();
         }
@@ -253,5 +257,36 @@ public class KLinePresenter extends BasePresenter {
         lineDataSetMa.setDrawCircles(false);
         lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);
         return lineDataSetMa;
+    }
+
+    public void longPressIndicator(int xIndex) {
+        try {
+            Entry md5Entry = null;
+            try {
+                md5Entry = line5Entries.get(xIndex - 4);
+            } catch (Exception e) {
+            }
+            Entry md10Entry = null;
+            try {
+                md10Entry = line10Entries.get(xIndex - 9);
+            } catch (Exception e) {
+            }
+            Entry md30Entry = null;
+            try {
+                md30Entry = line30Entries.get(xIndex - 29);
+            } catch (Exception e) {
+            }
+
+            String ma5 = mContext.getResources().getString(R.string.ma5);
+            String ma10 = mContext.getResources().getString(R.string.ma10);
+            String ma30 = mContext.getResources().getString(R.string.ma30);
+
+            chartActivity.tvMa5.setText(md5Entry != null ? String.format(ma5, md5Entry.getVal()) : "");
+            chartActivity.tvMa10.setText(md10Entry != null ? String.format(ma10, md10Entry.getVal()) : "");
+            chartActivity.tvMa30.setText(md30Entry != null ? String.format(ma30, md30Entry.getVal()) : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

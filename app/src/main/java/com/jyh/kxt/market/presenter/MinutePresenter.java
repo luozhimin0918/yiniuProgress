@@ -1,6 +1,10 @@
 package com.jyh.kxt.market.presenter;
 
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -39,6 +43,7 @@ public class MinutePresenter extends BasePresenter {
 
     private MyXAxis xAxisLine;
     private MyYAxis axisRightLine;
+    private List<MarketTrendBean> minuteList;
 
     public MinutePresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -96,6 +101,8 @@ public class MinutePresenter extends BasePresenter {
     }
 
     public void setData(List<MarketTrendBean> minuteList) {
+        this.minuteList = minuteList;
+
         MinuteParse mMinuteParse = new MinuteParse();
         mMinuteParse.setMarketTrendBeanList(minuteList);
         mMinuteParse.parseMinuteList();
@@ -150,5 +157,14 @@ public class MinutePresenter extends BasePresenter {
         LineData cd = new LineData(xLabelList, sets);
         chartActivity.minuteChartView.setData(cd);
         chartActivity.minuteChartView.invalidate();//刷新图
+    }
+
+    public void longPressIndicator(int xIndex) {
+        String text = "现价：" + minuteList.get(xIndex).getClose();
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
+        builder.setSpan(redSpan, 3, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        chartActivity.minuteChartDesc.setText(builder);
     }
 }

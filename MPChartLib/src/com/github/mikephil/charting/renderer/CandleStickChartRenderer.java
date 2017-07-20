@@ -361,9 +361,6 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
 
                 mChart.getTransformer(set.getAxisDependency()).pointValuesToPixel(pts);
 
-
-                // draw the lines
-//                drawHighlightLines(c, pts, set);
                 try {
                     List<String> timeList = candleData1.getXVals();
                     drawHighlightLines(c, pts, set, timeList.get(xIndex));
@@ -374,7 +371,7 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                 ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler =
                         mViewPortHandler.getOnLongPressIndicatorHandler();
                 if (onLongPressIndicatorHandler != null) {
-                    onLongPressIndicatorHandler.longPressIndicator(xIndex, candleData1);
+                    onLongPressIndicatorHandler.longPressIndicator(xIndex, candleData);
                 }
             }
         }

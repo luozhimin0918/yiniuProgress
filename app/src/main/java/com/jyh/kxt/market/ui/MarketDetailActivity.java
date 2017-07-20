@@ -2,13 +2,10 @@ package com.jyh.kxt.market.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +15,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +24,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
@@ -69,10 +62,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 public class MarketDetailActivity extends BaseActivity implements ViewPortHandler.OnLongPressIndicatorHandler,
         OnSocketTextMessage {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
+    @BindView(R.id.tv_bar_code) TextView tvBarCode;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
 
     @BindView(R.id.ll_market_detail_optional) LinearLayout llMarketDetailOptional;
@@ -82,6 +77,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @BindView(R.id.pll_content) PageLoadLayout pageLoadLayout;
 
 
+    @BindView(R.id.market_head_layout) RelativeLayout marketHeadLayout;
     @BindView(R.id.market_chart_frame) FrameLayout frameLayout;
     @BindView(R.id.market_chart_fenshi) TextView tvFenShiView;
     @BindView(R.id.view_select_sign) View selectSignView;
@@ -93,12 +89,14 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @BindView(R.id.market_chart_jinkai) TextView marketChartJinkai;
     @BindView(R.id.market_chart_zuigao) TextView marketChartZuigao;
     @BindView(R.id.market_chart_zuidi) TextView marketChartZuidi;
+    @BindView(R.id.market_chart_update_time) TextView marketChartLastTime;
 
+    @BindView(R.id.market_chart_load) PageLoadLayout marketChartLoad;
 
     /**
      * 分时图的Chart
      */
-    private TextView minuteChartDesc;
+    public TextView minuteChartDesc;
     public MyLineChart minuteChartView;
     private MinutePresenter minutePresenter;
 
@@ -211,6 +209,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 MarketDetailActivity.this.mMarketDetailBean = mMarketDetailBean;
 
                 tvBarTitle.setText(mMarketDetailBean.getData().getName());
+                tvBarCode.setText(mMarketDetailBean.getData().getCode());
 
                 marketItemList = MarketUtil.getMarketEditOption(getContext());
                 if (marketItemList == null) {
@@ -264,7 +263,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
         requestChartData(clickNavigationPosition);
 
-        itemView.setTextColor(ContextCompat.getColor(this, R.color.red2));
+        itemView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
         if (clickOldNavigationView != null) {
             clickOldNavigationView.setTextColor(ContextCompat.getColor(this, R.color.font_color2));
         }
@@ -292,13 +291,18 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
         if (chartView != null && localMarketList != null) {
             frameLayout.addView(chartView);
+            marketChartLoad.loadOver();
             return;
         }
+        marketChartLoad.loadWait();
+
         marketDetailChartPresenter.requestChartData(marketItemBean.getCode(),
                 fromSource,
                 new HttpListener<String>() {
                     @Override
                     protected void onResponse(String list) {
+                        marketChartLoad.loadOver();
+
                         List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
                         marketTrendMap.put(fromSource, marketTrendList);
 
@@ -338,6 +342,11 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
                         }
                     }
+
+                    @Override
+                    protected void onErrorResponse(VolleyError error) {
+                        marketChartLoad.loadError();
+                    }
                 });
     }
 
@@ -345,9 +354,8 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @Override
     public void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData) {
 
-
         if (clickNavigationPosition == 0 && minuteChartView != null) {
-            Entry entryForXIndex;
+         /*   Entry entryForXIndex;
             if (candleData instanceof LineData) {
                 entryForXIndex = ((LineData) candleData).getDataSets().get(0).getEntryForXIndex(xIndex);
             } else {
@@ -359,38 +367,10 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
             builder.setSpan(redSpan, 3, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            minuteChartDesc.setText(builder);
+            minuteChartDesc.setText(builder);*/
+            minutePresenter.longPressIndicator(xIndex);
         } else if (clickNavigationPosition != 0) {
-            try {
-                Entry md5Entry;
-                Entry md10Entry;
-                Entry md30Entry;
-
-                if (candleData instanceof LineData) {
-                    List<ILineDataSet> dataSets = ((LineData) candleData).getDataSets();
-
-                    md5Entry = dataSets.get(0).getEntryForIndex(xIndex - 5);
-                    md10Entry = dataSets.get(1).getEntryForIndex(xIndex - 10);
-                    md30Entry = dataSets.get(2).getEntryForIndex(xIndex - 30);
-                } else {
-                    List<ICandleDataSet> dataSets = ((CandleData) candleData).getDataSets();
-
-                    md5Entry = dataSets.get(0).getEntryForIndex(xIndex - 5);
-                    md10Entry = dataSets.get(1).getEntryForIndex(xIndex - 10);
-                    md30Entry = dataSets.get(2).getEntryForIndex(xIndex - 30);
-                }
-                String ma5 = getResources().getString(R.string.ma5);
-                String ma10 = getResources().getString(R.string.ma10);
-                String ma30 = getResources().getString(R.string.ma30);
-
-                tvMa5.setText(String.format(ma5, md5Entry.getVal()));
-                tvMa10.setText(String.format(ma10, md10Entry.getVal()));
-                tvMa30.setText(String.format(ma30, md30Entry.getVal()));
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            kLinePresenter.longPressIndicator(xIndex);
         }
     }
 
@@ -545,13 +525,27 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
      *
      * @param text
      */
+
+    private int oldHeadBgState = 0;
+
     @Override
     public void onTextMessage(String text) {
         if (TextUtils.isEmpty(text)) {
             return;
         }
-        JSONArray jsonArray = JSONArray.parseArray(text);
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        JSONObject jsonObject = null;
+        try {
+            JSONArray jsonArray = JSONArray.parseArray(text);
+            jsonObject = jsonArray.getJSONObject(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                jsonObject = JSONObject.parseObject(text);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return;
+            }
+        }
 
         String price = jsonObject.getString("p");   //最新价  3.5951
         Double change = jsonObject.getDouble("d");  //涨跌额  0.0238
@@ -562,20 +556,40 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         String zuigao = jsonObject.getString("h");  //最高
         String zuidi = jsonObject.getString("l");  //最低
 
+        String lastTime = jsonObject.getString("t");//最后更新时间
+        long lastTimeLong = Long.parseLong(lastTime) * 1000;
+        marketChartLastTime.setText("最后更新时间： " + DateFormat.format("HH:mm:ss", lastTimeLong));
 
         DecimalFormat df = new DecimalFormat("0.00");
         String formatChange = df.format(change);
 
         range = range.replace("%", "");
-        String formatRange = df.format(Double.parseDouble(range));
+        double rangeDouble = Double.parseDouble(range);
+
+
+        //判断涨跌幅状态,
+        if (rangeDouble == 0 && oldHeadBgState != 0) {
+            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg0);
+            oldHeadBgState = 0;
+        } else if (rangeDouble > 0 && oldHeadBgState != 1) {
+            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg1);
+            oldHeadBgState = 1;
+        } else if (rangeDouble < 0 && oldHeadBgState != 2) {
+            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg2);
+            oldHeadBgState = 2;
+        }
+
+        String formatRange = df.format(rangeDouble) + "%";
 
         marketChartLow.setText(price);
-        marketChartZde.setText(formatChange);
-        marketChartZdf.setText(formatRange + "%");
+        marketChartZde.setText(formatChange.indexOf("-") == -1 ? "+" + formatChange : formatChange);
+        marketChartZdf.setText(formatRange.indexOf("-") == -1 ? "+" + formatRange : formatRange);
 
         marketChartZuoshou.setText(zuoshou);
         marketChartJinkai.setText(jinkai);
         marketChartZuigao.setText(zuigao);
         marketChartZuidi.setText(zuidi);
+
+
     }
 }
