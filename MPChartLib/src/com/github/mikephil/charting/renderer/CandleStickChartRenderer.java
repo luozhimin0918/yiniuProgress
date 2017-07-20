@@ -41,11 +41,8 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
 
     @Override
     public void drawData(Canvas c) {
-
         CandleData candleData = mChart.getCandleData();
-
         for (ICandleDataSet set : candleData.getDataSets()) {
-
             if (set.isVisible() && set.getEntryCount() > 0) {
                 drawDataSet(c, set);
             }

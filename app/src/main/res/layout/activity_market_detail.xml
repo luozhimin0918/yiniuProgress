@@ -23,7 +23,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
                 android:minHeight="155dp"
-                android:background="@color/blue"
                 android:padding="10dp">
 
                 <RelativeLayout

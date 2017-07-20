@@ -25,7 +25,7 @@ public class CombinedChartRenderer extends DataRenderer {
      * all rederers for the different kinds of data this combined-renderer can draw
      */
     protected List<DataRenderer> mRenderers;
-
+    private LineChartRenderer lineChartRenderer;
     protected WeakReference<Chart> mChart;
 
     public CombinedChartRenderer(CombinedChart chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
@@ -52,24 +52,29 @@ public class CombinedChartRenderer extends DataRenderer {
 
             switch (order) {
                 case BAR:
-                    if (chart.getBarData() != null)
+                    if (chart.getBarData() != null) {
                         mRenderers.add(new BarChartRenderer(chart, animator, viewPortHandler));
+                    }
                     break;
                 case BUBBLE:
-                    if (chart.getBubbleData() != null)
+                    if (chart.getBubbleData() != null) {
                         mRenderers.add(new BubbleChartRenderer(chart, animator, viewPortHandler));
+                    }
                     break;
                 case LINE:
-                    if (chart.getLineData() != null)
+                    if (chart.getLineData() != null) {
                         mRenderers.add(new LineChartRenderer(chart, animator, viewPortHandler));
+                    }
                     break;
                 case CANDLE:
-                    if (chart.getCandleData() != null)
+                    if (chart.getCandleData() != null) {
                         mRenderers.add(new CandleStickChartRenderer(chart, animator, viewPortHandler));
+                    }
                     break;
                 case SCATTER:
-                    if (chart.getScatterData() != null)
+                    if (chart.getScatterData() != null) {
                         mRenderers.add(new ScatterChartRenderer(chart, animator, viewPortHandler));
+                    }
                     break;
             }
         }
@@ -84,9 +89,12 @@ public class CombinedChartRenderer extends DataRenderer {
 
     @Override
     public void drawData(Canvas c) {
-
-        for (DataRenderer renderer : mRenderers)
+        for (DataRenderer renderer : mRenderers) {
             renderer.drawData(c);
+            if (renderer instanceof LineChartRenderer) {
+                this.lineChartRenderer = (LineChartRenderer) renderer;
+            }
+        }
     }
 
     @Override
@@ -107,31 +115,34 @@ public class CombinedChartRenderer extends DataRenderer {
     public void drawHighlighted(Canvas c, Highlight[] indices) {
 
         Chart chart = mChart.get();
-        if (chart == null) 
+        if (chart == null) {
             return;
+        }
 
         for (DataRenderer renderer : mRenderers) {
             ChartData data = null;
 
-            if (renderer instanceof BarChartRenderer)
-                data = ((BarChartRenderer)renderer).mChart.getBarData();
-            else if (renderer instanceof LineChartRenderer)
-                data = ((LineChartRenderer)renderer).mChart.getLineData();
-            else if (renderer instanceof CandleStickChartRenderer)
-                data = ((CandleStickChartRenderer)renderer).mChart.getCandleData();
-            else if (renderer instanceof ScatterChartRenderer)
-                data = ((ScatterChartRenderer)renderer).mChart.getScatterData();
-            else if (renderer instanceof BubbleChartRenderer)
-                data = ((BubbleChartRenderer)renderer).mChart.getBubbleData();
+            if (renderer instanceof BarChartRenderer) {
+                data = ((BarChartRenderer) renderer).mChart.getBarData();
+            } else if (renderer instanceof LineChartRenderer) {
+                data = ((LineChartRenderer) renderer).mChart.getLineData();
+            } else if (renderer instanceof CandleStickChartRenderer) {
+                data = ((CandleStickChartRenderer) renderer).mChart.getCandleData();
+            } else if (renderer instanceof ScatterChartRenderer) {
+                data = ((ScatterChartRenderer) renderer).mChart.getScatterData();
+            } else if (renderer instanceof BubbleChartRenderer) {
+                data = ((BubbleChartRenderer) renderer).mChart.getBubbleData();
+            }
 
             int dataIndex = data == null
                     ? -1
-                    : ((CombinedData)chart.getData()).getAllData().indexOf(data);
+                    : ((CombinedData) chart.getData()).getAllData().indexOf(data);
 
             ArrayList<Highlight> dataIndices = new ArrayList<>();
             for (Highlight h : indices) {
-                if (h.getDataIndex() == dataIndex || h.getDataIndex() == -1)
+                if (h.getDataIndex() == dataIndex || h.getDataIndex() == -1) {
                     dataIndices.add(h);
+                }
             }
 
             renderer.drawHighlighted(c, dataIndices.toArray(new Highlight[dataIndices.size()]));
@@ -152,10 +163,11 @@ public class CombinedChartRenderer extends DataRenderer {
      * @return
      */
     public DataRenderer getSubRenderer(int index) {
-        if (index >= mRenderers.size() || index < 0)
+        if (index >= mRenderers.size() || index < 0) {
             return null;
-        else
+        } else {
             return mRenderers.get(index);
+        }
     }
 
     /**
@@ -169,5 +181,9 @@ public class CombinedChartRenderer extends DataRenderer {
 
     public void setSubRenderers(List<DataRenderer> renderers) {
         this.mRenderers = renderers;
+    }
+
+    public LineChartRenderer getLineChartRenderer() {
+        return lineChartRenderer;
     }
 }

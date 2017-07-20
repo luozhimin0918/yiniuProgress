@@ -32,6 +32,8 @@ import com.github.mikephil.charting.jobs.MoveViewJob;
 import com.github.mikephil.charting.jobs.ZoomJob;
 import com.github.mikephil.charting.listener.BarLineChartTouchListener;
 import com.github.mikephil.charting.listener.OnDrawListener;
+import com.github.mikephil.charting.renderer.CombinedChartRenderer;
+import com.github.mikephil.charting.renderer.LineChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.PointD;
@@ -256,6 +258,28 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         }
 
         mRenderer.drawData(canvas);
+
+        //自己增加画原点
+        if (mRenderer instanceof LineChartRenderer) {
+            if (mIndicesToHighlight != null) {
+                for (Highlight high : mIndicesToHighlight) {
+                    LineChartRenderer lineChartRenderer = (LineChartRenderer) mRenderer;
+                    lineChartRenderer.drawIntersectionDot(canvas, high.getXIndex());
+                }
+            }
+        } /*else if (mRenderer instanceof CombinedChartRenderer) {
+            if (mIndicesToHighlight != null) {
+                for (Highlight high : mIndicesToHighlight) {
+
+                    CombinedChartRenderer combinedChartRenderer = (CombinedChartRenderer) mRenderer;
+                    LineChartRenderer lineChartRenderer = combinedChartRenderer.getLineChartRenderer();
+                    if(lineChartRenderer != null){
+                        lineChartRenderer.drawIntersectionDot(canvas, high.getXIndex());
+                    }
+                }
+            }
+        }*/
+
 
         // if highlighting is enabled
         if (valuesToHighlight()) {

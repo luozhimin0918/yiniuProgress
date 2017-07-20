@@ -50,7 +50,7 @@ public class MinuteParse {
      */
     public float getBaseValue() {
         MarketTrendBean marketTrendBean = marketTrendBeanList.get(marketTrendBeanList.size() - 1);
-        return (float) marketTrendBean.getLow();
+        return (float) marketTrendBean.getClose();
     }
 
     public void parseMinuteList() {
@@ -63,10 +63,10 @@ public class MinuteParse {
         }
 
         //默认使用第一个值当最小值
-        minValue = marketTrendBeanList.get(0).getLow();
+        minValue = marketTrendBeanList.get(0).getClose();
 
         for (MarketTrendBean marketTrendBean : marketTrendBeanList) {
-            double lowValue = marketTrendBean.getLow();
+            double lowValue = marketTrendBean.getClose();
 
             if (lowValue > maxValue) {
                 maxValue = lowValue;

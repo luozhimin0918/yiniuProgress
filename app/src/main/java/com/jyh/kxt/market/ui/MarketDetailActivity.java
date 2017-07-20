@@ -7,10 +7,14 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -76,6 +80,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @BindView(R.id.ll_market_detail_share) LinearLayout llMarketDetailShare;
     @BindView(R.id.pll_content) PageLoadLayout pageLoadLayout;
 
+    @BindView(R.id.iv_bar_function) ImageView ivUpdateView;
 
     @BindView(R.id.market_head_layout) RelativeLayout marketHeadLayout;
     @BindView(R.id.market_chart_frame) FrameLayout frameLayout;
@@ -96,7 +101,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     /**
      * 分时图的Chart
      */
-    public TextView minuteChartDesc;
+    public TextView minuteChartTime,minuteChartDesc;
     public MyLineChart minuteChartView;
     private MinutePresenter minutePresenter;
 
@@ -105,6 +110,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
      */
     public CombinedChart combinedchart;
     public TextView tvMa5, tvMa10, tvMa30;
+
+    public TextView tvKLineTime, tvKLineKaiPan, tvKLineZuiGao, tvKLineZuiDi, tvKLineShouPan;
+
     private KLinePresenter kLinePresenter;
 
     private MarketDetailChartPresenter marketDetailChartPresenter;
@@ -132,7 +140,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private MarketDetailBean mMarketDetailBean;
     private MarketDetailBean.ShareBean mDetailShare;
 
-    @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break})
+    @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break, R.id.iv_bar_function})
     public void onOptionClick(View view) {
         switch (view.getId()) {
             case R.id.ll_market_detail_optional:
@@ -164,6 +172,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 break;
             case R.id.iv_bar_break:
                 onBackPressed();
+                break;
+            case R.id.iv_bar_function:
+                updateChartDate();
                 break;
         }
     }
@@ -288,7 +299,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         List<MarketTrendBean> localMarketList = marketTrendMap.get(fromSource);
 
         frameLayout.removeAllViews();
-
         if (chartView != null && localMarketList != null) {
             frameLayout.addView(chartView);
             marketChartLoad.loadOver();
@@ -315,6 +325,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             frameLayout.addView(minuteLayout);
                             chartMap.put(fromSource, minuteLayout);
 
+                            minuteChartTime = (TextView) minuteLayout.findViewById(R.id.tv_minute_time);
                             minuteChartDesc = (TextView) minuteLayout.findViewById(R.id.tv_current_price);
                             minuteChartView = (MyLineChart) minuteLayout.findViewById(R.id.minute_chart);
 
@@ -335,6 +346,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             tvMa5 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma5);
                             tvMa10 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma10);
                             tvMa30 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma30);
+
+                            tvKLineTime = (TextView) kLineLayout.findViewById(R.id.kline_tv_time);
+                            tvKLineKaiPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_kaipan);
+                            tvKLineZuiGao = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuigao);
+                            tvKLineZuiDi = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuidi);
+                            tvKLineShouPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_shoupan);
 
                             kLinePresenter = new KLinePresenter(MarketDetailActivity.this);
                             kLinePresenter.initChart(MarketDetailActivity.this);
@@ -533,16 +550,15 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         if (TextUtils.isEmpty(text)) {
             return;
         }
+        Log.e(TAG, "onTextMessage: "+text );
         JSONObject jsonObject = null;
         try {
             JSONArray jsonArray = JSONArray.parseArray(text);
             jsonObject = jsonArray.getJSONObject(0);
         } catch (Exception e) {
-            e.printStackTrace();
             try {
                 jsonObject = JSONObject.parseObject(text);
             } catch (Exception e1) {
-                e1.printStackTrace();
                 return;
             }
         }
@@ -558,7 +574,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
         String lastTime = jsonObject.getString("t");//最后更新时间
         long lastTimeLong = Long.parseLong(lastTime) * 1000;
-        marketChartLastTime.setText("最后更新时间： " + DateFormat.format("HH:mm:ss", lastTimeLong));
+        marketChartLastTime.setText("最后更新时间：" + DateFormat.format("HH:mm:ss", lastTimeLong));
 
         DecimalFormat df = new DecimalFormat("0.00");
         String formatChange = df.format(change);
@@ -582,14 +598,74 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         String formatRange = df.format(rangeDouble) + "%";
 
         marketChartLow.setText(price);
-        marketChartZde.setText(formatChange.indexOf("-") == -1 ? "+" + formatChange : formatChange);
-        marketChartZdf.setText(formatRange.indexOf("-") == -1 ? "+" + formatRange : formatRange);
+        marketChartZde.setText(!formatChange.contains("-") ? "+" + formatChange : formatChange);
+        marketChartZdf.setText(!formatRange.contains("-") ? "+" + formatRange : formatRange);
 
         marketChartZuoshou.setText(zuoshou);
         marketChartJinkai.setText(jinkai);
         marketChartZuigao.setText(zuigao);
         marketChartZuidi.setText(zuidi);
+    }
+
+    private boolean isUpdateDataIng = false;
+
+    private void updateChartDate() {
+
+        if (isUpdateDataIng) {
+            return;
+        }
+
+        RotateAnimation rotateAnimation = new RotateAnimation(
+                0f,
+                360f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        rotateAnimation.setDuration(1000);
+        rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        rotateAnimation.setRepeatCount(-1);
+
+        ivUpdateView.startAnimation(rotateAnimation);
+
+        isUpdateDataIng = true;
 
 
+        //检查Socket 是否断开！
+        JSONArray codes = new JSONArray();
+        codes.add(mMarketDetailBean.getData().getCode());
+        MarketConnectUtil.getInstance().sendSocketParams(
+                this,
+                codes,
+                this);
+
+        //重置Chart数据
+        marketChartLoad.loadWait();
+        marketDetailChartPresenter.requestChartData(marketItemBean.getCode(),
+                clickNavigationPosition,
+                new HttpListener<String>() {
+                    @Override
+                    protected void onResponse(String list) {
+                        marketChartLoad.loadOver();
+                        List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
+                        if (clickNavigationPosition == 0) {
+                            minutePresenter.setData(marketTrendList);
+                        } else {
+                            kLinePresenter.setData(marketTrendList);
+                        }
+
+                        isUpdateDataIng = false;
+                        ivUpdateView.clearAnimation();
+                    }
+
+                    @Override
+                    protected void onErrorResponse(VolleyError error) {
+                        marketChartLoad.loadError();
+
+                        isUpdateDataIng = false;
+                        ivUpdateView.clearAnimation();
+                    }
+                });
     }
 }

@@ -42,15 +42,6 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
             c.drawPath(mHighlightLinePath, mHighlightPaint);
 
             if (label != null) {
-                /*try {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date parseDate = simpleDateFormat.parse(label);
-
-                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm:ss");
-                    label = simpleDateFormat1.format(parseDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }*/
                 label = label.split(" ")[1];//读取后面一部分
 
                 //增加日期

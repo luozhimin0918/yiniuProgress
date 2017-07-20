@@ -114,9 +114,11 @@ public class MinutePresenter extends BasePresenter {
 
         //控件设置
         xAxisLine.setXLabels(mMinuteParse.getXLabels());
-        axisRightLine.setAxisMinValue((float) mMinuteParse.getMinValue());
-        axisRightLine.setAxisMaxValue((float) mMinuteParse.getMaxValue()); //基准线的位置宽度等
+//        axisRightLine.setAxisMinValue((float) mMinuteParse.getMinValue());
+//        axisRightLine.setAxisMaxValue((float) mMinuteParse.getMaxValue()); //基准线的位置宽度等
 
+        //先移除基线
+        axisRightLine.removeAllLimitLines();
         //基线位置
         LimitLine ll = new LimitLine(mMinuteParse.getBaseValue());
         ll.setLineWidth(1f);
@@ -157,14 +159,19 @@ public class MinutePresenter extends BasePresenter {
         LineData cd = new LineData(xLabelList, sets);
         chartActivity.minuteChartView.setData(cd);
         chartActivity.minuteChartView.invalidate();//刷新图
+
+        longPressIndicator(minuteList.size() - 1);
     }
 
     public void longPressIndicator(int xIndex) {
-        String text = "现价：" + minuteList.get(xIndex).getClose();
+        MarketTrendBean marketTrendBean = minuteList.get(xIndex);
+        String text = "现价：" + marketTrendBean.getClose();
         SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
         ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
         builder.setSpan(redSpan, 3, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         chartActivity.minuteChartDesc.setText(builder);
+
+        chartActivity.minuteChartTime.setText(marketTrendBean.getQuotetime());
     }
 }

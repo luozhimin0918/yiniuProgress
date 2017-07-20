@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -168,6 +169,8 @@ public class KLinePresenter extends BasePresenter {
 
         }
 
+        //先移除基线
+        axisRightK.removeAllLimitLines();
         /**
          * 基准线的位置宽度等
          */
@@ -202,7 +205,7 @@ public class KLinePresenter extends BasePresenter {
         handler.sendEmptyMessageDelayed(0, 300);
 
         //默认选中最后一条数据
-        onLongPressIndicatorHandler.longPressIndicator(kLineList.size() - 1, lineData);
+        longPressIndicator(kLineList.size() - 1);
     }
 
     private Handler handler = new Handler() {
@@ -284,6 +287,14 @@ public class KLinePresenter extends BasePresenter {
             chartActivity.tvMa5.setText(md5Entry != null ? String.format(ma5, md5Entry.getVal()) : "");
             chartActivity.tvMa10.setText(md10Entry != null ? String.format(ma10, md10Entry.getVal()) : "");
             chartActivity.tvMa30.setText(md30Entry != null ? String.format(ma30, md30Entry.getVal()) : "");
+
+            MarketTrendBean marketTrendBean = mKLineParse.getKLineList().get(xIndex);
+
+            chartActivity.tvKLineTime.setText(marketTrendBean.getQuotetime());
+            chartActivity.tvKLineKaiPan.setText("开盘价:" + marketTrendBean.getOpen());
+            chartActivity.tvKLineZuiGao.setText("最高价:" + marketTrendBean.getHigh());
+            chartActivity.tvKLineZuiDi.setText("最低价:" + marketTrendBean.getLow());
+            chartActivity.tvKLineShouPan.setText("收盘价:" + marketTrendBean.getClose());
 
         } catch (Exception e) {
             e.printStackTrace();

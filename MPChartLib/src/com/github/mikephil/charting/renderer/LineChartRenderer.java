@@ -21,6 +21,7 @@ import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 
 public class LineChartRenderer extends LineRadarRenderer {
@@ -67,6 +68,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
     }
 
+
     @Override
     public void drawData(Canvas c) {
 
@@ -91,7 +93,6 @@ public class LineChartRenderer extends LineRadarRenderer {
         LineData lineData = mChart.getLineData();
 
         for (ILineDataSet set : lineData.getDataSets()) {
-
             if (set.isVisible() && set.getEntryCount() > 0) {
                 drawDataSet(c, set);
             }
@@ -311,6 +312,13 @@ public class LineChartRenderer extends LineRadarRenderer {
 
     private float[] mLineBuffer = new float[4];
 
+    public void drawIntersectionDot(Canvas canvas, int xIndex) {
+        try {
+            canvas.drawCircle(mLineBuffer[xIndex * 4], mLineBuffer[xIndex * 4 + 1], 5, mIntersectionDotPaint);
+        } catch (Exception e) {
+        }
+    }
+
     /**
      * Draws a normal line.
      *
@@ -318,7 +326,6 @@ public class LineChartRenderer extends LineRadarRenderer {
      * @param dataSet
      */
     protected void drawLinear(Canvas c, ILineDataSet dataSet) {
-
         int entryCount = dataSet.getEntryCount();
 
         final boolean isDrawSteppedEnabled = dataSet.isDrawSteppedEnabled();
@@ -469,7 +476,6 @@ public class LineChartRenderer extends LineRadarRenderer {
                 }
             }
         }
-
         mRenderPaint.setPathEffect(null);
 
         // if drawing filled is enabled
@@ -785,6 +791,7 @@ public class LineChartRenderer extends LineRadarRenderer {
                     drawHighlightLines(c, pts, set);
                 }
                 lineData.setPts(pts);
+
                 ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler =
                         mViewPortHandler.getOnLongPressIndicatorHandler();
                 if (onLongPressIndicatorHandler != null) {

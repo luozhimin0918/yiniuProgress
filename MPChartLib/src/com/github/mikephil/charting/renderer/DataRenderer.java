@@ -37,7 +37,7 @@ public abstract class DataRenderer extends Renderer {
      */
     protected Paint mHighlightPaint;
     protected Paint mHighlightDatePaint;
-
+    protected Paint mIntersectionDotPaint;
     protected Paint mDrawPaint;
 
     /**
@@ -70,6 +70,11 @@ public abstract class DataRenderer extends Renderer {
         mHighlightPaint.setStyle(Style.STROKE);
         mHighlightPaint.setStrokeWidth(2f);
         mHighlightPaint.setColor(Color.rgb(255, 187, 115));
+
+        mIntersectionDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mIntersectionDotPaint.setStyle(Style.FILL);
+        mIntersectionDotPaint.setStrokeWidth(2f);
+        mIntersectionDotPaint.setColor(Color.rgb(255, 187, 115));
     }
 
     /**
