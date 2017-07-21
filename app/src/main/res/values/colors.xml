@@ -100,6 +100,7 @@
     <color name="rise_color">#EA4E2A</color>
     <color name="decline_color">#60B280</color>
     <color name="unaltered_color">#888887</color>
+    <color name="unaltered_color1">#4A5A7C</color>
 
     <color name="shape_bg1">#f1f2f6</color>
     <!-- 探索 -->
@@ -127,6 +128,8 @@
     <color name="minute_jizhun">#7F9976</color>
     <color name="minute_zhoutv">#858D93</color>
     <color name="marker_bg">#ffffff</color>
+    <color name="marker_line">#355791</color>
+
 
     <color name="ma5">#AAAA00</color>
     <color name="ma10">#FF0000</color>

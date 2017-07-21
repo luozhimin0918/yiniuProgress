@@ -1,8 +1,12 @@
 package com.jyh.kxt.market.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -39,12 +43,14 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.jyh.kxt.market.bean.MarketSocketBean;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
 import com.jyh.kxt.market.kline.mychart.MyLineChart;
 import com.jyh.kxt.market.presenter.KLinePresenter;
-import com.jyh.kxt.market.presenter.MarketDetailChartPresenter;
+import com.jyh.kxt.market.presenter.MarketDetailPresenter;
 import com.jyh.kxt.market.presenter.MinutePresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -70,38 +76,45 @@ import butterknife.OnClick;
 public class MarketDetailActivity extends BaseActivity implements ViewPortHandler.OnLongPressIndicatorHandler,
         OnSocketTextMessage {
 
-    @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
-    @BindView(R.id.tv_bar_code) TextView tvBarCode;
-    @BindView(R.id.tv_bar_title) TextView tvBarTitle;
-
     @BindView(R.id.ll_market_detail_optional) LinearLayout llMarketDetailOptional;
     @BindView(R.id.iv_market_detail_optional_img) ImageView ivOptionalImage;
     @BindView(R.id.tv_market_detail_optional) TextView tvOptional;
     @BindView(R.id.ll_market_detail_share) LinearLayout llMarketDetailShare;
     @BindView(R.id.pll_content) PageLoadLayout pageLoadLayout;
 
-    @BindView(R.id.iv_bar_function) ImageView ivUpdateView;
 
-    @BindView(R.id.market_head_layout) RelativeLayout marketHeadLayout;
-    @BindView(R.id.market_chart_frame) FrameLayout frameLayout;
+    @BindView(R.id.market_chart_frame) FrameLayout chartContainerLayout;
     @BindView(R.id.market_chart_fenshi) TextView tvFenShiView;
-    @BindView(R.id.view_select_sign) View selectSignView;
+    @BindView(R.id.view_select_sign) public View selectSignView;
 
-    @BindView(R.id.market_chart_low) TextView marketChartLow;
-    @BindView(R.id.market_chart_zde) TextView marketChartZde;
-    @BindView(R.id.market_chart_zdf) TextView marketChartZdf;
-    @BindView(R.id.market_chart_zuoshou) TextView marketChartZuoshou;
-    @BindView(R.id.market_chart_jinkai) TextView marketChartJinkai;
-    @BindView(R.id.market_chart_zuigao) TextView marketChartZuigao;
-    @BindView(R.id.market_chart_zuidi) TextView marketChartZuidi;
-    @BindView(R.id.market_chart_update_time) TextView marketChartLastTime;
+    /**
+     * Head Layout 相关控件
+     */
+    @BindView(R.id.market_head_layout) public ViewGroup marketHeadLayout;
+    @BindView(R.id.iv_bar_break) public ImageView ivBarBreak;
+    @BindView(R.id.iv_bar_function) public ImageView ivUpdateView;
+    @BindView(R.id.tv_bar_code) public TextView tvBarCode;
+    @BindView(R.id.tv_bar_title) public TextView tvBarTitle;
+
+    @BindView(R.id.market_head_parent) public FrameLayout marketHeadParentLayout;
+    @BindView(R.id.market_chart_low) public TextView marketChartLow;
+    @BindView(R.id.market_chart_zde) public TextView marketChartZde;
+    @BindView(R.id.market_chart_zdf) public TextView marketChartZdf;
+    @BindView(R.id.market_chart_zuoshou) public TextView marketChartZuoshou;
+    @BindView(R.id.market_chart_jinkai) public TextView marketChartJinkai;
+    @BindView(R.id.market_chart_zuigao) public TextView marketChartZuigao;
+    @BindView(R.id.market_chart_zuidi) public TextView marketChartZuidi;
+    @BindView(R.id.market_chart_update_time) public TextView marketChartLastTime;
+
+
+    @BindView(R.id.ll_nav) public LinearLayout marketFunctionNav;
 
     @BindView(R.id.market_chart_load) PageLoadLayout marketChartLoad;
 
     /**
      * 分时图的Chart
      */
-    public TextView minuteChartTime,minuteChartDesc;
+    public TextView minuteChartTime, minuteChartDesc;
     public MyLineChart minuteChartView;
     private MinutePresenter minutePresenter;
 
@@ -115,12 +128,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
     private KLinePresenter kLinePresenter;
 
-    private MarketDetailChartPresenter marketDetailChartPresenter;
+    private MarketDetailPresenter marketDetailPresenter;
     //点击上面的分时  日时等item
-    private int clickNavigationPosition = 0;
+    public int clickNavigationPosition = 0;
     private TextView clickOldNavigationView;
-    private int selectSignPadding = 0;
-    private int selectSignTranslateLeft = 0;
+    public int selectSignPadding = 0;
+    public int selectSignTranslateLeft = 0;
 
     //存储请求过来的数据
     private HashMap<Integer, List<MarketTrendBean>> marketTrendMap = new HashMap<>();
@@ -131,16 +144,24 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private List<MarketItemBean> marketItemList;
 
     private boolean defaultUpdateAddStatus = false;
+    private int currentThemeSource = 0; //0表示白天 1表示夜间
     /**
      * 是否允许添加, true 表示可以添加  图标为+  网络请求为删除  K线图修改的
      */
     private boolean updateAddStatus = true;
     private ShareJson shareJson;
 
-    private MarketDetailBean mMarketDetailBean;
+    public MarketDetailBean mMarketDetailBean;
     private MarketDetailBean.ShareBean mDetailShare;
 
-    @OnClick({R.id.ll_market_detail_optional, R.id.ll_market_detail_share, R.id.iv_bar_break, R.id.iv_bar_function})
+    public MarketSocketBean marketSocketBean;
+    public boolean portrait = true;
+
+    @OnClick({R.id.ll_market_detail_optional,
+                     R.id.ll_market_detail_share,
+                     R.id.iv_bar_break,
+                     R.id.iv_bar_function,
+                     R.id.market_chart_switch_full})
     public void onOptionClick(View view) {
         switch (view.getId()) {
             case R.id.ll_market_detail_optional:
@@ -176,6 +197,14 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             case R.id.iv_bar_function:
                 updateChartDate();
                 break;
+            case R.id.market_chart_switch_full:
+                int requestedOrientation = getRequestedOrientation();
+                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 转小屏
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {// 转全屏
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+                break;
         }
     }
 
@@ -183,12 +212,23 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detail, StatusBarColor.NO_COLOR);
+
+        int alertTheme = ThemeUtil.getAlertTheme(getContext());
+        switch (alertTheme) {
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
+                currentThemeSource = 1;
+                break;
+            case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
+                currentThemeSource = 0;
+                break;
+        }
+        marketSocketBean = new MarketSocketBean();
         requestInitDetail();
     }
 
     private void initDetailActivity() {
 
-        marketDetailChartPresenter = new MarketDetailChartPresenter(this);
+        marketDetailPresenter = new MarketDetailPresenter(this);
 
         //设置导航栏的标记View 宽度
         selectSignPadding = SystemUtil.dp2px(this, 25);
@@ -234,7 +274,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
                 verifyOptionAppend();
                 initDetailActivity();
-                pageLoadLayout.loadOver();
             }
 
             @Override
@@ -298,15 +337,15 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         View chartView = chartMap.get(fromSource);
         List<MarketTrendBean> localMarketList = marketTrendMap.get(fromSource);
 
-        frameLayout.removeAllViews();
+        chartContainerLayout.removeAllViews();
         if (chartView != null && localMarketList != null) {
-            frameLayout.addView(chartView);
+            chartContainerLayout.addView(chartView);
             marketChartLoad.loadOver();
             return;
         }
         marketChartLoad.loadWait();
 
-        marketDetailChartPresenter.requestChartData(marketItemBean.getCode(),
+        marketDetailPresenter.requestChartData(marketItemBean.getCode(),
                 fromSource,
                 new HttpListener<String>() {
                     @Override
@@ -320,9 +359,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             LayoutInflater mInflater = LayoutInflater.from(getContext());
                             View minuteLayout = mInflater.inflate(
                                     R.layout.view_market_chart_minute,
-                                    frameLayout,
+                                    chartContainerLayout,
                                     false);
-                            frameLayout.addView(minuteLayout);
+                            chartContainerLayout.addView(minuteLayout);
                             chartMap.put(fromSource, minuteLayout);
 
                             minuteChartTime = (TextView) minuteLayout.findViewById(R.id.tv_minute_time);
@@ -337,9 +376,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             LayoutInflater mInflater = LayoutInflater.from(getContext());
                             View kLineLayout = mInflater.inflate(
                                     R.layout.view_market_chart_kline,
-                                    frameLayout,
+                                    chartContainerLayout,
                                     false);
-                            frameLayout.addView(kLineLayout);
+                            chartContainerLayout.addView(kLineLayout);
                             chartMap.put(fromSource, kLineLayout);
 
                             combinedchart = (CombinedChart) kLineLayout.findViewById(R.id.combinedchart);
@@ -446,21 +485,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onBackPressed() {
-        try {
-            requestAddOrDeleteOptions();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onBackPressed();
-    }
 
     private void requestAddOrDeleteOptions() {
         if (defaultUpdateAddStatus == updateAddStatus) {
@@ -507,21 +531,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            if (shareJson != null) {
-                Bitmap shareBitmap = shareJson.getBitmap();
-                if (shareBitmap != null && !shareBitmap.isRecycled()) {
-                    shareBitmap.recycle();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * {
@@ -543,14 +552,16 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
      * @param text
      */
 
-    private int oldHeadBgState = 0;
+    private long oldLastTime;
 
     @Override
-    public void onTextMessage(String text) {
+    public synchronized void onTextMessage(String text) {
         if (TextUtils.isEmpty(text)) {
             return;
         }
-        Log.e(TAG, "onTextMessage: "+text );
+
+        marketSocketBean.setJsonData(text);
+
         JSONObject jsonObject = null;
         try {
             JSONArray jsonArray = JSONArray.parseArray(text);
@@ -563,53 +574,118 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             }
         }
 
-        String price = jsonObject.getString("p");   //最新价  3.5951
-        Double change = jsonObject.getDouble("d");  //涨跌额  0.0238
-        String range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
 
-        String zuoshou = jsonObject.getString("lc");  //昨收
-        String jinkai = jsonObject.getString("o");  //今开
-        String zuigao = jsonObject.getString("h");  //最高
-        String zuidi = jsonObject.getString("l");  //最低
+        marketSocketBean.price = jsonObject.getString("p");   //最新价  3.5951
+        Double change = jsonObject.getDouble("d");  //涨跌额  0.0238
+        marketSocketBean.range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
+
+        marketSocketBean.zuoshou = jsonObject.getString("lc");  //昨收
+        marketSocketBean.jinkai = jsonObject.getString("o");  //今开
+        marketSocketBean.zuigao = jsonObject.getString("h");  //最高
+        marketSocketBean.zuidi = jsonObject.getString("l");  //最低
 
         String lastTime = jsonObject.getString("t");//最后更新时间
         long lastTimeLong = Long.parseLong(lastTime) * 1000;
-        marketChartLastTime.setText("最后更新时间：" + DateFormat.format("HH:mm:ss", lastTimeLong));
+
+        marketSocketBean.lastTime = "最后更新时间：" + DateFormat.format("HH:mm:ss", lastTimeLong);
+        if (marketChartLastTime != null) {
+            marketChartLastTime.setText(marketSocketBean.lastTime);
+        }
+
+        CharSequence currentMM = DateFormat.format("mm", lastTimeLong);
+        if (oldLastTime != 0) {
+            CharSequence oldMM = DateFormat.format("mm", oldLastTime);
+            if (!currentMM.equals(oldMM)) {
+                MarketTrendBean marketTrendBean = new MarketTrendBean();
+
+                marketTrendBean.setClose(Double.parseDouble(marketSocketBean.price));
+                marketTrendBean.setHigh(Double.parseDouble(marketSocketBean.zuigao));
+                marketTrendBean.setLow(Double.parseDouble(marketSocketBean.zuidi));
+                marketTrendBean.setOpen(Double.parseDouble(marketSocketBean.jinkai));
+
+                CharSequence formatQuoteTime = DateFormat.format("yyyy-MM-dd HH:mm:ss", lastTimeLong);
+                marketTrendBean.setQuotetime(formatQuoteTime.toString());
+
+                marketTrendBean.setVolume(0);//总量
+                marketTrendBean.setStart(0);//开盘时间
+
+                if (minutePresenter != null) {
+                    minutePresenter.notifyDataChanged(marketTrendBean);
+                }
+            }
+        }
+
+        oldLastTime = lastTimeLong;
 
         DecimalFormat df = new DecimalFormat("0.00");
         String formatChange = df.format(change);
 
-        range = range.replace("%", "");
-        double rangeDouble = Double.parseDouble(range);
+        marketSocketBean.range = marketSocketBean.range.replace("%", "");
+        final double rangeDouble = Double.parseDouble(marketSocketBean.range);
 
 
-        //判断涨跌幅状态,
-        if (rangeDouble == 0 && oldHeadBgState != 0) {
-            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg0);
-            oldHeadBgState = 0;
-        } else if (rangeDouble > 0 && oldHeadBgState != 1) {
-            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg1);
-            oldHeadBgState = 1;
-        } else if (rangeDouble < 0 && oldHeadBgState != 2) {
-            marketHeadLayout.setBackgroundResource(R.mipmap.market_head_bg2);
-            oldHeadBgState = 2;
+        if (currentThemeSource == 0) {
+            //判断涨跌幅状态,
+
+            int colors[] = new int[2];
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+
+            if (rangeDouble == 0) {
+                colors[0] = 0xff7583A0;
+                colors[1] = 0xff95A1BB;
+
+            } else if (rangeDouble > 0) {
+                colors[0] = 0xffFF5159;
+                colors[1] = 0xffFF866C;
+
+            } else if (rangeDouble < 0) {
+                colors[0] = 0xff00B4C7;
+                colors[1] = 0xff00D8A9;
+            }
+
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                marketHeadLayout.setBackgroundDrawable(gradientDrawable);
+            } else {
+                marketHeadLayout.setBackground(gradientDrawable);
+            }
+
+        } else {
+            //判断涨跌幅状态,
+            int textColor = 0;
+            if (rangeDouble == 0) {
+                textColor = ContextCompat.getColor(this, R.color.unaltered_color1);
+            } else if (rangeDouble > 0) {
+                textColor = ContextCompat.getColor(this, R.color.rise_color);
+            } else if (rangeDouble < 0) {
+                textColor = ContextCompat.getColor(this, R.color.decline_color);
+            }
+            marketChartLow.setTextColor(textColor);
+            marketChartZde.setTextColor(textColor);
+            marketChartZdf.setTextColor(textColor);
         }
 
         String formatRange = df.format(rangeDouble) + "%";
 
-        marketChartLow.setText(price);
-        marketChartZde.setText(!formatChange.contains("-") ? "+" + formatChange : formatChange);
-        marketChartZdf.setText(!formatRange.contains("-") ? "+" + formatRange : formatRange);
+        marketChartLow.setText(marketSocketBean.price);
+        marketSocketBean.change = !formatChange.contains("-") ? "+" + formatChange : formatChange;
+        marketChartZde.setText(marketSocketBean.change);
 
-        marketChartZuoshou.setText(zuoshou);
-        marketChartJinkai.setText(jinkai);
-        marketChartZuigao.setText(zuigao);
-        marketChartZuidi.setText(zuidi);
+        marketSocketBean.range = !formatRange.contains("-") ? "+" + formatRange : formatRange;
+        marketChartZdf.setText(marketSocketBean.range);
+
+        marketChartZuoshou.setText(marketSocketBean.zuoshou);
+        marketChartJinkai.setText(marketSocketBean.jinkai);
+        marketChartZuigao.setText(marketSocketBean.zuigao);
+        marketChartZuidi.setText(marketSocketBean.zuidi);
+
+        if (!pageLoadLayout.isSuccessLoadOver()) {//防止进入的时候感觉闪烁一下  体验不好
+            pageLoadLayout.loadOver();
+        }
     }
 
     private boolean isUpdateDataIng = false;
 
-    private void updateChartDate() {
+    public void updateChartDate() {
 
         if (isUpdateDataIng) {
             return;
@@ -642,7 +718,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
         //重置Chart数据
         marketChartLoad.loadWait();
-        marketDetailChartPresenter.requestChartData(marketItemBean.getCode(),
+        marketDetailPresenter.requestChartData(marketItemBean.getCode(),
                 clickNavigationPosition,
                 new HttpListener<String>() {
                     @Override
@@ -668,4 +744,60 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                     }
                 });
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        marketDetailPresenter.onConfigurationChanged(newConfig);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (combinedchart != null) {
+                    combinedchart.invalidate();
+                }
+                if (minuteChartView != null) {
+                    minuteChartView.invalidate();
+                }
+            }
+        }, 500);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!portrait) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
+        }
+
+        try {
+            requestAddOrDeleteOptions();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (shareJson != null) {
+                Bitmap shareBitmap = shareJson.getBitmap();
+                if (shareBitmap != null && !shareBitmap.isRecycled()) {
+                    shareBitmap.recycle();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

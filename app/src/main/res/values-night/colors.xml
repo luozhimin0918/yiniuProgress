@@ -98,6 +98,7 @@
     <color name="rise_color">#A3331D</color>
     <color name="decline_color">#447E5C</color>
     <color name="unaltered_color">#888887</color>
+    <color name="unaltered_color1">#4A5A7C</color>
 
     <color name="shape_bg1">#f1f2f6</color>
     <!-- 探索 -->
@@ -111,4 +112,15 @@
 
     <color name="check_box_color3">#f1f2f6</color>
     <color name="check_box_color4">#d9e8ff</color>
+
+    <!--行情表-->
+    <color name="minute_grayLine">#2D2D2D</color>
+    <color name="minute_blue">#1187C9</color>
+    <color name="minute_yellow">#E7B448</color>
+    <color name="minute_black">#E7E7E7</color>
+    <color name="minute_jizhun">#7F9976</color>
+    <color name="minute_zhoutv">#858D93</color>
+    <color name="marker_bg">#242424</color>
+
+    <color name="marker_line">#2E528D</color>
 </resources>

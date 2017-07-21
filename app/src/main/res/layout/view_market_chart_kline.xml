@@ -16,6 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
@@ -23,7 +24,6 @@
             android:id="@+id/kline_tv_ma5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:textSize="12sp"/>
 
         <TextView
@@ -44,17 +44,17 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_marginLeft="20dp"
+        android:gravity="left"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="40dp"
-        android:gravity="right"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/kline_tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color2"
             android:text="2017年7月20日 12:00:41"
             android:textSize="7sp"/>
 
@@ -62,6 +62,7 @@
             android:id="@+id/kline_tv_kaipan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color2"
             android:text="开盘价: "
             android:textSize="7sp"/>
 
@@ -69,6 +70,7 @@
             android:id="@+id/kline_tv_zuigao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color2"
             android:text="最高价: "
             android:textSize="7sp"/>
 
@@ -77,12 +79,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="最低价: "
+            android:textColor="@color/font_color2"
             android:textSize="7sp"/>
 
         <TextView
             android:id="@+id/kline_tv_shoupan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color2"
             android:text="收盘价: "
             android:textSize="7sp"/>
 

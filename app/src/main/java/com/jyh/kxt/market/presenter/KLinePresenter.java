@@ -133,7 +133,7 @@ public class KLinePresenter extends BasePresenter {
         CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine");
         candleDataSet.setDrawHorizontalHighlightIndicator(false);
         candleDataSet.setHighlightEnabled(true);
-        candleDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.line_color));
+        candleDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         candleDataSet.setValueTextSize(10f);
         candleDataSet.setDrawValues(false);
         candleDataSet.setShadowColorSameAsCandle(true);
@@ -143,7 +143,7 @@ public class KLinePresenter extends BasePresenter {
         candleDataSet.setIncreasingColor(ContextCompat.getColor(mContext, R.color.rise_color));
 
         candleDataSet.setDecreasingPaintStyle(Paint.Style.FILL);
-        candleDataSet.setIncreasingPaintStyle(Paint.Style.STROKE);
+        candleDataSet.setIncreasingPaintStyle(Paint.Style.FILL);
 
         candleDataSet.setShadowWidth(1f);
         candleDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -176,10 +176,10 @@ public class KLinePresenter extends BasePresenter {
          */
         LimitLine ll = new LimitLine(mKLineParse.getBaseValue()); //基线位置
         ll.setLineWidth(1f);
-        ll.setLineColor(ContextCompat.getColor(mContext, R.color.line_color));
+        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
         ll.enableDashedLine(10f, 10f, 0f);
         ll.setTextSize(10);
-        ll.setTextColor(ContextCompat.getColor(mContext, R.color.marker_bg));
+        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
         ll.setLabel(mKLineParse.getBaseValue() + "");
         ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
 
@@ -237,7 +237,7 @@ public class KLinePresenter extends BasePresenter {
         if (ma == 5) {
             lineDataSetMa.setHighlightEnabled(true);
             lineDataSetMa.setDrawHorizontalHighlightIndicator(false);
-            lineDataSetMa.setHighLightColor(ContextCompat.getColor(mContext, R.color.line_color));
+            lineDataSetMa.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         } else {/*此处必须得写*/
             lineDataSetMa.setHighlightEnabled(false);
         }

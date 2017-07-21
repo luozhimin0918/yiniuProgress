@@ -10,6 +10,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarD
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Philipp Jahoda on 11/07/15.
  * 高亮
@@ -25,6 +27,7 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
         super(animator, viewPortHandler);
     }
 
+    //K线图滑动时日期跟随效果
     public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set, String label) {
         // set color and stroke-width
         mHighlightPaint.setColor(set.getHighLightColor());
@@ -42,7 +45,13 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
             c.drawPath(mHighlightLinePath, mHighlightPaint);
 
             if (label != null) {
-                label = label.split(" ")[1];//读取后面一部分
+                String[] splitLabelDate = label.split(" ");
+
+                label = splitLabelDate[1];//读取后面一部分
+                boolean isUseful = Pattern.matches(".*[1-9].*", label);
+                if (!isUseful) {
+                    label = splitLabelDate[0];//读取前面一部分
+                }
 
                 //增加日期
                 float right = pts[0];
@@ -54,16 +63,16 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
 
 
                 //如果在最左边或者最右边,则不要遮挡
-                if (right < labelLineWidth ) { //最左边了
+                if (right < labelLineWidth) { //最左边了
 
                 } else if (right - labelLineWidth < 0) {
 
                 }
-                mHighlightDatePaint.setColor(Color.GRAY);
-                c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding ,
-                                bottom - labelLineHeight - textPadding ,
-                                right + labelLineWidth / 2 + textPadding ,
-                                bottom + textPadding ),
+                mHighlightDatePaint.setColor(set.getHighLightColor());
+                c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding,
+                                bottom - labelLineHeight - textPadding,
+                                right + labelLineWidth / 2 + textPadding,
+                                bottom + textPadding),
                         mHighlightDatePaint);
 
                 mHighlightDatePaint.setColor(Color.WHITE);

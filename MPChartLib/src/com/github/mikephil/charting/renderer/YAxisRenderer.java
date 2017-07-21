@@ -399,7 +399,7 @@ public class YAxisRenderer extends AxisRenderer {
                     float bottom = pts[1] - yOffset + labelLineHeight;
 
                     int textPadding = 3;
-                    mLimitLinePaint.setColor(Color.GRAY);
+                    mLimitLinePaint.setColor(l.getLineColor());
                     c.drawRect(new RectF(right - labelLineWidth - textPadding,
                                     bottom - labelLineHeight-textPadding,
                                     right+textPadding,

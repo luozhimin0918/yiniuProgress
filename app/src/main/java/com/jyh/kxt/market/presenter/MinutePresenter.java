@@ -122,11 +122,11 @@ public class MinutePresenter extends BasePresenter {
         //基线位置
         LimitLine ll = new LimitLine(mMinuteParse.getBaseValue());
         ll.setLineWidth(1f);
-        ll.setLineColor(ContextCompat.getColor(mContext, R.color.line_color));
+        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
         ll.enableDashedLine(10f, 10f, 0f);
         ll.setTextSize(10);
         ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        ll.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
         ll.setLabel(mMinuteParse.getBaseValue() + "");
         axisRightLine.addLimitLine(ll);
 
@@ -147,7 +147,7 @@ public class MinutePresenter extends BasePresenter {
         lineDataSet1.setDrawValues(false);
         lineDataSet1.setCircleRadius(0);
         lineDataSet1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
-        lineDataSet1.setHighLightColor(ContextCompat.getColor(mContext, R.color.line_color));
+        lineDataSet1.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         lineDataSet1.setDrawFilled(true);
 
         //谁为基准
@@ -173,5 +173,14 @@ public class MinutePresenter extends BasePresenter {
         chartActivity.minuteChartDesc.setText(builder);
 
         chartActivity.minuteChartTime.setText(marketTrendBean.getQuotetime());
+    }
+
+    public void notifyDataChanged(MarketTrendBean marketTrendBean) {
+        try {
+            minuteList.add(marketTrendBean);
+            setData(minuteList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

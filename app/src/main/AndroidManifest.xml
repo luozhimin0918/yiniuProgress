@@ -160,6 +160,7 @@
         <!-- 行情 -->
         <activity
             android:name=".market.ui.MarketDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".market.ui.SearchActivity"
@@ -278,8 +279,6 @@
         </receiver>
 
         <activity android:name=".index.ui.ErrorActivity">
-        </activity>
-        <activity android:name=".market.ui.MarketDetailChartActivity">
         </activity>
     </application>
 
