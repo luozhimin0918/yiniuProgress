@@ -3,6 +3,7 @@ package com.jyh.kxt.av.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.push.PushUtil;
 import com.library.manager.ActivityManager;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -33,7 +35,7 @@ import butterknife.OnClick;
  * 视听-视屏详细页
  */
 public class VideoDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener,
-        PageLoadLayout.OnAfreshLoadListener {
+        PageLoadLayout.OnAfreshLoadListener,SuperPlayer.OnBackPressListener {
 
     @BindView(R.id.view_super_player) public SuperPlayer spVideo;
 
@@ -67,7 +69,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         videoId = getIntent().getStringExtra(IntentConstant.O_ID);
         videoDetailPresenter = new VideoDetailPresenter(this);
         commentPresenter = new CommentPresenter(this);
-
+        spVideo.setBackPressList(this);
         commentPresenter.setOnCommentPublishListener(this);
         pllContent.loadWait(PageLoadLayout.BgColor.WHITE, "正在进入..");
 
@@ -187,6 +189,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
             return;
         }
         super.onBackPressed();
+        PushUtil.pushToMainActivity(this);
     }
 
     @Override
@@ -234,5 +237,10 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
         }
 
 
+    }
+
+    @Override
+    public void onSuperBackPress() {
+        PushUtil.pushToMainActivity(this);
     }
 }

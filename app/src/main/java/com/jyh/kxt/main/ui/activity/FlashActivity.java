@@ -49,6 +49,7 @@ import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.presenter.FlashActivityPresenter;
+import com.jyh.kxt.push.PushUtil;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.DateUtils;
@@ -142,6 +143,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         switch (view.getId()) {
             case R.id.iv_break:
                 onBackPressed();
+                PushUtil.pushToMainActivity(this);
                 break;
             case R.id.iv_collect:
                 if (isLoadOver) {
@@ -647,6 +649,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
             llExponent.addView(textView);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        PushUtil.pushToMainActivity(this);
     }
 
     private TextView generateTextView() {

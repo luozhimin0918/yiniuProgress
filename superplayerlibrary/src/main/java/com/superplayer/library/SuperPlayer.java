@@ -165,6 +165,9 @@ public class SuperPlayer extends RelativeLayout {
                     activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 } else {
                     activity.finish();
+                    if(onBackPressListener!=null){
+                        onBackPressListener.onSuperBackPress();
+                    }
                 }
             } else if (v.getId() == R.id.view_jky_player_tv_continue) {
                 isNetListener = false;// 取消网络的监听
@@ -1383,7 +1386,13 @@ public class SuperPlayer extends RelativeLayout {
         }
         updateFullScreenButton();
     }
-
+    OnBackPressListener  onBackPressListener;
+    public void setBackPressList( OnBackPressListener  onBackPressListener){
+        this.onBackPressListener=onBackPressListener;
+    }
+    public interface OnBackPressListener {
+        void onSuperBackPress();
+    }
     public interface OnErrorListener {
         void onError(int what, int extra);
     }

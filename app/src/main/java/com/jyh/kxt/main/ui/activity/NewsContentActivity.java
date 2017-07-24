@@ -66,6 +66,7 @@ import com.jyh.kxt.explore.ui.AuthorActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
+import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -177,11 +178,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        PushUtil.pushToMainActivity(this);
+    }
+
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
                 onBackPressed();
+                PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
                 //回复
