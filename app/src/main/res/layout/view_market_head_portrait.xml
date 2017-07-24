@@ -4,14 +4,15 @@
     android:id="@+id/market_head_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:background="@color/red2">
 
     <RelativeLayout
         android:id="@+id/market_chart_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <ImageView
             android:id="@+id/iv_bar_break"
@@ -54,11 +55,30 @@
             android:src="@mipmap/icon_market_update"/>
     </RelativeLayout>
 
+    <View
+        android:id="@+id/portrait_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/market_chart_actionbar"
+        android:background="#11000000"
+        android:clipChildren="true"
+        android:orientation="vertical">
+
+    </View>
+
+    <android.support.v4.widget.Space
+        android:id="@+id/portrait_space"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@+id/portrait_line"/>
+
     <TextView
         android:id="@+id/market_chart_low"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/market_chart_actionbar"
+        android:layout_below="@+id/portrait_space"
+        android:layout_marginLeft="10dp"
+        android:text="5465616"
         android:textColor="@color/white"
         android:textSize="40sp"/>
 
@@ -67,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/market_chart_update_time"
-        android:layout_below="@+id/market_chart_actionbar"
+        android:layout_below="@+id/portrait_space"
         android:layout_marginRight="25dp"
         android:textColor="@color/white"
         android:textSize="@dimen/content_font_size"/>
@@ -89,8 +109,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/market_chart_zdf"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="3dp"
-        android:alpha="0.5"
+        android:alpha="0.7"
         android:textColor="@color/white"
         android:textSize="@dimen/describe_font_size1"/>
 
@@ -98,7 +119,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/market_chart_low"
-        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -112,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/market_chart_zde"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:text="昨收"
                 android:textColor="@color/white"
                 android:textSize="@dimen/describe_font_size3"/>
@@ -139,7 +163,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:text="今开"
                 android:textColor="@color/white"
                 android:textSize="@dimen/describe_font_size3"/>
@@ -165,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:text="最高"
                 android:textColor="@color/white"
                 android:textSize="@dimen/describe_font_size3"/>
@@ -191,7 +215,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:text="最低"
                 android:textColor="@color/white"
                 android:textSize="@dimen/describe_font_size3"/>

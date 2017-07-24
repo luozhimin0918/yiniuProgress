@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
@@ -62,13 +63,19 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
                 float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, label);
 
 
-                //如果在最左边或者最右边,则不要遮挡
-                if (right < labelLineWidth) { //最左边了
-
-                } else if (right - labelLineWidth < 0) {
-
-                }
                 mHighlightDatePaint.setColor(set.getHighLightColor());
+                float rectLeft = right - labelLineWidth / 2 - textPadding;
+                float rectRight = right + labelLineWidth / 2 + textPadding;
+
+                float viewDrawWidth = (rectRight - rectLeft) / 2;
+                //如果在最左边或者最右边,则不要遮挡
+                RectF contentRect = mViewPortHandler.getContentRect();
+                if (rectLeft < contentRect.left) { //最左边了
+                    right = contentRect.left + viewDrawWidth;
+                } else if (rectRight > contentRect.right) {
+                    right = contentRect.right - viewDrawWidth;
+                }
+
                 c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding,
                                 bottom - labelLineHeight - textPadding,
                                 right + labelLineWidth / 2 + textPadding,

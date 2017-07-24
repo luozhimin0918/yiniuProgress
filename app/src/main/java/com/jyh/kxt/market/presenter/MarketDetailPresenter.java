@@ -56,9 +56,12 @@ public class MarketDetailPresenter extends BasePresenter {
                     time = "30";
                     break;
                 case 3:
-                    time = "1d";
+                    time = "1h";
                     break;
                 case 4:
+                    time = "1d";
+                    break;
+                case 5:
                     time = "1w";
                     break;
             }
@@ -67,6 +70,7 @@ public class MarketDetailPresenter extends BasePresenter {
         }
 
         volleyRequest.setDefaultDecode(false);
+        volleyRequest.setTag(code  );
         volleyRequest.doGet(marketDataUrl, httpListener);
     }
 
@@ -99,9 +103,9 @@ public class MarketDetailPresenter extends BasePresenter {
          */
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         ViewGroup.LayoutParams selectSingViewParams = chartActivity.selectSignView.getLayoutParams();
-        selectSingViewParams.width = screenDisplay.widthPixels / 5 - chartActivity.selectSignPadding;
+        selectSingViewParams.width = screenDisplay.widthPixels / 6 - chartActivity.selectSignPadding;
 
-        final int toXDelta = screenDisplay.widthPixels / 5 * chartActivity.clickNavigationPosition +
+        final int toXDelta = screenDisplay.widthPixels / 6 * chartActivity.clickNavigationPosition +
                 chartActivity.selectSignPadding / 2;
         TranslateAnimation translateAnimation = new TranslateAnimation(
                 0,

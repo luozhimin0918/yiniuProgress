@@ -29,7 +29,7 @@
         android:layout_marginLeft="8dp"
         android:maxLines="1"
         android:drawablePadding="5dp"
-        android:layout_alignBottom="@+id/tv_title"
+        android:layout_alignTop="@+id/tv_title"
         android:textColor="@color/font_color6"
         android:textSize="@dimen/describe_font_size3"/>
 

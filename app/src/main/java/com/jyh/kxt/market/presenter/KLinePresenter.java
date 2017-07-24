@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -47,7 +49,7 @@ public class KLinePresenter extends BasePresenter {
     private KLineParse mKLineParse;
 
     private ArrayList<Entry> line5Entries, line10Entries, line30Entries;
-
+    private CombinedChart combinedchart = null;
     private ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler;
 
     public KLinePresenter(IBaseView iBaseView) {
@@ -94,7 +96,13 @@ public class KLinePresenter extends BasePresenter {
         chartActivity.combinedchart.setDragDecelerationFrictionCoef(0.2f);
     }
 
-    public void setData(List<MarketTrendBean> kLineList) {
+
+    public void setData(List<MarketTrendBean> kLineList, View chartView) {
+
+        if (chartView instanceof CombinedChart) {
+            combinedchart = (CombinedChart) chartView;
+        }
+
         mKLineParse = new KLineParse();
         mKLineParse.setKLineList(kLineList);
 
@@ -190,10 +198,10 @@ public class KLinePresenter extends BasePresenter {
         combinedData.setData(candleData);
         combinedData.setData(lineData);
 
-        chartActivity.combinedchart.setData(combinedData);
-        chartActivity.combinedchart.moveViewToX(kLineList.size() - 1);
+        combinedchart.setData(combinedData);
+        combinedchart.moveViewToX(kLineList.size() - 1);
 
-        ViewPortHandler viewPortHandlerCombined = chartActivity.combinedchart.getViewPortHandler();
+        ViewPortHandler viewPortHandlerCombined = combinedchart.getViewPortHandler();
         float xMaxScale = calculateMaxScale(xLabelList.size());
         viewPortHandlerCombined.setMaximumScaleX(xMaxScale);
         Matrix matrixCombined = viewPortHandlerCombined.getMatrixTouch();
@@ -201,21 +209,19 @@ public class KLinePresenter extends BasePresenter {
         //最大缩放值
         matrixCombined.postScale(xMaxScale / 3, 1f);
 
-        chartActivity.combinedchart.moveViewToX(kLineList.size() - 1);
-        handler.sendEmptyMessageDelayed(0, 300);
+        combinedchart.moveViewToX(kLineList.size() - 1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                combinedchart.setAutoScaleMinMaxEnabled(true);
+                combinedchart.notifyDataSetChanged();
+                combinedchart.invalidate();
+            }
+        }, 300);
 
         //默认选中最后一条数据
         longPressIndicator(kLineList.size() - 1);
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            chartActivity.combinedchart.setAutoScaleMinMaxEnabled(true);
-            chartActivity.combinedchart.notifyDataSetChanged();
-            chartActivity.combinedchart.invalidate();
-        }
-    };
 
     private float getMaValueSum(Integer a, Integer b) {
         float sum = 0;

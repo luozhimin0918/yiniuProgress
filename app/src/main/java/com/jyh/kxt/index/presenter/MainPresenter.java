@@ -210,7 +210,11 @@ public class MainPresenter extends BasePresenter {
 
                 if (applicationInfo != null) {
                     if (applicationInfo.metaData != null) {
-                        resultData = applicationInfo.metaData.getString("UMENG_CHANNEL");
+                        try {
+                            resultData = applicationInfo.metaData.getString("UMENG_CHANNEL");
+                        } catch (Exception e) {
+                            resultData = "360";
+                        }
                     }
                 }
             }

@@ -10,7 +10,7 @@
         android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_nav" >
+        android:layout_above="@+id/ll_nav">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,6 +56,14 @@
                     android:gravity="center"
                     android:text="30分"
                     android:textColor="@color/font_color2"/>
+                <TextView
+                    android:id="@+id/market_chart_fen60"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="60分"
+                    android:textColor="@color/font_color2"/>
 
                 <TextView
                     android:id="@+id/market_chart_rik"
@@ -85,30 +93,16 @@
             <com.library.widget.PageLoadLayout
                 android:id="@+id/market_chart_load"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
-                <RelativeLayout
+                <FrameLayout
+
+                    android:id="@+id/market_chart_frame"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <FrameLayout
+                </FrameLayout>
 
-                        android:id="@+id/market_chart_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                    </FrameLayout>
-
-                    <ImageView
-                        android:id="@+id/market_chart_switch_full"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="50dp"
-                        android:src="@mipmap/icon_market_full"/>
-                </RelativeLayout>
             </com.library.widget.PageLoadLayout>
 
         </LinearLayout>
@@ -120,8 +114,8 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@color/line_color2"
-        android:visibility="visible"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <View
             android:layout_width="match_parent"
@@ -153,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="添加自选"
+                    android:text="自选"
                     android:textColor="@color/font_color60"
                     android:textSize="@dimen/describe_font_size4"/>
 
@@ -190,6 +184,36 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/font_color63"></View>
+
+            <LinearLayout
+                android:id="@+id/ll_market_detail_full"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/icon_market_full"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="全屏"
+                    android:textColor="@color/font_color60"
+                    android:textSize="@dimen/describe_font_size4"/>
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
