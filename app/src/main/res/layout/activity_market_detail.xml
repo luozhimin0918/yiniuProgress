@@ -26,69 +26,139 @@
 
             </FrameLayout>
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/market_chart_fenshi"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="分时"
-                    android:textColor="@color/blue1"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
 
-                <TextView
-                    android:id="@+id/market_chart_fen5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="5分"
-                    android:textColor="@color/font_color2"/>
+                    <RelativeLayout
+                        android:id="@+id/market_chart_fenshi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/market_chart_fen30"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="30分"
-                    android:textColor="@color/font_color2"/>
-                <TextView
-                    android:id="@+id/market_chart_fen60"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="60分"
-                    android:textColor="@color/font_color2"/>
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:tag="text"
+                            android:text="分时"
+                            android:textColor="@color/blue1"/>
 
-                <TextView
-                    android:id="@+id/market_chart_rik"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="日K"
-                    android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/market_chart_zhouk"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="周K"
-                    android:textColor="@color/font_color2"/>
-            </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/market_chart_fen5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
 
-            <View
-                android:id="@+id/view_select_sign"
-                android:layout_width="0dp"
-                android:layout_height="2dp"
-                android:background="@color/blue1"></View>
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:tag="text"
+                            android:text="5分"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_fen15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:tag="text"
+                            android:text="15分"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_fen30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:tag="text"
+                            android:text="30分"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_fen60"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:tag="text"
+                            android:layout_centerInParent="true"
+                            android:text="60分"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_rik"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:tag="text"
+                            android:text="日线"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_zhouk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:tag="text"
+                            android:text="周线"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/market_chart_yue1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="@dimen/market_nav_item_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:tag="text"
+                            android:text="月线"
+                            android:textColor="@color/font_color2"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
             <com.library.widget.PageLoadLayout
                 android:id="@+id/market_chart_load"

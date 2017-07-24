@@ -22,11 +22,11 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
 import com.jyh.kxt.market.kline.bean.MinuteParse;
-import com.jyh.kxt.market.kline.mychart.MyBottomMarkerView;
-import com.jyh.kxt.market.kline.mychart.MyLeftMarkerView;
-import com.jyh.kxt.market.kline.mychart.MyRightMarkerView;
-import com.jyh.kxt.market.kline.mychart.MyXAxis;
-import com.jyh.kxt.market.kline.mychart.MyYAxis;
+import com.github.mikephil.charting.mychart.MyBottomMarkerView;
+import com.github.mikephil.charting.mychart.MyLeftMarkerView;
+import com.github.mikephil.charting.mychart.MyRightMarkerView;
+import com.github.mikephil.charting.mychart.MyXAxis;
+import com.github.mikephil.charting.mychart.MyYAxis;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 
 import java.text.DecimalFormat;

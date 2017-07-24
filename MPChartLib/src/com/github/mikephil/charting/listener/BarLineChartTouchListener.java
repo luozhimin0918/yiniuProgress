@@ -10,12 +10,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -172,7 +174,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
-                if ( Highlight) {
+                if (mChart.getHighlighted() != null) {
 //                    //放到缩小时取消高亮
 //                    mChart.highlightTouch(null);
 //                    Highlight = false;
@@ -210,7 +212,10 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-
+                if (mChart.getHighlighted() != null) {
+                    mTouchMode = HIGH_TLIGHT;
+                    Highlight = true;
+                }
                 if (mTouchMode == DRAG) {
                     Highlight = false;
 
@@ -538,28 +543,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-
-       /* mLastGesture = ChartGesture.DOUBLE_TAP;
-
-        OnChartGestureListener l = mChart.getOnChartGestureListener();
-
-        if (l != null) {
-            l.onChartDoubleTapped(e);
+        if (mChart instanceof CombinedChart) {
+            CombinedChart mCombinedChart = (CombinedChart) mChart;
+            mCombinedChart.onDoubleTap();
         }
-
-        // check if double-tap zooming is enabled
-        if (mChart.isDoubleTapToZoomEnabled()) {
-
-            PointF trans = getTrans(e.getX(), e.getY());
-
-            mChart.zoom(mChart.isScaleXEnabled() ? 1.4f : 1f, mChart.isScaleYEnabled() ? 1.4f : 1f, trans.x, trans.y);
-
-            if (mChart.isLogEnabled()) {
-                Log.i("BarlineChartTouch", "Double-Tap, Zooming In, x: " + trans.x + ", y: "
-                        + trans.y);
-            }
-        }*/
-
+       else if (mChart instanceof MyLineChart) {
+            MyLineChart mMyLineChart = (MyLineChart) mChart;
+            mMyLineChart.onDoubleTap();
+        }
         return super.onDoubleTap(e);
     }
 

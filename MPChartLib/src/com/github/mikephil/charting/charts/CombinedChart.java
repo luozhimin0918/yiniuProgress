@@ -49,6 +49,22 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
             DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.LINE, DrawOrder.CANDLE, DrawOrder.SCATTER
     };
 
+    public interface OnDoubleTapListener {
+        void onDoubleTap();
+    }
+
+    private OnDoubleTapListener onDoubleTapListener;
+
+    public void setOnDoubleTapListener(OnDoubleTapListener onDoubleTapListener) {
+        this.onDoubleTapListener = onDoubleTapListener;
+    }
+
+    public void onDoubleTap() {
+        if (onDoubleTapListener != null) {
+            onDoubleTapListener.onDoubleTap();
+        }
+    }
+
     /**
      * enum that allows to specify the order in which the different data objects
      * for the combined-chart are drawn
@@ -97,11 +113,13 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
                     final float xmin = set.getXMin();
                     final float xmax = set.getXMax();
 
-                    if (xmin < mXAxis.mAxisMinimum)
+                    if (xmin < mXAxis.mAxisMinimum) {
                         mXAxis.mAxisMinimum = xmin;
+                    }
 
-                    if (xmax > mXAxis.mAxisMaximum)
+                    if (xmax > mXAxis.mAxisMaximum) {
                         mXAxis.mAxisMaximum = xmax;
+                    }
                 }
             }
         }
@@ -124,36 +142,41 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
 
     @Override
     public LineData getLineData() {
-        if (mData == null)
+        if (mData == null) {
             return null;
+        }
         return mData.getLineData();
     }
 
     @Override
     public BarData getBarData() {
-        if (mData == null)
+        if (mData == null) {
             return null;
+        }
         return mData.getBarData();
     }
 
     @Override
     public ScatterData getScatterData() {
-        if (mData == null)
+        if (mData == null) {
             return null;
+        }
         return mData.getScatterData();
     }
 
     @Override
     public CandleData getCandleData() {
-        if (mData == null)
+        if (mData == null) {
             return null;
+        }
         return mData.getCandleData();
     }
 
     @Override
     public BubbleData getBubbleData() {
-        if (mData == null)
+        if (mData == null) {
             return null;
+        }
         return mData.getBubbleData();
     }
 
@@ -220,8 +243,9 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
      * @param order
      */
     public void setDrawOrder(DrawOrder[] order) {
-        if (order == null || order.length <= 0)
+        if (order == null || order.length <= 0) {
             return;
+        }
         mDrawOrder = order;
     }
 }

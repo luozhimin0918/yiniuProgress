@@ -389,5 +389,6 @@
     <dimen name="attention_padding1">10dp</dimen>
     <dimen name="attention_padding2">7dp</dimen>
     <dimen name="attention_padding3">5dp</dimen>
+    <dimen name="market_nav_item_width">60dp</dimen>
 
 </resources>

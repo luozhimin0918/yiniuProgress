@@ -4,12 +4,12 @@
              android:layout_height="match_parent"
              android:orientation="vertical">
 
-    <com.jyh.kxt.market.kline.mychart.MyLineChart
+    <com.github.mikephil.charting.mychart.MyLineChart
         android:id="@+id/minute_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.jyh.kxt.market.kline.mychart.MyLineChart>
+    </com.github.mikephil.charting.mychart.MyLineChart>
 
     <RelativeLayout
         android:id="@+id/rl_describe_position"

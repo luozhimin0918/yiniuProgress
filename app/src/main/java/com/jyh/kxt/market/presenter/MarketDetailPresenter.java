@@ -53,16 +53,22 @@ public class MarketDetailPresenter extends BasePresenter {
                     time = "5";
                     break;
                 case 2:
-                    time = "30";
+                    time = "15";
                     break;
                 case 3:
-                    time = "1h";
+                    time = "30";
                     break;
                 case 4:
-                    time = "1d";
+                    time = "1h";
                     break;
                 case 5:
+                    time = "1d";
+                    break;
+                case 6:
                     time = "1w";
+                    break;
+                case 7:
+                    time = "1m";
                     break;
             }
 
@@ -97,26 +103,6 @@ public class MarketDetailPresenter extends BasePresenter {
             chartActivity.marketFunctionNav.setVisibility(View.GONE);
 
         }
-
-        /**
-         * 移动导航栏的标记
-         */
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
-        ViewGroup.LayoutParams selectSingViewParams = chartActivity.selectSignView.getLayoutParams();
-        selectSingViewParams.width = screenDisplay.widthPixels / 6 - chartActivity.selectSignPadding;
-
-        final int toXDelta = screenDisplay.widthPixels / 6 * chartActivity.clickNavigationPosition +
-                chartActivity.selectSignPadding / 2;
-        TranslateAnimation translateAnimation = new TranslateAnimation(
-                0,
-                toXDelta,
-                0,
-                0);
-        translateAnimation.setDuration(400);
-        translateAnimation.setInterpolator(new OvershootInterpolator());
-        translateAnimation.setFillAfter(true);
-        chartActivity.selectSignView.startAnimation(translateAnimation);
-        chartActivity.selectSignTranslateLeft = toXDelta;
 
         /**
          * 重置HeadLayout 布局信息

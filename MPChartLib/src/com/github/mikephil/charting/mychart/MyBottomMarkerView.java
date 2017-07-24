@@ -1,14 +1,12 @@
-package com.jyh.kxt.market.kline.mychart;
+package com.github.mikephil.charting.mychart;
 
 import android.content.Context;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.R;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.jyh.kxt.R;
-
-import java.text.DecimalFormat;
 
 
 /**
@@ -16,7 +14,7 @@ import java.text.DecimalFormat;
  * mail：1025065158@qq.com
  * blog：http://blog.csdn.net/qqyanjiang
  */
-public class MyLeftMarkerView extends MarkerView {
+public class MyBottomMarkerView extends MarkerView {
     /**
      * Constructor. Sets up the MarkerView with a custom layout resource.
      *
@@ -24,22 +22,20 @@ public class MyLeftMarkerView extends MarkerView {
      * @param layoutResource the layout resource to use for the MarkerView
      */
     private TextView markerTv;
-    private float num;
-    private  DecimalFormat mFormat;
-    public MyLeftMarkerView(Context context, int layoutResource) {
+    private String time;
+    public MyBottomMarkerView(Context context, int layoutResource) {
         super(context, layoutResource);
-        mFormat=new DecimalFormat("#0.00");
         markerTv = (TextView) findViewById(R.id.marker_tv);
         markerTv.setTextSize(10);
     }
 
-    public void setData(float num){
+    public void setData(String time){
 
-        this.num=num;
+        this.time=time;
     }
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        markerTv.setText(mFormat.format(num));
+        markerTv.setText(time);
     }
 
     @Override

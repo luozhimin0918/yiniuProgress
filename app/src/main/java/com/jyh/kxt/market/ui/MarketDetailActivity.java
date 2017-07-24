@@ -7,23 +7,20 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.OvershootInterpolator;
 import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +29,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
+import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
@@ -48,7 +46,6 @@ import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketSocketBean;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
-import com.jyh.kxt.market.kline.mychart.MyLineChart;
 import com.jyh.kxt.market.presenter.KLinePresenter;
 import com.jyh.kxt.market.presenter.MarketDetailPresenter;
 import com.jyh.kxt.market.presenter.MinutePresenter;
@@ -85,8 +82,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
 
     @BindView(R.id.market_chart_frame) FrameLayout chartContainerLayout;
-    @BindView(R.id.market_chart_fenshi) TextView tvFenShiView;
-    @BindView(R.id.view_select_sign) public View selectSignView;
 
     /**
      * Head Layout 相关控件
@@ -106,6 +101,8 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @BindView(R.id.market_chart_zuigao) public TextView marketChartZuigao;
     @BindView(R.id.market_chart_zuidi) public TextView marketChartZuidi;
     @BindView(R.id.market_chart_update_time) public TextView marketChartLastTime;
+
+    @BindView(R.id.market_chart_fenshi) public RelativeLayout rlFenShiView;
 
 
     @BindView(R.id.ll_nav) public LinearLayout marketFunctionNav;
@@ -132,9 +129,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private MarketDetailPresenter marketDetailPresenter;
     //点击上面的分时  日时等item
     public int clickNavigationPosition = 0;
-    private TextView clickOldNavigationView;
-    public int selectSignPadding = 0;
-    public int selectSignTranslateLeft = 0;
+    private RelativeLayout clickOldNavigationView;
 
     //存储请求过来的数据
     private HashMap<Integer, List<MarketTrendBean>> marketTrendMap = new HashMap<>();
@@ -199,12 +194,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 updateChartDate();
                 break;
             case R.id.ll_market_detail_full:
-                int requestedOrientation = getRequestedOrientation();
-                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 转小屏
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else {// 转全屏
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
+                fullScreenDisplay();
                 break;
         }
     }
@@ -232,13 +222,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         marketDetailPresenter = new MarketDetailPresenter(this);
 
         //设置导航栏的标记View 宽度
-        selectSignPadding = SystemUtil.dp2px(this, 25);
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
-        ViewGroup.LayoutParams selectSingViewParams = selectSignView.getLayoutParams();
-        selectSingViewParams.width = screenDisplay.widthPixels / 6 - selectSignPadding;
-
-
-        onNavigationItemClick(tvFenShiView);
+        onNavigationItemClick(rlFenShiView);
 
 
         JSONArray codes = new JSONArray();
@@ -286,10 +270,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     }
 
     @OnClick({R.id.market_chart_fenshi, R.id.market_chart_fen5,
+                     R.id.market_chart_fen15,
                      R.id.market_chart_fen30, R.id.market_chart_fen60,
-                     R.id.market_chart_rik, R.id.market_chart_zhouk})
+                     R.id.market_chart_rik, R.id.market_chart_zhouk,
+                     R.id.market_chart_yue1})
     public void onNavigationItemClick(View view) {
-        TextView itemView = (TextView) view;
+        RelativeLayout itemView = (RelativeLayout) view;
 
         if (itemView == clickOldNavigationView) {
             return;
@@ -304,40 +290,63 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             case R.id.market_chart_fen5:
                 clickNavigationPosition = 1;
                 break;
-            case R.id.market_chart_fen30:
+            case R.id.market_chart_fen15:
                 clickNavigationPosition = 2;
                 break;
-            case R.id.market_chart_fen60:
+            case R.id.market_chart_fen30:
                 clickNavigationPosition = 3;
                 break;
-            case R.id.market_chart_rik:
+            case R.id.market_chart_fen60:
                 clickNavigationPosition = 4;
                 break;
-            case R.id.market_chart_zhouk:
+            case R.id.market_chart_rik:
                 clickNavigationPosition = 5;
+                break;
+            case R.id.market_chart_zhouk:
+                clickNavigationPosition = 6;
+                break;
+            case R.id.market_chart_yue1:
+                clickNavigationPosition = 7;
                 break;
         }
 
         requestChartData(clickNavigationPosition);
 
-        itemView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
+        TextView itemTextView = (TextView) itemView.findViewWithTag("text");
+        itemTextView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
+        addLineView(itemView);
+
         if (clickOldNavigationView != null) {
-            clickOldNavigationView.setTextColor(ContextCompat.getColor(this, R.color.font_color2));
+            try {
+                TextView clickOldNavigationTextView = (TextView) clickOldNavigationView.findViewWithTag("text");
+                clickOldNavigationTextView.setTextColor(ContextCompat.getColor(this, R.color.font_color2));
+
+                View lineView = clickOldNavigationView.findViewWithTag("lineView");
+                clickOldNavigationView.removeView(lineView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        final int toXDelta = view.getLeft() + selectSignPadding / 2;
-        TranslateAnimation translateAnimation = new TranslateAnimation(
-                selectSignTranslateLeft,
-                toXDelta,
-                0,
-                0);
-        translateAnimation.setDuration(400);
-        translateAnimation.setInterpolator(new OvershootInterpolator());
-        translateAnimation.setFillAfter(true);
-        selectSignView.startAnimation(translateAnimation);
-
-        selectSignTranslateLeft = toXDelta;
         clickOldNavigationView = itemView;
+    }
+
+    private void addLineView(View view) {
+        float lineWidth = getResources().getDimension(R.dimen.market_nav_item_width);
+        int height = SystemUtil.dp2px(this, 2);
+        View viewLine = new View(this);
+        viewLine.setTag("lineView");
+        RelativeLayout.LayoutParams viewLineParams = new RelativeLayout.LayoutParams(
+                (int) lineWidth,
+                height);
+        viewLineParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        int margins = SystemUtil.dp2px(this, 5);
+        viewLineParams.setMargins(margins, 0, margins, 0);
+        viewLine.setLayoutParams(viewLineParams);
+        viewLine.setBackgroundColor(ContextCompat.getColor(this, R.color.blue1));
+
+        RelativeLayout navLayout = (RelativeLayout) view;
+        navLayout.addView(viewLine);
     }
 
     private void requestChartData(final int fromSource) {
@@ -382,6 +391,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             minutePresenter.initChart(MarketDetailActivity.this);
                             minutePresenter.setData(marketTrendList);
 
+                            minuteChartView.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+                                @Override
+                                public void onDoubleTap() {
+                                    fullScreenDisplay();
+                                }
+                            });
                         } else {
                             LayoutInflater mInflater = LayoutInflater.from(getContext());
                             View kLineLayout = mInflater.inflate(
@@ -405,6 +420,13 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             kLinePresenter = new KLinePresenter(MarketDetailActivity.this);
                             kLinePresenter.initChart(MarketDetailActivity.this);
                             kLinePresenter.setData(marketTrendList, combinedchart);
+
+                            combinedchart.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+                                @Override
+                                public void onDoubleTap() {
+                                    fullScreenDisplay();
+                                }
+                            });
                         }
                     }
 
@@ -415,6 +437,14 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 });
     }
 
+    private void fullScreenDisplay() {
+        int requestedOrientation = getRequestedOrientation();
+        if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 转小屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {// 转全屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 
     @Override
     public void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData) {

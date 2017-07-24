@@ -135,6 +135,11 @@ public class PieRadarChartTouchListener extends ChartTouchListener<PieRadarChart
     }
 
     @Override
+    public boolean onDoubleTap(MotionEvent e) {
+        return super.onDoubleTap(e);
+    }
+
+    @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         return true;
     }
