@@ -32,10 +32,15 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
+import com.jyh.kxt.base.json.AdItemJson;
+import com.jyh.kxt.base.json.AdTitleIconBean;
+import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.ColorFormatUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
@@ -46,6 +51,7 @@ import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
+import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
@@ -56,6 +62,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.viewpager.BannerLayout;
@@ -96,6 +103,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private BtnAdapter btnAdapter;
     private ImageView iv_ad;
     private TextView tvTitle;
+
+    private String adIconDay, adIconNight;
+    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight = "#1384ED";
+    private TextView tvAd1;
+    private TextView tvAd2;
+    private ImageView ivAd;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -177,7 +190,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         quotes = arguments.getParcelableArrayList(IntentConstant.NEWS_QUOTES);
         ads = arguments.getParcelable(IntentConstant.NEWS_ADS);
 
-        ArrayList<NewsJson> parcelableArrayList = arguments.getParcelableArrayList(IntentConstant.NEWS_NEWS);
+        MainNewsContentJson parcelableArrayList = arguments.getParcelable(IntentConstant.NEWS_NEWS);
         list = arguments.getStringArrayList(IntentConstant.NEWS_LIST);
 
         initMain(parcelableArrayList);
@@ -186,71 +199,174 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     /**
      * 初始化首页布局
      *
-     * @param data
+     * @param initData
      */
-    private void initMain(List<NewsJson> data) {
+    private void initMain(MainNewsContentJson initData) {
 
-        List<NewsJson> newsJsons = checkNews(data);
-        if (newsJsons == null) {
-            newsItemFragment.plRootView.loadEmptyData();
-        } else {
-            if (newsAdapter == null) {
-                newsAdapter = new NewsAdapter(mContext, newsJsons);
-                newsItemFragment.plvContent.setAdapter(newsAdapter);
+        try {
+            MainNewsContentJson.DataBean data = initData.getData();
+            List<NewsJson> newsJsons = checkNews(data.getData());
+            if (newsJsons == null) {
+                newsItemFragment.plRootView.loadEmptyData();
             } else {
-                newsAdapter.setData(newsJsons);
-            }
-            newsItemFragment.plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    itemClickEvent(position - 2, view, parent);
+                if (newsAdapter == null) {
+                    newsAdapter = new NewsAdapter(mContext, newsJsons);
+                    newsItemFragment.plvContent.setAdapter(newsAdapter);
+                } else {
+                    newsAdapter.setData(newsJsons);
                 }
-            });
+                newsItemFragment.plvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        itemClickEvent(position - 2, view, parent);
+                    }
+                });
 
-            initHeadViewLayout();
+                initHeadViewLayout();
 
-            //头部排序
-            if (list != null) {
-                for (String type : list) {
-                    switch (type) {
-                        case VarConstant.NEWS_AD:
-                            addAD();
-                            break;
-                        case VarConstant.NEWS_SLIDE:
-                            addCarouselView(slides);
-                            break;
-                        case VarConstant.NEWS_SHORTCUT:
-                            addBtn(shortcuts);
-                            break;
-                        case VarConstant.NEWS_QUOTES:
-                            addQuotes();
-                            break;
+                //头部排序
+                if (list != null) {
+                    for (String type : list) {
+                        switch (type) {
+                            case VarConstant.NEWS_AD:
+                                addAD();
+                                break;
+                            case VarConstant.NEWS_SLIDE:
+                                addCarouselView(slides);
+                                break;
+                            case VarConstant.NEWS_SHORTCUT:
+                                addBtn(shortcuts);
+                                break;
+                            case VarConstant.NEWS_QUOTES:
+                                addQuotes();
+                                break;
+                        }
                     }
                 }
+                if (homeHeadView != null) {
+                    newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+                }
+                LinearLayout layout = new LinearLayout(mContext);
+
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+                View titleLayout = inflater.inflate(R.layout.view_title_blue1, null, false);
+                tvTitle = (TextView) titleLayout.findViewById(R.id.tv_title);
+                tvTitle.setText("财经要闻");
+                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+
+
+                tvAd1 = (TextView) titleLayout.findViewById(R.id.tv_advert1);
+                tvAd2 = (TextView) titleLayout.findViewById(R.id.tv_advert2);
+                ivAd = (ImageView) titleLayout.findViewById(R.id.iv_ad);
+
+                Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+
+                int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
+                tvAd1.setMaxWidth(adTvMaxWidth);
+
+                List<AdTitleItemBean> ads = data.getAd();
+                if (ads == null || ads.size() == 0) {
+                    tvAd1.setVisibility(View.GONE);
+                    tvAd2.setVisibility(View.GONE);
+                    ivAd.setVisibility(View.GONE);
+                } else if (ads.size() == 1) {
+                    tvAd1.setVisibility(View.VISIBLE);
+                    ivAd.setVisibility(View.VISIBLE);
+                    final AdTitleItemBean adItemJson = ads.get(0);
+                    AdTitleIconBean icon = data.getIcon();
+                    if (icon != null) {
+                        adIconDay = icon.getDay_icon();
+                        adIconNight = icon.getNight_icon();
+                    }
+                    ad1TvColorNight = adItemJson.getNight_color();
+                    ad1TvColorDay = adItemJson.getNight_color();
+
+                    ad1TvColorDay = ad1TvColorDay == null ? "#1384ED" : ad1TvColorDay;
+                    ad1TvColorNight = ad1TvColorNight == null ? "#1384ED" : ad1TvColorNight;
+                    if (isNight) {
+                        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                        if (adIconNight != null) {
+                            Glide.with(mContext).load(adIconNight).into(ivAd);
+                        }
+                    } else {
+                        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                        if (adIconDay != null)
+                            Glide.with(mContext).load(adIconDay).into(ivAd);
+                    }
+
+
+                    tvAd1.setText(adItemJson.getTitle());
+                    tvAd1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
+                                    adItemJson.getHref());
+                        }
+                    });
+                    tvAd2.setVisibility(View.GONE);
+                } else {
+                    tvAd1.setVisibility(View.VISIBLE);
+                    tvAd2.setVisibility(View.VISIBLE);
+                    ivAd.setVisibility(View.VISIBLE);
+                    final AdTitleItemBean adItemJson = ads.get(0);
+                    final AdTitleItemBean adItemJson2 = ads.get(1);
+
+                    AdTitleIconBean icon = data.getIcon();
+                    if (icon != null) {
+                        adIconDay = icon.getDay_icon();
+                        adIconNight = icon.getNight_icon();
+                    }
+                    ad1TvColorNight = adItemJson.getNight_color();
+                    ad1TvColorDay = adItemJson.getNight_color();
+                    ad2TvColorNight = adItemJson2.getNight_color();
+                    ad2TvColorDay = adItemJson2.getNight_color();
+                    ad1TvColorDay = ad1TvColorDay == null ? "#1384ED" : ad1TvColorDay;
+                    ad1TvColorNight = ad1TvColorNight == null ? "#1384ED" : ad1TvColorNight;
+                    ad2TvColorDay = ad2TvColorDay == null ? "#1384ED" : ad2TvColorDay;
+                    ad2TvColorNight = ad2TvColorNight == null ? "#1384ED" : ad2TvColorNight;
+
+                    if (isNight) {
+                        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                        tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
+                        if (adIconNight != null) {
+                            Glide.with(mContext).load(adIconNight).into(ivAd);
+                        }
+                    } else {
+                        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                        tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
+                        if (adIconDay != null)
+                            Glide.with(mContext).load(adIconDay).into(ivAd);
+                    }
+
+
+                    tvAd1.setText(adItemJson.getTitle());
+                    tvAd1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
+                                    adItemJson.getHref());
+                        }
+                    });
+                    tvAd2.setText(adItemJson2.getTitle());
+                    tvAd2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2.getO_action(),
+                                    adItemJson2.getO_id(),
+                                    adItemJson2.getHref());
+                        }
+                    });
+                }
+
+
+                layout.addView(titleLayout);
+                homeHeadView.addView(layout);
+                newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
+                newsItemFragment.plRootView.loadOver();
             }
-            if (homeHeadView != null) {
-                newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
-            }
-            LinearLayout layout = new LinearLayout(mContext);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams
-                            .WRAP_CONTENT);
-            tvTitle = new TextView(mContext);
-            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup
-                            .LayoutParams.WRAP_CONTENT);
-            tvTitle.setText("财经要闻");
-            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen
-                    .content_font_size));
-            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
-            tvTitle.setGravity(Gravity.CENTER_VERTICAL);
-            tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
-            tvTitle.setLayoutParams(tvParams);
-            layout.addView(tvTitle);
-            layout.setLayoutParams(params);
-            homeHeadView.addView(layout);
-            newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
-            newsItemFragment.plRootView.loadOver();
+        } catch (Exception e) {
+            e.printStackTrace();
+            newsItemFragment.plRootView.loadError();
         }
 
     }
@@ -443,7 +559,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
 
         try {
-            final AdJson.AdItemJson mPicAd = ads.getPic_ad();
+            final AdItemJson mPicAd = ads.getPic_ad();
             iv_ad.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
 
             if (mPicAd != null) {
@@ -476,12 +592,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
         try {
             mAdTextViewList = new ArrayList<>();
-            List<AdJson.AdItemJson> mTextAd = ads.getText_ad();
+            List<AdItemJson> mTextAd = ads.getText_ad();
             if (mTextAd != null) {
                 return;
             }
             LayoutInflater mInflater = LayoutInflater.from(mContext);
-            for (final AdJson.AdItemJson adItemJson : mTextAd) {
+            for (final AdItemJson adItemJson : mTextAd) {
                 View adLayoutView = mInflater.inflate(R.layout.item_news_ad, homeHeadView, false);
 
                 SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id.tv_news_ad_title);
@@ -537,7 +653,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
-                    List<NewsJson> data = new ArrayList<NewsJson>();
+                    MainNewsContentJson data = null;
                     for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
@@ -559,7 +675,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                data = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                data = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
@@ -692,7 +808,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 protected void onResponse(List<TypeDataJson> newsTypeDataJsons) {
 
                     ArrayList<String> list = new ArrayList<>();
-                    List<NewsJson> data = new ArrayList<NewsJson>();
+                    MainNewsContentJson data = null;
                     for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
@@ -712,9 +828,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
-                                JSONArray newsArray = (JSONArray) headerJson.getData();
-                                if (newsArray == null) break;
-                                data = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                data = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
@@ -796,6 +910,9 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     public void onChangeTheme() {
         try {
+
+            boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+
             if (mRollDotViewPager != null) {
                 mRollDotViewPager.onChangeTheme();
             }
@@ -834,6 +951,32 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                         0, 0);
                 tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
             }
+
+            if (tvAd1 != null) {
+                if (isNight) {
+                    tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                } else {
+                    tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                }
+            }
+            if (tvAd2 != null) {
+                if (isNight) {
+                    tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
+                } else {
+                    tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
+                }
+            }
+
+            if (ivAd != null) {
+                if (isNight) {
+                    if (adIconNight != null)
+                        Glide.with(mContext).load(adIconNight).into(ivAd);
+                } else {
+                    if (adIconDay != null)
+                        Glide.with(mContext).load(adIconDay).into(ivAd);
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

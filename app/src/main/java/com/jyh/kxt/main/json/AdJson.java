@@ -3,6 +3,7 @@ package com.jyh.kxt.main.json;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.JumpJson;
 
 import java.util.List;
@@ -33,126 +34,6 @@ public class AdJson implements Parcelable {
     public void setText_ad(List<AdItemJson> text_ad) {
         this.text_ad = text_ad;
     }
-
-   public static class AdItemJson extends JumpJson implements Parcelable {
-        private String author;
-        private String datetime;
-        private String href;
-        private String picture;
-        private int position;
-        private String title;
-        private String type;
-       private int imageHeight;
-
-        public String getAuthor() {
-            return author;
-        }
-
-        public void setAuthor(String author) {
-            this.author = author;
-        }
-
-        public String getDatetime() {
-            return datetime;
-        }
-
-        public void setDatetime(String datetime) {
-            this.datetime = datetime;
-        }
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
-
-        public String getPicture() {
-            return picture;
-        }
-
-        public void setPicture(String picture) {
-            this.picture = picture;
-        }
-
-        public int getPosition() {
-            return position;
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-       public int getImageHeight() {
-           if(imageHeight == 0){
-               imageHeight = 60;
-           }
-           return imageHeight;
-       }
-
-       public void setImageHeight(int imageHeight) {
-           this.imageHeight = imageHeight;
-       }
-
-       @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(this.author);
-            dest.writeString(this.datetime);
-            dest.writeString(this.href);
-            dest.writeString(this.picture);
-            dest.writeInt(this.position);
-            dest.writeString(this.title);
-            dest.writeString(this.type);
-        }
-
-        public AdItemJson() {
-        }
-
-        protected AdItemJson(Parcel in) {
-            this.author = in.readString();
-            this.datetime = in.readString();
-            this.href = in.readString();
-            this.picture = in.readString();
-            this.position = in.readInt();
-            this.title = in.readString();
-            this.type = in.readString();
-        }
-
-        public static final Creator<AdItemJson> CREATOR = new Creator<AdItemJson>() {
-            @Override
-            public AdItemJson createFromParcel(Parcel source) {
-                return new AdItemJson(source);
-            }
-
-            @Override
-            public AdItemJson[] newArray(int size) {
-                return new AdItemJson[size];
-            }
-        };
-    }
-
 
     @Override
     public int describeContents() {

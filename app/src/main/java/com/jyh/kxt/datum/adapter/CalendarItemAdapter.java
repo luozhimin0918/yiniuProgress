@@ -2,6 +2,7 @@ package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.BinderThread;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -17,10 +18,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.json.AdItemJson;
+import com.jyh.kxt.base.json.AdTitleIconBean;
+import com.jyh.kxt.base.json.AdTitleItemBean;
+import com.jyh.kxt.base.utils.ColorFormatUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
@@ -35,6 +43,7 @@ import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.library.util.ObserverCall;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 import java.text.ParseException;
@@ -56,6 +65,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     private LayoutInflater layoutInflater;
     private CalendarItemFragment parentFragment;
 
+    private String adIconDay, adIconNight;
+    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight = "#1384ED";
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -152,11 +163,109 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                     mPaddingView.setLayoutParams(lp);
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
+
+                if (mCalendarTitleBean.isShowAd()) {
+                    Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+                    int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
+                    viewHolder0.tvAd1.setMaxWidth(adTvMaxWidth);
+
+                    List<AdTitleItemBean> ads = mCalendarTitleBean.getAds();
+                    if (ads == null || ads.size() == 0) {
+                        viewHolder0.tvAd1.setVisibility(View.GONE);
+                        viewHolder0.tvAd2.setVisibility(View.GONE);
+                        viewHolder0.ivAd.setVisibility(View.GONE);
+                    } else if (ads.size() == 1) {
+                        viewHolder0.tvAd1.setVisibility(View.VISIBLE);
+                        viewHolder0.ivAd.setVisibility(View.VISIBLE);
+                        final AdTitleItemBean adItemJson = ads.get(0);
+                        AdTitleIconBean icon = mCalendarTitleBean.getIcon();
+
+                        ad1TvColorDay = adItemJson.getDay_color();
+                        ad1TvColorNight = adItemJson.getNight_color();
+                        if (icon != null) {
+                            adIconDay = icon.getDay_icon();
+                            adIconNight = icon.getNight_icon();
+                        }
+
+                        if (isNight) {
+                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                            if (adIconNight != null)
+                                Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                        } else {
+                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                            if (adIconDay != null)
+                                Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                        }
+
+
+                        viewHolder0.tvAd1.setText(adItemJson.getTitle());
+                        viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson
+                                                .getO_id(),
+                                        adItemJson.getHref());
+                            }
+                        });
+                        viewHolder0.tvAd2.setVisibility(View.GONE);
+                    } else {
+                        viewHolder0.tvAd1.setVisibility(View.VISIBLE);
+                        viewHolder0.tvAd2.setVisibility(View.VISIBLE);
+                        viewHolder0.ivAd.setVisibility(View.VISIBLE);
+                        final AdTitleItemBean adItemJson = ads.get(0);
+                        final AdTitleItemBean adItemJson2 = ads.get(1);
+                        AdTitleIconBean icon = mCalendarTitleBean.getIcon();
+                        if (icon != null) {
+                            adIconDay = icon.getDay_icon();
+                            adIconNight = icon.getNight_icon();
+                        }
+
+                        if (isNight) {
+                            ad1TvColorNight = adItemJson.getNight_color();
+                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                            viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
+                            if (adIconNight != null)
+                                Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                        } else {
+                            ad1TvColorDay = adItemJson.getNight_color();
+                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                            viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
+                            if (adIconDay != null)
+                                Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                        }
+
+
+
+                        viewHolder0.tvAd1.setText(adItemJson.getTitle());
+                        viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson
+                                                .getO_id(),
+                                        adItemJson.getHref());
+                            }
+                        });
+                        viewHolder0.tvAd2.setText(adItemJson2.getTitle());
+                        viewHolder0.tvAd2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2.getO_action(),
+                                        adItemJson2.getO_id(),
+                                        adItemJson2.getHref());
+                            }
+                        });
+                    }
+                } else {
+                    viewHolder0.tvAd1.setVisibility(View.GONE);
+                    viewHolder0.tvAd2.setVisibility(View.GONE);
+                    viewHolder0.ivAd.setVisibility(View.GONE);
+                }
+
                 break;
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
 
-                viewHolder1.tvTitle.setText(mCalendarFinanceBean.getState()+mCalendarFinanceBean.getTitle());
+                viewHolder1.tvTitle.setText(mCalendarFinanceBean.getState() + mCalendarFinanceBean.getTitle());
                 viewHolder1.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder1.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder1.tvAlarm.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
@@ -211,7 +320,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 break;
             case 2:
                 CalendarImportantBean mCalendarImportantBean = (CalendarImportantBean) mCalendarType;
-                viewHolder2.tvTitle.setText(mCalendarImportantBean.getState()+mCalendarImportantBean.getTitle());
+                viewHolder2.tvTitle.setText(mCalendarImportantBean.getState() + mCalendarImportantBean.getTitle());
                 viewHolder2.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder2.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder2.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
@@ -244,7 +353,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 break;
             case 3:
                 CalendarHolidayBean mCalendarHolidayBean = (CalendarHolidayBean) mCalendarType;
-                viewHolder3.tvTitle.setText(mCalendarHolidayBean.getState()+mCalendarHolidayBean.getTitle());
+                viewHolder3.tvTitle.setText(mCalendarHolidayBean.getState() + mCalendarHolidayBean.getTitle());
                 viewHolder3.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background));
                 viewHolder3.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
                 viewHolder3.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
@@ -288,6 +397,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     class ViewHolder0 {
         @BindView(R.id.ll_title_content) LinearLayout llContent;
         @BindView(R.id.tv_title) TextView tvTitle;
+        @BindView(R.id.tv_advert1) TextView tvAd1;
+        @BindView(R.id.tv_advert2) TextView tvAd2;
+        @BindView(R.id.iv_ad) ImageView ivAd;
 
         public ViewHolder0(View view) {
             ButterKnife.bind(this, view);
@@ -586,7 +698,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             if (realityFloat > 0) {
                 spannableString.setSpan(
                         new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.rise_color)),
-                        index-3,
+                        index - 3,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -594,7 +706,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             } else if (realityFloat < 0) {
                 spannableString.setSpan(
                         new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.rise_color/*decline_color*/)),
-                        index-3,
+                        index - 3,
                         describe.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {

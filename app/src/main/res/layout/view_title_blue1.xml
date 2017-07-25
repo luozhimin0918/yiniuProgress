@@ -16,28 +16,38 @@
         android:textColor="@color/font_color60"
         android:textSize="@dimen/content_font_size2"/>
 
-
-    <TextView
-        android:id="@+id/tv_advert1"
+    <View
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:gravity="right"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:text="● 广告文字1"
-        android:textSize="@dimen/describe_font_size2"/>
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/tv_advert2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:ellipsize="none"
         android:maxLines="1"
-        android:ellipsize="end"
-        android:text="● 广告文字2"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
+        android:text="● 广告文字1"
+        android:textColor="@color/font_color62"
         android:textSize="@dimen/describe_font_size2"/>
+
+    <TextView
+        android:id="@+id/tv_advert1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:maxLines="1"
+        android:paddingLeft="10dp"
+        android:text="● 广告文字2"
+        android:textColor="@color/font_color62"
+        android:textSize="@dimen/describe_font_size2"/>
+
+    <ImageView
+        android:id="@+id/iv_ad"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="@dimen/contentPadding"
+        android:src="@mipmap/icon_test"
+        android:visibility="gone"/>
 </LinearLayout>

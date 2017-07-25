@@ -1,11 +1,15 @@
 package com.jyh.kxt.datum.presenter;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.json.AdItemJson;
+import com.jyh.kxt.base.json.AdTitleIconBean;
+import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.datum.bean.CalendarBean;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
@@ -17,6 +21,9 @@ import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,7 +74,7 @@ public class CalendarItemPresenter extends BasePresenter {
 
                 try {
                     calendarItemFragment.pllContent.loadOver();
-                    generateFinanceListData(null, 0);
+                    generateFinanceListData(null, null, null, 0);
                     generateImportantListData(null, 0);
                     generateHolidayListData(null, 0);
                     calendarItemFragment.setCalendarAdapter(calendarTypeList);
@@ -92,13 +99,31 @@ public class CalendarItemPresenter extends BasePresenter {
 
             for (CalendarBean calendarItemBean : calendarBeen) {
                 String type = calendarItemBean.getType();
-                List<String> objectList = calendarItemBean.getData();
 
                 if ("finance".equals(type)) {//财经数据
-                    generateFinanceListData(objectList, status);
+                    try {
+                        org.json.JSONObject jsonObject = new org.json.JSONObject(calendarItemBean.getData());
+                        JSONArray adsJson = jsonObject.optJSONArray("ad");
+                        String dataJson = jsonObject.optString("data");
+
+                        List<AdTitleItemBean> ads = null;
+                        List<String> objectList = null;
+                        AdTitleIconBean iconBean = JSON.parseObject(jsonObject.optString("icon"), AdTitleIconBean.class);
+                        if (adsJson != null) {
+                            ads = JSON.parseArray(adsJson.toString(), AdTitleItemBean.class);
+                        }
+                        if (dataJson != null && !dataJson.equals("")) {
+                            objectList = JSON.parseArray(dataJson, String.class);
+                        }
+                        generateFinanceListData(ads, iconBean, objectList, status);
+                    } catch (JSONException e) {
+                        generateFinanceListData(null, null, null, 0);
+                    }
                 } else if ("important".equals(type)) {//事件数据
+                    List<String> objectList = JSON.parseArray(calendarItemBean.getData(), String.class);
                     generateImportantListData(objectList, status);
                 } else if ("holiday".equals(type)) { //假期数据
+                    List<String> objectList = JSON.parseArray(calendarItemBean.getData(), String.class);
                     generateHolidayListData(objectList, status);
                 }
             }
@@ -118,11 +143,14 @@ public class CalendarItemPresenter extends BasePresenter {
 
 
     //生成经济数据数组
-    private void generateFinanceListData(List<String> data, int status) {
+    private void generateFinanceListData(List<AdTitleItemBean> ads, AdTitleIconBean icon, List<String> data, int status) {
         CalendarTitleBean titleBean = new CalendarTitleBean();
         titleBean.setAdapterType(CalendarFragment.AdapterType.TITLE);
         titleBean.setName("数据");
         titleBean.setSpaceType(0);
+        titleBean.setAds(ads);
+        titleBean.setIcon(icon);
+        titleBean.setShowAd(true);
         calendarTypeList.add(titleBean);
 
         if (data == null || data.size() == 0) {

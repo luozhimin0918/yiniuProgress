@@ -14,6 +14,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.library.util.JsonUtil;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
@@ -102,7 +103,7 @@ public class NewsPresenter extends BasePresenter {
                 List<SlideJson> slide = null;
                 List<SlideJson> shortcut = null;
                 List<MarketItemBean> quotes = null;
-                List<NewsJson> news = null;
+                MainNewsContentJson news = null;
                 AdJson ad = null;
 
                 ArrayList<String> list = new ArrayList<>();
@@ -146,9 +147,7 @@ public class NewsPresenter extends BasePresenter {
                             break;
                         case VarConstant.NEWS_LIST:
                             try {
-                                JSONArray newsArray = (JSONArray) headerJson.getData();
-                                if (newsArray == null) break;
-                                news = JsonUtil.parseArray(newsArray.toString(), NewsJson.class);
+                                news = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -213,7 +212,7 @@ public class NewsPresenter extends BasePresenter {
                 List<SlideJson> slide = null;
                 List<SlideJson> shortcut = null;
                 List<MarketItemBean> quotes = null;
-                List<NewsJson> news = null;
+                MainNewsContentJson news = null;
                 AdJson ad = null;
 
                 ArrayList<String> list = new ArrayList<>();
@@ -259,7 +258,7 @@ public class NewsPresenter extends BasePresenter {
                             try {
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                news = JSON.parseArray(newsArray.toString(), NewsJson.class);
+                                news = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
