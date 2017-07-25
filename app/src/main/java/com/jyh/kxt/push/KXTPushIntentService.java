@@ -142,10 +142,9 @@ public class KXTPushIntentService extends UmengMessageService {
                     if (push && video != null && video.getUrl() != null) {
                         video.title = msg.title;
                         video.tvContent = msg.text;
-                        String url = video.getUrl();
-                        String id = url.substring(url.indexOf("/id") + 3);
-                        if (!RegexValidateUtil.isEmpty(id)) {
-                            video.id = id;
+                    /*    String url = video.getUrl();
+                        String id = url.substring(url.indexOf("/id") + 3);*/
+                        if (!RegexValidateUtil.isEmpty(video.id)) {
                             Random randow = new Random();
                             NotificationKXT notification = new NotificationKXT();
                             notification.sendUmenPush(
