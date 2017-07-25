@@ -9,6 +9,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
         android:drawableLeft="@mipmap/iocn_blue_sx"
         android:gravity="center_vertical"
         android:paddingRight="8dp"
@@ -16,38 +17,48 @@
         android:textColor="@color/font_color60"
         android:textSize="@dimen/content_font_size2"/>
 
-    <View
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
-    <TextView
-        android:id="@+id/tv_advert2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="none"
-        android:maxLines="1"
-        android:paddingLeft="10dp"
-        android:text="● 广告文字1"
-        android:textColor="@color/font_color62"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <TextView
-        android:id="@+id/tv_advert1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="none"
-        android:maxLines="1"
-        android:paddingLeft="10dp"
-        android:text="● 广告文字2"
-        android:textColor="@color/font_color62"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <ImageView
-        android:id="@+id/iv_ad"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/contentPadding"
-        android:src="@mipmap/icon_test"
-        android:visibility="gone"/>
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_ad"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/icon_test"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_advert1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_ad"
+            android:ellipsize="none"
+            android:maxLines="1"
+            android:maxWidth="100dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/font_color62"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_advert2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_advert1"
+            android:ellipsize="none"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:textColor="@color/font_color62"
+            android:textSize="@dimen/describe_font_size2"/>
+
+    </RelativeLayout>
+
+
 </LinearLayout>
