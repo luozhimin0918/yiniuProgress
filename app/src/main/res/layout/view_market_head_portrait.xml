@@ -88,9 +88,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/market_chart_update_time"
         android:layout_below="@+id/portrait_space"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="10dp"
         android:textColor="@color/white"
-        android:textSize="@dimen/content_font_size"/>
+        android:textSize="@dimen/describe_font_size4"/>
 
     <TextView
         android:id="@+id/market_chart_zdf"
@@ -100,7 +100,7 @@
         android:layout_below="@+id/market_chart_low"
         android:layout_toRightOf="@+id/market_chart_zde"
         android:textColor="@color/white"
-        android:textSize="@dimen/content_font_size"/>
+        android:textSize="@dimen/describe_font_size4"/>
 
 
     <TextView
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/market_chart_zdf"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="3dp"
         android:alpha="0.7"
         android:textColor="@color/white"

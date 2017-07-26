@@ -4,37 +4,43 @@
              android:layout_height="match_parent"
              android:orientation="vertical">
 
-    <com.github.mikephil.charting.mychart.MyLineChart
-        android:id="@+id/minute_chart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </com.github.mikephil.charting.mychart.MyLineChart>
 
     <RelativeLayout
         android:id="@+id/rl_describe_position"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp">
 
         <TextView
             android:id="@+id/tv_minute_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2017年7月20日 14:26:19"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:text="2017年7月20日 14:26:19"
             android:textColor="@color/font_color2"
-            android:textSize="7sp"/>
+            android:textSize="10sp"/>
+
         <TextView
             android:id="@+id/tv_current_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="1dp"
+            android:layout_toRightOf="@+id/tv_minute_time"
+            android:text="价位:"
             android:textColor="@color/font_color2"
-            android:layout_alignLeft="@+id/tv_minute_time"
-            android:layout_below="@+id/tv_minute_time"
-            android:text="现价:"
-            android:textSize="7sp"/>
+            android:textSize="10sp"/>
     </RelativeLayout>
+
+    <com.github.mikephil.charting.mychart.MyLineChart
+        android:id="@+id/minute_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+
+    </com.github.mikephil.charting.mychart.MyLineChart>
+
 
 </FrameLayout>

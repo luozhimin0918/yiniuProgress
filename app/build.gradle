@@ -294,7 +294,7 @@ dependencies {
     releaseCompile project(path: ':publiclibrary', configuration: 'release')
     debugCompile project(path: ':publiclibrary', configuration: 'debug')
     testCompile 'junit:junit:4.12'
-    compile project(':playerlibrary')
+    /*compile project(':playerlibrary')*/
     compile project(':superplayerlibrary')
     compile project(':Pushlib')
     compile project(':MPChartLib')

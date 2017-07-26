@@ -3,15 +3,12 @@ package com.jyh.kxt.market.presenter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CandleData;
@@ -49,6 +46,7 @@ public class KLinePresenter extends BasePresenter {
     private KLineParse mKLineParse;
 
     private ArrayList<Entry> line5Entries, line10Entries, line30Entries;
+
     private CombinedChart combinedchart = null;
     private ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler;
 
@@ -98,10 +96,22 @@ public class KLinePresenter extends BasePresenter {
 
 
     public void setData(List<MarketTrendBean> kLineList, View chartView) {
+        setData(kLineList, chartView, -1);
+    }
+
+    //可以刷新多个  15分的数据  30分的数据等
+    public void setData(List<MarketTrendBean> kLineList, View chartView, int fromSource) {
 
         if (chartView instanceof CombinedChart) {
             combinedchart = (CombinedChart) chartView;
         }
+
+//        if (chartView.getTag() == null && fromSource != -1) {
+//            ChartTagData chartTagData = new ChartTagData();
+//            chartTagData.setTag(String.valueOf(fromSource));
+//            chartView.setTag(chartTagData);
+//        }
+
 
         mKLineParse = new KLineParse();
         mKLineParse.setKLineList(kLineList);
@@ -138,7 +148,7 @@ public class KLinePresenter extends BasePresenter {
         /**
          * 每个K值的属性
          */
-        CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine");
+        CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine:"+fromSource);
         candleDataSet.setDrawHorizontalHighlightIndicator(false);
         candleDataSet.setHighlightEnabled(true);
         candleDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
@@ -178,20 +188,19 @@ public class KLinePresenter extends BasePresenter {
         }
 
         //先移除基线
-        axisRightK.removeAllLimitLines();
+//        axisRightK.removeAllLimitLines();
         /**
          * 基准线的位置宽度等
          */
-        LimitLine ll = new LimitLine(mKLineParse.getBaseValue()); //基线位置
-        ll.setLineWidth(1f);
-        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
-        ll.enableDashedLine(10f, 10f, 0f);
-        ll.setTextSize(10);
-        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
-        ll.setLabel(mKLineParse.getBaseValue() + "");
-        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-
-        axisRightK.addLimitLine(ll);
+//        LimitLine ll = new LimitLine(mKLineParse.getBaseValue()); //基线位置
+//        ll.setLineWidth(1f);
+//        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
+//        ll.enableDashedLine(10f, 10f, 0f);
+//        ll.setTextSize(10);
+//        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
+//        ll.setLabel(mKLineParse.getBaseValue() + "");
+//        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+//        axisRightK.addLimitLine(ll);
 
         CombinedData combinedData = new CombinedData(xLabelList);
         LineData lineData = new LineData(xLabelList, maEntityList);
@@ -241,7 +250,7 @@ public class KLinePresenter extends BasePresenter {
         LineDataSet lineDataSetMa = new LineDataSet(lineEntries, "ma" + ma);
 
         if (ma == 5) {
-            lineDataSetMa.setHighlightEnabled(true);
+            lineDataSetMa.setHighlightEnabled(false);
             lineDataSetMa.setDrawHorizontalHighlightIndicator(false);
             lineDataSetMa.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         } else {/*此处必须得写*/
@@ -296,7 +305,6 @@ public class KLinePresenter extends BasePresenter {
 
             MarketTrendBean marketTrendBean = mKLineParse.getKLineList().get(xIndex);
 
-            chartActivity.tvKLineTime.setText(marketTrendBean.getQuotetime());
             chartActivity.tvKLineKaiPan.setText("开盘价:" + marketTrendBean.getOpen());
             chartActivity.tvKLineZuiGao.setText("最高价:" + marketTrendBean.getHigh());
             chartActivity.tvKLineZuiDi.setText("最低价:" + marketTrendBean.getLow());

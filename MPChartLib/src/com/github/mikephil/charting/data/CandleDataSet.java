@@ -25,7 +25,7 @@ public class CandleDataSet extends LineScatterCandleRadarDataSet<CandleEntry> im
     /**
      * should the candle bars show?
      * when false, only "ticks" will show
-     *
+     * <p>
      * - default: true
      */
     private boolean mShowCandleBar = true;
@@ -99,22 +99,28 @@ public class CandleDataSet extends LineScatterCandleRadarDataSet<CandleEntry> im
         return copied;
     }
 
+    public CandleEntry minEntry;
+    public CandleEntry maxEntry;
+
     @Override
     public void calcMinMax(int start, int end) {
         // super.calculate();
 
-        if (mYVals == null)
+        if (mYVals == null) {
             return;
+        }
 
-        if (mYVals.isEmpty())
+        if (mYVals.isEmpty()) {
             return;
+        }
 
         int endValue;
 
-        if (end == 0 || end >= mYVals.size())
+        if (end == 0 || end >= mYVals.size()) {
             endValue = mYVals.size() - 1;
-        else
+        } else {
             endValue = end;
+        }
 
         mYMin = Float.MAX_VALUE;
         mYMax = -Float.MAX_VALUE;
@@ -123,11 +129,15 @@ public class CandleDataSet extends LineScatterCandleRadarDataSet<CandleEntry> im
 
             CandleEntry e = mYVals.get(i);
 
-            if (e.getLow() < mYMin)
+            if (e.getLow() < mYMin) {
                 mYMin = e.getLow();
+                minEntry = e;
+            }
 
-            if (e.getHigh() > mYMax)
+            if (e.getHigh() > mYMax) {
                 mYMax = e.getHigh();
+                maxEntry = e;
+            }
         }
     }
 
@@ -139,10 +149,12 @@ public class CandleDataSet extends LineScatterCandleRadarDataSet<CandleEntry> im
      */
     public void setBarSpace(float space) {
 
-        if (space < 0f)
+        if (space < 0f) {
             space = 0f;
-        if (space > 0.45f)
+        }
+        if (space > 0.45f) {
             space = 0.45f;
+        }
 
         mBarSpace = space;
     }

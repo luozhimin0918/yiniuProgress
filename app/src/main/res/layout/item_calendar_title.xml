@@ -4,60 +4,67 @@
     android:id="@+id/ll_title_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:drawableLeft="@mipmap/iocn_blue_sx"
-        android:gravity="center"
-        android:text="数据走势"
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/title_font_size"/>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/contentPadding"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/iv_ad"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@mipmap/icon_test"
-            android:visibility="gone"/>
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_advert1"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/iv_ad"
-            android:ellipsize="none"
-            android:maxLines="1"
-            android:maxWidth="100dp"
-            android:paddingLeft="10dp"
-            android:textColor="@color/font_color62"
-            android:textSize="@dimen/describe_font_size2"/>
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/iocn_blue_sx"
+            android:gravity="center"
+            android:text="数据走势"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/title_font_size"/>
 
-        <TextView
-            android:id="@+id/tv_advert2"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_advert1"
-            android:ellipsize="none"
-            android:maxLines="1"
-            android:paddingLeft="10dp"
-            android:textColor="@color/font_color62"
-            android:textSize="@dimen/describe_font_size2"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/contentPadding"
+            android:layout_weight="1">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_ad"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/icon_test"
+                android:visibility="gone"/>
 
+            <TextView
+                android:id="@+id/tv_advert1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/iv_ad"
+                android:ellipsize="none"
+                android:maxLines="1"
+                android:maxWidth="100dp"
+                android:paddingLeft="10dp"
+                android:textColor="@color/font_color62"
+                android:textSize="@dimen/describe_font_size2"/>
+
+            <TextView
+                android:id="@+id/tv_advert2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/tv_advert1"
+                android:ellipsize="none"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:textColor="@color/font_color62"
+                android:textSize="@dimen/describe_font_size2"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 </LinearLayout>

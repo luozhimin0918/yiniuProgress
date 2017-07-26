@@ -279,6 +279,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                     }
                 }
 
+
+                if (mTouchMode == DRAG) {
+                    //拖动之后松开
+                    if (mChart instanceof CombinedChart) {
+                        CombinedChart combinedChart = (CombinedChart) mChart;
+                        combinedChart.drawMinMaxValues();
+                    }
+                }
                 if (mTouchMode == X_ZOOM ||
                         mTouchMode == Y_ZOOM ||
                         mTouchMode == PINCH_ZOOM ||
@@ -388,6 +396,9 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
      *
      * @param event
      */
+
+    private Toast toastZoom;
+
     private void performZoom(MotionEvent event) {
 
         if (event.getPointerCount() >= 2) { // two finger zoom
@@ -455,9 +466,21 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                             l.onChartScale(event, scaleX, 1f);
                         }
                     } else if (!canZoomOutMoreX) {
-                        Toast.makeText(mChart.getContext(), "不能再缩放了", Toast.LENGTH_SHORT).show();
+                        if (toastZoom != null) {
+                            toastZoom.cancel();
+                            toastZoom = null;
+                        } else {
+                            toastZoom = Toast.makeText(mChart.getContext(), "不能再缩放了", Toast.LENGTH_SHORT);
+                            toastZoom.show();
+                        }
                     } else if (!canZoomInMoreX) {
-                        Toast.makeText(mChart.getContext(), "不能再放大了", Toast.LENGTH_SHORT).show();
+                        if (toastZoom != null) {
+                            toastZoom.cancel();
+                            toastZoom = null;
+                        } else {
+                            toastZoom = Toast.makeText(mChart.getContext(), "不能再放大了", Toast.LENGTH_SHORT);
+                            toastZoom.show();
+                        }
                     }
 
                 } else if (mTouchMode == Y_ZOOM && mChart.isScaleYEnabled()) {
@@ -546,8 +569,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         if (mChart instanceof CombinedChart) {
             CombinedChart mCombinedChart = (CombinedChart) mChart;
             mCombinedChart.onDoubleTap();
-        }
-       else if (mChart instanceof MyLineChart) {
+        } else if (mChart instanceof MyLineChart) {
             MyLineChart mMyLineChart = (MyLineChart) mChart;
             mMyLineChart.onDoubleTap();
         }

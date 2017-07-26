@@ -248,4 +248,10 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
         }
         mDrawOrder = order;
     }
+
+
+    public void drawMinMaxValues() {
+        drawMinMaxValues = 1;
+        postInvalidate();
+    }
 }

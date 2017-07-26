@@ -42,7 +42,9 @@ public class MinutePresenter extends BasePresenter {
     @BindObject MarketDetailActivity chartActivity;
 
     private MyXAxis xAxisLine;
+
     private MyYAxis axisRightLine;
+    private MyYAxis axisLeftLine;
     private List<MarketTrendBean> minuteList;
 
     public MinutePresenter(IBaseView iBaseView) {
@@ -73,17 +75,19 @@ public class MinutePresenter extends BasePresenter {
         xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
         // xAxisLine.setLabelsToSkip(59);
 
-        //隐藏左边的Y轴数据
-        MyYAxis axisLeft = chartActivity.minuteChartView.getAxisLeft();
-        axisLeft.setDrawLabels(false);
-        axisLeft.setDrawGridLines(false);
-        axisLeft.setDrawAxisLine(false);
+        //左边的Y轴数据
+        axisLeftLine = chartActivity.minuteChartView.getAxisLeft();
+        axisLeftLine.setLabelCount(5, true);
+        axisLeftLine.setDrawLabels(true);
+        axisLeftLine.setDrawGridLines(true);
+        axisLeftLine.setDrawAxisLine(false);
+        axisLeftLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
-        //右边y
-        axisRightLine = chartActivity.minuteChartView.getAxisRight();
-        axisRightLine.setLabelCount(5, true);
-        axisRightLine.setDrawLabels(true);
-        axisRightLine.setValueFormatter(new YAxisValueFormatter() {
+        axisLeftLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        axisLeftLine.setAxisLineColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        axisLeftLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
+
+        axisLeftLine.setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
                 DecimalFormat df = new DecimalFormat("######0.00");
@@ -91,13 +95,27 @@ public class MinutePresenter extends BasePresenter {
             }
         });
 
-        axisRightLine.setDrawGridLines(true);
+        //右边y
+        axisRightLine = chartActivity.minuteChartView.getAxisRight();
+        axisRightLine.setLabelCount(5, true);
+        axisRightLine.setDrawLabels(true);
+        axisRightLine.setDrawGridLines(false);
         axisRightLine.setDrawAxisLine(false);
+        axisRightLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
         axisRightLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
         axisRightLine.setAxisLineColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
         axisRightLine.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
 
+        axisRightLine.setValueFormatter(new YAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                float lastPrice = Float.parseFloat(chartActivity.marketSocketBean.zuoshou);
+                float zdfValue = (value - lastPrice) / lastPrice * 100;
+                DecimalFormat df = new DecimalFormat("######0.0000");
+                return df.format(zdfValue) + "%";
+            }
+        });
     }
 
     public void setData(List<MarketTrendBean> minuteList) {
@@ -114,21 +132,19 @@ public class MinutePresenter extends BasePresenter {
 
         //控件设置
         xAxisLine.setXLabels(mMinuteParse.getXLabels());
-//        axisRightLine.setAxisMinValue((float) mMinuteParse.getMinValue());
-//        axisRightLine.setAxisMaxValue((float) mMinuteParse.getMaxValue()); //基准线的位置宽度等
 
         //先移除基线
-        axisRightLine.removeAllLimitLines();
-        //基线位置
-        LimitLine ll = new LimitLine(mMinuteParse.getBaseValue());
-        ll.setLineWidth(1f);
-        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
-        ll.enableDashedLine(10f, 10f, 0f);
-        ll.setTextSize(10);
-        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
-        ll.setLabel(mMinuteParse.getBaseValue() + "");
-        axisRightLine.addLimitLine(ll);
+//        axisLeftLine.removeAllLimitLines();
+//        //基线位置
+//        LimitLine ll = new LimitLine(mMinuteParse.getBaseValue());
+//        ll.setLineWidth(1f);
+//        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
+//        ll.enableDashedLine(10f, 10f, 0f);
+//        ll.setTextSize(10);
+//        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+//        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
+//        ll.setLabel(mMinuteParse.getBaseValue() + "");
+//        axisLeftLine.addLimitLine(ll);
 
         ArrayList<String> xLabelList = new ArrayList<>();
         ArrayList<Entry> lineCJEntries = new ArrayList<>();
@@ -141,14 +157,18 @@ public class MinutePresenter extends BasePresenter {
                 continue;
             }
 
-            lineCJEntries.add(new Entry((float) marketTrendBean.getClose(), i));
+            Entry object = new Entry((float) marketTrendBean.getClose(), i);
+            lineCJEntries.add(object);
         }
-        LineDataSet lineDataSet1 = new LineDataSet(lineCJEntries, "收盘价");
+        LineDataSet lineDataSet1 = new LineDataSet(lineCJEntries, "minute");
         lineDataSet1.setDrawValues(false);
         lineDataSet1.setCircleRadius(0);
         lineDataSet1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
         lineDataSet1.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         lineDataSet1.setDrawFilled(true);
+
+        float lastPrice = Float.parseFloat(chartActivity.marketSocketBean.zuoshou);
+        lineDataSet1.setLastPrice(lastPrice);
 
         //谁为基准
         lineDataSet1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -165,7 +185,7 @@ public class MinutePresenter extends BasePresenter {
 
     public void longPressIndicator(int xIndex) {
         MarketTrendBean marketTrendBean = minuteList.get(xIndex);
-        String text = "现价：" + marketTrendBean.getClose();
+        String text = "价位:" + marketTrendBean.getClose();
         SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
         ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
@@ -182,5 +202,19 @@ public class MinutePresenter extends BasePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateLimitLine(float baseValue) {
+        axisLeftLine.removeAllLimitLines();
+        //基线位置
+        LimitLine ll = new LimitLine(baseValue);
+        ll.setLineWidth(1f);
+        ll.setLineColor(ContextCompat.getColor(mContext, R.color.marker_line));
+        ll.enableDashedLine(10f, 10f, 0f);
+        ll.setTextSize(10);
+        ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll.setTextColor(ContextCompat.getColor(mContext, R.color.font_color4));
+        ll.setLabel(baseValue + "");
+        axisLeftLine.addLimitLine(ll);
     }
 }

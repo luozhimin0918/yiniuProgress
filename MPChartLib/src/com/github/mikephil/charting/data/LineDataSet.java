@@ -386,6 +386,16 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
             mFillFormatter = formatter;
     }
 
+    private double lastPrice;
+
+    public double getLastPrice() {
+        return lastPrice;
+    }
+
+    public void setLastPrice(double lastPrice) {
+        this.lastPrice = lastPrice;
+    }
+
     @Override
     public FillFormatter getFillFormatter() {
         return mFillFormatter;

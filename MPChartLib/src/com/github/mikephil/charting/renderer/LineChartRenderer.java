@@ -11,6 +11,7 @@ import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.HighlightLineData;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -786,7 +787,11 @@ public class LineChartRenderer extends LineRadarRenderer {
                 // draw the lines
                 try {
                     List<String> timeList = lineData.getXVals();
-                    drawHighlightLines(c, pts, set, timeList.get(xIndex));
+                    HighlightLineData highlightLineData = new HighlightLineData();
+                    highlightLineData.setDateTime(timeList.get(xIndex));
+                    highlightLineData.setxIndex(xIndex);
+
+                    drawHighlightLines(c, pts, set,highlightLineData );
                 } catch (Exception e) {
                     drawHighlightLines(c, pts, set);
                 }

@@ -2,11 +2,18 @@
 package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.CandleData;
+import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.HighlightLineData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.CandleDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
@@ -157,7 +164,7 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                 trans.pointValuesToPixel(mBodyBuffers);
 
                 // draw body differently for increasing and decreasing entry
-                if (open > close) { // decreasing
+                if (open > close) { // decreasing 跌
 
                     if (dataSet.getDecreasingColor() == ColorTemplate.COLOR_NONE) {
                         mRenderPaint.setColor(dataSet.getColor(j));
@@ -171,6 +178,8 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                             mBodyBuffers[0], mBodyBuffers[3],
                             mBodyBuffers[2], mBodyBuffers[1],
                             mRenderPaint);
+
+                    drawHighestLowest(c, dataSet, e);
 
                 } else if (open < close) {
 
@@ -186,6 +195,8 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                             mBodyBuffers[0], mBodyBuffers[1],
                             mBodyBuffers[2], mBodyBuffers[3],
                             mRenderPaint);
+
+                    drawHighestLowest(c, dataSet, e);
                 } else { // equal values
 
                     if (dataSet.getNeutralColor() == ColorTemplate.COLOR_NONE) {
@@ -253,6 +264,124 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
 
             }
         }
+    }
+
+    private Paint highestLowestLine;
+
+    /**
+     * 最高最低线
+     *
+     * @param c
+     * @param dataSet
+     * @param e
+     */
+    private void drawHighestLowest(Canvas c, ICandleDataSet dataSet, CandleEntry e) {
+
+        if (highestLowestLine == null) {
+            highestLowestLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+            highestLowestLine.reset();
+            highestLowestLine.setTextSize(dp(9));
+            highestLowestLine.setStrokeWidth(2);
+        }
+
+        if (dataSet instanceof CandleDataSet) {
+            CandleDataSet candleDataSet = (CandleDataSet) dataSet;
+
+            float[] linePoint = new float[2];
+            String drawText = null;
+
+            if (candleDataSet.minEntry.getXIndex() == e.getXIndex()) { //最小值
+                highestLowestLine.setColor(dataSet.getDecreasingColor());
+                linePoint[0] = mShadowBuffers[4];
+                linePoint[1] = mShadowBuffers[5];
+
+                drawText = "" + e.getLow();
+
+            } else if (candleDataSet.maxEntry.getXIndex() == e.getXIndex()) {
+                highestLowestLine.setColor(dataSet.getIncreasingColor());
+
+                linePoint[0] = mShadowBuffers[0];
+                linePoint[1] = mShadowBuffers[1];
+
+                drawText = "" + e.getHigh();
+            }
+
+            //公共属性
+            if (candleDataSet.minEntry.getXIndex() == e.getXIndex() ||
+                    candleDataSet.maxEntry.getXIndex() == e.getXIndex()) {
+
+
+                RectF contentRect = mViewPortHandler.getContentRect();
+
+                //计算文字宽度
+                Rect mTextRect = new Rect();
+                highestLowestLine.getTextBounds(drawText, 0, drawText.length(), mTextRect);
+
+                int pathLineWidth = dp(20);
+                int textPadding = dp(3);
+                int rectWidth = mTextRect.width(); //这里用的就是DP值
+                int rectHeight = mTextRect.height();
+
+                //画线
+                highestLowestLine.setStyle(Paint.Style.STROKE);
+                DashPathEffect pathEffect = new DashPathEffect(new float[]{4f, 4f}, 0);
+                highestLowestLine.setPathEffect(pathEffect);
+
+
+                if (linePoint[0] + rectWidth + pathLineWidth + textPadding > contentRect.right) {
+                    //超出屏幕了  往左边画
+                    RectF rectBg = new RectF(linePoint[0] - pathLineWidth - rectWidth - textPadding / 2,
+                            linePoint[1] - rectHeight / 2,
+                            linePoint[0] - pathLineWidth + textPadding / 2,
+                            linePoint[1] + rectHeight / 2 + textPadding);
+
+                    Path path = new Path();
+                    path.moveTo(linePoint[0], linePoint[1]);
+                    path.lineTo(linePoint[0] - pathLineWidth, linePoint[1]);
+
+                    c.drawPath(path, highestLowestLine);
+
+                    highestLowestLine.setStyle(Paint.Style.FILL);
+                    c.drawRect(
+                            rectBg,
+                            highestLowestLine);
+
+                    highestLowestLine.setColor(Color.WHITE);
+                    c.drawText(drawText,
+                            rectBg.left + textPadding / 2,
+                            rectBg.top + rectHeight + (textPadding / 2),
+                            highestLowestLine);
+
+                } else {
+                    //矩形背景
+                    RectF rectBg = new RectF(linePoint[0] + pathLineWidth,
+                            linePoint[1] - rectHeight / 2,
+                            linePoint[0] + rectWidth + pathLineWidth + textPadding,
+                            linePoint[1] + rectHeight / 2 + textPadding);
+
+                    Path path = new Path();
+                    path.moveTo(linePoint[0], linePoint[1]);
+                    path.lineTo(linePoint[0] + pathLineWidth, linePoint[1]);
+
+                    c.drawPath(path, highestLowestLine);
+
+                    highestLowestLine.setStyle(Paint.Style.FILL);
+                    c.drawRect(
+                            rectBg,
+                            highestLowestLine);
+
+                    highestLowestLine.setColor(Color.WHITE);
+                    c.drawText(drawText,
+                            rectBg.left,
+                            rectBg.top + rectHeight + (textPadding / 2),
+                            highestLowestLine);
+                }
+            }
+        }
+    }
+
+    private int dp(float val) {
+        return (int) Utils.convertDpToPixel(val);
     }
 
     @Override
@@ -360,7 +489,11 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
 
                 try {
                     List<String> timeList = candleData1.getXVals();
-                    drawHighlightLines(c, pts, set, timeList.get(xIndex));
+                    HighlightLineData highlightLineData = new HighlightLineData();
+                    highlightLineData.setDateTime(timeList.get(xIndex));
+                    highlightLineData.setxIndex(xIndex);
+
+                    drawHighlightLines(c, pts, set, highlightLineData);
                 } catch (Exception er) {
                     drawHighlightLines(c, pts, set);
                 }

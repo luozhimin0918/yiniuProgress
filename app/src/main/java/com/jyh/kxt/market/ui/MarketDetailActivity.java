@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -122,7 +123,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     public CombinedChart combinedchart;
     public TextView tvMa5, tvMa10, tvMa30;
 
-    public TextView tvKLineTime, tvKLineKaiPan, tvKLineZuiGao, tvKLineZuiDi, tvKLineShouPan;
+    public TextView tvKLineKaiPan, tvKLineZuiGao, tvKLineZuiDi, tvKLineShouPan;
 
     private KLinePresenter kLinePresenter;
 
@@ -134,6 +135,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     //存储请求过来的数据
     private HashMap<Integer, List<MarketTrendBean>> marketTrendMap = new HashMap<>();
     private HashMap<Integer, View> chartMap = new HashMap<>();
+//    private HashMap<Integer,KLinePresenter> kLinePresenterMap = new HashMap<>();
 
 
     private MarketItemBean marketItemBean;
@@ -222,8 +224,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         marketDetailPresenter = new MarketDetailPresenter(this);
 
         //设置导航栏的标记View 宽度
-        onNavigationItemClick(rlFenShiView);
-
 
         JSONArray codes = new JSONArray();
         codes.add(mMarketDetailBean.getData().getCode());
@@ -411,7 +411,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                             tvMa10 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma10);
                             tvMa30 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma30);
 
-                            tvKLineTime = (TextView) kLineLayout.findViewById(R.id.kline_tv_time);
                             tvKLineKaiPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_kaipan);
                             tvKLineZuiGao = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuigao);
                             tvKLineZuiDi = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuidi);
@@ -419,7 +418,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
 
                             kLinePresenter = new KLinePresenter(MarketDetailActivity.this);
                             kLinePresenter.initChart(MarketDetailActivity.this);
-                            kLinePresenter.setData(marketTrendList, combinedchart);
+                            kLinePresenter.setData(marketTrendList, combinedchart, fromSource);
 
                             combinedchart.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
                                 @Override
@@ -489,7 +488,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         } else {
             marketItemList.remove(marketItemBean);
             ivOptionalImage.setSelected(false);
-            TSnackbar.make(ivBarBreak, "已删除", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+            TSnackbar.make(ivBarBreak, "取消自选", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
                     .setPromptThemBackground(Prompt.WARNING).show();
         }
         updateAddStatus = !updateAddStatus;
@@ -593,6 +592,8 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private long minuteTime5 = 0L;
     private long minuteTime30 = 0L;
 
+    private int textMessageCount = 0;
+
     @Override
     public void onTextMessage(String text) {
         if (TextUtils.isEmpty(text)) {
@@ -626,6 +627,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         }
 
 
+        if (textMessageCount == 0) {//保证数据Socket发送完成并且连接完成之后再发起请求
+            textMessageCount = 100;
+            onNavigationItemClick(rlFenShiView);
+        }
+
+
         marketSocketBean.price = jsonObject.getString("p");   //最新价  3.5951
         Double change = jsonObject.getDouble("d");  //涨跌额  0.0238
         marketSocketBean.range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
@@ -643,10 +650,14 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             marketChartLastTime.setText(marketSocketBean.lastTime);
         }
 
-        conditionRefreshChart(lastTimeLong);
+        try {
+            conditionRefreshChart(lastTimeLong);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        DecimalFormat df = new DecimalFormat("0.00");
-        String formatChange = df.format(change);
+        DecimalFormat dfChange = new DecimalFormat("0.00");
+        String formatChange = dfChange.format(change);
 
         marketSocketBean.range = marketSocketBean.range.replace("%", "");
         final double rangeDouble = Double.parseDouble(marketSocketBean.range);
@@ -663,12 +674,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 colors[1] = 0xff95A1BB;
 
             } else if (rangeDouble > 0) {
-                colors[0] = 0xffFF5159;
-                colors[1] = 0xffFF866C;
+                colors[0] = 0xffFF564A;
+                colors[1] = 0xffFF564A;
 
             } else if (rangeDouble < 0) {
-                colors[0] = 0xff00B4C7;
-                colors[1] = 0xff00D8A9;
+                colors[0] = 0xff0AB76C;
+                colors[1] = 0xff0AB76C;
             }
 
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -690,8 +701,11 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             marketChartLow.setTextColor(textColor);
             marketChartZde.setTextColor(textColor);
             marketChartZdf.setTextColor(textColor);
+
+            marketHeadLayout.setBackgroundColor(Color.parseColor("#242424"));
         }
 
+        DecimalFormat df = new DecimalFormat("0.0000");
         String formatRange = df.format(rangeDouble) + "%";
 
         marketChartLow.setText(marketSocketBean.price);
@@ -722,6 +736,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         } else {
             long intervalTime = lastTimeLong - minuteTime1;
             Log.e(TAG, "剩下刷新时间:minuteTime1 :>> " + (60 - intervalTime / 1000) + "秒");
+
+//            minutePresenter.updateLimitLine(Float.parseFloat(marketSocketBean.price));
+
             if (intervalTime >= 60 * 1000) { //分时刷新
                 minuteTime1 = lastTimeLong;//分时改变到当前时间
                 Log.e(TAG, "开始刷新:minuteTime1 :>> " + minuteTime1);

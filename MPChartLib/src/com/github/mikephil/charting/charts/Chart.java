@@ -69,7 +69,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * flag that indicates if logging is enabled or not
      */
-    protected boolean mLogEnabled = true;
+    protected boolean mLogEnabled = false;
     private boolean hasHighlightlongTime = true;
     /**
      * object that holds all data that was originally set for the chart, before
@@ -420,8 +420,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             boolean hasDescription = !TextUtils.isEmpty(mNoDataTextDescription);
             float line1height = hasText ? Utils.calcTextHeight(mInfoPaint, mNoDataText) : 0.f;
             float line2height = hasDescription ? Utils.calcTextHeight(mInfoPaint, mNoDataTextDescription) : 0.f;
-            float lineSpacing = (hasText && hasDescription) ?
-                    (mInfoPaint.getFontSpacing() - line1height) : 0.f;
+            float lineSpacing = (hasText && hasDescription) ? (mInfoPaint.getFontSpacing() - line1height) : 0.f;
 
             // if no data, inform the user
 
@@ -440,6 +439,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             if (hasDescription) {
                 canvas.drawText(mNoDataTextDescription, getWidth() / 2, y, mInfoPaint);
             }
+
+
+
             return;
         }
 
@@ -1813,4 +1815,5 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     public void setUnbindEnabled(boolean enabled) {
         this.mUnbind = enabled;
     }
+
 }

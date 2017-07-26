@@ -40,6 +40,8 @@ import com.github.mikephil.charting.utils.PointD;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 
+import io.realm.internal.Util;
+
 /**
  * Base-class of LineChart, BarChart, ScatterChart and CandleStickChart.
  *
@@ -191,6 +193,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
     private long totalTime = 0;
     private long drawCycles = 0;
 
+    protected int drawMinMaxValues = 0;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -241,6 +245,17 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         int clipRestoreCount = canvas.save();
         canvas.clipRect(mViewPortHandler.getContentRect());
 
+
+        if (drawMinMaxValues == 1) {
+            drawMinMaxValues = 0;//还原
+
+            getYMax();
+            Log.e("计算最大最小值", "onDraw: getYMax()"+getYMax() +"  >>> "+getYMin() );
+//            getLowestVisibleXIndex(), getHighestVisibleXIndex()
+//            getPosition()
+        }
+
+
         mXAxisRenderer.renderGridLines(canvas);
         mAxisRendererLeft.renderGridLines(canvas);
         mAxisRendererRight.renderGridLines(canvas);
@@ -280,12 +295,6 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
             }
         }*/
 
-
-        // if highlighting is enabled
-        if (valuesToHighlight()) {
-            mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
-        }
-
         // Removes clipping rectangle
         canvas.restoreToCount(clipRestoreCount);
 
@@ -315,6 +324,11 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         mRenderer.drawValues(canvas);
 
         mLegendRenderer.renderLegend(canvas);
+
+        // if highlighting is enabled
+        if (valuesToHighlight()) {
+            mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
+        }
 
         drawMarkers(canvas);
 
@@ -406,8 +420,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
         // calculate axis range (min / max) according to provided data
         mAxisLeft.calculate(mData.getYMin(AxisDependency.LEFT), mData.getYMax(AxisDependency.LEFT));
-        mAxisRight.calculate(mData.getYMin(AxisDependency.RIGHT), mData.getYMax(AxisDependency
-                .RIGHT));
+        mAxisRight.calculate(mData.getYMin(AxisDependency.RIGHT), mData.getYMax(AxisDependency.RIGHT));
     }
 
     protected void calculateLegendOffsets(RectF offsets) {

@@ -58,11 +58,9 @@ public class WelcomePresenter extends BasePresenter {
                             adImageUrl.equals(loadAd.getPicture())) {
 
                         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
-                        welcomeActivity.tvAdvertTime.setVisibility(View.VISIBLE);
 
                         Glide.with(welcomeActivity)
                                 .load(adImageUrl)
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(welcomeActivity.ivWelcome);
 
                         welcomeActivity.ivWelcome.setOnClickListener(new View.OnClickListener() {
@@ -93,24 +91,29 @@ public class WelcomePresenter extends BasePresenter {
         Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                int showTime = 0;
                 try {
+                    Thread.sleep(1500);
 
-                    String appConfig = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
-                    MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
-                    showTime = mainInitJson.getLoad_ad().getShowTime();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                showTime = showTime == 0 ? 5 : showTime;
-
-                for (int i = showTime; i > 0; i--) {
+                    int showTime = 0;
                     try {
-                        subscriber.onNext("跳过" + i + "S");
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
+                        String appConfig = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
+                        MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
+                        showTime = mainInitJson.getLoad_ad().getShowTime();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    showTime = showTime == 0 ? 5 : showTime;
+
+                    for (int i = showTime; i > 0; i--) {
+                        try {
+                            Thread.sleep(1000);
+                            subscriber.onNext("跳过" + i + "S");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 subscriber.onCompleted();
             }
@@ -132,6 +135,9 @@ public class WelcomePresenter extends BasePresenter {
 
                     @Override
                     public void onNext(String t) {
+                        if(!welcomeActivity.tvAdvertTime.isShown()){
+                            welcomeActivity.tvAdvertTime.setVisibility(View.VISIBLE);
+                        }
                         welcomeActivity.tvAdvertTime.setText(t);
                     }
                 });

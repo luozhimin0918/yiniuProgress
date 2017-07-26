@@ -4,13 +4,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.HighlightLineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -29,7 +37,8 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
     }
 
     //K线图滑动时日期跟随效果
-    public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set, String label) {
+    public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set, HighlightLineData
+            highlightLineData) {
         // set color and stroke-width
         mHighlightPaint.setColor(set.getHighLightColor());
         mHighlightPaint.setStrokeWidth(set.getHighlightLineWidth());
@@ -45,22 +54,56 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
 
             c.drawPath(mHighlightLinePath, mHighlightPaint);
 
-            if (label != null) {
-                String[] splitLabelDate = label.split(" ");
+            String dateTimeLabel = highlightLineData.getDateTime();
+            if (dateTimeLabel != null) {
 
-                label = splitLabelDate[1];//读取后面一部分
-                boolean isUseful = Pattern.matches(".*[1-9].*", label);
-                if (!isUseful) {
-                    label = splitLabelDate[0];//读取前面一部分
+//                String[] splitLabelDate = dateTimeLabel.split(" ");
+
+//                dateTimeLabel = splitLabelDate[1];//读取后面一部分
+//                boolean isUseful = Pattern.matches(".*[1-9].*", dateTimeLabel);
+//                if (!isUseful) {
+//                    dateTimeLabel = splitLabelDate[0];//读取前面一部分
+//                }
+
+                try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    if ("minute".equals(set.getLabel())) {
+                        Date parse = simpleDateFormat.parse(highlightLineData.getDateTime());
+                        dateTimeLabel = DateFormat.format("HH:mm", parse.getTime()).toString();
+                    } else {
+                        String mySetLabel = set.getLabel();
+                        if ("KLine".equals(mySetLabel.split(":")[0])) {
+                            //符合K线要求
+                            String fromSource = mySetLabel.split(":")[1];
+                            Date parse = simpleDateFormat.parse(highlightLineData.getDateTime());
+                            switch (fromSource) {
+                                case "1":
+                                case "2":
+                                case "3":
+                                case "4":
+                                    dateTimeLabel = DateFormat.format("MM-dd HH:mm", parse.getTime()).toString();
+                                    break;
+                                case "5":
+                                case "6":
+                                    dateTimeLabel = DateFormat.format("MM-dd", parse.getTime()).toString();
+                                    break;
+                                case "7":
+                                    dateTimeLabel = DateFormat.format("yyyy-MM", parse.getTime()).toString();
+                                    break;
+                            }
+
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
 
                 //增加日期
                 float right = pts[0];
-                float bottom = mViewPortHandler.contentBottom();
 
                 int textPadding = 3;
-                float labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, label);
-                float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, label);
+                float labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, dateTimeLabel);
+                float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, dateTimeLabel);
 
 
                 mHighlightDatePaint.setColor(set.getHighLightColor());
@@ -76,16 +119,31 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
                     right = contentRect.right - viewDrawWidth;
                 }
 
-                c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding,
-                                bottom - labelLineHeight - textPadding,
-                                right + labelLineWidth / 2 + textPadding,
-                                bottom + textPadding),
-                        mHighlightDatePaint);
+                if ("minute".equals(set.getLabel())) {
+                    float top = mViewPortHandler.contentTop();
+                    c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding,
+                                    top,
+                                    right + labelLineWidth / 2 + textPadding,
+                                    top + labelLineHeight + textPadding),
+                            mHighlightDatePaint);
 
-                mHighlightDatePaint.setColor(Color.WHITE);
-                c.drawText(label,
-                        right - labelLineWidth / 2,
-                        bottom, mHighlightDatePaint);
+                    mHighlightDatePaint.setColor(Color.WHITE);
+                    c.drawText(dateTimeLabel,
+                            right - labelLineWidth / 2,
+                            top + labelLineHeight, mHighlightDatePaint);
+                } else {
+                    float bottom = mViewPortHandler.contentBottom();
+                    c.drawRect(new RectF(right - labelLineWidth / 2 - textPadding,
+                                    bottom - labelLineHeight - textPadding,
+                                    right + labelLineWidth / 2 + textPadding,
+                                    bottom + textPadding),
+                            mHighlightDatePaint);
+
+                    mHighlightDatePaint.setColor(Color.WHITE);
+                    c.drawText(dateTimeLabel,
+                            right - labelLineWidth / 2,
+                            bottom, mHighlightDatePaint);
+                }
             }
         }
 
@@ -98,6 +156,60 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
             mHighlightLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
 
             c.drawPath(mHighlightLinePath, mHighlightPaint);
+
+            int xIndex = highlightLineData.getxIndex();
+            Entry entryForXIndex = set.getEntryForXIndex(xIndex);
+            if (entryForXIndex != null) {
+                String price = String.valueOf(entryForXIndex.getVal());
+
+                int textPadding = 3;
+
+                /**
+                 * 绘制价格
+                 */
+                float labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, price);
+                float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, price);
+
+                mHighlightDatePaint.setColor(set.getHighLightColor());
+
+                float left = mViewPortHandler.contentLeft();
+                c.drawRect(new RectF(left,
+                                pts[1] - labelLineHeight - textPadding,
+                                left + labelLineWidth + textPadding,
+                                pts[1] + textPadding),
+                        mHighlightDatePaint);
+
+                mHighlightDatePaint.setColor(Color.WHITE);
+                c.drawText(price,
+                        left,
+                        pts[1], mHighlightDatePaint);
+
+                /**
+                 * 绘制涨跌幅
+                 */
+                LineDataSet lineDataSet = (LineDataSet) set;
+                float newPrice = Float.parseFloat(price);
+                double zdfValue = ((newPrice - lineDataSet.getLastPrice()) / lineDataSet.getLastPrice()) * 100;
+                DecimalFormat df = new DecimalFormat("######0.0000");
+                String zdf = df.format(zdfValue) + "%";
+
+                labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, zdf);
+                labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, zdf);
+                mHighlightDatePaint.setColor(set.getHighLightColor());
+                //右边的
+                float right = mViewPortHandler.contentRight();
+                c.drawRect(new RectF(right - labelLineWidth - textPadding,
+                                pts[1] - labelLineHeight - textPadding,
+                                right,
+                                pts[1] + textPadding),
+                        mHighlightDatePaint);
+
+                mHighlightDatePaint.setColor(Color.WHITE);
+                c.drawText(zdf,
+                        right - labelLineWidth - textPadding,
+                        pts[1], mHighlightDatePaint);
+
+            }
         }
     }
 

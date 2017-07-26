@@ -66,7 +66,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
     private CalendarItemFragment parentFragment;
 
     private String adIconDay, adIconNight;
-    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight = "#1384ED";
+    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight
+            = "#1384ED";
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -189,12 +190,14 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
                         if (isNight) {
                             viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                            if (adIconNight != null)
+                            if (adIconNight != null) {
                                 Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                            }
                         } else {
                             viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                            if (adIconDay != null)
+                            if (adIconDay != null) {
                                 Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                            }
                         }
 
 
@@ -202,7 +205,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson
+                                                .getO_action(), adItemJson
                                                 .getO_id(),
                                         adItemJson.getHref());
                             }
@@ -224,23 +228,25 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                             ad1TvColorNight = adItemJson.getNight_color();
                             viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
                             viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
-                            if (adIconNight != null)
+                            if (adIconNight != null) {
                                 Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                            }
                         } else {
                             ad1TvColorDay = adItemJson.getNight_color();
                             viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
                             viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
-                            if (adIconDay != null)
+                            if (adIconDay != null) {
                                 Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                            }
                         }
-
 
 
                         viewHolder0.tvAd1.setText(adItemJson.getTitle());
                         viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson
+                                                .getO_action(), adItemJson
                                                 .getO_id(),
                                         adItemJson.getHref());
                             }
@@ -249,7 +255,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         viewHolder0.tvAd2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2.getO_action(),
+                                JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2
+                                                .getO_action(),
                                         adItemJson2.getO_id(),
                                         adItemJson2.getHref());
                             }
