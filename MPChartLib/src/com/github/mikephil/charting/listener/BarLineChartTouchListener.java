@@ -397,7 +397,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
      * @param event
      */
 
-    private Toast toastZoom;
+    private int zoomState = 0;//0可以正常缩放  -1已经最小  1 已经最大
 
     private void performZoom(MotionEvent event) {
 
@@ -458,29 +458,23 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                             canZoomInMoreX;
 
                     if (canZoomMoreX) {
-
                         mMatrix.set(mSavedMatrix);
                         mMatrix.postScale(scaleX, 1f, t.x, t.y);
 
                         if (l != null) {
                             l.onChartScale(event, scaleX, 1f);
                         }
+                        zoomState = 0;
                     } else if (!canZoomOutMoreX) {
-                        if (toastZoom != null) {
-                            toastZoom.cancel();
-                            toastZoom = null;
-                        } else {
-                            toastZoom = Toast.makeText(mChart.getContext(), "不能再缩放了", Toast.LENGTH_SHORT);
-                            toastZoom.show();
+                        if (zoomState != -1) {
+                            Toast.makeText(mChart.getContext(), "不能再缩放了", Toast.LENGTH_SHORT).show();
                         }
+                        zoomState = -1;
                     } else if (!canZoomInMoreX) {
-                        if (toastZoom != null) {
-                            toastZoom.cancel();
-                            toastZoom = null;
-                        } else {
-                            toastZoom = Toast.makeText(mChart.getContext(), "不能再放大了", Toast.LENGTH_SHORT);
-                            toastZoom.show();
+                        if (zoomState != 1) {
+                            Toast.makeText(mChart.getContext(), "不能再放大了", Toast.LENGTH_SHORT).show();
                         }
+                        zoomState = 1;
                     }
 
                 } else if (mTouchMode == Y_ZOOM && mChart.isScaleYEnabled()) {
@@ -596,6 +590,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         mChart.highlightTouch(null);
         mTouchMode = NONE;
         Highlight = false;
+
+        if (mChart instanceof CombinedChart) {
+            CombinedChart mCombinedChart = (CombinedChart) mChart;
+            mCombinedChart.onSingleTapUp();
+        } else if (mChart instanceof MyLineChart) {
+            MyLineChart mMyLineChart = (MyLineChart) mChart;
+            mMyLineChart.onSingleTapUp();
+        }
       /*  mLastGesture = ChartGesture.SINGLE_TAP;
 
         OnChartGestureListener l = mChart.getOnChartGestureListener();

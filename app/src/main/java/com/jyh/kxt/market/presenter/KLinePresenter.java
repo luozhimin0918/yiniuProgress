@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -55,6 +56,8 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
     private YAxis axisRightK;
 
     private KLineParse mKLineParse;
+
+    private List<MarketTrendBean> kLineList;
     private ArrayList<Entry> line5Entries, line10Entries, line30Entries;
 
     public KLinePresenter(IBaseView iBaseView) {
@@ -82,10 +85,16 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
         tvKLineZuiGao = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuigao);
         tvKLineZuiDi = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuidi);
         tvKLineShouPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_shoupan);
-        combinedChart.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+        combinedChart.setOnDoubleTapListener(new Chart.OnDoubleTapListener() {
             @Override
             public void onDoubleTap() {
                 chartActivity.fullScreenDisplay();
+            }
+
+            @Override
+            public void onSingleTapUp() {
+                //默认选中最后一条数据
+                longPressIndicator(kLineList.size() - 1);
             }
         });
 
@@ -142,6 +151,8 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
     //可以刷新多个  15分的数据  30分的数据等
     @Override
     public void setData(List<MarketTrendBean> kLineList, int fromSource) {
+
+        this.kLineList = kLineList;
 
 //        if (chartView.getTag() == null && fromSource != -1) {
 //            ChartTagData chartTagData = new ChartTagData();

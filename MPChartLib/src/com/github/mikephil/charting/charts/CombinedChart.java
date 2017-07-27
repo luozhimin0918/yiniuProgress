@@ -49,19 +49,16 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Lin
             DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.LINE, DrawOrder.CANDLE, DrawOrder.SCATTER
     };
 
-    public interface OnDoubleTapListener {
-        void onDoubleTap();
-    }
-
-    private OnDoubleTapListener onDoubleTapListener;
-
-    public void setOnDoubleTapListener(OnDoubleTapListener onDoubleTapListener) {
-        this.onDoubleTapListener = onDoubleTapListener;
-    }
 
     public void onDoubleTap() {
         if (onDoubleTapListener != null) {
             onDoubleTapListener.onDoubleTap();
+        }
+    }
+
+    public void onSingleTapUp() {
+        if (onDoubleTapListener != null) {
+            onDoubleTapListener.onSingleTapUp();
         }
     }
 

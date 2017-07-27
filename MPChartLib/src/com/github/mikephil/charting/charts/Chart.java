@@ -66,6 +66,18 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
 
     public static final String LOG_TAG = "MPAndroidChart";
 
+    public interface OnDoubleTapListener {
+        void onDoubleTap();
+
+        void onSingleTapUp();
+    }
+
+    public OnDoubleTapListener onDoubleTapListener;
+
+    public void setOnDoubleTapListener(OnDoubleTapListener onDoubleTapListener) {
+        this.onDoubleTapListener = onDoubleTapListener;
+    }
+
     /**
      * flag that indicates if logging is enabled or not
      */
@@ -439,7 +451,6 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             if (hasDescription) {
                 canvas.drawText(mNoDataTextDescription, getWidth() / 2, y, mInfoPaint);
             }
-
 
 
             return;

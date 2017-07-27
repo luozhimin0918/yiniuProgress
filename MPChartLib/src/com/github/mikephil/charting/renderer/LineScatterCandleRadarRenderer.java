@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Philipp Jahoda on 11/07/15.
- * 高亮
+ * 高亮画线
  */
 public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
 

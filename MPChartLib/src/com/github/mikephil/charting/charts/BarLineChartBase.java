@@ -327,8 +327,17 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
         // if highlighting is enabled
         if (valuesToHighlight()) {
-            if (mIndicesToHighlight[0].getXIndex() >= mAutoScaleLastLowestVisibleXIndex &&
-                    mIndicesToHighlight[0].getXIndex()  <=  mAutoScaleLastHighestVisibleXIndex) {
+            if (mIndicesToHighlight != null && mIndicesToHighlight.length > 0) {
+                try {
+                    if (mIndicesToHighlight[0].getXIndex() >= mAutoScaleLastLowestVisibleXIndex &&
+                            mIndicesToHighlight[0].getXIndex() <= mAutoScaleLastHighestVisibleXIndex) {
+
+                        mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
+                    }
+                } catch (Exception e) {
+                    mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
+                }
+            } else {
                 mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
             }
         }

@@ -28,19 +28,17 @@ public class MyLineChart extends LineChart {
         super(context, attrs, defStyle);
     }
 
-    public interface OnDoubleTapListener {
-        void onDoubleTap();
-    }
 
-    private CombinedChart.OnDoubleTapListener onDoubleTapListener;
-
-    public void setOnDoubleTapListener(CombinedChart.OnDoubleTapListener onDoubleTapListener) {
-        this.onDoubleTapListener = onDoubleTapListener;
-    }
 
     public void onDoubleTap() {
         if (onDoubleTapListener != null) {
             onDoubleTapListener.onDoubleTap();
+        }
+    }
+
+    public void onSingleTapUp() {
+        if (onDoubleTapListener != null) {
+            onDoubleTapListener.onSingleTapUp();
         }
     }
 

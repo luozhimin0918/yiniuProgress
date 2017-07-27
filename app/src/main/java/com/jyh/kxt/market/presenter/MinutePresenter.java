@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -72,10 +73,15 @@ public class MinutePresenter extends BaseChartPresenter<MyLineChart> {
         minuteChartDesc = (TextView) minuteLayout.findViewById(R.id.tv_current_price);
         minuteChartView = (MyLineChart) minuteLayout.findViewById(R.id.minute_chart);
 
-        minuteChartView.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+        minuteChartView.setOnDoubleTapListener(new  Chart.OnDoubleTapListener() {
             @Override
             public void onDoubleTap() {
                 chartActivity.fullScreenDisplay();
+            }
+
+            @Override
+            public void onSingleTapUp() {
+                longPressIndicator(minuteList.size() - 1);
             }
         });
         final ViewPortHandler viewPortHandler = minuteChartView.getViewPortHandler();
