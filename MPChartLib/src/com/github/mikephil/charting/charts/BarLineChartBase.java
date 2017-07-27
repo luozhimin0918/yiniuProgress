@@ -250,7 +250,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
             drawMinMaxValues = 0;//还原
 
             getYMax();
-            Log.e("计算最大最小值", "onDraw: getYMax()"+getYMax() +"  >>> "+getYMin() );
+            Log.e("计算最大最小值", "onDraw: getYMax()" + getYMax() + "  >>> " + getYMin());
 //            getLowestVisibleXIndex(), getHighestVisibleXIndex()
 //            getPosition()
         }
@@ -327,7 +327,10 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
         // if highlighting is enabled
         if (valuesToHighlight()) {
-            mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
+            if (mIndicesToHighlight[0].getXIndex() >= mAutoScaleLastLowestVisibleXIndex &&
+                    mIndicesToHighlight[0].getXIndex()  <=  mAutoScaleLastHighestVisibleXIndex) {
+                mRenderer.drawHighlighted(canvas, mIndicesToHighlight);
+            }
         }
 
         drawMarkers(canvas);

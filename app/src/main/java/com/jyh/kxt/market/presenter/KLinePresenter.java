@@ -5,12 +5,15 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
@@ -19,9 +22,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.market.kline.bean.KLineParse;
@@ -35,41 +38,78 @@ import java.util.List;
  * Created by Mr'Dai on 2017/7/19.
  */
 
-public class KLinePresenter extends BasePresenter {
+public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
 
     @BindObject MarketDetailActivity chartActivity;
+    /**
+     * K线图的Chart
+     */
+    private View kLineLayout;
+    private CombinedChart combinedChart;
+    private TextView tvMa5, tvMa10, tvMa30;
+    private TextView tvKLineKaiPan, tvKLineZuiGao, tvKLineZuiDi, tvKLineShouPan;
+
 
     private XAxis xAxisK;
     private YAxis axisLeftK;
     private YAxis axisRightK;
 
     private KLineParse mKLineParse;
-
     private ArrayList<Entry> line5Entries, line10Entries, line30Entries;
-
-    private CombinedChart combinedchart = null;
-    private ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler;
 
     public KLinePresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 
-    public void initChart(ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler) {
-        this.onLongPressIndicatorHandler = onLongPressIndicatorHandler;
+    public void initChart() {
+        /**
+         *  默认控件的初始化
+         */
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
 
-        ViewPortHandler viewPortHandler = chartActivity.combinedchart.getViewPortHandler();
-        viewPortHandler.setOnLongPressIndicatorHandler(onLongPressIndicatorHandler);
+        kLineLayout = mInflater.inflate(
+                R.layout.view_market_chart_kline,
+                chartActivity.chartContainerLayout,
+                false);
+        chartActivity.chartContainerLayout.addView(kLineLayout);
 
-        chartActivity.combinedchart.setDrawBorders(true);
-        chartActivity.combinedchart.setBorderWidth(1);
-        chartActivity.combinedchart.setBorderColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
-        chartActivity.combinedchart.setDescription("");
-        chartActivity.combinedchart.setDragEnabled(true);
-        chartActivity.combinedchart.setScaleYEnabled(false);
+        combinedChart = (CombinedChart) kLineLayout.findViewById(R.id.combinedchart);
+        tvMa5 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma5);
+        tvMa10 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma10);
+        tvMa30 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma30);
 
-        Legend combinedChartLegend = chartActivity.combinedchart.getLegend();
+        tvKLineKaiPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_kaipan);
+        tvKLineZuiGao = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuigao);
+        tvKLineZuiDi = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuidi);
+        tvKLineShouPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_shoupan);
+        combinedChart.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+            @Override
+            public void onDoubleTap() {
+                chartActivity.fullScreenDisplay();
+            }
+        });
+
+        ViewPortHandler viewPortHandler = combinedChart.getViewPortHandler();
+        viewPortHandler.setOnLongPressIndicatorHandler(new ViewPortHandler.OnLongPressIndicatorHandler() {
+            @Override
+            public void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData) {
+                KLinePresenter.this.longPressIndicator(xIndex);
+            }
+        });
+
+        /**
+         * 默认Chart的初始化
+         */
+        combinedChart.setDrawBorders(true);
+        combinedChart.setBorderWidth(1);
+        combinedChart.setBorderColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        combinedChart.setDescription(null);
+        combinedChart.setDragEnabled(true);
+        combinedChart.setScaleYEnabled(false);
+
+        Legend combinedChartLegend = combinedChart.getLegend();
         combinedChartLegend.setEnabled(false);
-        xAxisK = chartActivity.combinedchart.getXAxis();
+        xAxisK = combinedChart.getXAxis();
         xAxisK.setDrawLabels(true);
         xAxisK.setDrawGridLines(false);
         xAxisK.setDrawAxisLine(false);
@@ -77,12 +117,12 @@ public class KLinePresenter extends BasePresenter {
         xAxisK.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisK.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
 
-        axisLeftK = chartActivity.combinedchart.getAxisLeft();
+        axisLeftK = combinedChart.getAxisLeft();
         axisLeftK.setDrawGridLines(false);
         axisLeftK.setDrawAxisLine(false);
         axisLeftK.setDrawLabels(false);
 
-        axisRightK = chartActivity.combinedchart.getAxisRight();
+        axisRightK = combinedChart.getAxisRight();
         axisRightK.setDrawLabels(true);
         axisRightK.setDrawGridLines(true);
         axisRightK.setDrawAxisLine(false);
@@ -90,21 +130,18 @@ public class KLinePresenter extends BasePresenter {
         axisRightK.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
         axisRightK.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
 
-        chartActivity.combinedchart.setDragDecelerationEnabled(true);
-        chartActivity.combinedchart.setDragDecelerationFrictionCoef(0.2f);
+        combinedChart.setDragDecelerationEnabled(true);
+        combinedChart.setDragDecelerationFrictionCoef(0.2f);
     }
 
 
-    public void setData(List<MarketTrendBean> kLineList, View chartView) {
-        setData(kLineList, chartView, -1);
+    public void setData(List<MarketTrendBean> kLineList) {
+        setData(kLineList, -1);
     }
 
     //可以刷新多个  15分的数据  30分的数据等
-    public void setData(List<MarketTrendBean> kLineList, View chartView, int fromSource) {
-
-        if (chartView instanceof CombinedChart) {
-            combinedchart = (CombinedChart) chartView;
-        }
+    @Override
+    public void setData(List<MarketTrendBean> kLineList, int fromSource) {
 
 //        if (chartView.getTag() == null && fromSource != -1) {
 //            ChartTagData chartTagData = new ChartTagData();
@@ -148,7 +185,7 @@ public class KLinePresenter extends BasePresenter {
         /**
          * 每个K值的属性
          */
-        CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine:"+fromSource);
+        CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine:" + fromSource);
         candleDataSet.setDrawHorizontalHighlightIndicator(false);
         candleDataSet.setHighlightEnabled(true);
         candleDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
@@ -207,10 +244,10 @@ public class KLinePresenter extends BasePresenter {
         combinedData.setData(candleData);
         combinedData.setData(lineData);
 
-        combinedchart.setData(combinedData);
-        combinedchart.moveViewToX(kLineList.size() - 1);
+        combinedChart.setData(combinedData);
+        combinedChart.moveViewToX(kLineList.size() - 1);
 
-        ViewPortHandler viewPortHandlerCombined = combinedchart.getViewPortHandler();
+        ViewPortHandler viewPortHandlerCombined = combinedChart.getViewPortHandler();
         float xMaxScale = calculateMaxScale(xLabelList.size());
         viewPortHandlerCombined.setMaximumScaleX(xMaxScale);
         Matrix matrixCombined = viewPortHandlerCombined.getMatrixTouch();
@@ -218,13 +255,13 @@ public class KLinePresenter extends BasePresenter {
         //最大缩放值
         matrixCombined.postScale(xMaxScale / 3, 1f);
 
-        combinedchart.moveViewToX(kLineList.size() - 1);
+        combinedChart.moveViewToX(kLineList.size() - 1);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                combinedchart.setAutoScaleMinMaxEnabled(true);
-                combinedchart.notifyDataSetChanged();
-                combinedchart.invalidate();
+                combinedChart.setAutoScaleMinMaxEnabled(true);
+                combinedChart.notifyDataSetChanged();
+                combinedChart.invalidate();
             }
         }, 300);
 
@@ -261,15 +298,15 @@ public class KLinePresenter extends BasePresenter {
         if (ma == 5) {
             int color = ContextCompat.getColor(mContext, R.color.ma5);
             lineDataSetMa.setColor(color);
-            chartActivity.tvMa5.setTextColor(color);
+            tvMa5.setTextColor(color);
         } else if (ma == 10) {
             int color = ContextCompat.getColor(mContext, R.color.ma10);
             lineDataSetMa.setColor(color);
-            chartActivity.tvMa10.setTextColor(color);
+            tvMa10.setTextColor(color);
         } else {
             int color = ContextCompat.getColor(mContext, R.color.ma30);
             lineDataSetMa.setColor(color);
-            chartActivity.tvMa30.setTextColor(color);
+            tvMa30.setTextColor(color);
         }
         lineDataSetMa.setLineWidth(1f);
         lineDataSetMa.setDrawCircles(false);
@@ -299,19 +336,34 @@ public class KLinePresenter extends BasePresenter {
             String ma10 = mContext.getResources().getString(R.string.ma10);
             String ma30 = mContext.getResources().getString(R.string.ma30);
 
-            chartActivity.tvMa5.setText(md5Entry != null ? String.format(ma5, md5Entry.getVal()) : "");
-            chartActivity.tvMa10.setText(md10Entry != null ? String.format(ma10, md10Entry.getVal()) : "");
-            chartActivity.tvMa30.setText(md30Entry != null ? String.format(ma30, md30Entry.getVal()) : "");
+            tvMa5.setText(md5Entry != null ? String.format(ma5, md5Entry.getVal()) : "");
+            tvMa10.setText(md10Entry != null ? String.format(ma10, md10Entry.getVal()) : "");
+            tvMa30.setText(md30Entry != null ? String.format(ma30, md30Entry.getVal()) : "");
 
             MarketTrendBean marketTrendBean = mKLineParse.getKLineList().get(xIndex);
 
-            chartActivity.tvKLineKaiPan.setText("开盘价:" + marketTrendBean.getOpen());
-            chartActivity.tvKLineZuiGao.setText("最高价:" + marketTrendBean.getHigh());
-            chartActivity.tvKLineZuiDi.setText("最低价:" + marketTrendBean.getLow());
-            chartActivity.tvKLineShouPan.setText("收盘价:" + marketTrendBean.getClose());
+            tvKLineKaiPan.setText("开盘价:" + marketTrendBean.getOpen());
+            tvKLineZuiGao.setText("最高价:" + marketTrendBean.getHigh());
+            tvKLineZuiDi.setText("最低价:" + marketTrendBean.getLow());
+            tvKLineShouPan.setText("收盘价:" + marketTrendBean.getClose());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public View getChartLayout() {
+        return kLineLayout;
+    }
+
+    @Override
+    public void removeHighlight() {
+        combinedChart.mChartTouchListener.onSingleTapUp(null);
+    }
+
+    @Override
+    public CombinedChart getChartView() {
+        return combinedChart;
     }
 }

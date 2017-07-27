@@ -137,7 +137,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     protected OnChartValueSelectedListener mSelectionListener;
 
-    protected ChartTouchListener mChartTouchListener;
+    public ChartTouchListener mChartTouchListener;
 
     /**
      * text that is displayed when the chart is empty

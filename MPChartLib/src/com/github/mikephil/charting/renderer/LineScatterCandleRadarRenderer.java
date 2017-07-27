@@ -56,15 +56,6 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
 
             String dateTimeLabel = highlightLineData.getDateTime();
             if (dateTimeLabel != null) {
-
-//                String[] splitLabelDate = dateTimeLabel.split(" ");
-
-//                dateTimeLabel = splitLabelDate[1];//读取后面一部分
-//                boolean isUseful = Pattern.matches(".*[1-9].*", dateTimeLabel);
-//                if (!isUseful) {
-//                    dateTimeLabel = splitLabelDate[0];//读取前面一部分
-//                }
-
                 try {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     if ("minute".equals(set.getLabel())) {

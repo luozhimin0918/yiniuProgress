@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -28,9 +27,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
-import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
@@ -47,6 +43,7 @@ import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.bean.MarketSocketBean;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
+import com.jyh.kxt.market.presenter.BaseChartPresenter;
 import com.jyh.kxt.market.presenter.KLinePresenter;
 import com.jyh.kxt.market.presenter.MarketDetailPresenter;
 import com.jyh.kxt.market.presenter.MinutePresenter;
@@ -72,8 +69,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class MarketDetailActivity extends BaseActivity implements ViewPortHandler.OnLongPressIndicatorHandler,
-        OnSocketTextMessage {
+public class MarketDetailActivity extends BaseActivity implements OnSocketTextMessage {
 
     @BindView(R.id.ll_market_detail_optional) LinearLayout llMarketDetailOptional;
     @BindView(R.id.iv_market_detail_optional_img) ImageView ivOptionalImage;
@@ -82,7 +78,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     @BindView(R.id.pll_content) PageLoadLayout pageLoadLayout;
 
 
-    @BindView(R.id.market_chart_frame) FrameLayout chartContainerLayout;
+    @BindView(R.id.market_chart_frame) public FrameLayout chartContainerLayout;
 
     /**
      * Head Layout 相关控件
@@ -113,19 +109,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     /**
      * 分时图的Chart
      */
-    public TextView minuteChartTime, minuteChartDesc;
-    public MyLineChart minuteChartView;
-    private MinutePresenter minutePresenter;
-
-    /**
-     * K线图的Chart
-     */
-    public CombinedChart combinedchart;
-    public TextView tvMa5, tvMa10, tvMa30;
-
-    public TextView tvKLineKaiPan, tvKLineZuiGao, tvKLineZuiDi, tvKLineShouPan;
-
-    private KLinePresenter kLinePresenter;
 
     private MarketDetailPresenter marketDetailPresenter;
     //点击上面的分时  日时等item
@@ -133,13 +116,15 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private RelativeLayout clickOldNavigationView;
 
     //存储请求过来的数据
-    private HashMap<Integer, List<MarketTrendBean>> marketTrendMap = new HashMap<>();
-    private HashMap<Integer, View> chartMap = new HashMap<>();
-//    private HashMap<Integer,KLinePresenter> kLinePresenterMap = new HashMap<>();
+    private HashMap<Integer, BaseChartPresenter> basePresenterMap = new HashMap<>();
 
 
     private MarketItemBean marketItemBean;
     private List<MarketItemBean> marketItemList;
+
+    private MarketDetailBean.ShareBean mDetailShare;
+    public MarketDetailBean mMarketDetailBean;
+    public MarketSocketBean marketSocketBean;
 
     private boolean defaultUpdateAddStatus = false;
     private int currentThemeSource = 0; //0表示白天 1表示夜间
@@ -149,10 +134,6 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     private boolean updateAddStatus = true;
     private ShareJson shareJson;
 
-    public MarketDetailBean mMarketDetailBean;
-    private MarketDetailBean.ShareBean mDetailShare;
-
-    public MarketSocketBean marketSocketBean;
     public boolean portrait = true;
 
     @OnClick({R.id.ll_market_detail_optional,
@@ -350,13 +331,13 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
     }
 
     private void requestChartData(final int fromSource) {
-
-        View chartView = chartMap.get(fromSource);
-        List<MarketTrendBean> localMarketList = marketTrendMap.get(fromSource);
+        BaseChartPresenter baseChartPresenter = basePresenterMap.get(fromSource);
 
         chartContainerLayout.removeAllViews();
-        if (chartView != null && localMarketList != null) {
-            chartContainerLayout.addView(chartView);
+        if (baseChartPresenter != null) {
+            baseChartPresenter.removeHighlight();
+
+            chartContainerLayout.addView(baseChartPresenter.getChartLayout());
             marketChartLoad.loadOver();
             return;
         }
@@ -372,60 +353,18 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                         marketChartLoad.loadOver();
 
                         List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
-                        marketTrendMap.put(fromSource, marketTrendList);
 
                         if (fromSource == 0) {
-                            LayoutInflater mInflater = LayoutInflater.from(getContext());
-                            View minuteLayout = mInflater.inflate(
-                                    R.layout.view_market_chart_minute,
-                                    chartContainerLayout,
-                                    false);
-                            chartContainerLayout.addView(minuteLayout);
-                            chartMap.put(fromSource, minuteLayout);
-
-                            minuteChartTime = (TextView) minuteLayout.findViewById(R.id.tv_minute_time);
-                            minuteChartDesc = (TextView) minuteLayout.findViewById(R.id.tv_current_price);
-                            minuteChartView = (MyLineChart) minuteLayout.findViewById(R.id.minute_chart);
-
-                            minutePresenter = new MinutePresenter(MarketDetailActivity.this);
-                            minutePresenter.initChart(MarketDetailActivity.this);
-                            minutePresenter.setData(marketTrendList);
-
-                            minuteChartView.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
-                                @Override
-                                public void onDoubleTap() {
-                                    fullScreenDisplay();
-                                }
-                            });
+                            MinutePresenter minutePresenter = new MinutePresenter(MarketDetailActivity.this);
+                            minutePresenter.initChart();
+                            minutePresenter.setData(marketTrendList, 0);
+                            basePresenterMap.put(fromSource, minutePresenter);
                         } else {
-                            LayoutInflater mInflater = LayoutInflater.from(getContext());
-                            View kLineLayout = mInflater.inflate(
-                                    R.layout.view_market_chart_kline,
-                                    chartContainerLayout,
-                                    false);
-                            chartContainerLayout.addView(kLineLayout);
-                            chartMap.put(fromSource, kLineLayout);
+                            KLinePresenter kLinePresenter = new KLinePresenter(MarketDetailActivity.this);
+                            kLinePresenter.initChart();
+                            kLinePresenter.setData(marketTrendList, fromSource);
 
-                            combinedchart = (CombinedChart) kLineLayout.findViewById(R.id.combinedchart);
-                            tvMa5 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma5);
-                            tvMa10 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma10);
-                            tvMa30 = (TextView) kLineLayout.findViewById(R.id.kline_tv_ma30);
-
-                            tvKLineKaiPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_kaipan);
-                            tvKLineZuiGao = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuigao);
-                            tvKLineZuiDi = (TextView) kLineLayout.findViewById(R.id.kline_tv_zuidi);
-                            tvKLineShouPan = (TextView) kLineLayout.findViewById(R.id.kline_tv_shoupan);
-
-                            kLinePresenter = new KLinePresenter(MarketDetailActivity.this);
-                            kLinePresenter.initChart(MarketDetailActivity.this);
-                            kLinePresenter.setData(marketTrendList, combinedchart, fromSource);
-
-                            combinedchart.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
-                                @Override
-                                public void onDoubleTap() {
-                                    fullScreenDisplay();
-                                }
-                            });
+                            basePresenterMap.put(fromSource, kLinePresenter);
                         }
                     }
 
@@ -436,35 +375,12 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 });
     }
 
-    private void fullScreenDisplay() {
+    public void fullScreenDisplay() {
         int requestedOrientation = getRequestedOrientation();
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 转小屏
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {// 转全屏
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-    }
-
-    @Override
-    public void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData) {
-
-        if (clickNavigationPosition == 0 && minuteChartView != null) {
-         /*   Entry entryForXIndex;
-            if (candleData instanceof LineData) {
-                entryForXIndex = ((LineData) candleData).getDataSets().get(0).getEntryForXIndex(xIndex);
-            } else {
-                entryForXIndex = ((CandleData) candleData).getDataSets().get(0).getEntryForXIndex(xIndex);
-            }
-            String text = "现价：" + entryForXIndex.getVal();
-            SpannableStringBuilder builder = new SpannableStringBuilder(text);
-
-            ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
-            builder.setSpan(redSpan, 3, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            minuteChartDesc.setText(builder);*/
-            minutePresenter.longPressIndicator(xIndex);
-        } else if (clickNavigationPosition != 0) {
-            kLinePresenter.longPressIndicator(xIndex);
         }
     }
 
@@ -756,8 +672,9 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 marketTrendBean.setVolume(0);//总量
                 marketTrendBean.setStart(0);//开盘时间
 
-                if (minutePresenter != null) {
-                    minutePresenter.notifyDataChanged(marketTrendBean);
+                BaseChartPresenter baseChartPresenter = basePresenterMap.get(0);
+                if (baseChartPresenter != null) {
+                    ((MinutePresenter) baseChartPresenter).notifyDataChanged(marketTrendBean);
                 }
             }
         }
@@ -776,10 +693,10 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 marketDetailPresenter.requestChartData(marketItemBean.getCode(), 1, new HttpListener<String>() {
                     @Override
                     protected void onResponse(String list) {
-                        View chartView = chartMap.get(1);
-                        if (chartView != null) {
+                        BaseChartPresenter baseChartPresenter = basePresenterMap.get(1);
+                        if (baseChartPresenter != null) {
                             List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
-                            kLinePresenter.setData(marketTrendList, chartView);
+                            baseChartPresenter.setData(marketTrendList, 1);
                         }
                     }
                 });
@@ -799,10 +716,10 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                 marketDetailPresenter.requestChartData(marketItemBean.getCode(), 2, new HttpListener<String>() {
                     @Override
                     protected void onResponse(String list) {
-                        View chartView = chartMap.get(2);
-                        if (chartView != null) {
+                        BaseChartPresenter baseChartPresenter = basePresenterMap.get(2);
+                        if (baseChartPresenter != null) {
                             List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
-                            kLinePresenter.setData(marketTrendList, chartView);
+                            baseChartPresenter.setData(marketTrendList, 2);
                         }
                     }
                 });
@@ -819,7 +736,7 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
             return;
         }
 
-        if (chartMap.get(clickNavigationPosition) == null) {
+        if (basePresenterMap.get(clickNavigationPosition) == null) {
             ToastView.makeText(this, "请稍后刷新");
             return;
         }
@@ -858,14 +775,13 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
                     protected void onResponse(String list) {
                         marketChartLoad.loadOver();
                         List<MarketTrendBean> marketTrendList = JSONArray.parseArray(list, MarketTrendBean.class);
-                        if (clickNavigationPosition == 0) {
-                            minutePresenter.setData(marketTrendList);
-                        } else {
-                            kLinePresenter.setData(marketTrendList, combinedchart);
-                        }
 
+                        BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
+                        baseChartPresenter.setData(marketTrendList, clickNavigationPosition);
                         isUpdateDataIng = false;
                         ivUpdateView.clearAnimation();
+
+                        baseChartPresenter.removeHighlight();
                     }
 
                     @Override
@@ -902,12 +818,8 @@ public class MarketDetailActivity extends BaseActivity implements ViewPortHandle
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (combinedchart != null) {
-                    combinedchart.invalidate();
-                }
-                if (minuteChartView != null) {
-                    minuteChartView.invalidate();
-                }
+                BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
+                baseChartPresenter.getChartView().invalidate();
             }
         }, 500);
     }

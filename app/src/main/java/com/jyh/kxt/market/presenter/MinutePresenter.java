@@ -5,16 +5,22 @@ import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
@@ -37,12 +43,15 @@ import java.util.List;
  * Created by Mr'Dai on 2017/7/18.
  */
 
-public class MinutePresenter extends BasePresenter {
+public class MinutePresenter extends BaseChartPresenter<MyLineChart> {
 
     @BindObject MarketDetailActivity chartActivity;
 
-    private MyXAxis xAxisLine;
+    private View minuteLayout;
+    private MyLineChart minuteChartView;
+    private TextView minuteChartTime, minuteChartDesc;
 
+    private MyXAxis xAxisLine;
     private MyYAxis axisRightLine;
     private MyYAxis axisLeftLine;
     private List<MarketTrendBean> minuteList;
@@ -51,22 +60,43 @@ public class MinutePresenter extends BasePresenter {
         super(iBaseView);
     }
 
-    public void initChart(ViewPortHandler.OnLongPressIndicatorHandler onLongPressIndicatorHandler) {
+    public void initChart() {
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        minuteLayout = mInflater.inflate(
+                R.layout.view_market_chart_minute,
+                chartActivity.chartContainerLayout,
+                false);
 
-        final ViewPortHandler viewPortHandler = chartActivity.minuteChartView.getViewPortHandler();
-        viewPortHandler.setOnLongPressIndicatorHandler(onLongPressIndicatorHandler);
+        chartActivity.chartContainerLayout.addView(minuteLayout);
+        minuteChartTime = (TextView) minuteLayout.findViewById(R.id.tv_minute_time);
+        minuteChartDesc = (TextView) minuteLayout.findViewById(R.id.tv_current_price);
+        minuteChartView = (MyLineChart) minuteLayout.findViewById(R.id.minute_chart);
 
-        chartActivity.minuteChartView.setScaleEnabled(false);
-        chartActivity.minuteChartView.setDrawBorders(true);
-        chartActivity.minuteChartView.setBorderWidth(1);
-        chartActivity.minuteChartView.setBorderColor(chartActivity.getResources().getColor(R.color.minute_grayLine));
-        chartActivity.minuteChartView.setDescription("");
+        minuteChartView.setOnDoubleTapListener(new CombinedChart.OnDoubleTapListener() {
+            @Override
+            public void onDoubleTap() {
+                chartActivity.fullScreenDisplay();
+            }
+        });
+        final ViewPortHandler viewPortHandler = minuteChartView.getViewPortHandler();
+        viewPortHandler.setOnLongPressIndicatorHandler(new ViewPortHandler.OnLongPressIndicatorHandler() {
+            @Override
+            public void longPressIndicator(int xIndex, BarLineScatterCandleBubbleData candleData) {
+                MinutePresenter.this.longPressIndicator(xIndex);
+            }
+        });
 
-        Legend lineChartLegend = chartActivity.minuteChartView.getLegend();
+        minuteChartView.setScaleEnabled(false);
+        minuteChartView.setDrawBorders(true);
+        minuteChartView.setBorderWidth(1);
+        minuteChartView.setBorderColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
+        minuteChartView.setDescription("");
+
+        Legend lineChartLegend = minuteChartView.getLegend();
         lineChartLegend.setEnabled(false);
 
         //x轴
-        xAxisLine = chartActivity.minuteChartView.getXAxis();
+        xAxisLine = minuteChartView.getXAxis();
         xAxisLine.setDrawLabels(true);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
@@ -76,7 +106,7 @@ public class MinutePresenter extends BasePresenter {
         // xAxisLine.setLabelsToSkip(59);
 
         //左边的Y轴数据
-        axisLeftLine = chartActivity.minuteChartView.getAxisLeft();
+        axisLeftLine = minuteChartView.getAxisLeft();
         axisLeftLine.setLabelCount(5, true);
         axisLeftLine.setDrawLabels(true);
         axisLeftLine.setDrawGridLines(true);
@@ -96,7 +126,7 @@ public class MinutePresenter extends BasePresenter {
         });
 
         //右边y
-        axisRightLine = chartActivity.minuteChartView.getAxisRight();
+        axisRightLine = minuteChartView.getAxisRight();
         axisRightLine.setLabelCount(5, true);
         axisRightLine.setDrawLabels(true);
         axisRightLine.setDrawGridLines(false);
@@ -118,7 +148,8 @@ public class MinutePresenter extends BasePresenter {
         });
     }
 
-    public void setData(List<MarketTrendBean> minuteList) {
+    @Override
+    public void setData(List<MarketTrendBean> minuteList, int fromSource) {
         this.minuteList = minuteList;
 
         MinuteParse mMinuteParse = new MinuteParse();
@@ -128,7 +159,7 @@ public class MinutePresenter extends BasePresenter {
         MyLeftMarkerView leftMarkerView = new MyLeftMarkerView(chartActivity, R.layout.mymarkerview);
         MyRightMarkerView rightMarkerView = new MyRightMarkerView(chartActivity, R.layout.mymarkerview);
         MyBottomMarkerView bottomMarkerView = new MyBottomMarkerView(chartActivity, R.layout.mymarkerview);
-        chartActivity.minuteChartView.setMarker(leftMarkerView, rightMarkerView, bottomMarkerView);
+        minuteChartView.setMarker(leftMarkerView, rightMarkerView, bottomMarkerView);
 
         //控件设置
         xAxisLine.setXLabels(mMinuteParse.getXLabels());
@@ -177,8 +208,8 @@ public class MinutePresenter extends BasePresenter {
 
         /*注老版本LineData参数可以为空，最新版本会报错，修改进入ChartData加入if判断*/
         LineData cd = new LineData(xLabelList, sets);
-        chartActivity.minuteChartView.setData(cd);
-        chartActivity.minuteChartView.invalidate();//刷新图
+        minuteChartView.setData(cd);
+        minuteChartView.invalidate();//刷新图
 
         longPressIndicator(minuteList.size() - 1);
     }
@@ -190,15 +221,15 @@ public class MinutePresenter extends BasePresenter {
 
         ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
         builder.setSpan(redSpan, 3, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        chartActivity.minuteChartDesc.setText(builder);
+        minuteChartDesc.setText(builder);
 
-        chartActivity.minuteChartTime.setText(marketTrendBean.getQuotetime());
+        minuteChartTime.setText(marketTrendBean.getQuotetime());
     }
 
     public void notifyDataChanged(MarketTrendBean marketTrendBean) {
         try {
             minuteList.add(marketTrendBean);
-            setData(minuteList);
+            setData(minuteList, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -217,4 +248,18 @@ public class MinutePresenter extends BasePresenter {
         ll.setLabel(baseValue + "");
         axisLeftLine.addLimitLine(ll);
     }
+
+    @Override
+    public View getChartLayout() {
+        return minuteLayout;
+    }
+    @Override
+    public void removeHighlight() {
+        minuteChartView.mChartTouchListener.onSingleTapUp(null);
+    }
+    @Override
+    public View getChartView() {
+        return minuteChartView;
+    }
+
 }
