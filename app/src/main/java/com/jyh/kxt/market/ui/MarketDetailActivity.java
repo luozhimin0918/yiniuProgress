@@ -799,12 +799,14 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         super.onResume();
 
         try {
-            JSONArray codes = new JSONArray();
-            codes.add(mMarketDetailBean.getData().getCode());
-            MarketConnectUtil.getInstance().sendSocketParams(
-                    this,
-                    codes,
-                    this);
+            if (mMarketDetailBean != null) {
+                JSONArray codes = new JSONArray();
+                codes.add(mMarketDetailBean.getData().getCode());
+                MarketConnectUtil.getInstance().sendSocketParams(
+                        this,
+                        codes,
+                        this);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

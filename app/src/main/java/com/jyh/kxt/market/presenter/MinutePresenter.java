@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,9 @@ import com.github.mikephil.charting.mychart.MyYAxis;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -186,9 +189,13 @@ public class MinutePresenter extends BaseChartPresenter<MyLineChart> {
         ArrayList<String> xLabelList = new ArrayList<>();
         ArrayList<Entry> lineCJEntries = new ArrayList<>();
 
+
         for (int i = 0, j = 0; i < mMinuteParse.getMarketTrendBeanList().size(); i++, j++) {
             MarketTrendBean marketTrendBean = mMinuteParse.getMarketTrendBeanList().get(j);
             xLabelList.add(marketTrendBean.getQuotetime());
+
+
+
             if (marketTrendBean == null) {
                 lineCJEntries.add(new Entry(Float.NaN, i));
                 continue;

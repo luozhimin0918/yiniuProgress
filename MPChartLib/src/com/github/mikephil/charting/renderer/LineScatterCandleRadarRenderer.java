@@ -8,10 +8,13 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
+import com.github.mikephil.charting.data.CandleData;
+import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.HighlightLineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
+import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -37,16 +40,19 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
     }
 
     //K线图滑动时日期跟随效果
-    public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set, HighlightLineData
-            highlightLineData) {
+    public void drawHighlightLines(Canvas c, float[] pts, ILineScatterCandleRadarDataSet set,
+                                   HighlightLineData highlightLineData) {
+        if (highlightLineData == null) {
+            return;
+        }
         // set color and stroke-width
-        mHighlightPaint.setColor(set.getHighLightColor());
         mHighlightPaint.setStrokeWidth(set.getHighlightLineWidth());
         // draw highlighted lines (if enabled)
         mHighlightPaint.setPathEffect(set.getDashPathEffectHighlight());
 
         // draw vertical highlight lines
         if (set.isVerticalHighlightIndicatorEnabled()) {
+            mHighlightPaint.setColor(set.getHighLightColor());
             // create vertical path
             mHighlightLinePath.reset();
             mHighlightLinePath.moveTo(pts[0], mViewPortHandler.contentTop());
@@ -141,18 +147,105 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
         // draw horizontal highlight lines
         if (set.isHorizontalHighlightIndicatorEnabled()) {
 
-            // create horizontal path
-            mHighlightLinePath.reset();
-            mHighlightLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
-            mHighlightLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
-
-            c.drawPath(mHighlightLinePath, mHighlightPaint);
+            mHighlightPaint.setColor(set.getHighLightColor());
 
             int xIndex = highlightLineData.getxIndex();
             Entry entryForXIndex = set.getEntryForXIndex(xIndex);
-            if (entryForXIndex != null) {
-                String price = String.valueOf(entryForXIndex.getVal());
 
+            if ("minute".equals(set.getLabel())) {
+                // create horizontal path
+                mHighlightLinePath.reset();
+                mHighlightLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
+                mHighlightLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
+
+                c.drawPath(mHighlightLinePath, mHighlightPaint);
+
+                if (entryForXIndex != null) {
+                    String price = String.valueOf(entryForXIndex.getVal());
+
+                    int textPadding = 3;
+
+                    /**
+                     * 绘制价格
+                     */
+                    float labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, price);
+                    float labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, price);
+
+                    mHighlightDatePaint.setColor(set.getHighLightColor());
+
+                    float left = mViewPortHandler.contentLeft();
+                    c.drawRect(new RectF(left,
+                                    pts[1] - labelLineHeight - textPadding,
+                                    left + labelLineWidth + textPadding,
+                                    pts[1] + textPadding),
+                            mHighlightDatePaint);
+
+                    mHighlightDatePaint.setColor(Color.WHITE);
+                    c.drawText(price,
+                            left,
+                            pts[1], mHighlightDatePaint);
+
+                    /**
+                     * 绘制涨跌幅
+                     */
+                    LineDataSet lineDataSet = (LineDataSet) set;
+                    float newPrice = Float.parseFloat(price);
+                    double zdfValue = ((newPrice - lineDataSet.getLastPrice()) / lineDataSet.getLastPrice()) * 100;
+                    DecimalFormat df = new DecimalFormat("######0.0000");
+                    String zdf = df.format(zdfValue) + "%";
+
+                    labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, zdf);
+                    labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, zdf);
+                    mHighlightDatePaint.setColor(set.getHighLightColor());
+                    //右边的
+                    float right = mViewPortHandler.contentRight();
+                    c.drawRect(new RectF(right - labelLineWidth - textPadding,
+                                    pts[1] - labelLineHeight - textPadding,
+                                    right,
+                                    pts[1] + textPadding),
+                            mHighlightDatePaint);
+
+                    mHighlightDatePaint.setColor(Color.WHITE);
+                    c.drawText(zdf,
+                            right - labelLineWidth - textPadding,
+                            pts[1], mHighlightDatePaint);
+
+                }
+            } else {
+                String price;
+
+                float[] linePoint = new float[2];
+
+                CandleEntry mCandleEntry = (CandleEntry) entryForXIndex;
+                float[] shadowBuffers = mCandleEntry.getShadowBuffers();
+
+                float open = mCandleEntry.getOpen();
+                float close = mCandleEntry.getClose();
+
+                if (open > close) {//跌
+                    price = String.valueOf(close);
+
+                    linePoint[0] = shadowBuffers[4];
+                    linePoint[1] = shadowBuffers[5];
+
+                } else if (open < close) {//涨
+                    price = String.valueOf(open);
+
+                    linePoint[0] = shadowBuffers[0];
+                    linePoint[1] = shadowBuffers[1];
+
+                } else {
+                    price = String.valueOf(open);
+
+                    linePoint[0] = shadowBuffers[0];
+                    linePoint[1] = shadowBuffers[1];
+                }
+
+                mHighlightLinePath.reset();
+                mHighlightLinePath.moveTo(mViewPortHandler.contentLeft(), linePoint[1]);
+                mHighlightLinePath.lineTo(mViewPortHandler.contentRight(), linePoint[1]);
+
+                c.drawPath(mHighlightLinePath, mHighlightPaint);
                 int textPadding = 3;
 
                 /**
@@ -165,41 +258,15 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
 
                 float left = mViewPortHandler.contentLeft();
                 c.drawRect(new RectF(left,
-                                pts[1] - labelLineHeight - textPadding,
+                                linePoint[1] - labelLineHeight - textPadding,
                                 left + labelLineWidth + textPadding,
-                                pts[1] + textPadding),
+                                linePoint[1] + textPadding),
                         mHighlightDatePaint);
 
                 mHighlightDatePaint.setColor(Color.WHITE);
                 c.drawText(price,
-                        left,
-                        pts[1], mHighlightDatePaint);
-
-                /**
-                 * 绘制涨跌幅
-                 */
-                LineDataSet lineDataSet = (LineDataSet) set;
-                float newPrice = Float.parseFloat(price);
-                double zdfValue = ((newPrice - lineDataSet.getLastPrice()) / lineDataSet.getLastPrice()) * 100;
-                DecimalFormat df = new DecimalFormat("######0.0000");
-                String zdf = df.format(zdfValue) + "%";
-
-                labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, zdf);
-                labelLineWidth = Utils.calcTextWidth(mHighlightDatePaint, zdf);
-                mHighlightDatePaint.setColor(set.getHighLightColor());
-                //右边的
-                float right = mViewPortHandler.contentRight();
-                c.drawRect(new RectF(right - labelLineWidth - textPadding,
-                                pts[1] - labelLineHeight - textPadding,
-                                right,
-                                pts[1] + textPadding),
-                        mHighlightDatePaint);
-
-                mHighlightDatePaint.setColor(Color.WHITE);
-                c.drawText(zdf,
-                        right - labelLineWidth - textPadding,
-                        pts[1], mHighlightDatePaint);
-
+                        left + textPadding / 2,
+                        linePoint[1]  , mHighlightDatePaint);
             }
         }
     }

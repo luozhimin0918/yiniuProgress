@@ -81,6 +81,16 @@ public class XAxis extends AxisBase {
     /** the position of the x-labels relative to the chart */
     private XAxisPosition mPosition = XAxisPosition.TOP;
 
+    private ArrayList<String> formatList;
+
+    public void setFormatList(ArrayList<String> formatList) {
+        this.formatList = formatList;
+    }
+
+    public ArrayList<String> getFormatList() {
+        return formatList;
+    }
+
     /** enum for the position of the x-labels relative to the chart */
     public enum XAxisPosition {
         TOP, BOTTOM, BOTH_SIDED, TOP_INSIDE, BOTTOM_INSIDE

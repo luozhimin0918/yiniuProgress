@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -32,7 +33,10 @@ import com.jyh.kxt.market.kline.bean.KLineParse;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -165,15 +169,46 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
         mKLineParse.setKLineList(kLineList);
 
         ArrayList<String> xLabelList = new ArrayList<>();
+        ArrayList<String> xFormatList = new ArrayList<>();
+
         ArrayList<CandleEntry> candleEntries = new ArrayList<>();
 
         line5Entries = new ArrayList<>();
         line10Entries = new ArrayList<>();
         line30Entries = new ArrayList<>();
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         for (int i = 0; i < kLineList.size(); i++) {
 
             xLabelList.add(kLineList.get(i).getQuotetime());
+
+            try {
+                Date parseDate = simpleDateFormat.parse(kLineList.get(i).getQuotetime());
+                long dateTimeLong = parseDate.getTime();
+
+                String dateTimeLabel = "";
+                switch (fromSource){
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        dateTimeLabel = DateFormat.format("MM-dd HH:mm", dateTimeLong).toString();
+                        break;
+                    case 5:
+                    case 6:
+                        dateTimeLabel = DateFormat.format("yyyy-MM-dd", dateTimeLong).toString();
+                        break;
+                    case 7:
+                        dateTimeLabel = DateFormat.format("yyyy-MM", dateTimeLong).toString();
+                        break;
+                }
+                xFormatList.add(dateTimeLabel);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             candleEntries.add(
                     new CandleEntry(i,
@@ -193,11 +228,13 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
             }
         }
 
+        xAxisK.setFormatList(xFormatList);
+
         /**
          * 每个K值的属性
          */
         CandleDataSet candleDataSet = new CandleDataSet(candleEntries, "KLine:" + fromSource);
-        candleDataSet.setDrawHorizontalHighlightIndicator(false);
+        candleDataSet.setDrawHorizontalHighlightIndicator(true);
         candleDataSet.setHighlightEnabled(true);
         candleDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.marker_line));
         candleDataSet.setValueTextSize(10f);

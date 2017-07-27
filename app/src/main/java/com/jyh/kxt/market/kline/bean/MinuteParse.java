@@ -1,7 +1,10 @@
 package com.jyh.kxt.market.kline.bean;
 
+import android.text.format.DateFormat;
 import android.util.SparseArray;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,12 +57,23 @@ public class MinuteParse {
     }
 
     public void parseMinuteList() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         int labelsPadding = marketTrendBeanList.size() / 4;
         for (int i = 1; i <= 4; i++) {
             int labelPosition = labelsPadding * i - 1;
             MarketTrendBean marketTrendBean = marketTrendBeanList.get(labelPosition);//坐标位置-1
 
-            dateLabels.put(labelPosition, marketTrendBean.getQuotetime().split(" ")[1]);
+            try {
+                Date parseDate = simpleDateFormat.parse(marketTrendBean.getQuotetime());
+                long dateTimeLong = parseDate.getTime();
+
+                String dateTimeLabel = DateFormat.format("HH:mm", dateTimeLong).toString();
+                dateLabels.put(labelPosition, dateTimeLabel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
         //默认使用第一个值当最小值

@@ -20,6 +20,7 @@ public class CandleEntry extends Entry {
     /** open value */
     private float mOpen = 0f;
 
+    private float[] shadowBuffers;
     /**
      * Constructor.
      * 
@@ -144,5 +145,14 @@ public class CandleEntry extends Entry {
 
     public void setOpen(float mOpen) {
         this.mOpen = mOpen;
+    }
+
+
+    public void setShadowBuffers(float[] shadowBuffers) {
+        this.shadowBuffers = shadowBuffers;
+    }
+
+    public float[] getShadowBuffers() {
+        return shadowBuffers;
     }
 }

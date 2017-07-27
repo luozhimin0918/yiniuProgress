@@ -22,6 +22,7 @@ import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*画蜡烛图、值、高亮*/
@@ -162,8 +163,20 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                 mBodyBuffers[3] = open * phaseY;
 
                 trans.pointValuesToPixel(mBodyBuffers);
-
                 // draw body differently for increasing and decreasing entry
+
+
+                if (dataSet instanceof CandleDataSet) {
+                    CandleDataSet candleDataSet = (CandleDataSet) dataSet;
+                    CandleEntry mCandleEntry = candleDataSet.getEntryForXIndex(xIndex);
+
+                    float[] shadowBufferArray = new float[8];
+                    for (int i = 0; i < mShadowBuffers.length; i++) {
+                        shadowBufferArray[i] = mShadowBuffers[i];
+                    }
+                    mCandleEntry.setShadowBuffers(shadowBufferArray);
+                }
+
                 if (open > close) { // decreasing 跌
 
                     if (dataSet.getDecreasingColor() == ColorTemplate.COLOR_NONE) {
@@ -484,7 +497,6 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                 float[] pts = new float[]{
                         xIndex, y
                 };
-
                 mChart.getTransformer(set.getAxisDependency()).pointValuesToPixel(pts);
 
                 try {
