@@ -9,8 +9,11 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,8 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
@@ -371,8 +376,16 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                     @Override
                     protected void onErrorResponse(VolleyError error) {
                         marketChartLoad.loadError();
+                        View loadViewLayout = marketChartLoad.getLoadViewLayout();
+                        if (loadViewLayout != null) {
+                            View errorButton = loadViewLayout.findViewWithTag("errorButton");
+                            if (errorButton != null) {
+                                errorButton.setVisibility(View.GONE);
+                            }
+                        }
                     }
-                });
+                }
+        );
     }
 
     public void fullScreenDisplay() {
@@ -561,7 +574,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         String lastTime = jsonObject.getString("t");//最后更新时间
         long lastTimeLong = Long.parseLong(lastTime) * 1000;
 
-        marketSocketBean.lastTime = "最后更新时间：" + DateFormat.format("HH:mm:ss", lastTimeLong);
+        marketSocketBean.lastTime = "最后更新时间:" + DateFormat.format("HH:mm:ss", lastTimeLong);
         if (marketChartLastTime != null) {
             marketChartLastTime.setText(marketSocketBean.lastTime);
         }
@@ -572,8 +585,28 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             e.printStackTrace();
         }
 
-        DecimalFormat dfChange = new DecimalFormat("0.00");
-        String formatChange = dfChange.format(change);
+        //更改最新价格
+
+        BaseChartPresenter baseChartPresenter = basePresenterMap.get(0);
+        if (baseChartPresenter != null) {
+            MinutePresenter minutePresenter = (MinutePresenter) baseChartPresenter;
+            MyLineChart chartView = (MyLineChart) minutePresenter.getChartView();
+            if (chartView.mChartTouchListener.getTouchMode() != 7) {
+
+                String minuteDesc = "价位:" + marketSocketBean.price;
+                SpannableStringBuilder builder = new SpannableStringBuilder(minuteDesc);
+
+                ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
+                builder.setSpan(redSpan, 3, minuteDesc.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                minutePresenter.minuteChartDesc.setText(builder);
+                minutePresenter.minuteChartTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", lastTimeLong));
+            }
+        }
+
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        String formatChange = df.format(change);
 
         marketSocketBean.range = marketSocketBean.range.replace("%", "");
         final double rangeDouble = Double.parseDouble(marketSocketBean.range);
@@ -621,7 +654,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             marketHeadLayout.setBackgroundColor(Color.parseColor("#242424"));
         }
 
-        DecimalFormat df = new DecimalFormat("0.0000");
         String formatRange = df.format(rangeDouble) + "%";
 
         marketChartLow.setText(marketSocketBean.price);
@@ -737,7 +769,8 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         }
 
         if (basePresenterMap.get(clickNavigationPosition) == null) {
-            ToastView.makeText(this, "请稍后刷新");
+//            ToastView.makeText(this, "请稍后刷新");
+            requestChartData(clickNavigationPosition);
             return;
         }
 

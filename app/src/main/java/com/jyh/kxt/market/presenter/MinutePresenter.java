@@ -53,7 +53,7 @@ public class MinutePresenter extends BaseChartPresenter<MyLineChart> {
 
     private View minuteLayout;
     private MyLineChart minuteChartView;
-    private TextView minuteChartTime, minuteChartDesc;
+    public TextView minuteChartTime, minuteChartDesc;
 
     private MyXAxis xAxisLine;
     private MyYAxis axisRightLine;
@@ -151,7 +151,7 @@ public class MinutePresenter extends BaseChartPresenter<MyLineChart> {
             public String getFormattedValue(float value, YAxis yAxis) {
                 float lastPrice = Float.parseFloat(chartActivity.marketSocketBean.zuoshou);
                 float zdfValue = (value - lastPrice) / lastPrice * 100;
-                DecimalFormat df = new DecimalFormat("######0.0000");
+                DecimalFormat df = new DecimalFormat("######0.00");
                 return df.format(zdfValue) + "%";
             }
         });

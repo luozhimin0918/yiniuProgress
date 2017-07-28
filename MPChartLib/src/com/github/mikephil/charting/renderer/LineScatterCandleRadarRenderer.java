@@ -191,7 +191,7 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
                     LineDataSet lineDataSet = (LineDataSet) set;
                     float newPrice = Float.parseFloat(price);
                     double zdfValue = ((newPrice - lineDataSet.getLastPrice()) / lineDataSet.getLastPrice()) * 100;
-                    DecimalFormat df = new DecimalFormat("######0.0000");
+                    DecimalFormat df = new DecimalFormat("######0.00");
                     String zdf = df.format(zdfValue) + "%";
 
                     labelLineHeight = Utils.calcTextHeight(mHighlightDatePaint, zdf);
@@ -223,22 +223,22 @@ public abstract class LineScatterCandleRadarRenderer extends DataRenderer {
                 float close = mCandleEntry.getClose();
 
                 if (open > close) {//跌
-                    price = String.valueOf(close);
+                    price = String.valueOf(mCandleEntry.getClose());
 
-                    linePoint[0] = shadowBuffers[4];
-                    linePoint[1] = shadowBuffers[5];
+                    linePoint[0] = shadowBuffers[6];
+                    linePoint[1] = shadowBuffers[7];
 
                 } else if (open < close) {//涨
-                    price = String.valueOf(open);
+                    price = String.valueOf(mCandleEntry.getClose());
 
-                    linePoint[0] = shadowBuffers[0];
-                    linePoint[1] = shadowBuffers[1];
+                    linePoint[0] = shadowBuffers[2];
+                    linePoint[1] = shadowBuffers[3];
 
                 } else {
                     price = String.valueOf(open);
 
-                    linePoint[0] = shadowBuffers[0];
-                    linePoint[1] = shadowBuffers[1];
+                    linePoint[0] = shadowBuffers[2];
+                    linePoint[1] = shadowBuffers[3];
                 }
 
                 mHighlightLinePath.reset();

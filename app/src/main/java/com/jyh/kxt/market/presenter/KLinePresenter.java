@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.mychart.MyLineChart;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -33,6 +34,7 @@ import com.jyh.kxt.market.kline.bean.KLineParse;
 import com.jyh.kxt.market.kline.bean.MarketTrendBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -142,7 +144,19 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
         axisRightK.setGridColor(ContextCompat.getColor(mContext, R.color.minute_grayLine));
         axisRightK.setTextColor(ContextCompat.getColor(mContext, R.color.minute_zhoutv));
         axisRightK.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-
+        axisRightK.setValueFormatter(new YAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                DecimalFormat df = new DecimalFormat("######0.00");
+                return df.format(value);
+//                if (value == (int) value) {
+//                    return String.valueOf((int)value);
+//                } else {
+//                    DecimalFormat df = new DecimalFormat("######0.00");
+//                    return df.format(value);
+//                }
+            }
+        });
         combinedChart.setDragDecelerationEnabled(true);
         combinedChart.setDragDecelerationFrictionCoef(0.2f);
     }
@@ -188,7 +202,7 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
                 long dateTimeLong = parseDate.getTime();
 
                 String dateTimeLabel = "";
-                switch (fromSource){
+                switch (fromSource) {
                     case 1:
                     case 2:
                     case 3:
@@ -293,17 +307,16 @@ public class KLinePresenter extends BaseChartPresenter<CombinedChart> {
         combinedData.setData(lineData);
 
         combinedChart.setData(combinedData);
-        combinedChart.moveViewToX(kLineList.size() - 1);
 
         ViewPortHandler viewPortHandlerCombined = combinedChart.getViewPortHandler();
         float xMaxScale = calculateMaxScale(xLabelList.size());
         viewPortHandlerCombined.setMaximumScaleX(xMaxScale);
         Matrix matrixCombined = viewPortHandlerCombined.getMatrixTouch();
-
         //最大缩放值
-        matrixCombined.postScale(xMaxScale / 3, 1f);
-
+        matrixCombined.reset();
+        matrixCombined.postScale(xMaxScale/ 2, 1f);
         combinedChart.moveViewToX(kLineList.size() - 1);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

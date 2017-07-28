@@ -213,14 +213,14 @@
             android:id="@+id/iv_bar_function"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:src="@mipmap/icon_market_update"/>
 
         <ImageView
             android:id="@+id/iv_bar_break"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:src="@mipmap/icon_market_close"/>
 
     </LinearLayout>

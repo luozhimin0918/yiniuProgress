@@ -82,8 +82,15 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
             errorTv.setText("网络无法连接");
         }
 
-        llLoadView.findViewById(R.id.id_volley_load_error).setOnClickListener(this);
+        TextView errorButton = (TextView) llLoadView.findViewById(R.id.id_volley_load_error);
+        errorButton.setTag("errorButton");
+        errorButton.setOnClickListener(this);
+
         updateView();
+    }
+
+    public View getLoadViewLayout() {
+        return llLoadView;
     }
 
     public void loadEmptyData() {
