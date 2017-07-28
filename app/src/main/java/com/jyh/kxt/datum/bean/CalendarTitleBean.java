@@ -1,6 +1,5 @@
 package com.jyh.kxt.datum.bean;
 
-import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
 

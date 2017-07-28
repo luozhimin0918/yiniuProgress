@@ -27,6 +27,7 @@ import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
+import com.jyh.kxt.base.util.AdUtils;
 import com.jyh.kxt.base.utils.ColorFormatUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
@@ -42,6 +43,7 @@ import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.user.adapter.CollectVideoAdapter;
 import com.library.util.ObserverCall;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
@@ -146,6 +148,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                 CalendarTitleBean mCalendarTitleBean = (CalendarTitleBean) mCalendarType;
                 viewHolder0.tvTitle.setText(mCalendarTitleBean.getName());
                 viewHolder0.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
+                viewHolder0.tvTitle.setVisibility(View.VISIBLE);
 
                 View paddingTagView = viewHolder0.llContent.findViewWithTag("paddingView");
                 if (paddingTagView != null) {
@@ -165,111 +168,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
 
-                if (mCalendarTitleBean.isShowAd()) {
-                    Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
-                    int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-                    viewHolder0.tvAd1.setMaxWidth(adTvMaxWidth);
-
-                    List<AdTitleItemBean> ads = mCalendarTitleBean.getAds();
-                    if (ads == null || ads.size() == 0) {
-                        viewHolder0.tvAd1.setVisibility(View.GONE);
-                        viewHolder0.tvAd2.setVisibility(View.GONE);
-                        viewHolder0.ivAd.setVisibility(View.GONE);
-                    } else if (ads.size() == 1) {
-
-
-
-                        viewHolder0.tvAd1.setVisibility(View.VISIBLE);
-                        viewHolder0.ivAd.setVisibility(View.VISIBLE);
-                        final AdTitleItemBean adItemJson = ads.get(0);
-                        AdTitleIconBean icon = mCalendarTitleBean.getIcon();
-
-                        ad1TvColorDay = adItemJson.getDay_color();
-                        ad1TvColorNight = adItemJson.getNight_color();
-                        if (icon != null) {
-                            adIconDay = icon.getDay_icon();
-                            adIconNight = icon.getNight_icon();
-                        }
-
-                        if (isNight) {
-                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                            if (adIconNight != null) {
-                                Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
-                            }
-                        } else {
-                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                            if (adIconDay != null) {
-                                Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
-                            }
-                        }
-
-
-                        viewHolder0.tvAd1.setText(adItemJson.getTitle());
-                        viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson
-                                                .getO_action(), adItemJson
-                                                .getO_id(),
-                                        adItemJson.getHref());
-                            }
-                        });
-                        viewHolder0.tvAd2.setVisibility(View.GONE);
-                    } else {
-                        viewHolder0.tvAd1.setVisibility(View.VISIBLE);
-                        viewHolder0.tvAd2.setVisibility(View.VISIBLE);
-                        viewHolder0.ivAd.setVisibility(View.VISIBLE);
-                        final AdTitleItemBean adItemJson = ads.get(0);
-                        final AdTitleItemBean adItemJson2 = ads.get(1);
-                        AdTitleIconBean icon = mCalendarTitleBean.getIcon();
-                        if (icon != null) {
-                            adIconDay = icon.getDay_icon();
-                            adIconNight = icon.getNight_icon();
-                        }
-
-                        if (isNight) {
-                            ad1TvColorNight = adItemJson.getNight_color();
-                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                            viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
-                            if (adIconNight != null) {
-                                Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
-                            }
-                        } else {
-                            ad1TvColorDay = adItemJson.getNight_color();
-                            viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                            viewHolder0.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
-                            if (adIconDay != null) {
-                                Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
-                            }
-                        }
-
-
-                        viewHolder0.tvAd1.setText(adItemJson.getTitle());
-                        viewHolder0.tvAd1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson
-                                                .getO_action(), adItemJson
-                                                .getO_id(),
-                                        adItemJson.getHref());
-                            }
-                        });
-                        viewHolder0.tvAd2.setText(adItemJson2.getTitle());
-                        viewHolder0.tvAd2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2
-                                                .getO_action(),
-                                        adItemJson2.getO_id(),
-                                        adItemJson2.getHref());
-                            }
-                        });
-                    }
-                } else {
-                    viewHolder0.tvAd1.setVisibility(View.GONE);
-                    viewHolder0.tvAd2.setVisibility(View.GONE);
-                    viewHolder0.ivAd.setVisibility(View.GONE);
-                }
+                setAd(viewHolder0, mCalendarTitleBean);
 
                 break;
             case 1:
@@ -398,6 +297,143 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
         return view;
     }
 
+    private void setAd(ViewHolder0 viewHolder0, CalendarTitleBean mCalendarTitleBean) {
+        if (mCalendarTitleBean.isShowAd()) {
+            Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+            int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
+            viewHolder0.tvAd1.setMaxWidth(adTvMaxWidth);
+
+            List<AdTitleItemBean> ads = AdUtils.checkAdPosition(mCalendarTitleBean.getAds()) ;
+            if (ads == null || ads.size() == 0) {
+                viewHolder0.tvAd1.setVisibility(View.GONE);
+                viewHolder0.tvAd2.setVisibility(View.GONE);
+                viewHolder0.ivAd.setVisibility(View.GONE);
+            } else if (ads.size() == 1) {
+
+                viewHolder0.ivAd.setVisibility(View.VISIBLE);
+                final AdTitleItemBean adItemJson = ads.get(0);
+                AdTitleIconBean icon = mCalendarTitleBean.getIcon();
+
+                ad1TvColorDay = adItemJson.getDay_color();
+                ad1TvColorNight = adItemJson.getNight_color();
+                if (icon != null) {
+                    adIconDay = icon.getDay_icon();
+                    adIconNight = icon.getNight_icon();
+                }
+
+                if (isNight) {
+                    viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+                    if (adIconNight != null) {
+                        Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                    }
+                } else {
+                    viewHolder0.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
+                    if (adIconDay != null) {
+                        Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                    }
+                }
+
+                setAd(viewHolder0,adItemJson,0,false);
+
+            } else {
+                viewHolder0.ivAd.setVisibility(View.VISIBLE);
+                final AdTitleItemBean adItemJson = ads.get(0);
+                final AdTitleItemBean adItemJson2 = ads.get(1);
+                AdTitleIconBean icon = mCalendarTitleBean.getIcon();
+                if (icon != null) {
+                    adIconDay = icon.getDay_icon();
+                    adIconNight = icon.getNight_icon();
+                }
+
+                if (isNight) {
+                    ad1TvColorNight = adItemJson.getNight_color();
+                    if (adIconNight != null) {
+                        Glide.with(mContext).load(adIconNight).into(viewHolder0.ivAd);
+                    }
+                } else {
+                    ad1TvColorDay = adItemJson.getNight_color();
+                    if (adIconDay != null) {
+                        Glide.with(mContext).load(adIconDay).into(viewHolder0.ivAd);
+                    }
+                }
+
+
+                setAd(viewHolder0,adItemJson,0,true);
+                setAd(viewHolder0,adItemJson2,1,true);
+            }
+        } else {
+            viewHolder0.tvAd1.setVisibility(View.GONE);
+            viewHolder0.tvAd2.setVisibility(View.GONE);
+            viewHolder0.ivAd.setVisibility(View.GONE);
+        }
+    }
+
+    private void setAd(ViewHolder0 holder, final AdTitleItemBean ad, int position, boolean isShowAll) {
+        if(ad==null) return;
+        if (isShowAll){
+            if(position==0){
+                //左
+                holder.tvAd2.setVisibility(View.VISIBLE);
+                holder.tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                holder.tvAd2.setText(ad.getTitle());
+            }else{
+                //右
+                holder.tvAd1.setVisibility(View.VISIBLE);
+                holder.tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                holder.tvAd1.setText(ad.getTitle());
+            }
+        }else{
+            String adPosition = ad.getPosition();
+            if(adPosition==null||adPosition.equals("1")){
+                //左
+                holder.tvAd1.setVisibility(View.GONE);
+                holder.tvAd2.setVisibility(View.VISIBLE);
+                holder.tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                holder.tvAd2.setText(ad.getTitle());
+            }else{
+                //右
+                holder.tvAd1.setVisibility(View.VISIBLE);
+                holder.tvAd2.setVisibility(View.GONE);
+                holder.tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                holder.tvAd1.setText(ad.getTitle());
+
+            }
+        }
+        holder.tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+        holder.tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
+    }
 
     class ViewBaseHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoqi;

@@ -34,6 +34,7 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
+import com.jyh.kxt.base.util.AdUtils;
 import com.jyh.kxt.base.utils.ColorFormatUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
@@ -45,6 +46,7 @@ import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.main.json.AdJson;
+import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketHotBean;
@@ -116,7 +118,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         mainHeaderView = new LinearLayout(mContext);
         mainHeaderView.setOrientation(LinearLayout.VERTICAL);
-        AbsListView.LayoutParams mainHeaderParams = new AbsListView.LayoutParams(
+        final AbsListView.LayoutParams mainHeaderParams = new AbsListView.LayoutParams(
                 AbsListView.LayoutParams.MATCH_PARENT,
                 AbsListView.LayoutParams.WRAP_CONTENT);
         mainHeaderView.setLayoutParams(mainHeaderParams);
@@ -152,6 +154,12 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                                 createHotView(JSON.parseObject(JSON.toJSONString(marketBean), MarketHotBean.class));
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                MarketHotBean marketHotBean = new MarketHotBean();
+                                marketHotBean.setType("hot");
+                                MarketHotBean.DataBean dataBean = new MarketHotBean.DataBean();
+                                dataBean.setData(JSON.parseArray(JSONObject.toJSONString(marketBean.getData()), MarketItemBean.class));
+                                marketHotBean.setData(dataBean);
+                                createHotView(marketHotBean);
                             }
                             break;
                         case "ad":
@@ -408,7 +416,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
 
-        List<AdTitleItemBean> ads = data.getAd();
+        List<AdTitleItemBean> ads = AdUtils.checkAdPosition(data.getAd());
         if (ads == null || ads.size() == 0) {
             tvAd1.setVisibility(View.GONE);
             tvAd2.setVisibility(View.GONE);
@@ -438,21 +446,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                     Glide.with(mContext).load(adIconDay).into(ivAd);
             }
 
-            tvAd1.setVisibility(View.VISIBLE);
-            tvAd1.setText(adItemJson.getTitle());
             ivAd.setVisibility(View.VISIBLE);
-            tvAd1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
-                            adItemJson.getHref());
-                }
-            });
-
-            tvAd2.setVisibility(View.GONE);
+            setAd(tvAd1, tvAd2, adItemJson, 0, false);
         } else {
-            tvAd1.setVisibility(View.VISIBLE);
-            tvAd2.setVisibility(View.VISIBLE);
             ivAd.setVisibility(View.VISIBLE);
             final AdTitleItemBean adItemJson = ads.get(0);
             final AdTitleItemBean adItemJson2 = ads.get(1);
@@ -485,22 +481,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                     Glide.with(mContext).load(adIconDay).into(ivAd);
             }
 
-            tvAd1.setText(adItemJson.getTitle());
-            tvAd1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
-                            adItemJson.getHref());
-                }
-            });
-            tvAd2.setText(adItemJson2.getTitle());
-            tvAd2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2.getO_action(), adItemJson2.getO_id(),
-                            adItemJson2.getHref());
-                }
-            });
+            setAd(tvAd1, tvAd2, adItemJson, 0, true);
+            setAd(tvAd1, tvAd2, adItemJson2, 1, true);
         }
         tvTitle.setText("热门行情");
 
@@ -535,6 +517,73 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketItemBeens);
         marketItemFragment.refreshableView.setAdapter(marketMainItemAdapter);
+    }
+
+    private void setAd(TextView tvAd1, TextView tvAd2, final AdTitleItemBean ad, int position, boolean isShowAll) {
+        if (ad == null) return;
+        if (isShowAll) {
+            if (position == 0) {
+                //左
+                tvAd2.setVisibility(View.VISIBLE);
+                tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd2.setText(ad.getTitle());
+            } else {
+                //右
+                tvAd1.setVisibility(View.VISIBLE);
+                tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd1.setText(ad.getTitle());
+            }
+        } else {
+            String adPosition = ad.getPosition();
+            if (adPosition == null || adPosition.equals("1")) {
+                //左
+                tvAd1.setVisibility(View.GONE);
+                tvAd2.setVisibility(View.VISIBLE);
+                tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd2.setText(ad.getTitle());
+            } else {
+                //右
+                tvAd1.setVisibility(View.VISIBLE);
+                tvAd2.setVisibility(View.GONE);
+                tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd1.setText(ad.getTitle());
+
+            }
+        }
+        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+        tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
     }
 
     private void createPaddingView(int heightPx) {

@@ -149,8 +149,13 @@ public class NewsPresenter extends BasePresenter {
                             try {
                                 news = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                news = new MainNewsContentJson();
+                                MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
+                                news.setType("news");
+                                dataBean.setData(JSON.parseArray(JSON.toJSONString(headerJson.getData()), NewsJson.class));
+                                news.setData(dataBean);
                             }
+
                             break;
                         case VarConstant.NEWS_QUOTES:
                             try {

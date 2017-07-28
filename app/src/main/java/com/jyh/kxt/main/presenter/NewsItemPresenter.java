@@ -2,6 +2,7 @@ package com.jyh.kxt.main.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,12 +40,14 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
+import com.jyh.kxt.base.util.AdUtils;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.ColorFormatUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
+import com.jyh.kxt.datum.adapter.CalendarItemAdapter;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -264,13 +267,12 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
                 tvAd1.setMaxWidth(adTvMaxWidth);
 
-                List<AdTitleItemBean> ads = data.getAd();
+                List<AdTitleItemBean> ads = AdUtils.checkAdPosition(data.getAd());
                 if (ads == null || ads.size() == 0) {
                     tvAd1.setVisibility(View.GONE);
                     tvAd2.setVisibility(View.GONE);
                     ivAd.setVisibility(View.GONE);
                 } else if (ads.size() == 1) {
-                    tvAd1.setVisibility(View.VISIBLE);
                     ivAd.setVisibility(View.VISIBLE);
                     final AdTitleItemBean adItemJson = ads.get(0);
                     AdTitleIconBean icon = data.getIcon();
@@ -294,19 +296,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                             Glide.with(mContext).load(adIconDay).into(ivAd);
                     }
 
-
-                    tvAd1.setText(adItemJson.getTitle());
-                    tvAd1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
-                                    adItemJson.getHref());
-                        }
-                    });
-                    tvAd2.setVisibility(View.GONE);
+                    setAd(tvAd1,tvAd2,adItemJson,0,false);
                 } else {
-                    tvAd1.setVisibility(View.VISIBLE);
-                    tvAd2.setVisibility(View.VISIBLE);
                     ivAd.setVisibility(View.VISIBLE);
                     final AdTitleItemBean adItemJson = ads.get(0);
                     final AdTitleItemBean adItemJson2 = ads.get(1);
@@ -339,23 +330,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                     }
 
 
-                    tvAd1.setText(adItemJson.getTitle());
-                    tvAd1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            JumpUtils.jump((BaseActivity) mContext, adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
-                                    adItemJson.getHref());
-                        }
-                    });
-                    tvAd2.setText(adItemJson2.getTitle());
-                    tvAd2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            JumpUtils.jump((BaseActivity) mContext, adItemJson2.getO_class(), adItemJson2.getO_action(),
-                                    adItemJson2.getO_id(),
-                                    adItemJson2.getHref());
-                        }
-                    });
+                    setAd(tvAd1,tvAd2,adItemJson,0,true);
+                    setAd(tvAd1,tvAd2,adItemJson2,1,true);
                 }
 
 
@@ -370,6 +346,74 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         }
 
     }
+
+    private void setAd(TextView tvAd1,TextView tvAd2, final AdTitleItemBean ad, int position, boolean isShowAll) {
+        if(ad==null) return;
+        if (isShowAll){
+            if(position==0){
+                //左
+                tvAd2.setVisibility(View.VISIBLE);
+                tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd2.setText(ad.getTitle());
+            }else{
+                //右
+                tvAd1.setVisibility(View.VISIBLE);
+                tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd1.setText(ad.getTitle());
+            }
+        }else{
+            String adPosition = ad.getPosition();
+            if(adPosition==null||adPosition.equals("1")){
+                //左
+                tvAd1.setVisibility(View.INVISIBLE);
+                tvAd2.setVisibility(View.VISIBLE);
+                tvAd2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd2.setText(ad.getTitle());
+            }else{
+                //右
+                tvAd1.setVisibility(View.VISIBLE);
+                tvAd2.setVisibility(View.GONE);
+                tvAd1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
+                                        .getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
+                tvAd1.setText(ad.getTitle());
+
+            }
+        }
+        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
+        tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
+    }
+
 
     private List<SkinnableTextView> mAdTextViewList;
     private LinearLayout homeHeadView;
@@ -675,7 +719,15 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                             case VarConstant.NEWS_LIST:
                                 JSONArray newsArray = (JSONArray) headerJson.getData();
                                 if (newsArray == null) break;
-                                data = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
+                                try {
+                                    data = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    data = new MainNewsContentJson();
+                                    MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
+                                    dataBean.setData(JSON.parseArray(newsArray.toString(), NewsJson.class));
+                                    data.setData(dataBean);
+                                }
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
@@ -828,7 +880,15 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
-                                data = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
+                                try {
+                                    data = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
+                                } catch (Exception e) {
+                                    data = new MainNewsContentJson();
+                                    MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
+                                    dataBean.setData(JSON.parseArray(JSON.toJSONString(headerJson.getData()), NewsJson.class));
+                                    data.setType("news");
+                                    data.setData(dataBean);
+                                }
                                 break;
                             case VarConstant.NEWS_QUOTES:
                                 JSONArray quotesArray = (JSONArray) headerJson.getData();
