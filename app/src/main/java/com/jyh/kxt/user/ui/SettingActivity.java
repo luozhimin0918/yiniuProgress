@@ -132,7 +132,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     public void changeVersionPointStatus(boolean isShow) {
-        vPoint.setVisibility(isShow ? View.VISIBLE : View.INVISIBLE);
+        vPoint.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -256,7 +256,44 @@ public class UmengShareTool {
             ShareAction shareAction = new ShareAction(activity);
 
             ShareContent shareContent = new ShareContent();
-            shareContent.mText = shareBean.getDiscription() /*+ " " + shareBean.getShareUrl()*/ ;
+            shareContent.mText = shareBean.getDiscription() /*+ " " + shareBean.getShareUrl()*/;
+            shareContent.mMedia = urlImage;
+            shareAction.setShareContent(shareContent);
+
+            shareAction
+                    .withMedia(urlImage)
+                    .setPlatform(share_media)
+                    .setCallback(umShareListener)
+                    .share();
+
+        } catch (Exception e) {
+            ToastView.makeText3(activity, "分享失败");
+        }
+    }
+
+    /**
+     * 纯图片分享
+     *
+     * @param activity
+     * @param share_media 分享平台
+     */
+    public static void setShareContent(Activity activity, SHARE_MEDIA share_media, ShareJson shareBean) {
+        try {
+            application = activity.getApplication();
+
+            String thumb = shareBean.getThumb();
+            UMImage urlImage;
+            if (null != thumb) {
+                urlImage = new UMImage(activity, thumb);
+            } else {
+                urlImage = new UMImage(activity, R.mipmap.ic_launcher);
+            }
+
+
+            ShareAction shareAction = new ShareAction(activity);
+
+            ShareContent shareContent = new ShareContent();
+            shareContent.mText = shareBean.getDiscription() /*+ " " + shareBean.getShareUrl()*/;
             shareContent.mMedia = urlImage;
             shareAction.setShareContent(shareContent);
 
@@ -369,7 +406,7 @@ public class UmengShareTool {
                         break;
                     case 2:
                         //如果是行情或者视听, 并且是分享到新浪的则分享默认图片推广二维码
-                        if (shareBean.getShareFromSource() == 1 || shareBean.getShareFromSource() == 2) {
+                        if (shareBean.getShareFromSource() == 1) {
                             Bitmap screenShotBitmap = shareBean.getBitmap();
                             if (screenShotBitmap != null && !screenShotBitmap.isRecycled()) {
                                 screenShotBitmap.recycle();
@@ -381,6 +418,16 @@ public class UmengShareTool {
                             shareBean.setDiscription(shareBean.getWeiBoDiscript());//替换微博的
                             setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean);
                             break;
+                        } else if (shareBean.getShareFromSource() == 2) {
+
+                            shareBean.setDiscription(shareBean.getWeiBoDiscript());//替换微博的
+                            setShareContent(activity, SHARE_MEDIA.SINA, shareBean);
+
+//                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
+//                                    .getDiscription(), shareBean.getThumb(), SHARE_MEDIA.SINA);
+
+//                            setShareContent(Activity activity, String title, String weburl, String discription,
+//                                    String thumb, SHARE_MEDIA share_media)
                         } else {
                             setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
                                             .getDiscription(),

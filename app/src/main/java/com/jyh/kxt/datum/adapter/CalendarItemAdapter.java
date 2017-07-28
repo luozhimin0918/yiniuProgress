@@ -176,6 +176,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         viewHolder0.tvAd2.setVisibility(View.GONE);
                         viewHolder0.ivAd.setVisibility(View.GONE);
                     } else if (ads.size() == 1) {
+
+
+
                         viewHolder0.tvAd1.setVisibility(View.VISIBLE);
                         viewHolder0.ivAd.setVisibility(View.VISIBLE);
                         final AdTitleItemBean adItemJson = ads.get(0);

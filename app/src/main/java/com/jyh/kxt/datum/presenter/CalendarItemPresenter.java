@@ -102,21 +102,29 @@ public class CalendarItemPresenter extends BasePresenter {
 
                 if ("finance".equals(type)) {//财经数据
                     try {
-                        org.json.JSONObject jsonObject = new org.json.JSONObject(calendarItemBean.getData());
-                        JSONArray adsJson = jsonObject.optJSONArray("ad");
-                        String dataJson = jsonObject.optString("data");
-
+                        String dataJson = null;
                         List<AdTitleItemBean> ads = null;
                         List<String> objectList = null;
-                        AdTitleIconBean iconBean = JSON.parseObject(jsonObject.optString("icon"), AdTitleIconBean.class);
-                        if (adsJson != null) {
-                            ads = JSON.parseArray(adsJson.toString(), AdTitleItemBean.class);
+                        AdTitleIconBean iconBean = null;
+                        try {
+                            org.json.JSONObject jsonObject = new org.json.JSONObject(calendarItemBean.getData());
+                            JSONArray adsJson = jsonObject.optJSONArray("ad");
+                            dataJson = jsonObject.optString("data");
+
+                            ads = null;
+                            objectList = null;
+                            iconBean = JSON.parseObject(jsonObject.optString("icon"), AdTitleIconBean.class);
+                            if (adsJson != null) {
+                                ads = JSON.parseArray(adsJson.toString(), AdTitleItemBean.class);
+                            }
+                        } catch (JSONException e) {
+                            dataJson = calendarItemBean.getData();
                         }
                         if (dataJson != null && !dataJson.equals("")) {
                             objectList = JSON.parseArray(dataJson, String.class);
                         }
                         generateFinanceListData(ads, iconBean, objectList, status);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         generateFinanceListData(null, null, null, 0);
                     }
                 } else if ("important".equals(type)) {//事件数据
