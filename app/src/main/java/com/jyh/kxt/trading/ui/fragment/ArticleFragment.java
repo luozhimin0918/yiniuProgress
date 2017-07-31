@@ -1,4 +1,4 @@
-package com.jyh.kxt.explore.ui.fragment;
+package com.jyh.kxt.trading.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.json.NewsNavJson;
-import com.jyh.kxt.explore.presenter.ArticleFragmentPresenter;
+import com.jyh.kxt.trading.presenter.ArticleFragmentPresenter;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;

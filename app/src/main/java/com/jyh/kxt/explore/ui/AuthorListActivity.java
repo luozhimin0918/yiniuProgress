@@ -11,7 +11,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.explore.ui.fragment.ArticleFragment;
+import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.explore.ui.fragment.AuthorFragment;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.tablayout.SegmentTabLayout;

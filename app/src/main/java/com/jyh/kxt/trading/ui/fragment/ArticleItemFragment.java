@@ -1,11 +1,7 @@
-package com.jyh.kxt.explore.ui.fragment;
+package com.jyh.kxt.trading.ui.fragment;
 
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +17,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
-import com.jyh.kxt.explore.presenter.ArticleItemPresenter;
+import com.jyh.kxt.trading.presenter.ArticleItemPresenter;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;

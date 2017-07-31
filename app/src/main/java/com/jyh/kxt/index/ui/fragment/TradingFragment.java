@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.trading.ui.ViewpointFragment;
+import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
@@ -44,7 +46,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
     @BindView(R.id.fl_content) FrameLayout flContent;
     private BaseFragment lastFragment;
-    private NewsFragment newsFragment;
+    private ArticleFragment articleFragment;
     private ViewpointFragment viewpointFragment;
 
     @Override
@@ -75,25 +77,11 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @Override
     public void onNetChange(int netMobile) {
         super.onNetChange(netMobile);
-        if (newsFragment != null) {
-            newsFragment.onNetChange(netMobile);
+        if (articleFragment != null) {
+            articleFragment.onNetChange(netMobile);
         }
         if (viewpointFragment != null) {
             viewpointFragment.onNetChange(netMobile);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        try {
-            if (isResumed()) { //没有被隐藏
-                if (newsFragment != null) {
-                    newsFragment.sendSocketParams();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -103,8 +91,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         stlNavigationBar.setBarStrokeColor(
                 ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
         ivRightIcon1.setImageResource(R.mipmap.icon_search);
-        if (newsFragment != null)
-            newsFragment.onChangeTheme();
+        if (articleFragment != null)
+            articleFragment.onChangeTheme();
         if (viewpointFragment != null)
             viewpointFragment.onChangeTheme();
     }
@@ -113,7 +101,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     public void onTabSelect(int position) {
         BaseFragment currentFragment;
         if (position == 1) {
-            currentFragment = newsFragment = newsFragment == null ? new NewsFragment() : newsFragment;
+            currentFragment = articleFragment = articleFragment == null ? new ArticleFragment() : articleFragment;
         } else {
             currentFragment = viewpointFragment = viewpointFragment == null ? new ViewpointFragment() : viewpointFragment;
         }
@@ -147,6 +135,14 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
             stlNavigationBar.setCurrentTab(0);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (lastFragment != null) {
+            lastFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 

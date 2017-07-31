@@ -11,7 +11,7 @@ import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
-import com.jyh.kxt.explore.ui.fragment.ArticleFragment;
+import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.ui.activity.DpActivity;

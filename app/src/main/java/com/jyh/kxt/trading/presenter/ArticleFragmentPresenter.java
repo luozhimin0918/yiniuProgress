@@ -1,4 +1,4 @@
-package com.jyh.kxt.explore.presenter;
+package com.jyh.kxt.trading.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.json.NewsNavJson;
-import com.jyh.kxt.explore.ui.fragment.ArticleFragment;
+import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.ClassifyActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
