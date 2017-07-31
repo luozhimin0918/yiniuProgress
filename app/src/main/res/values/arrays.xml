@@ -34,6 +34,11 @@
         <item>数据</item>
     </string-array>
 
+    <string-array name="nav_trading">
+        <item>观点</item>
+        <item>文章</item>
+    </string-array>
+
     <string-array name="nav_video_test">
         <item>最新</item>
         <item>财经观察</item>

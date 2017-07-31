@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigationBar2Height"
+        android:background="#f9fafc">
+
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="热门专栏"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/max_font_size"/>
+
+        <TextView
+            android:id="@+id/tv_myattention"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/contentPadding"
+            android:text="我的关注"
+            android:textColor="@color/font_color2"
+            android:textSize="@dimen/title_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingRight="@dimen/contentPadding"
+            android:text="查看全部"
+            android:textColor="@color/font_color2"
+            android:textSize="@dimen/title_font_size2"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_headView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.jyh.kxt.base.custom.RollDotViewPager
+            android:id="@+id/rdvp_content"
+            android:layout_width="match_parent"
+            android:layout_height="232dp"/>
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:background="@color/line_color2"/>
+
+        <com.library.widget.tablayout.SlidingTabLayout
+            android:id="@+id/stl_navigation_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navigationBar2Height"
+            android:paddingRight="@dimen/navigationBar2ImageWidth"
+            tl:tl_indicator_color="@color/indicator_color"
+            tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+            tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+
+            tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+            tl:tl_tab_padding="10dp"
+            tl:tl_textSelectColor="@color/tabSelColor"
+            tl:tl_textUnselectColor="@color/tabUnSelColor"
+            tl:tl_textsize="@dimen/describe_font_size4"
+            />
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

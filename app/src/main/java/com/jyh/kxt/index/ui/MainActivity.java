@@ -48,6 +48,7 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
+import com.jyh.kxt.index.ui.fragment.TradingFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
@@ -99,7 +100,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public AvFragment avFragment;
     public MarketFragment marketFragment;
     public DatumFragment datumFragment;
-    public ExploreFragment exploreFragment;
+    public TradingFragment exploreFragment;
     //侧边栏控件
     public LinearLayout llHeaderLayout;
     TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout;
@@ -287,7 +288,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 }
                 break;
             case R.id.rb_probe:
-                exploreFragment = exploreFragment == null ? ExploreFragment.newInstance() : exploreFragment;
+                exploreFragment = exploreFragment == null ? new TradingFragment() : exploreFragment;
                 mClickFragment = exploreFragment;
                 if (currentFragment == exploreFragment && currentTime - oldClickNavigationTime < 2000) {
                     exploreFragment.doubleClickFragment();

@@ -92,6 +92,8 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private TextView tvAd1;
     private TextView tvAd2;
     private ImageView ivAd;
+    private List<AdTitleItemBean> ads;
+    private AdTitleIconBean adIcon;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -414,76 +416,11 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
         tvAd1.setMaxWidth(adTvMaxWidth);
 
-        Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
 
-        List<AdTitleItemBean> ads = AdUtils.checkAdPosition(data.getAd());
-        if (ads == null || ads.size() == 0) {
-            tvAd1.setVisibility(View.GONE);
-            tvAd2.setVisibility(View.GONE);
-            ivAd.setVisibility(View.GONE);
-        } else if (ads.size() == 1) {
-            final AdTitleItemBean adItemJson = ads.get(0);
-
-            AdTitleIconBean icon = data.getIcon();
-            ad1TvColorDay = adItemJson.getDay_color();
-            ad1TvColorNight = adItemJson.getNight_color();
-
-            ad1TvColorDay = ad1TvColorDay == null ? "#1384ED" : ad1TvColorDay;
-            ad1TvColorNight = ad1TvColorNight == null ? "#1384ED" : ad1TvColorNight;
-
-            if (icon != null) {
-                adIconDay = icon.getDay_icon();
-                adIconNight = icon.getNight_icon();
-            }
-
-            if (isNight) {
-                tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                if (adIconNight != null)
-                    Glide.with(mContext).load(adIconNight).into(ivAd);
-            } else {
-                tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                if (adIconDay != null)
-                    Glide.with(mContext).load(adIconDay).into(ivAd);
-            }
-
-            ivAd.setVisibility(View.VISIBLE);
-            setAd(tvAd1, tvAd2, adItemJson, 0, false);
-        } else {
-            ivAd.setVisibility(View.VISIBLE);
-            final AdTitleItemBean adItemJson = ads.get(0);
-            final AdTitleItemBean adItemJson2 = ads.get(1);
-
-            ad1TvColorDay = adItemJson.getDay_color();
-            ad1TvColorNight = adItemJson.getNight_color();
-            ad2TvColorDay = adItemJson2.getDay_color();
-            ad2TvColorNight = adItemJson2.getNight_color();
-
-            ad1TvColorDay = ad1TvColorDay == null ? "#1384ED" : ad1TvColorDay;
-            ad1TvColorNight = ad1TvColorNight == null ? "#1384ED" : ad1TvColorNight;
-            ad2TvColorDay = ad2TvColorDay == null ? "#1384ED" : ad2TvColorDay;
-            ad2TvColorNight = ad2TvColorNight == null ? "#1384ED" : ad2TvColorNight;
-
-            AdTitleIconBean icon = data.getIcon();
-            if (icon != null) {
-                adIconDay = icon.getDay_icon();
-                adIconNight = icon.getNight_icon();
-            }
-
-            if (isNight) {
-                tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
-                if (adIconNight != null)
-                    Glide.with(mContext).load(adIconNight).into(ivAd);
-            } else {
-                tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
-                if (adIconDay != null)
-                    Glide.with(mContext).load(adIconDay).into(ivAd);
-            }
-
-            setAd(tvAd1, tvAd2, adItemJson, 0, true);
-            setAd(tvAd1, tvAd2, adItemJson2, 1, true);
-        }
+        ads = data.getAd();
+        adIcon = data.getIcon();
+        AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, ads, adIcon);
+//
         tvTitle.setText("热门行情");
 
         Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.iocn_blue_sx);
@@ -517,73 +454,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketItemBeens);
         marketItemFragment.refreshableView.setAdapter(marketMainItemAdapter);
-    }
-
-    private void setAd(TextView tvAd1, TextView tvAd2, final AdTitleItemBean ad, int position, boolean isShowAll) {
-        if (ad == null) return;
-        if (isShowAll) {
-            if (position == 0) {
-                //左
-                tvAd2.setVisibility(View.VISIBLE);
-                tvAd2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
-                                        .getO_action(),
-                                ad.getO_id(),
-                                ad.getHref());
-                    }
-                });
-                tvAd2.setText(ad.getTitle());
-            } else {
-                //右
-                tvAd1.setVisibility(View.VISIBLE);
-                tvAd1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
-                                        .getO_action(),
-                                ad.getO_id(),
-                                ad.getHref());
-                    }
-                });
-                tvAd1.setText(ad.getTitle());
-            }
-        } else {
-            String adPosition = ad.getPosition();
-            if (adPosition == null || adPosition.equals("1")) {
-                //左
-                tvAd1.setVisibility(View.GONE);
-                tvAd2.setVisibility(View.VISIBLE);
-                tvAd2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
-                                        .getO_action(),
-                                ad.getO_id(),
-                                ad.getHref());
-                    }
-                });
-                tvAd2.setText(ad.getTitle());
-            } else {
-                //右
-                tvAd1.setVisibility(View.VISIBLE);
-                tvAd2.setVisibility(View.GONE);
-                tvAd1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        JumpUtils.jump((BaseActivity) mContext, ad.getO_class(), ad
-                                        .getO_action(),
-                                ad.getO_id(),
-                                ad.getHref());
-                    }
-                });
-                tvAd1.setText(ad.getTitle());
-
-            }
-        }
-        tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-        tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
     }
 
     private void createPaddingView(int heightPx) {
@@ -668,30 +538,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 }
             }
 
-            if (tvAd1 != null) {
-                if (isNight) {
-                    tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorNight));
-                } else {
-                    tvAd1.setTextColor(ColorFormatUtils.formatColor(ad1TvColorDay));
-                }
-            }
-            if (tvAd2 != null) {
-                if (isNight) {
-                    tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorNight));
-                } else {
-                    tvAd2.setTextColor(ColorFormatUtils.formatColor(ad2TvColorDay));
-                }
-            }
-
-            if (ivAd != null) {
-                if (isNight) {
-                    if (adIconNight != null)
-                        Glide.with(mContext).load(adIconNight).into(ivAd);
-                } else {
-                    if (adIconDay != null)
-                        Glide.with(mContext).load(adIconDay).into(ivAd);
-                }
-            }
+            AdUtils.onChangeTheme(mContext, isNight, tvAd1, tvAd2, ivAd, ads, adIcon);
 
         } catch (Exception e) {
             e.printStackTrace();

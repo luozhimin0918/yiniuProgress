@@ -151,8 +151,8 @@ public class SampleApplicationLike extends DefaultApplicationLike {
             }
         });
 
-        CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(SampleApplicationContext.context);
+//        CrashHandler crashHandler = new CrashHandler();
+//        crashHandler.init(SampleApplicationContext.context);
 
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
         //避免启动慢的问题
