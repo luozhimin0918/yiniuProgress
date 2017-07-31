@@ -139,14 +139,15 @@ public class ViewpointAdapter extends BaseListAdapter<ViewpointJson> {
             for (int i = 0; i < 9; i++) {
                 ImageView imageView = new ImageView(context);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgWidth, ViewGroup
-                        .LayoutParams.MATCH_PARENT);
+                        .LayoutParams.WRAP_CONTENT);
+                GridLayout.LayoutParams layoutParams=new GridLayout.LayoutParams(params);
 
                 if (i != 3)
-                    params.rightMargin = ImgPadding;
+                    layoutParams.rightMargin = ImgPadding;
                 if (i / 3 >= 1)
-                    params.topMargin = ImgPadding;
+                    layoutParams.topMargin = ImgPadding;
 
-                viewHolder.ivRootView.addView(imageView, params);
+                viewHolder.ivRootView.addView(imageView, layoutParams);
                 requestManager.load(imgs.get(i)).error(R.mipmap.icon_video_defualt_photo).placeholder(R.mipmap.icon_video_defualt_photo)
                         .into
                                 (imageView);
@@ -155,14 +156,15 @@ public class ViewpointAdapter extends BaseListAdapter<ViewpointJson> {
             for (int i = 0; i < size; i++) {
                 ImageView imageView = new ImageView(context);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgWidth, ViewGroup
-                        .LayoutParams.MATCH_PARENT);
+                        .LayoutParams.WRAP_CONTENT);
+                GridLayout.LayoutParams layoutParams=new GridLayout.LayoutParams(params);
 
                 if (i != 3)
-                    params.rightMargin = ImgPadding;
+                    layoutParams.rightMargin = ImgPadding;
                 if (i / 3 >= 1)
-                    params.topMargin = ImgPadding;
+                    layoutParams.topMargin = ImgPadding;
 
-                viewHolder.ivRootView.addView(imageView, params);
+                viewHolder.ivRootView.addView(imageView, layoutParams);
                 requestManager.load(imgs.get(i)).error(R.mipmap.icon_video_defualt_photo).placeholder(R.mipmap.icon_video_defualt_photo)
                         .into
                                 (imageView);
