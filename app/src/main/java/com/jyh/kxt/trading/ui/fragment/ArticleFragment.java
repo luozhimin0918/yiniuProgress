@@ -142,6 +142,10 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
             args.putString(IntentConstant.TYPE, newsNavJson.getType());
             args.putInt(IntentConstant.INDEX, i);
             itemFragment.setArguments(args);
+            if (i == 0)
+                itemFragment.setMain(true);
+            else
+                itemFragment.setMain(false);
             fragmentList.add(itemFragment);
 
             if (!RegexValidateUtil.isEmpty(selTab)) {

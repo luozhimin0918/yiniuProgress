@@ -1,4 +1,4 @@
-package com.jyh.kxt.explore.ui;
+package com.jyh.kxt.trading.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,7 +26,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
-import com.jyh.kxt.explore.presenter.AuthorPresenter;
+import com.jyh.kxt.trading.presenter.AuthorPresenter;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;

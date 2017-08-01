@@ -34,16 +34,18 @@ public class ArticleItemPresenter extends BasePresenter {
     private String lastId;
     private String id;
     private String type;
+    private boolean isMain;
 
     public ArticleItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
         request = new VolleyRequest(mContext, mQueue);
     }
 
-    public void init(String id, String type) {
+    public void init(String id, boolean isMain, String type) {
 
         this.id = id;
         this.type = type;
+        this.isMain = isMain;
 
         JSONObject jsonParam = request.getJsonParam();
         if (VarConstant.EXPLORE_ARTICLE_LIST_TYPE_FOLLOW.equals(type)) {

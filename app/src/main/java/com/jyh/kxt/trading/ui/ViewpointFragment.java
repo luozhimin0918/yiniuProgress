@@ -73,6 +73,7 @@ public class ViewpointFragment extends BaseFragment implements OnScrollListener,
                 break;
             case R.id.tv_all:
                 // TODO: 2017/7/26 查看全部
+                startActivity(new Intent(getContext(), AuthorListActivity.class));
                 break;
         }
     }

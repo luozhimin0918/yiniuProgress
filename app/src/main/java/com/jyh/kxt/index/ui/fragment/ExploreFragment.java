@@ -34,7 +34,7 @@ import com.jyh.kxt.explore.json.ActivityJson;
 import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.explore.json.TopicJson;
-import com.jyh.kxt.explore.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.ExplorePresenter;

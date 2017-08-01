@@ -6,17 +6,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
+import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.trading.presenter.ArticleItemPresenter;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
@@ -24,7 +28,9 @@ import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.viewpager.BannerLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,11 +49,15 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
 
     private ArticleItemPresenter presenter;
 
+    private boolean isMain = false;
+
     private String name;
     private String id;
     private String type;
     private NewsAdapter newsAdapter;
     private View loginLayout;
+    private LinearLayout homeHeadView;
+    private BannerLayout carouseView;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -73,7 +83,7 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
             if (isLogined) {
                 hideLoginBar();
                 plRootView.loadWait();
-                presenter.init(id, type);
+                presenter.init(id, isMain, type);
             } else {
                 plRootView.loadEmptyData();
                 showLoginBar();
@@ -81,7 +91,7 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         } else {
             hideLoginBar();
             plRootView.loadWait();
-            presenter.init(id, type);
+            presenter.init(id, isMain, type);
         }
     }
 
@@ -131,14 +141,14 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         if (VarConstant.EXPLORE_ARTICLE_LIST_TYPE_FOLLOW.equals(type)) {
             boolean isLogined = LoginUtils.isLogined(getContext());
             if (isLogined) {
-                presenter.init(id, type);
+                presenter.init(id, isMain, type);
                 hideLoginBar();
             } else {
                 plRootView.loadEmptyData();
                 showLoginBar();
             }
         } else {
-            presenter.init(id, type);
+            presenter.init(id, isMain, type);
         }
     }
 
@@ -191,17 +201,81 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
             if (VarConstant.EXPLORE_ARTICLE_LIST_TYPE_FOLLOW.equals(type)) {
                 boolean isLogined = LoginUtils.isLogined(getContext());
                 if (isLogined) {
-                    presenter.init(id, type);
+                    presenter.init(id, isMain, type);
                     hideLoginBar();
                 } else {
                     plRootView.loadEmptyData();
                     showLoginBar();
                 }
             } else {
-                presenter.init(id, type);
+                presenter.init(id, isMain, type);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMain(boolean main) {
+        isMain = main;
+    }
+
+    /**
+     * 初始化头部布局
+     */
+    public void initHeadViewLayout() {
+        if (homeHeadView == null) {
+            AbsListView.LayoutParams headLayoutParams = new AbsListView.LayoutParams(
+                    AbsListView.LayoutParams.MATCH_PARENT,
+                    AbsListView.LayoutParams.WRAP_CONTENT);
+
+            homeHeadView = new LinearLayout(getContext());
+            homeHeadView.setOrientation(LinearLayout.VERTICAL);
+            homeHeadView.setLayoutParams(headLayoutParams);
+        } else {
+            homeHeadView.removeAllViews();
+        }
+
+    }
+
+    /**
+     * 添加轮播图
+     *
+     * @param carouselList
+     */
+    public void addCarouselView(final List<SlideJson> carouselList) {
+
+        if (carouselList == null) return;
+
+        int currentItem = 0;
+        if (carouseView != null) {
+            currentItem = carouseView.getViewPager().getCurrentItem();
+        }
+
+        final int carouselHeight = (int) getContext().getResources().getDimension(R.dimen.index_slide);
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                carouselHeight);
+        carouseView = (BannerLayout) LayoutInflater.from(getContext()).inflate(R.layout.news_header_slide, null);
+        carouseView.setLayoutParams(params);
+
+        final List<String> carouseList = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
+        for (int i = 0; i < carouselList.size(); i++) {
+            SlideJson slideJson = carouselList.get(i);
+            String carouselItem = slideJson.getPicture();
+            carouseList.add(HttpConstant.IMG_URL + carouselItem);
+            titles.add(slideJson.getTitle());
+        }
+        carouseView.setViewUrls(carouseList, titles, currentItem);
+        homeHeadView.addView(carouseView);
+
+        carouseView.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                SlideJson slideJson = carouselList.get(position);
+                JumpUtils.jump((BaseActivity) getContext(), slideJson.getO_class(), slideJson.getO_action(), slideJson
+                        .getO_id(), slideJson
+                        .getHref());
+            }
+        });
     }
 }

@@ -11,7 +11,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
-import com.jyh.kxt.explore.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.index.adapter.AttentionAuthorAdapter;
 import com.jyh.kxt.index.presenter.AttentionAuthorPresenter;
 import com.library.bean.EventBusClass;

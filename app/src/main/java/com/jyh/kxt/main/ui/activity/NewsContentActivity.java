@@ -62,7 +62,7 @@ import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.explore.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;

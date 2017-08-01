@@ -1,4 +1,4 @@
-package com.jyh.kxt.explore.presenter;
+package com.jyh.kxt.trading.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -9,7 +9,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
-import com.jyh.kxt.explore.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;

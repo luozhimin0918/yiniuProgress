@@ -8,7 +8,7 @@
     <com.library.widget.PageLoadLayout
         android:id="@+id/pl_list_rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,8 +55,7 @@
                 android:layout_height="@dimen/authorPhotoSize"
                 android:layout_below="@+id/rl_head_title_bar"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="@dimen/newsContentPadding3"
-                android:src="@mipmap/icon_user_def_photo"/>
+                android:layout_marginRight="@dimen/newsContentPadding3"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -64,9 +63,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/iv_photo"
                 android:layout_toRightOf="@id/iv_photo"
-                android:textColor="@color/white"
-                android:maxLength="10"
                 android:ellipsize="end"
+                android:maxLength="10"
+                android:textColor="@color/white"
                 android:textSize="@dimen/title_font_size2"/>
 
             <LinearLayout
@@ -85,8 +84,8 @@
                 <View
                     android:layout_width="2px"
                     android:layout_height="12dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:background="@color/font_color14"
                     />
@@ -104,12 +103,12 @@
     <ImageView
         android:id="@+id/error_break"
         android:layout_width="48dp"
-        android:layout_marginTop="20dp"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
+        android:layout_marginTop="20dp"
         android:padding="16dp"
         android:src="@mipmap/ico_break"
+        android:visibility="gone"
         />
 
 </FrameLayout>

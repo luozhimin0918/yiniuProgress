@@ -2,6 +2,7 @@ package com.jyh.kxt.explore.json;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.trading.json.ViewpointJson;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class AuthorDetailsJson {
 
     @JSONField(name = "article")
     private List<AuthorNewsJson> list;
+    private List<ViewpointJson> views;
 
     public String getIs_follow() {
         return is_follow;
@@ -94,5 +96,13 @@ public class AuthorDetailsJson {
 
     public void setList(List<AuthorNewsJson> list) {
         this.list = list;
+    }
+
+    public List<ViewpointJson> getViews() {
+        return views;
+    }
+
+    public void setViews(List<ViewpointJson> views) {
+        this.views = views;
     }
 }
