@@ -51,6 +51,11 @@ public class HttpConstant {
     public static final String INDEX_MAIN = BASE_URL + "index/main" + JWT;//首页
 
     /**
+     * 交易圈
+     */
+    public static  final String TRADE_MAIN = BASE_URL +"trade/main";
+
+    /**
      * 要闻点评
      */
     public static final String NEWS_LIST = BASE_URL + "news/list" + VarConstant.HTTP_CONTENT;//要闻列表

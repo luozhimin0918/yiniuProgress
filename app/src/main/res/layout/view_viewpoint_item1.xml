@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_content_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/theme1"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingBottom="10dp"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:paddingTop="18dp">
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/riv_user_avatar"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/riv_user_avatar"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/riv_user_avatar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="简单的OMG"
+            android:textColor="@color/font_color62"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="02-14 22:58"
+            android:textColor="@color/font_color9"
+            android:textSize="@dimen/min_font_size"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/viewpoint_function"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:src="@mipmap/icon_viewpoint_jt"/>
+
+    <TextView
+        android:id="@+id/viewpoint_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/riv_user_avatar"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="3"
+        android:padding="5dp"
+        android:text="在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分"
+        android:textColor="@color/font_color3"
+        android:textSize="@dimen/describe_font_size4"
+        android:visibility="visible"/>
+
+
+    <LinearLayout
+        android:id="@+id/viewpoint_picture_layout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_below="@+id/viewpoint_title"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewpoint_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/viewpoint_picture_layout"
+        android:layout_marginLeft="-18dp"
+        android:layout_marginRight="-18dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/line_color6"/>
+
+    <!--            <com.jyh.kxt.base.widget.ThumbView
+                                android:id="@+id/viewpoint_thumb"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:drawableLeft="@mipmap/icon_video_list_zan"
+                                android:drawablePadding="5dp"
+                                android:gravity="center"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/viewpoint_line"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_video_list_zan"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:textColor="@color/font_color9"
+                android:textSize="@dimen/describe_font_size3"
+                android:text="5"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:background="@color/line_color6"
+            android:layout_height="15dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_video_list_zan"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:textSize="@dimen/describe_font_size3"
+                android:textColor="@color/font_color9"
+                android:text="5"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:background="@color/line_color6"
+            android:layout_height="15dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@mipmap/icon_video_list_zan"
+                android:drawablePadding="8dp"
+                android:textColor="@color/font_color9"
+                android:textSize="@dimen/describe_font_size3"
+                android:gravity="center"
+                android:text="5"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

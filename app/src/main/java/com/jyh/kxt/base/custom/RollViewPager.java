@@ -73,13 +73,14 @@ public class RollViewPager extends ViewPager {
 
         for (int i = 0; i < itemGroupViewPagerCount; i++) {
             int startCount = i * mGridMaxCount;
-            int endCount = (i * mGridMaxCount + mGridMaxCount) > dataList.size() ? dataList.size() : (i *
-                    mGridMaxCount + mGridMaxCount);
+            int endCount = (i * mGridMaxCount + mGridMaxCount) >
+                    dataList.size() ?
+                    dataList.size() : (i * mGridMaxCount + mGridMaxCount);
 
             List dataSubList = dataList.subList(startCount, endCount);
             if (gridViewItemData != null) {
-
                 GridView gridView = getGridView();
+//                gridView.setLineNumColumns(3);
                 gridViewItemData.itemData(dataSubList, gridView);
                 groupViewList.add(gridView);
             }
@@ -92,8 +93,9 @@ public class RollViewPager extends ViewPager {
             @Override
             public void run() {
                 RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+//                RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             }
-        },500);
+        }, 500);
 
     }
 

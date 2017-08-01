@@ -39,6 +39,13 @@
         <item>文章</item>
     </string-array>
 
+    <string-array name="nav_trading_menu">
+        <item>精选</item>
+        <item>全部</item>
+        <item>关注</item>
+    </string-array>
+
+
     <string-array name="nav_video_test">
         <item>最新</item>
         <item>财经观察</item>

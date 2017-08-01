@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\git\kxt\Kxt\Pushlib\assets"/><source path="D:\git\kxt\Kxt\Pushlib\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\git\kxt\Kxt\Pushlib\build-types\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Android\Repertory\KxtProfessional\Pushlib\assets"/><source path="D:\Android\Repertory\KxtProfessional\Pushlib\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\Android\Repertory\KxtProfessional\Pushlib\build-types\release\assets"/></dataSet></merger>

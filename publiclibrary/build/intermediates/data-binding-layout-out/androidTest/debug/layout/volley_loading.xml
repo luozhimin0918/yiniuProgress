@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/theme1"
     android:orientation="vertical">
-
+    <!--android:background="@drawable/shape_widget_toast"-->
     <RelativeLayout
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/shape_widget_toast"
+
         android:gravity="center">
 
         <ImageView
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_progress"
             android:layout_centerHorizontal="true"
+            android:visibility="gone"
             android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="12sp"/>

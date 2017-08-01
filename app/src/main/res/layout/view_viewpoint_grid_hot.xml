@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#F9FAFC"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="15dp"
+            android:text="我的关注"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="热门专栏"
+            android:textColor="@color/black"
+            android:textSize="@dimen/content_font_size2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/icon_user_break"
+            android:gravity="center|right"
+            android:paddingRight="15dp"
+            android:text="查看全部"
+            android:textSize="@dimen/describe_font_size3"/>
+
+    </LinearLayout>
+
+    <com.jyh.kxt.base.custom.RollDotViewPager
+        android:id="@+id/rdvp_content"
+        android:layout_width="match_parent"
+        android:layout_height="232dp"/>
+</LinearLayout>

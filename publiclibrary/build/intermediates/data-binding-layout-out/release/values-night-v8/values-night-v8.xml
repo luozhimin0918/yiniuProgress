@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ampm_text_color">#8c8c8c</color>
+    <color name="banner_title_color">#88ffffff</color>
     <color name="black">#ff000000</color>
     <color name="blue">#115e91</color>
     <color name="blue_btn_bg_color">#AEDEF4</color>
@@ -21,11 +22,14 @@
     <color name="line_background">#ff4d4d4d</color>
     <color name="line_background1">#2d2d2d</color>
     <color name="line_background2">#292929</color>
+    <color name="line_background3">#4d4d4d</color>
+    <color name="line_background4">#2d2d2d</color>
     <color name="material_blue_grey_80">#ff37474f</color>
     <color name="material_blue_grey_90">#ff263238</color>
     <color name="material_blue_grey_95">#ff21272b</color>
     <color name="material_deep_teal_20">#ff80cbc4</color>
     <color name="material_deep_teal_50">#ff009688</color>
+    <color name="no_more_data">#136aa4</color>
     <color name="numbers_text_color">#8c8c8c</color>
     <color name="pickerview_bgColor_default">#FFFFFFFF</color>
     <color name="pickerview_bgColor_overlay">#60000000</color>

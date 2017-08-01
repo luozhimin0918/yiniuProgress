@@ -43,6 +43,7 @@
     </attr>
     <attr format="dimension" name="tl_underline_height"/>
     <color name="ampm_text_color">#8c8c8c</color>
+    <color name="banner_title_color">#ffffff</color>
     <color name="black">#ff000000</color>
     <color name="blue">#2A87F0</color>
     <color name="blue_btn_bg_color">#AEDEF4</color>
@@ -63,12 +64,15 @@
     <color name="line_background">#ffcccccc</color>
     <color name="line_background1">#d9d9d9</color>
     <color name="line_background2">#f7f7f7</color>
+    <color name="line_background3">#e6e6e6</color>
+    <color name="line_background4">#f1f1f1</color>
     <color name="material_blue_grey_80">#ff37474f</color>
     <color name="material_blue_grey_90">#ff263238</color>
     <color name="material_blue_grey_95">#ff21272b</color>
     <color name="material_deep_teal_20">#ff80cbc4</color>
     <color name="material_deep_teal_50">#ff009688</color>
     <color name="moiety_transparent">#44000000</color>
+    <color name="no_more_data">#1c9cf2</color>
     <color name="numbers_text_color">#8c8c8c</color>
     <color name="pickerview_bgColor_default">#FFFFFFFF</color>
     <color name="pickerview_bgColor_overlay">#60000000</color>
@@ -83,7 +87,7 @@
     <color name="red2">#EA492A</color>
     <color name="red_btn_bg_color">#DD6B55</color>
     <color name="red_btn_bg_pressed_color">#CD5B55</color>
-    <color name="statusColor">#ffffff</color>
+    <color name="statusColor">#BDBDBD</color>
     <color name="success_stroke_color">#A5DC86</color>
     <color name="sweet_dialog_bg_color">#FFFFFF</color>
     <color name="text_color">#575757</color>
@@ -175,7 +179,7 @@
     <dimen name="month_list_item_header_height">50dip</dimen>
     <dimen name="month_select_circle_radius">45dip</dimen>
     <dimen name="picker_dimen">270dip</dimen>
-    <dimen name="pickerview_textsize">20sp</dimen>
+    <dimen name="pickerview_textsize">18sp</dimen>
     <dimen name="pickerview_topbar_btn_textsize">16sp</dimen>
     <dimen name="pickerview_topbar_height">45dp</dimen>
     <dimen name="pickerview_topbar_padding">20dp</dimen>
@@ -232,7 +236,7 @@
     <string name="pickerview_minutes">分</string>
     <string name="pickerview_month">月</string>
     <string name="pickerview_seconds">秒</string>
-    <string name="pickerview_submit">确定</string>
+    <string name="pickerview_submit">完成</string>
     <string name="pickerview_year">年</string>
     <string name="pull_to_refresh_from_bottom_pull_label">上拉可以加载更多</string>
     <string name="pull_to_refresh_from_bottom_refreshing_label">正在加载更多数据...</string>
