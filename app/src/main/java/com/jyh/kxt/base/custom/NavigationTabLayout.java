@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -16,20 +17,18 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static android.R.attr.indicatorLeft;
 
 /**
  * Created by Mr'Dai on 2017/7/31.
@@ -240,6 +239,43 @@ public class NavigationTabLayout extends LinearLayout {
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        ArrayList<View> touchViewList = getTouchables();
+        for (int i = 0; i < touchViewList.size(); i++) {
+            View itemView = touchViewList.get(i);
+            if (isPinnedViewTouched(itemView, ev.getX(), ev.getY())) {
+
+                mCurrentClickPosition = mTabsContainer.indexOfChild(itemView);
+                if (mCurrentClickPosition == -1) {
+                    continue;
+                }
+                if (mCurrentClickPosition != mOldClickPosition) {
+
+                    //这里由于是属于虚拟画出来的子视图
+                    if (mListener != null) {
+                        mListener.onTabSelect(mCurrentClickPosition,0);
+                    }
+                    mCurrentPositionOffset = 1f;
+                    animatorState = 0;
+                    updateTabSelection(mCurrentClickPosition);
+                    postInvalidate();
+
+                    mOldClickPosition = mCurrentClickPosition;
+                }
+                break;
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean isPinnedViewTouched(View view, float x, float y) {
+        Rect rect = new Rect();
+        view.getGlobalVisibleRect(rect);
+        return rect.contains((int) x, (int) y);
+    }
 
     /**
      * 创建并添加tab
@@ -255,10 +291,12 @@ public class NavigationTabLayout extends LinearLayout {
             public void onClick(View v) {
                 if (isClickable && animatorState == 1) {
                     mCurrentClickPosition = mTabsContainer.indexOfChild(v);
-
+                    if (mCurrentClickPosition == -1) {
+                        return;
+                    }
                     if (mCurrentClickPosition != mOldClickPosition) {
                         if (mListener != null) {
-                            mListener.onTabSelect(mCurrentClickPosition);
+                            mListener.onTabSelect(mCurrentClickPosition,1);
                         }
                         clickTabAnimator();
                     }
@@ -335,9 +373,10 @@ public class NavigationTabLayout extends LinearLayout {
         }
         animatorState = 1;
 
-        boolean isRightOffset = mCurrentClickPosition > mOldClickPosition;
-
         View oldTabView = mTabsContainer.getChildAt(mOldClickPosition);
+        if (oldTabView == null) {
+            return;
+        }
         float left = oldTabView.getLeft();
         float right = oldTabView.getRight();
 
@@ -372,7 +411,7 @@ public class NavigationTabLayout extends LinearLayout {
 
         int padding = (oldTabView.getWidth() / 2 - (int) mIndicatorWidth / 2);
         mIndicatorRect.left = (int) left + padding;
-        mIndicatorRect.right = mIndicatorRect.left + (int)mIndicatorWidth;
+        mIndicatorRect.right = mIndicatorRect.left + (int) mIndicatorWidth;
 
         mTabRect.left = (int) left;
         mTabRect.right = (int) right;
@@ -623,6 +662,23 @@ public class NavigationTabLayout extends LinearLayout {
         updateTabStyles();
     }
 
+    public void setCurrentTab(int tabPosition) {
+        mCurrentClickPosition = tabPosition;
+        mCurrentPositionOffset = 1;
+        animatorState = 0;
+        updateTabSelection(mCurrentClickPosition);
+        postInvalidate();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mOldClickPosition = mCurrentClickPosition;
+                animatorState = 1;
+            }
+        },100);
+    }
+
+
     public int getTabCount() {
         return mTabCount;
     }
@@ -723,6 +779,10 @@ public class NavigationTabLayout extends LinearLayout {
     private Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
+
+    public interface OnTabSelectListener {
+        void onTabSelect(int position,int clickId);
+    }
 
     private OnTabSelectListener mListener;
 

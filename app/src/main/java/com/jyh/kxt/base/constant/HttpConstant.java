@@ -53,7 +53,7 @@ public class HttpConstant {
     /**
      * 交易圈
      */
-    public static  final String TRADE_MAIN = BASE_URL +"trade/main";
+    public static  final String TRADE_MAIN = BASE_URL +"trade/main?content=";
 
     /**
      * 要闻点评
