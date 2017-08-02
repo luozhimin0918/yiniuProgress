@@ -18,6 +18,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
+import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.jyh.kxt.trading.ui.ViewpointFragment;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -70,6 +71,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 break;
             case R.id.iv_right_icon1:
                 // TODO: 2017/7/26 搜索
+                startActivity(new Intent(getContext(), AuthorListActivity.class));
                 break;
         }
     }

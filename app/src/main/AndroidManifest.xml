@@ -148,7 +148,7 @@
 
         <!-- 探索 -->
         <activity
-            android:name=".trading.ui.AuthorActivity"
+            android:name=".trading.AuthorActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".explore.ui.AuthorListActivity"
@@ -183,6 +183,9 @@
 
         <activity
             android:name=".trading.ui.AuthorListActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".trading.ui.AuthorActivity"
             android:screenOrientation="portrait"/>
 
         <!-- umeng推送 -->

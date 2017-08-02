@@ -1,6 +1,5 @@
 package com.jyh.kxt.trading.presenter;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;

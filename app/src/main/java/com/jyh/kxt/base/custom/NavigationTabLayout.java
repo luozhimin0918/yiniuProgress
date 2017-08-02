@@ -61,9 +61,9 @@ public class NavigationTabLayout extends LinearLayout {
     private Paint mTrianglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private Path mTrianglePath = new Path();
-    private static final int STYLE_NORMAL = 0;
-    private static final int STYLE_TRIANGLE = 1;
-    private static final int STYLE_BLOCK = 2;
+    public static final int STYLE_NORMAL = 0;
+    public static final int STYLE_TRIANGLE = 1;
+    public static final int STYLE_BLOCK = 2;
     private int mIndicatorStyle = STYLE_NORMAL;
 
     private int modeScrollable;

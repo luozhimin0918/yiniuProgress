@@ -8,178 +8,90 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
-import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
-import com.library.util.EncryptionUtils;
-import com.library.util.RegexValidateUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 项目名:Kxt
+ * 项目名:KxtProfessional
  * 类描述:
  * 创建人:苟蒙蒙
- * 创建日期:2017/5/8.
+ * 创建日期:2017/8/1.
  */
 
 public class AuthorPresenter extends BasePresenter {
+    @BindObject AuthorActivity activity;
 
-    @BindObject AuthorActivity authorActivity;
+    private String authorId;
     private VolleyRequest request;
 
-    private String authorId = "";//作者id
-    private String lastId = "";
-    private boolean isMore;
+    private String lastId_viewpoint, lastId_article;
+    private boolean isMore_viewpoint, isMore_article;
 
-    public AuthorPresenter(IBaseView iBaseView) {
+    public AuthorPresenter(IBaseView iBaseView, String authorId) {
         super(iBaseView);
-    }
-
-    public void init(final String authorId) {
-
         this.authorId = authorId;
+        request = new VolleyRequest(mContext, mQueue);
+        request.setTag(getClass().getName());
+    }
 
-        if (request == null) {
-            request = new VolleyRequest(mContext, mQueue);
-            request.setTag(getClass().getName());
+    public void init() {
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_ID, authorId);
+        if (LoginUtils.isLogined(mContext)) {
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
         }
-        request.doGet(getUrl(request), new HttpListener<AuthorDetailsJson>() {
+        request.doPost(HttpConstant.TRADING_COLUMNIST_PROFILE, jsonParam, new HttpListener<AuthorDetailsJson>() {
             @Override
             protected void onResponse(AuthorDetailsJson authorDetailsJson) {
-                authorActivity.setView(authorDetailsJson);
+                activity.setView(authorDetailsJson);
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                authorActivity.loadError();
+                activity.loadError();
             }
         });
     }
 
-
-    /**
-     * 刷新
-     */
-    public void refresh() {
-        request.doGet(getUrl(request), new HttpListener<AuthorDetailsJson>() {
-            @Override
-            protected void onResponse(AuthorDetailsJson authorDetailsJson) {
-                authorActivity.refresh(authorDetailsJson);
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                authorActivity.plListRootView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        authorActivity.plContent.onRefreshComplete();
-                    }
-                }, 500);
-            }
-        });
+    public String getLastId_viewpoint() {
+        return lastId_viewpoint;
     }
 
-    /**
-     * 加载更多
-     */
-    public void loadMore() {
-
-        if (isMore) {
-
-            if (request == null) {
-                request = new VolleyRequest(mContext, mQueue);
-            }
-            request.doGet(getLoadMoreUrl(), new HttpListener<List<AuthorNewsJson>>() {
-                @Override
-                protected void onResponse(List<AuthorNewsJson> newsJsons) {
-                    if (newsJsons != null) {
-                        int size = newsJsons.size();
-                        List<AuthorNewsJson> data;
-                        if (size > VarConstant.LIST_MAX_SIZE) {
-                            isMore = true;
-                            data = new ArrayList<>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                            lastId = authorActivity.newsAdapter.getLastId();
-                        } else {
-                            isMore = false;
-                            data = newsJsons;
-                        }
-                        authorActivity.loadMore(data);
-                    }
-                    authorActivity.plListRootView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            authorActivity.plContent.onRefreshComplete();
-                        }
-                    }, 500);
-                }
-
-                @Override
-                protected void onErrorResponse(VolleyError error) {
-                    super.onErrorResponse(error);
-                    authorActivity.plListRootView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            authorActivity.plContent.onRefreshComplete();
-                        }
-                    }, 500);
-                }
-            });
-        } else {
-            authorActivity.plContent.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    authorActivity.plContent.onRefreshComplete();
-                    authorActivity.plContent.noMoreData();
-                }
-            }, 500);
-        }
+    public void setLastId_viewpoint(String lastId_viewpoint) {
+        this.lastId_viewpoint = lastId_viewpoint;
     }
 
-
-    /**
-     * 重新加载
-     */
-    public void reLoadListData() {
-        request.doGet(getLoadMoreUrl(), new HttpListener<List<AuthorNewsJson>>() {
-            @Override
-            protected void onResponse(List<AuthorNewsJson> newsJsons) {
-                if (newsJsons != null) {
-                    int size = newsJsons.size();
-                    List<AuthorNewsJson> data;
-                    if (size > VarConstant.LIST_MAX_SIZE) {
-                        data = new ArrayList<AuthorNewsJson>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                    } else {
-                        data = newsJsons;
-                    }
-                    authorActivity.reLoadListData(data);
-                } else {
-                    authorActivity.plListRootView.loadEmptyData();
-                }
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                authorActivity.plListRootView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        authorActivity.plContent.onRefreshComplete();
-                    }
-                }, 500);
-            }
-        });
+    public String getLastId_article() {
+        return lastId_article;
     }
 
+    public void setLastId_article(String lastId_article) {
+        this.lastId_article = lastId_article;
+    }
+
+    public boolean isMore_viewpoint() {
+        return isMore_viewpoint;
+    }
+
+    public void setMore_viewpoint(boolean more_viewpoint) {
+        isMore_viewpoint = more_viewpoint;
+    }
+
+    public boolean isMore_article() {
+        return isMore_article;
+    }
+
+    public void setMore_article(boolean more_article) {
+        isMore_article = more_article;
+    }
 
     /**
      * 关注
@@ -198,7 +110,7 @@ public class AuthorPresenter extends BasePresenter {
         request.doGet(getFollowUrl(isFollow), jsonParam, new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                authorActivity.attention(isFollow);
+                activity.attention(isFollow);
                 if (isFollow) {
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
                 } else {
@@ -225,62 +137,5 @@ public class AuthorPresenter extends BasePresenter {
         } else {
             return HttpConstant.EXPLORE_BLOG_ADDFAVOR;
         }
-    }
-
-    /**
-     * 获取加载更多的url
-     *
-     * @return
-     */
-    private String getLoadMoreUrl() {
-        JSONObject jsonParam = request.getJsonParam();
-        jsonParam.put(VarConstant.HTTP_LIST_TYPE, VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER);
-        if (!RegexValidateUtil.isEmpty(lastId)) {
-            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
-        }
-        jsonParam.put(VarConstant.HTTP_WRITER_ID, authorId);
-        try {
-            return HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT(VarConstant
-                    .KEY, jsonParam
-                    .toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return HttpConstant.EXPLORE_BLOG_LIST;
-        }
-    }
-
-    /**
-     * 获取初次加载地址
-     *
-     * @param request
-     * @return
-     */
-    private String getUrl(VolleyRequest request) {
-        JSONObject jsonParam = request.getJsonParam();
-        jsonParam.put(VarConstant.HTTP_ID, authorId);
-        if (LoginUtils.isLogined(mContext)) {
-            UserJson userInfo = LoginUtils.getUserInfo(mContext);
-            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-        }
-        try {
-            return HttpConstant.EXPLORE_BLOG_PROFILE + VarConstant.HTTP_CONTENT + EncryptionUtils.createJWT
-                    (VarConstant.KEY, jsonParam
-                            .toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return HttpConstant.EXPLORE_BLOG_PROFILE;
-        }
-    }
-
-    public void setLastId(String lastId) {
-        this.lastId = lastId;
-    }
-
-    public boolean isMore() {
-        return isMore;
-    }
-
-    public void setMore(boolean more) {
-        isMore = more;
     }
 }

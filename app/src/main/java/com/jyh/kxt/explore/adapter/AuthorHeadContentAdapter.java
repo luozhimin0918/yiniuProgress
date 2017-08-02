@@ -17,7 +17,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.explore.json.AuthorJson;
-import com.jyh.kxt.trading.ui.AuthorActivity;
+import com.jyh.kxt.trading.AuthorActivity;
 import com.library.util.RegexValidateUtil;
 
 import java.util.List;
