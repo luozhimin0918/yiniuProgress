@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -475,8 +474,8 @@ public class NavigationTabLayout extends LinearLayout {
                             right,
                             bottom);
 
-                    Log.e("mIndicatorDrawable", "mIndicatorRect.left " + mIndicatorRect.left +
-                            " mIndicatorRect.right " + mIndicatorRect.right);
+//                    Log.e("mIndicatorDrawable", "mIndicatorRect.left " + mIndicatorRect.left +
+//                            " mIndicatorRect.right " + mIndicatorRect.right);
                 } else {
                     mIndicatorDrawable.setBounds(paddingLeft + (int) mIndicatorMarginLeft + mIndicatorRect.left,
                             (int) mIndicatorMarginTop,

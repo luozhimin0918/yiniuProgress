@@ -32,6 +32,8 @@ import com.library.bean.EventBusClass;
 import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -82,6 +84,7 @@ public class AuthorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trading_author, StatusBarColor.NO_COLOR);
 
+        plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plContent.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -117,8 +120,12 @@ public class AuthorActivity extends BaseActivity {
                 return false;
             }
         });
+
+        PinnedSectionListView refreshableView = plContent.getRefreshableView();
+        refreshableView.setmShadowTopSpace(SystemUtil.dp2px(this, 68));
+
         statusHeight = SystemUtil.getStatusHeight(this);
-        rlHeadTitleBar.getBackground().setAlpha(255);
+        rlHeadTitleBar.getBackground().setAlpha(0);
 
         try {
             EventBus.getDefault().register(this);
@@ -198,10 +205,11 @@ public class AuthorActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.v_like:
-                if (LoginUtils.isLogined(this))
+                if (LoginUtils.isLogined(this)) {
                     presenter.attention(vLike.isSelected());
-                else
+                } else {
                     startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                }
                 break;
         }
     }
@@ -273,7 +281,7 @@ public class AuthorActivity extends BaseActivity {
             tvInfo.setAlpha(scaleVal);
 
             int bgAlphaVal = (int) ((1 - scaleVal) * 255);
-//            rlHeadTitleBar.getBackground().setAlpha(bgAlphaVal);
+            rlHeadTitleBar.getBackground().setAlpha(bgAlphaVal);
         } else if (scrollY > actionBarHeight) {
 
             ivPhoto.setScaleX(0.4f);
@@ -290,7 +298,7 @@ public class AuthorActivity extends BaseActivity {
             llLayoutDesc.setAlpha(0);
             tvInfo.setAlpha(0);
 
-//            rlHeadTitleBar.getBackground().setAlpha(255);
+            rlHeadTitleBar.getBackground().setAlpha(255);
 
         } else if (scrollY == 0) {
             ivPhoto.setScaleX(1);
@@ -307,7 +315,7 @@ public class AuthorActivity extends BaseActivity {
             llLayoutDesc.setAlpha(1);
             tvInfo.setAlpha(1);
 
-//            rlHeadTitleBar.getBackground().setAlpha(0);
+            rlHeadTitleBar.getBackground().setAlpha(0);
 
         }
     }

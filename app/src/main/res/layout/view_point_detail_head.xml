@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clipToPadding="false"
+    android:padding="10dp">
+
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/point_detail_img"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/point_detail_nick_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@+id/point_detail_img"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="简单的OMG"
+        android:textColor="@color/font_color62"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <TextView
+        android:id="@+id/point_detail_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/point_detail_img"
+        android:layout_alignLeft="@+id/point_detail_nick_name"
+        android:layout_marginBottom="2dp"
+        android:text="02-14 22:58"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/min_font_size"/>
+
+    <CheckBox
+        android:id="@+id/point_detail_attention"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/point_detail_time"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/point_detail_nick_name"
+        android:button="@drawable/sel_news_attention"/>
+
+    <TextView
+        android:id="@+id/point_detail_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/point_detail_time"
+        android:layout_marginTop="10dp"
+        android:text="您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。"
+        android:textColor="@color/font_color64"
+        android:textSize="@dimen/content_font_size"/>
+
+    <LinearLayout
+        android:id="@+id/point_detail_atlas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/point_detail_content"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:background="@color/colorPrimary"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:background="@color/colorPrimary"
+            android:layout_height="90dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:background="@color/colorPrimary"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <View
+        android:layout_below="@+id/point_detail_atlas"
+        android:layout_width="match_parent"
+        android:background="@color/bg_color2"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginRight="-10dp"
+        android:layout_height="6dp"/>
+
+</RelativeLayout>

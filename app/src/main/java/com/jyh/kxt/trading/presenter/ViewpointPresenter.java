@@ -19,7 +19,7 @@ import com.jyh.kxt.trading.adapter.HotHeadAdapter;
 import com.jyh.kxt.trading.adapter.ViewpointAdapter;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
-import com.jyh.kxt.trading.ui.ViewpointFragment;
+import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 

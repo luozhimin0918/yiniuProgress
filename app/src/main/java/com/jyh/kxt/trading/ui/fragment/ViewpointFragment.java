@@ -1,4 +1,4 @@
-package com.jyh.kxt.trading.ui;
+package com.jyh.kxt.trading.ui.fragment;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;

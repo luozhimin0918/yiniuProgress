@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_view_point_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jyh.kxt.trading.ui.ViewPointDetailActivity">
+
+    <include layout="@layout/action_bar1"/>
+
+    <include layout="@layout/view_point_detail_head"/>
+
+</LinearLayout>

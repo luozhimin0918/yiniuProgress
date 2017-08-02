@@ -78,6 +78,8 @@ public class PinnedSectionListView extends ListView {
     private int mSectionsDistanceY;
     private int mShadowHeight;
 
+    private int mShadowTopSpace = 0;
+
     /**
      * Delegating listener, can be null.
      */
@@ -424,7 +426,7 @@ public class PinnedSectionListView extends ListView {
 
             // prepare variables
             int pLeft = getListPaddingLeft();
-            int pTop = getListPaddingTop();
+            int pTop = getListPaddingTop()+   mShadowTopSpace;
             View view = mPinnedSection.view;
 
             // draw child
@@ -555,4 +557,8 @@ public class PinnedSectionListView extends ListView {
         return ((PinnedSectionListAdapter) adapter).isItemViewTypePinned(viewType);
     }
 
+
+    public void setmShadowTopSpace(int mShadowTopSpace) {
+        this.mShadowTopSpace = mShadowTopSpace;
+    }
 }
