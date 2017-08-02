@@ -17,6 +17,7 @@
     <color name="slidingTabLayout_bgColor">#242424</color>
     <color name="segmentTabLayout_bar_color">#242424</color>
     <color name="segmentTabLayout_indicator_color">#136aa4</color>
+    <color name="navigationTablayout_bgcolor">#1A222D</color>
 
     <color name="line_color">#1E1E1E</color>
     <color name="line_color2">#1E1E1E</color>

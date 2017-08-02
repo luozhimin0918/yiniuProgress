@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
@@ -95,13 +96,31 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         }
     }
 
-    public void init(List<AuthorNewsJson> list) {
+    public void init(List<AuthorNewsJson> list, String slide) {
+
+
         if (newsAdapter == null) {
             newsAdapter = new NewsAdapter(getContext(), list);
             plvContent.setAdapter(newsAdapter);
         } else {
             newsAdapter.setData(list);
         }
+
+        initHeadViewLayout();
+
+        try {
+            if (slide != null && !slide.trim().equals("")) {
+                List<SlideJson> slideJsons = JSON.parseArray(slide, SlideJson.class);
+                addCarouselView(slideJsons);
+                if (homeHeadView != null) {
+                    plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+                    plvContent.getRefreshableView().addHeaderView(homeHeadView);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void refresh(List<AuthorNewsJson> list) {

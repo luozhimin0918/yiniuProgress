@@ -8,6 +8,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
+import com.jyh.kxt.trading.adapter.AuthorAdapter;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -59,6 +60,42 @@ public class AuthorPresenter extends BasePresenter {
                 activity.loadError();
             }
         });
+    }
+
+
+    public void loadMore() {
+        int type = 0;
+        try {
+            type = activity.adapter.getType();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (type == AuthorAdapter.TYPE_VIEWPOINT) {
+            //观点加载更多
+            if (isMore_viewpoint) {
+
+            } else {
+                activity.plContent.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.plContent.onRefreshComplete();
+                    }
+                }, 200);
+            }
+        } else {
+            //文章加载更多
+            if (isMore_article) {
+
+            } else {
+                activity.plContent.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.plContent.onRefreshComplete();
+                    }
+                }, 200);
+            }
+        }
+
     }
 
     public String getLastId_viewpoint() {

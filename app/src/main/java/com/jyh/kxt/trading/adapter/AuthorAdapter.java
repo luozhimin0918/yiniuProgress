@@ -38,12 +38,15 @@ import butterknife.ButterKnife;
  * 创建日期:2017/8/2.
  */
 
-public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter {
+public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter, NavigationTabLayout
+        .OnTabSelectListener {
 
     public static final int TYPE_VIEWPOINT = 1;
     public static final int TYPE_ARTICLE = 2;
 
     public static final int TYPE_TITLE = 0;
+
+    private NavigationTabLayout navigationTabLayout;
 
     private Context mContext;
     private List<ViewpointJson> viewpoints;
@@ -97,9 +100,10 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         if (convertView == null) {
             switch (viewType) {
                 case TYPE_TITLE:
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.view_viewpoint_function_nav, parent, false);
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.view_viewpoint_function_nav2, parent, false);
                     titleViewHolder = new TitleViewHolder(convertView);
                     convertView.setTag(titleViewHolder);
+                    navigationTabLayout = (NavigationTabLayout) convertView;
                     break;
                 case TYPE_ARTICLE:
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_news, parent, false);
@@ -137,17 +141,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     } else {
                         titleViewHolder.ntlTitleView.setCurrentTab(1);
                     }
-                    titleViewHolder.ntlTitleView.setOnTabSelectListener(new NavigationTabLayout.OnTabSelectListener() {
-                        @Override
-                        public void onTabSelect(int position, int clickId) {
-                            if (position == 0) {
-                                type = TYPE_VIEWPOINT;
-                            } else {
-                                type = TYPE_ARTICLE;
-                            }
-                            notifyDataSetChanged();
-                        }
-                    });
+                    titleViewHolder.ntlTitleView.setOnTabSelectListener(this);
 
                     break;
                 case TYPE_ARTICLE:
@@ -258,6 +252,21 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         this.type = type;
     }
 
+    public List<AuthorNewsJson> getAuthorData() {
+        return news;
+    }
+
+    public List<ViewpointJson> getViewpointData() {
+        return viewpoints;
+    }
+
+    public List getData() {
+        if (type == TYPE_VIEWPOINT)
+            return getViewpointData();
+        else
+            return getAuthorData();
+    }
+
     /**
      * 设置内容字体颜色
      *
@@ -323,6 +332,18 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 //        }
         holder.tvTitle.setText(Html.fromHtml(content));
         holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+    }
+
+    @Override
+    public void onTabSelect(int position, int clickId) {
+        if (position == 0) {
+            type = TYPE_VIEWPOINT;
+        } else {
+            type = TYPE_ARTICLE;
+        }
+        if (clickId == 0) {
+            notifyDataSetChanged();
+        }
     }
 
     static class ArticleViewHolder {

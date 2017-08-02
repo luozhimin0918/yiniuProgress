@@ -209,4 +209,5 @@ public class HttpConstant {
     public static final String TRADING_COLUMNIST_NAV = BASE_URL + "writer/nav" + VarConstant.HTTP_CONTENT;//全部专栏-标题
     public static final String TRADING_COLUMNIST_LIST = BASE_URL + "writer/list";//全部专栏-列表
     public static final String TRADING_COLUMNIST_PROFILE = BASE_URL + "writer/profile";//专栏详情
+    public static final String TRADING_TRADE_ARTICLE = BASE_URL + "trade/article/nav";//文章列表
 }

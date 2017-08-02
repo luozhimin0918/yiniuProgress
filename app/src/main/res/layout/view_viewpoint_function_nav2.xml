@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jyh.kxt.base.custom.NavigationTabLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ntl_title_view"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+
+    android:background="@color/navigationTablayout_bgcolor"
+
+    tl:tl_indicator_color="@color/theme1"
+    tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+
+    tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+    tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+    tl:tl_tab_padding="10dp"
+    tl:tl_textSelectColor="@color/font_color4"
+    tl:tl_textUnselectColor="@color/font_color6"
+    tl:tl_textsize="@dimen/describe_font_size4">
+
+</com.jyh.kxt.base.custom.NavigationTabLayout>

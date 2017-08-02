@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
@@ -53,8 +55,9 @@ import butterknife.OnClick;
  * 创建日期:2017/8/1.
  */
 
-public class AuthorActivity extends BaseActivity {
-    @BindView(R.id.pl_content) PullPinnedListView plContent;
+public class AuthorActivity extends BaseActivity implements AdapterView.OnItemClickListener,PullToRefreshBase.OnRefreshListener {
+    @BindView(R.id.pl_content) public PullPinnedListView plContent;
+    private PinnedSectionListView refreshableView;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.v_like) View vLike;
     @BindView(R.id.rl_head_title_bar) RelativeLayout rlHeadTitleBar;
@@ -77,7 +80,8 @@ public class AuthorActivity extends BaseActivity {
     private boolean isPullUp;
     private int statusHeight;
 
-    private AuthorAdapter adapter;
+    public AuthorAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +89,11 @@ public class AuthorActivity extends BaseActivity {
         setContentView(R.layout.activity_trading_author, StatusBarColor.NO_COLOR);
 
         plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        plContent.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+        refreshableView = plContent.getRefreshableView();
+        refreshableView.setDividerHeight(0);
+        plContent.setOnItemClickListener(this);
+        plContent.setOnRefreshListener(this);
+        refreshableView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 switch (scrollState) {
@@ -100,7 +108,7 @@ public class AuthorActivity extends BaseActivity {
                 listUpdateScroll();
             }
         });
-        plContent.getRefreshableView().setOnTouchListener(new View.OnTouchListener() {
+        refreshableView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 try {
@@ -121,7 +129,6 @@ public class AuthorActivity extends BaseActivity {
             }
         });
 
-        PinnedSectionListView refreshableView = plContent.getRefreshableView();
         refreshableView.setmShadowTopSpace(SystemUtil.dp2px(this, 68));
 
         statusHeight = SystemUtil.getStatusHeight(this);
@@ -186,8 +193,8 @@ public class AuthorActivity extends BaseActivity {
                 adapter.setArticleData(data);
             }
 
-            if (plContent.getRefreshableView().getHeaderViewsCount() <= 1) {
-                plContent.getRefreshableView().addHeaderView(headView);
+            if (refreshableView.getHeaderViewsCount() <= 1) {
+                refreshableView.addHeaderView(headView);
             }
             loadOver();
         } catch (Exception e) {
@@ -386,5 +393,25 @@ public class AuthorActivity extends BaseActivity {
      */
     public void attention(boolean isFollow) {
         vLike.setSelected(!isFollow);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        List data = adapter.getData();
+        int clickPosition = position - 1;
+        if (data != null && data.size() >= clickPosition) {
+            Object bean = data.get(clickPosition);
+            if (bean instanceof ViewpointJson) {
+                ViewpointJson viewpoint = (ViewpointJson) bean;
+            } else {
+                AuthorNewsJson newsJson = (AuthorNewsJson) bean;
+                JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
+            }
+        }
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshBase refreshView) {
+        presenter.loadMore();
     }
 }
