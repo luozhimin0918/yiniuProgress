@@ -2,12 +2,14 @@ package com.jyh.kxt.trading.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
+import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
@@ -15,8 +17,13 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 项目名:KxtProfessional
@@ -70,6 +77,7 @@ public class AuthorPresenter extends BasePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        JSONObject jsonParam = request.getJsonParam();
         if (type == AuthorAdapter.TYPE_VIEWPOINT) {
             //观点加载更多
             if (isMore_viewpoint) {
@@ -79,18 +87,60 @@ public class AuthorPresenter extends BasePresenter {
                     @Override
                     public void run() {
                         activity.plContent.onRefreshComplete();
+                        ToastView.makeText(mContext, mContext.getString(R.string.no_data));
                     }
                 }, 200);
+
             }
         } else {
             //文章加载更多
             if (isMore_article) {
+                jsonParam.put(VarConstant.HTTP_LIST_TYPE, VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER);
+                if (!RegexValidateUtil.isEmpty(lastId_article)) {
+                    jsonParam.put(VarConstant.HTTP_LASTID, lastId_article);
+                }
+                jsonParam.put(VarConstant.HTTP_WRITER_ID, authorId);
+                request.doPost(HttpConstant.EXPLORE_BLOG_LIST, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
+                    @Override
+                    protected void onResponse(List<AuthorNewsJson> newsJsons) {
+                        if (newsJsons != null) {
+                            int size = newsJsons.size();
+                            List<AuthorNewsJson> data;
+                            if (size > VarConstant.LIST_MAX_SIZE) {
+                                isMore_article = true;
+                                data = new ArrayList<>(newsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                                lastId_article = data.get(data.size() - 1).getO_id();
+                            } else {
+                                isMore_article = false;
+                                data = newsJsons;
+                            }
+                            activity.loadMoreArticle(data);
+                        }
+                        activity.plRootView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.plContent.onRefreshComplete();
+                            }
+                        }, 200);
+                    }
 
+                    @Override
+                    protected void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        activity.plRootView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.plContent.onRefreshComplete();
+                            }
+                        }, 200);
+                    }
+                });
             } else {
                 activity.plContent.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         activity.plContent.onRefreshComplete();
+                        ToastView.makeText(mContext, mContext.getString(R.string.no_data));
                     }
                 }, 200);
             }

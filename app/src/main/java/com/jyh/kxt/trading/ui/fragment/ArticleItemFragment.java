@@ -96,51 +96,25 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         }
     }
 
-    public void init(List<AuthorNewsJson> list, String slide) {
-
-
+    public void init(List<AuthorNewsJson> list) {
         if (newsAdapter == null) {
             newsAdapter = new NewsAdapter(getContext(), list);
             plvContent.setAdapter(newsAdapter);
         } else {
             newsAdapter.setData(list);
         }
-
-        initHeadViewLayout();
-
-        try {
-            if (slide != null && !slide.trim().equals("")) {
-                List<SlideJson> slideJsons = JSON.parseArray(slide, SlideJson.class);
-                addCarouselView(slideJsons);
-                if (homeHeadView != null) {
-                    plvContent.getRefreshableView().removeHeaderView(homeHeadView);
-                    plvContent.getRefreshableView().addHeaderView(homeHeadView);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        if (homeHeadView != null)
+            plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+        plvContent.getRefreshableView().addHeaderView(homeHeadView);
     }
 
-    public void refresh(List<AuthorNewsJson> list,String slide) {
+    public void refresh(List<AuthorNewsJson> list) {
         if (list != null && list.size() != 0) {
             newsAdapter.setData(list);
         }
-        initHeadViewLayout();
-
-        try {
-            if (slide != null && !slide.trim().equals("")) {
-                List<SlideJson> slideJsons = JSON.parseArray(slide, SlideJson.class);
-                addCarouselView(slideJsons);
-                if (homeHeadView != null) {
-                    plvContent.getRefreshableView().removeHeaderView(homeHeadView);
-                    plvContent.getRefreshableView().addHeaderView(homeHeadView);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (homeHeadView != null)
+            plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+        plvContent.getRefreshableView().addHeaderView(homeHeadView);
     }
 
     public void loadMore(List<AuthorNewsJson> list) {

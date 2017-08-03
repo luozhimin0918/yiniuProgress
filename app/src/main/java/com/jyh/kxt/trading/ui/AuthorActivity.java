@@ -55,7 +55,7 @@ import butterknife.OnClick;
  * 创建日期:2017/8/1.
  */
 
-public class AuthorActivity extends BaseActivity implements AdapterView.OnItemClickListener,PullToRefreshBase.OnRefreshListener {
+public class AuthorActivity extends BaseActivity implements AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener {
     @BindView(R.id.pl_content) public PullPinnedListView plContent;
     private PinnedSectionListView refreshableView;
     @BindView(R.id.iv_break) ImageView ivBreak;
@@ -66,7 +66,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     @BindView(R.id.tv_fans) TextView tvFans;
     @BindView(R.id.tv_article) TextView tvArticle;
     @BindView(R.id.ll_layout_desc) LinearLayout llLayoutDesc;
-    @BindView(R.id.pl_list_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.pl_list_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.error_break) ImageView errorBreak;
 
     private AuthorPresenter presenter;
@@ -413,5 +413,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     @Override
     public void onRefresh(PullToRefreshBase refreshView) {
         presenter.loadMore();
+    }
+
+    public void loadMoreArticle(List<AuthorNewsJson> data) {
+        adapter.addArticleData(data);
     }
 }

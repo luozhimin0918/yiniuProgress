@@ -230,13 +230,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     }
 
     public void addViewPointData(List<ViewpointJson> viewpointData) {
-        viewpoints.clear();
         viewpoints.addAll(viewpointData);
         notifyDataSetChanged();
     }
 
     public void addArticleData(List<AuthorNewsJson> news) {
-        this.news.clear();
         this.news.addAll(news);
         notifyDataSetChanged();
     }

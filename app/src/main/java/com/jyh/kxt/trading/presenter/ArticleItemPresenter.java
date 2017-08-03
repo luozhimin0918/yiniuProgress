@@ -1,6 +1,7 @@
 package com.jyh.kxt.trading.presenter;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -10,6 +11,8 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
+import com.jyh.kxt.index.json.TypeDataJson;
+import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.trading.ui.fragment.ArticleItemFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -42,7 +45,7 @@ public class ArticleItemPresenter extends BasePresenter {
         request = new VolleyRequest(mContext, mQueue);
     }
 
-    public void init(String id, final boolean isMain, String type) {
+    public void init(String id, final boolean isMain, final String type) {
 
         this.id = id;
         this.type = type;
@@ -62,26 +65,46 @@ public class ArticleItemPresenter extends BasePresenter {
             @Override
             protected void onResponse(String s) {
                 if (isMain) {
-                    JSONObject job = JSON.parseObject(s, JSONObject.class);
-                    String slide = job.getString("slide");
-                    String main = job.getString("main");
-                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(main, AuthorNewsJson.class);
-                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-                        fragment.plRootView.loadEmptyData();
-                    } else {
-                        int size = authorNewsJsons.size();
-                        List<AuthorNewsJson> list;
-                        if (size > VarConstant.LIST_MAX_SIZE) {
-                            isMore = true;
-                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-                        } else {
-                            isMore = false;
-                            list = new ArrayList<>(authorNewsJsons);
+
+                    List<TypeDataJson> typeDataJsons = JSON.parseArray(s, TypeDataJson.class);
+                    for (TypeDataJson typeDataJson : typeDataJsons) {
+                        String dataType = typeDataJson.getType();
+                        switch (dataType) {
+                            case "slide":
+                                try {
+                                    fragment.initHeadViewLayout();
+                                    JSONArray array= (JSONArray) typeDataJson.getData();
+                                    List<SlideJson> slides=JSON.parseArray(array.toString(), SlideJson.class);
+                                    if(slides!=null&&slides.size()!=0){
+                                        fragment.addCarouselView(slides);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case "main":
+                                JSONArray array= (JSONArray) typeDataJson.getData();
+                                List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+                                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                                    fragment.plRootView.loadEmptyData();
+                                } else {
+                                    int size = authorNewsJsons.size();
+                                    List<AuthorNewsJson> list;
+                                    if (size > VarConstant.LIST_MAX_SIZE) {
+                                        isMore = true;
+                                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                                    } else {
+                                        isMore = false;
+                                        list = new ArrayList<>(authorNewsJsons);
+                                    }
+                                    fragment.init(list);
+                                    fragment.plRootView.loadOver();
+                                }
+                                break;
                         }
-                        fragment.init(list, slide);
-                        fragment.plRootView.loadOver();
                     }
+
                 } else {
                     List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
                     if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
@@ -97,7 +120,7 @@ public class ArticleItemPresenter extends BasePresenter {
                             isMore = false;
                             list = new ArrayList<>(authorNewsJsons);
                         }
-                        fragment.init(list, null);
+                        fragment.init(list);
                         fragment.plRootView.loadOver();
                     }
                 }
@@ -110,33 +133,6 @@ public class ArticleItemPresenter extends BasePresenter {
             }
         });
 
-//        request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
-//            @Override
-//            protected void onResponse(List<AuthorNewsJson> authorNewsJsons) {
-//                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-//                    fragment.plRootView.loadEmptyData();
-//                } else {
-//                    int size = authorNewsJsons.size();
-//                    List<AuthorNewsJson> list;
-//                    if (size > VarConstant.LIST_MAX_SIZE) {
-//                        isMore = true;
-//                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-//                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-//                    } else {
-//                        isMore = false;
-//                        list = new ArrayList<>(authorNewsJsons);
-//                    }
-//                    fragment.init(list);
-//                    fragment.plRootView.loadOver();
-//                }
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//                fragment.plRootView.loadError();
-//            }
-//        });
     }
 
     public void refresh() {
@@ -153,40 +149,46 @@ public class ArticleItemPresenter extends BasePresenter {
         request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
-//                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-//                } else {
-//                    int size = authorNewsJsons.size();
-//                    List<AuthorNewsJson> list;
-//                    if (size > VarConstant.LIST_MAX_SIZE) {
-//                        isMore = true;
-//                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-//                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-//                    } else {
-//                        isMore = false;
-//                        list = new ArrayList<>(authorNewsJsons);
-//                    }
-//                    fragment.refresh(list);
-//                }
+
                 if (isMain) {
-                    JSONObject job = JSON.parseObject(s, JSONObject.class);
-                    String slide = job.getString("slide");
-                    String main = job.getString("main");
-                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(main, AuthorNewsJson.class);
-                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-                    } else {
-                        int size = authorNewsJsons.size();
-                        List<AuthorNewsJson> list;
-                        if (size > VarConstant.LIST_MAX_SIZE) {
-                            isMore = true;
-                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-                        } else {
-                            isMore = false;
-                            list = new ArrayList<>(authorNewsJsons);
+
+                    List<TypeDataJson> typeDataJsons = JSON.parseArray(s, TypeDataJson.class);
+                    for (TypeDataJson typeDataJson : typeDataJsons) {
+                        String dataType = typeDataJson.getType();
+                        switch (dataType) {
+                            case "slide":
+                                try {
+                                    fragment.initHeadViewLayout();
+                                    JSONArray array= (JSONArray) typeDataJson.getData();
+                                    List<SlideJson> slides=JSON.parseArray(array.toString(), SlideJson.class);
+                                    if(slides!=null&&slides.size()!=0){
+                                        fragment.addCarouselView(slides);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case "main":
+                                JSONArray array= (JSONArray) typeDataJson.getData();
+                                List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+                                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                                } else {
+                                    int size = authorNewsJsons.size();
+                                    List<AuthorNewsJson> list;
+                                    if (size > VarConstant.LIST_MAX_SIZE) {
+                                        isMore = true;
+                                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                                    } else {
+                                        isMore = false;
+                                        list = new ArrayList<>(authorNewsJsons);
+                                    }
+                                    fragment.refresh(list);
+                                }
+                                break;
                         }
-                        fragment.refresh(list, slide);
-                        fragment.plRootView.loadOver();
                     }
+
                 } else {
                     List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
                     if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
@@ -201,9 +203,47 @@ public class ArticleItemPresenter extends BasePresenter {
                             isMore = false;
                             list = new ArrayList<>(authorNewsJsons);
                         }
-                        fragment.refresh(list, null);
+                        fragment.refresh(list);
                     }
                 }
+
+//                if (isMain) {
+//                    JSONObject job = JSON.parseObject(s, JSONObject.class);
+//                    String slide = job.getString("slide");
+//                    String main = job.getString("main");
+//                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(main, AuthorNewsJson.class);
+//                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+//                    } else {
+//                        int size = authorNewsJsons.size();
+//                        List<AuthorNewsJson> list;
+//                        if (size > VarConstant.LIST_MAX_SIZE) {
+//                            isMore = true;
+//                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+//                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+//                        } else {
+//                            isMore = false;
+//                            list = new ArrayList<>(authorNewsJsons);
+//                        }
+//                        fragment.refresh(list, slide);
+//                        fragment.plRootView.loadOver();
+//                    }
+//                } else {
+//                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
+//                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+//                    } else {
+//                        int size = authorNewsJsons.size();
+//                        List<AuthorNewsJson> list;
+//                        if (size > VarConstant.LIST_MAX_SIZE) {
+//                            isMore = true;
+//                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+//                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+//                        } else {
+//                            isMore = false;
+//                            list = new ArrayList<>(authorNewsJsons);
+//                        }
+//                        fragment.refresh(list, null);
+//                    }
+//                }
                 fragment.plRootView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -238,23 +278,71 @@ public class ArticleItemPresenter extends BasePresenter {
             }
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
 
-            request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
+            request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<String>() {
                 @Override
-                protected void onResponse(List<AuthorNewsJson> authorNewsJsons) {
-                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-                    } else {
-                        int size = authorNewsJsons.size();
-                        List<AuthorNewsJson> list;
-                        if (size > VarConstant.LIST_MAX_SIZE) {
-                            isMore = true;
-                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-                        } else {
-                            isMore = false;
-                            list = new ArrayList<>(authorNewsJsons);
+                protected void onResponse(String s) {
+
+                    if (isMain) {
+
+                        List<TypeDataJson> typeDataJsons = JSON.parseArray(s, TypeDataJson.class);
+                        for (TypeDataJson typeDataJson : typeDataJsons) {
+                            String dataType = typeDataJson.getType();
+                            switch (dataType) {
+                                case "slide":
+                                    break;
+                                case "main":
+                                    JSONArray array= (JSONArray) typeDataJson.getData();
+                                    List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+                                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                                    } else {
+                                        int size = authorNewsJsons.size();
+                                        List<AuthorNewsJson> list;
+                                        if (size > VarConstant.LIST_MAX_SIZE) {
+                                            isMore = true;
+                                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                                        } else {
+                                            isMore = false;
+                                            list = new ArrayList<>(authorNewsJsons);
+                                        }
+                                        fragment.loadMore(list);
+                                    }
+                                    break;
+                            }
                         }
-                        fragment.loadMore(list);
+
+                    } else {
+                        List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
+                        if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                        } else {
+                            int size = authorNewsJsons.size();
+                            List<AuthorNewsJson> list;
+                            if (size > VarConstant.LIST_MAX_SIZE) {
+                                isMore = true;
+                                list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                                lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                            } else {
+                                isMore = false;
+                                list = new ArrayList<>(authorNewsJsons);
+                            }
+                            fragment.loadMore(list);
+                        }
                     }
+
+//                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+//                    } else {
+//                        int size = authorNewsJsons.size();
+//                        List<AuthorNewsJson> list;
+//                        if (size > VarConstant.LIST_MAX_SIZE) {
+//                            isMore = true;
+//                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+//                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+//                        } else {
+//                            isMore = false;
+//                            list = new ArrayList<>(authorNewsJsons);
+//                        }
+//                        fragment.loadMore(list);
+//                    }
                     fragment.plRootView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
