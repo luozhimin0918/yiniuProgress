@@ -33,8 +33,12 @@ public class RollViewPager extends ViewPager {
 
     private GridViewItemData gridViewItemData;
     private ViewPagerAdapter viewPagerAdapter;
-    private int mGridMaxCount;
+
     private List dataList;
+
+    private int mGridMaxCount;
+    private int mNumColumns = 3;
+
     private boolean showPaddingLine = true;
 
     public RollViewPager(Context context) {
@@ -58,6 +62,20 @@ public class RollViewPager extends ViewPager {
 
     public void setGridViewItemData(GridViewItemData gridViewItemData) {
         this.gridViewItemData = gridViewItemData;
+    }
+
+    public RollViewPager setNumColumns(int mNumColumns) {
+        this.mNumColumns = mNumColumns;
+        return this;
+    }
+
+    public boolean isShowPaddingLine() {
+        return showPaddingLine;
+    }
+
+    public RollViewPager setShowPaddingLine(boolean showPaddingLine) {
+        this.showPaddingLine = showPaddingLine;
+        return this;
     }
 
     public void build() {
@@ -93,7 +111,6 @@ public class RollViewPager extends ViewPager {
             @Override
             public void run() {
                 RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
-//                RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             }
         }, 500);
 
@@ -103,7 +120,7 @@ public class RollViewPager extends ViewPager {
         GridView itemPageGridView = new GridView(getContext());
 
         itemPageGridView.setMotionEventSplittingEnabled(false);
-        itemPageGridView.setNumColumns(3);
+        itemPageGridView.setNumColumns(mNumColumns);
         itemPageGridView.setBackgroundColor(Color.TRANSPARENT);
         itemPageGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         itemPageGridView.setCacheColorHint(0);
@@ -190,11 +207,4 @@ public class RollViewPager extends ViewPager {
         }
     }
 
-    public boolean isShowPaddingLine() {
-        return showPaddingLine;
-    }
-
-    public void setShowPaddingLine(boolean showPaddingLine) {
-        this.showPaddingLine = showPaddingLine;
-    }
 }

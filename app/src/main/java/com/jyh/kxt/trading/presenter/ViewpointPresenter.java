@@ -116,8 +116,10 @@ public class ViewpointPresenter extends BasePresenter {
                 rollDotViewPager.setViewPageToDotAbout();
                 RollViewPager rollViewPager = rollDotViewPager.getRollViewPager();
                 rollViewPager
-                        .setGridMaxCount(6)
+                        .setNumColumns(4)
+                        .setGridMaxCount(8)
                         .setDataList(viewPointBean.getHot())
+                        .setShowPaddingLine(false)
                         .setGridViewItemData(
                                 new RollViewPager.GridViewItemData() {
                                     @Override

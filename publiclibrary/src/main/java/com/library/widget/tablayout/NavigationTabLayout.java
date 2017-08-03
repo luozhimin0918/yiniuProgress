@@ -109,7 +109,9 @@ public class NavigationTabLayout extends LinearLayout {
 
     private int mTextBold;
     private boolean mTextAllCaps;
-    private Rect clickRect;
+
+    private boolean isAcceptTouchRect = false;
+    private Rect mTouchRect;
 
     public NavigationTabLayout(Context context) {
         this(context, null);
@@ -272,9 +274,9 @@ public class NavigationTabLayout extends LinearLayout {
 
     private boolean isPinnedViewTouched(View view, float x, float y) {
 
-        if (clickRect != null) {
-            boolean contains = clickRect.contains((int) x, (int) y);
-            clickRect = null;
+        if (mTouchRect != null) {
+            boolean contains = mTouchRect.contains((int) x, (int) y);
+            mTouchRect = null;
             return contains;
         }
 
@@ -785,8 +787,16 @@ public class NavigationTabLayout extends LinearLayout {
     private Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
-    public void setClickRect(Rect clickRect) {
-        this.clickRect = clickRect;
+    public void setAcceptTouchRect(boolean acceptTouchRect) {
+        isAcceptTouchRect = acceptTouchRect;
+    }
+
+    public boolean isAcceptTouchRect(){
+        return isAcceptTouchRect;
+    }
+    
+    public void setTouchRect(Rect mTouchRect) {
+        this.mTouchRect = mTouchRect;
     }
 
 

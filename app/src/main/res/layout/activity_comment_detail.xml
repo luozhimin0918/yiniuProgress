@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_comment_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jyh.kxt.trading.ui.CommentDetailActivity">
+
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar1"/>
+
+    <com.library.widget.handmark.PullToRefreshListView
+        android:id="@+id/ptrlv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/comment_layout"
+        android:layout_below="@+id/action_bar">
+
+    </com.library.widget.handmark.PullToRefreshListView>
+
+    <LinearLayout
+        android:id="@+id/comment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line_color6"/>
+
+        <TextView
+            android:id="@+id/comment_publish"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_weight="3"
+            android:background="@drawable/shape_edit_comme_bg"
+            android:drawablePadding="8dp"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text="发表伟大言论..."
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size3"/>
+    </LinearLayout>
+
+</RelativeLayout>

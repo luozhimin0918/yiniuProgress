@@ -1,5 +1,7 @@
 package com.jyh.kxt.trading.json;
 
+import java.util.List;
+
 /**
  * Created by Mr'Dai on 2017/8/1.
  */
@@ -21,78 +23,59 @@ public class ViewPointTradeBean {
     }
 
     /**
-     * comment_num : 0
-     * content : 阿素福非凡方法asfsa阿司法司法额发生的还是
-     * create_time : 1501487885
-     * id : 45
-     * num_good : 1
-     * picture :
-     * ref_id : 49
+     * 实体类
+     * {
+     * content:行情简述$超链接$  //内包含超链接 超链接内容用#&<  >&# 包含，格式数据包含 title href,o_class,o_action,o_id    示例格式 #&<
+     * title=文字&href=&o_class=&o_action=&o_id=  >&#
+     * num_good:200,
+     * num_commit:200,
+     * author_name:快讯通,
+     * author_id:108108,
+     * author_img:头像url
+     * time:159039321,
+     * href:"",
+     * o_class:trading,
+     * o_action:detail,
+     * o_id:108108,
+     * report:["垃圾营销","内容抄袭","违法信息","低俗信息","虚假",],
+     * //转发内容
+     * forward:{
+     * //格式参考观点的格式[图片],[图片] },
+     * picture：[ img1url,img2url,img3url ],
+     * shareDict:{url:http://www.baidu.com,
+     * img:http://www.baidu.com/icon.png,
+     * title:行情描述,
+     * descript:行情描述 },
+     * <p>
+     * }
      */
+    public String content;
+    public int num_good;
+    public int num_commit;
+    public String author_name;
+    public String author_id;
+    public String author_img;
+    public long time;
+    public String href;
 
-    private int comment_num;
-    private String content;
-    private int create_time;
-    private int id;
-    private int num_good;
-    private String picture;
-    private int ref_id;
+    public String o_class;
+    public String o_action;
+    public String o_id;
 
-    public int getComment_num() {
-        return comment_num;
+    public List<String> report;
+    public List<String> picture;
+
+    public Forward forward;
+
+
+    class Forward {
+        public ShareDict shareDict;
+
+        class ShareDict {
+            public String url;
+            public String img;
+            public String title;
+            public String descript;
+        }
     }
-
-    public void setComment_num(int comment_num) {
-        this.comment_num = comment_num;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(int create_time) {
-        this.create_time = create_time;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getNum_good() {
-        return num_good;
-    }
-
-    public void setNum_good(int num_good) {
-        this.num_good = num_good;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public int getRef_id() {
-        return ref_id;
-    }
-
-    public void setRef_id(int ref_id) {
-        this.ref_id = ref_id;
-    }
-
-
 }

@@ -481,7 +481,13 @@ public class PinnedSectionListView extends ListView {
         if (mTouchTarget != null) {
             if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
                 mTouchTarget.dispatchTouchEvent(ev);
-                return false;
+                //如果isAcceptTouchRect 开启之后才返回false
+                if (mTouchTarget instanceof NavigationTabLayout) {
+                    NavigationTabLayout mNavigationTabLayout = (NavigationTabLayout) mTouchTarget;
+                    if (mNavigationTabLayout.isAcceptTouchRect()) {
+                        return false;
+                    }
+                }
             }
 
             if (action == MotionEvent.ACTION_UP) { // perform onClick on pinned view
@@ -519,10 +525,6 @@ public class PinnedSectionListView extends ListView {
     private boolean isPinnedViewTouched(View view, float x, float y) {
         view.getHitRect(mTouchRect);
 
-        if (view instanceof NavigationTabLayout) {
-            ((NavigationTabLayout) view).setClickRect(mTouchRect);
-        }
-
         // by taping top or bottom padding, the list performs on click on a border item.
         // we don't add top padding here to keep behavior consistent.
         mTouchRect.top += mTranslateY + mShadowTopSpace;
@@ -530,6 +532,14 @@ public class PinnedSectionListView extends ListView {
         mTouchRect.bottom += mTranslateY + getPaddingTop() + mShadowTopSpace;
         mTouchRect.left += getPaddingLeft();
         mTouchRect.right -= getPaddingRight();
+
+        if (view instanceof NavigationTabLayout) {
+            NavigationTabLayout mNavigationTabLayout = (NavigationTabLayout) view;
+            if (mNavigationTabLayout.isAcceptTouchRect()) {
+                mNavigationTabLayout.setTouchRect(mTouchRect);
+            }
+        }
+
         return mTouchRect.contains((int) x, (int) y);
     }
 

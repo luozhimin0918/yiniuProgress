@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +131,24 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         replyMessageView();
     }
 
+    public void bindListView(LinearLayout listHeadView) {
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        headView = (LinearLayout) mInflater.inflate(R.layout.view_comment_list, listHeadView, false);
+
+        ButterKnife.bind(this, headView);
+
+        listHeadView.addView(headView);
+
+        tvReplyMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReplyMessageView(tvReplyMessage);
+            }
+        });
+        replyMessageView();
+    }
+
+
     public LinearLayout getHeadView() {
         return headView;
     }
@@ -140,11 +157,11 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      * 创建  填充更多的视图
      */
     public void createMoreVideoView(List<VideoDetailVideoBean> videoList) {
-        LayoutInflater mInflater = LayoutInflater.from(mContext);
         if (videoList == null || videoList.size() == 0) {
             rlRecommendLayout.setVisibility(View.GONE);
             return;
         }
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
         for (final VideoDetailVideoBean videoDetailVideoBean : videoList) {
 
             String imageUrl = HttpConstant.IMG_URL + videoDetailVideoBean.getPicture();
@@ -175,6 +192,11 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
      * 创建  填充更多的视图
      */
     public void createMoreView(List<NewsJson> articleList) {
+        if (articleList == null || articleList.size() == 0) {
+            rlRecommendLayout.setVisibility(View.GONE);
+            return;
+        }
+
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         for (final NewsJson mArticleJson : articleList) {
 

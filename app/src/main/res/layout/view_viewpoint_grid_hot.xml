@@ -47,5 +47,5 @@
     <com.jyh.kxt.base.custom.RollDotViewPager
         android:id="@+id/rdvp_content"
         android:layout_width="match_parent"
-        android:layout_height="232dp"/>
+        android:layout_height="200dp"/>
 </LinearLayout>

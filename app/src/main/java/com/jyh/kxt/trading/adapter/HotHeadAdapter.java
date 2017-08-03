@@ -63,7 +63,7 @@ public class HotHeadAdapter extends BaseAdapter {
 
         final HotHeadAdapter.ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_explore_author, parent, false);
+            convertView = mInflater.inflate(R.layout.item_hot_head_view, parent, false);
             holder = new HotHeadAdapter.ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

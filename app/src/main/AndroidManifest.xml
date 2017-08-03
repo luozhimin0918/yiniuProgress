@@ -289,6 +289,8 @@
         </activity>
         <activity android:name=".trading.ui.ViewPointDetailActivity">
         </activity>
+        <activity android:name=".trading.ui.CommentDetailActivity">
+        </activity>
     </application>
 
 </manifest>

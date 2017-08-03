@@ -391,4 +391,6 @@
     <dimen name="attention_padding3">5dp</dimen>
     <dimen name="market_nav_item_width">60dp</dimen>
 
+    <dimen name="view_point_picture_height">70dp</dimen>
+
 </resources>

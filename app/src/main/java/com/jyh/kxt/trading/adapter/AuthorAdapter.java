@@ -131,6 +131,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             switch (viewType) {
                 case TYPE_TITLE:
                     titleViewHolder.ntlTitleView.setData(R.array.nav_trading);
+                    titleViewHolder.ntlTitleView.setAcceptTouchRect(true);
                     titleViewHolder.ntlTitleView.setIndicatorStyle(NavigationTabLayout.STYLE_TRIANGLE);
 
                     if (type == TYPE_VIEWPOINT) {

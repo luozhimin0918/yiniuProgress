@@ -14,8 +14,7 @@
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"
         android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_height="38dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -31,7 +30,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="简单的OMG"
             android:textColor="@color/font_color62"
             android:textSize="@dimen/describe_font_size3"/>
 
@@ -40,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="02-14 22:58"
             android:textColor="@color/font_color9"
             android:textSize="@dimen/min_font_size"/>
     </LinearLayout>
@@ -55,7 +52,7 @@
         android:paddingRight="12dp"
         android:src="@mipmap/icon_viewpoint_jt"/>
 
-    <TextView
+    <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
         android:id="@+id/viewpoint_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,42 +62,22 @@
         android:gravity="center_vertical"
         android:maxLines="3"
         android:padding="5dp"
-        android:text="在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分在行情特别好滴积分"
         android:textColor="@color/font_color3"
         android:textSize="@dimen/describe_font_size4"
         android:visibility="visible"/>
 
 
-    <LinearLayout
+    <com.jyh.kxt.base.custom.MeasureGridView
         android:id="@+id/viewpoint_picture_layout"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/viewpoint_title"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp"
+        android:numColumns="3"
+        android:orientation="horizontal" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"/>
-    </LinearLayout>
+    </com.jyh.kxt.base.custom.MeasureGridView>
 
     <View
         android:id="@+id/viewpoint_line"

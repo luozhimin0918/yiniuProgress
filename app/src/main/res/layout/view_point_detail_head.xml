@@ -2,10 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:clipToPadding="false"
-    android:padding="10dp">
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="25dp">
 
 
     <com.jyh.kxt.base.custom.RoundImageView
@@ -57,42 +60,37 @@
         android:textColor="@color/font_color64"
         android:textSize="@dimen/content_font_size"/>
 
-    <LinearLayout
-        android:id="@+id/point_detail_atlas"
+
+    <com.jyh.kxt.base.custom.MeasureGridView
+        android:id="@+id/viewpoint_picture_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/point_detail_content"
-        android:layout_marginBottom="25dp"
-        android:layout_marginTop="10dp">
+        android:horizontalSpacing="5dp"
+        android:numColumns="3"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:verticalSpacing="5dp">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="90dp"
-            android:background="@color/colorPrimary"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"/>
+    </com.jyh.kxt.base.custom.MeasureGridView>
 
-        <ImageView
-            android:layout_width="0dp"
-            android:background="@color/colorPrimary"
-            android:layout_height="90dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="90dp"
-            android:background="@color/colorPrimary"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-    <View
-        android:layout_below="@+id/point_detail_atlas"
+    <RelativeLayout
+        android:id="@+id/viewpoint_transmit_layout"
         android:layout_width="match_parent"
-        android:background="@color/bg_color2"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
-        android:layout_height="6dp"/>
+        android:padding="10dp"
+        android:visibility="gone"
+        android:background="@drawable/view_point_transmit_content"
+        android:layout_below="@+id/viewpoint_picture_layout"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/viewpoint_transmit_text"
+            android:layout_width="wrap_content"
+            android:textColor="@color/font_color64"
+            android:textSize="@dimen/content_font_size"
+            android:text="您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

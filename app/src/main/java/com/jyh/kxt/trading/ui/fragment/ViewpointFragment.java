@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -41,16 +40,8 @@ public class ViewpointFragment extends BaseFragment {
 
     private void initView() {
         PinnedSectionListView mRefreshableView = mPullPinnedListView.getRefreshableView();
-        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(),
-                com.library.R.color.line_background4)));
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(1);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-
-        mPullPinnedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long viewType) {
-            }
-        });
-
     }
 }
