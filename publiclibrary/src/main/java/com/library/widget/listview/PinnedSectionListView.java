@@ -38,6 +38,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
+import com.library.widget.tablayout.NavigationTabLayout;
+
 /**
  * ListView, which is capable to pin section views at its top while the rest is still scrolled.
  */
@@ -426,7 +428,7 @@ public class PinnedSectionListView extends ListView {
 
             // prepare variables
             int pLeft = getListPaddingLeft();
-            int pTop = getListPaddingTop()+   mShadowTopSpace;
+            int pTop = getListPaddingTop() + mShadowTopSpace;
             View view = mPinnedSection.view;
 
             // draw child
@@ -479,6 +481,7 @@ public class PinnedSectionListView extends ListView {
         if (mTouchTarget != null) {
             if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
                 mTouchTarget.dispatchTouchEvent(ev);
+                return false;
             }
 
             if (action == MotionEvent.ACTION_UP) { // perform onClick on pinned view
@@ -516,11 +519,15 @@ public class PinnedSectionListView extends ListView {
     private boolean isPinnedViewTouched(View view, float x, float y) {
         view.getHitRect(mTouchRect);
 
+        if (view instanceof NavigationTabLayout) {
+            ((NavigationTabLayout) view).setClickRect(mTouchRect);
+        }
+
         // by taping top or bottom padding, the list performs on click on a border item.
         // we don't add top padding here to keep behavior consistent.
-        mTouchRect.top += mTranslateY;
+        mTouchRect.top += mTranslateY + mShadowTopSpace;
 
-        mTouchRect.bottom += mTranslateY + getPaddingTop();
+        mTouchRect.bottom += mTranslateY + getPaddingTop() + mShadowTopSpace;
         mTouchRect.left += getPaddingLeft();
         mTouchRect.right -= getPaddingRight();
         return mTouchRect.contains((int) x, (int) y);

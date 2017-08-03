@@ -12,6 +12,7 @@
         android:gravity="center_vertical">
 
         <TextView
+            android:id="@+id/tv_myattention"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -30,6 +31,7 @@
             android:textSize="@dimen/content_font_size2"/>
 
         <TextView
+            android:id="@+id/tv_all"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"

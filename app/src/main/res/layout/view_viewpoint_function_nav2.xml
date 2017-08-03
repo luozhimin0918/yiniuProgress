@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jyh.kxt.base.custom.NavigationTabLayout
+<com.library.widget.tablayout.NavigationTabLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ntl_title_view"
@@ -18,4 +18,4 @@
     tl:tl_textUnselectColor="@color/font_color6"
     tl:tl_textsize="@dimen/describe_font_size4">
 
-</com.jyh.kxt.base.custom.NavigationTabLayout>
+</com.library.widget.tablayout.NavigationTabLayout>

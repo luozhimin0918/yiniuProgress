@@ -150,22 +150,59 @@ public class ArticleItemPresenter extends BasePresenter {
         } else {
             jsonParam.put(VarConstant.HTTP_ID, id);
         }
-        request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
+        request.doGet(HttpConstant.EXPLORE_BLOG_LIST + VarConstant.HTTP_CONTENT, jsonParam, new HttpListener<String>() {
             @Override
-            protected void onResponse(List<AuthorNewsJson> authorNewsJsons) {
-                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-                } else {
-                    int size = authorNewsJsons.size();
-                    List<AuthorNewsJson> list;
-                    if (size > VarConstant.LIST_MAX_SIZE) {
-                        isMore = true;
-                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+            protected void onResponse(String s) {
+//                if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+//                } else {
+//                    int size = authorNewsJsons.size();
+//                    List<AuthorNewsJson> list;
+//                    if (size > VarConstant.LIST_MAX_SIZE) {
+//                        isMore = true;
+//                        list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+//                        lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+//                    } else {
+//                        isMore = false;
+//                        list = new ArrayList<>(authorNewsJsons);
+//                    }
+//                    fragment.refresh(list);
+//                }
+                if (isMain) {
+                    JSONObject job = JSON.parseObject(s, JSONObject.class);
+                    String slide = job.getString("slide");
+                    String main = job.getString("main");
+                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(main, AuthorNewsJson.class);
+                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
                     } else {
-                        isMore = false;
-                        list = new ArrayList<>(authorNewsJsons);
+                        int size = authorNewsJsons.size();
+                        List<AuthorNewsJson> list;
+                        if (size > VarConstant.LIST_MAX_SIZE) {
+                            isMore = true;
+                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                        } else {
+                            isMore = false;
+                            list = new ArrayList<>(authorNewsJsons);
+                        }
+                        fragment.refresh(list, slide);
+                        fragment.plRootView.loadOver();
                     }
-                    fragment.refresh(list);
+                } else {
+                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
+                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                    } else {
+                        int size = authorNewsJsons.size();
+                        List<AuthorNewsJson> list;
+                        if (size > VarConstant.LIST_MAX_SIZE) {
+                            isMore = true;
+                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+                        } else {
+                            isMore = false;
+                            list = new ArrayList<>(authorNewsJsons);
+                        }
+                        fragment.refresh(list, null);
+                    }
                 }
                 fragment.plRootView.postDelayed(new Runnable() {
                     @Override

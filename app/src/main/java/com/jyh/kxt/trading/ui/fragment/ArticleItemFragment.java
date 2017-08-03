@@ -123,9 +123,23 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
 
     }
 
-    public void refresh(List<AuthorNewsJson> list) {
+    public void refresh(List<AuthorNewsJson> list,String slide) {
         if (list != null && list.size() != 0) {
             newsAdapter.setData(list);
+        }
+        initHeadViewLayout();
+
+        try {
+            if (slide != null && !slide.trim().equals("")) {
+                List<SlideJson> slideJsons = JSON.parseArray(slide, SlideJson.class);
+                addCarouselView(slideJsons);
+                if (homeHeadView != null) {
+                    plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+                    plvContent.getRefreshableView().addHeaderView(homeHeadView);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,5 +1,8 @@
 package com.jyh.kxt.trading.presenter;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +18,15 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.index.ui.AttentionActivity;
 import com.jyh.kxt.trading.adapter.HotHeadAdapter;
 import com.jyh.kxt.trading.adapter.ViewpointAdapter;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 
@@ -39,6 +46,7 @@ public class ViewpointPresenter extends BasePresenter {
 
     private LinearLayout headLinearLayout;
     private List<ViewPointTradeBean> tradeBeanList = new ArrayList<>();
+    private AlertDialog loginPop;
 
     public ViewpointPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -85,6 +93,24 @@ public class ViewpointPresenter extends BasePresenter {
                         .inflate(R.layout.view_viewpoint_grid_hot,
                                 mViewpointFragment.mPullPinnedListView,
                                 false);
+                //查看更多
+                mGridView.findViewById(R.id.tv_all).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(new Intent(mContext, AuthorListActivity.class));
+                    }
+                });
+                //我的关注
+                mGridView.findViewById(R.id.tv_myattention).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (LoginUtils.isLogined(mContext)) {
+                            mContext.startActivity(new Intent(mContext, AttentionActivity.class));
+                        } else {
+                            showLoginDialog();
+                        }
+                    }
+                });
 
                 RollDotViewPager rollDotViewPager = (RollDotViewPager) mGridView.findViewById(R.id.rdvp_content);
                 rollDotViewPager.setViewPageToDotAbout();
@@ -113,5 +139,31 @@ public class ViewpointPresenter extends BasePresenter {
             protected void onErrorResponse(VolleyError error) {
             }
         });
+    }
+
+    /**
+     * 显示登录dialog
+     */
+    public void showLoginDialog() {
+        if (loginPop == null) {
+            loginPop = new AlertDialog.Builder(mContext)
+                    .setTitle("提醒")
+                    .setMessage("请先登录")
+                    .setNegativeButton("登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                        }
+                    }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+        }
+        if (loginPop.isShowing()) {
+            loginPop.dismiss();
+        }
+        loginPop.show();
     }
 }

@@ -69,7 +69,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 break;
             case R.id.iv_right_icon1:
                 // TODO: 2017/7/26 搜索
-                startActivity(new Intent(getContext(), AuthorListActivity.class));
+
                 break;
         }
     }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
-import com.jyh.kxt.base.custom.NavigationTabLayout;
+import com.library.widget.tablayout.NavigationTabLayout;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.library.widget.listview.PinnedSectionListView;
 

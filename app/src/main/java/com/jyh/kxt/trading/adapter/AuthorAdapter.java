@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.custom.NavigationTabLayout;
+import com.library.widget.tablayout.NavigationTabLayout;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.ThumbView2;
@@ -45,8 +45,6 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     public static final int TYPE_ARTICLE = 2;
 
     public static final int TYPE_TITLE = 0;
-
-    private NavigationTabLayout navigationTabLayout;
 
     private Context mContext;
     private List<ViewpointJson> viewpoints;
@@ -103,7 +101,6 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.view_viewpoint_function_nav2, parent, false);
                     titleViewHolder = new TitleViewHolder(convertView);
                     convertView.setTag(titleViewHolder);
-                    navigationTabLayout = (NavigationTabLayout) convertView;
                     break;
                 case TYPE_ARTICLE:
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.item_news, parent, false);
@@ -341,9 +338,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         } else {
             type = TYPE_ARTICLE;
         }
-        if (clickId == 0) {
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
     static class ArticleViewHolder {

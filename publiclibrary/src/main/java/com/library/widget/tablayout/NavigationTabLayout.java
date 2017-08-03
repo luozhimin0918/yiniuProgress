@@ -1,5 +1,7 @@
-package com.jyh.kxt.base.custom;
+package com.library.widget.tablayout;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -22,9 +24,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,6 +109,7 @@ public class NavigationTabLayout extends LinearLayout {
 
     private int mTextBold;
     private boolean mTextAllCaps;
+    private Rect clickRect;
 
     public NavigationTabLayout(Context context) {
         this(context, null);
@@ -254,7 +254,7 @@ public class NavigationTabLayout extends LinearLayout {
 
                     //这里由于是属于虚拟画出来的子视图
                     if (mListener != null) {
-                        mListener.onTabSelect(mCurrentClickPosition,0);
+                        mListener.onTabSelect(mCurrentClickPosition, 0);
                     }
                     mCurrentPositionOffset = 1f;
                     animatorState = 0;
@@ -271,6 +271,13 @@ public class NavigationTabLayout extends LinearLayout {
     }
 
     private boolean isPinnedViewTouched(View view, float x, float y) {
+
+        if (clickRect != null) {
+            boolean contains = clickRect.contains((int) x, (int) y);
+            clickRect = null;
+            return contains;
+        }
+
         Rect rect = new Rect();
         view.getGlobalVisibleRect(rect);
         return rect.contains((int) x, (int) y);
@@ -295,7 +302,7 @@ public class NavigationTabLayout extends LinearLayout {
                     }
                     if (mCurrentClickPosition != mOldClickPosition) {
                         if (mListener != null) {
-                            mListener.onTabSelect(mCurrentClickPosition,1);
+                            mListener.onTabSelect(mCurrentClickPosition, 1);
                         }
                         clickTabAnimator();
                     }
@@ -674,7 +681,7 @@ public class NavigationTabLayout extends LinearLayout {
                 mOldClickPosition = mCurrentClickPosition;
                 animatorState = 1;
             }
-        },100);
+        }, 100);
     }
 
 
@@ -778,9 +785,13 @@ public class NavigationTabLayout extends LinearLayout {
     private Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
+    public void setClickRect(Rect clickRect) {
+        this.clickRect = clickRect;
+    }
+
 
     public interface OnTabSelectListener {
-        void onTabSelect(int position,int clickId);
+        void onTabSelect(int position, int clickId);
     }
 
     private OnTabSelectListener mListener;
