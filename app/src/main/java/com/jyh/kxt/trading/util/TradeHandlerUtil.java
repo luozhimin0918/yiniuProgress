@@ -48,6 +48,7 @@ public class TradeHandlerUtil {
     }
 
     public void listCheckState(List<ViewPointTradeBean> checkList) {
+        if (checkList == null) return;
         for (ViewPointTradeBean viewPointTradeBean : checkList) {
             TradeHandlerBean tradeHandlerBean = checkHandlerState(viewPointTradeBean.o_id);
             if (tradeHandlerBean != null) {

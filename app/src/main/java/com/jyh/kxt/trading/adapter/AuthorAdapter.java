@@ -1,35 +1,53 @@
 package com.jyh.kxt.trading.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
-import com.library.widget.tablayout.NavigationTabLayout;
+import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.annotation.OnTabSelectListener;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
-import com.jyh.kxt.base.widget.ThumbView2;
+import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.trading.json.ViewpointJson;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.listview.PinnedSectionListView;
+import com.library.widget.tablayout.NavigationTabLayout;
+import com.library.widget.window.ToastView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 项目名:KxtProfessional
@@ -45,28 +63,33 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     public static final int TYPE_ARTICLE = 2;
 
     public static final int TYPE_TITLE = 0;
+    public static final int TYPE_NODATA = 3;
 
     private Context mContext;
-    private List<ViewpointJson> viewpoints;
+    private List<ViewPointTradeBean> viewpoints;
     private List<AuthorNewsJson> news;
     private int type = 0;
+    private TradeHandlerUtil mTradeHandlerUtil;
+    private SimplePopupWindow functionPopupWindow;
 
-    public AuthorAdapter(Context context, List<ViewpointJson> viewpoints, List<AuthorNewsJson> news, int type) {
+    public AuthorAdapter(Context context, List<ViewPointTradeBean> viewpoints, List<AuthorNewsJson> news, int type) {
         this.mContext = context;
         this.viewpoints = viewpoints;
+        TradeHandlerUtil.getInstance().listCheckState(viewpoints);
         this.news = news;
         this.type = type;
+        mTradeHandlerUtil = TradeHandlerUtil.getInstance();
     }
 
     @Override
     public int getCount() {
         switch (type) {
             case TYPE_ARTICLE:
-                return news == null ? 1 : news.size() + 1;
+                return news == null ? 2 : news.size() + 1;
             case TYPE_VIEWPOINT:
-                return viewpoints == null ? 1 : viewpoints.size() + 1;
+                return viewpoints == null ? 2 : viewpoints.size() + 1;
         }
-        return 1;
+        return 2;
     }
 
     @Override
@@ -74,9 +97,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         try {
             switch (type) {
                 case TYPE_ARTICLE:
-                    return news == null ? null : news.get(position);
+                    return news == null ? null : news.get(position - 1);
                 case TYPE_VIEWPOINT:
-                    return viewpoints == null ? null : viewpoints.get(position);
+                    return viewpoints == null ? null : viewpoints.get(position - 1);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +118,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         ArticleViewHolder articleViewHolder = null;
         TitleViewHolder titleViewHolder = null;
         ViewpointViewHolder viewpointViewHolder = null;
+        NoDataViewHolder noDataViewHolder = null;
         if (convertView == null) {
             switch (viewType) {
                 case TYPE_TITLE:
@@ -108,9 +132,22 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     convertView.setTag(articleViewHolder);
                     break;
                 case TYPE_VIEWPOINT:
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_viewpoint, parent, false);
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.view_viewpoint_item1, parent, false);
                     viewpointViewHolder = new ViewpointViewHolder(convertView);
                     convertView.setTag(viewpointViewHolder);
+                    viewpointViewHolder.initGridView();
+
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(new Intent(mContext, ViewPointDetailActivity.class));
+                        }
+                    });
+                    break;
+                case TYPE_NODATA:
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_nodata, parent, false);
+                    noDataViewHolder = new NoDataViewHolder(convertView);
+                    convertView.setTag(noDataViewHolder);
                     break;
             }
 
@@ -125,11 +162,15 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                 case TYPE_VIEWPOINT:
                     viewpointViewHolder = (ViewpointViewHolder) convertView.getTag();
                     break;
+                case TYPE_NODATA:
+                    noDataViewHolder = (NoDataViewHolder) convertView.getTag();
             }
         }
         try {
             switch (viewType) {
                 case TYPE_TITLE:
+
+                    setTitleTheme(titleViewHolder.ntlTitleView);
                     titleViewHolder.ntlTitleView.setData(R.array.nav_trading);
                     titleViewHolder.ntlTitleView.setAcceptTouchRect(true);
                     titleViewHolder.ntlTitleView.setIndicatorStyle(NavigationTabLayout.STYLE_TRIANGLE);
@@ -176,8 +217,28 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     break;
                 case TYPE_VIEWPOINT:
                     if (type == TYPE_VIEWPOINT) {
-                        ViewpointJson viewpoint = viewpoints.get(position - 1);
+                        ViewPointTradeBean viewPointTradeBean = viewpoints.get(position - 1);
+                        viewpointViewHolder.setData(viewPointTradeBean);
+                        setViewpoint(viewpointViewHolder);
+
+                        viewpointViewHolder.tvContent.convertToGif(viewPointTradeBean.content);
+                        viewpointViewHolder.tvNickName.setText(viewPointTradeBean.author_name);
+
+                        CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
+                        viewpointViewHolder.tvTime.setText(formatCreateTime.toString());
+
+                        viewpointViewHolder.setAuthorImage(viewPointTradeBean.author_img);
+
+                        viewpointViewHolder.tvZanView.setText(viewPointTradeBean.num_good + "");
+                        viewpointViewHolder.tvPinLunView.setText(viewPointTradeBean.num_commit + "");
+                        viewpointViewHolder.initTradeHandler();
+
+//                viewpointViewHolder.gridViewNotifyDataSetChanged(strings);      viewpointViewHolder.gridViewNotifyDataSetChanged(strings);
                     }
+                    break;
+                case TYPE_NODATA:
+                    noDataViewHolder.rootView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
+                    noDataViewHolder.idVolleyLoadNodataImg.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_not_data));
                     break;
             }
         } catch (Exception e) {
@@ -186,13 +247,36 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         return convertView;
     }
 
+    private void setViewpoint(ViewpointViewHolder holder) {
+
+    }
+
+    private void setTitleTheme(NavigationTabLayout ntlTitleView) {
+        ntlTitleView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.navigationTablayout_bgcolor));
+        ntlTitleView.setTextSelectColor(ContextCompat.getColor(mContext, R.color.font_color4));
+        ntlTitleView.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        ntlTitleView.setIndicatorColor(ContextCompat.getColor(mContext, R.color.theme1));
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
             return TYPE_TITLE;
         } else {
+
+            if (type == TYPE_VIEWPOINT) {
+                if (viewpoints == null || viewpoints.size() == 0) {
+                    return TYPE_NODATA;
+                }
+            } else {
+                if (news == null || news.size() == 0) {
+                    return TYPE_NODATA;
+                }
+            }
+
+
             Object item = getItem(position);
-            if (item instanceof ViewpointJson) {
+            if (item instanceof ViewPointTradeBean) {
                 return TYPE_VIEWPOINT;
             } else {
                 return TYPE_ARTICLE;
@@ -202,7 +286,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -210,13 +294,15 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         return viewType == TYPE_TITLE;
     }
 
-    public void setViewpointData(List<ViewpointJson> viewpointData) {
+    public void setViewpointData(List<ViewPointTradeBean> viewpointData) {
         if (viewpoints == null) {
             viewpoints = viewpointData;
         } else {
             viewpoints.clear();
             viewpoints.addAll(viewpointData);
         }
+
+        TradeHandlerUtil.getInstance().listCheckState(viewpointData);
         notifyDataSetChanged();
     }
 
@@ -230,8 +316,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         notifyDataSetChanged();
     }
 
-    public void addViewPointData(List<ViewpointJson> viewpointData) {
+    public void addViewPointData(List<ViewPointTradeBean> viewpointData) {
         viewpoints.addAll(viewpointData);
+        TradeHandlerUtil.getInstance().listCheckState(viewpoints);
         notifyDataSetChanged();
     }
 
@@ -252,7 +339,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         return news;
     }
 
-    public List<ViewpointJson> getViewpointData() {
+    public List<ViewPointTradeBean> getViewpointData() {
         return viewpoints;
     }
 
@@ -285,47 +372,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         news.setDataType(VarConstant.DB_TYPE_BROWER);
 
         boolean browered = BrowerHistoryUtils.isBrowered(mContext, news);
-//        if (RegexValidateUtil.isEmpty(searchKey)) {
         if (browered) {
             holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
         } else {
             holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
         }
-//        } else {
-//            if (content.contains(searchKey)) {
-//                int searchKeyIndex = content.indexOf(searchKey);
-//                String before = content.substring(0, searchKeyIndex);
-//                String end = content.substring(searchKeyIndex + searchKey.length());
-//
-//                String defalutColor = "";
-//                String keyColor = "";
-//                String browerColor = "";
-//
-//                switch (ThemeUtil.getAlertTheme(mContext)) {
-//                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-//                        defalutColor = "#909090";
-//                        keyColor = "#136AA4";
-//                        browerColor = "#4D4D4D";
-//                        break;
-//                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-//                        defalutColor = "#2E3239";
-//                        keyColor = "#EA492A";
-//                        browerColor = "#A1ABB2";
-//                        break;
-//                }
-//
-//                String textColor;
-//                if (browered) {
-//                    textColor = browerColor;
-//                } else
-//                    textColor = defalutColor;
-//
-//                content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
-//                        "</font><font " +
-//                        "color='" + textColor +
-//                        "'>" + end + "</font>";
-//            }
-//        }
         holder.tvTitle.setText(Html.fromHtml(content));
         holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
     }
@@ -337,7 +388,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         } else {
             type = TYPE_ARTICLE;
         }
-        notifyDataSetChanged();
+        if (onTabSelLinstener != null) {
+            onTabSelLinstener.tabSel(position);
+        }
     }
 
     static class ArticleViewHolder {
@@ -360,21 +413,195 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         }
     }
 
-    static class ViewpointViewHolder {
-        @BindView(R.id.riv_avatar) RoundImageView rivAvatar;
-        @BindView(R.id.tv_name) TextView tvName;
+    class ViewpointViewHolder {
+        @BindView(R.id.riv_user_avatar) RoundImageView rivUserAvatar;
+        @BindView(R.id.tv_nick_name) TextView tvNickName;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_more) ImageView ivMore;
-        @BindView(R.id.tv_content) TextView tvContent;
-        @BindView(R.id.iv_rootView) GridLayout ivRootView;
-        @BindView(R.id.tv_thumb) ThumbView2 tvThumb;
-        @BindView(R.id.ll_dianzan) LinearLayout llDianzan;
-        @BindView(R.id.tv_pinglun) TextView tvPinglun;
-        @BindView(R.id.ll_pinglun) LinearLayout llPinglun;
-        @BindView(R.id.ll_share) LinearLayout llShare;
+        @BindView(R.id.viewpoint_function_share) ImageView mFunctionView;
+        @BindView(R.id.viewpoint_title) EmoticonSimpleTextView tvContent;
+        @BindView(R.id.viewpoint_picture_layout) GridView gridPictureLayout;
+        @BindView(R.id.viewpoint_function_zan) LinearLayout viewpointFunctionZan;
+        @BindView(R.id.rl_content_item) RelativeLayout rlContentItem;
 
-        ViewpointViewHolder(View view) {
+        @BindView(R.id.view_point_zan_tv) TextView tvZanView;
+        @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
+        @BindView(R.id.view_point_fx_tv) TextView tvShareView;
+
+        private ViewPointTradeBean viewPointTradeBean;
+
+        @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
+        public void itemNavFunction(View view) {
+            switch (view.getId()) {
+                case R.id.view_point_zan_layout:
+                    if (viewPointTradeBean.isFavour) {
+                        ToastView.makeText(mContext, "您已经赞过了");
+                    } else {
+                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1);
+                        viewPointTradeBean.isFavour = true;
+                        initTradeHandler();
+
+                    }
+                    break;
+                case R.id.view_point_pl_layout:
+
+                    break;
+                case R.id.view_point_fx_layout:
+                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
+
+                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+                        @Override
+                        public void onCreateView(View popupView) {
+
+                        }
+
+                        @Override
+                        public void onDismiss() {
+
+                        }
+                    });
+                    functionPopupWindow.show(R.layout.pop_point_share);
+                    break;
+            }
+        }
+
+
+        public void setData(ViewPointTradeBean viewPointTradeBean) {
+            this.viewPointTradeBean = viewPointTradeBean;
+        }
+
+        ViewpointViewHolder(View contentView) {
+            ButterKnife.bind(this, contentView);
+
+            initGridView();
+
+            /**
+             * 初始化右上角的点击事件
+             */
+            mFunctionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
+                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+                        View.OnClickListener functionListener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                switch (view.getId()) {
+                                    case R.id.point_function_sc:
+                                        ToastView.makeText(mContext, "收藏成功");
+                                        break;
+                                    case R.id.point_function_gz:
+                                        break;
+                                    case R.id.point_function_jb:
+
+                                        break;
+                                    case R.id.point_function_qx:
+                                        functionPopupWindow.dismiss();
+                                        break;
+                                }
+                            }
+                        };
+
+                        @Override
+                        public void onCreateView(View popupView) {
+                            popupView.findViewById(R.id.point_function_sc).setOnClickListener(functionListener);
+                            popupView.findViewById(R.id.point_function_gz).setOnClickListener(functionListener);
+                            popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
+                            popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
+                        }
+
+                        @Override
+                        public void onDismiss() {
+
+                        }
+                    });
+                    functionPopupWindow.show(R.layout.pop_point_function);
+                }
+            });
+        }
+
+        void initTradeHandler() {
+            if (viewPointTradeBean.isFavour) {
+                Drawable drawableLeft = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_zan2);
+                tvZanView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+            } else {
+                Drawable drawableLeft = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_zan1);
+                tvZanView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+            }
+        }
+
+        void setAuthorImage(String authorImageUrl) {
+            Glide.with(mContext)
+                    .load(authorImageUrl)
+                    .asBitmap()
+                    .override(80, 80).into(
+                    new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                glideAnimation) {
+                            rivUserAvatar.setImageBitmap(resource);
+                        }
+                    });
+        }
+
+        /**
+         * 初始化GridView 控件
+         */
+        void initGridView() {
+            gridPictureLayout.setMotionEventSplittingEnabled(false);
+            gridPictureLayout.setNumColumns(3);
+            gridPictureLayout.setBackgroundColor(Color.TRANSPARENT);
+            gridPictureLayout.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+            gridPictureLayout.setCacheColorHint(0);
+            gridPictureLayout.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            gridPictureLayout.setGravity(Gravity.CENTER);
+            gridPictureLayout.setVerticalScrollBarEnabled(false);
+        }
+
+        void gridViewNotifyDataSetChanged(List<String> gridList) {
+            BaseListAdapter<String> pictureAdapter = new BaseListAdapter<String>(gridList) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    ViewHolder mViewHolder;
+
+                    if (convertView == null) {
+                        convertView = LayoutInflater.from(mContext).inflate(R.layout.view_viewpoint_item_picture, parent, false);
+                        mViewHolder = new ViewHolder();
+                        convertView.setTag(mViewHolder);
+
+                        mViewHolder.mPictureView = (ImageView) convertView.findViewById(R.id.item_picture);
+                    } else {
+                        mViewHolder = (ViewHolder) convertView.getTag();
+                    }
+                    mViewHolder.mPictureView.setBackgroundColor(Color.BLUE);
+                    return convertView;
+                }
+
+                class ViewHolder {
+                    ImageView mPictureView;
+                }
+            };
+            gridPictureLayout.setAdapter(pictureAdapter);
+        }
+    }
+
+    static class NoDataViewHolder {
+        @BindView(R.id.ll_rootView) View rootView;
+        @BindView(R.id.id_volley_load_nodata_img) ImageView idVolleyLoadNodataImg;
+        @BindView(R.id.id_volley_load_nodata) TextView idVolleyLoadNodata;
+
+        NoDataViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
+    private OnTabSelectListener onTabSelLinstener;
+
+    public OnTabSelectListener getOnTabSelLinstener() {
+        return onTabSelLinstener;
+    }
+
+    public void setOnTabSelLinstener(OnTabSelectListener onTabSelLinstener) {
+        this.onTabSelLinstener = onTabSelLinstener;
+    }
 }
+

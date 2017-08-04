@@ -7,6 +7,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.trading.json.ColumnistList;
 import com.jyh.kxt.trading.json.ColumnistListJson;
 import com.jyh.kxt.trading.ui.fragment.AuthorFragment;
 import com.library.base.http.HttpListener;
@@ -42,22 +43,23 @@ public class AuthorItemPresenter extends BasePresenter {
     public void init() {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_TYPE, code);
-        request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<List<ColumnistListJson>>() {
+        request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<ColumnistList>() {
             @Override
-            protected void onResponse(List<ColumnistListJson> list) {
-                if (list == null || list.size() == 0) {
+            protected void onResponse(ColumnistList data) {
+                if (data == null || data.getData() == null || data.getData().size() == 0) {
                     authorFragment.plRootView.loadEmptyData();
                 } else {
                     List<ColumnistListJson> jsons;
-                    int size = list.size();
+                    List<ColumnistListJson> columnistListJsons = data.getData();
+                    int size = columnistListJsons.size();
                     if (size > VarConstant.LIST_MAX_SIZE) {
                         isMore = true;
-                        jsons = new ArrayList<>(list.subList(0, size - 1));
-                        lastId = jsons.get(jsons.size() - 1).getId();
+                        jsons = new ArrayList<>(columnistListJsons.subList(0, size - 1));
+                        lastId = data.getCurrent_page();
                     } else {
                         isMore = false;
-                        lastId = list.get(size - 1).getId();
-                        jsons = new ArrayList<>(list);
+                        lastId = data.getCurrent_page();
+                        jsons = new ArrayList<>(columnistListJsons);
                     }
                     authorFragment.init(jsons);
                 }
@@ -75,21 +77,23 @@ public class AuthorItemPresenter extends BasePresenter {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_TYPE, code);
         lastId = "";
-        request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<List<ColumnistListJson>>() {
+        request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<ColumnistList>() {
             @Override
-            protected void onResponse(List<ColumnistListJson> list) {
-                if (list == null || list.size() == 0) {
+            protected void onResponse(ColumnistList data) {
+                if (data == null || data.getData() == null || data.getData().size() == 0) {
                 } else {
                     List<ColumnistListJson> jsons;
-                    int size = list.size();
+                    List<ColumnistListJson> columnistListJsons;
+                    columnistListJsons = data.getData();
+                    int size = columnistListJsons.size();
                     if (size > VarConstant.LIST_MAX_SIZE) {
                         isMore = true;
-                        jsons = new ArrayList<>(list.subList(0, size - 1));
-                        lastId = jsons.get(jsons.size() - 1).getId();
+                        jsons = new ArrayList<>(columnistListJsons.subList(0, size - 1));
+                        lastId = data.getCurrent_page();
                     } else {
                         isMore = false;
-                        lastId = list.get(size - 1).getId();
-                        jsons = new ArrayList<>(list);
+                        lastId = data.getCurrent_page();
+                        jsons = new ArrayList<>(columnistListJsons);
                     }
                     authorFragment.refresh(jsons);
                 }
@@ -120,23 +124,24 @@ public class AuthorItemPresenter extends BasePresenter {
         if (isMore) {
             JSONObject jsonParam = request.getJsonParam();
             jsonParam.put(VarConstant.HTTP_TYPE, code);
-            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
-            request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<List<ColumnistListJson>>() {
+            jsonParam.put(VarConstant.HTTP_CURRENT_PAGE, lastId);
+            request.doPost(HttpConstant.TRADING_COLUMNIST_LIST, jsonParam, new HttpListener<ColumnistList>() {
                 @Override
-                protected void onResponse(List<ColumnistListJson> list) {
-                    if (list == null || list.size() == 0) {
+                protected void onResponse(ColumnistList data) {
+                    if (data == null || data.getData() == null || data.getData().size() == 0) {
 
                     } else {
                         List<ColumnistListJson> jsons;
-                        int size = list.size();
+                        List<ColumnistListJson> columnistListJsons=data.getData();
+                        int size = columnistListJsons.size();
                         if (size > VarConstant.LIST_MAX_SIZE) {
                             isMore = true;
-                            jsons = new ArrayList<>(list.subList(0, size - 1));
-                            lastId = jsons.get(jsons.size() - 1).getId();
+                            jsons = new ArrayList<>(columnistListJsons.subList(0, size - 1));
+                            lastId = data.getCurrent_page();
                         } else {
                             isMore = false;
-                            lastId = list.get(size - 1).getId();
-                            jsons = new ArrayList<>(list);
+                            lastId = data.getCurrent_page();
+                            jsons = new ArrayList<>(columnistListJsons);
                         }
                         authorFragment.loadMore(jsons);
                     }
