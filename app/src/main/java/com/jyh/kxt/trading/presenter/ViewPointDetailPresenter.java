@@ -44,7 +44,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
         }
 
         ViewPointDetailAdapter mViewPointDetailAdapter = new ViewPointDetailAdapter(mContext, commentDetailList);
-        mViewPointDetailActivity.pplvContent.setAdapter(mViewPointDetailAdapter);
+        mViewPointDetailActivity.mPullPinnedListView.setAdapter(mViewPointDetailAdapter);
 
         /**
          * 初始化LinearLayout
@@ -60,7 +60,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
          */
         View mHeadDetailView = LayoutInflater.from(mContext)
                 .inflate(R.layout.view_point_detail_head,
-                        mViewPointDetailActivity.pplvContent,
+                        mViewPointDetailActivity.mPullPinnedListView,
                         false);
 
         headLinearLayout.addView(mHeadDetailView);
@@ -75,6 +75,6 @@ public class ViewPointDetailPresenter extends BasePresenter {
         /**
          * 添加头部到ListView
          */
-        mViewPointDetailActivity.pplvContent.getRefreshableView().addHeaderView(headLinearLayout);
+        mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().addHeaderView(headLinearLayout);
     }
 }

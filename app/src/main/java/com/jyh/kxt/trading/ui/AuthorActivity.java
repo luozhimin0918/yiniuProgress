@@ -129,7 +129,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
             }
         });
 
-        refreshableView.setmShadowTopSpace(SystemUtil.dp2px(this, 68));
+        refreshableView.setShadowTopSpace(SystemUtil.dp2px(this, 68));
 
         statusHeight = SystemUtil.getStatusHeight(this);
         rlHeadTitleBar.getBackground().setAlpha(0);

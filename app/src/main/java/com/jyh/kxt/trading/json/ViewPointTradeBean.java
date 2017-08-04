@@ -1,12 +1,14 @@
 package com.jyh.kxt.trading.json;
 
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
+
 import java.util.List;
 
 /**
  * Created by Mr'Dai on 2017/8/1.
  */
 
-public class ViewPointTradeBean {
+public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
 
     /**
      * 自定义的  格式发生改变  时不动

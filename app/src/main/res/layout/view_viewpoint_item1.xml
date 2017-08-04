@@ -97,74 +97,6 @@
                                 android:drawableLeft="@mipmap/icon_video_list_zan"
                                 android:drawablePadding="5dp"
                                 android:gravity="center"/>-->
-    <LinearLayout
-        android:id="@+id/viewpoint_function_zan"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/viewpoint_line"
-        android:gravity="center_vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/icon_video_list_zan"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:textColor="@color/font_color9"
-                android:textSize="@dimen/describe_font_size3"
-                android:text="5"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="1px"
-            android:background="@color/line_color6"
-            android:layout_height="15dp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/icon_video_list_zan"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:textSize="@dimen/describe_font_size3"
-                android:textColor="@color/font_color9"
-                android:text="5"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="1px"
-            android:background="@color/line_color6"
-            android:layout_height="15dp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:drawableLeft="@mipmap/icon_video_list_zan"
-                android:drawablePadding="8dp"
-                android:textColor="@color/font_color9"
-                android:textSize="@dimen/describe_font_size3"
-                android:gravity="center"
-                android:text="5"/>
-        </LinearLayout>
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -173,4 +105,81 @@
         android:layout_marginLeft="-18dp"
         android:layout_marginRight="-18dp"
         android:background="@color/line_color6"/>
+
+    <LinearLayout
+        android:id="@+id/viewpoint_function_zan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/viewpoint_line"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:id="@+id/view_point_zan_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/view_point_zan_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_point_zan1"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:textColor="@color/font_color9"
+                android:textSize="@dimen/describe_font_size3"
+                android:text="5"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:background="@color/line_color6"
+            android:layout_height="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/view_point_pl_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/view_point_pl_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_point_pl"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:textSize="@dimen/describe_font_size3"
+                android:textColor="@color/font_color9"
+                android:text="5"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:background="@color/line_color6"
+            android:layout_height="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/view_point_fx_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/view_point_fx_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@mipmap/icon_point_fx"
+                android:drawablePadding="8dp"
+                android:textColor="@color/font_color9"
+                android:textSize="@dimen/describe_font_size3"
+                android:gravity="center"
+                android:text="5"/>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

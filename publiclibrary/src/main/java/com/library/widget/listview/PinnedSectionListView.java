@@ -575,7 +575,7 @@ public class PinnedSectionListView extends ListView {
     }
 
 
-    public void setmShadowTopSpace(int mShadowTopSpace) {
+    public void setShadowTopSpace(int mShadowTopSpace) {
         this.mShadowTopSpace = mShadowTopSpace;
     }
 }

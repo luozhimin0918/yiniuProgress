@@ -105,6 +105,6 @@
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/tv_reply_count"
-        android:background="@color/bg_color2"
+        android:background="@color/line_background4"
         android:layout_height="1px"/>
 </RelativeLayout>

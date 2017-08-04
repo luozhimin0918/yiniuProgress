@@ -247,29 +247,32 @@ public class NavigationTabLayout extends LinearLayout {
         for (int i = 0; i < touchViewList.size(); i++) {
             View itemView = touchViewList.get(i);
             if (isPinnedViewTouched(itemView, ev.getX(), ev.getY())) {
-
-                mCurrentClickPosition = mTabsContainer.indexOfChild(itemView);
-                if (mCurrentClickPosition == -1) {
-                    continue;
-                }
-                if (mCurrentClickPosition != mOldClickPosition) {
-
-                    //这里由于是属于虚拟画出来的子视图
-                    if (mListener != null) {
-                        mListener.onTabSelect(mCurrentClickPosition, 0);
-                    }
-                    mCurrentPositionOffset = 1f;
-                    animatorState = 0;
-                    updateTabSelection(mCurrentClickPosition);
-                    postInvalidate();
-
-                    mOldClickPosition = mCurrentClickPosition;
-                }
+                updateContainerPosition(itemView);
                 break;
             }
         }
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void updateContainerPosition(View itemView) {
+        mCurrentClickPosition = mTabsContainer.indexOfChild(itemView);
+        if (mCurrentClickPosition == -1) {
+            return;
+        }
+        if (mCurrentClickPosition != mOldClickPosition) {
+
+            //这里由于是属于虚拟画出来的子视图
+            if (mListener != null) {
+                mListener.onTabSelect(mCurrentClickPosition, 0);
+            }
+            mCurrentPositionOffset = 1f;
+            animatorState = 0;
+            updateTabSelection(mCurrentClickPosition);
+            postInvalidate();
+
+            mOldClickPosition = mCurrentClickPosition;
+        }
     }
 
     private boolean isPinnedViewTouched(View view, float x, float y) {
@@ -297,17 +300,21 @@ public class NavigationTabLayout extends LinearLayout {
         tabView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isClickable && animatorState == 1) {
-                    mCurrentClickPosition = mTabsContainer.indexOfChild(v);
-                    if (mCurrentClickPosition == -1) {
-                        return;
-                    }
-                    if (mCurrentClickPosition != mOldClickPosition) {
-                        if (mListener != null) {
-                            mListener.onTabSelect(mCurrentClickPosition, 1);
+                if (isOpenContainerAnimator) {
+                    if (isClickable && animatorState == 1) {
+                        mCurrentClickPosition = mTabsContainer.indexOfChild(v);
+                        if (mCurrentClickPosition == -1) {
+                            return;
                         }
-                        clickTabAnimator();
+                        if (mCurrentClickPosition != mOldClickPosition) {
+                            if (mListener != null) {
+                                mListener.onTabSelect(mCurrentClickPosition, 1);
+                            }
+                            clickTabAnimator();
+                        }
                     }
+                } else {
+                    updateContainerPosition(v);
                 }
             }
         });
@@ -324,6 +331,7 @@ public class NavigationTabLayout extends LinearLayout {
         mTabsContainer.addView(tabView, position, lp_tab);
     }
 
+    private boolean isOpenContainerAnimator;
     private int animatorState = 0;
 
     private void clickTabAnimator() {
@@ -775,6 +783,10 @@ public class NavigationTabLayout extends LinearLayout {
         return mTextAllCaps;
     }
 
+    public void setOpenContainerAnimator(boolean openContainerAnimator) {
+        isOpenContainerAnimator = openContainerAnimator;
+    }
+
     public TextView getTitleView(int tab) {
         View tabView = mTabsContainer.getChildAt(tab);
         TextView tv_tab_title = (TextView) tabView.findViewById(com.library.R.id.tv_tab_title);
@@ -791,10 +803,10 @@ public class NavigationTabLayout extends LinearLayout {
         isAcceptTouchRect = acceptTouchRect;
     }
 
-    public boolean isAcceptTouchRect(){
+    public boolean isAcceptTouchRect() {
         return isAcceptTouchRect;
     }
-    
+
     public void setTouchRect(Rect mTouchRect) {
         this.mTouchRect = mTouchRect;
     }

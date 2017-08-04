@@ -16,9 +16,9 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
@@ -51,6 +51,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_trading, LibActivity.StatusBarColor.THEME1);
+
+        TradeHandlerUtil.getInstance().initTradeHandler(getContext());
 
         ivRightIcon1.setImageResource(R.mipmap.icon_search);
 
@@ -91,10 +93,12 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         stlNavigationBar.setBarStrokeColor(
                 ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
         ivRightIcon1.setImageResource(R.mipmap.icon_search);
-        if (articleFragment != null)
+        if (articleFragment != null) {
             articleFragment.onChangeTheme();
-        if (viewpointFragment != null)
+        }
+        if (viewpointFragment != null) {
             viewpointFragment.onChangeTheme();
+        }
     }
 
     @Override
@@ -103,7 +107,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         if (position == 1) {
             currentFragment = articleFragment = articleFragment == null ? new ArticleFragment() : articleFragment;
         } else {
-            currentFragment = viewpointFragment = viewpointFragment == null ? new ViewpointFragment() : viewpointFragment;
+            currentFragment = viewpointFragment = viewpointFragment == null ? new ViewpointFragment() :
+                    viewpointFragment;
         }
         replaceFragment(currentFragment);
 
@@ -119,7 +124,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         if (toFragment.isAdded()) {
             transaction.show(toFragment);
         } else {
-            transaction.add(R.id.fl_content, toFragment, toFragment instanceof ViewpointFragment ? "ViewpointFragment" : null);
+            transaction.add(R.id.fl_content, toFragment, toFragment instanceof ViewpointFragment ?
+                    "ViewpointFragment" : null);
         }
         transaction.commitAllowingStateLoss();
     }

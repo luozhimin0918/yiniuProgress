@@ -21,9 +21,9 @@ import butterknife.BindView;
  * 创建日期:2017/7/26.
  */
 
-public class ViewpointFragment extends BaseFragment {
+public class ViewpointFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
 
-    @BindView(R.id.pll_content) PageLoadLayout mPllContent;
+    @BindView(R.id.pll_content) public PageLoadLayout mPllContent;
     @BindView(R.id.pplv_content) public PullPinnedListView mPullPinnedListView;
 
     private ViewpointPresenter viewpointPresenter;
@@ -34,6 +34,9 @@ public class ViewpointFragment extends BaseFragment {
 
         initView();
 
+        mPllContent.loadWait();
+        mPllContent.setOnAfreshLoadListener(this);
+
         viewpointPresenter = new ViewpointPresenter(this);
         viewpointPresenter.requestInitData();
     }
@@ -41,7 +44,12 @@ public class ViewpointFragment extends BaseFragment {
     private void initView() {
         PinnedSectionListView mRefreshableView = mPullPinnedListView.getRefreshableView();
         mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
-        mRefreshableView.setDividerHeight(1);
+        mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        viewpointPresenter.requestInitData();
     }
 }

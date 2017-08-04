@@ -45,8 +45,9 @@ public class ViewpointPresenter extends BasePresenter {
     @BindObject ViewpointFragment mViewpointFragment;
 
     private LinearLayout headLinearLayout;
-    private List<ViewPointTradeBean> tradeBeanList = new ArrayList<>();
     private AlertDialog loginPop;
+
+    private List<ViewPointTradeBean> tradeBeanList = new ArrayList<>();
 
     public ViewpointPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -54,7 +55,6 @@ public class ViewpointPresenter extends BasePresenter {
 
     public void requestInitData() {
         //写上网络请求
-
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
         mVolleyRequest.setTag(getClass().getName());
 
@@ -63,6 +63,7 @@ public class ViewpointPresenter extends BasePresenter {
         mVolleyRequest.doGet(HttpConstant.TRADE_MAIN, mainParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String manJson) {
+                mViewpointFragment.mPllContent.loadOver();
                 ViewPointBean viewPointBean = JSONObject.parseObject(manJson, ViewPointBean.class);
 
                 /**
@@ -70,11 +71,7 @@ public class ViewpointPresenter extends BasePresenter {
                  */
                 tradeBeanList.addAll(viewPointBean.getTrade());
 
-                ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
-                viewPointTradeBean.setItemViewType(0);
-                tradeBeanList.add(0, viewPointTradeBean);
-
-                ViewpointAdapter viewpointAdapter = new ViewpointAdapter(mContext, tradeBeanList);
+                ViewpointAdapter viewpointAdapter = new ViewpointAdapter(mContext, tradeBeanList, "chosen");
                 mViewpointFragment.mPullPinnedListView.setAdapter(viewpointAdapter);
 
                 /**
@@ -139,9 +136,11 @@ public class ViewpointPresenter extends BasePresenter {
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                mViewpointFragment.mPllContent.loadError();
             }
         });
     }
+
 
     /**
      * 显示登录dialog
