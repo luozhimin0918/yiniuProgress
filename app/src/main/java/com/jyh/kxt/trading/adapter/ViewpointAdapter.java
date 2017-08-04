@@ -3,13 +3,8 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +16,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
@@ -73,12 +66,14 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     private TradeHandlerUtil mTradeHandlerUtil;
     private SimplePopupWindow functionPopupWindow;
+    private ArticleContentPresenter articleContentPresenter;
 
     public ViewpointAdapter(Context mContext, List<ViewPointTradeBean> viewPointTradeBeanList, String typeMap) {
 
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
 
+        articleContentPresenter = new ArticleContentPresenter(mContext);
         dataList = new ArrayList<>(viewPointTradeBeanList);
         pointListMap.put(typeMap, viewPointTradeBeanList);
 
@@ -107,7 +102,7 @@ public class ViewpointAdapter extends BaseAdapter implements
         ViewHolder1 viewHolder1 = null;
         ViewHolder2 viewHolder2 = null;
 
-        ViewPointTradeBean viewPointTradeBean = dataList.get(position);
+        final ViewPointTradeBean viewPointTradeBean = dataList.get(position);
         int itemViewType = getItemViewType(position);
 
         if (convertView == null) {
@@ -122,10 +117,13 @@ public class ViewpointAdapter extends BaseAdapter implements
                     viewHolder1 = new ViewHolder1(convertView);
                     convertView.setTag(viewHolder1);
 
+
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.startActivity(new Intent(mContext, ViewPointDetailActivity.class));
+                            Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                            intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
+                            mContext.startActivity(intent);
                         }
                     });
                     break;
@@ -133,7 +131,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                     convertView = mInflater.inflate(R.layout.view_point_nodata, parent, false);
                     viewHolder2 = new ViewHolder2(convertView);
                     convertView.setTag(viewHolder2);
-
                     break;
             }
         } else {
@@ -166,13 +163,18 @@ public class ViewpointAdapter extends BaseAdapter implements
                 CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
                 viewHolder1.tvTime.setText(formatCreateTime.toString());
 
-                viewHolder1.setAuthorImage(viewPointTradeBean.author_img);
+                viewHolder1.tvZanView.setText(String.valueOf(viewPointTradeBean.num_good));
+                viewHolder1.tvPinLunView.setText(String.valueOf(viewPointTradeBean.num_commit));
 
-                viewHolder1.tvZanView.setText(viewPointTradeBean.num_good + "");
-                viewHolder1.tvPinLunView.setText(viewPointTradeBean.num_commit + "");
-                viewHolder1.initTradeHandler();
+                articleContentPresenter.setAuthorImage(viewHolder1.rivUserAvatar, viewPointTradeBean.author_img);
+                articleContentPresenter.initTradeHandler(viewHolder1.tvZanView, viewPointTradeBean.isFavour);
 
-//                viewHolder1.gridViewNotifyDataSetChanged(strings);
+                articleContentPresenter.initTransmitView(
+                        viewHolder1.rlTransmitLayout,
+                        viewHolder1.tvTransmitView,
+                        viewPointTradeBean.forward);
+
+                articleContentPresenter.setPictureAdapter(viewHolder1.gridPictureLayout, viewPointTradeBean.picture);
                 break;
             case 2:
                 if (navigationTabClickPosition == 2) {
@@ -192,8 +194,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
                 break;
         }
-
-
         return convertView;
     }
 
@@ -228,6 +228,9 @@ public class ViewpointAdapter extends BaseAdapter implements
         @BindView(R.id.viewpoint_function_zan) LinearLayout viewpointFunctionZan;
         @BindView(R.id.rl_content_item) RelativeLayout rlContentItem;
 
+        @BindView(R.id.viewpoint_transmit_layout) RelativeLayout rlTransmitLayout;
+        @BindView(R.id.viewpoint_transmit_text) EmoticonSimpleTextView tvTransmitView;
+
         @BindView(R.id.view_point_zan_tv) TextView tvZanView;
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
         @BindView(R.id.view_point_fx_tv) TextView tvShareView;
@@ -239,12 +242,11 @@ public class ViewpointAdapter extends BaseAdapter implements
             switch (view.getId()) {
                 case R.id.view_point_zan_layout:
                     if (viewPointTradeBean.isFavour) {
-                        ToastView.makeText(mContext,"您已经赞过了");
+                        ToastView.makeText(mContext, "您已经赞过了");
                     } else {
                         mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1);
                         viewPointTradeBean.isFavour = true;
-                        initTradeHandler();
-
+                        articleContentPresenter.initTradeHandler(tvZanView, true);
                     }
                     break;
                 case R.id.view_point_pl_layout:
@@ -277,8 +279,7 @@ public class ViewpointAdapter extends BaseAdapter implements
         ViewHolder1(View contentView) {
             ButterKnife.bind(this, contentView);
 
-            initGridView();
-
+            articleContentPresenter.initGridView(gridPictureLayout);
             /**
              * 初始化右上角的点击事件
              */
@@ -323,72 +324,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
             });
         }
-
-        void initTradeHandler() {
-            if (viewPointTradeBean.isFavour) {
-                Drawable drawableLeft = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_zan2);
-                tvZanView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
-            } else {
-                Drawable drawableLeft = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_zan1);
-                tvZanView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
-            }
-        }
-
-        void setAuthorImage(String authorImageUrl) {
-            Glide.with(mContext)
-                    .load(authorImageUrl)
-                    .asBitmap()
-                    .override(80, 80).into(
-                    new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                glideAnimation) {
-                            rivUserAvatar.setImageBitmap(resource);
-                        }
-                    });
-        }
-
-        /**
-         * 初始化GridView 控件
-         */
-        void initGridView() {
-            gridPictureLayout.setMotionEventSplittingEnabled(false);
-            gridPictureLayout.setNumColumns(3);
-            gridPictureLayout.setBackgroundColor(Color.TRANSPARENT);
-            gridPictureLayout.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-            gridPictureLayout.setCacheColorHint(0);
-            gridPictureLayout.setSelector(new ColorDrawable(Color.TRANSPARENT));
-            gridPictureLayout.setGravity(Gravity.CENTER);
-            gridPictureLayout.setVerticalScrollBarEnabled(false);
-        }
-
-        void gridViewNotifyDataSetChanged(List<String> gridList) {
-            BaseListAdapter<String> pictureAdapter = new BaseListAdapter<String>(gridList) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    ViewHolder mViewHolder;
-
-                    if (convertView == null) {
-                        convertView = mInflater.inflate(R.layout.view_viewpoint_item_picture, parent, false);
-                        mViewHolder = new ViewHolder();
-                        convertView.setTag(mViewHolder);
-
-                        mViewHolder.mPictureView = (ImageView) convertView.findViewById(R.id.item_picture);
-                    } else {
-                        mViewHolder = (ViewHolder) convertView.getTag();
-                    }
-                    mViewHolder.mPictureView.setBackgroundColor(Color.BLUE);
-                    return convertView;
-                }
-
-                class ViewHolder {
-                    ImageView mPictureView;
-                }
-            };
-            gridPictureLayout.setAdapter(pictureAdapter);
-        }
-
-
     }
 
     @Override

@@ -114,6 +114,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
     private LinearLayout headView;
     private PopupUtil replyMessagePopup;
     private ReplyMessagePresenter replyMessagePresenter;
+    private boolean isOnlyAllowSmallEmoJe = false;
 
     public void bindListView(PullToRefreshListView listView) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
@@ -334,6 +335,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         replyMessagePresenter.setCommentWho(commentWho);
         replyMessagePresenter.isShowEmoJiView = false;
 
+        replyMessagePresenter.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
+
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
 //        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -388,6 +391,10 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
                 tvRecommendLabel.setText("往期节目");
                 break;
         }
+    }
+
+    public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
+        this.isOnlyAllowSmallEmoJe = isOnlyAllowSmallEmoJe;
     }
 
     public void onResume() {

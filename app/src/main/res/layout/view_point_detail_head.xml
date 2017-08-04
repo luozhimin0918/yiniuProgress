@@ -50,7 +50,7 @@
         android:layout_alignTop="@+id/point_detail_nick_name"
         android:button="@drawable/sel_news_attention"/>
 
-    <TextView
+    <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
         android:id="@+id/point_detail_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 
 
     <com.jyh.kxt.base.custom.MeasureGridView
-        android:id="@+id/viewpoint_picture_layout"
+        android:id="@+id/point_detail_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/point_detail_content"
@@ -75,20 +75,19 @@
     </com.jyh.kxt.base.custom.MeasureGridView>
 
     <RelativeLayout
-        android:id="@+id/viewpoint_transmit_layout"
+        android:id="@+id/point_detail_transmit_layout"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:visibility="gone"
         android:background="@drawable/view_point_transmit_content"
-        android:layout_below="@+id/viewpoint_picture_layout"
+        android:layout_below="@+id/point_detail_picture"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/viewpoint_transmit_text"
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+            android:id="@+id/point_detail_transmit_text"
             android:layout_width="wrap_content"
             android:textColor="@color/font_color64"
             android:textSize="@dimen/content_font_size"
-            android:text="您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。您使用所提供的凭据无权查看此目录或页面。"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>

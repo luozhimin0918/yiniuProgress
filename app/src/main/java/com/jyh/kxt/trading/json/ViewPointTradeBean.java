@@ -67,17 +67,12 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
     public List<String> report;
     public List<String> picture;
 
-    public Forward forward;
+    public ViewPointTradeBean forward;
 
-
-    class Forward {
-        public ShareDict shareDict;
-
-        class ShareDict {
-            public String url;
-            public String img;
-            public String title;
-            public String descript;
-        }
+    class ShareDict {
+        public String url;
+        public String img;
+        public String title;
+        public String descript;
     }
 }

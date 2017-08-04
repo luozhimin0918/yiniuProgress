@@ -187,6 +187,17 @@
             android:name=".trading.ui.AuthorActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".index.ui.ErrorActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".trading.ui.ViewPointDetailActivity"
+                  android:windowSoftInputMode="adjustPan"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".trading.ui.CommentDetailActivity"
+                  android:windowSoftInputMode="adjustPan"
+                  android:screenOrientation="portrait">
+        </activity>
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->
@@ -285,12 +296,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".index.ui.ErrorActivity">
-        </activity>
-        <activity android:name=".trading.ui.ViewPointDetailActivity">
-        </activity>
-        <activity android:name=".trading.ui.CommentDetailActivity">
-        </activity>
     </application>
 
 </manifest>

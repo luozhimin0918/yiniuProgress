@@ -65,7 +65,12 @@ public class EmoticonSimpleTextView extends TextView {
 
     public boolean convertToGif(String text) {
 
-        SpannableStringBuilder currentSpannable = new SpannableStringBuilder(text);
+        return convertToGif(new SpannableStringBuilder(text));
+    }
+
+    public boolean convertToGif(SpannableStringBuilder currentSpannable) {
+        String text = currentSpannable.toString();
+
         Matcher marketMatcher = Pattern.compile("#&<(.*?)>&#").matcher(text);
 
         while (marketMatcher.find()) {
@@ -142,7 +147,6 @@ public class EmoticonSimpleTextView extends TextView {
         }
 
         setText(currentSpannable);
-
         return isFindMatcher;
     }
 

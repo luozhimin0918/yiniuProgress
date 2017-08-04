@@ -159,6 +159,9 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
     }
 
+    public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
+        emoJeContentView.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
+    }
 
     public void adjustEmoJeView(int height) {
         if (flEmoJe != null && isAdjustEmoJeView) {

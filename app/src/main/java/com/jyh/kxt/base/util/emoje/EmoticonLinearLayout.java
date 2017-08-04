@@ -64,6 +64,7 @@ public class EmoticonLinearLayout extends LinearLayout {
     private List<TextView> mGroupNameViewList = new ArrayList<>();
     private List<View> mGroupLineList = new ArrayList<>();
     private int groupViewPagerPosition = 0;
+    private boolean isOnlyAllowSmallEmoJe = false;
 
     public EmoticonLinearLayout(Context context) {
         super(context, null);
@@ -84,11 +85,15 @@ public class EmoticonLinearLayout extends LinearLayout {
         initEmoticon();
     }
 
+    public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
+        this.isOnlyAllowSmallEmoJe = isOnlyAllowSmallEmoJe;
+    }
+
     private void initEmoticon() {
         evpEmoJePage = (EmoticonViewPager) findViewWithTag("evp_emoje");
         mLlCircle = (LinearLayout) findViewWithTag("ll_circle");
         mLlLabel = (LinearLayout) findViewWithTag("ll_label");
-        viewLine =  findViewById(R.id.view_line);
+        viewLine = findViewById(R.id.view_line);
 
         /**
          * 获得数据库最新数据
@@ -104,6 +109,12 @@ public class EmoticonLinearLayout extends LinearLayout {
         while (cursor.moveToNext()) {
             String groupName = cursor.getString(cursor.getColumnIndex("GROUP_CHINESE_NAME"));
             mGroupNameList.add(groupName);
+
+            if (isOnlyAllowSmallEmoJe) {
+                if ("可可".equals(groupName) || "米亚".equals(groupName) || "茉晗".equals(groupName)) {
+                    mGroupNameList.remove(groupName);
+                }
+            }
         }
         cursor.close();
 
