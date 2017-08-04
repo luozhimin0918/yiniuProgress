@@ -470,8 +470,8 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 data = new ArrayList<>(news);
             }
         }
-        adapter.setArticleData(data);
         adapter.setType(AuthorAdapter.TYPE_ARTICLE);
+        adapter.setArticleData(data);
         adapter.notifyDataSetChanged();
     }
 }

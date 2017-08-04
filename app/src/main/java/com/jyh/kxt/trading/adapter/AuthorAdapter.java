@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -270,6 +271,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                 }
             } else {
                 if (news == null || news.size() == 0) {
+                    Log.i("nodata", "nodata");
                     return TYPE_NODATA;
                 }
             }
@@ -307,6 +309,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     }
 
     public void setArticleData(List<AuthorNewsJson> articleData) {
+        if (articleData == null || articleData.size() == 0) {
+            news = null;
+            notifyDataSetChanged();
+            return;
+        }
         if (news == null) {
             news = articleData;
         } else {
