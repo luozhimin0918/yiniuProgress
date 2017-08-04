@@ -128,7 +128,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     });
                     break;
                 case 2:
-                    convertView = mInflater.inflate(R.layout.view_point_nodata, parent, false);
+                    convertView = mInflater.inflate(com.library.R.layout.view_point_nodata, parent, false);
                     viewHolder2 = new ViewHolder2(convertView);
                     convertView.setTag(viewHolder2);
                     break;

@@ -46,6 +46,8 @@ public class VarConstant {
     public static final String HTTP_LIST_TYPE = "list_type";
     public static final String HTTP_OPENID = "openid";
     public static final String HTTP_UNIONID = "unionid";
+    public static final String HTTP_RELOAD = "reload";
+    public static final String HTTP_CURRENT_PAGE = "current_page";
 
     public static final String HTTP_WORD = "word";
 
@@ -214,4 +216,12 @@ public class VarConstant {
 
 
     public static final String APP_WEB_URL = "https://www.daiyao.com";//App内部应用填充Url
+
+
+    /**
+     * 作者专栏详情类型
+     */
+    public static final String TRADING_AUTHOR_TYPE_POINT = "point";//观点
+    public static final String TRADING_AUTHOR_TYPE_ARTICLE = "blog";//专栏
+
 }

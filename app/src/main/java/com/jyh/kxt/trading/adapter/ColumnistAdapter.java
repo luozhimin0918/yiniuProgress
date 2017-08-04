@@ -57,9 +57,12 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
                     }
                 });
         holder.tvName.setText(bean.getName());
-        holder.tvViewpoint.setText("观点数: " + bean.getPoint_num());
-        holder.tvArticle.setText("文章数: " + bean.getArticle_num());
-        holder.tvFans.setText("粉丝: " + bean.getNum_fans());
+        String point_num = bean.getPoint_num();
+        String article_num = bean.getArticle_num();
+        String num_fans = bean.getNum_fans();
+        holder.tvViewpoint.setText("观点数: " + (point_num == null || point_num.equals("null") ? 0 : point_num));
+        holder.tvArticle.setText("文章数: " + (article_num == null || article_num.equals("null") ? 0 : article_num));
+        holder.tvFans.setText("粉丝: " + (num_fans == null || num_fans.equals("null") ? 0 : article_num));
 
         setTheme(holder);
 

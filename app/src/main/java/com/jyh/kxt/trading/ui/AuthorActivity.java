@@ -19,6 +19,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.OnTabSelectListener;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -26,7 +27,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
-import com.jyh.kxt.trading.json.ViewpointJson;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.AuthorPresenter;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
@@ -55,7 +56,8 @@ import butterknife.OnClick;
  * 创建日期:2017/8/1.
  */
 
-public class AuthorActivity extends BaseActivity implements AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener {
+public class AuthorActivity extends BaseActivity implements AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener,
+        PageLoadLayout.OnAfreshLoadListener, OnTabSelectListener {
     @BindView(R.id.pl_content) public PullPinnedListView plContent;
     private PinnedSectionListView refreshableView;
     @BindView(R.id.iv_break) ImageView ivBreak;
@@ -91,6 +93,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         refreshableView = plContent.getRefreshableView();
         refreshableView.setDividerHeight(0);
+        plRootView.setOnAfreshLoadListener(this);
         plContent.setOnItemClickListener(this);
         plContent.setOnRefreshListener(this);
         refreshableView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -157,9 +160,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         setHeadView(authorDetailsJson);
         try {
             List<AuthorNewsJson> news = authorDetailsJson.getList();
-            List<ViewpointJson> viewpoints = authorDetailsJson.getViews();
+            List<ViewPointTradeBean> viewpoints = authorDetailsJson.getView();
             List<AuthorNewsJson> data = null;
-            List<ViewpointJson> data2 = null;
+            List<ViewPointTradeBean> data2 = null;
             if (news == null || news.size() == 0) {
             } else {
                 if (news.size() > VarConstant.LIST_MAX_SIZE) {
@@ -175,18 +178,19 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
             if (viewpoints == null || viewpoints.size() == 0) {
             } else {
                 if (viewpoints.size() > VarConstant.LIST_MAX_SIZE) {
-                    presenter.setMore_article(true);
-                    presenter.setLastId_article(viewpoints.get(VarConstant.LIST_MAX_SIZE - 1).getAuthor_id());
+                    presenter.setMore_viewpoint(true);
+                    presenter.setLastId_viewpoint(viewpoints.get(VarConstant.LIST_MAX_SIZE - 1).o_id);
                     data2 = new ArrayList<>(viewpoints.subList(0, VarConstant.LIST_MAX_SIZE));
                 } else {
-                    presenter.setMore_article(false);
-                    presenter.setLastId_article("");
+                    presenter.setMore_viewpoint(false);
+                    presenter.setLastId_viewpoint("");
                     data2 = new ArrayList<>(viewpoints);
                 }
             }
 
             if (adapter == null) {
                 adapter = new AuthorAdapter(this, data2, data, AuthorAdapter.TYPE_VIEWPOINT);
+                adapter.setOnTabSelLinstener(this);
                 plContent.setAdapter(adapter);
             } else {
                 adapter.setViewpointData(data2);
@@ -398,11 +402,14 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         List data = adapter.getData();
-        int clickPosition = position - 1;
+        int clickPosition = position - 3;
         if (data != null && data.size() >= clickPosition) {
             Object bean = data.get(clickPosition);
-            if (bean instanceof ViewpointJson) {
-                ViewpointJson viewpoint = (ViewpointJson) bean;
+            if (bean instanceof ViewPointTradeBean) {
+                ViewPointTradeBean viewpoint = (ViewPointTradeBean) bean;
+                Intent intent = new Intent(this, ViewPointDetailActivity.class);
+                intent.putExtra(IntentConstant.O_ID, viewpoint.o_id);
+                startActivity(intent);
             } else {
                 AuthorNewsJson newsJson = (AuthorNewsJson) bean;
                 JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());
@@ -417,5 +424,54 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
 
     public void loadMoreArticle(List<AuthorNewsJson> data) {
         adapter.addArticleData(data);
+    }
+
+    public void loadMoreViewpoint(List<ViewPointTradeBean> viewpoints) {
+        adapter.addViewPointData(viewpoints);
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        loadWait();
+        presenter.init();
+    }
+
+    @Override
+    public void tabSel(int position) {
+        if (position == 1) {
+            //跳转到第二个界面
+            presenter.initTwo();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void setAuthors(List<AuthorNewsJson> news) {
+
+        ArrayList<AuthorNewsJson> data;
+
+        if (news == null) {
+            data = new ArrayList<>();
+        } else {
+
+            if (news.size() > VarConstant.LIST_MAX_SIZE) {
+                presenter.setMore_article(true);
+                presenter.setLastId_article(news.get(VarConstant.LIST_MAX_SIZE - 1).getO_id());
+                data = new ArrayList<>(news.subList(0, VarConstant.LIST_MAX_SIZE));
+            } else {
+                presenter.setMore_article(false);
+                presenter.setLastId_article("");
+                data = new ArrayList<>(news);
+            }
+        }
+        adapter.setType(AuthorAdapter.TYPE_ARTICLE);
+        adapter.setArticleData(data);
+        adapter.notifyDataSetChanged();
     }
 }

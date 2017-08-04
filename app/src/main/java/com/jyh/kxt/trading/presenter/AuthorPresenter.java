@@ -11,6 +11,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -40,6 +41,8 @@ public class AuthorPresenter extends BasePresenter {
 
     private String lastId_viewpoint, lastId_article;
     private boolean isMore_viewpoint, isMore_article;
+    private boolean isloading;
+    private boolean isloadOver;
 
     public AuthorPresenter(IBaseView iBaseView, String authorId) {
         super(iBaseView);
@@ -55,6 +58,8 @@ public class AuthorPresenter extends BasePresenter {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
         }
+        jsonParam.put(VarConstant.HTTP_RELOAD, "yes");
+        jsonParam.put(VarConstant.HTTP_TYPE, VarConstant.TRADING_AUTHOR_TYPE_POINT);
         request.doPost(HttpConstant.TRADING_COLUMNIST_PROFILE, jsonParam, new HttpListener<AuthorDetailsJson>() {
             @Override
             protected void onResponse(AuthorDetailsJson authorDetailsJson) {
@@ -81,7 +86,46 @@ public class AuthorPresenter extends BasePresenter {
         if (type == AuthorAdapter.TYPE_VIEWPOINT) {
             //观点加载更多
             if (isMore_viewpoint) {
+                jsonParam.put(VarConstant.HTTP_ID, authorId);
+                jsonParam.put(VarConstant.HTTP_RELOAD, "no");
+                jsonParam.put(VarConstant.HTTP_TYPE, VarConstant.TRADING_AUTHOR_TYPE_POINT);
+                jsonParam.put(VarConstant.HTTP_LASTID, lastId_viewpoint);
+                request.doPost(HttpConstant.TRADING_COLUMNIST_PROFILE, jsonParam, new HttpListener<AuthorDetailsJson>() {
+                    @Override
+                    protected void onResponse(AuthorDetailsJson authorDetailsJson) {
+                        List<ViewPointTradeBean> viewpoints = authorDetailsJson.getView();
+                        if (viewpoints != null) {
+                            int size = viewpoints.size();
+                            List<ViewPointTradeBean> data;
+                            if (size > VarConstant.LIST_MAX_SIZE) {
+                                isMore_viewpoint = true;
+                                data = new ArrayList<>(viewpoints.subList(0, VarConstant.LIST_MAX_SIZE));
+                                lastId_viewpoint = data.get(data.size() - 1).o_id;
+                            } else {
+                                isMore_viewpoint = false;
+                                data = viewpoints;
+                            }
+                            activity.loadMoreViewpoint(data);
+                        }
+                        activity.plRootView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.plContent.onRefreshComplete();
+                            }
+                        }, 200);
+                    }
 
+                    @Override
+                    protected void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        activity.plRootView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.plContent.onRefreshComplete();
+                            }
+                        }, 200);
+                    }
+                });
             } else {
                 activity.plContent.postDelayed(new Runnable() {
                     @Override
@@ -95,14 +139,14 @@ public class AuthorPresenter extends BasePresenter {
         } else {
             //文章加载更多
             if (isMore_article) {
-                jsonParam.put(VarConstant.HTTP_LIST_TYPE, VarConstant.EXPLORE_AUTHOR_LIST_TYPE_WRITER);
-                if (!RegexValidateUtil.isEmpty(lastId_article)) {
-                    jsonParam.put(VarConstant.HTTP_LASTID, lastId_article);
-                }
-                jsonParam.put(VarConstant.HTTP_WRITER_ID, authorId);
-                request.doPost(HttpConstant.EXPLORE_BLOG_LIST, jsonParam, new HttpListener<List<AuthorNewsJson>>() {
+                jsonParam.put(VarConstant.HTTP_ID, authorId);
+                jsonParam.put(VarConstant.HTTP_RELOAD, "no");
+                jsonParam.put(VarConstant.HTTP_TYPE, VarConstant.TRADING_AUTHOR_TYPE_ARTICLE);
+                jsonParam.put(VarConstant.HTTP_LASTID, lastId_article);
+                request.doPost(HttpConstant.TRADING_COLUMNIST_PROFILE, jsonParam, new HttpListener<AuthorDetailsJson>() {
                     @Override
-                    protected void onResponse(List<AuthorNewsJson> newsJsons) {
+                    protected void onResponse(AuthorDetailsJson authorDetailsJson) {
+                        List<AuthorNewsJson> newsJsons = authorDetailsJson.getList();
                         if (newsJsons != null) {
                             int size = newsJsons.size();
                             List<AuthorNewsJson> data;
@@ -135,12 +179,13 @@ public class AuthorPresenter extends BasePresenter {
                         }, 200);
                     }
                 });
+
             } else {
                 activity.plContent.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         activity.plContent.onRefreshComplete();
-                        ToastView.makeText(mContext, mContext.getString(R.string.no_data));
+                        ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                     }
                 }, 200);
             }
@@ -224,5 +269,32 @@ public class AuthorPresenter extends BasePresenter {
         } else {
             return HttpConstant.EXPLORE_BLOG_ADDFAVOR;
         }
+    }
+
+    public void initTwo() {
+
+        if (isloading || isloadOver) return;
+        isloading = true;
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_ID, authorId);
+        jsonParam.put(VarConstant.HTTP_RELOAD, "no");
+        jsonParam.put(VarConstant.HTTP_TYPE, VarConstant.TRADING_AUTHOR_TYPE_ARTICLE);
+        request.doPost(HttpConstant.TRADING_COLUMNIST_PROFILE, jsonParam, new HttpListener<AuthorDetailsJson>() {
+            @Override
+            protected void onResponse(AuthorDetailsJson authorDetailsJson) {
+                isloading = false;
+                isloadOver = true;
+                List<AuthorNewsJson> news = authorDetailsJson.getList();
+                activity.setAuthors(news);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                isloading = false;
+                isloadOver = true;
+                activity.setAuthors(null);
+            }
+        });
     }
 }
