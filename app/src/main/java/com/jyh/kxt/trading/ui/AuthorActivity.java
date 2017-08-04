@@ -66,6 +66,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     @BindView(R.id.iv_photo) RoundImageView ivPhoto;
     @BindView(R.id.tv_name) TextView tvName;
     @BindView(R.id.tv_fans) TextView tvFans;
+    @BindView(R.id.tv_viewpoint) TextView tvViewpoint;
     @BindView(R.id.tv_article) TextView tvArticle;
     @BindView(R.id.ll_layout_desc) LinearLayout llLayoutDesc;
     @BindView(R.id.pl_list_rootView) public PageLoadLayout plRootView;
@@ -229,6 +230,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         tvName.setText(authorDetailsJson.getName());
         tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
         tvArticle.setText("文章 " + authorDetailsJson.getArticle_num());
+        tvViewpoint.setText("观点 " + authorDetailsJson.getPoint_num());
         tvInfo.setText(authorDetailsJson.getIntroduce());
 
         //关注
@@ -349,6 +351,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         tvName = (TextView) findViewById(R.id.tv_name);
         ivPhoto = (RoundImageView) findViewById(R.id.iv_photo);
         tvFans = (TextView) findViewById(R.id.tv_fans);
+        tvViewpoint = (TextView) findViewById(R.id.tv_viewpoint);
         tvArticle = (TextView) findViewById(R.id.tv_article);
         llLayoutDesc = (LinearLayout) findViewById(R.id.ll_layout_desc);
     }

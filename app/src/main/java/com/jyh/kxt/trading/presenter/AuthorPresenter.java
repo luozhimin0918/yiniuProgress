@@ -18,7 +18,6 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
-import com.library.util.RegexValidateUtil;
 import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -131,7 +130,7 @@ public class AuthorPresenter extends BasePresenter {
                     @Override
                     public void run() {
                         activity.plContent.onRefreshComplete();
-                        ToastView.makeText(mContext, mContext.getString(R.string.no_data));
+                        ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
                     }
                 }, 200);
 

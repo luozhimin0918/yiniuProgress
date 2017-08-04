@@ -63,6 +63,7 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
     public String o_class;
     public String o_action;
     public String o_id;
+    public String is_top;
 
     public List<String> report;
     public List<String> picture;
