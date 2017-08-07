@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -79,9 +79,9 @@ public class ViewpointPresenter extends BasePresenter {
                  */
                 headLinearLayout = new LinearLayout(mContext);
                 headLinearLayout.setLayoutParams(
-                        new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        new AbsListView.LayoutParams(
+                                AbsListView.LayoutParams.MATCH_PARENT,
+                                AbsListView.LayoutParams.WRAP_CONTENT));
                 headLinearLayout.setOrientation(LinearLayout.VERTICAL);
                 /**
                  * 加入头部
