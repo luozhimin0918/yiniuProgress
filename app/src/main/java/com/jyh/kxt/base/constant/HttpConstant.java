@@ -182,6 +182,9 @@ public class HttpConstant {
     public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes" + JWT;//行情热门搜索
     public static final String SEARCH_MARKET = BASE_URL + "quotes/search";//?word={}
 
+    public static final String SEARCH_LIST=BASE_URL+"search/list";
+
+
     public static final String MEMBER_FAVOR_WRITER = BASE_URL + "member/favor_writer";
 
     public static final String MEMBER_COMMENT_REPLY = BASE_URL + "member/comment_reply";

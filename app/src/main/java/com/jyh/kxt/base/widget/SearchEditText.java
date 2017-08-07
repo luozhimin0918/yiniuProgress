@@ -178,6 +178,11 @@ public class SearchEditText extends RelativeLayout {
         editText.addTextChangedListener(textWatcher);
     }
 
+    public void setHint(String hint) {
+        if (editText != null)
+            editText.setHint(hint);
+    }
+
     public class TextWatcher implements android.text.TextWatcher {
 
         @Override

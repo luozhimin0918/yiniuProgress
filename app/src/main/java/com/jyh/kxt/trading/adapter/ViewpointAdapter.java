@@ -3,6 +3,8 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -36,6 +39,8 @@ import com.library.base.http.VolleyRequest;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -256,7 +261,74 @@ public class ViewpointAdapter extends BaseAdapter implements
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
                         @Override
                         public void onCreateView(View popupView) {
+                            View pyq = popupView.findViewById(R.id.iv_pyq);
+                            View weixin = popupView.findViewById(R.id.iv_wxhy);
+                            View sina = popupView.findViewById(R.id.iv_xl);
+                            View qq = popupView.findViewById(R.id.iv_qq);
+                            View zone = popupView.findViewById(R.id.iv_qq_kj);
 
+                            final ViewPointTradeBean.ShareDict shareDict = viewPointTradeBean.shareDict;
+
+                            pyq.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
+                                                        .descript,
+                                                shareDict.img, SHARE_MEDIA.WEIXIN_CIRCLE);
+                                    } else {
+                                        ToastView.makeText3(mContext, "未安装微信");
+                                    }
+                                }
+                            });
+                            weixin.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
+                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
+                                                        .descript,
+                                                shareDict.img, SHARE_MEDIA.WEIXIN);
+                                    } else {
+                                        ToastView.makeText3(mContext, "未安装微信");
+                                    }
+                                }
+                            });
+                            sina.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
+                                                    .descript_sina,
+                                            shareDict.img, SHARE_MEDIA.SINA);
+                                }
+                            });
+                            qq.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
+                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
+                                                        .descript,
+                                                shareDict.img, SHARE_MEDIA.QQ);
+                                    } else {
+                                        ToastView.makeText3(mContext, "未安装QQ");
+                                    }
+                                }
+                            });
+                            zone.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QZONE)) {
+                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
+                                                        .descript,
+                                                shareDict.img, SHARE_MEDIA.QQ);
+                                    } else {
+                                        ToastView.makeText3(mContext, "未安装QQ");
+                                    }
+                                }
+                            });
                         }
 
                         @Override

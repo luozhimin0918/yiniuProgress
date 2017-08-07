@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
@@ -31,6 +30,7 @@ import butterknife.ButterKnife;
 public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
 
     private Context mContext;
+    private String searchKey;
 
     public ColumnistAdapter(List<ColumnistListJson> dataList, Context mContext) {
         super(dataList);
@@ -90,6 +90,10 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
 
     public List<ColumnistListJson> getData() {
         return dataList;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
     }
 
     static class ViewHolder {

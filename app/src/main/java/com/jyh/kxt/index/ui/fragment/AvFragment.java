@@ -3,8 +3,6 @@ package com.jyh.kxt.index.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -18,14 +16,11 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.fragment.RankFragment;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.SearchActivity;
-import com.jyh.kxt.main.ui.fragment.FlashFragment;
-import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
@@ -36,9 +31,6 @@ import com.library.widget.tablayout.listener.OnTabSelectListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;

@@ -224,4 +224,16 @@ public class VarConstant {
     public static final String TRADING_AUTHOR_TYPE_POINT = "point";//观点
     public static final String TRADING_AUTHOR_TYPE_ARTICLE = "blog";//专栏
 
+    /**
+     * 搜索类型
+     */
+    public static final String SEARCH_TYPE_NEWS = "news";//要闻
+    public static final String SEARCH_TYPE_VIDEO = "video";//视听
+    public static final String SEARCH_TYPE_QUOTE = "quote";//行情
+    public static final String SEARCH_TYPE_VIEWPOINT = "trade";//点评
+    public static final String SEARCH_TYPE_ARTICLE = "article";//文章
+    public static final String SEARCH_TYPE_BLOG = "blog";//博客
+    public static final String SEARCH_TYPE_MAIN = "main";//首页
+    public static final String SEARCH_TYPE_COLUMNIST = "colu";
+
 }
