@@ -72,7 +72,7 @@ public class ViewpointPresenter extends BasePresenter {
                 tradeBeanList.addAll(viewPointBean.getTrade());
 
                 ViewpointAdapter viewpointAdapter = new ViewpointAdapter(mContext, tradeBeanList, "chosen");
-                mViewpointFragment.mPullPinnedListView.setAdapter(viewpointAdapter);
+                viewpointAdapter.bindListView(mViewpointFragment.mPullPinnedListView);
 
                 /**
                  * 初始化LinearLayout

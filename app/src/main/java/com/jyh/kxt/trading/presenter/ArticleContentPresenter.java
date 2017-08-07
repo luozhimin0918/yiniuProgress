@@ -92,7 +92,7 @@ public class ArticleContentPresenter {
             StringBuffer contentBuffer = new StringBuffer(forwardContent.content);
             contentBuffer.insert(0, authorInfo);
 
-            if (forwardContent.picture.size() == 1) {
+            if (forwardContent.picture != null && forwardContent.picture.size() == 1) {
                 contentBuffer.insert(contentBuffer.length(), "[图片]");
             } else {
                 contentBuffer.insert(contentBuffer.length(), "[图片][图片]...");
@@ -190,35 +190,6 @@ public class ArticleContentPresenter {
         tvSc.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
 
-    /**
-     * 关注
-     *
-     * @param tvGz
-     * @param authorId
-     */
-    public void getAttentionState(TextView tvGz, String authorId) {
-        UserJson userInfo = LoginUtils.getUserInfo(mContext);
-        if (userInfo == null) {
-            return;
-        }
-
-        //读取关注状态
-        IBaseView iBaseView = (IBaseView) mContext;
-        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
-        mVolleyRequest.setTag(getClass().getName());
-
-        JSONObject mainParam = mVolleyRequest.getJsonParam();
-        mainParam.put("id", authorId);
-        mainParam.put("uid", userInfo.getUid());
-        mVolleyRequest.doGet(HttpConstant.TRADE_FAVORSTATUS, mainParam, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String s) {
-                //
-
-            }
-        });
-    }
-
     public void setAttentionState(TextView tvGz, boolean isAttention) {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
@@ -229,9 +200,68 @@ public class ArticleContentPresenter {
         Drawable drawableTop;
         if (isAttention) {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz3);
+            tvGz.setTag("true");
         } else {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz);
+            tvGz.setTag("false");
         }
         tvGz.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
+
+    /**
+     * 读取状态
+     */
+    public void requestGetGzState(final TextView tvGz, String authorId) {
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo != null) {
+            IBaseView iBaseView = (IBaseView) mContext;
+            VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+            JSONObject mainParam = mVolleyRequest.getJsonParam();
+            mainParam.put("writer_id", authorId);
+            mainParam.put("uid", userInfo.getUid());
+
+            mVolleyRequest.doGet(HttpConstant.VIEW_POINT_IS_FOLLOW, mainParam, new HttpListener<JSONObject>() {
+                @Override
+                protected void onResponse(JSONObject jsonObject) {
+                    int isFollow = jsonObject.getInteger("is_follow");
+                    if (isFollow == 0) {
+                        setAttentionState(tvGz, false);
+                    } else {
+                        setAttentionState(tvGz, true);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * 请求关注状态
+     */
+    public void requestAttentionState(String authorId, boolean bool) {
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo != null) {
+            IBaseView iBaseView = (IBaseView) mContext;
+            VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+            JSONObject mainParam = mVolleyRequest.getJsonParam();
+            mainParam.put("writer_id", authorId);
+            mainParam.put("uid", userInfo.getUid());
+            mainParam.put("accessToken", userInfo.getToken());
+            mainParam.put("type", "point");
+
+            String attentionUrl;
+            if (bool) {
+                attentionUrl = HttpConstant.EXPLORE_BLOG_ADDFAVOR;
+            } else {
+                attentionUrl = HttpConstant.EXPLORE_BLOG_DELETEFAVOR;
+            }
+
+            mVolleyRequest.doGet(attentionUrl, mainParam, new HttpListener<JSONObject>() {
+                @Override
+                protected void onResponse(JSONObject jsonObject) {
+                }
+            });
+        }
+    }
+
+
 }

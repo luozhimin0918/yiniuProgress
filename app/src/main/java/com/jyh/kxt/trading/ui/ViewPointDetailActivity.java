@@ -53,7 +53,15 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
         articlePresenter = new ArticleContentPresenter(this);
         viewPointDetailPresenter = new ViewPointDetailPresenter(this);
-        viewPointDetailPresenter.requestInitData();
+        viewPointDetailPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
+
+        mPullPinnedListView.setMode(PullToRefreshBase.Mode.DISABLED);
+        mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                viewPointDetailPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_END);
+            }
+        });
     }
 
     private void initView() {
@@ -73,6 +81,6 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
      */
     @Override
     public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId) {
-
+        viewPointDetailPresenter.requestIssueComment(popupWindow, etContent, commentBean, parentId);
     }
 }

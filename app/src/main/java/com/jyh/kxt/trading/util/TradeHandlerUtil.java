@@ -1,11 +1,21 @@
 package com.jyh.kxt.trading.util;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
+import com.library.util.NetUtils;
 import com.library.util.SPUtils;
+import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -68,28 +78,108 @@ public class TradeHandlerUtil {
         return contains(id);
     }
 
-    public void saveState(Context mContext, String id, int type) {
+    //isSaveSuccess
+    public boolean saveState(Context mContext, String id, int type, boolean bool) {
+
+        if (!NetUtils.isNetworkAvailable(mContext)) {
+            ToastView.makeText3(mContext, "暂无网络,点赞失败");
+            return false;
+        }
+
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (type == 2) {
+            if (userInfo == null) {
+                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                return false;
+            }
+        }
 
         TradeHandlerBean historyTradeHandlerBean = checkHandlerState(id);
 
         if (historyTradeHandlerBean == null) {
-            TradeHandlerBean tradeHandlerBean = new TradeHandlerBean();
-            tradeHandlerBean.tradeId = id;
-            tradeHandlerBean.isFavour = type == 1;
-            tradeHandlerBean.isCollect = type == 2;
-
-            tradeHandlerList.add(tradeHandlerBean);
+            historyTradeHandlerBean = new TradeHandlerBean();
+            historyTradeHandlerBean.tradeId = id;
+            if (type == 1) {
+                historyTradeHandlerBean.isFavour = bool;
+            } else if (type == 2) {
+                historyTradeHandlerBean.isCollect = bool;
+            }
+            tradeHandlerList.add(historyTradeHandlerBean);
         } else {
             switch (type) {
                 case 1:
-                    historyTradeHandlerBean.isFavour = !historyTradeHandlerBean.isFavour;
+                    historyTradeHandlerBean.isFavour = bool;
                     break;
                 case 2:
-                    historyTradeHandlerBean.isCollect = !historyTradeHandlerBean.isCollect;
+                    historyTradeHandlerBean.isCollect = bool;
                     break;
             }
         }
         SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
+
+        if (type == 1) {  //发起网络请求
+            requestFavour(mContext, id);
+        } else if (type == 2) {
+            requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+        }
+        return true;
+    }
+
+
+    /**
+     * 点赞
+     *
+     * @param mContext
+     * @param id
+     */
+    private void requestFavour(Context mContext, String id) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
+        mainParam.put("id", id);
+        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_ADDGOOD, mainParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+
+            }
+        });
+    }
+
+    /**
+     * 收藏
+     *
+     * @param mContext
+     * @param id
+     * @param userInfo
+     * @param isCollect
+     */
+    private void requestCollect(Context mContext, String id, UserJson userInfo, boolean isCollect) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
+
+        mainParam.put("uid", userInfo.getUid());
+        mainParam.put("accessToken", userInfo.getToken());
+        mainParam.put("id", id);
+        mainParam.put("type", "point");
+
+        String collectUrl;
+        if (isCollect) {
+            collectUrl = HttpConstant.COLLECT_ADD;
+        } else {
+            collectUrl = HttpConstant.COLLECT_DEL;
+        }
+
+        mVolleyRequest.doPost(collectUrl, mainParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+
+            }
+        });
     }
 
     private TradeHandlerBean contains(String id) {

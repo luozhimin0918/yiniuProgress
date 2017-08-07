@@ -3,7 +3,6 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,30 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.IBaseView;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
-import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
-import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
-import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VolleyRequest;
-import com.library.widget.listview.PinnedSectionListView;
-import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +39,7 @@ import butterknife.OnClick;
  * 创建日期:2017/7/26.
  */
 
-public class ViewpointSearchAdapter extends BaseAdapter{
+public class ViewpointSearchAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -174,7 +161,7 @@ public class ViewpointSearchAdapter extends BaseAdapter{
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1);
+                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
                         viewPointTradeBean.isFavour = true;
                         articleContentPresenter.initTradeHandler(tvZanView, true);
                     }
@@ -251,7 +238,7 @@ public class ViewpointSearchAdapter extends BaseAdapter{
 
                             tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                             tvGz.setOnClickListener(functionListener);
-                            articleContentPresenter.getAttentionState(tvGz, viewPointTradeBean.author_id);
+                            articleContentPresenter.requestGetGzState(tvGz, viewPointTradeBean.author_id);
 
                             popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
                             popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);

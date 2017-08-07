@@ -22,6 +22,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -36,7 +37,9 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.listview.PinnedSectionListView;
+import com.library.widget.listview.PullPinnedListView;
 import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.UMShareAPI;
@@ -62,6 +65,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     private Context mContext;
     private LayoutInflater mInflater;
+    private PullPinnedListView mPullPinnedListView;
 
     private int viewTypeCount = 3;
     private int navigationTabClickPosition = 0;
@@ -203,6 +207,11 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     private String requestNavigationType = null;
 
+    public void bindListView(PullPinnedListView mPullPinnedListView) {
+        this.mPullPinnedListView = mPullPinnedListView;
+        mPullPinnedListView.setAdapter(this);
+    }
+
     class ViewHolder0 {
         @BindView(R.id.ntl_title_view) NavigationTabLayout navigationTabLayout;
 
@@ -210,16 +219,6 @@ public class ViewpointAdapter extends BaseAdapter implements
             ButterKnife.bind(this, contentView);
         }
     }
-
-    class ViewHolder2 {
-        @BindView(R.id.nodata_img) ImageView ivNoDataImage;
-        @BindView(R.id.nodata_text) TextView tvNoDataText;
-
-        ViewHolder2(View contentView) {
-            ButterKnife.bind(this, contentView);
-        }
-    }
-
 
     class ViewHolder1 {
         @BindView(R.id.riv_user_avatar) RoundImageView rivUserAvatar;
@@ -247,9 +246,14 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1);
-                        viewPointTradeBean.isFavour = true;
-                        articleContentPresenter.initTradeHandler(tvZanView, true);
+                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
+                        if (isSaveSuccess) {
+                            viewPointTradeBean.isFavour = true;
+                            articleContentPresenter.initTradeHandler(tvZanView, true);
+
+                            viewPointTradeBean.num_good += 1;
+                            tvZanView.setText(String.valueOf(viewPointTradeBean.num_good));
+                        }
                     }
                     break;
                 case R.id.view_point_pl_layout:
@@ -359,6 +363,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     functionPopupWindow = new SimplePopupWindow((Activity) mContext);
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 
+
                         TextView tvSc;
                         TextView tvGz;
 
@@ -369,12 +374,15 @@ public class ViewpointAdapter extends BaseAdapter implements
                                     case R.id.point_function_sc:
                                         viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
                                         articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
+                                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 2, viewPointTradeBean.isCollect);
                                         break;
                                     case R.id.point_function_gz:
-                                        articleContentPresenter.setAttentionState(tvGz, true);
+                                        boolean isGz = !"true".equals(tvGz.getTag());
+                                        articleContentPresenter.setAttentionState(tvGz, isGz);
+                                        articleContentPresenter.requestAttentionState(viewPointTradeBean.author_id, isGz);
                                         break;
                                     case R.id.point_function_jb:
-
+                                        showReportWindow(viewPointTradeBean);
                                         break;
                                     case R.id.point_function_qx:
                                         functionPopupWindow.dismiss();
@@ -391,10 +399,11 @@ public class ViewpointAdapter extends BaseAdapter implements
 
                             tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                             tvGz.setOnClickListener(functionListener);
-                            articleContentPresenter.getAttentionState(tvGz, viewPointTradeBean.author_id);
 
                             popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
                             popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
+
+                            articleContentPresenter.requestGetGzState(tvGz, viewPointTradeBean.author_id);
                         }
 
                         @Override
@@ -402,9 +411,19 @@ public class ViewpointAdapter extends BaseAdapter implements
 
                         }
                     });
+
                     functionPopupWindow.show(R.layout.pop_point_function);
                 }
             });
+        }
+    }
+
+    class ViewHolder2 {
+        @BindView(R.id.nodata_img) ImageView ivNoDataImage;
+        @BindView(R.id.nodata_text) TextView tvNoDataText;
+
+        ViewHolder2(View contentView) {
+            ButterKnife.bind(this, contentView);
         }
     }
 
@@ -489,7 +508,6 @@ public class ViewpointAdapter extends BaseAdapter implements
             if (userInfo == null) {
                 if (viewPointTradeBeen == null) {
                     ArrayList<ViewPointTradeBean> tradeList = new ArrayList<>();
-
                     replaceDataAndNotifyDataSetChanged(tradeList, 0);
                 }
                 return;
@@ -515,6 +533,11 @@ public class ViewpointAdapter extends BaseAdapter implements
                 @Override
                 protected void onResponse(String manJson) {
                     ViewPointBean viewPointBean = JSONObject.parseObject(manJson, ViewPointBean.class);
+                    if (viewPointBean == null) {
+                        ArrayList<ViewPointTradeBean> tradeList = new ArrayList<>();
+                        replaceDataAndNotifyDataSetChanged(tradeList, 0);
+                        return;
+                    }
 
                     List<ViewPointTradeBean> tradeList = viewPointBean.getTrade();
                     pointListMap.put(requestNavigationType, tradeList);
@@ -524,6 +547,74 @@ public class ViewpointAdapter extends BaseAdapter implements
         } else {
             replaceDataAndNotifyDataSetChanged(viewPointTradeBeen, 1);
         }
+    }
+
+    /**
+     * 显示举报的Window
+     *
+     * @param viewPointTradeBean
+     */
+    private void showReportWindow(final ViewPointTradeBean viewPointTradeBean) {
+        functionPopupWindow.dismiss();
+
+        functionPopupWindow = new SimplePopupWindow((Activity) mContext);
+        functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+
+            private OptionFlowLayout mTagFlowLayout;
+            private DiscolorButton mDiscolorButton;
+
+            @Override
+            public void onCreateView(View popupView) {
+                mTagFlowLayout = (OptionFlowLayout) popupView.findViewById(R.id.report_content);
+                mDiscolorButton = (DiscolorButton) popupView.findViewById(R.id.report_btn);
+
+                mTagFlowLayout.addOptionView(viewPointTradeBean.report, R.layout.item_point_jb_tv);
+                mTagFlowLayout.setDefaultOption(0);
+                mTagFlowLayout.setMinOrMaxCheckCount(1, 1);
+
+                mDiscolorButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        List<String> checkBoxText = mTagFlowLayout.getCheckBoxText();
+                        if (checkBoxText.size() == 0) {
+                            ToastView.makeText3(mContext, "投诉内容不能为空");
+                            return;
+                        }
+
+                        String reportContent = checkBoxText.get(0);
+
+                        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                        if (userInfo == null) {
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            return;
+                        }
+                        //读取关注状态
+                        IBaseView iBaseView = (IBaseView) mContext;
+                        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+                        mVolleyRequest.setTag(getClass().getName());
+
+                        JSONObject mainParam = mVolleyRequest.getJsonParam();
+                        mainParam.put("id", viewPointTradeBean.o_id);
+                        mainParam.put("uid", userInfo.getUid());
+                        mainParam.put("type", reportContent);
+                        mVolleyRequest.doGet(HttpConstant.TRADE_FAVORSTATUS, mainParam, new HttpListener<String>() {
+                            @Override
+                            protected void onResponse(String s) {
+
+                            }
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        functionPopupWindow.show(R.layout.pop_point_report);
     }
 
 }

@@ -16,8 +16,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.trading.AuthorActivity;
 import com.jyh.kxt.trading.json.ViewPointHotBean;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 
 import java.util.List;
 

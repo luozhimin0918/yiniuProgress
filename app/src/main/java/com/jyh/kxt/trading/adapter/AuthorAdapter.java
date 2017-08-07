@@ -195,10 +195,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                             author = "广告";
                         } else {
                             author = news.getName();
-                            if (!RegexValidateUtil.isEmpty(author))
+                            if (!RegexValidateUtil.isEmpty(author)) {
                                 author = "文/" + author;
-                            else
+                            } else {
                                 author = "";
+                            }
                         }
                         articleViewHolder.tvAuthor.setText(author);
                         try {
@@ -373,10 +374,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     }
 
     public List getData() {
-        if (type == TYPE_VIEWPOINT)
+        if (type == TYPE_VIEWPOINT) {
             return getViewpointData();
-        else
+        } else {
             return getAuthorData();
+        }
     }
 
     /**
@@ -468,9 +470,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1);
-                        viewPointTradeBean.isFavour = true;
-                        articleContentPresenter.initTradeHandler(tvZanView, true);
+                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
+                        if (isSaveSuccess) {
+                            viewPointTradeBean.isFavour = true;
+                            articleContentPresenter.initTradeHandler(tvZanView, true);
+                        }
                     }
                     break;
                 case R.id.view_point_pl_layout:
