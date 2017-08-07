@@ -52,6 +52,8 @@ public class ReplyMessagePresenter extends BasePresenter {
     private CommentBean commentBean;
     private int commentWho;
 
+    private boolean isOnlyAllowSmallEmoJe = false;
+
     public ReplyMessagePresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -120,7 +122,8 @@ public class ReplyMessagePresenter extends BasePresenter {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             emoJeContentView = (EmoticonLinearLayout) inflater.inflate(R.layout.view_emoje_content, null);
             emoJeContentView.setLayoutParams(emoJeParams);
-
+            emoJeContentView.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
+            emoJeContentView.initData();
 
             emoJeContentView.setOnItemClick(new EmoticonLinearLayout.OnItemClick() {
                 @Override
@@ -160,7 +163,7 @@ public class ReplyMessagePresenter extends BasePresenter {
     }
 
     public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
-        emoJeContentView.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
+        this.isOnlyAllowSmallEmoJe = isOnlyAllowSmallEmoJe;
     }
 
     public void adjustEmoJeView(int height) {

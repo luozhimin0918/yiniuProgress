@@ -116,16 +116,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                     convertView = mInflater.inflate(R.layout.view_viewpoint_item1, parent, false);
                     viewHolder1 = new ViewHolder1(convertView);
                     convertView.setTag(viewHolder1);
-
-
-                    convertView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
-                            intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
-                            mContext.startActivity(intent);
-                        }
-                    });
                     break;
                 case 2:
                     convertView = mInflater.inflate(com.library.R.layout.view_point_nodata, parent, false);
@@ -194,6 +184,14 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
                 break;
         }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
+                mContext.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
@@ -288,14 +286,20 @@ public class ViewpointAdapter extends BaseAdapter implements
                 public void onClick(View v) {
                     functionPopupWindow = new SimplePopupWindow((Activity) mContext);
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+
+                        TextView tvSc;
+                        TextView tvGz;
+
                         View.OnClickListener functionListener = new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 switch (view.getId()) {
                                     case R.id.point_function_sc:
-                                        ToastView.makeText(mContext, "收藏成功");
+                                        viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
+                                        articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
                                         break;
                                     case R.id.point_function_gz:
+                                        articleContentPresenter.setAttentionState(tvGz, true);
                                         break;
                                     case R.id.point_function_jb:
 
@@ -309,8 +313,14 @@ public class ViewpointAdapter extends BaseAdapter implements
 
                         @Override
                         public void onCreateView(View popupView) {
-                            popupView.findViewById(R.id.point_function_sc).setOnClickListener(functionListener);
-                            popupView.findViewById(R.id.point_function_gz).setOnClickListener(functionListener);
+                            tvSc = (TextView) popupView.findViewById(R.id.point_function_sc);
+                            tvSc.setOnClickListener(functionListener);
+                            articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
+
+                            tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
+                            tvGz.setOnClickListener(functionListener);
+                            articleContentPresenter.getAttentionState(tvGz, viewPointTradeBean.author_id);
+
                             popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
                             popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
                         }

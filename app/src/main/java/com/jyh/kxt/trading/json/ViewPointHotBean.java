@@ -14,13 +14,22 @@ package com.jyh.kxt.trading.json;
  * point_num : 0
  */
 public class ViewPointHotBean {
+
+    /**
+     * article_num : 2
+     * auth_type : 1
+     * id : 1288
+     * name : 宋仪论金
+     * num_fans : 38
+     * picture : http://img.kxt.com/Member/58902/avatar/59182f8451d52.jpg
+     */
+
     private int article_num;
     private int auth_type;
-    private int id;
+    private String id;
     private String name;
     private int num_fans;
     private String picture;
-    private int point_num;
 
     public int getArticle_num() {
         return article_num;
@@ -38,11 +47,11 @@ public class ViewPointHotBean {
         this.auth_type = auth_type;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -68,13 +77,5 @@ public class ViewPointHotBean {
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public int getPoint_num() {
-        return point_num;
-    }
-
-    public void setPoint_num(int point_num) {
-        this.point_num = point_num;
     }
 }

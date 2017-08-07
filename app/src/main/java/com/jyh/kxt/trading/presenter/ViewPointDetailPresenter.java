@@ -24,6 +24,7 @@ import com.jyh.kxt.trading.adapter.ViewPointDetailAdapter;
 import com.jyh.kxt.trading.json.CommentDetailBean;
 import com.jyh.kxt.trading.json.ViewPointDetailBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -110,7 +111,6 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 } else {
                     mViewPointDetailActivity.commentPresenter.createNoneComment();
                 }
-
                 ViewPointDetailAdapter mViewPointDetailAdapter = new
                         ViewPointDetailAdapter(mContext, commentDetailList);
 
@@ -134,22 +134,51 @@ public class ViewPointDetailPresenter extends BasePresenter {
     private void headViewHandler(View mHeadDetailView) {
         ButterKnife.bind(this, mHeadDetailView);
 
-        ArticleContentPresenter articleContentPresenter = new ArticleContentPresenter(mContext);
-
         estvContent.convertToGif(viewPointDetailBean.content);
         tvNickName.setText(viewPointDetailBean.author_name);
 
         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointDetailBean.time * 1000);
         tvTime.setText(formatCreateTime.toString());
 
-//        viewHolder1.tvZanView.setText(String.valueOf(viewPointDetailBean.num_good));
-//        viewHolder1.tvPinLunView.setText(String.valueOf(viewPointDetailBean.num_commit));
+        mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
+        mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(viewPointDetailBean.num_commit));
 
-        articleContentPresenter.setAuthorImage(roundImageView, viewPointDetailBean.author_img);
+        mViewPointDetailActivity.articlePresenter.setAuthorImage(roundImageView, viewPointDetailBean.author_img);
+
         if (viewPointDetailBean.picture != null) {
-            articleContentPresenter.initGridView(gvPicture);
-            articleContentPresenter.setPictureAdapter(gvPicture, viewPointDetailBean.picture);
+            mViewPointDetailActivity.articlePresenter.initGridView(gvPicture);
+            mViewPointDetailActivity.articlePresenter.setPictureAdapter(gvPicture, viewPointDetailBean.picture);
         }
-        articleContentPresenter.initTransmitView(rlTransmitLayout, tvTransmitContent, viewPointDetailBean.forward);
+
+        mViewPointDetailActivity.articlePresenter.initTransmitView(rlTransmitLayout,
+                tvTransmitContent,
+                viewPointDetailBean.forward);
+
+        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean =
+                TradeHandlerUtil.getInstance().checkHandlerState(viewPointDetailBean.o_id);
+
+
+        if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
+            mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
+        } else {
+            mViewPointDetailActivity.ivZanView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 1);
+                    mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
+                }
+            });
+        }
+        if (tradeHandlerBean != null && tradeHandlerBean.isCollect) {
+            mViewPointDetailActivity.ivCollect.setSelected(true);
+        }
+
+        mViewPointDetailActivity.ivCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 2);
+                mViewPointDetailActivity.ivCollect.setSelected(!mViewPointDetailActivity.ivCollect.isSelected());
+            }
+        });
     }
 }

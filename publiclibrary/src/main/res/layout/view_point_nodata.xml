@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="wrap_content"
     android:background="@color/theme1"
     android:orientation="vertical">
 
@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:layout_above="@+id/id_volley_load_nodata"
-        android:src="@mipmap/icon_not_data"/>
+        android:src="@mipmap/icon_error_load"/>
 
     <TextView
         android:id="@+id/nodata_text"
@@ -22,6 +23,8 @@
         android:gravity="center"
         android:layout_below="@+id/nodata_img"
         android:textColor="#999999"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="没有数据！"
-        android:textSize="16sp"/>
+        android:textSize="12sp"/>
 </RelativeLayout>

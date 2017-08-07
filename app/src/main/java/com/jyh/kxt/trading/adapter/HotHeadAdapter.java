@@ -1,6 +1,7 @@
 package com.jyh.kxt.trading.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.trading.AuthorActivity;
 import com.jyh.kxt.trading.json.ViewPointHotBean;
 
 import java.util.List;
@@ -27,12 +30,12 @@ import butterknife.ButterKnife;
 
 public class HotHeadAdapter extends BaseAdapter {
 
-    private Context context;
+    private Context mContext;
     private List<ViewPointHotBean> authors;
     private LayoutInflater mInflater;
 
     public HotHeadAdapter(Context context, List<ViewPointHotBean> authors) {
-        this.context = context;
+        this.mContext = context;
         this.authors = authors;
         mInflater = LayoutInflater.from(context);
     }
@@ -72,7 +75,7 @@ public class HotHeadAdapter extends BaseAdapter {
 
         holder.tvName.setText(authorJson.getName());
 
-        Glide.with(context).load(authorJson.getPicture())
+        Glide.with(mContext).load(authorJson.getPicture())
                 .asBitmap().error(R.mipmap.icon_user_def_photo)
                 .placeholder(R.mipmap.icon_user_def_photo)
                 .override(100, 100)
@@ -83,11 +86,14 @@ public class HotHeadAdapter extends BaseAdapter {
                     }
                 });
 
-        holder.tvName.setTextColor(ContextCompat.getColor(context, R.color.font_color5));
+        holder.tvName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mContext, AuthorActivity.class);
+                intent.putExtra(IntentConstant.O_ID, authorJson.getId());
+                mContext.startActivity(intent);
             }
         });
         return convertView;

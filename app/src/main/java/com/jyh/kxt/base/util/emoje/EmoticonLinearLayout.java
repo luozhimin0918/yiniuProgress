@@ -82,19 +82,21 @@ public class EmoticonLinearLayout extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        initEmoticon();
+        onFindAllView();
     }
 
     public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
         this.isOnlyAllowSmallEmoJe = isOnlyAllowSmallEmoJe;
     }
 
-    private void initEmoticon() {
+    private void onFindAllView() {
         evpEmoJePage = (EmoticonViewPager) findViewWithTag("evp_emoje");
         mLlCircle = (LinearLayout) findViewWithTag("ll_circle");
         mLlLabel = (LinearLayout) findViewWithTag("ll_label");
         viewLine = findViewById(R.id.view_line);
+    }
 
+    public void initData() {
         /**
          * 获得数据库最新数据
          */
@@ -127,7 +129,6 @@ public class EmoticonLinearLayout extends LinearLayout {
          * 初始化ViewPager
          */
         evpEmoJePage.initViewPager(mGroupNameList);
-
     }
 
     public void itemEmoJeClick(EmojeBean emojeBean) {

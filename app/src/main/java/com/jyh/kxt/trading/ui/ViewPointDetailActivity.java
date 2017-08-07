@@ -5,14 +5,17 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -23,7 +26,14 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
     @BindView(R.id.pplv_content) public PullToRefreshListView mPullPinnedListView;
 
+    @BindView(R.id.iv_like) public ImageView ivZanView;
+    @BindView(R.id.tv_zanCount) public TextView tvZanCount;
+
+    @BindView(R.id.iv_collect) public ImageView ivCollect;
+    @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
+
     public CommentPresenter commentPresenter;
+    public ArticleContentPresenter articlePresenter;
     private ViewPointDetailPresenter viewPointDetailPresenter;
 
     public String detailId;
@@ -35,11 +45,13 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.setOnCommentPublishListener(this);
+        commentPresenter.setOnlyAllowSmallEmoJe(true);
 
         detailId = getIntent().getStringExtra(IntentConstant.O_ID);
 
         initView();
 
+        articlePresenter = new ArticleContentPresenter(this);
         viewPointDetailPresenter = new ViewPointDetailPresenter(this);
         viewPointDetailPresenter.requestInitData();
     }

@@ -1,6 +1,7 @@
 package com.jyh.kxt.trading.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,14 +18,22 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,5 +172,66 @@ public class ArticleContentPresenter {
         mGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         mGridView.setGravity(Gravity.CENTER);
         mGridView.setVerticalScrollBarEnabled(false);
+    }
+
+    /**
+     * 收藏
+     *
+     * @param tvSc
+     * @param isCollect
+     */
+    public void setCollectState(TextView tvSc, boolean isCollect) {
+        Drawable drawableTop;
+        if (isCollect) {
+            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc3);
+        } else {
+            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc);
+        }
+        tvSc.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+    }
+
+    /**
+     * 关注
+     *
+     * @param tvGz
+     * @param authorId
+     */
+    public void getAttentionState(TextView tvGz, String authorId) {
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            return;
+        }
+
+        //读取关注状态
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
+        mainParam.put("id", authorId);
+        mainParam.put("uid", userInfo.getUid());
+        mVolleyRequest.doGet(HttpConstant.TRADE_FAVORSTATUS, mainParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+                //
+
+            }
+        });
+    }
+
+    public void setAttentionState(TextView tvGz, boolean isAttention) {
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            return;
+        }
+
+        Drawable drawableTop;
+        if (isAttention) {
+            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz3);
+        } else {
+            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz);
+        }
+        tvGz.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
 }

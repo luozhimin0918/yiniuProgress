@@ -14,7 +14,6 @@ import android.widget.ScrollView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
-import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.user.ui.fragment.LoginFragment;
 import com.jyh.kxt.user.ui.fragment.RegisterFragment;

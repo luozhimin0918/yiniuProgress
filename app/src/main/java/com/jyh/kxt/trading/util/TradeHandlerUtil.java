@@ -82,10 +82,10 @@ public class TradeHandlerUtil {
         } else {
             switch (type) {
                 case 1:
-                    historyTradeHandlerBean.isFavour = true;
+                    historyTradeHandlerBean.isFavour = !historyTradeHandlerBean.isFavour;
                     break;
                 case 2:
-                    historyTradeHandlerBean.isCollect = true;
+                    historyTradeHandlerBean.isCollect = !historyTradeHandlerBean.isCollect;
                     break;
             }
         }
@@ -108,7 +108,7 @@ public class TradeHandlerUtil {
 
     public static class TradeHandlerBean {
         public String tradeId;
-        public boolean isFavour; //是否赞
-        public boolean isCollect; //是否收藏
+        public boolean isFavour = false; //是否赞
+        public boolean isCollect = false; //是否收藏
     }
 }
