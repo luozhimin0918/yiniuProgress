@@ -29,6 +29,9 @@ public class EventBusClass {
     public static final int EVENT_MARKET_LOGIN_GONG = 15;//登录之后，行情自选下方登录隐藏
     public static final int EVENT_REQUEST_MAIN_INIT = 16;//请求完成之后发送Event
 
+
+    public static final int EVENT_VIEW_POINT_HANDLER = 17;//观点的Handler 相关
+
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;
         this.intentObj = intentObj;

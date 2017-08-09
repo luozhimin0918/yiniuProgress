@@ -78,6 +78,13 @@ public class TradeHandlerUtil {
         return contains(id);
     }
 
+    /**
+     * @param mContext
+     * @param id
+     * @param type     1 交易圈列表的赞  2 收藏 3
+     * @param bool
+     * @return
+     */
     //isSaveSuccess
     public boolean saveState(Context mContext, String id, int type, boolean bool) {
 
@@ -99,7 +106,7 @@ public class TradeHandlerUtil {
         if (historyTradeHandlerBean == null) {
             historyTradeHandlerBean = new TradeHandlerBean();
             historyTradeHandlerBean.tradeId = id;
-            if (type == 1) {
+            if (type == 1 || type == 3) {
                 historyTradeHandlerBean.isFavour = bool;
             } else if (type == 2) {
                 historyTradeHandlerBean.isCollect = bool;
@@ -108,6 +115,7 @@ public class TradeHandlerUtil {
         } else {
             switch (type) {
                 case 1:
+                case 3:
                     historyTradeHandlerBean.isFavour = bool;
                     break;
                 case 2:
@@ -121,6 +129,8 @@ public class TradeHandlerUtil {
             requestFavour(mContext, id);
         } else if (type == 2) {
             requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+        } else if (type == 3) {
+            requestFavour2(mContext, id);
         }
         return true;
     }
@@ -140,6 +150,28 @@ public class TradeHandlerUtil {
         JSONObject mainParam = mVolleyRequest.getJsonParam();
         mainParam.put("id", id);
         mVolleyRequest.doGet(HttpConstant.VIEW_POINT_ADDGOOD, mainParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+
+            }
+        });
+    }
+
+    /**
+     * 交易圈评论点赞
+     *
+     * @param mContext
+     * @param id
+     */
+    private void requestFavour2(Context mContext, String id) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
+        mainParam.put("id", id);
+        mainParam.put("type", "point");
+        mVolleyRequest.doGet(HttpConstant.VP_COMMENT_ADDGOOD, mainParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
 
@@ -200,5 +232,16 @@ public class TradeHandlerUtil {
         public String tradeId;
         public boolean isFavour = false; //是否赞
         public boolean isCollect = false; //是否收藏
+    }
+
+    public static class EventHandlerBean {
+        public String tradeId;
+        public int favourState = 0;// 1 赞   0 取消赞
+        public int collectState = 0; // 1 收藏   0 取消收藏
+        public int commentState = 0; // 1 评论   0 没评论
+
+        public EventHandlerBean(String tradeId) {
+            this.tradeId = tradeId;
+        }
     }
 }

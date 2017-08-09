@@ -34,10 +34,13 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +54,9 @@ import butterknife.ButterKnife;
 
 public class ViewPointDetailPresenter extends BasePresenter {
 
-    @BindObject ViewPointDetailActivity mViewPointDetailActivity;
+    @BindObject public ViewPointDetailActivity mViewPointDetailActivity;
 
+    private boolean isToComment = true;
     private LinearLayout headLinearLayout;
     private ViewPointDetailBean viewPointDetailBean;
     private ViewPointDetailAdapter mViewPointDetailAdapter;
@@ -63,12 +67,44 @@ public class ViewPointDetailPresenter extends BasePresenter {
     }
 
 
-    public void requestInitData(final PullToRefreshBase.Mode requestMode) {
+    /**
+     * 加载更多数据
+     */
+    public void requestMoreData() {
+        String lastCommentId = String.valueOf(commentDetailList.get(commentDetailList.size() - 1).getId());
+
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
+
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
+        mainParam.put("type", "point");
+        mainParam.put("object_id", mViewPointDetailActivity.detailId);
+        mainParam.put("last_id", lastCommentId);
+
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo != null) {
+            mainParam.put("uid", userInfo.getUid());
+        }
+        mVolleyRequest.doGet(HttpConstant.VP_COMMENT_LIST, mainParam, new HttpListener<List<CommentDetailBean>>() {
+            @Override
+            protected void onResponse(List<CommentDetailBean> newCommentDetailList) {
+                if (newCommentDetailList.size() == 0) {
+                    mViewPointDetailActivity.mPullPinnedListView.noMoreData();
+                    return;
+                }
+                mViewPointDetailActivity.mPullPinnedListView.onRefreshComplete();
+                commentDetailList.addAll(newCommentDetailList);
+                mViewPointDetailAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    /**
+     * 初始化加载所有信息
+     */
+    public void requestInitData() {
         //写上网络请求
 
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
-        mVolleyRequest.setTag(getClass().getName());
-
 
         JSONObject mainParam = mVolleyRequest.getJsonParam();
         mainParam.put("id", mViewPointDetailActivity.detailId);
@@ -81,52 +117,51 @@ public class ViewPointDetailPresenter extends BasePresenter {
         mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DETAIL, mainParam, new HttpListener<ViewPointDetailBean>() {
             @Override
             protected void onResponse(ViewPointDetailBean viewPointDetailBean) {
-                if (requestMode == PullToRefreshBase.Mode.PULL_FROM_START) {
-                    ViewPointDetailPresenter.this.viewPointDetailBean = viewPointDetailBean;
+                ViewPointDetailPresenter.this.viewPointDetailBean = viewPointDetailBean;
 
-                    /**
-                     * 初始化LinearLayout
-                     */
-                    headLinearLayout = new LinearLayout(mContext);
-                    headLinearLayout.setLayoutParams(
-                            new AbsListView.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                    headLinearLayout.setOrientation(LinearLayout.VERTICAL);
-                    /**
-                     * 加入头部详情信息
-                     */
-                    View mHeadDetailView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.view_point_detail_head,
-                                    mViewPointDetailActivity.mPullPinnedListView,
-                                    false);
+                /**
+                 * 初始化LinearLayout
+                 */
+                headLinearLayout = new LinearLayout(mContext);
+                headLinearLayout.setLayoutParams(
+                        new AbsListView.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                headLinearLayout.setOrientation(LinearLayout.VERTICAL);
+                /**
+                 * 加入头部详情信息
+                 */
+                View mHeadDetailView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.view_point_detail_head,
+                                mViewPointDetailActivity.mPullPinnedListView,
+                                false);
 
-                    headLinearLayout.addView(mHeadDetailView);
-                    headViewHandler(mHeadDetailView);
+                headLinearLayout.addView(mHeadDetailView);
+                headViewHandler(mHeadDetailView);
 
-                    /**
-                     *  加入评论
-                     */
-                    mViewPointDetailActivity.commentPresenter.bindListView(headLinearLayout);
-                    mViewPointDetailActivity.commentPresenter.createMoreView(null);
+                /**
+                 *  加入评论
+                 */
+                mViewPointDetailActivity.commentPresenter.bindListView(headLinearLayout);
+                mViewPointDetailActivity.commentPresenter.createMoreView(null);
 
-                    /**
-                     * 添加头部到ListView
-                     */
-                    mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().addHeaderView(headLinearLayout);
+                /**
+                 * 添加头部到ListView
+                 */
+                mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().addHeaderView(headLinearLayout);
 
-                    /**
-                     * set Adapter
-                     */
-                    if (viewPointDetailBean.comment != null && viewPointDetailBean.comment.size() != 0) {
-                        commentDetailList.addAll(viewPointDetailBean.comment);
-                        mViewPointDetailActivity.mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-                    } else {
-                        mViewPointDetailActivity.commentPresenter.createNoneComment();
-                    }
-                    mViewPointDetailAdapter = new ViewPointDetailAdapter(mContext, commentDetailList);
-                    mViewPointDetailActivity.mPullPinnedListView.setAdapter(mViewPointDetailAdapter);
+                /**
+                 * set Adapter
+                 */
+                if (viewPointDetailBean.comment != null && viewPointDetailBean.comment.size() != 0) {
+                    commentDetailList.addAll(viewPointDetailBean.comment);
+                    mViewPointDetailActivity.mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+                } else {
+                    mViewPointDetailActivity.commentPresenter.createNoneComment();
                 }
+                mViewPointDetailAdapter = new ViewPointDetailAdapter(mContext, commentDetailList);
+                mViewPointDetailAdapter.setPresenter(ViewPointDetailPresenter.this);
+                mViewPointDetailActivity.mPullPinnedListView.setAdapter(mViewPointDetailAdapter);
             }
         });
     }
@@ -152,8 +187,14 @@ public class ViewPointDetailPresenter extends BasePresenter {
         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointDetailBean.time * 1000);
         tvTime.setText(formatCreateTime.toString());
 
-        mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
-        mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(viewPointDetailBean.num_commit));
+        if (viewPointDetailBean.num_good > 0) {
+            mViewPointDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
+            mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
+        }
+        if (viewPointDetailBean.num_comment > 0) {
+            mViewPointDetailActivity.tvCommentCount.setVisibility(View.VISIBLE);
+            mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(viewPointDetailBean.num_comment));
+        }
 
         mViewPointDetailActivity.articlePresenter.setAuthorImage(roundImageView, viewPointDetailBean.author_img);
 
@@ -166,8 +207,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 tvTransmitContent,
                 viewPointDetailBean.forward);
 
-        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean =
-                TradeHandlerUtil.getInstance().checkHandlerState(viewPointDetailBean.o_id);
+        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(viewPointDetailBean.o_id);
 
 
         if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
@@ -177,8 +217,15 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 @Override
                 public void onClick(View v) {
                     boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 1, true);
+
                     if (isSaveSuccess) {
                         mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
+                        viewPointDetailBean.num_good += 1;
+                        mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
+
+                        TradeHandlerUtil.EventHandlerBean zanBean = new TradeHandlerUtil.EventHandlerBean(viewPointDetailBean.o_id);
+                        zanBean.favourState = 1;
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_HANDLER, zanBean));
                     }
                 }
             });
@@ -194,7 +241,35 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 2, bool);
                 if (isSaveSuccess) {
                     mViewPointDetailActivity.ivCollect.setSelected(bool);
+
+                    TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(viewPointDetailBean.o_id);
+                    scBean.collectState = 1;
+                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_HANDLER, scBean));
                 }
+            }
+        });
+
+        mViewPointDetailActivity.ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isToComment) {
+                    mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(2);
+                }else{
+                    mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(0);
+                }
+                isToComment = !isToComment;
+            }
+        });
+
+        String followState = viewPointDetailBean.is_follow;
+        boolean isFollow = "1".equals(followState);
+        cbAttention.setChecked(isFollow);
+
+        cbAttention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPointDetailActivity.articlePresenter
+                        .requestAttentionState(String.valueOf(viewPointDetailBean.author_id), cbAttention.isChecked());
             }
         });
     }
@@ -237,19 +312,20 @@ public class ViewPointDetailPresenter extends BasePresenter {
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
-        jsonParam.put("type", VarConstant.VIDEO);
+        jsonParam.put("type", "point");
         jsonParam.put("object_id", mViewPointDetailActivity.detailId);
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
         jsonParam.put("content", commentContent);
 
         if (parentId != 0) {
+            jsonParam.put("root_id", commentBean.getId());
             jsonParam.put("parent_id", parentId);
         }
 
-        volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
+        volleyRequest.doPost(HttpConstant.VP_COMMENT_PUBLISH, jsonParam, new HttpListener<CommentDetailBean>() {
             @Override
-            protected void onResponse(CommentBean mCommentBean) {
+            protected void onResponse(CommentDetailBean mCommentBean) {
                 popupWindow.dismiss();
                 commentEdit.setText("");
 
@@ -282,19 +358,29 @@ public class ViewPointDetailPresenter extends BasePresenter {
      *
      * @param mCommentBean
      */
-    public void commentCommit(CommentBean mCommentBean) {
-        try {
-            if (commentDetailList.size() == 0) {
-                View noneComment = headLinearLayout.findViewWithTag("noneComment");
-                ViewGroup parent = (ViewGroup) noneComment.getParent();
-                parent.removeView(noneComment);
+    public void commentCommit(CommentDetailBean mCommentBean) {
+        if (mCommentBean.getParent_id() == 0) {
+            try {
+                if (commentDetailList.size() == 0) {
+                    View noneComment = headLinearLayout.findViewWithTag("noneComment");
+                    ViewGroup parent = (ViewGroup) noneComment.getParent();
+                    parent.removeView(noneComment);
+                }
+                mCommentBean.setType(VarConstant.POINT);
+                commentDetailList.add(0, mCommentBean);
+                mViewPointDetailAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            CommentDetailBean mCommentDetailBean = new CommentDetailBean();
-
-            commentDetailList.add(0, mCommentDetailBean);
+        } else {
+            for (CommentDetailBean commentDetailBean : commentDetailList) {
+                if (commentDetailBean.getId() == mCommentBean.getParent_id()) {
+                    int subCommentCount = commentDetailBean.getSub_comment_count();
+                    subCommentCount += 1;
+                    commentDetailBean.setSub_comment_count(subCommentCount);
+                }
+            }
             mViewPointDetailAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

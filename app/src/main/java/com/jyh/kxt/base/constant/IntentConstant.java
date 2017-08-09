@@ -21,6 +21,8 @@ public class IntentConstant {
     public static final String O_ID = "o_id";
     public static final String O_CLASS = "o_class";
     public static final String O_ACTION = "o_action";
+    public static final String OBJECT = "object";
+
 
     public static final String SEARCH_KEY = "search_key";//搜索关键字
     public static final String JAVASCRIPTENABLED = "JavaScriptEnabled";//JS开启

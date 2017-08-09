@@ -144,7 +144,7 @@
                 android:drawableLeft="@mipmap/icon_point_zan1"
                 android:drawablePadding="8dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="0"
                 android:textColor="@color/font_color9"
                 android:textSize="@dimen/describe_font_size3"/>
         </LinearLayout>
@@ -168,7 +168,7 @@
                 android:drawableLeft="@mipmap/icon_point_pl"
                 android:drawablePadding="8dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="0"
                 android:textColor="@color/font_color9"
                 android:textSize="@dimen/describe_font_size3"/>
         </LinearLayout>
@@ -192,7 +192,7 @@
                 android:drawableLeft="@mipmap/icon_point_fx"
                 android:drawablePadding="8dp"
                 android:gravity="center"
-                android:text="5"
+                android:text="0"
                 android:textColor="@color/font_color9"
                 android:textSize="@dimen/describe_font_size3"/>
         </LinearLayout>

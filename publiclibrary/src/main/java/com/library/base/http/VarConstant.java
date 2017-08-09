@@ -54,6 +54,7 @@ public class VarConstant {
     public static final String ARTICLE = "article";//文章
     public static final String BLOG_ARTICLE = "blog_article";//博客
     public static final String VIDEO = "video";//视听
+    public static final String POINT = "point";//交易圈
 
     /**
      * 跳转

@@ -246,7 +246,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                         viewpointViewHolder.tvTime.setText(formatCreateTime.toString());
 
                         viewpointViewHolder.tvZanView.setText(viewPointTradeBean.num_good + "");
-                        viewpointViewHolder.tvPinLunView.setText(viewPointTradeBean.num_commit + "");
+                        viewpointViewHolder.tvPinLunView.setText(viewPointTradeBean.num_comment + "");
                         articleContentPresenter.setAuthorImage(viewpointViewHolder.rivUserAvatar, viewPointTradeBean.author_img);
                         articleContentPresenter.initTradeHandler(viewpointViewHolder.tvZanView, viewPointTradeBean.isFavour);
 

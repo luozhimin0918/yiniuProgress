@@ -53,7 +53,7 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
      */
     public String content;
     public int num_good;
-    public int num_commit;
+    public int num_comment;
     public String author_name;
     public String author_id;
     public String author_img;

@@ -38,7 +38,7 @@ public class ViewPointDetailBean {
     public String content;
     public String is_follow;
     public int num_good;
-    public int num_commit;
+    public int num_comment;
     public int author_id;
 
     public String author_name;

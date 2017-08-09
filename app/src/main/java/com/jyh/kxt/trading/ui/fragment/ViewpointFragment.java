@@ -8,9 +8,14 @@ import android.view.View;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.trading.presenter.ViewpointPresenter;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 
@@ -39,6 +44,16 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
 
         viewpointPresenter = new ViewpointPresenter(this);
         viewpointPresenter.requestInitData();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onViewPointEventBus(EventBusClass eventBusClass) {
+        if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_HANDLER) {
+            TradeHandlerUtil.EventHandlerBean intentObj = (TradeHandlerUtil.EventHandlerBean) eventBusClass.intentObj;
+            viewpointPresenter.viewpointAdapter.handlerEventBus(intentObj);
+        }
     }
 
     private void initView() {

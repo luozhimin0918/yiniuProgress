@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="02-14 22：59"
+                android:text="02-14 22:59"
                 android:textColor="@color/font_color9"
                 android:textSize="@dimen/min_font_size"/>
         </LinearLayout>

@@ -100,7 +100,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
         viewHolder1.tvTime.setText(formatCreateTime.toString());
 
         viewHolder1.tvZanView.setText(String.valueOf(viewPointTradeBean.num_good));
-        viewHolder1.tvPinLunView.setText(String.valueOf(viewPointTradeBean.num_commit));
+        viewHolder1.tvPinLunView.setText(String.valueOf(viewPointTradeBean.num_comment));
 
         articleContentPresenter.setAuthorImage(viewHolder1.rivUserAvatar, viewPointTradeBean.author_img);
         articleContentPresenter.initTradeHandler(viewHolder1.tvZanView, viewPointTradeBean.isFavour);

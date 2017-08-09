@@ -1,5 +1,6 @@
 package com.jyh.kxt.trading.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -111,54 +115,6 @@ public class ArticleContentPresenter {
         }
     }
 
-    /**
-     * GridView adapter
-     */
-    public void setPictureAdapter(GridView mGridViewPicture, List<String> gridList) {
-        if (gridList == null) {
-            gridList = new ArrayList<>();
-        }
-
-        final List<String> finalGridList = gridList;
-        BaseListAdapter<String> pictureAdapter = new BaseListAdapter<String>(finalGridList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                final ViewHolder mViewHolder;
-
-                if (convertView == null) {
-                    convertView = LayoutInflater
-                            .from(mContext)
-                            .inflate(R.layout.view_viewpoint_item_picture, parent, false);
-
-                    mViewHolder = new ViewHolder();
-                    convertView.setTag(mViewHolder);
-                    mViewHolder.mPictureView = (ImageView) convertView.findViewById(R.id.item_picture);
-                } else {
-                    mViewHolder = (ViewHolder) convertView.getTag();
-                }
-
-                String imageUrl = finalGridList.get(position);
-
-                Glide.with(mContext)
-                        .load(imageUrl)
-                        .asBitmap()
-                        .override(100, 80)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                    glideAnimation) {
-                                mViewHolder.mPictureView.setImageBitmap(resource);
-                            }
-                        });
-                return convertView;
-            }
-
-            class ViewHolder {
-                ImageView mPictureView;
-            }
-        };
-        mGridViewPicture.setAdapter(pictureAdapter);
-    }
 
     /**
      * 初始化GridView 控件
@@ -223,12 +179,8 @@ public class ArticleContentPresenter {
             mVolleyRequest.doGet(HttpConstant.VIEW_POINT_IS_FOLLOW, mainParam, new HttpListener<JSONObject>() {
                 @Override
                 protected void onResponse(JSONObject jsonObject) {
-                    int isFollow = jsonObject.getInteger("is_follow");
-                    if (isFollow == 0) {
-                        setAttentionState(tvGz, false);
-                    } else {
-                        setAttentionState(tvGz, true);
-                    }
+                    boolean isFollow = jsonObject.getBoolean("is_follow");
+                    setAttentionState(tvGz, isFollow);
                 }
             });
         }
@@ -243,7 +195,7 @@ public class ArticleContentPresenter {
             IBaseView iBaseView = (IBaseView) mContext;
             VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
             JSONObject mainParam = mVolleyRequest.getJsonParam();
-            mainParam.put("writer_id", authorId);
+            mainParam.put("id", authorId);
             mainParam.put("uid", userInfo.getUid());
             mainParam.put("accessToken", userInfo.getToken());
             mainParam.put("type", "point");
@@ -255,13 +207,113 @@ public class ArticleContentPresenter {
                 attentionUrl = HttpConstant.EXPLORE_BLOG_DELETEFAVOR;
             }
 
-            mVolleyRequest.doGet(attentionUrl, mainParam, new HttpListener<JSONObject>() {
+            mVolleyRequest.doGet(attentionUrl, mainParam, new HttpListener<String>() {
                 @Override
-                protected void onResponse(JSONObject jsonObject) {
+                protected void onResponse(String jsonObject) {
                 }
             });
         }
     }
 
+    /**
+     * GridView adapter
+     */
+    public void setPictureAdapter(GridView mGridViewPicture, List<String> gridList) {
+        if (gridList == null) {
+            gridList = new ArrayList<>();
+        }
 
+        final List<String> finalGridList = gridList;
+        BaseListAdapter<String> pictureAdapter = new BaseListAdapter<String>(finalGridList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final ViewHolder mViewHolder;
+
+                if (convertView == null) {
+                    convertView = LayoutInflater
+                            .from(mContext)
+                            .inflate(R.layout.view_viewpoint_item_picture, parent, false);
+
+                    mViewHolder = new ViewHolder();
+                    convertView.setTag(mViewHolder);
+                    mViewHolder.mPictureView = (ImageView) convertView.findViewById(R.id.item_picture);
+                } else {
+                    mViewHolder = (ViewHolder) convertView.getTag();
+                }
+
+                String imageUrl = finalGridList.get(position);
+
+                Glide.with(mContext)
+                        .load(imageUrl)
+                        .asBitmap()
+                        .override(100, 80)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                                    glideAnimation) {
+                                mViewHolder.mPictureView.setImageBitmap(resource);
+                            }
+                        });
+                return convertView;
+            }
+
+            class ViewHolder {
+                ImageView mPictureView;
+            }
+        };
+        mGridViewPicture.setAdapter(pictureAdapter);
+        mGridViewPicture.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String girdImageUrl = finalGridList.get(position);
+                setGridViewItemClick(girdImageUrl);
+            }
+        });
+    }
+
+    /**
+     * 点击GridView 弹出PopWindow
+     */
+    private PopupUtil imagePopupUtil;
+
+    private void setGridViewItemClick(String girdImageUrl) {
+
+        imagePopupUtil = new PopupUtil((Activity) mContext);
+        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
+        inflate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imagePopupUtil.isShowing()) {
+                    imagePopupUtil.dismiss();
+                }
+            }
+        });
+        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+
+        PopupUtil.Config config = new PopupUtil.Config();
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+        config.animationStyle = R.style.PopupWindow_Style1;
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = WindowManager.LayoutParams.MATCH_PARENT;
+        imagePopupUtil.setConfig(config);
+
+        Glide.with(mContext).load(girdImageUrl)
+                .asBitmap()
+                .error(R.mipmap.icon_def_news)
+                .placeholder(R.mipmap.icon_def_news)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        ivPop.setLayoutParams(layoutParams);
+                        ivPop.setImageBitmap(resource);
+
+                        imagePopupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
+                    }
+                });
+    }
 }

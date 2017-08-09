@@ -71,7 +71,7 @@ public class EmoticonSimpleTextView extends TextView {
     public boolean convertToGif(SpannableStringBuilder currentSpannable) {
         String text = currentSpannable.toString();
 
-        Matcher marketMatcher = Pattern.compile("#&<(.*?)>&#").matcher(text);
+        Matcher marketMatcher = Pattern.compile("#&(.*?)&#").matcher(text);
 
         while (marketMatcher.find()) {
             final String marketName = marketMatcher.group(1);

@@ -3,8 +3,6 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -47,6 +45,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -163,7 +162,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder1.tvTime.setText(formatCreateTime.toString());
 
                 viewHolder1.tvZanView.setText(String.valueOf(viewPointTradeBean.num_good));
-                viewHolder1.tvPinLunView.setText(String.valueOf(viewPointTradeBean.num_commit));
+                viewHolder1.tvPinLunView.setText(String.valueOf(viewPointTradeBean.num_comment));
 
                 articleContentPresenter.setAuthorImage(viewHolder1.rivUserAvatar, viewPointTradeBean.author_img);
                 articleContentPresenter.initTradeHandler(viewHolder1.tvZanView, viewPointTradeBean.isFavour);
@@ -193,12 +192,15 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
                 break;
         }
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
-                intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
-                mContext.startActivity(intent);
+                if (navigationTabClickPosition != 2) {
+                    Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
+                    mContext.startActivity(intent);
+                }
             }
         });
         return convertView;
@@ -447,7 +449,7 @@ public class ViewpointAdapter extends BaseAdapter implements
      * 刷新Adapter替换 List 数组
      *
      * @param tradeList
-     * @param fromSource
+     * @param fromSource 0表示不存在Tab切换按钮数据  1表示存在
      */
     private void replaceDataAndNotifyDataSetChanged(List<ViewPointTradeBean> tradeList, int fromSource) {
         dataList.clear();
@@ -509,8 +511,8 @@ public class ViewpointAdapter extends BaseAdapter implements
                 if (viewPointTradeBeen == null) {
                     ArrayList<ViewPointTradeBean> tradeList = new ArrayList<>();
                     replaceDataAndNotifyDataSetChanged(tradeList, 0);
+                    return;
                 }
-                return;
             } else {
                 uId = userInfo.getUid();
             }
@@ -598,10 +600,11 @@ public class ViewpointAdapter extends BaseAdapter implements
                         mainParam.put("id", viewPointTradeBean.o_id);
                         mainParam.put("uid", userInfo.getUid());
                         mainParam.put("type", reportContent);
-                        mVolleyRequest.doGet(HttpConstant.TRADE_FAVORSTATUS, mainParam, new HttpListener<String>() {
+                        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_REPORT, mainParam, new HttpListener<String>() {
                             @Override
                             protected void onResponse(String s) {
-
+                                ToastView.makeText3(mContext, "您的举报我们已经受理");
+                                functionPopupWindow.dismiss();
                             }
                         });
 
@@ -617,4 +620,29 @@ public class ViewpointAdapter extends BaseAdapter implements
         functionPopupWindow.show(R.layout.pop_point_report);
     }
 
+    public void handlerEventBus(TradeHandlerUtil.EventHandlerBean intentObj) {
+        Iterator<String> iterator = pointListMap.keySet().iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+
+            List<ViewPointTradeBean> tradeBeanList = pointListMap.get(next);
+            for (ViewPointTradeBean viewPointTradeBean : tradeBeanList) {
+                if (intentObj.tradeId.equals(viewPointTradeBean.o_id)) {
+                    if (intentObj.favourState == 1) {
+                        viewPointTradeBean.isFavour = true;
+                        viewPointTradeBean.num_good += 1;
+                    }
+                    if (intentObj.collectState == 1) {
+                        viewPointTradeBean.isCollect = true;
+                    }
+
+                    if (intentObj.commentState == 1) {
+                        viewPointTradeBean.num_comment += 1;
+                    }
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
 }

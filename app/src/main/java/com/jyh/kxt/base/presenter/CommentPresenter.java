@@ -281,8 +281,14 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         });
     }
 
+
     private CommentBean commentBean;
     private int commentWho;
+    private String hintContent;
+
+    public void setContentEditHint(String hintContent) {
+        this.hintContent = hintContent;
+    }
 
     /**
      * 弹出回复的PopWindow
@@ -336,6 +342,8 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         replyMessagePresenter.isShowEmoJiView = false;
 
         replyMessagePresenter.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
+        replyMessagePresenter.setContentEditHint(hintContent);
+        hintContent = "来发表您的伟大评论吧";
 
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);

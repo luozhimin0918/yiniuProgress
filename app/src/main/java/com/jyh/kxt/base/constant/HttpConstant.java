@@ -57,10 +57,14 @@ public class HttpConstant {
     public static  final String VIEW_POINT_DETAIL = BASE_URL +"viewpoint/detail?content=";
     public static  final String TRADE_FAVORSTATUS = BASE_URL +"trade/favorstatus?content=";
     public static  final String VIEW_POINT_ADDGOOD = BASE_URL +"viewpoint/addGood?content=";
+    public static  final String VP_COMMENT_ADDGOOD = BASE_URL +"vpcomment/addGood?content=";
     //是否关注
     public static  final String VIEW_POINT_IS_FOLLOW = BASE_URL +"viewpoint/is_follow?content=";
     //举报
     public static  final String VIEW_POINT_REPORT = BASE_URL +"viewpoint/report?content=";
+    public static  final String VP_COMMENT_PUBLISH = BASE_URL +"vpcomment/publish?content=";
+    public static  final String VP_COMMENT_DETAIL = BASE_URL +"vpcomment/detail?content=";
+    public static  final String VP_COMMENT_LIST = BASE_URL +"vpcomment/list?content=";
 
     /**
      * 要闻点评

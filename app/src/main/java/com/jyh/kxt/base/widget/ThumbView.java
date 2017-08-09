@@ -1,7 +1,6 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -16,10 +15,9 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.NativeStore;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 
 /**
  * Created by Mr'Dai on 2017/5/4.
@@ -61,16 +59,6 @@ public class ThumbView extends RelativeLayout {
         int thumbAddColor = ContextCompat.getColor(getContext(), R.color.font_color11);
         int marginsRight = SystemUtil.dp2px(getContext(), 5);
 
-        //点赞的图片
-        ivThumb = new ImageView(getContext());
-        ivThumb.setId(R.id.iv_thumb);
-
-        LayoutParams thumbImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        thumbImageParams.setMargins(0, 0, marginsRight, 0);
-
-        ivThumb.setLayoutParams(thumbImageParams);
-        addView(ivThumb);
-
 
         //点赞数量
         tvThumbCount = new TextView(getContext());
@@ -82,7 +70,13 @@ public class ThumbView extends RelativeLayout {
 
         tvThumbCount.setLayoutParams(thumbCountParams);
         addView(tvThumbCount);
-
+        //点赞的图片
+        ivThumb = new ImageView(getContext());
+        ivThumb.setId(R.id.iv_thumb);
+        LayoutParams thumbImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        thumbImageParams.setMargins(0, 2, marginsRight, 0);
+        ivThumb.setLayoutParams(thumbImageParams);
+        addView(ivThumb);
         //点赞累加
         tvThumbAddCount = new TextView(getContext());
         tvThumbAddCount.setText("+1");
@@ -113,7 +107,28 @@ public class ThumbView extends RelativeLayout {
      * 请求点赞
      */
     private void requestClickThumb() {
+        if (VarConstant.POINT.equals(commentBean.getType()) && !isThumb) {
+            //交易圈处理
+            TradeHandlerUtil.getInstance().saveState(getContext(), String.valueOf(thumbId), 3, true);
 
+            changerCount(1);
+            ivThumb.setImageResource(R.mipmap.icon_comment_like);
+
+            tvThumbAddCount.setVisibility(View.VISIBLE);
+
+            mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.thumb_anim);
+            tvThumbAddCount.startAnimation(mAnimation);
+
+            tvThumbAddCount.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tvThumbAddCount.setVisibility(View.GONE);
+                }
+            }, mAnimation.getDuration());
+            isThumb = true;
+
+            return;
+        }
         String type = "";
         switch (commentBean.getType()) {
             case "2":
@@ -154,25 +169,6 @@ public class ThumbView extends RelativeLayout {
 
             }
         });
-
-//        IBaseView iBaseView = (IBaseView) getContext();
-//        VolleyRequest volleyRequest = new VolleyRequest(getContext(), iBaseView.getQueue());
-//        JSONObject jsonParam = volleyRequest.getJsonParam();
-//        jsonParam.put("id", thumbId);
-//        jsonParam.put("uid", userInfo.getUid());
-//        jsonParam.put("token", userInfo.getToken());
-//
-//        volleyRequest.doPost(HttpConstant.GOOD_NEWS, jsonParam, new HttpListener<String>() {
-//            @Override
-//            protected void onResponse(String data) {
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//            }
-//        });
-
     }
 
     @Override
@@ -190,6 +186,25 @@ public class ThumbView extends RelativeLayout {
         this.observerData = observerData;
         int count = commentBean.getNum_good();
 
+        if (VarConstant.POINT.equals(commentBean.getType())) {
+            //交易圈处理
+            TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(String.valueOf(thumbId));
+            if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
+                ivThumb.setImageResource(R.mipmap.icon_comment_like);
+                if (count == 0) {
+                    count = 1;
+                }
+                isThumb = true;
+            } else {
+                ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
+                isThumb = false;
+            }
+
+            if (tvThumbCount != null) {
+                tvThumbCount.setText(String.valueOf(count));
+            }
+            return;
+        }
         String type = null;
 
         switch (commentBean.getType()) {
@@ -214,7 +229,6 @@ public class ThumbView extends RelativeLayout {
             if (count == 0) {
                 count = 1;
             }
-//            count = count + (commentBean.isTemporaryClickFavour() ? 1 : 0);
         } else {
             ivThumb.setImageResource(R.mipmap.icon_comment_unlike);
         }

@@ -44,8 +44,9 @@ public class ViewpointPresenter extends BasePresenter {
 
     @BindObject ViewpointFragment mViewpointFragment;
 
-    private LinearLayout headLinearLayout;
     private AlertDialog loginPop;
+    private LinearLayout headLinearLayout;
+    public ViewpointAdapter viewpointAdapter;
 
     private List<ViewPointTradeBean> tradeBeanList = new ArrayList<>();
 
@@ -71,7 +72,7 @@ public class ViewpointPresenter extends BasePresenter {
                  */
                 tradeBeanList.addAll(viewPointBean.getTrade());
 
-                ViewpointAdapter viewpointAdapter = new ViewpointAdapter(mContext, tradeBeanList, "chosen");
+                viewpointAdapter = new ViewpointAdapter(mContext, tradeBeanList, "chosen");
                 viewpointAdapter.bindListView(mViewpointFragment.mPullPinnedListView);
 
                 /**

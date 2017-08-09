@@ -27,6 +27,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @BindView(R.id.pplv_content) public PullToRefreshListView mPullPinnedListView;
 
     @BindView(R.id.iv_like) public ImageView ivZanView;
+    @BindView(R.id.iv_comment) public ImageView ivComment;
     @BindView(R.id.tv_zanCount) public TextView tvZanCount;
 
     @BindView(R.id.iv_collect) public ImageView ivCollect;
@@ -53,13 +54,13 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
         articlePresenter = new ArticleContentPresenter(this);
         viewPointDetailPresenter = new ViewPointDetailPresenter(this);
-        viewPointDetailPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
+        viewPointDetailPresenter.requestInitData();
 
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.DISABLED);
         mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                viewPointDetailPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_END);
+                viewPointDetailPresenter.requestMoreData();
             }
         });
     }

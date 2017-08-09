@@ -207,4 +207,10 @@ public class ReplyMessagePresenter extends BasePresenter {
             e.printStackTrace();
         }
     }
+
+    public void setContentEditHint(String contentEditHint) {
+        if (contentEditHint != null) {
+            eetContent.setHint(contentEditHint);
+        }
+    }
 }
