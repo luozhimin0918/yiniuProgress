@@ -56,10 +56,5 @@ public class ViewPointDetailBean {
 
     public List<CommentDetailBean> comment;
 
-    class ShareDict {
-        public String url;
-        public String img;
-        public String title;
-        public String descript;
-    }
+    public ShareDictBean shareDict;
 }

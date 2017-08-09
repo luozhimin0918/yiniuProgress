@@ -62,6 +62,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<PinnedSectionListView>() {
             @Override
@@ -79,5 +80,18 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
     @Override
     public void OnAfreshLoad() {
         viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
+    }
+
+    @Override
+    public void onChangeTheme() {
+        super.onChangeTheme();
+
+        mPullPinnedListView.getRefreshableView().setShadowVisible(true);
+        viewpointPresenter.viewpointAdapter.notifyDataSetChanged();
+        viewpointPresenter.rollDotViewPager.onChangeTheme();
+
+        View viewPointHotTitle = viewpointPresenter.mGridHotViewLayout.findViewById(R.id.viewpoint_hot_title);
+        viewPointHotTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.slidingTabLayout_bgColor));
+//        rollViewPager.setBackground(null);
     }
 }

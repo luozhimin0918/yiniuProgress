@@ -15,6 +15,9 @@ import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.trading.json.ShareDictBean;
+import com.jyh.kxt.trading.json.ViewPointDetailBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -25,13 +28,15 @@ import butterknife.OnClick;
 
 public class ViewPointDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener {
 
+    @BindView(R.id.tv_bar_title) TextView tvBarTitle;
+    @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
+
     @BindView(R.id.pplv_content) public PullToRefreshListView mPullPinnedListView;
 
     @BindView(R.id.iv_like) public ImageView ivZanView;
     @BindView(R.id.iv_comment) public ImageView ivComment;
     @BindView(R.id.tv_zanCount) public TextView tvZanCount;
 
-    @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
 
@@ -47,6 +52,8 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_point_detail, StatusBarColor.THEME1);
         tvBarTitle.setText("详情页");
+        ivBarFunction.setVisibility(View.VISIBLE);
+        ivBarFunction.setImageResource(R.mipmap.icon_point_menu);
 
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.setOnCommentPublishListener(this);
@@ -78,7 +85,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
-    @OnClick({R.id.iv_bar_break,R.id.tv_comment})
+    @OnClick({R.id.iv_bar_break, R.id.tv_comment, R.id.iv_bar_function})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -87,7 +94,9 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
             case R.id.tv_comment:
                 commentPresenter.showReplyMessageView(view);
                 break;
-
+            case R.id.iv_bar_function:
+                showShareOrFunction();
+                break;
         }
     }
 
@@ -100,5 +109,58 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @Override
     public void onPublish(PopupWindow popupWindow, EditText etContent, CommentBean commentBean, int parentId) {
         viewPointDetailPresenter.requestIssueComment(popupWindow, etContent, commentBean, parentId);
+    }
+
+
+    private SimplePopupWindow functionPopupWindow;
+
+    private void showShareOrFunction() {
+        if (viewPointDetailPresenter.viewPointDetailBean == null) {
+            return;
+        }
+
+        functionPopupWindow = new SimplePopupWindow(this);
+        functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+
+            ViewPointDetailBean mViewPointDetailBean;
+
+            View.OnClickListener functionClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    functionPopupWindow.dismiss();
+                    switch (v.getId()) {
+                        case R.id.iv_fun_url:
+
+                            break;
+                        case R.id.iv_fun_jb:
+                            articlePresenter.showReportWindow(mViewPointDetailBean.o_id, mViewPointDetailBean.report);
+                            break;
+                        case R.id.iv_fun_qx:
+                            break;
+                    }
+                }
+            };
+
+            @Override
+            public void onCreateView(View popupView) {
+                mViewPointDetailBean = viewPointDetailPresenter.viewPointDetailBean;
+                ShareDictBean shareDict = mViewPointDetailBean.shareDict;
+                articlePresenter.shareToPlatform(popupView, shareDict);
+
+                TextView tvFunUrl = (TextView) popupView.findViewById(R.id.iv_fun_url);
+                TextView tvFunJb = (TextView) popupView.findViewById(R.id.iv_fun_jb);
+                TextView tvFunQx = (TextView) popupView.findViewById(R.id.iv_fun_qx);
+
+                tvFunUrl.setOnClickListener(functionClickListener);
+                tvFunJb.setOnClickListener(functionClickListener);
+                tvFunQx.setOnClickListener(functionClickListener);
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        functionPopupWindow.show(R.layout.pop_point_share_fun);
     }
 }

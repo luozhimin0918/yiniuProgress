@@ -29,15 +29,23 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.widget.flowlayout.OptionFlowLayout;
+import com.library.widget.window.ToastView;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +100,7 @@ public class ArticleContentPresenter {
         if (forwardContent != null) {
             rlTransmitLayout.setVisibility(View.VISIBLE);
 
-            String authorInfo = "@ " + forwardContent.author_name;
+            String authorInfo = "@ " + forwardContent.author_name + " ";
             StringBuffer contentBuffer = new StringBuffer(forwardContent.content);
             contentBuffer.insert(0, authorInfo);
 
@@ -314,5 +322,166 @@ public class ArticleContentPresenter {
                         imagePopupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
                     }
                 });
+    }
+
+    /**
+     * 分享到平台上
+     *
+     * @param popupView
+     */
+    public void shareToPlatform(View popupView, final ShareDictBean shareDict) {
+
+        View pyq = popupView.findViewById(R.id.iv_pyq);
+        View weixin = popupView.findViewById(R.id.iv_wxhy);
+        View sina = popupView.findViewById(R.id.iv_xl);
+        View qq = popupView.findViewById(R.id.iv_qq);
+        View zone = popupView.findViewById(R.id.iv_qq_kj);
+
+
+        pyq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                    UmengShareTool.setShareContent((Activity) mContext,
+                            shareDict.title,
+                            shareDict.url,
+                            shareDict.descript,
+                            shareDict.img,
+                            SHARE_MEDIA.WEIXIN_CIRCLE);
+                } else {
+                    ToastView.makeText3(mContext, "未安装微信");
+                }
+            }
+        });
+        weixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
+                    UmengShareTool.setShareContent((Activity) mContext,
+                            shareDict.title,
+                            shareDict.url,
+                            shareDict.descript,
+                            shareDict.img,
+                            SHARE_MEDIA.WEIXIN);
+                } else {
+                    ToastView.makeText3(mContext, "未安装微信");
+                }
+            }
+        });
+        sina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UmengShareTool.setShareContent((Activity) mContext,
+                        shareDict.title,
+                        shareDict.url,
+                        shareDict.descript_sina,
+                        shareDict.img,
+                        SHARE_MEDIA.SINA);
+            }
+        });
+        qq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
+                    UmengShareTool.setShareContent((Activity) mContext,
+                            shareDict.title,
+                            shareDict.url,
+                            shareDict.descript,
+                            shareDict.img,
+                            SHARE_MEDIA.QQ);
+                } else {
+                    ToastView.makeText3(mContext, "未安装QQ");
+                }
+            }
+        });
+        zone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QZONE)) {
+                    UmengShareTool.setShareContent((Activity) mContext,
+                            shareDict.title,
+                            shareDict.url,
+                            shareDict.descript,
+                            shareDict.img,
+                            SHARE_MEDIA.QQ);
+                } else {
+                    ToastView.makeText3(mContext, "未安装QQ");
+                }
+            }
+        });
+    }
+
+    /**
+     * 显示举报的Window
+     *
+     * @param viewPointTradeBean
+     */
+    SimplePopupWindow functionPopupWindow;
+
+    public void showReportWindow(final String oid, final List<String> reportList) {
+
+        functionPopupWindow = new SimplePopupWindow((Activity) mContext);
+        functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+
+            private OptionFlowLayout mTagFlowLayout;
+            private DiscolorButton mDiscolorButton;
+
+            @Override
+            public void onCreateView(View popupView) {
+                mTagFlowLayout = (OptionFlowLayout) popupView.findViewById(R.id.report_content);
+                mDiscolorButton = (DiscolorButton) popupView.findViewById(R.id.report_btn);
+
+                mTagFlowLayout.addOptionView(reportList, R.layout.item_point_jb_tv);
+                mTagFlowLayout.setDefaultOption(0);
+                mTagFlowLayout.setMinOrMaxCheckCount(1, 1);
+
+                mDiscolorButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        List<String> checkBoxText = mTagFlowLayout.getCheckBoxText();
+                        if (checkBoxText.size() == 0) {
+                            ToastView.makeText3(mContext, "投诉内容不能为空");
+                            return;
+                        }
+
+                        String reportContent = checkBoxText.get(0);
+
+                        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                        if (userInfo == null) {
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            return;
+                        }
+                        //读取关注状态
+                        IBaseView iBaseView = (IBaseView) mContext;
+                        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+                        mVolleyRequest.setTag(getClass().getName());
+
+                        JSONObject mainParam = mVolleyRequest.getJsonParam();
+                        mainParam.put("id", oid);
+                        mainParam.put("uid", userInfo.getUid());
+                        mainParam.put("type", reportContent);
+                        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_REPORT, mainParam, new HttpListener<String>() {
+                            @Override
+                            protected void onResponse(String s) {
+                                ToastView.makeText3(mContext, "您的举报我们已经受理");
+                                functionPopupWindow.dismiss();
+                            }
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        functionPopupWindow.show(R.layout.pop_point_report);
     }
 }

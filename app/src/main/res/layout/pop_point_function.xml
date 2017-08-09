@@ -18,6 +18,7 @@
             android:layout_weight="1"
             android:drawablePadding="10dp"
             android:drawableTop="@mipmap/icon_point_sc"
+            android:textColor="@color/font_color3"
             android:gravity="center"
             android:text="收藏"/>
 
@@ -26,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/font_color3"
             android:drawablePadding="10dp"
             android:drawableTop="@mipmap/icon_point_gz"
             android:gravity="center"
@@ -35,6 +37,7 @@
             android:id="@+id/point_function_jb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color3"
             android:layout_weight="1"
             android:drawablePadding="10dp"
             android:drawableTop="@mipmap/icon_point_jb"
@@ -45,6 +48,7 @@
             android:id="@+id/point_function_qx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font_color3"
             android:layout_weight="1"
             android:drawablePadding="10dp"
             android:drawableTop="@mipmap/icon_point_qx"

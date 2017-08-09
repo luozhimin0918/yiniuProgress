@@ -2,7 +2,6 @@ package com.jyh.kxt.trading.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.widget.Space;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -145,7 +144,7 @@ public class CommentDetailAdapter extends BaseListAdapter<CommentDetailBean> {
 
     class ViewHolder {
 
-        @BindView(R.id.point_comment_space) Space mCommentSpace;
+        @BindView(R.id.point_comment_space) View mCommentSpace;
         @BindView(R.id.riv_user_avatar) RoundImageView rivUserAvatar;
         @BindView(R.id.tv_nick_name) TextView tvNickName;
         @BindView(R.id.tv_time) TextView tvTime;

@@ -58,10 +58,10 @@ public class ViewPointDetailPresenter extends BasePresenter {
 
     private boolean isToComment = true;
     private LinearLayout headLinearLayout;
-    private ViewPointDetailBean viewPointDetailBean;
     private ViewPointDetailAdapter mViewPointDetailAdapter;
     private List<CommentDetailBean> commentDetailList = new ArrayList<>();
 
+    public ViewPointDetailBean viewPointDetailBean;
     public ViewPointDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }

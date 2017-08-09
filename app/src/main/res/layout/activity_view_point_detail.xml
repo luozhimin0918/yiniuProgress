@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/action_bar"
-        layout="@layout/action_bar1"/>
+        layout="@layout/action_bar3"/>
 
     <!--<include layout="@layout/view_point_detail_head"/>-->
     <com.library.widget.handmark.PullToRefreshListView
@@ -31,6 +31,7 @@
         android:id="@+id/ll_nav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoNavHeight2"
+        android:background="@color/theme1"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 

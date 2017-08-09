@@ -99,6 +99,7 @@
         android:layout_alignLeft="@+id/tv_content"
         android:layout_below="@+id/tv_content"
         android:visibility="gone"
+        android:textColor="@color/font_color3"
         android:layout_height="wrap_content"/>
 
     <View

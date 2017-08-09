@@ -21,11 +21,9 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -36,14 +34,11 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
 import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,9 +148,16 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder0.navigationTabLayout.setOpenContainerAnimator(false);
                 viewHolder0.navigationTabLayout.setOnTabSelectListener(this);
                 viewHolder0.navigationTabLayout.setCurrentTab(navigationTabClickPosition);
+
+                viewHolder0.navigationTabLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
+                viewHolder0.navigationTabLayout.setIndicatorColor(ContextCompat.getColor(mContext, R.color.indicator_color));
+                viewHolder0.navigationTabLayout.setTextSelectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
+                viewHolder0.navigationTabLayout.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
+
                 break;
             case 1:
                 viewHolder1.setData(viewPointTradeBean);
+                viewHolder1.setItemViewColor(convertView);
 
                 viewHolder1.tvContent.convertToGif(viewPointTradeBean.content);
                 viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
@@ -200,7 +202,7 @@ public class ViewpointAdapter extends BaseAdapter implements
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (navigationTabClickPosition != 2) {
+                if (viewPointTradeBean.content != null) {
                     Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
                     intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
                     mContext.startActivity(intent);
@@ -243,7 +245,21 @@ public class ViewpointAdapter extends BaseAdapter implements
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
         @BindView(R.id.view_point_fx_tv) TextView tvShareView;
 
+        @BindView(R.id.viewpoint_space) View viewSpace;
+
         private ViewPointTradeBean viewPointTradeBean;
+
+        public void setItemViewColor(View convertView) {
+            convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
+
+            tvNickName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color62));
+            tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
+            tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+            tvTransmitView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
+            viewSpace.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+            rlTransmitLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.view_point_transmit_content));
+        }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
@@ -271,74 +287,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
                         @Override
                         public void onCreateView(View popupView) {
-                            View pyq = popupView.findViewById(R.id.iv_pyq);
-                            View weixin = popupView.findViewById(R.id.iv_wxhy);
-                            View sina = popupView.findViewById(R.id.iv_xl);
-                            View qq = popupView.findViewById(R.id.iv_qq);
-                            View zone = popupView.findViewById(R.id.iv_qq_kj);
-
-                            final ViewPointTradeBean.ShareDict shareDict = viewPointTradeBean.shareDict;
-
-                            pyq.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
-                                                        .descript,
-                                                shareDict.img, SHARE_MEDIA.WEIXIN_CIRCLE);
-                                    } else {
-                                        ToastView.makeText3(mContext, "未安装微信");
-                                    }
-                                }
-                            });
-                            weixin.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
-                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
-                                                        .descript,
-                                                shareDict.img, SHARE_MEDIA.WEIXIN);
-                                    } else {
-                                        ToastView.makeText3(mContext, "未安装微信");
-                                    }
-                                }
-                            });
-                            sina.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
-                                                    .descript_sina,
-                                            shareDict.img, SHARE_MEDIA.SINA);
-                                }
-                            });
-                            qq.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
-                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
-                                                        .descript,
-                                                shareDict.img, SHARE_MEDIA.QQ);
-                                    } else {
-                                        ToastView.makeText3(mContext, "未安装QQ");
-                                    }
-                                }
-                            });
-                            zone.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                                    if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QZONE)) {
-                                        UmengShareTool.setShareContent((Activity) mContext, shareDict.title, shareDict.url, shareDict
-                                                        .descript,
-                                                shareDict.img, SHARE_MEDIA.QQ);
-                                    } else {
-                                        ToastView.makeText3(mContext, "未安装QQ");
-                                    }
-                                }
-                            });
+                            articleContentPresenter.shareToPlatform(popupView, viewPointTradeBean.shareDict);
                         }
 
                         @Override
@@ -388,7 +337,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                                         articleContentPresenter.requestAttentionState(viewPointTradeBean.author_id, isGz);
                                         break;
                                     case R.id.point_function_jb:
-                                        showReportWindow(viewPointTradeBean);
+                                        articleContentPresenter.showReportWindow(viewPointTradeBean.o_id,viewPointTradeBean.report);
                                         break;
                                     case R.id.point_function_qx:
                                         functionPopupWindow.dismiss();
@@ -422,6 +371,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
             });
         }
+
     }
 
     class ViewHolder2 {
@@ -465,11 +415,15 @@ public class ViewpointAdapter extends BaseAdapter implements
             mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
         }
 
-        if (tradeList.size() == 0) {//如果没有数据, 则添加类型为2的空数据
+        if (tradeList.size() == 0 && fromSource == 0) {//如果没有数据, 则添加类型为2的空数据
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
             viewPointTradeBean.setItemViewType(2);
             tradeList.add(viewPointTradeBean);
-            //如果没有数据不允许滑动
+
+            if (mPullPinnedListView != null) {
+                mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            }
+        } else if (tradeList.size() == 1 && fromSource == 1) {
 
             if (mPullPinnedListView != null) {
                 mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
@@ -572,81 +526,13 @@ public class ViewpointAdapter extends BaseAdapter implements
         }
     }
 
-    /**
-     * 显示举报的Window
-     *
-     * @param viewPointTradeBean
-     */
-    private void showReportWindow(final ViewPointTradeBean viewPointTradeBean) {
-        functionPopupWindow.dismiss();
-
-        functionPopupWindow = new SimplePopupWindow((Activity) mContext);
-        functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
-
-            private OptionFlowLayout mTagFlowLayout;
-            private DiscolorButton mDiscolorButton;
-
-            @Override
-            public void onCreateView(View popupView) {
-                mTagFlowLayout = (OptionFlowLayout) popupView.findViewById(R.id.report_content);
-                mDiscolorButton = (DiscolorButton) popupView.findViewById(R.id.report_btn);
-
-                mTagFlowLayout.addOptionView(viewPointTradeBean.report, R.layout.item_point_jb_tv);
-                mTagFlowLayout.setDefaultOption(0);
-                mTagFlowLayout.setMinOrMaxCheckCount(1, 1);
-
-                mDiscolorButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        List<String> checkBoxText = mTagFlowLayout.getCheckBoxText();
-                        if (checkBoxText.size() == 0) {
-                            ToastView.makeText3(mContext, "投诉内容不能为空");
-                            return;
-                        }
-
-                        String reportContent = checkBoxText.get(0);
-
-                        UserJson userInfo = LoginUtils.getUserInfo(mContext);
-                        if (userInfo == null) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
-                            return;
-                        }
-                        //读取关注状态
-                        IBaseView iBaseView = (IBaseView) mContext;
-                        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
-                        mVolleyRequest.setTag(getClass().getName());
-
-                        JSONObject mainParam = mVolleyRequest.getJsonParam();
-                        mainParam.put("id", viewPointTradeBean.o_id);
-                        mainParam.put("uid", userInfo.getUid());
-                        mainParam.put("type", reportContent);
-                        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_REPORT, mainParam, new HttpListener<String>() {
-                            @Override
-                            protected void onResponse(String s) {
-                                ToastView.makeText3(mContext, "您的举报我们已经受理");
-                                functionPopupWindow.dismiss();
-                            }
-                        });
-
-                    }
-                });
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-        functionPopupWindow.show(R.layout.pop_point_report);
-    }
 
     /**
      * 加载更多数据
      *
      * @param newTradeBeanList
      */
-    public void loadMoreData(List<ViewPointTradeBean> newTradeBeanList) {
+    public void refreshAdapterData(List<ViewPointTradeBean> newTradeBeanList, PullToRefreshBase.Mode mode) {
         switch (navigationTabClickPosition) {
             case 0:
                 requestNavigationType = "chosen";
@@ -659,8 +545,16 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
         List<ViewPointTradeBean> tradeBeanList = pointListMap.get(requestNavigationType);
-        tradeBeanList.addAll(newTradeBeanList); //存放到Map 中
-        dataList.addAll(newTradeBeanList); //将Map 中的数据放到当前List中
+        if (mode == PullToRefreshBase.Mode.PULL_FROM_START) {
+            tradeBeanList.clear();
+            dataList.clear();
+
+            tradeBeanList.addAll(newTradeBeanList); //存放到Map 中
+            replaceDataAndNotifyDataSetChanged(tradeBeanList, 0);
+        } else {
+            tradeBeanList.addAll(newTradeBeanList); //存放到Map 中
+            dataList.addAll(newTradeBeanList); //将Map 中的数据放到当前List中
+        }
         notifyDataSetChanged();
     }
 

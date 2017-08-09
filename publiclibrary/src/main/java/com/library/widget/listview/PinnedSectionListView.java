@@ -19,12 +19,12 @@ package com.library.widget.listview;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
@@ -38,6 +38,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
+import com.library.R;
 import com.library.widget.tablayout.NavigationTabLayout;
 
 /**
@@ -195,12 +196,11 @@ public class PinnedSectionListView extends ListView {
 
     public void initShadow(boolean visible) {
         if (visible) {
-            if (mShadowDrawable == null) {
-                mShadowDrawable = new GradientDrawable(Orientation.TOP_BOTTOM,
-                        new int[]{Color.parseColor("#ffa0a0a0"), Color.parseColor("#50a0a0a0"), Color.parseColor
-                                ("#00a0a0a0")});
-                mShadowHeight = (int) (8 * getResources().getDisplayMetrics().density);
-            }
+            mShadowDrawable = new GradientDrawable(Orientation.TOP_BOTTOM,
+                    new int[]{ContextCompat.getColor(getContext(), R.color.pinned_shadow1),
+                            ContextCompat.getColor(getContext(), R.color.pinned_shadow2),
+                            ContextCompat.getColor(getContext(), R.color.pinned_shadow3)});
+            mShadowHeight = (int) (5 * getResources().getDisplayMetrics().density);
         } else {
             if (mShadowDrawable != null) {
                 mShadowDrawable = null;

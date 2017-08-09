@@ -28,6 +28,7 @@ import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -50,6 +51,9 @@ public class ViewpointPresenter extends BasePresenter {
 
     private AlertDialog loginPop;
     private LinearLayout headLinearLayout;
+
+    public View mGridHotViewLayout;
+    public RollDotViewPager rollDotViewPager;
     public ViewpointAdapter viewpointAdapter;
 
 
@@ -58,8 +62,6 @@ public class ViewpointPresenter extends BasePresenter {
     }
 
     public void requestInitData(final PullToRefreshBase.Mode pullFromStart) {
-
-
         //写上网络请求
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
         mVolleyRequest.setTag(getClass().getName());
@@ -80,6 +82,11 @@ public class ViewpointPresenter extends BasePresenter {
         }
         mainParam.put("type", requestNavigationType);
 
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo != null) {
+            mainParam.put("uid", userInfo.getUid());
+        }
+
         if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_END) {
             footViewLoadIng(true);
 
@@ -93,6 +100,7 @@ public class ViewpointPresenter extends BasePresenter {
             protected void onResponse(String manJson) {
 
                 if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
+
                     if (headLinearLayout != null) {
                         mViewpointFragment.mPullPinnedListView.getRefreshableView().removeHeaderView(headLinearLayout);
                     }
@@ -103,9 +111,13 @@ public class ViewpointPresenter extends BasePresenter {
                     /**
                      * 处理Adapter
                      */
-                    viewpointAdapter = new ViewpointAdapter(mContext, viewPointBean.getTrade());
-                    viewpointAdapter.bindListView(mViewpointFragment.mPullPinnedListView);
-
+                    if (viewpointAdapter == null) {
+                        viewpointAdapter = new ViewpointAdapter(mContext, viewPointBean.getTrade());
+                        viewpointAdapter.bindListView(mViewpointFragment.mPullPinnedListView);
+                    } else {
+                        List<ViewPointTradeBean> newTradeBeanList = viewPointBean.getTrade();
+                        viewpointAdapter.refreshAdapterData(newTradeBeanList, pullFromStart);
+                    }
                     /**
                      * 初始化LinearLayout
                      */
@@ -118,19 +130,19 @@ public class ViewpointPresenter extends BasePresenter {
                     /**
                      * 加入头部
                      */
-                    View mGridView = LayoutInflater.from(mContext)
+                    mGridHotViewLayout = LayoutInflater.from(mContext)
                             .inflate(R.layout.view_viewpoint_grid_hot,
                                     mViewpointFragment.mPullPinnedListView,
                                     false);
                     //查看更多
-                    mGridView.findViewById(R.id.tv_all).setOnClickListener(new View.OnClickListener() {
+                    mGridHotViewLayout.findViewById(R.id.tv_all).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mContext.startActivity(new Intent(mContext, AuthorListActivity.class));
                         }
                     });
                     //我的关注
-                    mGridView.findViewById(R.id.tv_myattention).setOnClickListener(new View.OnClickListener() {
+                    mGridHotViewLayout.findViewById(R.id.tv_myattention).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (LoginUtils.isLogined(mContext)) {
@@ -141,25 +153,22 @@ public class ViewpointPresenter extends BasePresenter {
                         }
                     });
 
-                    RollDotViewPager rollDotViewPager = (RollDotViewPager) mGridView.findViewById(R.id.rdvp_content);
+                    rollDotViewPager = (RollDotViewPager) mGridHotViewLayout.findViewById(R.id.rdvp_content);
                     rollDotViewPager.setViewPageToDotAbout();
                     RollViewPager rollViewPager = rollDotViewPager.getRollViewPager();
-                    rollViewPager
-                            .setNumColumns(4)
-                            .setGridMaxCount(8)
-                            .setDataList(viewPointBean.getHot())
+                    rollViewPager.setNumColumns(4).setGridMaxCount(8).setDataList(viewPointBean.getHot())
                             .setShowPaddingLine(false)
                             .setGridViewItemData(
                                     new RollViewPager.GridViewItemData() {
                                         @Override
                                         public void itemData(List dataSubList, GridView gridView) {
-                                            HotHeadAdapter headAdapter =
-                                                    new HotHeadAdapter(mContext, dataSubList);
+                                            HotHeadAdapter headAdapter = new HotHeadAdapter(mContext, dataSubList);
                                             gridView.setAdapter(headAdapter);
                                         }
                                     });
+                    rollViewPager.setEnableBackgroundColor(false);
                     rollDotViewPager.build();
-                    headLinearLayout.addView(mGridView);
+                    headLinearLayout.addView(mGridHotViewLayout);
 
                     //添加头部
                     mViewpointFragment.mPullPinnedListView.getRefreshableView().addHeaderView(headLinearLayout);
@@ -170,12 +179,10 @@ public class ViewpointPresenter extends BasePresenter {
                     if (newTradeBeanList.size() == 0) {
                         ToastView.makeText3(mContext, "暂无更多数据");
                     } else {
-                        viewpointAdapter.loadMoreData(newTradeBeanList);
+                        viewpointAdapter.refreshAdapterData(newTradeBeanList, pullFromStart);
                     }
-
-
+                    footViewLoadIng(false);
                 }
-                footViewLoadIng(false);
                 mViewpointFragment.mPullPinnedListView.onRefreshComplete();
             }
 

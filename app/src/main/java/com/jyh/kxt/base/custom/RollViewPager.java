@@ -38,6 +38,7 @@ public class RollViewPager extends ViewPager {
 
     private int mGridMaxCount;
     private int mNumColumns = 3;
+    private boolean isEnableBackgroundColor = true;
 
     private boolean showPaddingLine = true;
 
@@ -78,6 +79,10 @@ public class RollViewPager extends ViewPager {
         return this;
     }
 
+    public void setEnableBackgroundColor(boolean isEnableBackgroundColor) {
+        this.isEnableBackgroundColor = isEnableBackgroundColor;
+    }
+
     public void build() {
         int extendedCount = 0;
         if (dataList.size() % mGridMaxCount != 0) {
@@ -107,12 +112,14 @@ public class RollViewPager extends ViewPager {
         viewPagerAdapter = new ViewPagerAdapter(groupViewList);
         setAdapter(viewPagerAdapter);
 
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
-            }
-        }, 500);
+        if (isEnableBackgroundColor) {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    RollViewPager.this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+                }
+            }, 500);
+        }
 
     }
 
@@ -200,7 +207,9 @@ public class RollViewPager extends ViewPager {
                     }
                 }
                 viewPagerAdapter.notifyDataSetChanged();
-                this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+                if (isEnableBackgroundColor) {
+                    this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.gray_btn_bg_color));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,10 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <android.support.v4.widget.Space
-        android:id="@+id/point_comment_space"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"/>
 
     <RelativeLayout
         android:id="@+id/rl_content_item"
@@ -17,13 +13,19 @@
         android:background="@color/theme1"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="10dp"
+        android:paddingBottom="1dp"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
         android:paddingTop="18dp">
 
+        <View
+            android:id="@+id/point_comment_space"
+            android:layout_width="0dp"
+            android:layout_height="1dp"/>
+
         <com.jyh.kxt.base.custom.RoundImageView
             android:id="@+id/riv_user_avatar"
+            android:layout_toRightOf="@+id/point_comment_space"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:src="@mipmap/icon_user_def_photo"/>
@@ -107,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/tv_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:background="@color/bg_color2"/>
     </RelativeLayout>
 </LinearLayout>

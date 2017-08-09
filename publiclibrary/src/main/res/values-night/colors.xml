@@ -61,4 +61,8 @@
 
     <color name="banner_title_color">#88ffffff</color>
     <color name="no_more_data">#136aa4</color>
+
+    <color name="pinned_shadow1">#aa000000</color>
+    <color name="pinned_shadow2">#60000000</color>
+    <color name="pinned_shadow3">#00000000</color>
 </resources>

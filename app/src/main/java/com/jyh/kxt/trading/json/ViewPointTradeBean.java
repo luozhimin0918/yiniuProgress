@@ -59,7 +59,7 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
     public String author_img;
     public long time;
     public String href;
-    public ShareDict shareDict;
+    public ShareDictBean shareDict;
 
     public String o_class;
     public String o_action;
@@ -71,11 +71,4 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
 
     public ViewPointTradeBean forward;
 
-    public class ShareDict {
-        public String url;
-        public String img;
-        public String title;
-        public String descript;
-        public String descript_sina;
-    }
 }
