@@ -21,9 +21,14 @@ import com.jyh.kxt.search.json.SearchType;
 import com.jyh.kxt.search.presenter.SearchMainPresenter;
 import com.jyh.kxt.search.ui.fragment.SearchItemFragment;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.util.RegexValidateUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +56,7 @@ public class SearchMainActivity extends BaseActivity {
 
     private SearchMainPresenter presenter;
     private String[] tabs;
+    private List<SearchType> searchTypes;
     private List<Fragment> fragments = new ArrayList<>();
     private String searchKey;
     private String searchType;
@@ -65,6 +71,12 @@ public class SearchMainActivity extends BaseActivity {
         searchType = getIntent().getStringExtra(SEARCH_TYPE);
         if (RegexValidateUtil.isEmpty(searchType)) {
             searchType = VarConstant.SEARCH_TYPE_MAIN;
+        }
+
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -106,6 +118,7 @@ public class SearchMainActivity extends BaseActivity {
         if (o == null || o.size() == 0) {
             plRootView.loadEmptyData();
         } else {
+            searchTypes = o;
             int size = o.size();
             tabs = new String[size];
             for (int i = 0; i < size; i++) {
@@ -127,7 +140,7 @@ public class SearchMainActivity extends BaseActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    index=position;
+                    index = position;
                 }
 
                 @Override
@@ -152,6 +165,29 @@ public class SearchMainActivity extends BaseActivity {
         if (requestCode == IntentConstant.REQUESTCODE1 && resultCode == Activity.RESULT_OK) {
             int index = data.getIntExtra(IntentConstant.INDEX, 0);
             stlNavigationBar.setCurrentTab(index);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBusClass) {
+        if (eventBusClass != null && eventBusClass.fromCode == EventBusClass.EVENT_SEARCH_TYPE) {
+            String type = (String) eventBusClass.intentObj;
+            int size = searchTypes.size();
+            for (int i = 0; i < size; i++) {
+                if (searchTypes.get(i).getCode().equals(type)) {
+                    vpSearch.setCurrentItem(i);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

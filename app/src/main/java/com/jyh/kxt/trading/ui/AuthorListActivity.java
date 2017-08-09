@@ -1,5 +1,6 @@
 package com.jyh.kxt.trading.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -12,9 +13,11 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
+import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.trading.json.ColumnistNavJson;
 import com.jyh.kxt.trading.presenter.AuthorListPresenter;
 import com.jyh.kxt.trading.ui.fragment.AuthorFragment;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
@@ -70,7 +73,9 @@ public class AuthorListActivity extends BaseActivity implements PageLoadLayout.O
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
-                // TODO: 2017/7/31  搜索
+                Intent intent=new Intent(this,SearchActivity.class);
+                intent.putExtra(SearchActivity.TYPE,VarConstant.SEARCH_TYPE_COLUMNIST);
+                startActivity(intent);
                 break;
         }
     }

@@ -2,7 +2,9 @@ package com.jyh.kxt.trading.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.trading.json.ColumnistListJson;
+import com.library.util.SPUtils;
 
 import java.util.List;
 
@@ -31,6 +35,11 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
 
     private Context mContext;
     private String searchKey;
+
+    private int defaultDayColor_name = Color.parseColor("#FF2E3239");
+    private int defaultNightColor_name = Color.parseColor("#FF909090");
+    private int keyDayColor = Color.parseColor("#FF1C9CF2");
+    private int keyNightColor = Color.parseColor("#FF136AA4");
 
     public ColumnistAdapter(List<ColumnistListJson> dataList, Context mContext) {
         super(dataList);
@@ -56,7 +65,50 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
                         holder.rivAvatar.setImageBitmap(resource);
                     }
                 });
-        holder.tvName.setText(bean.getName());
+
+        Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+        String name = bean.getName();
+        if(isNight){
+            if (searchKey != null && !"".equals(searchKey)) {
+                if (name != null && name.contains(searchKey)) {
+                    String before = name.substring(0, name.indexOf(searchKey));
+                    String end = name.substring(name.indexOf(searchKey) + searchKey.length());
+                    String content = "<font color='" + defaultNightColor_name + "'>" + before + "</font><font color='" + keyNightColor +
+                            "'>"
+                            + searchKey +
+                            "</font><font " +
+                            "color='" + defaultNightColor_name +
+                            "'>" + end + "</font>";
+                    holder.tvName.setText(Html.fromHtml(content));
+                } else {
+                    holder.tvName.setText(name);
+                    holder.tvName.setTextColor(defaultNightColor_name);
+                }
+            } else {
+                holder.tvName.setText(name);
+                holder.tvName.setTextColor(defaultNightColor_name);
+            }
+        }else{
+            if (searchKey != null && !"".equals(searchKey)) {
+                if (name != null && name.contains(searchKey)) {
+                    String before = name.substring(0, name.indexOf(searchKey));
+                    String end = name.substring(name.indexOf(searchKey) + searchKey.length());
+                    String content = "<font color='" + defaultDayColor_name + "'>" + before + "</font><font color='" + keyDayColor + "'>"
+                            + searchKey +
+                            "</font><font " +
+                            "color='" + defaultDayColor_name +
+                            "'>" + end + "</font>";
+                    holder.tvName.setText(Html.fromHtml(content));
+                } else {
+                    holder.tvName.setText(name);
+                    holder.tvName.setTextColor(defaultDayColor_name);
+                }
+            } else {
+                holder.tvName.setText(name);
+                holder.tvName.setTextColor(defaultDayColor_name);
+            }
+        }
+
         String point_num = bean.getPoint_num();
         String article_num = bean.getArticle_num();
         String num_fans = bean.getNum_fans();

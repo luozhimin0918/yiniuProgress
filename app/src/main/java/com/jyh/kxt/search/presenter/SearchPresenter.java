@@ -17,6 +17,7 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,9 @@ public class SearchPresenter extends BasePresenter {
     private String type;//搜索类型
     private String searchKey;//搜索关键字
 
+    private String lastId;
+    private boolean isMore;
+
     public SearchPresenter(IBaseView iBaseView, String type) {
         super(iBaseView);
         this.type = type;
@@ -54,7 +58,10 @@ public class SearchPresenter extends BasePresenter {
         this.searchKey = searchKey;
         saveSearchHistory(searchKey);
         JSONObject jsonParam = request.getJsonParam();
-        jsonParam.put("type", "news");
+        jsonParam.put(VarConstant.HTTP_CODE, type);
+        jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+
         request.doGet(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String info) {
@@ -149,7 +156,11 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public void refresh() {
-        request.doGet("", new HttpListener<String>() {
+        lastId = "";
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_CODE, type);
+        jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        request.doGet(HttpConstant.SEARCH_LIST, new HttpListener<String>() {
             @Override
             protected void onResponse(String info) {
                 activity.refresh(info);
@@ -169,22 +180,44 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public void loadMore() {
-        request.doGet("", new HttpListener<String>() {
-            @Override
-            protected void onResponse(String info) {
-                activity.loadMore(info);
-            }
+        if (isMore) {
+            JSONObject jsonParam = request.getJsonParam();
+            jsonParam.put(VarConstant.HTTP_CODE, type);
+            jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+            request.doGet(HttpConstant.SEARCH_LIST, new HttpListener<String>() {
+                @Override
+                protected void onResponse(String info) {
+                    activity.loadMore(info);
+                }
 
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                activity.plvContent.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        activity.plvContent.onRefreshComplete();
-                    }
-                }, 200);
-            }
-        });
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    activity.plvContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.plvContent.onRefreshComplete();
+                        }
+                    }, 200);
+                }
+            });
+        } else {
+            activity.plvContent.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+                    activity.plvContent.onRefreshComplete();
+                }
+            }, 200);
+        }
+    }
+
+    public void setLastId(String o_id) {
+        lastId = o_id;
+    }
+
+    public void setMore(boolean ismore) {
+        this.isMore = ismore;
     }
 }

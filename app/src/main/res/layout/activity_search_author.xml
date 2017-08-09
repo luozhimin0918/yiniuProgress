@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical">
+
+    <include layout="@layout/nav_search"/>
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.library.widget.tablayout.SlidingTabLayout
+                android:id="@+id/stl_navigation_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navigationBar2Height"
+                android:background="@color/slidingTabLayout_bgColor"
+                android:paddingRight="@dimen/navigationBar2ImageWidth"
+                tl:tl_indicator_color="@color/indicator_color"
+                tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+                tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+
+                tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+
+                tl:tl_tab_padding="10dp"
+                tl:tl_textSelectColor="@color/tabSelColor"
+                tl:tl_textUnselectColor="@color/tabUnSelColor"
+                tl:tl_textsize="@dimen/describe_font_size4"
+                />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+    </com.library.widget.PageLoadLayout>
+</LinearLayout>

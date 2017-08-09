@@ -3,6 +3,9 @@ package com.jyh.kxt.search.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,8 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
@@ -25,11 +30,13 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SPUtils;
 import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.window.ToastView;
 
@@ -54,6 +61,11 @@ public class ViewpointAdapter extends BaseListAdapter<ViewPointTradeBean> {
     private ArticleContentPresenter articleContentPresenter;
     private String searchKey;
 
+    private int defaultDayColor_name = Color.parseColor("#FF2E3239");
+    private int defaultNightColor_name = Color.parseColor("#FF909090");
+    private int keyDayColor = Color.parseColor("#FF1C9CF2");
+    private int keyNightColor = Color.parseColor("#FF136AA4");
+
     public ViewpointAdapter(List<ViewPointTradeBean> dataList, Context mContext) {
         super(dataList);
         this.mContext = mContext;
@@ -71,10 +83,40 @@ public class ViewpointAdapter extends BaseListAdapter<ViewPointTradeBean> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ViewPointTradeBean viewPointTradeBean = dataList.get(position);
+        final ViewPointTradeBean viewPointTradeBean = dataList.get(position);
         holder.setData(viewPointTradeBean);
 
-        holder.tvContent.convertToGif(viewPointTradeBean.content);
+        Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+        if (isNight) {
+            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
+                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                String content = "<font color='" + defaultNightColor_name + "'>" + before + "</font><font color='" + keyNightColor +
+                        "'>"
+                        + searchKey +
+                        "</font><font " +
+                        "color='" + defaultNightColor_name +
+                        "'>" + end + "</font>";
+                holder.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+            } else {
+                holder.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+            }
+        } else {
+            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
+                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                String content = "<font color='" + defaultDayColor_name + "'>" + before + "</font><font color='" + keyDayColor +
+                        "'>"
+                        + searchKey +
+                        "</font><font " +
+                        "color='" + defaultDayColor_name +
+                        "'>" + end + "</font>";
+                holder.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+            } else {
+                holder.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+            }
+        }
+
         holder.tvNickName.setText(viewPointTradeBean.author_name);
 
         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
@@ -92,6 +134,14 @@ public class ViewpointAdapter extends BaseListAdapter<ViewPointTradeBean> {
                 viewPointTradeBean.forward);
 
         articleContentPresenter.setPictureAdapter(holder.gridPictureLayout, viewPointTradeBean.picture);
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
+                mContext.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

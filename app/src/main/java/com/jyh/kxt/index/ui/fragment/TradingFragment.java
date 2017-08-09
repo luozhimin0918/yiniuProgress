@@ -16,11 +16,13 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
+import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
@@ -47,6 +49,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     private BaseFragment lastFragment;
     private ArticleFragment articleFragment;
     private ViewpointFragment viewpointFragment;
+    private int index;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -70,8 +73,13 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
             case R.id.iv_right_icon1:
-                // TODO: 2017/7/26 搜索
-
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                if (index == 0) {
+                    intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_VIEWPOINT);
+                } else {
+                    intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_BLOG);
+                }
+                startActivity(intent);
                 break;
         }
     }
@@ -103,6 +111,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
     @Override
     public void onTabSelect(int position) {
+        this.index = position;
         BaseFragment currentFragment;
         if (position == 1) {
             currentFragment = articleFragment = articleFragment == null ? new ArticleFragment() : articleFragment;

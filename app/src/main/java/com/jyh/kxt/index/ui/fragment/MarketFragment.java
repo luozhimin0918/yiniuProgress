@@ -18,11 +18,12 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.market.ui.MarketEditActivity;
-import com.jyh.kxt.market.ui.SearchActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.market.ui.fragment.OptionalFragment;
+import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
+import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
@@ -114,7 +115,9 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
                     Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
                     startActivity(marketEditIntent);
                 } else {
-                    startActivity(new Intent(getContext(), SearchActivity.class));
+                    Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_QUOTE);
+                    startActivity(intent);
                 }
                 break;
         }

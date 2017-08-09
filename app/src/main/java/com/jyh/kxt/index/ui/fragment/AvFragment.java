@@ -20,7 +20,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.SearchActivity;
+import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
@@ -114,7 +114,7 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
                 break;
             case R.id.iv_right_icon1:
                 Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(IntentConstant.TYPE, VarConstant.VIDEO);
+                intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_VIDEO);
                 startActivity(intent);
                 break;
         }

@@ -49,7 +49,7 @@ public class QuoteAdapter extends BaseListAdapter<QuoteItemJson> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_search_quote, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_market_search, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -100,6 +100,8 @@ public class QuoteAdapter extends BaseListAdapter<QuoteItemJson> {
             } else {
                 holder.tvName.setTextColor(defaultNightColor_name);
                 holder.tvCode.setTextColor(defaultNightColor_code);
+                holder.tvName.setText(name);
+                holder.tvCode.setText(code);
             }
         } else {
             if (searchKey != null && !"".equals(searchKey)) {
@@ -133,6 +135,8 @@ public class QuoteAdapter extends BaseListAdapter<QuoteItemJson> {
             } else {
                 holder.tvName.setTextColor(defaultDayColor_name);
                 holder.tvCode.setTextColor(defaultDayColor_code);
+                holder.tvName.setText(name);
+                holder.tvCode.setText(code);
             }
         }
     }
@@ -153,10 +157,9 @@ public class QuoteAdapter extends BaseListAdapter<QuoteItemJson> {
     }
 
     static class ViewHolder {
-        @BindView(R.id.tv_name) TextView tvName;
+        @BindView(R.id.tv_title) TextView tvName;
+        @BindView(R.id.tv_content) TextView tvCode;
         @BindView(R.id.v_line) View vLine;
-        @BindView(R.id.tv_code) TextView tvCode;
-        @BindView(R.id.iv_zx) ImageView ivZx;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
