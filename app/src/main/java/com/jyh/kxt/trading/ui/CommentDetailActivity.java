@@ -22,7 +22,7 @@ import butterknife.OnClick;
 
 public class CommentDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener {
 
-    @BindView(R.id.comment_publish) TextView tvPublishView;
+    @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.ptrlv_content) public PullToRefreshListView pullToRefreshListView;
 
     public String commentId;
@@ -34,6 +34,7 @@ public class CommentDetailActivity extends BaseActivity implements CommentPresen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_detail, StatusBarColor.THEME1);
+        tvBarTitle.setText("回复");
 
         commentId = getIntent().getStringExtra("commentId");
         viewPointId = getIntent().getStringExtra("viewPointId");
@@ -55,9 +56,12 @@ public class CommentDetailActivity extends BaseActivity implements CommentPresen
         pullToRefreshListView.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
-    @OnClick({R.id.comment_publish})
+    @OnClick({R.id.iv_bar_break, R.id.comment_publish})
     public void onViewClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
             case R.id.comment_publish:
                 mCommentPresenter.showReplyMessageView(view);
                 break;

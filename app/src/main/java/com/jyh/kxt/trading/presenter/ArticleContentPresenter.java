@@ -280,7 +280,8 @@ public class ArticleContentPresenter {
 
         imagePopupUtil = new PopupUtil((Activity) mContext);
         View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
-        inflate.setOnClickListener(new View.OnClickListener() {
+        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+        ivPop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (imagePopupUtil.isShowing()) {
@@ -288,8 +289,6 @@ public class ArticleContentPresenter {
                 }
             }
         });
-        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
-
         PopupUtil.Config config = new PopupUtil.Config();
         config.outsideTouchable = true;
         config.alpha = 0.5f;

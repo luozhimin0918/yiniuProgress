@@ -21,6 +21,7 @@ import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ViewPointDetailActivity extends BaseActivity implements CommentPresenter.OnCommentPublishListener {
 
@@ -30,8 +31,10 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @BindView(R.id.iv_comment) public ImageView ivComment;
     @BindView(R.id.tv_zanCount) public TextView tvZanCount;
 
+    @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
+
 
     public CommentPresenter commentPresenter;
     public ArticleContentPresenter articlePresenter;
@@ -43,6 +46,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_point_detail, StatusBarColor.THEME1);
+        tvBarTitle.setText("详情页");
 
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.setOnCommentPublishListener(this);
@@ -72,6 +76,19 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.DISABLED);
+    }
+
+    @OnClick({R.id.iv_bar_break,R.id.tv_comment})
+    public void onViewClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
+            case R.id.tv_comment:
+                commentPresenter.showReplyMessageView(view);
+                break;
+
+        }
     }
 
     /**

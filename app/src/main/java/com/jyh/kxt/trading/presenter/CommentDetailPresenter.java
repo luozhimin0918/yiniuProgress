@@ -1,6 +1,7 @@
 package com.jyh.kxt.trading.presenter;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
@@ -154,6 +155,12 @@ public class CommentDetailPresenter extends BasePresenter {
             mCommentBean.setType(VarConstant.POINT);
             commentAdapterList.add(1, mCommentBean);//添加到主评论下面
             commentDetailAdapter.notifyDataSetChanged();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    commentDetailActivity.pullToRefreshListView.getRefreshableView().setSelection(0);
+                }
+            }, 500);
         } catch (Exception e) {
             e.printStackTrace();
         }

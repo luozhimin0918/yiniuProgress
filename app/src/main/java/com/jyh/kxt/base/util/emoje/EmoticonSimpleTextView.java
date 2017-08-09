@@ -3,7 +3,7 @@ package com.jyh.kxt.base.util.emoje;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -21,13 +21,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.dao.EmojeBean;
 import com.jyh.kxt.base.util.TextGifDrawable;
 import com.jyh.kxt.base.utils.EmoJeUtil;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.library.util.SystemUtil;
-import com.library.widget.window.ToastView;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,27 +74,47 @@ public class EmoticonSimpleTextView extends TextView {
     public boolean convertToGif(SpannableStringBuilder currentSpannable) {
         String text = currentSpannable.toString();
 
-        Matcher marketMatcher = Pattern.compile("#&(.*?)&#").matcher(text);
+        try {
+            Matcher marketMatcher = Pattern.compile("#&(.*?)&#").matcher(text);
 
-        while (marketMatcher.find()) {
-            final String marketName = marketMatcher.group(1);
+            while (marketMatcher.find()) {
+                final String contentText = marketMatcher.group(1);
+                final HashMap<String, String> marketKeyMap = new HashMap<>();
 
-            currentSpannable.setSpan(new ClickableSpan() {
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(Color.BLUE);
-                    ds.setUnderlineText(false);
+                String[] splitContent = contentText.split("&");
+                for (int i = 0; i < splitContent.length; i++) {
+                    String itemContent = splitContent[i];
+                    String[] splitItem = itemContent.split("=");
+
+                    String key = splitItem.length == 0 ? "" : splitItem[0];
+                    String value = splitItem.length == 1 ? "" : splitItem[1];
+                    marketKeyMap.put(key, value);
                 }
 
-                @Override
-                public void onClick(View widget) {
-                    ToastView.makeText(getContext(), marketName);
-                }
+                currentSpannable.setSpan(new ClickableSpan() {
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(ContextCompat.getColor(getContext(), R.color.blue1));
+                        ds.setUnderlineText(false);
+                    }
 
-            }, marketMatcher.start(), marketMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    @Override
+                    public void onClick(View widget) {
+                        BaseActivity activity = (BaseActivity) getContext();
+                        JumpUtils.jump(activity,
+                                marketKeyMap.get("o_class"),
+                                marketKeyMap.get("o_action"),
+                                marketKeyMap.get("o_id"),
+                                marketKeyMap.get("url"));
+                    }
 
-            currentSpannable.replace(marketMatcher.start(), marketMatcher.end(), marketName);
+                }, marketMatcher.start(), marketMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                currentSpannable.replace(marketMatcher.start(), marketMatcher.end(), marketKeyMap.get("title"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         boolean isFindMatcher = false;

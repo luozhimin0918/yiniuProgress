@@ -11,6 +11,7 @@ import com.jyh.kxt.trading.presenter.ViewpointPresenter;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
 
@@ -43,7 +44,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mPllContent.setOnAfreshLoadListener(this);
 
         viewpointPresenter = new ViewpointPresenter(this);
-        viewpointPresenter.requestInitData();
+        viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
 
         EventBus.getDefault().register(this);
     }
@@ -61,10 +62,22 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
         mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<PinnedSectionListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<PinnedSectionListView> refreshView) {
+                viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<PinnedSectionListView> refreshView) {
+                viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_END);
+            }
+        });
     }
 
     @Override
     public void OnAfreshLoad() {
-        viewpointPresenter.requestInitData();
+        viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 }

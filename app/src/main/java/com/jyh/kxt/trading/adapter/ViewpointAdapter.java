@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -36,6 +37,7 @@ import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.widget.flowlayout.OptionFlowLayout;
+import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
 import com.library.widget.tablayout.NavigationTabLayout;
@@ -67,23 +69,23 @@ public class ViewpointAdapter extends BaseAdapter implements
     private PullPinnedListView mPullPinnedListView;
 
     private int viewTypeCount = 3;
-    private int navigationTabClickPosition = 0;
-
     private List<ViewPointTradeBean> dataList;
-    private HashMap<String, List<ViewPointTradeBean>> pointListMap = new HashMap<>();
 
     private TradeHandlerUtil mTradeHandlerUtil;
     private SimplePopupWindow functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
 
-    public ViewpointAdapter(Context mContext, List<ViewPointTradeBean> viewPointTradeBeanList, String typeMap) {
+    public int navigationTabClickPosition = 0;
+    public HashMap<String, List<ViewPointTradeBean>> pointListMap = new HashMap<>();
+
+    public ViewpointAdapter(Context mContext, List<ViewPointTradeBean> viewPointTradeBeanList) {
 
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
 
         articleContentPresenter = new ArticleContentPresenter(mContext);
         dataList = new ArrayList<>(viewPointTradeBeanList);
-        pointListMap.put(typeMap, viewPointTradeBeanList);
+        pointListMap.put("chosen", viewPointTradeBeanList);
 
         mTradeHandlerUtil = TradeHandlerUtil.getInstance();
         replaceDataAndNotifyDataSetChanged(viewPointTradeBeanList, 0);
@@ -175,10 +177,12 @@ public class ViewpointAdapter extends BaseAdapter implements
                 articleContentPresenter.setPictureAdapter(viewHolder1.gridPictureLayout, viewPointTradeBean.picture);
                 break;
             case 2:
+                viewHolder2.tvNoDataText.setText("暂无任何数据");
+
                 if (navigationTabClickPosition == 2) {
                     boolean loginEd = LoginUtils.isLogined(mContext);
                     if (!loginEd) {
-                        viewHolder2.tvNoDataText.setText("登录后查看关注?");
+                        viewHolder2.tvNoDataText.setText("立即登录同步关注");
                         viewHolder2.tvNoDataText.setTextColor(ContextCompat.getColor(mContext, R.color.blue1));
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -187,7 +191,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                             }
                         });
                     } else {
-                        viewHolder2.tvNoDataText.setText("暂无关注数据喔");
+                        viewHolder2.tvNoDataText.setText("暂无关注");
                     }
                 }
                 break;
@@ -457,18 +461,27 @@ public class ViewpointAdapter extends BaseAdapter implements
         if (tradeList == null) {
             tradeList = new ArrayList<>();
         }
+        if (mPullPinnedListView != null) {
+            mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
+        }
 
-        if (tradeList.size() == 0) {
+        if (tradeList.size() == 0) {//如果没有数据, 则添加类型为2的空数据
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
             viewPointTradeBean.setItemViewType(2);
             tradeList.add(viewPointTradeBean);
+            //如果没有数据不允许滑动
+
+            if (mPullPinnedListView != null) {
+                mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            }
         }
 
-        if (fromSource == 0) {
+        if (fromSource == 0) { //如果来源是0 表示初次使用这个数据源  1 则表示读取的缓存数据源
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
             viewPointTradeBean.setItemViewType(0);
             tradeList.add(0, viewPointTradeBean);
         }
+
         dataList.addAll(tradeList);
 
         //对 List 进行赞的遍历
@@ -480,16 +493,14 @@ public class ViewpointAdapter extends BaseAdapter implements
     @Override
     public void onTabSelect(int position, int clickId) {
         navigationTabClickPosition = position;
-        requestNavigationSwitch(position);
+        requestNavigationSwitch();
     }
 
     /**
      * 点击导航栏Tab 进行数据切换
-     *
-     * @param position
      */
-    private void requestNavigationSwitch(int position) {
-        switch (position) {
+    private void requestNavigationSwitch() {
+        switch (navigationTabClickPosition) {
             case 0:
                 requestNavigationType = "chosen";
                 break;
@@ -505,7 +516,7 @@ public class ViewpointAdapter extends BaseAdapter implements
         //如果点击的是关注
         String uId = null;
 
-        if (position == 2) {
+        if (navigationTabClickPosition == 2) {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             if (userInfo == null) {
                 if (viewPointTradeBeen == null) {
@@ -520,7 +531,8 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         if (viewPointTradeBeen == null) {
             //请求网络显示转圈
-            IBaseView iBaseView = (IBaseView) mContext;
+            final IBaseView iBaseView = (IBaseView) mContext;
+            iBaseView.showWaitDialog(null);
 
             VolleyRequest mVolleyRequest = new VolleyRequest(iBaseView.getContext(), iBaseView.getQueue());
             mVolleyRequest.setTag(getClass().getName());
@@ -544,6 +556,15 @@ public class ViewpointAdapter extends BaseAdapter implements
                     List<ViewPointTradeBean> tradeList = viewPointBean.getTrade();
                     pointListMap.put(requestNavigationType, tradeList);
                     replaceDataAndNotifyDataSetChanged(tradeList, 0);
+
+                    iBaseView.dismissWaitDialog();
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    iBaseView.dismissWaitDialog();
+                    ToastView.makeText3(mContext, "请检查网络~");
                 }
             });
         } else {
@@ -619,6 +640,30 @@ public class ViewpointAdapter extends BaseAdapter implements
         });
         functionPopupWindow.show(R.layout.pop_point_report);
     }
+
+    /**
+     * 加载更多数据
+     *
+     * @param newTradeBeanList
+     */
+    public void loadMoreData(List<ViewPointTradeBean> newTradeBeanList) {
+        switch (navigationTabClickPosition) {
+            case 0:
+                requestNavigationType = "chosen";
+                break;
+            case 1:
+                requestNavigationType = "all";
+                break;
+            case 2:
+                requestNavigationType = "follow";
+                break;
+        }
+        List<ViewPointTradeBean> tradeBeanList = pointListMap.get(requestNavigationType);
+        tradeBeanList.addAll(newTradeBeanList); //存放到Map 中
+        dataList.addAll(newTradeBeanList); //将Map 中的数据放到当前List中
+        notifyDataSetChanged();
+    }
+
 
     public void handlerEventBus(TradeHandlerUtil.EventHandlerBean intentObj) {
         Iterator<String> iterator = pointListMap.keySet().iterator();

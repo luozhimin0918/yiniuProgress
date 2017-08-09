@@ -87,11 +87,11 @@ public class ViewPointDetailPresenter extends BasePresenter {
         mVolleyRequest.doGet(HttpConstant.VP_COMMENT_LIST, mainParam, new HttpListener<List<CommentDetailBean>>() {
             @Override
             protected void onResponse(List<CommentDetailBean> newCommentDetailList) {
+                mViewPointDetailActivity.mPullPinnedListView.onRefreshComplete();
                 if (newCommentDetailList.size() == 0) {
                     mViewPointDetailActivity.mPullPinnedListView.noMoreData();
                     return;
                 }
-                mViewPointDetailActivity.mPullPinnedListView.onRefreshComplete();
                 commentDetailList.addAll(newCommentDetailList);
                 mViewPointDetailAdapter.notifyDataSetChanged();
             }
