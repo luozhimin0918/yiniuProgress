@@ -49,11 +49,12 @@ public class SpConstant {
      */
     public static final String SEARCH_HISTORY = "search_history";
     public static final String SEARCH_HISTORY_MARKET = "search_history_market";
-    public static final String SEARCH_HISTORY_NEWS="search_history_news";
-    public static final String SEARCH_HISTORY_VIDEO="search_history_video";
-    public static final String SEARCH_HISTORY_VIEWPOINT="search_history_viewpoint";
-    public static final String SEARCH_HISTORY_ARTICLE="search_history_article";
-    public static final String SEARCH_HISTORY_COLUMNIST="search_history_columnist";
+    public static final String SEARCH_HISTORY_NEWS = "search_history_news";
+    public static final String SEARCH_HISTORY_VIDEO = "search_history_video";
+    public static final String SEARCH_HISTORY_VIEWPOINT = "search_history_viewpoint";
+    public static final String SEARCH_HISTORY_ARTICLE = "search_history_article";
+    public static final String SEARCH_HISTORY_COLUMNIST = "search_history_columnist";
+    public static final String SEARCH_HISTORY_ALL = "search_history_all";
 
     /**
      * 浏览历史
@@ -99,5 +100,5 @@ public class SpConstant {
     public static final String PATCH_INFO = "patch_info";//补丁信息
     public static final String PATCH_PATH = "patch_path";//补丁路径
 
-    public static final String AD_IMAGE_URL = "ad_image_url" ;
+    public static final String AD_IMAGE_URL = "ad_image_url";
 }

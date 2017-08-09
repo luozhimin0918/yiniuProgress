@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <include layout="@layout/nav_search"/>
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navigationBar2Height"
+                android:background="@color/slidingTabLayout_bgColor">
+
+                <com.library.widget.tablayout.SlidingTabLayout
+                    android:id="@+id/stl_navigation_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/navigationBar2Height"
+                    android:paddingRight="@dimen/navigationBar2ImageWidth"
+                    tl:tl_indicator_color="@color/indicator_color"
+                    tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+                    tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+
+                    tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+
+                    tl:tl_tab_padding="10dp"
+                    tl:tl_textSelectColor="@color/tabSelColor"
+                    tl:tl_textUnselectColor="@color/tabUnSelColor"
+                    tl:tl_textsize="@dimen/describe_font_size4"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="@dimen/navigationBar2ImageWidth"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|right"
+                    android:background="@drawable/bg_more"
+                    android:paddingLeft="@dimen/navigationBar2ImagePaddingRight"
+                    android:paddingRight="@dimen/navigationBar2ImagePaddingLeft"
+                    android:src="@mipmap/icon_more"
+                    />
+            </FrameLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+    </com.library.widget.PageLoadLayout>
+
+</LinearLayout>

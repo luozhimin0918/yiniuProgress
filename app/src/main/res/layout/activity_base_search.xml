@@ -13,17 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/layout_market_search_end"
+        <include
+            android:id="@+id/layout_start"
+            layout="@layout/layout_main_search_start"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            app:ptrShowIndicator="false"/>
+            android:layout_height="match_parent"/>
 
         <include
-            android:id="@+id/layout_market_search_start"
-            layout="@layout/layout_market_search_default"
-            android:visibility="visible"/>
+            android:id="@+id/layout_end"
+            layout="@layout/layout_main_search_end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
     </com.library.widget.PageLoadLayout>
-
 </LinearLayout>

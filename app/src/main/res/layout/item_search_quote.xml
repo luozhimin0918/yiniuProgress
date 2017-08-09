@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="黄金"
+        android:textSize="@dimen/content_font_size"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="@dimen/contentPadding"
+        />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color3"
+        android:layout_alignParentBottom="true"/>
+    <TextView
+        android:id="@+id/tv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hj"
+        android:textSize="@dimen/describe_font_size1"
+        android:layout_marginBottom="8dp"
+        android:layout_above="@id/v_line"
+        android:layout_marginLeft="@dimen/contentPadding"/>
+
+
+    <ImageView
+        android:id="@+id/iv_zx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/contentPadding"
+        android:src="@mipmap/icon_market_add"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

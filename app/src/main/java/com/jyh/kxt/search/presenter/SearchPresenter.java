@@ -1,4 +1,4 @@
-package com.jyh.kxt.base.presenter;
+package com.jyh.kxt.search.presenter;
 
 import android.app.Activity;
 
@@ -10,7 +10,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.ui.SearchActivity;
+import com.jyh.kxt.search.ui.SearchActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;

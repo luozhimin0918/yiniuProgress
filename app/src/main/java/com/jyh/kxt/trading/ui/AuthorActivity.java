@@ -409,10 +409,6 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         if (data != null && data.size() >= clickPosition) {
             Object bean = data.get(clickPosition);
             if (bean instanceof ViewPointTradeBean) {
-                ViewPointTradeBean viewpoint = (ViewPointTradeBean) bean;
-                Intent intent = new Intent(this, ViewPointDetailActivity.class);
-                intent.putExtra(IntentConstant.O_ID, viewpoint.o_id);
-                startActivity(intent);
             } else {
                 AuthorNewsJson newsJson = (AuthorNewsJson) bean;
                 JumpUtils.jump(this, newsJson.getO_class(), newsJson.getO_action(), newsJson.getO_id(), newsJson.getHref());

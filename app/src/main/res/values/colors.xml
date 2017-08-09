@@ -67,6 +67,7 @@
     <color name="font_color14">#CFCDC9</color>
     <color name="font_color15">#C6BFB9</color>
     <color name="font_color16">#2E3239</color>
+    <color name="font_color17">#999999</color>
     <!--代瑶写的色值,6开头避免冲突-->
     <color name="font_color60">#5E6C75</color>
     <color name="font_color61">#F9FAFB</color>

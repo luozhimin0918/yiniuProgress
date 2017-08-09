@@ -32,6 +32,8 @@ public class EventBusClass {
 
     public static final int EVENT_VIEW_POINT_HANDLER = 17;//观点的Handler 相关
 
+    public static final int EVENT_SEARCH = 18;//搜索
+
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;
         this.intentObj = intentObj;

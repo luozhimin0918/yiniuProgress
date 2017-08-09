@@ -34,6 +34,7 @@ import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -45,7 +46,6 @@ import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
-import com.jyh.kxt.index.ui.fragment.ExploreFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
@@ -400,7 +400,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.fl_search:
                 //搜索
-                Intent searchIntent = new Intent(this, SearchActivity.class);
+//                Intent searchIntent = new Intent(this, SearchActivity.class);
+//                startActivity(searchIntent);
+                Intent searchIntent = new Intent(this, SearchIndexActivity.class);
                 startActivity(searchIntent);
                 break;
             case R.id.ll_pl:

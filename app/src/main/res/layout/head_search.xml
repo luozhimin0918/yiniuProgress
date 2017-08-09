@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/contentPadding"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/describe_font_size3"
+        android:textColor="@color/font_color6"
+        android:text="行情"/>
+
+    <View
+        android:id="@+id/v_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color3"/>
+
+    <ListView
+        android:id="@+id/rv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
+
+    <TextView
+        android:id="@+id/tv_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:textSize="@dimen/describe_font_size2"
+        android:textColor="@color/font_color8"
+        android:text="查看更多 >"/>
+
+    <View
+        android:id="@+id/v_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color3"/>
+
+    <TextView
+        android:id="@+id/tv_title2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/contentPadding"
+        android:textSize="@dimen/describe_font_size3"
+        android:textColor="@color/font_color6"
+        android:gravity="center_vertical"
+        android:text="观点"/>
+
+    <View
+        android:id="@+id/v_line3"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color3"/>
+</LinearLayout>

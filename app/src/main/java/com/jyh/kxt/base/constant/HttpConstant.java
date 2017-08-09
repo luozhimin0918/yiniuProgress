@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-//        public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    //        public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -59,7 +59,7 @@ public class HttpConstant {
     public static  final String VIEW_POINT_ADDGOOD = BASE_URL +"viewpoint/addGood?content=";
     public static  final String VP_COMMENT_ADDGOOD = BASE_URL +"vpcomment/addGood?content=";
     //是否关注
-    public static  final String VIEW_POINT_IS_FOLLOW = BASE_URL +"viewpoint/is_follow?content=";
+    public static final String VIEW_POINT_IS_FOLLOW = BASE_URL + "viewpoint/is_follow?content=";
     //举报
     public static  final String VIEW_POINT_REPORT = BASE_URL +"viewpoint/report?content=";
     public static  final String VP_COMMENT_PUBLISH = BASE_URL +"vpcomment/publish?content=";
@@ -192,7 +192,8 @@ public class HttpConstant {
     public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes" + JWT;//行情热门搜索
     public static final String SEARCH_MARKET = BASE_URL + "quotes/search";//?word={}
 
-    public static final String SEARCH_LIST=BASE_URL+"search/list";
+    public static final String SEARCH_LIST = BASE_URL + "search/list"+VarConstant.HTTP_CONTENT;
+    public static final String SEARCH_NAV = BASE_URL + "search/nav"+VarConstant.HTTP_CONTENT;
 
 
     public static final String MEMBER_FAVOR_WRITER = BASE_URL + "member/favor_writer";

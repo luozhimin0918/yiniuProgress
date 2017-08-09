@@ -1,4 +1,4 @@
-package com.jyh.kxt.base.ui;
+package com.jyh.kxt.search.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.presenter.SearchPresenter;
+import com.jyh.kxt.search.presenter.SearchPresenter;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.widget.SearchEditText;
@@ -139,6 +139,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 String searchKey = searchHistoryList.get(position);
                 edtSearch.setText(searchKey);
+                plRootView.loadWait();
                 presenter.search(searchKey);
                 return false;
             }
