@@ -99,7 +99,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 List<QuoteItemJson> dataList = adapter.dataList;
-                int dataPosition=position-2;
+                int dataPosition = position - 2;
                 if (dataPosition < dataList.size()) {
                     Intent intent = new Intent(getContext(), MarketDetailActivity.class);
                     MarketItemBean marketBean = new MarketItemBean();
@@ -156,6 +156,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                 return false;
             }
         });
+        edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
     }
 
     @OnClick({R.id.tv_break, R.id.iv_del})
@@ -275,6 +276,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             } else {
                 adapter.setData(quotes);
             }
+            adapter.setSearchKey(searchKey);
             ListView refreshableView = rvContent.getRefreshableView();
             if (headView != null) {
                 refreshableView.removeHeaderView(headView);
@@ -308,29 +310,27 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     }
 
     public void refresh(List<QuoteItemJson> quotes) {
-        if (quotes == null || quotes.size() == 0) {
-            rvContent.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rvContent.onRefreshComplete();
-                }
-            }, 200);
-        } else {
+        if (quotes != null && quotes.size() > 0) {
             adapter.setData(quotes);
         }
+        rvContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvContent.onRefreshComplete();
+            }
+        }, 200);
     }
 
     public void loadMore(List<QuoteItemJson> quotes) {
-        if (quotes == null || quotes.size() == 0) {
-            rvContent.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rvContent.onRefreshComplete();
-                }
-            }, 200);
-        } else {
+        if (quotes != null || quotes.size() > 0) {
             adapter.addData(quotes);
         }
+        rvContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvContent.onRefreshComplete();
+            }
+        }, 200);
     }
 
     public void initHeadView() {

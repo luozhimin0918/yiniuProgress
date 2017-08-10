@@ -278,9 +278,17 @@ public class NavigationTabLayout extends LinearLayout {
     private boolean isPinnedViewTouched(View view, float x, float y) {
 
         if (mTouchRect != null) {
-            boolean contains = mTouchRect.contains((int) x, (int) y);
-            mTouchRect = null;
-            return contains;
+
+
+            Rect rect = new Rect();
+            view.getGlobalVisibleRect(rect);
+            rect.top = mTouchRect.top;
+            rect.bottom = mTouchRect.bottom;
+            return rect.contains((int) x, (int) y);
+
+//            boolean contains = mTouchRect.contains((int) x, (int) y);
+//            mTouchRect = null;
+//            return contains;
         }
 
         Rect rect = new Rect();

@@ -3,8 +3,13 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,7 +164,8 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder1.setData(viewPointTradeBean);
                 viewHolder1.setItemViewColor(convertView);
 
-                viewHolder1.tvContent.convertToGif(viewPointTradeBean.content);
+                setTop(viewHolder1.tvContent, position, viewPointTradeBean);
+
                 viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
 
                 CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
@@ -210,6 +216,24 @@ public class ViewpointAdapter extends BaseAdapter implements
             }
         });
         return convertView;
+    }
+
+    private void setTop(EmoticonSimpleTextView tvContent, int position, ViewPointTradeBean bean) {
+
+        String content = bean.content;
+        if (position == 0 && "1".equals(bean.is_top)) {
+            //置顶
+            Drawable d = ContextCompat.getDrawable(mContext, R.mipmap.icon_trading_top);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());//设置图片大小
+
+            SpannableStringBuilder spannableBuilder = new SpannableStringBuilder("1" + content);
+            spannableBuilder.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            tvContent.convertToGif(spannableBuilder);
+        } else {
+            tvContent.convertToGif(content);
+        }
+
     }
 
 
@@ -337,7 +361,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                                         articleContentPresenter.requestAttentionState(viewPointTradeBean.author_id, isGz);
                                         break;
                                     case R.id.point_function_jb:
-                                        articleContentPresenter.showReportWindow(viewPointTradeBean.o_id,viewPointTradeBean.report);
+                                        articleContentPresenter.showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
                                         break;
                                     case R.id.point_function_qx:
                                         functionPopupWindow.dismiss();

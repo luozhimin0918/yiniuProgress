@@ -130,7 +130,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 edtSearch.setHint("搜索专栏用户");
                 break;
             case VarConstant.SEARCH_TYPE_QUOTE:
-                edtSearch.setHint("搜索行情");
+                edtSearch.setHint("搜索代码、简称、拼音");
                 break;
             case VarConstant.SEARCH_TYPE_VIEWPOINT:
                 edtSearch.setHint("搜索名家观点");
@@ -166,6 +166,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 return false;
             }
         });
+
+        edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
 
     }
 

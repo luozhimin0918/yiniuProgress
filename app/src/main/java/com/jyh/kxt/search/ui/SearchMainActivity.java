@@ -93,6 +93,7 @@ public class SearchMainActivity extends BaseActivity {
                 return false;
             }
         });
+        edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
 
         presenter = new SearchMainPresenter(this);
 

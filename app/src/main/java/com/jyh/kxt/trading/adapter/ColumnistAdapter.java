@@ -68,7 +68,7 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
 
         Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
         String name = bean.getName();
-        if(isNight){
+        if (isNight) {
             if (searchKey != null && !"".equals(searchKey)) {
                 if (name != null && name.contains(searchKey)) {
                     String before = name.substring(0, name.indexOf(searchKey));
@@ -88,7 +88,7 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
                 holder.tvName.setText(name);
                 holder.tvName.setTextColor(defaultNightColor_name);
             }
-        }else{
+        } else {
             if (searchKey != null && !"".equals(searchKey)) {
                 if (name != null && name.contains(searchKey)) {
                     String before = name.substring(0, name.indexOf(searchKey));
@@ -146,6 +146,7 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {

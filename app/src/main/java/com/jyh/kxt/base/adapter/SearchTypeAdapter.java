@@ -47,7 +47,7 @@ public class SearchTypeAdapter extends RecyclerView.Adapter<SearchTypeAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.setSearchType(searchTypes.get(position));
+        holder.setSearchType(searchTypes.get(position), position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,28 +63,30 @@ public class SearchTypeAdapter extends RecyclerView.Adapter<SearchTypeAdapter.Vi
         return searchTypes == null ? 0 : searchTypes.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView title;
-        private SearchType searchType;
+        private View vLine;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView;
+            title = (TextView) itemView.findViewById(R.id.tv_type);
+            vLine = itemView.findViewById(R.id.v_line);
         }
 
-        public void setSearchType(SearchType searchType) {
-            this.searchType = searchType;
+        public void setSearchType(SearchType searchType, int position) {
             title.setText(searchType.getName());
             title.setTextColor(ContextCompat.getColor(mContext, R.color.font_color8));
-            title.setOnClickListener(this);
+            vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color3));
+
+            if (position == getItemCount() - 1 || position == 2) {
+                vLine.setVisibility(View.GONE);
+            } else {
+                vLine.setVisibility(View.VISIBLE);
+            }
+
         }
 
-
-        @Override
-        public void onClick(View v) {
-            ToastView.makeText3(mContext, searchType.getName());
-        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
