@@ -57,6 +57,7 @@ public class SearchPresenter extends BasePresenter {
     public void search(String searchKey) {
         this.searchKey = searchKey;
         saveSearchHistory(searchKey);
+        activity.isCanBreak=true;
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_CODE, type);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
@@ -82,6 +83,7 @@ public class SearchPresenter extends BasePresenter {
      * 初始化搜索历史记录
      */
     public void initHistorySearch() {
+
         String searchType = null;
         switch (type) {
             case VarConstant.SEARCH_TYPE_NEWS:

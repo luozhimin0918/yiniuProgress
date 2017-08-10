@@ -75,6 +75,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     private String searchKey;//搜索关键字
     private List<String> searchHistoryList;
 
+    public boolean isCanBreak;
+
     private TagAdapter<String> tagAdapter;
     private QuoteAdapter marketSearchAdapter;
     private VideoSearchAdapter videoAdapter;
@@ -168,6 +170,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     }
 
     public void init(String info) {
+        plvContent.setVisibility(View.VISIBLE);
         if (info == null || info.equals("")) {
             plRootView.setNullText(getString(R.string.error_search_null));
             plRootView.loadEmptyData();
@@ -475,6 +478,16 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 presenter.delHistory();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isCanBreak) {
+            isCanBreak = false;
+            plvContent.setVisibility(View.GONE);
+            presenter.initHistorySearch();
+        } else
+            super.onBackPressed();
     }
 
     @Override

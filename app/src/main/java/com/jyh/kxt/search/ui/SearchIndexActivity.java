@@ -99,10 +99,11 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 List<QuoteItemJson> dataList = adapter.dataList;
-                if (position < dataList.size()) {
+                int dataPosition=position-2;
+                if (dataPosition < dataList.size()) {
                     Intent intent = new Intent(getContext(), MarketDetailActivity.class);
                     MarketItemBean marketBean = new MarketItemBean();
-                    marketBean.setCode(dataList.get(position).getCode());
+                    marketBean.setCode(dataList.get(dataPosition).getCode());
                     intent.putExtra(IntentConstant.MARKET, marketBean);
                     startActivity(intent);
                 }
