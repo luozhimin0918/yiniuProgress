@@ -33,7 +33,7 @@
 
                     tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
 
-                    tl:tl_tab_padding="10dp"
+                    tl:tl_tab_padding="13dp"
                     tl:tl_textSelectColor="@color/tabSelColor"
                     tl:tl_textUnselectColor="@color/tabUnSelColor"
                     tl:tl_textsize="@dimen/describe_font_size4"

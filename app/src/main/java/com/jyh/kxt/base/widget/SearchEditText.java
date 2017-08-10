@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,6 +155,7 @@ public class SearchEditText extends RelativeLayout {
     public void setText(String text) {
         if (text == null) text = "";
         editText.setText(text);
+        editText.setSelection(text.length());
     }
 
     public String getText() {
