@@ -27,6 +27,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 
@@ -104,33 +105,37 @@ public class ViewpointSearchAdapter extends BaseAdapter {
         viewHolder1.setData(viewPointTradeBean);
 
         Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
-        if (isNight) {
-            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
-                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
-                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
-                String content = "<font color='" + defaultNightColor_name + "'>" + before + "</font><font color='" + keyNightColor +
-                        "'>"
-                        + searchKey +
-                        "</font><font " +
-                        "color='" + defaultNightColor_name +
-                        "'>" + end + "</font>";
-                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+        if (viewPointTradeBean != null) {
+            if (isNight) {
+                if (!RegexValidateUtil.isEmpty(searchKey) && viewPointTradeBean.content != null && viewPointTradeBean.content.contains
+                        (searchKey)) {
+                    String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                    String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                    String content = "<font color='" + defaultNightColor_name + "'>" + before + "</font><font color='" + keyNightColor +
+                            "'>"
+                            + searchKey +
+                            "</font><font " +
+                            "color='" + defaultNightColor_name +
+                            "'>" + end + "</font>";
+                    viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+                } else {
+                    viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+                }
             } else {
-                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
-            }
-        } else {
-            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
-                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
-                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
-                String content = "<font color='" + defaultDayColor_name + "'>" + before + "</font><font color='" + keyDayColor +
-                        "'>"
-                        + searchKey +
-                        "</font><font " +
-                        "color='" + defaultDayColor_name +
-                        "'>" + end + "</font>";
-                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
-            } else {
-                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+                if (!RegexValidateUtil.isEmpty(searchKey) && viewPointTradeBean.content != null && viewPointTradeBean.content.contains
+                        (searchKey)) {
+                    String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                    String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                    String content = "<font color='" + defaultDayColor_name + "'>" + before + "</font><font color='" + keyDayColor +
+                            "'>"
+                            + searchKey +
+                            "</font><font " +
+                            "color='" + defaultDayColor_name +
+                            "'>" + end + "</font>";
+                    viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+                } else {
+                    viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+                }
             }
         }
         viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
@@ -167,6 +172,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+        notifyDataSetChanged();
     }
 
     public void addData(List list) {
@@ -200,9 +206,14 @@ public class ViewpointSearchAdapter extends BaseAdapter {
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
-                        viewPointTradeBean.isFavour = true;
-                        articleContentPresenter.initTradeHandler(tvZanView, true);
+                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
+                        if (isSaveSuccess) {
+                            viewPointTradeBean.isFavour = true;
+                            articleContentPresenter.initTradeHandler(tvZanView, true);
+
+                            viewPointTradeBean.num_good += 1;
+                            tvZanView.setText(String.valueOf(viewPointTradeBean.num_good));
+                        }
                     }
                     break;
                 case R.id.view_point_pl_layout:
@@ -214,7 +225,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
                         @Override
                         public void onCreateView(View popupView) {
-
+                            articleContentPresenter.shareToPlatform(popupView, viewPointTradeBean.shareDict);
                         }
 
                         @Override
@@ -255,12 +266,15 @@ public class ViewpointSearchAdapter extends BaseAdapter {
                                     case R.id.point_function_sc:
                                         viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
                                         articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
+                                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 2, viewPointTradeBean.isCollect);
                                         break;
                                     case R.id.point_function_gz:
-                                        articleContentPresenter.setAttentionState(tvGz, true);
+                                        boolean isGz = !"true".equals(tvGz.getTag());
+                                        articleContentPresenter.setAttentionState(tvGz, isGz);
+                                        articleContentPresenter.requestAttentionState(viewPointTradeBean.author_id, isGz);
                                         break;
                                     case R.id.point_function_jb:
-
+                                        articleContentPresenter.showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
                                         break;
                                     case R.id.point_function_qx:
                                         functionPopupWindow.dismiss();
@@ -277,10 +291,11 @@ public class ViewpointSearchAdapter extends BaseAdapter {
 
                             tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                             tvGz.setOnClickListener(functionListener);
-                            articleContentPresenter.requestGetGzState(tvGz, viewPointTradeBean.author_id);
 
                             popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
                             popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
+
+                            articleContentPresenter.requestGetGzState(tvGz, viewPointTradeBean.author_id);
                         }
 
                         @Override

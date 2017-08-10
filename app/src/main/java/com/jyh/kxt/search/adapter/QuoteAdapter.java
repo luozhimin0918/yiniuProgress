@@ -143,6 +143,7 @@ public class QuoteAdapter extends BaseListAdapter<QuoteItemJson> {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+        notifyDataSetChanged();
     }
 
     public void setData(List data) {

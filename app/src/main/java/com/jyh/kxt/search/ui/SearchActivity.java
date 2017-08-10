@@ -186,11 +186,12 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (newsAdapter == null) {
                                 newsAdapter = new NewsAdapter(getContext(), disposeData(newsJsons));
+                                newsAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(newsAdapter);
                             } else {
+                                newsAdapter.setSearchKey(searchKey);
                                 newsAdapter.setData(disposeData(newsJsons));
                             }
-                            newsAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
                         break;
@@ -202,11 +203,12 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (videoAdapter == null) {
                                 videoAdapter = new VideoSearchAdapter(getContext(), disposeData(videos));
+                                videoAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(videoAdapter);
                             } else {
+                                videoAdapter.setSearchKey(searchKey);
                                 videoAdapter.setData(disposeData(videos));
                             }
-                            videoAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
                         break;
@@ -218,11 +220,12 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (newsAdapter == null) {
                                 newsAdapter = new NewsAdapter(getContext(), disposeData(newsJsonList));
+                                newsAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(newsAdapter);
                             } else {
+                                newsAdapter.setSearchKey(searchKey);
                                 newsAdapter.setData(disposeData(newsJsonList));
                             }
-                            newsAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
                         break;
@@ -234,11 +237,12 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (columnistAdapter == null) {
                                 columnistAdapter = new ColumnistAdapter(disposeData(columnists), getContext());
+                                columnistAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(columnistAdapter);
                             } else {
+                                columnistAdapter.setSearchKey(searchKey);
                                 columnistAdapter.setData(disposeData(columnists));
                             }
-                            columnistAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
                         break;
@@ -250,11 +254,13 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (marketSearchAdapter == null) {
                                 marketSearchAdapter = new QuoteAdapter(this, disposeData(marketItemBeens));
+                                marketSearchAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(marketSearchAdapter);
                             } else {
+                                marketSearchAdapter.setSearchKey(searchKey);
                                 marketSearchAdapter.setData(disposeData(marketItemBeens));
                             }
-                            marketSearchAdapter.setSearchKey(searchKey);
+
                             hideSearchHistory();
                         }
                         break;
@@ -266,11 +272,13 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         } else {
                             if (viewpointSearchAdapter == null) {
                                 viewpointSearchAdapter = new ViewpointSearchAdapter(this, disposeData(viewPoints));
+                                viewpointSearchAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(viewpointSearchAdapter);
                             } else {
+                                viewpointSearchAdapter.setSearchKey(searchKey);
                                 viewpointSearchAdapter.setData(disposeData(viewPoints));
                             }
-                            viewpointSearchAdapter.setSearchKey(searchKey);
+
                             hideSearchHistory();
                         }
                         break;
@@ -296,12 +304,14 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons != null && newsJsons.size() > 0) {
                             if (newsAdapter == null) {
-                                newsAdapter = new NewsAdapter(getContext(), newsJsons);
+                                newsAdapter = new NewsAdapter(getContext(), disposeData(newsJsons));
+                                newsAdapter.setSearchKey(searchKey);
                                 plvContent.setAdapter(newsAdapter);
                             } else {
-                                newsAdapter.setData(newsJsons);
+                                newsAdapter.setSearchKey(searchKey);
+                                newsAdapter.setData(disposeData(newsJsons));
                             }
-                            newsAdapter.setSearchKey(searchKey);
+
                             hideSearchHistory();
                         }
                         break;
@@ -309,10 +319,10 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<VideoListJson> videos = JSON.parseArray(info, VideoListJson.class);
                         if (videos != null && videos.size() > 0) {
                             if (videoAdapter == null) {
-                                videoAdapter = new VideoSearchAdapter(getContext(), videos);
+                                videoAdapter = new VideoSearchAdapter(getContext(), disposeData(videos));
                                 plvContent.setAdapter(videoAdapter);
                             } else {
-                                videoAdapter.setData(videos);
+                                videoAdapter.setData(disposeData(videos));
                             }
                             videoAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
@@ -322,10 +332,10 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList != null && newsJsonList.size() > 0) {
                             if (newsAdapter == null) {
-                                newsAdapter = new NewsAdapter(getContext(), newsJsonList);
+                                newsAdapter = new NewsAdapter(getContext(), disposeData(newsJsonList));
                                 plvContent.setAdapter(newsAdapter);
                             } else {
-                                newsAdapter.setData(newsJsonList);
+                                newsAdapter.setData(disposeData(newsJsonList));
                             }
                             newsAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
@@ -335,10 +345,10 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ColumnistListJson> columnists = JSON.parseArray(info, ColumnistListJson.class);
                         if (columnists != null && columnists.size() > 0) {
                             if (columnistAdapter == null) {
-                                columnistAdapter = new ColumnistAdapter(columnists, getContext());
+                                columnistAdapter = new ColumnistAdapter(disposeData(columnists), getContext());
                                 plvContent.setAdapter(columnistAdapter);
                             } else {
-                                columnistAdapter.setData(columnists);
+                                columnistAdapter.setData(disposeData(columnists));
                             }
                             columnistAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
@@ -348,10 +358,10 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<QuoteItemJson> marketItemBeens = JSON.parseArray(info, QuoteItemJson.class);
                         if (marketItemBeens != null && marketItemBeens.size() > 0) {
                             if (marketSearchAdapter == null) {
-                                marketSearchAdapter = new QuoteAdapter(this, marketItemBeens);
+                                marketSearchAdapter = new QuoteAdapter(this, disposeData(marketItemBeens));
                                 plvContent.setAdapter(marketSearchAdapter);
                             } else {
-                                marketSearchAdapter.setData(marketItemBeens);
+                                marketSearchAdapter.setData(disposeData(marketItemBeens));
                             }
                             marketSearchAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
@@ -361,10 +371,10 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ViewPointTradeBean> viewPointTradeBeen = JSON.parseArray(info, ViewPointTradeBean.class);
                         if (viewPointTradeBeen != null && viewPointTradeBeen.size() > 0) {
                             if (viewpointSearchAdapter == null) {
-                                viewpointSearchAdapter = new ViewpointSearchAdapter(this, viewPointTradeBeen);
+                                viewpointSearchAdapter = new ViewpointSearchAdapter(this, disposeData(viewPointTradeBeen));
                                 plvContent.setAdapter(viewpointSearchAdapter);
                             } else {
-                                viewpointSearchAdapter.setData(viewPointTradeBeen);
+                                viewpointSearchAdapter.setData(disposeData(viewPointTradeBeen));
                             }
                             viewpointSearchAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
@@ -394,7 +404,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons == null || newsJsons.size() == 0) {
                         } else {
-                            newsAdapter.addData(newsJsons);
+                            newsAdapter.addData(disposeData(newsJsons));
                             newsAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -403,7 +413,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<VideoListJson> videoListJsons = JSON.parseArray(info, VideoListJson.class);
                         if (videoListJsons == null || videoListJsons.size() == 0) {
                         } else {
-                            videoAdapter.addData(videoListJsons);
+                            videoAdapter.addData(disposeData(videoListJsons));
                             videoAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -412,7 +422,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList == null || newsJsonList.size() == 0) {
                         } else {
-                            newsAdapter.addData(newsJsonList);
+                            newsAdapter.addData(disposeData(newsJsonList));
                             newsAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -421,7 +431,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ColumnistListJson> columnists = JSON.parseArray(info, ColumnistListJson.class);
                         if (columnists == null || columnists.size() == 0) {
                         } else {
-                            columnistAdapter.addData(columnists);
+                            columnistAdapter.addData(disposeData(columnists));
                             columnistAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -430,7 +440,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<MarketItemBean> marketItemBeen = JSON.parseArray(info, MarketItemBean.class);
                         if (marketItemBeen == null || marketItemBeen.size() == 0) {
                         } else {
-                            marketSearchAdapter.setData(marketItemBeen);
+                            marketSearchAdapter.addData(disposeData(marketItemBeen));
                             marketSearchAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -439,7 +449,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ViewPointTradeBean> viewPointTradeBeen = JSON.parseArray(info, ViewPointTradeBean.class);
                         if (viewPointTradeBeen == null || viewPointTradeBeen.size() == 0) {
                         } else {
-                            viewpointSearchAdapter.addData(viewPointTradeBeen);
+                            viewpointSearchAdapter.addData(disposeData(viewPointTradeBeen));
                             viewpointSearchAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
