@@ -69,9 +69,10 @@ public class SearchMainActivity extends BaseActivity {
 
         searchKey = getIntent().getStringExtra(SEARCH_KEY);
         searchType = getIntent().getStringExtra(SEARCH_TYPE);
-        if (RegexValidateUtil.isEmpty(searchType)) {
+        if (searchKey != null)
+            edtSearch.setText(searchKey);
+        if (RegexValidateUtil.isEmpty(searchType))
             searchType = VarConstant.SEARCH_TYPE_MAIN;
-        }
 
         try {
             EventBus.getDefault().register(this);

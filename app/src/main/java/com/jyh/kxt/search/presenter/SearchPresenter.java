@@ -91,6 +91,7 @@ public class SearchPresenter extends BasePresenter {
                 searchType = SpConstant.SEARCH_HISTORY_VIDEO;
                 break;
             case VarConstant.SEARCH_TYPE_ARTICLE:
+            case VarConstant.SEARCH_TYPE_BLOG:
                 searchType = SpConstant.SEARCH_HISTORY_ARTICLE;
                 break;
             case VarConstant.SEARCH_TYPE_COLUMNIST:
@@ -131,6 +132,7 @@ public class SearchPresenter extends BasePresenter {
                 searchType = SpConstant.SEARCH_HISTORY_VIDEO;
                 break;
             case VarConstant.SEARCH_TYPE_ARTICLE:
+            case VarConstant.SEARCH_TYPE_BLOG:
                 searchType = SpConstant.SEARCH_HISTORY_ARTICLE;
                 break;
             case VarConstant.SEARCH_TYPE_COLUMNIST:
@@ -219,5 +221,32 @@ public class SearchPresenter extends BasePresenter {
 
     public void setMore(boolean ismore) {
         this.isMore = ismore;
+    }
+
+    public void delHistory() {
+        String searchType = null;
+        switch (type) {
+            case VarConstant.SEARCH_TYPE_NEWS:
+                searchType = SpConstant.SEARCH_HISTORY_NEWS;
+                break;
+            case VarConstant.SEARCH_TYPE_VIDEO:
+                searchType = SpConstant.SEARCH_HISTORY_VIDEO;
+                break;
+            case VarConstant.SEARCH_TYPE_ARTICLE:
+            case VarConstant.SEARCH_TYPE_BLOG:
+                searchType = SpConstant.SEARCH_HISTORY_ARTICLE;
+                break;
+            case VarConstant.SEARCH_TYPE_COLUMNIST:
+                searchType = SpConstant.SEARCH_HISTORY_COLUMNIST;
+                break;
+            case VarConstant.SEARCH_TYPE_QUOTE:
+                searchType = SpConstant.SEARCH_HISTORY_MARKET;
+                break;
+            case VarConstant.SEARCH_TYPE_VIEWPOINT:
+                searchType = SpConstant.SEARCH_HISTORY_VIEWPOINT;
+                break;
+        }
+        SPUtils.save(mContext, searchType, "");
+        activity.showHistorySearch(null);
     }
 }

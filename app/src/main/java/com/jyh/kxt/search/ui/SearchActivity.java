@@ -25,7 +25,6 @@ import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
-import com.jyh.kxt.search.adapter.ViewpointAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.presenter.SearchPresenter;
 import com.jyh.kxt.trading.adapter.ColumnistAdapter;
@@ -45,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -83,14 +81,11 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     private NewsAdapter newsAdapter;
     private ColumnistAdapter columnistAdapter;
     private ViewpointSearchAdapter viewpointSearchAdapter;
-    private ViewpointAdapter viewpointAdapter;
-    private QuoteAdapter quoteAdapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_search, StatusBarColor.THEME1);
-        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -137,6 +132,9 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 break;
             case VarConstant.SEARCH_TYPE_VIEWPOINT:
                 edtSearch.setHint("搜索名家观点");
+                break;
+            case VarConstant.SEARCH_TYPE_BLOG:
+                edtSearch.setHint("搜索专栏文章");
                 break;
         }
 
@@ -464,7 +462,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plRootView.loadOver();
     }
 
-    @OnClick({R.id.iv_break, R.id.tv_break})
+    @OnClick({R.id.iv_break, R.id.tv_break, R.id.iv_clear_history})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -472,6 +470,9 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 break;
             case R.id.tv_break:
                 onBackPressed();
+                break;
+            case R.id.iv_clear_history:
+                presenter.delHistory();
                 break;
         }
     }
@@ -631,200 +632,210 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     }
 
 
-    public void refresh(List data) {
+//    public void refresh(List data) {
+//
+//        switch (type) {
+//            case VarConstant.SEARCH_TYPE_MAIN:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (viewpointAdapter == null) {
+//                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(viewpointAdapter);
+//                    } else {
+//                        viewpointAdapter.setData(disposeData(data));
+//                    }
+//                    viewpointAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_VIEWPOINT:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (viewpointAdapter == null) {
+//                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(viewpointAdapter);
+//                    } else {
+//                        viewpointAdapter.setData(disposeData(data));
+//                    }
+//                    viewpointAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_NEWS:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (newsAdapter == null) {
+//                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(newsAdapter);
+//                    } else {
+//                        newsAdapter.setData(disposeData(data));
+//                    }
+//                    newsAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_VIDEO:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (videoAdapter == null) {
+//                        videoAdapter = new VideoSearchAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(videoAdapter);
+//                    } else {
+//                        videoAdapter.setData(disposeData(data));
+//                    }
+//                    videoAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_COLUMNIST:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (columnistAdapter == null) {
+//                        columnistAdapter = new ColumnistAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(columnistAdapter);
+//                    } else {
+//                        columnistAdapter.setData(disposeData(data));
+//                    }
+//                    columnistAdapter.setSearchKey(searchKey);
+//                }
+//
+//                break;
+//            case VarConstant.SEARCH_TYPE_BLOG:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (newsAdapter == null) {
+//                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(newsAdapter);
+//                    } else {
+//                        newsAdapter.setData(disposeData(data));
+//                    }
+//                    newsAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_QUOTE:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (quoteAdapter2 == null) {
+//                        quoteAdapter2 = new QuoteAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(quoteAdapter2);
+//                    } else {
+//                        quoteAdapter2.setData(disposeData(data));
+//                    }
+//                    quoteAdapter2.setSearchKey(searchKey);
+//                }
+//                break;
+//        }
+//
+//        plvContent.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                plvContent.onRefreshComplete();
+//            }
+//        }, 200);
+//    }
 
-        switch (type) {
-            case VarConstant.SEARCH_TYPE_MAIN:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(viewpointAdapter);
-                    } else {
-                        viewpointAdapter.setData(disposeData(data));
-                    }
-                    viewpointAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_VIEWPOINT:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(viewpointAdapter);
-                    } else {
-                        viewpointAdapter.setData(disposeData(data));
-                    }
-                    viewpointAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_NEWS:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(newsAdapter);
-                    } else {
-                        newsAdapter.setData(disposeData(data));
-                    }
-                    newsAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_VIDEO:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (videoAdapter == null) {
-                        videoAdapter = new VideoSearchAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(videoAdapter);
-                    } else {
-                        videoAdapter.setData(disposeData(data));
-                    }
-                    videoAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_COLUMNIST:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (columnistAdapter == null) {
-                        columnistAdapter = new ColumnistAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(columnistAdapter);
-                    } else {
-                        columnistAdapter.setData(disposeData(data));
-                    }
-                    columnistAdapter.setSearchKey(searchKey);
-                }
+//    public void loadMore(List data) {
+//
+//        switch (type) {
+//            case VarConstant.SEARCH_TYPE_MAIN:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (viewpointAdapter == null) {
+//                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(viewpointAdapter);
+//                    } else {
+//                        viewpointAdapter.addData(disposeData(data));
+//                    }
+//                    viewpointAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_VIEWPOINT:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (viewpointAdapter == null) {
+//                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(viewpointAdapter);
+//                    } else {
+//                        viewpointAdapter.addData(disposeData(data));
+//                    }
+//                    viewpointAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_NEWS:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (newsAdapter == null) {
+//                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(newsAdapter);
+//                    } else {
+//                        newsAdapter.addData(disposeData(data));
+//                    }
+//                    newsAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_VIDEO:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (videoAdapter == null) {
+//                        videoAdapter = new VideoSearchAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(videoAdapter);
+//                    } else {
+//                        videoAdapter.addData(disposeData(data));
+//                    }
+//                    videoAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_COLUMNIST:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (columnistAdapter == null) {
+//                        columnistAdapter = new ColumnistAdapter(disposeData(data), getContext());
+//                        plvContent.setAdapter(columnistAdapter);
+//                    } else {
+//                        columnistAdapter.addData(disposeData(data));
+//                    }
+//                    columnistAdapter.setSearchKey(searchKey);
+//                }
+//
+//                break;
+//            case VarConstant.SEARCH_TYPE_BLOG:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (newsAdapter == null) {
+//                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(newsAdapter);
+//                    } else {
+//                        newsAdapter.addData(disposeData(data));
+//                    }
+//                    newsAdapter.setSearchKey(searchKey);
+//                }
+//                break;
+//            case VarConstant.SEARCH_TYPE_QUOTE:
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (quoteAdapter2 == null) {
+//                        quoteAdapter2 = new QuoteAdapter(getContext(), disposeData(data));
+//                        plvContent.setAdapter(quoteAdapter2);
+//                    } else {
+//                        quoteAdapter2.addData(disposeData(data));
+//                    }
+//                    quoteAdapter2.setSearchKey(searchKey);
+//                }
+//                break;
+//        }
+//
+//        plvContent.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                plvContent.onRefreshComplete();
+//            }
+//        }, 200);
+//    }
 
-                break;
-            case VarConstant.SEARCH_TYPE_BLOG:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(newsAdapter);
-                    } else {
-                        newsAdapter.setData(disposeData(data));
-                    }
-                    newsAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_QUOTE:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (quoteAdapter2 == null) {
-                        quoteAdapter2 = new QuoteAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(quoteAdapter2);
-                    } else {
-                        quoteAdapter2.setData(disposeData(data));
-                    }
-                    quoteAdapter2.setSearchKey(searchKey);
-                }
-                break;
-        }
-
-        plvContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                plvContent.onRefreshComplete();
-            }
-        }, 200);
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (tagAdapter != null) tagAdapter.notifyDataChanged();
+        if (marketSearchAdapter != null) marketSearchAdapter.notifyDataSetChanged();
+        if (videoAdapter != null) videoAdapter.notifyDataSetChanged();
+        if (newsAdapter != null) newsAdapter.notifyDataSetChanged();
+        if (columnistAdapter != null) columnistAdapter.notifyDataSetChanged();
+        if (viewpointSearchAdapter != null) viewpointSearchAdapter.notifyDataSetChanged();
     }
-
-    public void loadMore(List data) {
-
-        switch (type) {
-            case VarConstant.SEARCH_TYPE_MAIN:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(viewpointAdapter);
-                    } else {
-                        viewpointAdapter.addData(disposeData(data));
-                    }
-                    viewpointAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_VIEWPOINT:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(viewpointAdapter);
-                    } else {
-                        viewpointAdapter.addData(disposeData(data));
-                    }
-                    viewpointAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_NEWS:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(newsAdapter);
-                    } else {
-                        newsAdapter.addData(disposeData(data));
-                    }
-                    newsAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_VIDEO:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (videoAdapter == null) {
-                        videoAdapter = new VideoSearchAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(videoAdapter);
-                    } else {
-                        videoAdapter.addData(disposeData(data));
-                    }
-                    videoAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_COLUMNIST:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (columnistAdapter == null) {
-                        columnistAdapter = new ColumnistAdapter(disposeData(data), getContext());
-                        plvContent.setAdapter(columnistAdapter);
-                    } else {
-                        columnistAdapter.addData(disposeData(data));
-                    }
-                    columnistAdapter.setSearchKey(searchKey);
-                }
-
-                break;
-            case VarConstant.SEARCH_TYPE_BLOG:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (newsAdapter == null) {
-                        newsAdapter = new NewsAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(newsAdapter);
-                    } else {
-                        newsAdapter.addData(disposeData(data));
-                    }
-                    newsAdapter.setSearchKey(searchKey);
-                }
-                break;
-            case VarConstant.SEARCH_TYPE_QUOTE:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (quoteAdapter2 == null) {
-                        quoteAdapter2 = new QuoteAdapter(getContext(), disposeData(data));
-                        plvContent.setAdapter(quoteAdapter2);
-                    } else {
-                        quoteAdapter2.addData(disposeData(data));
-                    }
-                    quoteAdapter2.setSearchKey(searchKey);
-                }
-                break;
-        }
-
-        plvContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                plvContent.onRefreshComplete();
-            }
-        }, 200);
-    }
-
 }

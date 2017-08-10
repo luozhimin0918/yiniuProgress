@@ -1,11 +1,9 @@
 package com.jyh.kxt.search.ui;
 
 import android.content.Intent;
-import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -26,15 +24,14 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.SearchTypeAdapter;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.widget.SearchEditText;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.SearchType;
 import com.jyh.kxt.search.presenter.SearchIndexPresenter;
-import com.jyh.kxt.base.widget.SearchEditText;
 import com.library.base.http.VarConstant;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
@@ -42,7 +39,6 @@ import com.library.widget.flowlayout.TagAdapter;
 import com.library.widget.flowlayout.TagFlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +75,12 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     private View footView;
     public boolean isCanBack;
 
+    private RelativeLayout rlView;
+    private ImageView ivIcon;
+    private TextView tvFoot1;
+    private TextView tvFoot2;
+    private ImageView ivFootMore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,12 +98,11 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         rvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int dataPosition = position - 1;
                 List<QuoteItemJson> dataList = adapter.dataList;
-                if (dataPosition < dataList.size()) {
+                if (position < dataList.size()) {
                     Intent intent = new Intent(getContext(), MarketDetailActivity.class);
                     MarketItemBean marketBean = new MarketItemBean();
-                    marketBean.setCode(dataList.get(dataPosition).getCode());
+                    marketBean.setCode(dataList.get(position).getCode());
                     intent.putExtra(IntentConstant.MARKET, marketBean);
                     startActivity(intent);
                 }
@@ -122,8 +123,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         searchTypeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                Intent intent = new Intent(getContext(), SearchMainActivity.class);
-                intent.putExtra(SearchMainActivity.SEARCH_TYPE, searchTypes.get(position).getCode());
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                intent.putExtra(SearchActivity.TYPE, searchTypes.get(position).getCode());
                 startActivity(intent);
             }
         });
@@ -186,6 +187,27 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         super.onChangeTheme();
         if (searchTypeAdapter != null)
             searchTypeAdapter.notifyDataSetChanged();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+        if (tagAdapter != null)
+            tagAdapter.notifyDataChanged();
+        if (headView != null)
+            headView.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color2));
+
+        if (footView != null) {
+            footView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+            if (rlView != null)
+                rlView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
+            if (ivIcon != null)
+                ivIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search_logo));
+            if (tvFoot1 != null)
+                tvFoot1.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color5));
+            if (tvFoot2 != null)
+                tvFoot2.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color17));
+            if (ivFootMore != null)
+                ivFootMore.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_comment_more));
+        }
+
     }
 
     /**
@@ -332,5 +354,10 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                 startActivity(intent);
             }
         });
+        rlView = (RelativeLayout) footView.findViewById(R.id.rl_more);
+        ivIcon = (ImageView) footView.findViewById(R.id.iv_icon);
+        tvFoot1 = (TextView) footView.findViewById(R.id.tv1);
+        tvFoot2 = (TextView) footView.findViewById(R.id.tv2);
+        ivFootMore = (ImageView) footView.findViewById(R.id.iv_more);
     }
 }

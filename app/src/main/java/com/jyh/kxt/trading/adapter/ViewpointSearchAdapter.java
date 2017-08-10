@@ -3,6 +3,9 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
@@ -23,6 +27,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
+import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -50,6 +55,11 @@ public class ViewpointSearchAdapter extends BaseAdapter {
     private SimplePopupWindow functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
     private String searchKey;
+
+    private int defaultDayColor_name = Color.parseColor("#FF2E3239");
+    private int defaultNightColor_name = Color.parseColor("#FF909090");
+    private int keyDayColor = Color.parseColor("#FF1C9CF2");
+    private int keyNightColor = Color.parseColor("#FF136AA4");
 
     public ViewpointSearchAdapter(Context mContext, List<ViewPointTradeBean> viewPointTradeBeanList) {
 
@@ -93,7 +103,36 @@ public class ViewpointSearchAdapter extends BaseAdapter {
 
         viewHolder1.setData(viewPointTradeBean);
 
-        viewHolder1.tvContent.convertToGif(viewPointTradeBean.content);
+        Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+        if (isNight) {
+            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
+                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                String content = "<font color='" + defaultNightColor_name + "'>" + before + "</font><font color='" + keyNightColor +
+                        "'>"
+                        + searchKey +
+                        "</font><font " +
+                        "color='" + defaultNightColor_name +
+                        "'>" + end + "</font>";
+                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+            } else {
+                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+            }
+        } else {
+            if (viewPointTradeBean.content != null && viewPointTradeBean.content.contains(searchKey)) {
+                String before = viewPointTradeBean.content.substring(0, viewPointTradeBean.content.indexOf(searchKey));
+                String end = viewPointTradeBean.content.substring(viewPointTradeBean.content.indexOf(searchKey) + searchKey.length());
+                String content = "<font color='" + defaultDayColor_name + "'>" + before + "</font><font color='" + keyDayColor +
+                        "'>"
+                        + searchKey +
+                        "</font><font " +
+                        "color='" + defaultDayColor_name +
+                        "'>" + end + "</font>";
+                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(Html.fromHtml(content)));
+            } else {
+                viewHolder1.tvContent.convertToGif(new SpannableStringBuilder(viewPointTradeBean.content));
+            }
+        }
         viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
 
         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);

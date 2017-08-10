@@ -2,6 +2,7 @@ package com.jyh.kxt.search.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +23,14 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.adapter.VideoSearchAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
-import com.jyh.kxt.search.adapter.ViewpointAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.QuoteJson;
 import com.jyh.kxt.search.presenter.SearchItemPresenter;
 import com.jyh.kxt.trading.adapter.ColumnistAdapter;
+import com.jyh.kxt.trading.adapter.ViewpointSearchAdapter;
 import com.jyh.kxt.trading.json.ColumnistListJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorActivity;
@@ -80,7 +80,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
     private String searchType;
 
     private QuoteAdapter quoteAdapter;
-    private ViewpointAdapter viewpointAdapter;
+    private ViewpointSearchAdapter viewpointAdapter;
     private NewsAdapter newsAdapter;
     private VideoSearchAdapter videoAdapter;
     private ColumnistAdapter columnistAdapter;
@@ -143,7 +143,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 if (data == null || data.size() == 0) {
                 } else {
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.setData(disposeData(data));
@@ -155,7 +155,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 if (data == null || data.size() == 0) {
                 } else {
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.setData(disposeData(data));
@@ -241,7 +241,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 if (data == null || data.size() == 0) {
                 } else {
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.addData(disposeData(data));
@@ -253,7 +253,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 if (data == null || data.size() == 0) {
                 } else {
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.addData(disposeData(data));
@@ -398,6 +398,18 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
     public void onChangeTheme() {
         super.onChangeTheme();
         if (quoteAdapter != null) quoteAdapter.notifyDataSetChanged();
+        if (viewpointAdapter != null) viewpointAdapter.notifyDataSetChanged();
+        if (newsAdapter != null) newsAdapter.notifyDataSetChanged();
+        if (videoAdapter != null) videoAdapter.notifyDataSetChanged();
+        if (columnistAdapter != null) columnistAdapter.notifyDataSetChanged();
+        if (quoteAdapter2 != null) quoteAdapter2.notifyDataSetChanged();
+
+        if (tvTitleQuote != null) tvTitleQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color6));
+        if (tvTitleViewpoint != null) tvTitleViewpoint.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color6));
+        if (vLine1 != null) vLine1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+        if (vLine2 != null) vLine2.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+        if (vLine3 != null) vLine3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+        if (tvMoreQuote != null) tvMoreQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color8));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -444,7 +456,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     plContent.getRefreshableView().addHeaderView(homeHeadView);
 
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.setData(disposeData(data));
@@ -459,7 +471,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     plRootView.loadEmptyData();
                 } else {
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointAdapter(disposeData(data), getContext());
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
                         plContent.setAdapter(viewpointAdapter);
                     } else {
                         viewpointAdapter.setData(disposeData(data));

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
+              android:layout_height="76dp"
               android:background="@color/line_color2"
-              android:layout_height="76dp">
+              android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/rl_more"
         android:layout_width="match_parent"
@@ -29,6 +30,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="查看更多搜索结果"
@@ -36,6 +38,7 @@
                 android:textSize="@dimen/content_font_size"/>
 
             <TextView
+                android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
@@ -45,6 +48,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
