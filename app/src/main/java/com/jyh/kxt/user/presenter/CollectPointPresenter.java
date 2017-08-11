@@ -1,6 +1,7 @@
 package com.jyh.kxt.user.presenter;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -8,6 +9,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -33,6 +35,7 @@ public class CollectPointPresenter extends BasePresenter {
 
     public CollectPointPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        mTradeHandlerUtil = TradeHandlerUtil.getInstance();
     }
 
     private PullToRefreshBase.Mode pullFromStart;
@@ -54,29 +57,49 @@ public class CollectPointPresenter extends BasePresenter {
         if (userInfo == null) {
             getLocalityData();
         } else {
-            requestGetData();
+            //将本地数据提交到网络，再请求网络数据
+            mTradeHandlerUtil.updata(mContext, new ObserverData<Boolean>() {
+                @Override
+                public void callback(Boolean aBoolean) {
+                    requestGetData();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    requestGetData();
+                }
+            }, localityCount);
         }
     }
 
     private void requestGetData() {
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
         mVolleyRequest.setTag(getClass().getName());
-        JSONObject mainParam = mVolleyRequest.getJsonParam();
+        final JSONObject mainParam = mVolleyRequest.getJsonParam();
 
-        mVolleyRequest.doGet(HttpConstant.TRADE_MAIN, mainParam, new HttpListener<String>() {
+        mainParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+
+        mVolleyRequest.doGet(HttpConstant.COLLECT_POINT, mainParam, new HttpListener<List<ViewPointTradeBean>>() {
             @Override
-            protected void onResponse(String manJson) {
+            protected void onResponse(List<ViewPointTradeBean> manJson) {
                 collectPointFragment.mPullPinnedListView.onRefreshComplete();
-
-                if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
-
+                if (manJson == null || manJson.size() == 0) {
+                    collectPointFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                    collectPointFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
+                    collectPointFragment.plRootView.loadEmptyData();
                 } else {
-
+                    if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
+                        notifyAdapter(manJson);
+                        collectPointFragment.plRootView.loadOver();
+                    } else {
+                        notifyAdapter(manJson);
+                    }
                 }
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                collectPointFragment.plRootView.loadError();
             }
         });
     }
@@ -85,9 +108,8 @@ public class CollectPointPresenter extends BasePresenter {
         if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
             localityCount = 0;
         }
-
-        mTradeHandlerUtil = TradeHandlerUtil.getInstance();
-        List<ViewPointTradeBean> localityCollectList = mTradeHandlerUtil.getLocalityCollectList(mContext, localityCount, VarConstant.LIST_MAX_SIZE);
+        List<ViewPointTradeBean> localityCollectList = mTradeHandlerUtil.getLocalityCollectList(mContext, localityCount, VarConstant
+                .LIST_MAX_SIZE);
         if (localityCollectList.size() != 0) {
             localityCount += localityCollectList.size();
         }

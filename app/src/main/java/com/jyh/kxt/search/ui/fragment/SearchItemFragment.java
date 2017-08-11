@@ -391,6 +391,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
                 .WRAP_CONTENT);
+        if (homeHeadView == null) initHeadViewLayout();
         homeHeadView.addView(viewQuote, params);
     }
 
@@ -434,8 +435,10 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
     }
 
     public void initQuote(QuoteJson quoteJson) {
-        homeHeadView.removeAllViews();
-        plContent.getRefreshableView().removeHeaderView(homeHeadView);
+        if (homeHeadView != null) {
+            homeHeadView.removeAllViews();
+            plContent.getRefreshableView().removeHeaderView(homeHeadView);
+        }
         addQuoteView(quoteJson.getData());
         String is_more = quoteJson.getIs_more();
         if (is_more != null && is_more.equals("1")) {

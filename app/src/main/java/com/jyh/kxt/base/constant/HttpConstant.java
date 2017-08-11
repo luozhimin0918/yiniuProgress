@@ -53,18 +53,18 @@ public class HttpConstant {
     /**
      * 交易圈
      */
-    public static  final String TRADE_MAIN = BASE_URL +"trade/main?content=";
-    public static  final String VIEW_POINT_DETAIL = BASE_URL +"viewpoint/detail?content=";
-    public static  final String TRADE_FAVORSTATUS = BASE_URL +"trade/favorstatus?content=";
-    public static  final String VIEW_POINT_ADDGOOD = BASE_URL +"viewpoint/addGood?content=";
-    public static  final String VP_COMMENT_ADDGOOD = BASE_URL +"vpcomment/addGood?content=";
+    public static final String TRADE_MAIN = BASE_URL + "trade/main?content=";
+    public static final String VIEW_POINT_DETAIL = BASE_URL + "viewpoint/detail?content=";
+    public static final String TRADE_FAVORSTATUS = BASE_URL + "trade/favorstatus?content=";
+    public static final String VIEW_POINT_ADDGOOD = BASE_URL + "viewpoint/addGood?content=";
+    public static final String VP_COMMENT_ADDGOOD = BASE_URL + "vpcomment/addGood?content=";
     //是否关注
     public static final String VIEW_POINT_IS_FOLLOW = BASE_URL + "viewpoint/is_follow?content=";
     //举报
-    public static  final String VIEW_POINT_REPORT = BASE_URL +"viewpoint/report?content=";
-    public static  final String VP_COMMENT_PUBLISH = BASE_URL +"vpcomment/publish?content=";
-    public static  final String VP_COMMENT_DETAIL = BASE_URL +"vpcomment/detail?content=";
-    public static  final String VP_COMMENT_LIST = BASE_URL +"vpcomment/list?content=";
+    public static final String VIEW_POINT_REPORT = BASE_URL + "viewpoint/report?content=";
+    public static final String VP_COMMENT_PUBLISH = BASE_URL + "vpcomment/publish?content=";
+    public static final String VP_COMMENT_DETAIL = BASE_URL + "vpcomment/detail?content=";
+    public static final String VP_COMMENT_LIST = BASE_URL + "vpcomment/list?content=";
 
     /**
      * 要闻点评
@@ -157,6 +157,7 @@ public class HttpConstant {
     public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏列表-文章
     // ?uid={uid}&token={token}&lastid={lastid}
     public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏列表-视听
+    public static final String COLLECT_POINT = BASE_URL + "member/favor_point"+VarConstant.HTTP_CONTENT;//收藏列表-观点
     public static final String COLLECT_LIST_DEL = BASE_URL + "member/favor_delete";//收藏列表-删除
     // ?uid={uid}&token={token}&type={type:1,
     // 2}&id={1,2,3,4}
@@ -167,6 +168,7 @@ public class HttpConstant {
     public static final String COLLECT_DEL = BASE_URL + "favor/deleteFavor";//收藏-删除 ?uid={}?id={}?type={} type: video
     // | article
     public static final String COLLECT_DELS = BASE_URL + "member/favor_delete";
+    public static final String COLLECT_DELS_POINT = BASE_URL + "favor/batchDelPoint";//观点批量取消收藏
 
     /**
      * 点评
@@ -192,8 +194,8 @@ public class HttpConstant {
     public static final String SEARCH_MARKET_HOT = BASE_URL + "quotes/hotQuotes" + JWT;//行情热门搜索
     public static final String SEARCH_MARKET = BASE_URL + "quotes/search";//?word={}
 
-    public static final String SEARCH_LIST = BASE_URL + "search/list"+VarConstant.HTTP_CONTENT;
-    public static final String SEARCH_NAV = BASE_URL + "search/nav"+VarConstant.HTTP_CONTENT;
+    public static final String SEARCH_LIST = BASE_URL + "search/list" + VarConstant.HTTP_CONTENT;
+    public static final String SEARCH_NAV = BASE_URL + "search/nav" + VarConstant.HTTP_CONTENT;
 
 
     public static final String MEMBER_FAVOR_WRITER = BASE_URL + "member/favor_writer";

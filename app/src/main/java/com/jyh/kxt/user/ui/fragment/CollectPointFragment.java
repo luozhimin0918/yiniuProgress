@@ -9,7 +9,9 @@ import android.widget.ListView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.annotation.DelNumListener;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
@@ -90,9 +92,9 @@ public class CollectPointFragment extends BaseFragment implements PageLoadLayout
 
     public void del(final DelNumListener observerData) {
 
-        Set<String> sparseArray = new HashSet<>();
+        final Set<String> sparseArray = new HashSet<>();
         //获取选中的id
-        List<ViewPointTradeBean> data = adapter.getData();
+        final List<ViewPointTradeBean> data = adapter.getData();
 
         String ids = "";
         Iterator<ViewPointTradeBean> iteratorAdapter = data.iterator();
@@ -112,9 +114,39 @@ public class CollectPointFragment extends BaseFragment implements PageLoadLayout
             return;
         }
 
-        //本地的最新的收藏列表
-        List<ViewPointTradeBean> localityCollectList = TradeHandlerUtil.getInstance().getLocalityCollectList(getContext(), 0, Integer.MAX_VALUE);
+        if (LoginUtils.isLogined(getContext())) {
+
+            TradeHandlerUtil.getInstance().dels(getContext(), new ObserverData<Boolean>() {
+                @Override
+                public void callback(Boolean aBoolean) {
+                    //本地的最新的收藏列表
+                    delLocal(sparseArray, observerData, data);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    observerData.delError();
+                    quitEdit(observerData);//退出编辑状态
+                }
+            }, ids);
+        } else {
+            delLocal(sparseArray, observerData, data);
+        }
+    }
+
+    /**
+     * 本地删除
+     *
+     * @param sparseArray
+     * @param observerData
+     * @param data
+     */
+    private void delLocal(Set<String> sparseArray, DelNumListener observerData, List<ViewPointTradeBean> data) {
+        List<ViewPointTradeBean> localityCollectList = TradeHandlerUtil.getInstance().getLocalityCollectList(getContext(), 0,
+                Integer
+                        .MAX_VALUE);
         Iterator<ViewPointTradeBean> iterator = localityCollectList.iterator();
+
         while (iterator.hasNext()) {
             ViewPointTradeBean next = iterator.next();
 
@@ -125,11 +157,6 @@ public class CollectPointFragment extends BaseFragment implements PageLoadLayout
         }
         TradeHandlerUtil.getInstance().clearCollectBean(getContext());
         TradeHandlerUtil.getInstance().saveCollectList(getContext(), localityCollectList);
-
-        UserJson userInfo = LoginUtils.getUserInfo(getContext());
-        if (userInfo != null) {
-            TradeHandlerUtil.getInstance().requestCollect(getContext(), ids, userInfo, false);
-        }
 
         observerData.delSuccessed();
         quitEdit(observerData);//退出编辑状态

@@ -51,6 +51,7 @@ public class AuthorFragment extends BaseFragment implements PullToRefreshBase.On
 
         code = getArguments().getString(CODE);
         presenter = new AuthorItemPresenter(this, code);
+        plRootView.loadWait();
         presenter.init();
     }
 

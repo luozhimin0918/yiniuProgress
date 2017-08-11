@@ -6,12 +6,15 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
 import com.library.util.SPUtils;
@@ -149,11 +152,11 @@ public class TradeHandlerUtil {
             if (type == 1) {  //发起网络请求
                 requestFavour(mContext, id);
             } else if (type == 2) {
-                saveCollectBean(mContext, viewPointTradeBean, historyTradeHandlerBean.isCollect);  //同时保存一份收藏到Sp本地文件中
-
                 UserJson userInfo = LoginUtils.getUserInfo(mContext);
-                if (userInfo == null) {
-                    requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+                if (userInfo != null) {
+                    requestCollect(mContext, id, userInfo, viewPointTradeBean, historyTradeHandlerBean.isCollect);
+                } else {
+                    saveCollectBean(mContext, viewPointTradeBean, historyTradeHandlerBean.isCollect);  //同时保存一份收藏到Sp本地文件中
                 }
 
             } else if (type == 3) {
@@ -216,9 +219,11 @@ public class TradeHandlerUtil {
      * @param mContext
      * @param id
      * @param userInfo
+     * @param viewPointTradeBean
      * @param isCollect
      */
-    public void requestCollect(Context mContext, String id, UserJson userInfo, boolean isCollect) {
+    public void requestCollect(final Context mContext, String id, UserJson userInfo, final ViewPointTradeBean viewPointTradeBean, final
+    boolean isCollect) {
         IBaseView iBaseView = (IBaseView) mContext;
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
         mVolleyRequest.setTag(getClass().getName());
@@ -240,7 +245,7 @@ public class TradeHandlerUtil {
         mVolleyRequest.doPost(collectUrl, mainParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
-
+                saveCollectBean(mContext, viewPointTradeBean, isCollect);  //同时保存一份收藏到Sp本地文件中
             }
         });
     }
@@ -334,6 +339,79 @@ public class TradeHandlerUtil {
             subTrade = viewPointTradeList.subList(start, viewPointTradeList.size());
         }
         return subTrade;
+    }
+
+    /**
+     * 将本地收藏提交到网络
+     *
+     * @param observerData
+     * @param localityCount
+     */
+    public void updata(Context mContext, final ObserverData<Boolean> observerData, int localityCount) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+        JSONObject jsonParam = mVolleyRequest.getJsonParam();
+        UserJson userJson = LoginUtils.getUserInfo(mContext);
+        jsonParam.put(VarConstant.HTTP_UID, userJson.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userJson.getToken());
+
+        List<ViewPointTradeBean> localityCollectList = getLocalityCollectList(mContext, localityCount, VarConstant
+                .LIST_MAX_SIZE);
+
+        Iterator<ViewPointTradeBean> iterator = localityCollectList.iterator();
+        String ids = "";
+        while (iterator.hasNext()) {
+            if (ids.equals("")) {
+                ids += iterator.next().o_id;
+            } else {
+                ids += "," + iterator.next().o_id;
+            }
+        }
+        jsonParam.put(VarConstant.HTTP_ID, ids);
+        jsonParam.put(VarConstant.HTTP_TYPE, "point");
+        mVolleyRequest.doPost(HttpConstant.COLLECT_ADDS, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(true);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.callback(false);
+            }
+        });
+    }
+
+    /**
+     * 网络批量删除收藏
+     *
+     * @param mContext
+     * @param observerData
+     * @param ids
+     */
+    public void dels(Context mContext, final ObserverData<Boolean> observerData, String ids) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+        JSONObject jsonParam = mVolleyRequest.getJsonParam();
+        UserJson userJson = LoginUtils.getUserInfo(mContext);
+        jsonParam.put(VarConstant.HTTP_UID, userJson.getUid());
+        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userJson.getToken());
+        jsonParam.put(VarConstant.HTTP_ID, ids);
+        mVolleyRequest.doPost(HttpConstant.COLLECT_DELS_POINT, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(true);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.callback(false);
+            }
+        });
     }
 
 
