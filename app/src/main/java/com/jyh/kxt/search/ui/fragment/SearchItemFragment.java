@@ -101,6 +101,12 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             searchType = arguments.getString(SEARCH_TYPE);
         }
 
+        if (searchType.equals(VarConstant.SEARCH_TYPE_MAIN)) {
+            plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        } else {
+            plContent.setMode(PullToRefreshBase.Mode.BOTH);
+        }
+
         presenter = new SearchItemPresenter(this, searchType);
 
         plRootView.loadWait();
@@ -142,11 +148,19 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 plContent.getRefreshableView().addHeaderView(homeHeadView);
                 if (data == null || data.size() == 0) {
                 } else {
+
+                    List dataCopy = new ArrayList();
+                    if (data != null && data.size() > 3) {
+                        dataCopy.addAll(data.subList(0, 3));
+                    } else {
+                        dataCopy.add(data);
+                    }
+
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), dataCopy);
                         plContent.setAdapter(viewpointAdapter);
                     } else {
-                        viewpointAdapter.setData(disposeData(data));
+                        viewpointAdapter.setData(dataCopy);
                     }
                     viewpointAdapter.setSearchKey(searchKey);
                 }
@@ -238,16 +252,16 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
 
         switch (searchType) {
             case VarConstant.SEARCH_TYPE_MAIN:
-                if (data == null || data.size() == 0) {
-                } else {
-                    if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
-                        plContent.setAdapter(viewpointAdapter);
-                    } else {
-                        viewpointAdapter.addData(disposeData(data));
-                    }
-                    viewpointAdapter.setSearchKey(searchKey);
-                }
+//                if (data == null || data.size() == 0) {
+//                } else {
+//                    if (viewpointAdapter == null) {
+//                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
+//                        plContent.setAdapter(viewpointAdapter);
+//                    } else {
+//                        viewpointAdapter.addData(disposeData(data));
+//                    }
+//                    viewpointAdapter.setSearchKey(searchKey);
+//                }
                 break;
             case VarConstant.SEARCH_TYPE_VIEWPOINT:
                 if (data == null || data.size() == 0) {
@@ -458,11 +472,18 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 } else {
                     plContent.getRefreshableView().addHeaderView(homeHeadView);
 
+                    List dataCopy = new ArrayList();
+                    if (data != null && data.size() > 3) {
+                        dataCopy.addAll(data.subList(0, 3));
+                    } else {
+                        dataCopy.add(data);
+                    }
+
                     if (viewpointAdapter == null) {
-                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), disposeData(data));
+                        viewpointAdapter = new ViewpointSearchAdapter(getContext(), dataCopy);
                         plContent.setAdapter(viewpointAdapter);
                     } else {
-                        viewpointAdapter.setData(disposeData(data));
+                        viewpointAdapter.setData(dataCopy);
                     }
                     viewpointAdapter.setSearchKey(searchKey);
                     plRootView.loadOver();

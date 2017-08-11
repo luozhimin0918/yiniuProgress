@@ -273,6 +273,7 @@ public class TradeHandlerUtil {
      * @param viewPointTradeList
      */
     public void saveCollectList(Context mContext, List<ViewPointTradeBean> viewPointTradeList) {
+        tradeHandlerList.addAll(viewPointTradeList);
         SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, JSON.toJSONString(viewPointTradeList));
     }
 
