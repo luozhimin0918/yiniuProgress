@@ -3,6 +3,8 @@ package com.jyh.kxt.search.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -85,6 +88,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
     private VideoSearchAdapter videoAdapter;
     private ColumnistAdapter columnistAdapter;
     private QuoteAdapter quoteAdapter2;
+    private TextView footView;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -111,6 +115,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
 
         plRootView.loadWait();
         initHeadViewLayout();
+        initFootView();
         presenter.init(searchKey);
     }
 
@@ -363,6 +368,22 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         }
     }
 
+    public void initFootView() {
+        footView = new TextView(getContext());
+        footView.setText("查看更多 >");
+        footView.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color8));
+        footView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        footView.setGravity(Gravity.CENTER);
+        footView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_SEARCH_TYPE, VarConstant.SEARCH_TYPE_VIEWPOINT));
+            }
+        });
+        AbsListView.LayoutParams params=new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext(),35));
+        footView.setLayoutParams(params);
+    }
+
     /**
      * 添加行情布局
      *
@@ -425,6 +446,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         if (vLine2 != null) vLine2.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         if (vLine3 != null) vLine3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         if (tvMoreQuote != null) tvMoreQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color8));
+
+        if(footView!=null) footView.setTextColor(ContextCompat.getColor(getContext(),R.color.font_color8));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -471,6 +494,9 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     plRootView.loadEmptyData();
                 } else {
                     plContent.getRefreshableView().addHeaderView(homeHeadView);
+
+                    if(footView==null) initFootView();
+                    plContent.getRefreshableView().addFooterView(footView);
 
                     List dataCopy = new ArrayList();
                     if (data != null && data.size() > 3) {
