@@ -9,7 +9,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,12 +20,14 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
+import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.widget.ThumbView;
+import com.jyh.kxt.index.presenter.CommentListPresenter;
 import com.jyh.kxt.index.presenter.MyCommentPresenter;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
@@ -44,7 +45,7 @@ import butterknife.ButterKnife;
  * Created by Mr'Dai on 2017/5/4.
  */
 
-public class CommentAdapter extends BaseAdapter {
+public class CommentAdapter extends BaseListAdapter<CommentBean> {
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -58,26 +59,14 @@ public class CommentAdapter extends BaseAdapter {
      */
     private int adapterFromStatus = 0;
 
+
     public CommentAdapter(Context mContext, List<CommentBean> videoDetailList, BasePresenter basePresenter) {
+        super(videoDetailList);
+
         mInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.basePresenter = basePresenter;
         this.videoDetailList = videoDetailList;
-    }
-
-    @Override
-    public int getCount() {
-        return videoDetailList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return videoDetailList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
@@ -349,6 +338,9 @@ public class CommentAdapter extends BaseAdapter {
         } else if (basePresenter instanceof MyCommentPresenter) {
             MyCommentPresenter myCommentPresenter = (MyCommentPresenter) basePresenter;
             myCommentPresenter.showReplyMessageView(v, commentBean, parentId);
+        }else if (basePresenter instanceof CommentListPresenter) {
+            CommentListPresenter commentListPresenter = (CommentListPresenter) basePresenter;
+            commentListPresenter.showReplyMessageView(v, commentBean, parentId);
         }
     }
 

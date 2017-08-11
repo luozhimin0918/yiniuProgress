@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_content_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/theme1"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingBottom="10dp"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:paddingTop="18dp">
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/riv_user_avatar"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:src="@mipmap/icon_user_def_photo"/>
+
+    <LinearLayout
+        android:id="@+id/ll_je_sao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/ll_thumb"
+        android:layout_toRightOf="@+id/riv_user_avatar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="简单的OMG"
+            android:textColor="@color/font_color62"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="刚刚"
+            android:textColor="@color/font_color9"
+            android:textSize="@dimen/min_font_size"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_thumb"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+
+        <com.jyh.kxt.base.widget.ThumbView
+            android:id="@+id/tv_thumb"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/icon_comment_unlike"
+            android:drawablePadding="5dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:drawableLeft="@mipmap/icon_comment_reply"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:textColor="@color/font_color9"/>
+    </LinearLayout>
+
+    <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+        android:id="@+id/tv_comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_je_sao"
+        android:layout_marginTop="10dp"
+        android:text="回复 岁月警号 你说的太对了 攒一个"
+        android:textColor="@color/font_color64"
+
+        android:textSize="@dimen/describe_font_size4"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_comment_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+            android:id="@+id/tv_read_title1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_color2"
+            android:padding="10dp"
+            android:drawablePadding="5dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="我是标题"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size4"
+            android:visibility="visible"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/line_color7"/>
+
+        <com.jyh.kxt.base.util.emoje.EmoticonTextView
+            android:id="@+id/tv_read_title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:maxLines="2"
+            android:background="@color/bg_color2"
+            android:drawablePadding="5dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:text="我是标题"
+            android:textColor="@color/font_color3"
+            android:textSize="@dimen/describe_font_size4"
+            android:visibility="visible"/>
+    </LinearLayout>
+</RelativeLayout>

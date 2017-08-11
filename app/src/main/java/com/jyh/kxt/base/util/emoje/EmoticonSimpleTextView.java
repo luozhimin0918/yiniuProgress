@@ -67,7 +67,6 @@ public class EmoticonSimpleTextView extends TextView {
     }
 
     public boolean convertToGif(String text) {
-
         return convertToGif(new SpannableStringBuilder(text));
     }
 

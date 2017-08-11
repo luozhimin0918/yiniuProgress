@@ -16,8 +16,6 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         this.dataList = dataList;
     }
 
-
-
     @Override
     public int getCount() {
         return dataList == null ? 0 : dataList.size();
@@ -32,4 +30,5 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
 }

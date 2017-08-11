@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height">
+
+        <ImageView
+            android:id="@+id/iv_bar_break"
+            android:layout_width="@dimen/actionbar_height"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_alignParentLeft="true"
+            android:padding="16dp"
+            android:src="@mipmap/ico_break"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/comment_list_my_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:text="我的评论"
+                    android:textColor="@color/blue1"
+                    android:textSize="@dimen/content_font_size"/>
+
+                <View
+                    android:id="@+id/comm_list_my_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignLeft="@+id/comment_list_my_comment"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignRight="@+id/comment_list_my_comment"
+                    android:background="@color/blue1"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/comment_list_reply_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="回复我的"
+                    android:textColor="@color/font_color64"
+                    android:textSize="@dimen/content_font_size"/>
+
+                <View
+                    android:id="@+id/comm_list_reply_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignLeft="@+id/comment_list_reply_me"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignRight="@+id/comment_list_reply_me"
+                    android:background="@color/blue"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color7"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:layout_below="@+id/action_bar"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/comm_list_rb1"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/sel_comm_list"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="文章"
+            android:textColor="@drawable/font_focus_3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <RadioButton
+            android:id="@+id/comm_list_rb2"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/sel_comm_list"
+            android:button="@null"
+            android:gravity="center"
+            android:text="视听"
+            android:textColor="@drawable/font_focus_3"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <RadioButton
+            android:id="@+id/comm_list_rb3"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:background="@drawable/sel_comm_list"
+            android:button="@null"
+            android:gravity="center"
+            android:text="观点"
+            android:textColor="@drawable/font_focus_3"
+            android:textSize="@dimen/describe_font_size3"/>
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color7"/>
+</LinearLayout>

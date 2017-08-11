@@ -59,6 +59,6 @@
             style="@style/Main_RB_Style"
             android:drawableTop="@drawable/sel_index_explore"
             android:onClick="clickSwitchFragment"
-            android:text="探索"/>
+            android:text="交易圈"/>
     </RadioGroup>
 </LinearLayout>

@@ -74,6 +74,7 @@ public class VarConstant {
     public static final String OCLASS_BLOG = "blog";//博客
     public static final String OCLASS_ACTIVITY = "activity";//活动
     public static final String OCLASS_TOPIC = "topic";//专题
+    public static final String OCLASS_VIEWPOINT = "viewpoint";//交易
 
     public static final String OACTION_LIST = "list";//列表
     public static final String OACTION_INDEX = "index";//首页
@@ -85,6 +86,7 @@ public class VarConstant {
     public static final String OACTION_SCHOOL = "school";//投资学堂
     public static final String OACTION_DIANPING = "dianping";//点评
     public static final String OACTION_ZX = "zixuan";//自选
+    public static final String OACTION_VIEWPOINT_DETAIL = "detail";//交易
 
     public static final String OID_GOLD = "gold";
     public static final String OID_SILVER = "silver";

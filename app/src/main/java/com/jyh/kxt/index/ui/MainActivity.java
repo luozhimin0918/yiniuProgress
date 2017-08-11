@@ -408,7 +408,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.ll_pl:
                 //评论
                 if (LoginUtils.isLogined(this)) {
-                    startActivity(new Intent(this, MyCommentActivity.class));
+                    startActivity(new Intent(this, CommentListActivity.class));
                 } else {
                     mainPresenter.showLoginDialog();
                 }

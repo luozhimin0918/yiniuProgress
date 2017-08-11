@@ -57,14 +57,18 @@ public class EmoticonTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public boolean convertToGif(int type, CommentBean commentBean, int nickNameLength, String text) {
-
+    public boolean convertToGif(int type, CommentBean commentBean, int nickNameLength, String text, String avatarUrl) {
         final SpannableString currentSpannable = new SpannableString(text);
 
         try {
             if ('@' == currentSpannable.charAt(0) && type == 2) {
+
+                if (avatarUrl == null) {
+                    avatarUrl = commentBean.getParent_member_picture();
+                }
+
                 Glide.with(getContext())
-                        .load(commentBean.getParent_member_picture())
+                        .load(avatarUrl)
                         .asBitmap()
                         .transform(new GlideCircleTransform(getContext()))
                         .into(new SimpleTarget<Bitmap>() {
@@ -72,7 +76,7 @@ public class EmoticonTextView extends TextView {
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
                                     glideAnimation) {
                                 BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), resource);
-                                int firstImgHeight = SystemUtil.dp2px(getContext(), 15);
+                                int firstImgHeight = SystemUtil.dp2px(getContext(), 20);
                                 bitmapDrawable.setBounds(0, 0, firstImgHeight, firstImgHeight);
 
                                 ImageSpan mEmoJeImageSpan = new ImageSpan(bitmapDrawable, ImageSpan.ALIGN_BASELINE);
@@ -146,8 +150,11 @@ public class EmoticonTextView extends TextView {
 
 
         setText(currentSpannable);
-
         return isFindMatcher;
+    }
+
+    public boolean convertToGif(int type, CommentBean commentBean, int nickNameLength, String text) {
+        return convertToGif(type, commentBean, nickNameLength, text, null);
     }
 
     /**

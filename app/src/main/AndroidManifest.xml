@@ -181,12 +181,16 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
+            android:name=".index.ui.CommentListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
             android:name=".trading.ui.AuthorListActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".trading.ui.AuthorActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".index.ui.ErrorActivity"
             android:screenOrientation="portrait">

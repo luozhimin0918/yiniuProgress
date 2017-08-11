@@ -11,6 +11,7 @@ import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -95,6 +96,9 @@ public class JumpUtils {
                     case VarConstant.OCLASS_QUOTES:
                         jumpQuotes(context, o_action, o_id);
                         break;
+                    case VarConstant.OCLASS_VIEWPOINT:
+                        jumpViewPoint(context, o_action, o_id);
+                        break;
                 }
             } else {
                 //网页跳转
@@ -110,6 +114,17 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void jumpViewPoint(BaseActivity context, String o_action, String o_id) {
+
+        switch (o_action) {
+            case VarConstant.OACTION_VIEWPOINT_DETAIL:
+                Intent viewPointIntent = new Intent(context, ViewPointDetailActivity.class);
+                viewPointIntent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(viewPointIntent);
+                break;
         }
     }
 
