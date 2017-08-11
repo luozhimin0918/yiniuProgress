@@ -253,57 +253,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
             mFunctionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
-                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
-
-                        TextView tvSc;
-                        TextView tvGz;
-
-                        View.OnClickListener functionListener = new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                switch (view.getId()) {
-                                    case R.id.point_function_sc:
-                                        viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
-                                        articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
-                                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 2, viewPointTradeBean.isCollect);
-                                        break;
-                                    case R.id.point_function_gz:
-                                        boolean isGz = !"true".equals(tvGz.getTag());
-                                        articleContentPresenter.setAttentionState(tvGz, isGz);
-                                        articleContentPresenter.requestAttentionState(viewPointTradeBean.author_id, isGz);
-                                        break;
-                                    case R.id.point_function_jb:
-                                        articleContentPresenter.showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
-                                        break;
-                                    case R.id.point_function_qx:
-                                        functionPopupWindow.dismiss();
-                                        break;
-                                }
-                            }
-                        };
-
-                        @Override
-                        public void onCreateView(View popupView) {
-                            tvSc = (TextView) popupView.findViewById(R.id.point_function_sc);
-                            tvSc.setOnClickListener(functionListener);
-                            articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
-
-                            tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
-                            tvGz.setOnClickListener(functionListener);
-
-                            popupView.findViewById(R.id.point_function_jb).setOnClickListener(functionListener);
-                            popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
-
-                            articleContentPresenter.requestGetGzState(tvGz, viewPointTradeBean.author_id);
-                        }
-
-                        @Override
-                        public void onDismiss() {
-
-                        }
-                    });
-                    functionPopupWindow.show(R.layout.pop_point_function);
+                    articleContentPresenter.showFunctionWindow(viewPointTradeBean);
                 }
             });
         }

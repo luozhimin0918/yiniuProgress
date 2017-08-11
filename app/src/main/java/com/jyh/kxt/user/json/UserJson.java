@@ -31,11 +31,14 @@ public class UserJson {
     private String work;
     private String birthday;
 
+    private String writer_id;
+    private String writer_name;
+
     public UserJson() {
     }
 
     public UserJson(String token, String nickname, String picture, String uid, int sex, String email, String address, String work, String
-            birthday) {
+            birthday, String writer_id, String writer_name) {
         this.token = token;
         this.nickname = nickname;
         this.picture = picture;
@@ -45,6 +48,24 @@ public class UserJson {
         this.address = address;
         this.work = work;
         this.birthday = birthday;
+        this.writer_id = writer_id;
+        this.writer_name = writer_name;
+    }
+
+    public String getWriter_id() {
+        return writer_id;
+    }
+
+    public void setWriter_id(String writer_id) {
+        this.writer_id = writer_id;
+    }
+
+    public String getWriter_name() {
+        return writer_name;
+    }
+
+    public void setWriter_name(String writer_name) {
+        this.writer_name = writer_name;
     }
 
     public String getToken() {

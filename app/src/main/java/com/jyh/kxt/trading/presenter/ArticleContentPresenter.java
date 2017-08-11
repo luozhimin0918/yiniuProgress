@@ -40,6 +40,7 @@ import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
+import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
@@ -495,5 +496,74 @@ public class ArticleContentPresenter {
             }
         });
         functionPopupWindow.show(R.layout.pop_point_report);
+    }
+
+    public void showFunctionWindow(final ViewPointTradeBean viewPointTradeBean) {
+        functionPopupWindow = new SimplePopupWindow((Activity) mContext);
+        functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
+
+            TextView tvSc;
+            TextView tvGz;
+
+            View.OnClickListener functionListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case R.id.point_function_sc:
+                            viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
+                            boolean b = TradeHandlerUtil.getInstance().saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean
+                                    .isCollect);
+                            if (b) {
+                                setCollectState(tvSc, viewPointTradeBean.isCollect);
+                            }
+                            break;
+                        case R.id.point_function_gz:
+                            boolean isGz = !"true".equals(tvGz.getTag());
+                            setAttentionState(tvGz, isGz);
+                            requestAttentionState(viewPointTradeBean.author_id, isGz);
+                            break;
+                        case R.id.point_function_jb:
+                            showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
+                            break;
+                        case R.id.point_function_qx:
+                            functionPopupWindow.dismiss();
+                            break;
+                    }
+                }
+            };
+
+            @Override
+            public void onCreateView(View popupView) {
+
+                tvSc = (TextView) popupView.findViewById(R.id.point_function_sc);
+                tvSc.setOnClickListener(functionListener);
+                setCollectState(tvSc, viewPointTradeBean.isCollect);
+
+                tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
+                tvGz.setOnClickListener(functionListener);
+
+                TextView tvJb = (TextView) popupView.findViewById(R.id.point_function_jb);
+                tvJb.setOnClickListener(functionListener);
+                popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
+
+                requestGetGzState(tvGz, viewPointTradeBean.author_id);
+
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(viewPointTradeBean.author_id)) {
+                    tvGz.setVisibility(View.GONE);
+                    tvJb.setVisibility(View.GONE);
+                } else {
+                    tvGz.setVisibility(View.VISIBLE);
+                    tvJb.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+
+        functionPopupWindow.show(R.layout.pop_point_function);
     }
 }

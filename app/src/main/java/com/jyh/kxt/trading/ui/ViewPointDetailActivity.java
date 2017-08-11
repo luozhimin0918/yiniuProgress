@@ -15,11 +15,13 @@ import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 
@@ -150,6 +152,14 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                 TextView tvFunUrl = (TextView) popupView.findViewById(R.id.iv_fun_url);
                 TextView tvFunJb = (TextView) popupView.findViewById(R.id.iv_fun_jb);
                 TextView tvFunQx = (TextView) popupView.findViewById(R.id.iv_fun_qx);
+
+                UserJson userInfo = LoginUtils.getUserInfo(getContext());
+                if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(mViewPointTradeBean.author_id)) {
+                    tvFunJb.setVisibility(View.GONE);
+                } else {
+                    tvFunJb.setVisibility(View.VISIBLE);
+                }
+
 
                 tvFunUrl.setOnClickListener(functionClickListener);
                 tvFunJb.setOnClickListener(functionClickListener);
