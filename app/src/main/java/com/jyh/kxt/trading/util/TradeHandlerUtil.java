@@ -1,7 +1,6 @@
 package com.jyh.kxt.trading.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -12,7 +11,6 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
@@ -116,13 +114,13 @@ public class TradeHandlerUtil {
                 return false;
             }
 
-            UserJson userInfo = LoginUtils.getUserInfo(mContext);
-            if (type == 2) {
-                if (userInfo == null) {
-                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
-                    return false;
-                }
-            }
+//            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+//            if (type == 2) {
+//                if (userInfo == null) {
+//                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+//                    return false;
+//                }
+//            }
 
             TradeHandlerBean historyTradeHandlerBean = checkHandlerState(id);
 
@@ -152,7 +150,12 @@ public class TradeHandlerUtil {
                 requestFavour(mContext, id);
             } else if (type == 2) {
                 saveCollectBean(mContext, viewPointTradeBean, historyTradeHandlerBean.isCollect);  //同时保存一份收藏到Sp本地文件中
-                requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                if (userInfo == null) {
+                    requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+                }
+
             } else if (type == 3) {
                 requestFavour2(mContext, id);
             }
