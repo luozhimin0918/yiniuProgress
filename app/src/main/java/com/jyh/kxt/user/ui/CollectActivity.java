@@ -2,8 +2,6 @@ package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,21 +10,16 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
-import com.jyh.kxt.base.annotation.DelNumListener;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.user.presenter.CollectActityPresenter;
 import com.jyh.kxt.user.ui.fragment.CollectFlashFragment;
 import com.jyh.kxt.user.ui.fragment.CollectNewsFragment;
+import com.jyh.kxt.user.ui.fragment.CollectPointFragment;
 import com.jyh.kxt.user.ui.fragment.CollectVideoFragment;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.SlidingTabLayout;
-import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.library.widget.viewpager.ControllableViewPager;
-import com.library.widget.window.ToastView;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +50,7 @@ public class CollectActivity extends BaseActivity {
     public CollectVideoFragment videoFragment;
     public CollectNewsFragment newsFragment, authorFragment;
     public CollectFlashFragment flashFragment;
+    public CollectPointFragment pointFragment;
 
 
     public CollectActityPresenter collectActityPresenter;
@@ -69,14 +63,14 @@ public class CollectActivity extends BaseActivity {
         tvBarTitle.setText("我的收藏");
         ivBarFunction.setText("编辑");
 
-        String[] tabs = new String[]{"视听", "文章", "快讯", "专栏"};
+        String[] tabs = new String[]{"视听", "文章", "快讯", "专栏","观点"};
 
         initFragments();
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vpContent.addOnPageChangeListener(collectActityPresenter);
-        vpContent.setOffscreenPageLimit(4);
+        vpContent.setOffscreenPageLimit(5);
         stlNavigationBar.setViewPager(vpContent, tabs);
-        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 4));
+        stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 5));
         stlNavigationBar.setOnTabSelectListener(collectActityPresenter);
     }
 
@@ -84,19 +78,24 @@ public class CollectActivity extends BaseActivity {
         fragmentList = new ArrayList<>();
         videoFragment = new CollectVideoFragment();
         fragmentList.add(videoFragment);
+
         newsFragment = new CollectNewsFragment();
         Bundle newsBundle = new Bundle();
         newsBundle.putString(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
         newsFragment.setArguments(newsBundle);
         fragmentList.add(newsFragment);
+
         flashFragment = new CollectFlashFragment();
         fragmentList.add(flashFragment);
+
         authorFragment = new CollectNewsFragment();
         Bundle flashBundle = new Bundle();
         flashBundle.putString(IntentConstant.TYPE, VarConstant.OCLASS_BLOG);
         authorFragment.setArguments(flashBundle);
         fragmentList.add(authorFragment);
 
+        pointFragment = new CollectPointFragment();
+        fragmentList.add(pointFragment);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.ll_selAll, R.id.tv_del})

@@ -34,7 +34,6 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
-import com.library.widget.window.ToastView;
 
 import java.util.List;
 
@@ -177,7 +176,7 @@ public class ViewpointPresenter extends BasePresenter {
                     List<ViewPointTradeBean> newTradeBeanList = viewPointBean.getTrade();
 
                     if (newTradeBeanList.size() == 0) {
-                        ToastView.makeText3(mContext, "暂无更多数据");
+                        mViewpointFragment.mPullPinnedListView.addFootNoMoreData();
                     } else {
                         viewpointAdapter.refreshAdapterData(newTradeBeanList, pullFromStart);
                     }

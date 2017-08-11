@@ -77,7 +77,10 @@ public class EmoticonSimpleTextView extends TextView {
         try {
             Matcher marketMatcher = Pattern.compile("#&(.*?)&#").matcher(text);
 
+
+            int matcherContentLength = 0;//匹配的内容长度
             while (marketMatcher.find()) {
+
                 final String contentText = marketMatcher.group(1);
                 final HashMap<String, String> marketKeyMap = new HashMap<>();
 
@@ -91,6 +94,8 @@ public class EmoticonSimpleTextView extends TextView {
                     marketKeyMap.put(key, value);
                 }
 
+                int matcherStart = marketMatcher.start() - matcherContentLength;
+                int matcherEnd = marketMatcher.end() - matcherContentLength;
                 currentSpannable.setSpan(new ClickableSpan() {
                     @Override
                     public void updateDrawState(TextPaint ds) {
@@ -109,9 +114,12 @@ public class EmoticonSimpleTextView extends TextView {
                                 marketKeyMap.get("url"));
                     }
 
-                }, marketMatcher.start(), marketMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }, matcherStart, matcherEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                currentSpannable.replace(marketMatcher.start(), marketMatcher.end(), marketKeyMap.get("title"));
+                String marketName = marketKeyMap.get("title");
+
+                currentSpannable.replace(matcherStart, matcherEnd, marketName);
+                matcherContentLength += marketMatcher.end() - marketMatcher.start() - marketName.length();
             }
         } catch (Exception e) {
             e.printStackTrace();

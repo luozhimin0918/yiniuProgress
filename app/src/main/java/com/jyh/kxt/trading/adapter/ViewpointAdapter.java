@@ -3,13 +3,9 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +73,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     public int navigationTabClickPosition = 0;
     public HashMap<String, List<ViewPointTradeBean>> pointListMap = new HashMap<>();
+    public HashMap<Integer, PinnedSectionListView.PinnedOffset> listViewOffset = new HashMap<>();
 
     public ViewpointAdapter(Context mContext, List<ViewPointTradeBean> viewPointTradeBeanList) {
 
@@ -164,8 +161,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder1.setData(viewPointTradeBean);
                 viewHolder1.setItemViewColor(convertView);
 
-                setTop(viewHolder1.tvContent, position, viewPointTradeBean);
-
+                viewHolder1.tvContent.convertToGif(viewPointTradeBean.content);
                 viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
 
                 CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
@@ -185,12 +181,10 @@ public class ViewpointAdapter extends BaseAdapter implements
                 articleContentPresenter.setPictureAdapter(viewHolder1.gridPictureLayout, viewPointTradeBean.picture);
                 break;
             case 2:
-                viewHolder2.tvNoDataText.setText("暂无任何数据");
-
                 if (navigationTabClickPosition == 2) {
                     boolean loginEd = LoginUtils.isLogined(mContext);
                     if (!loginEd) {
-                        viewHolder2.tvNoDataText.setText("立即登录同步关注");
+                        viewHolder2.tvNoDataText.setText("登录同步关注");
                         viewHolder2.tvNoDataText.setTextColor(ContextCompat.getColor(mContext, R.color.blue1));
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -201,6 +195,14 @@ public class ViewpointAdapter extends BaseAdapter implements
                     } else {
                         viewHolder2.tvNoDataText.setText("暂无关注");
                     }
+                } else {
+                    viewHolder2.tvNoDataText.setText("暂无任何数据");
+                    viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                        }
+                    });
                 }
                 break;
         }
@@ -216,24 +218,6 @@ public class ViewpointAdapter extends BaseAdapter implements
             }
         });
         return convertView;
-    }
-
-    private void setTop(EmoticonSimpleTextView tvContent, int position, ViewPointTradeBean bean) {
-
-        String content = bean.content;
-        if (position == 0 && "1".equals(bean.is_top)) {
-            //置顶
-            Drawable d = ContextCompat.getDrawable(mContext, R.mipmap.icon_trading_top);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());//设置图片大小
-
-            SpannableStringBuilder spannableBuilder = new SpannableStringBuilder("1" + content);
-            spannableBuilder.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            tvContent.convertToGif(spannableBuilder);
-        } else {
-            tvContent.convertToGif(content);
-        }
-
     }
 
 
@@ -271,6 +255,11 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         @BindView(R.id.viewpoint_space) View viewSpace;
 
+        @BindView(R.id.viewpoint_line) View viewLine1;
+        @BindView(R.id.view_line1) View viewLine2;
+        @BindView(R.id.view_line2) View viewLine3;
+
+
         private ViewPointTradeBean viewPointTradeBean;
 
         public void setItemViewColor(View convertView) {
@@ -283,6 +272,10 @@ public class ViewpointAdapter extends BaseAdapter implements
             viewSpace.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
             rlTransmitLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.view_point_transmit_content));
+
+            viewLine1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+            viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+            viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
         }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
@@ -292,7 +285,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
+                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean , 1, true);
                         if (isSaveSuccess) {
                             viewPointTradeBean.isFavour = true;
                             articleContentPresenter.initTradeHandler(tvZanView, true);
@@ -342,7 +335,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                     functionPopupWindow = new SimplePopupWindow((Activity) mContext);
                     functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 
-
                         TextView tvSc;
                         TextView tvGz;
 
@@ -352,8 +344,10 @@ public class ViewpointAdapter extends BaseAdapter implements
                                 switch (view.getId()) {
                                     case R.id.point_function_sc:
                                         viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
-                                        articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
-                                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 2, viewPointTradeBean.isCollect);
+                                        boolean b = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean.isCollect);
+                                        if(b){
+                                            articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
+                                        }
                                         break;
                                     case R.id.point_function_gz:
                                         boolean isGz = !"true".equals(tvGz.getTag());
@@ -431,7 +425,12 @@ public class ViewpointAdapter extends BaseAdapter implements
      */
     private void replaceDataAndNotifyDataSetChanged(List<ViewPointTradeBean> tradeList, int fromSource) {
         dataList.clear();
+        comparisonData(tradeList, fromSource);
+        dataList.addAll(tradeList);
+        notifyDataSetChanged();
+    }
 
+    private void comparisonData(List<ViewPointTradeBean> tradeList, int fromSource) {
         if (tradeList == null) {
             tradeList = new ArrayList<>();
         }
@@ -447,8 +446,7 @@ public class ViewpointAdapter extends BaseAdapter implements
             if (mPullPinnedListView != null) {
                 mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
             }
-        } else if (tradeList.size() == 1 && fromSource == 1) {
-
+        } else if ((tradeList.size() == 2 || tradeList.size() == 1) && fromSource == 1) {
             if (mPullPinnedListView != null) {
                 mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
             }
@@ -459,26 +457,25 @@ public class ViewpointAdapter extends BaseAdapter implements
             viewPointTradeBean.setItemViewType(0);
             tradeList.add(0, viewPointTradeBean);
         }
-
-        dataList.addAll(tradeList);
-
-        //对 List 进行赞的遍历
-        TradeHandlerUtil.getInstance().listCheckState(dataList);
-
-        notifyDataSetChanged();
+        TradeHandlerUtil.getInstance().listCheckState(tradeList);   //对 List 进行赞的遍历
     }
 
     @Override
     public void onTabSelect(int position, int clickId) {
+        PinnedSectionListView refreshableView = mPullPinnedListView.getRefreshableView();
+        PinnedSectionListView.PinnedOffset mPinnedOffset = refreshableView.getPinnedScrollY();
+        listViewOffset.put(navigationTabClickPosition, mPinnedOffset);//保存旧的Y轴偏移
+
         navigationTabClickPosition = position;
-        requestNavigationSwitch();
+        requestNavigationSwitch(position, 0);
     }
 
     /**
      * 点击导航栏Tab 进行数据切换
+     * fromSource 0 默认请求 requestNavigationType  1 来自登录之后的数据刷新
      */
-    private void requestNavigationSwitch() {
-        switch (navigationTabClickPosition) {
+    private void requestNavigationSwitch(final int tabClickPosition, final int fromSource) {
+        switch (tabClickPosition) {
             case 0:
                 requestNavigationType = "chosen";
                 break;
@@ -489,12 +486,27 @@ public class ViewpointAdapter extends BaseAdapter implements
                 requestNavigationType = "follow";
                 break;
         }
+
+        if (tabClickPosition == navigationTabClickPosition) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    PinnedSectionListView.PinnedOffset pinnedOffset = listViewOffset.get(tabClickPosition);
+                    if (pinnedOffset == null) {
+                        mPullPinnedListView.getRefreshableView().setSelection(0);
+                    } else {
+//                mPullPinnedListView.getRefreshableView().smoothScrollToPositionFromTop(pinnedOffset.position, pinnedOffset.offset, 0);
+                        mPullPinnedListView.getRefreshableView().setSelection(pinnedOffset.position);
+                    }
+                }
+            },150);
+        }
+
         List<ViewPointTradeBean> viewPointTradeBeen = pointListMap.get(requestNavigationType);
 
         //如果点击的是关注
         String uId = null;
-
-        if (navigationTabClickPosition == 2) {
+        if (tabClickPosition == 2) {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             if (userInfo == null) {
                 if (viewPointTradeBeen == null) {
@@ -533,8 +545,12 @@ public class ViewpointAdapter extends BaseAdapter implements
 
                     List<ViewPointTradeBean> tradeList = viewPointBean.getTrade();
                     pointListMap.put(requestNavigationType, tradeList);
-                    replaceDataAndNotifyDataSetChanged(tradeList, 0);
 
+                    if (fromSource == 0 || (fromSource == 1 && navigationTabClickPosition == 2)) {
+                        replaceDataAndNotifyDataSetChanged(tradeList, 0);
+                    } else if (fromSource == 1 && navigationTabClickPosition != 2) {
+                        comparisonData(tradeList, 0);
+                    }
                     iBaseView.dismissWaitDialog();
                 }
 
@@ -557,6 +573,10 @@ public class ViewpointAdapter extends BaseAdapter implements
      * @param newTradeBeanList
      */
     public void refreshAdapterData(List<ViewPointTradeBean> newTradeBeanList, PullToRefreshBase.Mode mode) {
+
+        //对 List 进行赞的遍历
+        TradeHandlerUtil.getInstance().listCheckState(newTradeBeanList);
+
         switch (navigationTabClickPosition) {
             case 0:
                 requestNavigationType = "chosen";
@@ -582,7 +602,11 @@ public class ViewpointAdapter extends BaseAdapter implements
         notifyDataSetChanged();
     }
 
-
+    /**
+     * 通过EventBus 接到通知后赞数量+1
+     *
+     * @param intentObj
+     */
     public void handlerEventBus(TradeHandlerUtil.EventHandlerBean intentObj) {
         Iterator<String> iterator = pointListMap.keySet().iterator();
         while (iterator.hasNext()) {
@@ -605,7 +629,31 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
             }
         }
-
         notifyDataSetChanged();
+    }
+
+    /**
+     * 退出或者登录之后 关注界面所发生的改变
+     */
+    public void loginAccount() {
+        List<ViewPointTradeBean> followList = pointListMap.get("follow");
+        if (followList != null) {//已经初始化过了
+            //同步关注信息
+            pointListMap.remove("follow");
+            requestNavigationSwitch(2, 1);
+        }
+    }
+
+    public void exitAccount() {
+        List<ViewPointTradeBean> followList = pointListMap.get("follow");
+        if (followList != null) {//已经初始化过了
+            followList.clear();
+            if (navigationTabClickPosition == 2) {
+                replaceDataAndNotifyDataSetChanged(followList, 0);
+            } else {
+                comparisonData(followList, 0);
+                pointListMap.put("follow", followList);
+            }
+        }
     }
 }

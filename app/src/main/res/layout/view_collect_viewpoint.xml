@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingLeft="18dp"
+    android:orientation="horizontal"
+    >
+
+    <FrameLayout
+        android:id="@+id/fl_del"
+        android:layout_width="@dimen/collect_del_width"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/sel_collect_item"
+            />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_content_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingRight="18dp"
+        android:paddingTop="18dp">
+
+        <com.jyh.kxt.base.custom.RoundImageView
+            android:id="@+id/riv_user_avatar"
+            android:layout_width="38dp"
+            android:layout_height="38dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/riv_user_avatar"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/riv_user_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/font_color62"
+                android:textSize="@dimen/describe_font_size3"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/font_color9"
+                android:textSize="@dimen/min_font_size"/>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/viewpoint_function_share"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:src="@mipmap/icon_viewpoint_jt"/>
+
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+            android:id="@+id/viewpoint_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/riv_user_avatar"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="3"
+            android:padding="5dp"
+            android:textColor="@color/font_color5"
+            android:textSize="@dimen/describe_font_size4"
+            android:visibility="visible"/>
+
+
+        <com.jyh.kxt.base.custom.MeasureGridView
+            android:id="@+id/viewpoint_picture_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewpoint_title"
+            android:horizontalSpacing="5dp"
+            android:numColumns="3"
+            android:orientation="horizontal"
+            android:verticalSpacing="5dp">
+
+        </com.jyh.kxt.base.custom.MeasureGridView>
+
+        <RelativeLayout
+            android:id="@+id/viewpoint_transmit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewpoint_picture_layout"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/view_point_transmit_content"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+                android:id="@+id/viewpoint_transmit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="3"
+                android:textColor="@color/font_color64"
+                android:textSize="@dimen/content_font_size"/>
+
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/viewpoint_line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/viewpoint_transmit_layout"
+            android:layout_marginLeft="-18dp"
+            android:layout_marginRight="-18dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/line_color6"/>
+
+        <View
+            android:id="@+id/viewpoint_space"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_below="@+id/viewpoint_function_zan"
+            android:layout_marginLeft="-18dp"
+            android:layout_marginRight="-18dp"
+            android:background="@color/line_color6"/>
+
+        <LinearLayout
+            android:id="@+id/viewpoint_function_zan"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/viewpoint_line"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/view_point_zan_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/view_point_zan_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/icon_point_zan1"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/font_color9"
+                    android:textSize="@dimen/describe_font_size3"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view_line1"
+                android:layout_width="1px"
+                android:layout_height="15dp"
+                android:background="@color/line_color6"/>
+
+            <LinearLayout
+                android:id="@+id/view_point_pl_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/view_point_pl_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/icon_point_pl"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/font_color9"
+                    android:textSize="@dimen/describe_font_size3"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view_line2"
+                android:layout_width="1px"
+                android:layout_height="15dp"
+                android:background="@color/line_color6"/>
+
+            <LinearLayout
+                android:id="@+id/view_point_fx_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/view_point_fx_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@mipmap/icon_point_fx"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/font_color9"
+                    android:textSize="@dimen/describe_font_size3"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -4,14 +4,19 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.library.R;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.LoadingLayoutProxy;
 import com.library.widget.handmark.OverscrollHelper;
 import com.library.widget.handmark.PullToRefreshAdapterViewBase;
@@ -22,8 +27,7 @@ import com.library.widget.handmark.internal.LoadingLayout;
  * Created by DaiYao on 2016/10/2.
  */
 
-public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSectionListView>
-{
+public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSectionListView> {
 
     private LoadingLayout mHeaderLoadingView;
     private LoadingLayout mFooterLoadingView;
@@ -32,42 +36,35 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
 
     private boolean mListViewExtrasEnabled;
 
-    public PullPinnedListView(Context context)
-    {
+    public PullPinnedListView(Context context) {
         super(context);
     }
 
-    public PullPinnedListView(Context context, AttributeSet attrs)
-    {
+    public PullPinnedListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PullPinnedListView(Context context, Mode mode)
-    {
+    public PullPinnedListView(Context context, Mode mode) {
         super(context, mode);
     }
 
-    public PullPinnedListView(Context context, Mode mode, AnimationStyle style)
-    {
+    public PullPinnedListView(Context context, Mode mode, AnimationStyle style) {
         super(context, mode, style);
     }
 
     @Override
-    public final Orientation getPullToRefreshScrollDirection()
-    {
+    public final Orientation getPullToRefreshScrollDirection() {
         return Orientation.VERTICAL;
     }
 
     @Override
-    protected void onRefreshing(final boolean doScroll)
-    {
+    protected void onRefreshing(final boolean doScroll) {
         /**
          * If we're not showing the Refreshing view, or the list is empty, the
          * the header/footer views won't show so we use the normal method.
          */
         ListAdapter adapter = mRefreshableView.getAdapter();
-        if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty())
-        {
+        if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
             super.onRefreshing(doScroll);
             return;
         }
@@ -77,8 +74,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
         final int selection, scrollToY;
 
-        switch (getCurrentMode())
-        {
+        switch (getCurrentMode()) {
             case MANUAL_REFRESH_ONLY:
             case PULL_FROM_END:
                 origLoadingView = getFooterLayout();
@@ -108,8 +104,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         listViewLoadingView.setVisibility(View.VISIBLE);
         listViewLoadingView.refreshing();
 
-        if (doScroll)
-        {
+        if (doScroll) {
             // We need to disable the automatic visibility changes for now
             disableLoadingLayoutVisibilityChanges();
 
@@ -127,13 +122,11 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
     }
 
     @Override
-    protected void onReset()
-    {
+    protected void onReset() {
         /**
          * If the extras are not enabled, just call up to super and return.
          */
-        if (!mListViewExtrasEnabled)
-        {
+        if (!mListViewExtrasEnabled) {
             super.onReset();
             return;
         }
@@ -142,8 +135,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         final int scrollToHeight, selection;
         final boolean scrollLvToEdge;
 
-        switch (getCurrentMode())
-        {
+        switch (getCurrentMode()) {
             case MANUAL_REFRESH_ONLY:
             case PULL_FROM_END:
                 originalLoadingLayout = getFooterLayout();
@@ -164,8 +156,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
 
         // If the ListView header loadWait layout is showing, then we need to
         // flip so that the original one is showing instead
-        if (listViewLoadingLayout.getVisibility() == View.VISIBLE)
-        {
+        if (listViewLoadingLayout.getVisibility() == View.VISIBLE) {
 
             // Set our Original View to Visible
             originalLoadingLayout.showInvisibleViews();
@@ -178,8 +169,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
              * header/footer, but only scroll if: we've pulled to refresh, it's
              * positioned correctly
              */
-            if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING)
-            {
+            if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
                 mRefreshableView.setSelection(selection);
                 setHeaderScroll(scrollToHeight);
             }
@@ -190,20 +180,16 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
     }
 
     @Override
-    protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd)
-    {
+    protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd) {
         LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
 
-        if (mListViewExtrasEnabled)
-        {
+        if (mListViewExtrasEnabled) {
             final Mode mode = getMode();
 
-            if (includeStart && mode.showHeaderLoadingLayout())
-            {
+            if (includeStart && mode.showHeaderLoadingLayout()) {
                 proxy.addLayout(mHeaderLoadingView);
             }
-            if (includeEnd && mode.showFooterLoadingLayout())
-            {
+            if (includeEnd && mode.showFooterLoadingLayout()) {
                 proxy.addLayout(mFooterLoadingView);
             }
         }
@@ -211,16 +197,14 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         return proxy;
     }
 
-    protected PinnedSectionListView createListView(Context context, AttributeSet attrs)
-    {
+    protected PinnedSectionListView createListView(Context context, AttributeSet attrs) {
         PinnedSectionListView lv;
         lv = new PinnedSectionListView(context, attrs);
         return lv;
     }
 
     @Override
-    protected PinnedSectionListView createRefreshableView(Context context, AttributeSet attrs)
-    {
+    protected PinnedSectionListView createRefreshableView(Context context, AttributeSet attrs) {
         PinnedSectionListView lv = createListView(context, attrs);
         // Set it to this so it can be used in ListActivity/ListFragment
         lv.setId(android.R.id.list);
@@ -228,14 +212,12 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
     }
 
     @Override
-    protected void handleStyledAttributes(TypedArray a)
-    {
+    protected void handleStyledAttributes(TypedArray a) {
         super.handleStyledAttributes(a);
 
         mListViewExtrasEnabled = a.getBoolean(com.library.R.styleable.PullToRefresh_ptrListViewExtrasEnabled, true);
 
-        if (mListViewExtrasEnabled)
-        {
+        if (mListViewExtrasEnabled) {
             final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL);
 
@@ -255,26 +237,22 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
              * If the value for Scrolling While Refreshing hasn't been
              * explicitly set via XML, enable Scrolling While Refreshing.
              */
-            if (!a.hasValue(com.library.R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled))
-            {
+            if (!a.hasValue(com.library.R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled)) {
                 setScrollingWhileRefreshingEnabled(true);
             }
         }
     }
 
     @TargetApi(9)
-    final class InternalListViewSDK9 extends InternalListView
-    {
+    final class InternalListViewSDK9 extends InternalListView {
 
-        public InternalListViewSDK9(Context context, AttributeSet attrs)
-        {
+        public InternalListViewSDK9(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
         @Override
         protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-                                       int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)
-        {
+                                       int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 
             final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
                     scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
@@ -286,57 +264,47 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         }
     }
 
-    protected class InternalListView extends ListView implements EmptyViewMethodAccessor
-    {
+    protected class InternalListView extends ListView implements EmptyViewMethodAccessor {
 
         private boolean mAddedLvFooter = false;
 
-        public InternalListView(Context context, AttributeSet attrs)
-        {
+        public InternalListView(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
         @Override
-        protected void dispatchDraw(Canvas canvas)
-        {
+        protected void dispatchDraw(Canvas canvas) {
             /**
              * This is a bit hacky, but Samsung's ListView has got a bug in it
              * when using Header/Footer Views and the list is empty. This masks
              * the issue so that it doesn't cause an FC. See Issue #66.
              */
-            try
-            {
+            try {
                 super.dispatchDraw(canvas);
-            } catch (IndexOutOfBoundsException e)
-            {
+            } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
         }
 
         @Override
-        public boolean dispatchTouchEvent(MotionEvent ev)
-        {
+        public boolean dispatchTouchEvent(MotionEvent ev) {
             /**
              * This is a bit hacky, but Samsung's ListView has got a bug in it
              * when using Header/Footer Views and the list is empty. This masks
              * the issue so that it doesn't cause an FC. See Issue #66.
              */
-            try
-            {
+            try {
                 return super.dispatchTouchEvent(ev);
-            } catch (IndexOutOfBoundsException e)
-            {
+            } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
                 return false;
             }
         }
 
         @Override
-        public void setAdapter(ListAdapter adapter)
-        {
+        public void setAdapter(ListAdapter adapter) {
             // Add the Footer View at the last possible moment
-            if (null != mLvFooterLoadingFrame && !mAddedLvFooter)
-            {
+            if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
                 addFooterView(mLvFooterLoadingFrame, null, false);
                 mAddedLvFooter = true;
             }
@@ -345,17 +313,60 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         }
 
         @Override
-        public void setEmptyView(View emptyView)
-        {
+        public void setEmptyView(View emptyView) {
             PullPinnedListView.this.setEmptyView(emptyView);
         }
 
         @Override
-        public void setEmptyViewInternal(View emptyView)
-        {
+        public void setEmptyViewInternal(View emptyView) {
             super.setEmptyView(emptyView);
         }
 
     }
 
+    /**
+     * 没有加载更多数据的时候 显示addFoot
+     */
+    private TextView tvNoMoreDataView;
+
+    public void addFootNoMoreData() {
+        if (tvNoMoreDataView != null) {
+            return;
+        }
+        Mode mode = getMode();
+        if (mode == Mode.BOTH) {
+            setMode(Mode.PULL_FROM_START);
+        } else if (mode == Mode.PULL_FROM_END) {
+            setMode(Mode.DISABLED);
+        }
+        tvNoMoreDataView = new TextView(getContext());
+        tvNoMoreDataView.setText("暂无更多数据");
+        tvNoMoreDataView.setTag("noMoreData");
+        int footHeight = SystemUtil.dp2px(getContext(), 40);
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, footHeight);
+
+        tvNoMoreDataView.setTextColor(ContextCompat.getColor(getContext(), R.color.no_more_data));
+        tvNoMoreDataView.setLayoutParams(layoutParams);
+
+        tvNoMoreDataView.setGravity(Gravity.CENTER);
+        getRefreshableView().addFooterView(tvNoMoreDataView);
+        tvNoMoreDataView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setMode(Mode mode) {
+        super.setMode(mode);
+
+        if (tvNoMoreDataView != null) {
+            if (mode == Mode.BOTH || mode == Mode.PULL_FROM_END) {
+                getRefreshableView().removeFooterView(tvNoMoreDataView);
+                tvNoMoreDataView = null;
+            }
+        }
+    }
 }

@@ -1,10 +1,7 @@
 package com.jyh.kxt.base.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.RequestQueue;
@@ -15,16 +12,11 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.bean.EventBusClass;
 import com.library.util.EncryptionUtils;
-import com.library.widget.window.ToastView;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +69,7 @@ public class UmengLoginTool {
             @Override
             protected void onResponse(UserJson user) {
                 LoginUtils.login(context, user);
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, user));
+//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, user));//上面会发送一个登录广播
                 context.dismissWaitDialog();
             }
 

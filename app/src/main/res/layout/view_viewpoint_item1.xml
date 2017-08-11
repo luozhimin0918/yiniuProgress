@@ -150,6 +150,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view_line1"
             android:layout_width="1px"
             android:layout_height="15dp"
             android:background="@color/line_color6"/>
@@ -174,6 +175,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view_line2"
             android:layout_width="1px"
             android:layout_height="15dp"
             android:background="@color/line_color6"/>

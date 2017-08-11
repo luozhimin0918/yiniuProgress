@@ -17,7 +17,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
-import com.jyh.kxt.trading.json.ViewPointDetailBean;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -115,14 +115,14 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     private SimplePopupWindow functionPopupWindow;
 
     private void showShareOrFunction() {
-        if (viewPointDetailPresenter.viewPointDetailBean == null) {
+        if (viewPointDetailPresenter.mViewPointTradeBean == null) {
             return;
         }
 
         functionPopupWindow = new SimplePopupWindow(this);
         functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 
-            ViewPointDetailBean mViewPointDetailBean;
+            ViewPointTradeBean mViewPointTradeBean;
 
             View.OnClickListener functionClickListener = new View.OnClickListener() {
                 @Override
@@ -133,7 +133,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
                             break;
                         case R.id.iv_fun_jb:
-                            articlePresenter.showReportWindow(mViewPointDetailBean.o_id, mViewPointDetailBean.report);
+                            articlePresenter.showReportWindow(mViewPointTradeBean.o_id, mViewPointTradeBean.report);
                             break;
                         case R.id.iv_fun_qx:
                             break;
@@ -143,8 +143,8 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
             @Override
             public void onCreateView(View popupView) {
-                mViewPointDetailBean = viewPointDetailPresenter.viewPointDetailBean;
-                ShareDictBean shareDict = mViewPointDetailBean.shareDict;
+                mViewPointTradeBean = viewPointDetailPresenter.mViewPointTradeBean;
+                ShareDictBean shareDict = mViewPointTradeBean.shareDict;
                 articlePresenter.shareToPlatform(popupView, shareDict);
 
                 TextView tvFunUrl = (TextView) popupView.findViewById(R.id.iv_fun_url);

@@ -2,7 +2,9 @@ package com.jyh.kxt.trading.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.base.IBaseView;
@@ -34,9 +36,13 @@ public class TradeHandlerUtil {
     private final static String TradeHandlerFileName = "tradehandler";
 
     /**
-     * 存储的点赞的Key 值
+     * 存储的点赞,收藏的Key 值
      */
     private final static String tradeKey = "trade";
+    /**
+     * 存储的收藏的对象
+     */
+    private final static String collectBeanKey = "collectbean";
 
     static TradeHandlerUtil tradeHandlerUtil;
 
@@ -78,59 +84,81 @@ public class TradeHandlerUtil {
         return contains(id);
     }
 
+    public void updateCollect(Context mContext, String id, boolean isCollect) {
+        for (TradeHandlerBean handlerBean : tradeHandlerList) {
+            if (id.equals(handlerBean.tradeId)) {
+                handlerBean.isCollect = isCollect;
+            }
+        }
+        SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
+    }
+
+
+    public boolean saveState(Context mContext, String id, int type, boolean bool) {
+        ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
+        viewPointTradeBean.o_id = id;
+        return saveState(mContext, viewPointTradeBean, type, bool);
+    }
+
     /**
      * @param mContext
-     * @param id
      * @param type     1 交易圈列表的赞  2 收藏 3
      * @param bool
      * @return
      */
     //isSaveSuccess
-    public boolean saveState(Context mContext, String id, int type, boolean bool) {
+    public boolean saveState(Context mContext, ViewPointTradeBean viewPointTradeBean, int type, boolean bool) {
+        try {
+            String id = viewPointTradeBean.o_id;
 
-        if (!NetUtils.isNetworkAvailable(mContext)) {
-            ToastView.makeText3(mContext, "暂无网络,点赞失败");
-            return false;
-        }
-
-        UserJson userInfo = LoginUtils.getUserInfo(mContext);
-        if (type == 2) {
-            if (userInfo == null) {
-                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            if (!NetUtils.isNetworkAvailable(mContext)) {
+                ToastView.makeText3(mContext, "暂无网络,点赞失败");
                 return false;
             }
-        }
 
-        TradeHandlerBean historyTradeHandlerBean = checkHandlerState(id);
-
-        if (historyTradeHandlerBean == null) {
-            historyTradeHandlerBean = new TradeHandlerBean();
-            historyTradeHandlerBean.tradeId = id;
-            if (type == 1 || type == 3) {
-                historyTradeHandlerBean.isFavour = bool;
-            } else if (type == 2) {
-                historyTradeHandlerBean.isCollect = bool;
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            if (type == 2) {
+                if (userInfo == null) {
+                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                    return false;
+                }
             }
-            tradeHandlerList.add(historyTradeHandlerBean);
-        } else {
-            switch (type) {
-                case 1:
-                case 3:
+
+            TradeHandlerBean historyTradeHandlerBean = checkHandlerState(id);
+
+            if (historyTradeHandlerBean == null) {
+                historyTradeHandlerBean = new TradeHandlerBean();
+                historyTradeHandlerBean.tradeId = id;
+                if (type == 1 || type == 3) {
                     historyTradeHandlerBean.isFavour = bool;
-                    break;
-                case 2:
+                } else if (type == 2) {
                     historyTradeHandlerBean.isCollect = bool;
-                    break;
+                }
+                tradeHandlerList.add(historyTradeHandlerBean);
+            } else {
+                switch (type) {
+                    case 1:
+                    case 3:
+                        historyTradeHandlerBean.isFavour = bool;
+                        break;
+                    case 2:
+                        historyTradeHandlerBean.isCollect = bool;
+                        break;
+                }
             }
-        }
-        SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
+            SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
 
-        if (type == 1) {  //发起网络请求
-            requestFavour(mContext, id);
-        } else if (type == 2) {
-            requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
-        } else if (type == 3) {
-            requestFavour2(mContext, id);
+            if (type == 1) {  //发起网络请求
+                requestFavour(mContext, id);
+            } else if (type == 2) {
+                saveCollectBean(mContext, viewPointTradeBean, historyTradeHandlerBean.isCollect);  //同时保存一份收藏到Sp本地文件中
+                requestCollect(mContext, id, userInfo, historyTradeHandlerBean.isCollect);
+            } else if (type == 3) {
+                requestFavour2(mContext, id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
@@ -187,7 +215,7 @@ public class TradeHandlerUtil {
      * @param userInfo
      * @param isCollect
      */
-    private void requestCollect(Context mContext, String id, UserJson userInfo, boolean isCollect) {
+    public void requestCollect(Context mContext, String id, UserJson userInfo, boolean isCollect) {
         IBaseView iBaseView = (IBaseView) mContext;
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
         mVolleyRequest.setTag(getClass().getName());
@@ -225,6 +253,84 @@ public class TradeHandlerUtil {
             }
         }
         return null;
+    }
+
+    public void clearCollectBean(Context mContext) {
+        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, "");
+    }
+
+    /**
+     * 保存收藏的列表
+     *
+     * @param viewPointTradeList
+     */
+    public void saveCollectList(Context mContext, List<ViewPointTradeBean> viewPointTradeList) {
+        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, JSON.toJSONString(viewPointTradeList));
+    }
+
+    /**
+     * 保存收藏的Bean
+     *
+     * @param viewPointTradeBean
+     * @param isCollect
+     */
+    public void saveCollectBean(Context mContext, ViewPointTradeBean viewPointTradeBean, boolean isCollect) {
+        String collectJson = SPUtils.getString2(mContext, TradeHandlerFileName, collectBeanKey);
+
+        List<ViewPointTradeBean> viewPointTradeList;
+        if (!TextUtils.isEmpty(collectJson)) {
+            viewPointTradeList = JSONArray.parseArray(collectJson, ViewPointTradeBean.class);
+        } else {
+            viewPointTradeList = new ArrayList<>();
+        }
+
+        if (viewPointTradeList.size() > 100) {
+            viewPointTradeList.remove(0);
+        }
+        if (isCollect) {
+            viewPointTradeList.add(viewPointTradeBean);
+        } else {
+            Iterator<ViewPointTradeBean> iterator = viewPointTradeList.iterator();
+            while (iterator.hasNext()) {
+                ViewPointTradeBean next = iterator.next();
+                if (viewPointTradeBean.o_id.contains(next.o_id)) {
+                    iterator.remove();
+                }
+            }
+        }
+        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, JSON.toJSONString(viewPointTradeList));
+    }
+
+    /**
+     * 得到本地的收藏
+     *
+     * @param mContext
+     * @return
+     */
+    public List<ViewPointTradeBean> getLocalityCollectList(Context mContext, int start, int digit) {
+        String collectJson = SPUtils.getString2(mContext, TradeHandlerFileName, collectBeanKey);
+        List<ViewPointTradeBean> viewPointTradeList;
+        if (!TextUtils.isEmpty(collectJson)) {
+            viewPointTradeList = JSONArray.parseArray(collectJson, ViewPointTradeBean.class);
+        } else {
+            viewPointTradeList = new ArrayList<>();
+        }
+
+
+        if (Integer.MAX_VALUE == digit) {
+            return viewPointTradeList;
+        }
+        if (start >= viewPointTradeList.size()) {
+            return new ArrayList<>();
+        }
+
+        List<ViewPointTradeBean> subTrade;
+        try {
+            subTrade = viewPointTradeList.subList(start, start + digit);
+        } catch (Exception e) {
+            subTrade = viewPointTradeList.subList(start, viewPointTradeList.size());
+        }
+        return subTrade;
     }
 
 

@@ -25,12 +25,9 @@ import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
-import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +40,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.jyh.kxt.base.utils.MarketUtil.getMarketEditOption;
+import static com.library.bean.EventBusClass.EVENT_LOGOUT;
 import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 /**
@@ -157,7 +155,8 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
                         marketCodeList,
                         this);
                 break;
-            case EventBusClass.EVENT_MARKET_LOGIN_GONG:
+            case EventBusClass.EVENT_LOGIN:
+            case EventBusClass.EVENT_LOGOUT:
                 UserJson userInfo = LoginUtils.getUserInfo(getContext());
                 if(userInfo != null){
                     requestSynchronization(userInfo);

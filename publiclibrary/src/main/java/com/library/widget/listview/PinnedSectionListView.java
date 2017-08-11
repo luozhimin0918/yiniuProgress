@@ -103,9 +103,11 @@ public class PinnedSectionListView extends ListView {
      */
     int mTranslateY;
 
+    public int scrollState;
     /**
      * Scroll listener which does the magic
      */
+
     private final OnScrollListener mOnScrollListener = new OnScrollListener() {
 
         @Override
@@ -113,6 +115,7 @@ public class PinnedSectionListView extends ListView {
             if (mDelegateOnScrollListener != null) { // delegate
                 mDelegateOnScrollListener.onScrollStateChanged(view, scrollState);
             }
+            PinnedSectionListView.this.scrollState = scrollState;
         }
 
         @Override
@@ -577,5 +580,27 @@ public class PinnedSectionListView extends ListView {
 
     public void setShadowTopSpace(int mShadowTopSpace) {
         this.mShadowTopSpace = mShadowTopSpace;
+    }
+
+    public PinnedOffset getPinnedScrollY() {
+        View c = getChildAt(0);
+        if (c == null) {
+            return new PinnedOffset(0, 0);
+        }
+        int firstVisiblePosition = getFirstVisiblePosition();
+        int top = c.getTop();
+        PinnedOffset pinnedOffset = new PinnedOffset(firstVisiblePosition, top);
+//        return -top + firstVisiblePosition * c.getHeight();
+        return pinnedOffset;
+    }
+
+    public class PinnedOffset {
+        public int position;
+        public int offset;
+
+        public PinnedOffset(int position, int offset) {
+            this.position = position;
+            this.offset = offset;
+        }
     }
 }

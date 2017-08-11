@@ -426,7 +426,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     }
 
     @Override
-    public final void setMode(Mode mode) {
+    public   void setMode(Mode mode) {
         if (mode != mMode) {
             if (DEBUG) {
                 Log.d(LOG_TAG, "Setting mode to: " + mode);

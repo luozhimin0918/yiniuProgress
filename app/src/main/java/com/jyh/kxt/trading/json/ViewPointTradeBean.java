@@ -24,6 +24,16 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
         this.itemViewType = itemViewType;
     }
 
+    private boolean isSel;
+
+    public boolean isSel() {
+        return isSel;
+    }
+
+    public void setSel(boolean sel) {
+        isSel = sel;
+    }
+
     /**
      * 实体类
      * {
@@ -65,10 +75,10 @@ public class ViewPointTradeBean extends TradeHandlerUtil.TradeHandlerBean {
     public String o_action;
     public String o_id;
     public String is_top;
-
     public List<String> report;
     public List<String> picture;
-
     public ViewPointTradeBean forward;
 
+    public String is_follow;
+    public List<CommentDetailBean> comment;
 }

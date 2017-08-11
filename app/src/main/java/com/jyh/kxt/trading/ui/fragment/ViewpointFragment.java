@@ -4,6 +4,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
@@ -54,6 +55,11 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_HANDLER) {
             TradeHandlerUtil.EventHandlerBean intentObj = (TradeHandlerUtil.EventHandlerBean) eventBusClass.intentObj;
             viewpointPresenter.viewpointAdapter.handlerEventBus(intentObj);
+
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_LOGIN) {//登录之后刷新关注
+            viewpointPresenter.viewpointAdapter.loginAccount();
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_LOGOUT) {//退出登录之后关注数据清空
+            viewpointPresenter.viewpointAdapter.exitAccount();
         }
     }
 
@@ -63,6 +69,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
+        mRefreshableView.setFriction(ViewConfiguration.getScrollFriction() * 10);
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<PinnedSectionListView>() {
             @Override

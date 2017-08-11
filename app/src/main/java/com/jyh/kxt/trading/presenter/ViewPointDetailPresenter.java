@@ -27,7 +27,7 @@ import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.adapter.ViewPointDetailAdapter;
 import com.jyh.kxt.trading.json.CommentDetailBean;
-import com.jyh.kxt.trading.json.ViewPointDetailBean;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
@@ -61,7 +61,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
     private ViewPointDetailAdapter mViewPointDetailAdapter;
     private List<CommentDetailBean> commentDetailList = new ArrayList<>();
 
-    public ViewPointDetailBean viewPointDetailBean;
+    public ViewPointTradeBean mViewPointTradeBean;
     public ViewPointDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -114,10 +114,10 @@ public class ViewPointDetailPresenter extends BasePresenter {
             mainParam.put("uid", userInfo.getUid());
         }
 
-        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DETAIL, mainParam, new HttpListener<ViewPointDetailBean>() {
+        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DETAIL, mainParam, new HttpListener<ViewPointTradeBean>() {
             @Override
-            protected void onResponse(ViewPointDetailBean viewPointDetailBean) {
-                ViewPointDetailPresenter.this.viewPointDetailBean = viewPointDetailBean;
+            protected void onResponse(ViewPointTradeBean viewPointTradeBean) {
+                ViewPointDetailPresenter.this.mViewPointTradeBean = viewPointTradeBean;
 
                 /**
                  * 初始化LinearLayout
@@ -153,8 +153,8 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 /**
                  * set Adapter
                  */
-                if (viewPointDetailBean.comment != null && viewPointDetailBean.comment.size() != 0) {
-                    commentDetailList.addAll(viewPointDetailBean.comment);
+                if (viewPointTradeBean.comment != null && viewPointTradeBean.comment.size() != 0) {
+                    commentDetailList.addAll(viewPointTradeBean.comment);
                     mViewPointDetailActivity.mPullPinnedListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
                 } else {
                     mViewPointDetailActivity.commentPresenter.createNoneComment();
@@ -181,33 +181,33 @@ public class ViewPointDetailPresenter extends BasePresenter {
     private void headViewHandler(View mHeadDetailView) {
         ButterKnife.bind(this, mHeadDetailView);
 
-        estvContent.convertToGif(viewPointDetailBean.content);
-        tvNickName.setText(viewPointDetailBean.author_name);
+        estvContent.convertToGif(mViewPointTradeBean.content);
+        tvNickName.setText(mViewPointTradeBean.author_name);
 
-        CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointDetailBean.time * 1000);
+        CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", mViewPointTradeBean.time * 1000);
         tvTime.setText(formatCreateTime.toString());
 
-        if (viewPointDetailBean.num_good > 0) {
+        if (mViewPointTradeBean.num_good > 0) {
             mViewPointDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
-            mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
+            mViewPointDetailActivity.tvZanCount.setText(String.valueOf(mViewPointTradeBean.num_good));
         }
-        if (viewPointDetailBean.num_comment > 0) {
+        if (mViewPointTradeBean.num_comment > 0) {
             mViewPointDetailActivity.tvCommentCount.setVisibility(View.VISIBLE);
-            mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(viewPointDetailBean.num_comment));
+            mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(mViewPointTradeBean.num_comment));
         }
 
-        mViewPointDetailActivity.articlePresenter.setAuthorImage(roundImageView, viewPointDetailBean.author_img);
+        mViewPointDetailActivity.articlePresenter.setAuthorImage(roundImageView, mViewPointTradeBean.author_img);
 
-        if (viewPointDetailBean.picture != null) {
+        if (mViewPointTradeBean.picture != null) {
             mViewPointDetailActivity.articlePresenter.initGridView(gvPicture);
-            mViewPointDetailActivity.articlePresenter.setPictureAdapter(gvPicture, viewPointDetailBean.picture);
+            mViewPointDetailActivity.articlePresenter.setPictureAdapter(gvPicture, mViewPointTradeBean.picture);
         }
 
         mViewPointDetailActivity.articlePresenter.initTransmitView(rlTransmitLayout,
                 tvTransmitContent,
-                viewPointDetailBean.forward);
+                mViewPointTradeBean.forward);
 
-        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(viewPointDetailBean.o_id);
+        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(mViewPointTradeBean.o_id);
 
 
         if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
@@ -216,14 +216,14 @@ public class ViewPointDetailPresenter extends BasePresenter {
             mViewPointDetailActivity.ivZanView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 1, true);
+                    boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean , 1, true);
 
                     if (isSaveSuccess) {
                         mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
-                        viewPointDetailBean.num_good += 1;
-                        mViewPointDetailActivity.tvZanCount.setText(String.valueOf(viewPointDetailBean.num_good));
+                        mViewPointTradeBean.num_good += 1;
+                        mViewPointDetailActivity.tvZanCount.setText(String.valueOf(mViewPointTradeBean.num_good));
 
-                        TradeHandlerUtil.EventHandlerBean zanBean = new TradeHandlerUtil.EventHandlerBean(viewPointDetailBean.o_id);
+                        TradeHandlerUtil.EventHandlerBean zanBean = new TradeHandlerUtil.EventHandlerBean(mViewPointTradeBean.o_id);
                         zanBean.favourState = 1;
                         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_HANDLER, zanBean));
                     }
@@ -238,11 +238,11 @@ public class ViewPointDetailPresenter extends BasePresenter {
             @Override
             public void onClick(View v) {
                 boolean bool = !mViewPointDetailActivity.ivCollect.isSelected();
-                boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, viewPointDetailBean.o_id, 2, bool);
+                boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean , 2, bool);
                 if (isSaveSuccess) {
                     mViewPointDetailActivity.ivCollect.setSelected(bool);
 
-                    TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(viewPointDetailBean.o_id);
+                    TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(mViewPointTradeBean.o_id);
                     scBean.collectState = 1;
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_HANDLER, scBean));
                 }
@@ -261,7 +261,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
             }
         });
 
-        String followState = viewPointDetailBean.is_follow;
+        String followState = mViewPointTradeBean.is_follow;
         boolean isFollow = "1".equals(followState);
         cbAttention.setChecked(isFollow);
 
@@ -269,7 +269,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
             @Override
             public void onClick(View v) {
                 mViewPointDetailActivity.articlePresenter
-                        .requestAttentionState(String.valueOf(viewPointDetailBean.author_id), cbAttention.isChecked());
+                        .requestAttentionState(String.valueOf(mViewPointTradeBean.author_id), cbAttention.isChecked());
             }
         });
     }
@@ -366,6 +366,11 @@ public class ViewPointDetailPresenter extends BasePresenter {
                     ViewGroup parent = (ViewGroup) noneComment.getParent();
                     parent.removeView(noneComment);
                 }
+
+                mViewPointDetailActivity.tvCommentCount.setVisibility(View.VISIBLE);
+                mViewPointTradeBean.num_comment += 1;
+                mViewPointDetailActivity.tvCommentCount.setText(String.valueOf(mViewPointTradeBean.num_comment));
+
                 mCommentBean.setType(VarConstant.POINT);
                 commentDetailList.add(0, mCommentBean);
                 mViewPointDetailAdapter.notifyDataSetChanged();

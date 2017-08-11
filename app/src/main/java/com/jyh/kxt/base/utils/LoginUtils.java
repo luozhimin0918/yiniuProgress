@@ -5,11 +5,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.deser.impl.NullProvider;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
-import com.jyh.kxt.user.json.UserJson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,7 +30,6 @@ public class LoginUtils {
     public static void login(Context context, UserJson userInfo) {
         SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
-        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MARKET_LOGIN_GONG, userInfo));
     }
 
     /**
@@ -53,7 +51,6 @@ public class LoginUtils {
         SPUtils.save(context, SpConstant.USERINFO, "");
         UmengLoginTool.logout((Activity) context);
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGOUT, null));
-        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MARKET_LOGIN_GONG, null));
     }
 
     /**

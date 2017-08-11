@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
@@ -103,17 +102,19 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         } else {
             newsAdapter.setData(list);
         }
-        if (homeHeadView != null)
+        if (homeHeadView != null) {
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
-        plvContent.getRefreshableView().addHeaderView(homeHeadView);
+            plvContent.getRefreshableView().addHeaderView(homeHeadView);
+        }
     }
 
     public void refresh(List<AuthorNewsJson> list) {
         if (list != null && list.size() != 0) {
             newsAdapter.setData(list);
         }
-        if (homeHeadView != null)
+        if (homeHeadView != null) {
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+        }
         plvContent.getRefreshableView().addHeaderView(homeHeadView);
     }
 
@@ -168,8 +169,9 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (newsAdapter != null)
+        if (newsAdapter != null) {
             newsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -196,8 +198,9 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void hideLoginBar() {
-        if (loginLayout != null)
+        if (loginLayout != null) {
             plRootView.removeView(loginLayout);
+        }
     }
 
     @Override

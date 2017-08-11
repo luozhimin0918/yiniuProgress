@@ -29,6 +29,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
@@ -38,6 +39,7 @@ import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
@@ -96,7 +98,7 @@ public class ArticleContentPresenter {
      */
     public void initTransmitView(ViewGroup rlTransmitLayout,
                                  EmoticonSimpleTextView tvTransmitView,
-                                 ViewPointTradeBean forwardContent) {
+                                 final ViewPointTradeBean forwardContent) {
         if (forwardContent != null) {
             rlTransmitLayout.setVisibility(View.VISIBLE);
 
@@ -118,6 +120,16 @@ public class ArticleContentPresenter {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tvTransmitView.convertToGif(spannableBuilder);
+
+
+            rlTransmitLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, forwardContent.o_id);
+                    mContext.startActivity(intent);
+                }
+            });
         } else {
             rlTransmitLayout.setVisibility(View.GONE);
         }

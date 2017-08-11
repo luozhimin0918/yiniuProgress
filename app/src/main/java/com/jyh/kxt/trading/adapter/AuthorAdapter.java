@@ -481,7 +481,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 1, true);
+                        boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 1, true);
                         if (isSaveSuccess) {
                             viewPointTradeBean.isFavour = true;
                             articleContentPresenter.initTradeHandler(tvZanView, true);
@@ -541,8 +541,10 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                                 switch (view.getId()) {
                                     case R.id.point_function_sc:
                                         viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
-                                        articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
-                                        mTradeHandlerUtil.saveState(mContext, viewPointTradeBean.o_id, 2, viewPointTradeBean.isCollect);
+                                        boolean b = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean.isCollect);
+                                        if(b){
+                                            articleContentPresenter.setCollectState(tvSc, viewPointTradeBean.isCollect);
+                                        }
                                         break;
                                     case R.id.point_function_gz:
                                         boolean isGz = !"true".equals(tvGz.getTag());
