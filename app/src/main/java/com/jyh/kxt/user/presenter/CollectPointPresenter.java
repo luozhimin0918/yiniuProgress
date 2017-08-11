@@ -88,12 +88,30 @@ public class CollectPointPresenter extends BasePresenter {
                     collectPointFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectPointFragment.plRootView.loadEmptyData();
                 } else {
+
                     if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
                         notifyAdapter(manJson);
                         collectPointFragment.plRootView.loadOver();
                     } else {
                         notifyAdapter(manJson);
                     }
+
+                    List<ViewPointTradeBean> data = collectPointAdapter.getData();
+                    for (ViewPointTradeBean viewPointTradeBean : data) {
+                        viewPointTradeBean.tradeId = viewPointTradeBean.o_id;
+                        viewPointTradeBean.isCollect = true;
+                        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean =
+                                TradeHandlerUtil.getInstance().checkHandlerState (viewPointTradeBean.o_id);
+                        if(tradeHandlerBean == null ){
+                            viewPointTradeBean.isFavour = false;
+                        }else{
+                            viewPointTradeBean.isFavour = tradeHandlerBean.isFavour;
+                        }
+                    }
+
+                    mTradeHandlerUtil.clearCollectBean(mContext);
+                    mTradeHandlerUtil.saveCollectList(mContext,data);
+                    TradeHandlerUtil.getInstance().listCheckState(data);   //对 List 进行赞的遍历
                 }
             }
 
