@@ -114,8 +114,9 @@ public class SearchEditText extends RelativeLayout {
      */
     private void drawSearchView() {
         searchView = new ImageView(context);
-        searchView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search));
-        LayoutParams searchParams = new LayoutParams((int) searchImgSize, (int) searchImgSize);
+        Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search);
+        searchView.setImageDrawable(drawable);
+        LayoutParams searchParams = new LayoutParams(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         searchParams.leftMargin = (int) marginLeft;
         searchParams.addRule(RelativeLayout.CENTER_VERTICAL);
         searchParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -154,8 +155,9 @@ public class SearchEditText extends RelativeLayout {
      */
     private void drawClearView() {
         clearView = new ImageView(context);
-        clearView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_clear));
-        LayoutParams clearParams = new LayoutParams((int) clearImgSize, (int) clearImgSize);
+        Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_clear);
+        clearView.setImageDrawable(drawable);
+        LayoutParams clearParams = new LayoutParams(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         clearParams.rightMargin = (int) marginRight;
         clearParams.addRule(RelativeLayout.CENTER_VERTICAL);
         clearParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);

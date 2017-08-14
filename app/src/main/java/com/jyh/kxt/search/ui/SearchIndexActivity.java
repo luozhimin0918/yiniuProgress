@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -365,7 +366,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         headView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         headView.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color2));
         headView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext(), 40));
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext()
+                , 40));
         headView.setLayoutParams(params);
     }
 
