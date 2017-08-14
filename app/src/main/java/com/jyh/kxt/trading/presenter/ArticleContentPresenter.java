@@ -436,7 +436,9 @@ public class ArticleContentPresenter {
     SimplePopupWindow functionPopupWindow;
 
     public void showReportWindow(final String oid, final List<String> reportList) {
-
+        if (functionPopupWindow != null) {
+            functionPopupWindow.dismiss();
+        }
         functionPopupWindow = new SimplePopupWindow((Activity) mContext);
         functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 
@@ -499,6 +501,9 @@ public class ArticleContentPresenter {
     }
 
     public void showFunctionWindow(final ViewPointTradeBean viewPointTradeBean) {
+        if (functionPopupWindow != null) {
+            functionPopupWindow.dismiss();
+        }
         functionPopupWindow = new SimplePopupWindow((Activity) mContext);
         functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 

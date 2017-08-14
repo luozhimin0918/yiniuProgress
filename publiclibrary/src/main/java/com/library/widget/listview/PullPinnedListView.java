@@ -341,7 +341,7 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
         }
         tvNoMoreDataView = new TextView(getContext());
         tvNoMoreDataView.setText("暂无更多数据");
-        tvNoMoreDataView.setTag("noMoreData");
+        tvNoMoreDataView.setTag("addFootNoMore");
         int footHeight = SystemUtil.dp2px(getContext(), 40);
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, footHeight);
 

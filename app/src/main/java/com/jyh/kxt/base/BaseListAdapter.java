@@ -31,4 +31,8 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         return position;
     }
 
+    public void addData(T t) {
+        dataList.add(t);
+        notifyDataSetChanged();
+    }
 }

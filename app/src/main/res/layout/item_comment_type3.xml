@@ -42,7 +42,6 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:text="刚刚"
             android:textColor="@color/font_color9"
             android:textSize="@dimen/min_font_size"/>
@@ -82,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_je_sao"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="回复 岁月警号 你说的太对了 攒一个"
         android:textColor="@color/font_color64"
 
@@ -92,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_comment_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
@@ -100,14 +99,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_color2"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:textSize="@dimen/describe_font_size2"
             android:drawablePadding="5dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="2"
             android:text="我是标题"
             android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size4"
             android:visibility="visible"/>
 
         <View
@@ -121,7 +120,8 @@
             android:id="@+id/tv_read_title2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:textSize="@dimen/describe_font_size2"
             android:maxLines="2"
             android:background="@color/bg_color2"
             android:drawablePadding="5dp"
@@ -129,7 +129,6 @@
             android:gravity="center_vertical"
             android:text="我是标题"
             android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size4"
             android:visibility="visible"/>
     </LinearLayout>
 </RelativeLayout>

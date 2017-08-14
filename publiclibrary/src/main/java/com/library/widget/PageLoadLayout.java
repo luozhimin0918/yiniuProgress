@@ -51,7 +51,6 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     public void loadWait(BgColor bgColor, String desc) {
         removeLoading();
         llLoadView = mInflater.inflate(R.layout.volley_loading, this, false);
-        llLoadView.setOnClickListener(null);
 
         ImageView ivProgress = (ImageView) llLoadView.findViewById(R.id.iv_progress);
         Glide.with(getContext()).load(R.mipmap.loading).asGif().into(ivProgress);
@@ -123,6 +122,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     }
 
     private void updateView() {
+        llLoadView.setOnClickListener(null);
         addView(llLoadView);
     }
 

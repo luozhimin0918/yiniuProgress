@@ -89,7 +89,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
             protected void onResponse(List<CommentDetailBean> newCommentDetailList) {
                 mViewPointDetailActivity.mPullPinnedListView.onRefreshComplete();
                 if (newCommentDetailList.size() == 0) {
-                    mViewPointDetailActivity.mPullPinnedListView.noMoreData();
+                    mViewPointDetailActivity.mPullPinnedListView.addFootNoMore();
                     return;
                 }
                 commentDetailList.addAll(newCommentDetailList);

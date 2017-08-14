@@ -231,7 +231,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     List<CommentBean> comment = JsonUtil.parseArray(json, CommentBean.class);
                     videoDetailActivity.rvMessage.onRefreshComplete();
                     if (comment.size() == 0) {
-                        videoDetailActivity.rvMessage.noMoreData();
+                        videoDetailActivity.rvMessage.addFootNoMore();
                         return;
                     }
                     adapterCommentList.addAll(comment);
@@ -246,7 +246,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     if (adapterCommentList == null || adapterCommentList.size() == 0) {
                         videoDetailActivity.pllContent.loadError();
                     } else {
-                        videoDetailActivity.rvMessage.noMoreData();
+                        videoDetailActivity.rvMessage.addFootNoMore();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,10 +1,6 @@
 package com.jyh.kxt.datum.presenter;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -28,6 +24,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.util.MyImageSpan;
 import com.jyh.kxt.datum.bean.DataGroup;
 import com.jyh.kxt.datum.bean.DataHot;
 import com.jyh.kxt.datum.bean.DataList;
@@ -342,48 +339,7 @@ public class DataPresenter extends BasePresenter {
         }
     }
 
-    public class MyImageSpan extends ImageSpan {
 
-        public MyImageSpan(Drawable d) {
-            super(d);
-        }
-
-        public int getSize(Paint paint, CharSequence text, int start, int end,
-                           Paint.FontMetricsInt fm) {
-            Drawable d = getDrawable();
-            Rect rect = d.getBounds();
-            if (fm != null) {
-                Paint.FontMetricsInt fmPaint = paint.getFontMetricsInt();
-                int fontHeight = fmPaint.bottom - fmPaint.top;
-                int drHeight = rect.bottom - rect.top;
-
-                int top = drHeight / 2 - fontHeight / 4;
-                int bottom = drHeight / 2 + fontHeight / 4;
-
-                fm.ascent = -bottom;
-                fm.top = -bottom;
-                fm.bottom = top;
-                fm.descent = top;
-            }
-            return rect.right;
-        }
-
-        @Override
-        public void draw(Canvas canvas,
-                         CharSequence text,
-                         int start, int end,
-                         float x,
-                         int top,
-                         int y,
-                         int bottom,
-                         Paint paint) {
-            Drawable b = getDrawable();
-            canvas.save();
-            canvas.translate(x, top);
-            b.draw(canvas);
-            canvas.restore();
-        }
-    }
 
     public void onChangeTheme() {
         if (rightContentAdapter != null) {

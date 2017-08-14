@@ -42,6 +42,10 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
     @BindObject CommentListActivity commentListActivity;
     private CommentPresenter commentPresenter;
 
+    private int navPosition;
+    private int listType;
+
+
     HashMap<String, PullListViewPresenter> listViewMap = new HashMap<>();
 
     public CommentListPresenter(IBaseView iBaseView) {
@@ -52,10 +56,12 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
     }
 
     /**
-     * @param navPosition 最上方导航栏
-     * @param listType    我的评论  回复我的  观点
+     * @param navPosition 最上方导航栏 0我的评论 1回复我的
+     * @param listType    0 文章  1视听 2 观点
      */
-    public void requestList(int navPosition, final int listType) {
+    public void requestList(int navPosition, int listType) {
+        this.navPosition = navPosition;
+        this.listType = listType;
 
         String requestUrl = null;
         switch (navPosition) {
@@ -92,7 +98,9 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
             }
         }
 
-        PullListViewPresenter presenter = listViewMap.get(navPosition + "" + listType);
+        String contentTag = navPosition + "" + listType;
+
+        PullListViewPresenter presenter = listViewMap.get(contentTag);
         if (presenter == null) {
             presenter = new PullListViewPresenter(iBaseView);
             presenter.createView(commentListActivity.flContent);
@@ -122,22 +130,19 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
             presenter.setLoadMode(PullListViewPresenter.LoadMode.PAGE_LOAD);
             presenter.setRequestInfo(requestUrl, parameterJson, dataClass);
             presenter.setAdapter(baseListAdapter);
+            presenter.switchContentView();
+            presenter.startRequest();
 
-
-            presenter.replaceContentView();
-
-            presenter.pullStartRequest();
-
-            listViewMap.put(navPosition + "" + listType, presenter);
+            listViewMap.put(contentTag, presenter);
         } else {
-            presenter.replaceContentView();
+            presenter.switchContentView();
         }
 
         presenter.setOnLoadMoreListener(new PullListViewPresenter.OnLoadMoreListener() {
             @Override
-            public void alterParameter(List dataList, JSONObject jsonObject) {
+            public void beforeParameter(List dataList, JSONObject jsonObject) {
                 String lastId = null;
-                switch (listType) {
+                switch (CommentListPresenter.this.listType) {
                     case 0:
                     case 1:
                         CommentBean commentBean = (CommentBean) dataList.get(dataList.size() - 1);
@@ -164,8 +169,7 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
      * @param parentId    0 表示回复的新评论  1 回复别人的评论  2 回复别人的回复评论
      */
     @Override
-    public void onPublish(final PopupWindow popupWindow, final EditText commentEdit, CommentBean commentBean,
-                          int parentId) {
+    public void onPublish(final PopupWindow popupWindow, final EditText commentEdit, CommentBean commentBean, int parentId) {
         String commentContent = commentEdit.getText().toString();
         if (commentContent.trim().length() == 0) {
             commentEdit.setText("");
@@ -198,17 +202,37 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("type", commentBean.getType());
-        jsonParam.put("object_id", commentBean.getObject_id());
         jsonParam.put("uid", userInfo.getUid());
         jsonParam.put("accessToken", userInfo.getToken());
         jsonParam.put("content", commentContent);
 
-        if (parentId != 0) {
-            jsonParam.put("parent_id", parentId);
+        String commentUrl = null;
+
+        switch (listType) {
+            case 0:
+            case 1:
+                commentUrl = HttpConstant.COMMENT_PUBLISH;
+                jsonParam.put("object_id", commentBean.getObject_id());
+                if (parentId != 0) {
+                    jsonParam.put("parent_id", parentId);
+                }
+                break;
+            case 2:
+                PointJson mPointJson = (PointJson) commentBean;
+                commentUrl = HttpConstant.VP_COMMENT_PUBLISH;
+                jsonParam.put("type", "point");
+                jsonParam.put("object_id", String.valueOf(mPointJson.getO_id()));
+                jsonParam.put("parent_id", String.valueOf(parentId));
+                if (parentId != 0) {
+                    jsonParam.put("root_id", String.valueOf(mPointJson.getRoot_id()));
+                }
+
+                break;
         }
-        volleyRequest.doPost(HttpConstant.COMMENT_PUBLISH, jsonParam, new HttpListener<CommentBean>() {
+
+        volleyRequest.doPost(commentUrl, jsonParam, new HttpListener<String>() {
             @Override
-            protected void onResponse(CommentBean mCommentBean) {
+            protected void onResponse(String jsonData) {
                 popupWindow.dismiss();
                 commentEdit.setText("");
 
@@ -221,6 +245,22 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
                 if (popupWindow instanceof PopupUtil) {
                     ((PopupUtil) popupWindow).addLock(false);
                 }
+
+//                String contentTag = navPosition + "" + listType;
+//                PullListViewPresenter presenter = listViewMap.get(contentTag);
+//                BaseListAdapter baseListAdapter = presenter.getBaseListAdapter();
+//                switch (listType) {
+//                    case 0:
+//                    case 1:
+//                        CommentBean myComment1 = JSONObject.parseObject(jsonData, CommentBean.class);
+//                        baseListAdapter.addData(myComment1);
+//                        break;
+//                    case 2:
+//                        PointJson myComment2 = JSONObject.parseObject(jsonData, PointJson.class);
+//                        baseListAdapter.addData(myComment2);
+//                        break;
+//                }
+
             }
 
             @Override

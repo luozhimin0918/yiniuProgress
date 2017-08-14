@@ -29,6 +29,7 @@ import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
@@ -335,8 +336,31 @@ public class ViewpointAdapter extends BaseAdapter implements
                     articleContentPresenter.showFunctionWindow(viewPointTradeBean);
                 }
             });
-        }
 
+            /**
+             * 点击头像
+             */
+            rivUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AuthorActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
+                    mContext.startActivity(intent);
+                }
+            });
+
+            /**
+             * 点击昵称
+             */
+            tvNickName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AuthorActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
     }
 
     class ViewHolder2 {

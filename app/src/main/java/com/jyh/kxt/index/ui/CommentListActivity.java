@@ -45,7 +45,6 @@ public class CommentListActivity extends BaseActivity {
 
         commentListPresenter = new CommentListPresenter(this);
         commentListPresenter.requestList(navPosition, listType);
-
     }
 
     @OnClick({R.id.iv_bar_break, R.id.comment_list_my_comment, R.id.comment_list_reply_me,

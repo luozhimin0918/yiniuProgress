@@ -115,7 +115,7 @@ public class EmoticonSimpleTextView extends TextView {
 
                 }, matcherStart, matcherEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                String marketName = marketKeyMap.get("title");
+                String marketName = "$" + marketKeyMap.get("title") + "$";
 
                 currentSpannable.replace(matcherStart, matcherEnd, marketName);
                 matcherContentLength += marketMatcher.end() - marketMatcher.start() - marketName.length();

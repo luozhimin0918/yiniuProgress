@@ -363,7 +363,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
     private TextView tvFootTextView;
 
-    public void noMoreData() {
+    public void addFootNoMore() {
         if (tvFootTextView != null) {
             return;
         }
@@ -375,7 +375,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
         }
         tvFootTextView = new TextView(getContext());
         tvFootTextView.setText("暂无更多数据");
-        tvFootTextView.setTag("noMoreData");
+        tvFootTextView.setTag("addFootNoMore");
         int footHeight = SystemUtil.dp2px(getContext(), 40);
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(
                 AbsListView.LayoutParams.MATCH_PARENT, footHeight);
@@ -391,6 +391,20 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
             }
         });
+    }
+
+    public void removeFootNoMore() {
+        if (tvFootTextView == null) {
+            return;
+        }
+        Mode mode = getMode();
+        if (mode == Mode.DISABLED) {
+            setMode(Mode.PULL_FROM_END);
+        } else if (mode == Mode.PULL_FROM_START) {
+            setMode(Mode.BOTH);
+        }
+        getRefreshableView().removeFooterView(tvFootTextView);
+        tvFootTextView = null;
     }
 
     public void onChangeTheme() {

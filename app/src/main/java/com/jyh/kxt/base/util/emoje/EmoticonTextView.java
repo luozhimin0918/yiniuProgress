@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.dao.EmojeBean;
+import com.jyh.kxt.base.util.MyImageSpan;
 import com.jyh.kxt.base.util.TextGifDrawable;
 import com.jyh.kxt.base.utils.EmoJeUtil;
 import com.jyh.kxt.base.utils.GlideCircleTransform;
@@ -79,7 +80,7 @@ public class EmoticonTextView extends TextView {
                                 int firstImgHeight = SystemUtil.dp2px(getContext(), 20);
                                 bitmapDrawable.setBounds(0, 0, firstImgHeight, firstImgHeight);
 
-                                ImageSpan mEmoJeImageSpan = new ImageSpan(bitmapDrawable, ImageSpan.ALIGN_BASELINE);
+                                MyImageSpan mEmoJeImageSpan = new MyImageSpan(bitmapDrawable);
                                 currentSpannable.setSpan(
                                         mEmoJeImageSpan,
                                         0, //这里因为没有加上中括号

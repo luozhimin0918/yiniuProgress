@@ -140,8 +140,8 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                 });
                 mViewHolder2.tvPrimaryMessage.setText(String.valueOf(commentBean.getParent_num_reply()));
                 mViewHolder2.tvPrimaryTime.setText(getSimpleTime(commentBean.getParent_create_time()));
-                String convertContent = "@" + commentBean.getParent_member_nickname() +
-                        ":" +
+                String convertContent = "@ " + commentBean.getParent_member_nickname() +
+                        ": " +
                         commentBean.getParent_content();
                 int nickNameLnegth = commentBean.getParent_member_nickname().length() + 2;//这里包括@ 和 :
 
@@ -156,10 +156,12 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                         setReadTitle(mViewHolder2.tvPrimaryReadTitle, commentBean);
                         mViewHolder2.tvPrimaryThumb.setVisibility(View.GONE);
                         mViewHolder2.tvPrimaryMessage.setVisibility(View.GONE);
+                        mViewHolder2.tvPrimaryTime.setVisibility(View.GONE);
                         break;
                     case 2:
                         mViewHolder2.tvPrimaryReadTitle.setVisibility(View.VISIBLE);
                         setReadTitle(mViewHolder2.tvPrimaryReadTitle, commentBean);
+                        mViewHolder2.tvPrimaryTime.setVisibility(View.GONE);
                         break;
                 }
                 mViewHolder2.tvPrimaryMessage.setOnClickListener(new View.OnClickListener() {

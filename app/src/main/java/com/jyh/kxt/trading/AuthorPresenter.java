@@ -139,7 +139,7 @@ public class AuthorPresenter extends BasePresenter {
                 @Override
                 public void run() {
                     authorActivity.plContent.onRefreshComplete();
-//                    authorActivity.plContent.noMoreData();
+//                    authorActivity.plContent.addFootNoMore();
                 }
             }, 500);
         }

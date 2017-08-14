@@ -28,7 +28,9 @@ import butterknife.ButterKnife;
  * Created by Mr'Dai on 2017/8/11.
  */
 
-public class PullListViewPresenter extends BasePresenter implements PullToRefreshBase.OnRefreshListener2<ListView> {
+public class PullListViewPresenter extends BasePresenter implements PullToRefreshBase.OnRefreshListener2<ListView>, PageLoadLayout
+        .OnAfreshLoadListener {
+
     enum LoadMode {
         LIST_PULL, PAGE_LOAD
     }
@@ -39,7 +41,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
     private LoadMode mLoadMode = LoadMode.LIST_PULL;
 
     public interface OnLoadMoreListener {
-        void alterParameter(List dataList, JSONObject jsonObject);
+        void beforeParameter(List dataList, JSONObject jsonObject);
     }
 
     @BindView(R.id.pll_content) PageLoadLayout mPageLoadLayout;
@@ -50,8 +52,21 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
 
     private BaseListAdapter baseListAdapter;
     private String url;
-    private JSONObject jsonObject;
+    /**
+     * 下拉参数
+     */
+    private JSONObject startParams;
+    /**
+     * 上拉加载更多参数
+     */
+    private JSONObject endParams;
+
     private Class<?> jsonBeanClass;
+
+    /**
+     * 对于视图的Tag
+     */
+    private String contentTag;
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
@@ -72,10 +87,18 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
         mPullToRefreshListView.setAdapter(baseListAdapter);
     }
 
-    public void setRequestInfo(String url, JSONObject jsonObject, Class<?> jsonBeanClass) {
+    public void setRequestInfo(String url, JSONObject defaultParams, Class<?> jsonBeanClass) {
         this.url = url;
-        this.jsonObject = jsonObject;
+        this.startParams = defaultParams;
         this.jsonBeanClass = jsonBeanClass;
+
+        startParams.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+        startParams.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+
+        startParams.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
+        startParams.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
+
+        this.endParams = JSONObject.parseObject(startParams.toJSONString());
     }
 
     //创建视图
@@ -86,6 +109,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
 
         mPullToRefreshListView.setOnRefreshListener(this);
         mPullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mPageLoadLayout.setOnAfreshLoadListener(this);
 
         return contentView;
     }
@@ -94,7 +118,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
     /**
      * 开始请求接口
      */
-    public void pullStartRequest() {
+    public void startRequest() {
         if (mLoadMode == LoadMode.PAGE_LOAD) {
             mPageLoadLayout.loadWait();
         } else {
@@ -109,11 +133,10 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
     private void requestListData() {
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
 
-        jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
-        jsonObject.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
-        mVolleyRequest.doPost(url, jsonObject, new HttpListener<String>() {
+        mVolleyRequest.doPost(url, startParams, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
+                mPullToRefreshListView.removeFootNoMore();
 
                 List<?> arrayList = JSONArray.parseArray(s, jsonBeanClass);
                 if (arrayList.size() == 0) {
@@ -142,7 +165,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
      */
     private void requestLoadMore() {
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
-        mVolleyRequest.doPost(url, jsonObject, new HttpListener<String>() {
+        mVolleyRequest.doPost(url, endParams, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
                 mPageLoadLayout.loadOver();
@@ -150,7 +173,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
 
                 List<?> arrayList = JSONArray.parseArray(s, jsonBeanClass);
                 if (arrayList.size() == 0) {
-                    mPullToRefreshListView.noMoreData();
+                    mPullToRefreshListView.addFootNoMore();
                     return;
                 }
                 baseListAdapter.dataList.addAll(arrayList);
@@ -164,12 +187,25 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
         });
     }
 
-    /**
-     * 替换View 视图
-     */
-    public void replaceContentView() {
+    public void switchContentView() {
         fatherView.removeAllViews();
         fatherView.addView(contentView);
+    }
+
+    /**
+     * 替换View 视图
+     *
+     * @param contentTag
+     */
+    public void switchContentView(String contentTag) {
+        if (this.contentTag == null) {
+            this.contentTag = contentTag;
+        }
+        //Tag一致则认为是当前的视图
+        if (contentTag.equals(fatherView.getTag())) {
+            fatherView.removeAllViews();
+            fatherView.addView(contentView);
+        }
     }
 
 
@@ -180,14 +216,30 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-        if (mOnLoadMoreListener != null) {
-            mOnLoadMoreListener.alterParameter(baseListAdapter.dataList, jsonObject);
+        try {
+            if (baseListAdapter.dataList == null || baseListAdapter.dataList.size() == 0) {
+                return;
+            }
+            if (mOnLoadMoreListener != null) {
+                mOnLoadMoreListener.beforeParameter(baseListAdapter.dataList, endParams);
+            }
+            requestLoadMore();
+        } catch (Exception e) {
+
         }
-        requestLoadMore();
     }
 
 
+    @Override
+    public void OnAfreshLoad() {
+        startRequest();
+    }
+
     public View getContentView() {
         return contentView;
+    }
+
+    public BaseListAdapter getBaseListAdapter() {
+        return baseListAdapter;
     }
 }

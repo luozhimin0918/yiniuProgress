@@ -270,7 +270,7 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 if (list.size() < 5) {
                     plContent.setMode(PullToRefreshBase.Mode.DISABLED);
                 } else if (!authorPresenter.isMore()) {
-                    plContent.noMoreData();
+                    plContent.addFootNoMore();
                 }
 
                 List<AuthorNewsJson> data;

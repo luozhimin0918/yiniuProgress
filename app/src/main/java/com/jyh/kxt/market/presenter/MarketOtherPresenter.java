@@ -1,20 +1,14 @@
 package com.jyh.kxt.market.presenter;
 
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
-import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
-import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.fragment.MarketItemFragment;
@@ -40,7 +34,40 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         super(iBaseView);
     }
 
-    public void generateAdapter() {
+   /* public void generateWebSocketAdapter() {
+        marketItemFragment.pageLoadLayout.loadOver();
+
+        MarketVPFragment parentFragment = (MarketVPFragment) marketItemFragment.getParentFragment();
+        parentFragment.getNavBean(marketItemFragment);
+
+        marketDataList.clear();
+        marketCodeList.clear();
+        marketItemFragment.marketMap.clear();
+
+        List<MarketItemBean> marketList = new ArrayList<>();
+        if (marketMainItemAdapter == null) {
+            marketDataList.addAll(marketList);
+            marketMainItemAdapter = new MarketMainItemAdapter(mContext, marketDataList);
+            marketItemFragment.ptrlvContent.setAdapter(marketMainItemAdapter);
+        } else {
+            marketDataList.addAll(marketList);
+            marketMainItemAdapter.notifyDataSetChanged();
+        }
+
+        for (MarketItemBean marketItemBean : marketDataList) {
+            marketCodeList.add(marketItemBean.getCode());
+            marketItemFragment.marketMap.put(marketItemBean.getCode(), marketItemBean);
+            //赋值默认的初始值
+            marketItemBean.setSwitchTarget(marketItemBean.getRange());
+        }
+
+        MarketConnectUtil.getInstance().sendSocketParams(
+                iBaseView,
+                marketCodeList,
+                MarketOtherPresenter.this);
+    }*/
+
+    public void generateNetWorkAdapter() {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         volleyRequest.setTag(marketItemFragment.navBean.getCode());
 
@@ -104,11 +131,12 @@ public class MarketOtherPresenter extends BasePresenter implements OnSocketTextM
         marketItemFragment.switchItemType = marketItemFragment.switchItemType == 0 ? 1 : 0;
         marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
 
-        if (marketMainItemAdapter != null && marketMainItemAdapter.dataList != null)
+        if (marketMainItemAdapter != null && marketMainItemAdapter.dataList != null) {
             for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {
                 marketItemBean.setSwitchTarget(
                         marketItemFragment.switchItemType == 0 ? marketItemBean.getRange() : marketItemBean.getChange());
             }
+        }
     }
 
     public void onChangeTheme() {

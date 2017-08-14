@@ -91,7 +91,8 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
             ptrlvContent.setLayoutParams(contentParams);
 
             marketOtherPresenter = new MarketOtherPresenter(this);
-            marketOtherPresenter.generateAdapter();
+            marketOtherPresenter.generateNetWorkAdapter();
+//            marketOtherPresenter.generateWebSocketAdapter();
 
         }
         ptrlvContent.setMode(PullToRefreshBase.Mode.DISABLED);

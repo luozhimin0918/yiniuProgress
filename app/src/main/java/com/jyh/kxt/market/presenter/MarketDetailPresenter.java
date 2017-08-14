@@ -1,12 +1,9 @@
 package com.jyh.kxt.market.presenter;
 
 import android.content.res.Configuration;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,8 +14,6 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.util.SystemUtil;
-import com.superplayer.library.utils.SuperPlayerUtils;
 
 /**
  * Created by Mr'Dai on 2017/7/18.
@@ -41,11 +36,11 @@ public class MarketDetailPresenter extends BasePresenter {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
 
 
-        String url = "http://120.26.97.99:15772/chartbyrows?interval=%s&type=%s&rows=%s&code=%s";
+        String url = "http://120.26.97.99:15772/chartbyrows?interval=%s&type=%s&code=%s";
         String marketDataUrl;
 
         if (fromSource == 0) {
-            marketDataUrl = String.format(url, "1", "areas", "800", code);
+            marketDataUrl = String.format(url, "1", "areas", code);
         } else {
             String time = "1";
             switch (fromSource) {
@@ -72,11 +67,11 @@ public class MarketDetailPresenter extends BasePresenter {
                     break;
             }
 
-            marketDataUrl = String.format(url, time, "candlestick", "800", code);
+            marketDataUrl = String.format(url, time, "candlestick", code);
         }
 
         volleyRequest.setDefaultDecode(false);
-        volleyRequest.setTag(code  );
+        volleyRequest.setTag(code);
         volleyRequest.doGet(marketDataUrl, httpListener);
     }
 
