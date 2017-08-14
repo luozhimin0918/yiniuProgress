@@ -44,6 +44,8 @@ public class SpConstant {
      */
     public static String EMOJE_IS_INIT = "emoje_is_init";
 
+
+    public static final String SEARCH_QUOTE = "search_quote";
     /**
      * 搜索历史
      */

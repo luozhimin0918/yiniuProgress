@@ -22,15 +22,18 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.index.adapter.VideoSearchAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
+import com.jyh.kxt.search.json.PointJson;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.QuoteJson;
 import com.jyh.kxt.search.presenter.SearchItemPresenter;
+import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.jyh.kxt.trading.adapter.ColumnistAdapter;
 import com.jyh.kxt.trading.adapter.ViewpointSearchAdapter;
 import com.jyh.kxt.trading.json.ColumnistListJson;
@@ -167,6 +170,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     } else {
                         viewpointAdapter.setData(dataCopy);
                     }
+                    AutoCompleteUtils.saveData(getContext(),dataCopy);
                     viewpointAdapter.setSearchKey(searchKey);
                 }
                 break;
@@ -241,6 +245,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                         quoteAdapter2.setData(disposeData(data));
                     }
                     quoteAdapter2.setSearchKey(searchKey);
+                    AutoCompleteUtils.saveData(getContext(),data);
                 }
                 break;
         }
@@ -339,6 +344,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                         quoteAdapter2.addData(disposeData(data));
                     }
                     quoteAdapter2.setSearchKey(searchKey);
+                    AutoCompleteUtils.saveData(getContext(),data);
                 }
                 break;
         }
@@ -380,7 +386,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_SEARCH_TYPE, VarConstant.SEARCH_TYPE_VIEWPOINT));
             }
         });
-        AbsListView.LayoutParams params=new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext(),35));
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext()
+                , 35));
         footView.setLayoutParams(params);
     }
 
@@ -402,6 +409,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         vLine3 = viewQuote.findViewById(R.id.v_line3);
 
         quoteAdapter = new QuoteAdapter(getContext(), data);
+        AutoCompleteUtils.saveData(getContext(),data);
         quoteAdapter.setSearchKey(searchKey);
         rvContentQuote.setAdapter(quoteAdapter);
         fixListViewHeight(rvContentQuote);
@@ -447,7 +455,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         if (vLine3 != null) vLine3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         if (tvMoreQuote != null) tvMoreQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color8));
 
-        if(footView!=null) footView.setTextColor(ContextCompat.getColor(getContext(),R.color.font_color8));
+        if (footView != null) footView.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color8));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -483,8 +491,25 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         } else {
             tvMoreQuote.setVisibility(View.GONE);
         }
+        AutoCompleteUtils.saveData(getContext(),quoteJson.getData());
     }
 
+
+    public void initMain(PointJson viewpoints) {
+        String is_more = viewpoints.getIs_more();
+        if (is_more != null && is_more.equals("1")) {
+            footView.setVisibility(View.VISIBLE);
+        } else {
+            footView.setVisibility(View.GONE);
+        }
+        init(viewpoints.getData());
+        plContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                plContent.onRefreshComplete();
+            }
+        }, 200);
+    }
 
     public void init(List data) {
         switch (searchType) {
@@ -495,14 +520,14 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 } else {
                     plContent.getRefreshableView().addHeaderView(homeHeadView);
 
-                    if(footView==null) initFootView();
+                    if (footView == null) initFootView();
                     plContent.getRefreshableView().addFooterView(footView);
 
                     List dataCopy = new ArrayList();
-                    if (data != null && data.size() > 3) {
+                    if (data.size() > 3) {
                         dataCopy.addAll(data.subList(0, 3));
                     } else {
-                        dataCopy.add(data);
+                        dataCopy.addAll(data);
                     }
 
                     if (viewpointAdapter == null) {
@@ -604,6 +629,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     }
                     quoteAdapter2.setSearchKey(searchKey);
                     plRootView.loadOver();
+                    AutoCompleteUtils.saveData(getContext(),data);
                 }
                 break;
         }
@@ -740,4 +766,5 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         listView.setLayoutParams(params);
 
     }
+
 }

@@ -18,6 +18,24 @@ public class QuoteItemJson {
     private String id;
     private String name;
     private String code;
+    private String letter;
+    private String pinyin;
+
+    public String getLetter() {
+        return letter;
+    }
+
+    public void setLetter(String letter) {
+        this.letter = letter;
+    }
+
+    public String getPinyin() {
+        return pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
+    }
 
     public String getId() {
         return id;

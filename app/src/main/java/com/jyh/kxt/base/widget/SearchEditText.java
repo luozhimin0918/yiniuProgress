@@ -13,13 +13,23 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.manager.ConnectivityMonitor;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.search.adapter.AutoCompleteAdapter;
+import com.jyh.kxt.search.json.QuoteItemJson;
 import com.library.util.SystemUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 项目名:Kxt
@@ -42,13 +52,14 @@ public class SearchEditText extends RelativeLayout {
     private int textColor;
     private int hintColor;
     private String text = "", hint = "";
-    private EditText editText;
+    private AutoCompleteTextView editText;
     private ImageView clearView;
     private int edtMarginLeft;
     private int edtMarginRight;
 
     private boolean isShowClearBtn = true;//是否显示清除按钮
     private ImageView searchView;
+    private AutoCompleteAdapter adapter;
 
     public SearchEditText(Context context) {
         this(context, null);
@@ -115,12 +126,14 @@ public class SearchEditText extends RelativeLayout {
      * 输入控件
      */
     private void drawInputView() {
-        editText = new EditText(context);
+        editText = new AutoCompleteTextView(context);
+        editText.setThreshold(1);//设置从第几个字符开始出现提示
         editText.setBackground(null);
         editText.setTextSize(textSize);
         editText.setTextColor(textColor);
         editText.setHintTextColor(hintColor);
         editText.setHint(hint);
+        editText.setDropDownHeight(SystemUtil.getScreenDisplay(context).heightPixels / 3);//设置下拉列表高度
         editText.setSingleLine(true);
         editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         RelativeLayout.LayoutParams editParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -130,6 +143,10 @@ public class SearchEditText extends RelativeLayout {
         editText.setPadding(0, 0, 0, 0);
 
         addView(editText, editParams);
+    }
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        if (editText != null) editText.setOnItemClickListener(onItemClickListener);
     }
 
     /**
@@ -187,6 +204,20 @@ public class SearchEditText extends RelativeLayout {
             editText.setHint(hint);
     }
 
+    /**
+     * 关闭下拉提示框
+     */
+    public void dismissDropDown() {
+        if (editText != null)
+            editText.dismissDropDown();
+    }
+
+    public ListAdapter getAdapter() {
+        if (editText != null)
+            return editText.getAdapter();
+        return null;
+    }
+
     public class TextWatcher implements android.text.TextWatcher {
 
         @Override
@@ -230,4 +261,42 @@ public class SearchEditText extends RelativeLayout {
             searchView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_search_edt_search));
         invalidate();
     }
+
+    public void setAdapter(AutoCompleteAdapter adapter) {
+        this.adapter = adapter;
+        if (editText != null && adapter != null)
+            editText.setAdapter(adapter);
+    }
+
+    public void setData(List<QuoteItemJson> data) {
+        if (adapter != null) {
+            if (adapter.dataList == null) {
+                adapter.dataList = new ArrayList<>();
+            }
+            adapter.dataList.clear();
+            adapter.dataList.addAll(data);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void addData(List<QuoteItemJson> data) {
+        if (adapter != null) {
+            if (adapter.dataList == null) {
+                adapter.dataList = new ArrayList<>();
+            }
+            adapter.dataList.addAll(data);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void addData(QuoteItemJson data) {
+        if (adapter != null) {
+            if (adapter.dataList == null) {
+                adapter.dataList = new ArrayList<>();
+            }
+            adapter.dataList.add(data);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 }

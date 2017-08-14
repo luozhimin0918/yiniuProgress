@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -24,9 +25,11 @@ import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
+import com.jyh.kxt.search.adapter.AutoCompleteAdapter;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.presenter.SearchPresenter;
+import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.jyh.kxt.trading.adapter.ColumnistAdapter;
 import com.jyh.kxt.trading.adapter.ViewpointSearchAdapter;
 import com.jyh.kxt.trading.json.ColumnistListJson;
@@ -167,6 +170,22 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             }
         });
 
+        if (type.equals(VarConstant.SEARCH_TYPE_QUOTE)) {
+            edtSearch.setAdapter(new AutoCompleteAdapter(AutoCompleteUtils.getData(this), this));
+            edtSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ListAdapter adapter = edtSearch.getAdapter();
+                    if (adapter != null) {
+                        QuoteItemJson item = (QuoteItemJson) adapter.getItem(position);
+                        String name = item.getName();
+                        edtSearch.setText(name);
+                        presenter.search(name);
+                    }
+                }
+            });
+        }
+
         edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
 
     }
@@ -262,7 +281,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                                 marketSearchAdapter.setSearchKey(searchKey);
                                 marketSearchAdapter.setData(disposeData(marketItemBeens));
                             }
-
+                            AutoCompleteUtils.saveData(this, marketItemBeens);
+                            edtSearch.setData(AutoCompleteUtils.getData(this));
                             hideSearchHistory();
                         }
                         break;
@@ -365,6 +385,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                             } else {
                                 marketSearchAdapter.setData(disposeData(marketItemBeens));
                             }
+                            AutoCompleteUtils.saveData(this, marketItemBeens);
+                            edtSearch.setData(AutoCompleteUtils.getData(this));
                             marketSearchAdapter.setSearchKey(searchKey);
                             hideSearchHistory();
                         }
@@ -439,11 +461,13 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         }
                         break;
                     case VarConstant.SEARCH_TYPE_QUOTE:
-                        List<MarketItemBean> marketItemBeen = JSON.parseArray(info, MarketItemBean.class);
+                        List<QuoteItemJson> marketItemBeen = JSON.parseArray(info, QuoteItemJson.class);
                         if (marketItemBeen == null || marketItemBeen.size() == 0) {
                         } else {
                             marketSearchAdapter.addData(disposeData(marketItemBeen));
                             marketSearchAdapter.setSearchKey(searchKey);
+                            AutoCompleteUtils.saveData(this, marketItemBeen);
+                            edtSearch.setData(AutoCompleteUtils.getData(this));
                             hideSearchHistory();
                         }
                         break;
