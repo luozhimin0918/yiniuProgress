@@ -182,7 +182,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                     titleViewHolder.ntlTitleView.setData(R.array.nav_trading);
                     titleViewHolder.ntlTitleView.setAcceptTouchRect(true);
                     titleViewHolder.ntlTitleView.setIndicatorStyle(NavigationTabLayout.STYLE_TRIANGLE);
-                    titleViewHolder.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
+//                    titleViewHolder.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
 
                     if (type == TYPE_VIEWPOINT) {
                         titleViewHolder.ntlTitleView.setCurrentTab(0);
@@ -444,7 +444,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     static class TitleViewHolder {
         @BindView(R.id.ntl_title_view) NavigationTabLayout ntlTitleView;
-        @BindView(R.id.v_line) View line;
+//        @BindView(R.id.v_line) View line;
 
         TitleViewHolder(View view) {
             ButterKnife.bind(this, view);
