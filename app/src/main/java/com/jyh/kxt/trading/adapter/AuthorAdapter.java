@@ -221,7 +221,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                         viewpointViewHolder.setData(viewPointTradeBean);
                         viewpointViewHolder.setItemViewColor(convertView);
 
-                        viewpointViewHolder.tvContent.convertToGif(viewPointTradeBean.content);
+                        setTop(viewpointViewHolder.tvContent,location,viewPointTradeBean);
                         viewpointViewHolder.tvNickName.setText(viewPointTradeBean.author_name);
 
                         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
