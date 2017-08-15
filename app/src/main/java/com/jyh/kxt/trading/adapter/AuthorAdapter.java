@@ -169,8 +169,8 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
                     setTitleTheme(titleViewHolder.ntlTitleView);
                     titleViewHolder.ntlTitleView.setData(R.array.nav_trading);
+                    titleViewHolder.ntlTitleView.setOpenContainerAnimator(false);
                     titleViewHolder.ntlTitleView.setAcceptTouchRect(true);
-                    titleViewHolder.ntlTitleView.setIndicatorStyle(NavigationTabLayout.STYLE_TRIANGLE);
 //                    titleViewHolder.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
 
                     if (type == TYPE_VIEWPOINT) {
@@ -179,7 +179,6 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                         titleViewHolder.ntlTitleView.setCurrentTab(1);
                     }
                     titleViewHolder.ntlTitleView.setOnTabSelectListener(this);
-
                     break;
                 case TYPE_ARTICLE:
                     if (type == TYPE_ARTICLE) {

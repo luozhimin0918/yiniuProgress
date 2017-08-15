@@ -80,7 +80,7 @@ public class NavigationTabLayout extends LinearLayout {
     private float mIndicatorMarginRight;
     private float mIndicatorMarginBottom;
     private int mIndicatorGravity;
-    private boolean mIndicatorWidthEqualTitle;
+    private boolean mIndicatorWidthEqualTitle ;
 
     /**
      * underline
@@ -165,7 +165,7 @@ public class NavigationTabLayout extends LinearLayout {
                                 STYLE_BLOCK ? 7 : 0));
         mIndicatorGravity = ta.getInt(com.library.R.styleable.SlidingTabLayout_tl_indicator_gravity, Gravity.BOTTOM);
         mIndicatorWidthEqualTitle = ta.getBoolean(com.library.R.styleable
-                .SlidingTabLayout_tl_indicator_width_equal_title, false);
+                .SlidingTabLayout_tl_indicator_width_equal_title, true);
 
         mUnderlineColor = ta.getColor(com.library.R.styleable.SlidingTabLayout_tl_underline_color, Color.parseColor
                 ("#ffffff"));
@@ -392,9 +392,9 @@ public class NavigationTabLayout extends LinearLayout {
     private float margin;
 
     private void calcIndicatorRect() {
-        if (animatorState != 0) {
-            return;
-        }
+//        if (animatorState != 0) {
+//            return;
+//        }
         animatorState = 1;
 
         View oldTabView = mTabsContainer.getChildAt(mOldClickPosition);
@@ -405,7 +405,7 @@ public class NavigationTabLayout extends LinearLayout {
         float right = oldTabView.getRight();
 
         //for mIndicatorWidthEqualTitle
-        if (mIndicatorStyle == STYLE_NORMAL && mIndicatorWidthEqualTitle) {
+        if ((mIndicatorStyle == STYLE_NORMAL || mIndicatorStyle == STYLE_TRIANGLE) && mIndicatorWidthEqualTitle) {
             TextView tab_title = (TextView) oldTabView.findViewById(com.library.R.id.tv_tab_title);
             mTextPaint.setTextSize(mTextsize);
             float textWidth = mTextPaint.measureText(tab_title.getText().toString());
@@ -424,7 +424,7 @@ public class NavigationTabLayout extends LinearLayout {
             right = right + offsetRight;
 
             //for mIndicatorWidthEqualTitle
-            if (mIndicatorStyle == STYLE_NORMAL && mIndicatorWidthEqualTitle) {
+            if ((mIndicatorStyle == STYLE_NORMAL || mIndicatorStyle == STYLE_TRIANGLE) && mIndicatorWidthEqualTitle) {
                 TextView next_tab_title = (TextView) nextTabView.findViewById(com.library.R.id.tv_tab_title);
                 mTextPaint.setTextSize(mTextsize);
                 float nextTextWidth = mTextPaint.measureText(next_tab_title.getText().toString());
@@ -690,8 +690,8 @@ public class NavigationTabLayout extends LinearLayout {
         mCurrentClickPosition = tabPosition;
         mCurrentPositionOffset = 1;
         animatorState = 0;
+        invalidate();
         updateTabSelection(mCurrentClickPosition);
-        postInvalidate();
 
         new Handler().postDelayed(new Runnable() {
             @Override

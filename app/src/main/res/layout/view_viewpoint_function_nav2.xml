@@ -12,6 +12,7 @@
     tl:tl_indicator_color="@color/theme1"
     tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
 
+    tl:tl_indicator_style = "TRIANGLE"
     tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
     tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
     tl:tl_tab_padding="10dp"

@@ -566,8 +566,8 @@ public class ArticleContentPresenter {
                             requestAttentionState(viewPointTradeBean.author_id, isGz, new HttpCallBack() {
                                 @Override
                                 public void onResponse(Status status) {
-                                    if (status == Status.SUCCESS) {
-                                        setAttentionState(tvGz, isGz);
+                                    if (status == Status.ERROR) {
+                                        setAttentionState(tvGz, !isGz);
                                     }
                                 }
                             });
