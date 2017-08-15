@@ -1,5 +1,8 @@
 package com.jyh.kxt.trading.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +27,7 @@ import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -132,7 +136,20 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                     functionPopupWindow.dismiss();
                     switch (v.getId()) {
                         case R.id.iv_fun_url:
-
+                            //复制链接
+                            try {
+                                //获取剪切板服务
+                                ClipboardManager clipboard = (ClipboardManager)getSystemService(Context
+                                        .CLIPBOARD_SERVICE);
+                                //然后把数据放在ClipData对象中
+                                ClipData clip = ClipData.newPlainText("simple text", mViewPointTradeBean.shareDict.url);
+                                //把clip对象放在剪贴板中
+                                clipboard.setPrimaryClip(clip);
+                                ToastView.makeText3(ViewPointDetailActivity.this, "链接复制成功");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ToastView.makeText3(ViewPointDetailActivity.this, "复制链接失败，请重试");
+                            }
                             break;
                         case R.id.iv_fun_jb:
                             articlePresenter.showReportWindow(mViewPointTradeBean.o_id, mViewPointTradeBean.report);
