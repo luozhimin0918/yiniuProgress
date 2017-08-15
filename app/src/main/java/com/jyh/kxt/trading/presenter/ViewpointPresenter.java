@@ -151,6 +151,7 @@ public class ViewpointPresenter extends BasePresenter {
                             }
                         }
                     });
+                    
 
                     rollDotViewPager = (RollDotViewPager) mGridHotViewLayout.findViewById(R.id.rdvp_content);
                     rollDotViewPager.setViewPageToDotAbout();

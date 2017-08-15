@@ -156,6 +156,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder0.navigationTabLayout.setIndicatorColor(ContextCompat.getColor(mContext, R.color.indicator_color));
                 viewHolder0.navigationTabLayout.setTextSelectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
                 viewHolder0.navigationTabLayout.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
+                viewHolder0.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
 
                 break;
             case 1:
@@ -231,6 +232,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     class ViewHolder0 {
         @BindView(R.id.ntl_title_view) NavigationTabLayout navigationTabLayout;
+        @BindView(R.id.v_line) View line;
 
         ViewHolder0(View contentView) {
             ButterKnife.bind(this, contentView);
