@@ -116,8 +116,8 @@ public class DBManager {
         }
 
         private void upgradeToVersion1(Database db) {
-            MarkBeanDao.createTable(db, true);
-            ViewPointTradeBeanDao.createTable(db, true);
+            MarkBeanDao.createTable(db, false);
+            ViewPointTradeBeanDao.createTable(db, false);
         }
     }
 }
