@@ -1,15 +1,18 @@
 package com.jyh.kxt.trading.util;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.database.Cursor;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.dao.DaoSession;
+import com.jyh.kxt.base.dao.MarkBean;
+import com.jyh.kxt.base.dao.MarkBeanDao;
+import com.jyh.kxt.base.dao.ViewPointTradeBeanDao;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.user.json.UserJson;
@@ -17,12 +20,15 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
-import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 
+import org.greenrobot.greendao.database.Database;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mr'Dai on 2017/8/4.
@@ -30,20 +36,6 @@ import java.util.List;
  */
 
 public class TradeHandlerUtil {
-
-    /**
-     * Sp 文件名称
-     */
-    private final static String TradeHandlerFileName = "tradehandler";
-
-    /**
-     * 存储的点赞,收藏的Key 值
-     */
-    private final static String tradeKey = "trade";
-    /**
-     * 存储的收藏的对象
-     */
-    private final static String collectBeanKey = "collectbean";
 
     static TradeHandlerUtil tradeHandlerUtil;
 
@@ -54,44 +46,75 @@ public class TradeHandlerUtil {
         return tradeHandlerUtil;
     }
 
-    private List<TradeHandlerBean> tradeHandlerList = new ArrayList<>();
+    /**
+     * 查询一个数据集合中的收藏状态
+     *
+     * @param mContext
+     * @param oId
+     */
+    public MarkBean entityCheckState(Context mContext, String oId) {
+        if (oId == null) return null;
 
-    public void initTradeHandler(Context mContext) {
-        tradeHandlerList.clear();
-        String tradeJson = SPUtils.getString2(mContext, TradeHandlerFileName, tradeKey);
-        if (tradeJson != null && !tradeJson.isEmpty()) {
-            tradeHandlerList.addAll(JSONArray.parseArray(tradeJson, TradeHandlerBean.class));
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        MarkBeanDao markBeanDao = mDBManager.getDaoSessionRead().getMarkBeanDao();
+        MarkBean markBean = markBeanDao.queryBuilder().where(MarkBeanDao.Properties.OId.eq(oId)).unique();
+        if (markBean == null) {
+            markBean = new MarkBean();
+            markBean.setUserId(oId);
         }
+        return markBean;
     }
 
-    public void listCheckState(List<ViewPointTradeBean> checkList) {
-        if (checkList == null) return;
-        for (ViewPointTradeBean viewPointTradeBean : checkList) {
-            TradeHandlerBean tradeHandlerBean = checkHandlerState(viewPointTradeBean.o_id);
-            if (tradeHandlerBean != null) {
-                viewPointTradeBean.isFavour = tradeHandlerBean.isFavour;
-                viewPointTradeBean.isCollect = tradeHandlerBean.isCollect;
-            }
-        }
+    public void listCheckState(Context mContext, List<ViewPointTradeBean> checkList) {
+        listCheckState(mContext, checkList, null);
     }
 
     /**
-     * 可能为空
+     * 查询一个数据集合中的收藏状态
      *
-     * @param id
-     * @return
+     * @param mContext
+     * @param checkList
      */
-    public TradeHandlerBean checkHandlerState(String id) {
-        return contains(id);
+    public void listCheckState(Context mContext, List<ViewPointTradeBean> checkList, String sql) {
+        if (checkList == null || checkList.size() == 0) return;
+
+        StringBuffer objectIds = new StringBuffer();
+        //组织Map List
+        Map<String, ViewPointTradeBean> pointMap = new HashMap<>();
+        for (ViewPointTradeBean viewPointTradeBean : checkList) {
+            pointMap.put(viewPointTradeBean.getO_id(), viewPointTradeBean);
+            objectIds.append(viewPointTradeBean.getO_id() + ",");
+        }
+        objectIds.deleteCharAt(objectIds.length() - 1);
+
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        Database mDataBase = mDBManager.getDaoSessionRead().getDatabase();
+        Cursor cursor;
+        if (sql == null) {
+            cursor = mDataBase.rawQuery("SELECT * FROM MARK_BEAN WHERE O_ID in (" + objectIds.toString() + ")", new String[]{});
+        } else {
+            cursor = mDataBase.rawQuery("SELECT * FROM MARK_BEAN WHERE O_ID in (" + objectIds.toString() + ") " + sql, new String[]{});
+        }
+
+        while (cursor.moveToNext()) {
+            String oId = cursor.getString(cursor.getColumnIndex("O_ID"));
+            int favourState = cursor.getInt(cursor.getColumnIndex("FAVOUR_STATE"));
+            int collectState = cursor.getInt(cursor.getColumnIndex("COLLECT_STATE"));
+
+            ViewPointTradeBean viewPointTradeBean = pointMap.get(oId);
+            if (viewPointTradeBean != null) {
+                viewPointTradeBean.isFavour = favourState != 0;
+                viewPointTradeBean.isCollect = collectState != 0;
+            }
+        }
+        cursor.close();
     }
 
     public void updateCollect(Context mContext, String id, boolean isCollect) {
-        for (TradeHandlerBean handlerBean : tradeHandlerList) {
-            if (id.equals(handlerBean.tradeId)) {
-                handlerBean.isCollect = isCollect;
-            }
-        }
-        SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
+        int collectState = isCollect ? 1 : 0;
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        Database mDataBase = mDBManager.getDaoSessionWrit().getDatabase();
+        mDataBase.execSQL("UPDATE MARK_BEAN SET COLLECT_STATE = ? WHERE O_ID=?", new String[]{String.valueOf(collectState), id});
     }
 
 
@@ -103,64 +126,58 @@ public class TradeHandlerUtil {
 
     /**
      * @param mContext
-     * @param type     1 交易圈列表的赞  2 收藏 3
+     * @param type     1 交易圈列表的赞  2 收藏
      * @param bool
      * @return
      */
     //isSaveSuccess
     public boolean saveState(Context mContext, ViewPointTradeBean viewPointTradeBean, int type, boolean bool) {
         try {
-            String id = viewPointTradeBean.o_id;
 
             if (!NetUtils.isNetworkAvailable(mContext)) {
                 ToastView.makeText3(mContext, "暂无网络,点赞失败");
                 return false;
             }
 
-//            UserJson userInfo = LoginUtils.getUserInfo(mContext);
-//            if (type == 2) {
-//                if (userInfo == null) {
-//                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
-//                    return false;
-//                }
-//            }
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
 
-            TradeHandlerBean historyTradeHandlerBean = checkHandlerState(id);
+            /**
+             * 对于标记的ID的DAO 如果存在则替换否则增加
+             */
 
-            if (historyTradeHandlerBean == null) {
-                historyTradeHandlerBean = new TradeHandlerBean();
-                historyTradeHandlerBean.tradeId = id;
-                if (type == 1 || type == 3) {
-                    historyTradeHandlerBean.isFavour = bool;
-                } else if (type == 2) {
-                    historyTradeHandlerBean.isCollect = bool;
-                }
-                tradeHandlerList.add(historyTradeHandlerBean);
-            } else {
-                switch (type) {
-                    case 1:
-                    case 3:
-                        historyTradeHandlerBean.isFavour = bool;
-                        break;
-                    case 2:
-                        historyTradeHandlerBean.isCollect = bool;
-                        break;
-                }
+            DBManager mDBManager = DBManager.getInstance(mContext);
+            MarkBeanDao markBeanDao = mDBManager.getDaoSessionWrit().getMarkBeanDao();
+
+            MarkBean markBean = markBeanDao.queryBuilder().where(MarkBeanDao.Properties.OId.eq(viewPointTradeBean.o_id)).unique();
+            if (markBean == null) {
+                markBean = new MarkBean();
             }
-            SPUtils.save2(mContext, TradeHandlerFileName, tradeKey, JSONObject.toJSONString(tradeHandlerList));
+            markBean.setOId(viewPointTradeBean.o_id);
 
-            if (type == 1) {  //发起网络请求
-                requestFavour(mContext, id);
+            if (userInfo != null) {
+                markBean.setUserId(userInfo.getUid());
+            }
+            if (type == 1 || type == 3) {
+                viewPointTradeBean.isFavour = bool;
+                markBean.setFavourState(bool ? 1 : 0);
             } else if (type == 2) {
-                UserJson userInfo = LoginUtils.getUserInfo(mContext);
-                if (userInfo != null) {
-                    requestCollect(mContext, id, userInfo, viewPointTradeBean, historyTradeHandlerBean.isCollect);
-                } else {
-                    saveCollectBean(mContext, viewPointTradeBean, historyTradeHandlerBean.isCollect);  //同时保存一份收藏到Sp本地文件中
-                }
+                viewPointTradeBean.isCollect = bool;
+                markBean.setCollectState(bool ? 1 : 0);
+            }
+            markBeanDao.insertOrReplace(markBean);
 
-            } else if (type == 3) {
-                requestFavour2(mContext, id);
+            /**
+             * 发起网络请求
+             */
+            if (type == 1 || type == 3) {  //发起网络请求
+                requestFavour(mContext, viewPointTradeBean.o_id);
+            } else if (type == 2) {
+                if (userInfo != null) {
+                    requestCollect(mContext, userInfo, viewPointTradeBean, bool);
+                } else {
+                    ViewPointTradeBeanDao viewPointTradeBeanDao = mDBManager.getDaoSessionWrit().getViewPointTradeBeanDao();
+                    viewPointTradeBeanDao.insertOrReplace(viewPointTradeBean);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,17 +230,30 @@ public class TradeHandlerUtil {
         });
     }
 
+    public boolean getCollectState(Context mContext, String id) {
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        MarkBeanDao markBeanDao = mDBManager.getDaoSessionWrit().getMarkBeanDao();
+        MarkBean markBean = markBeanDao.queryBuilder().where(MarkBeanDao.Properties.OId.eq(id)).unique();
+        if (markBean == null) {
+            return false;
+        } else {
+            return markBean.getCollectState() == 1;
+        }
+    }
+
     /**
      * 收藏
      *
      * @param mContext
-     * @param id
      * @param userInfo
      * @param viewPointTradeBean
      * @param isCollect
      */
-    public void requestCollect(final Context mContext, String id, UserJson userInfo, final ViewPointTradeBean viewPointTradeBean, final
-    boolean isCollect) {
+    public void requestCollect(final Context mContext,
+                               UserJson userInfo,
+                               final ViewPointTradeBean viewPointTradeBean,
+                               final boolean isCollect) {
+
         IBaseView iBaseView = (IBaseView) mContext;
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
         mVolleyRequest.setTag(getClass().getName());
@@ -232,7 +262,7 @@ public class TradeHandlerUtil {
 
         mainParam.put("uid", userInfo.getUid());
         mainParam.put("accessToken", userInfo.getToken());
-        mainParam.put("id", id);
+        mainParam.put("id", viewPointTradeBean.o_id);
         mainParam.put("type", "point");
 
         String collectUrl;
@@ -245,26 +275,11 @@ public class TradeHandlerUtil {
         mVolleyRequest.doPost(collectUrl, mainParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
-                saveCollectBean(mContext, viewPointTradeBean, isCollect);  //同时保存一份收藏到Sp本地文件中
+                DBManager mDBManager = DBManager.getInstance(mContext);
+                ViewPointTradeBeanDao viewPointTradeBeanDao = mDBManager.getDaoSessionWrit().getViewPointTradeBeanDao();
+                viewPointTradeBeanDao.insertOrReplace(viewPointTradeBean);
             }
         });
-    }
-
-    private TradeHandlerBean contains(String id) {
-        Iterator<TradeHandlerBean> it = tradeHandlerList.iterator();
-        if (id != null) {
-            while (it.hasNext()) {
-                TradeHandlerBean next = it.next();
-                if (id.equals(next.tradeId)) {
-                    return next;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void clearCollectBean(Context mContext) {
-        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, "");
     }
 
     /**
@@ -273,42 +288,26 @@ public class TradeHandlerUtil {
      * @param viewPointTradeList
      */
     public void saveCollectList(Context mContext, List<ViewPointTradeBean> viewPointTradeList) {
-        tradeHandlerList.addAll(viewPointTradeList);
-        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, JSON.toJSONString(viewPointTradeList));
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        DaoSession daoSessionWrit = mDBManager.getDaoSessionWrit();
+        //保存到本地收藏
+        ViewPointTradeBeanDao viewPointTradeBeanDao = daoSessionWrit.getViewPointTradeBeanDao();
+        viewPointTradeBeanDao.insertOrReplaceInTx(viewPointTradeList);
+
+        //同时保存一份到MarkBean中
+        MarkBeanDao markBeanDao = daoSessionWrit.getMarkBeanDao();
+
+        List<MarkBean> markList = new ArrayList<>();
+        for (ViewPointTradeBean viewPointTradeBean : viewPointTradeList) {
+            MarkBean markBean = new MarkBean();
+            markBean.setOId(viewPointTradeBean.o_id);
+            markBean.setCollectState(viewPointTradeBean.isCollect ? 1 : 0);
+            markBean.setFavourState(viewPointTradeBean.isFavour ? 1 : 0);
+            markList.add(markBean);
+        }
+        markBeanDao.insertOrReplaceInTx(markList);
     }
 
-    /**
-     * 保存收藏的Bean
-     *
-     * @param viewPointTradeBean
-     * @param isCollect
-     */
-    public void saveCollectBean(Context mContext, ViewPointTradeBean viewPointTradeBean, boolean isCollect) {
-        String collectJson = SPUtils.getString2(mContext, TradeHandlerFileName, collectBeanKey);
-
-        List<ViewPointTradeBean> viewPointTradeList;
-        if (!TextUtils.isEmpty(collectJson)) {
-            viewPointTradeList = JSONArray.parseArray(collectJson, ViewPointTradeBean.class);
-        } else {
-            viewPointTradeList = new ArrayList<>();
-        }
-
-        if (viewPointTradeList.size() > 100) {
-            viewPointTradeList.remove(0);
-        }
-        if (isCollect) {
-            viewPointTradeList.add(viewPointTradeBean);
-        } else {
-            Iterator<ViewPointTradeBean> iterator = viewPointTradeList.iterator();
-            while (iterator.hasNext()) {
-                ViewPointTradeBean next = iterator.next();
-                if (viewPointTradeBean.o_id.contains(next.o_id)) {
-                    iterator.remove();
-                }
-            }
-        }
-        SPUtils.save2(mContext, TradeHandlerFileName, collectBeanKey, JSON.toJSONString(viewPointTradeList));
-    }
 
     /**
      * 得到本地的收藏
@@ -317,28 +316,24 @@ public class TradeHandlerUtil {
      * @return
      */
     public List<ViewPointTradeBean> getLocalityCollectList(Context mContext, int start, int digit) {
-        String collectJson = SPUtils.getString2(mContext, TradeHandlerFileName, collectBeanKey);
-        List<ViewPointTradeBean> viewPointTradeList;
-        if (!TextUtils.isEmpty(collectJson)) {
-            viewPointTradeList = JSONArray.parseArray(collectJson, ViewPointTradeBean.class);
-        } else {
-            viewPointTradeList = new ArrayList<>();
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        ViewPointTradeBeanDao viewPointTradeBeanDao = mDBManager.getDaoSessionRead().getViewPointTradeBeanDao();
+
+        List<ViewPointTradeBean> subTrade =
+                viewPointTradeBeanDao
+                        .queryBuilder().limit(digit).offset(start).list();
+
+        listCheckState(mContext, subTrade);
+
+        //查询出来收藏已经取消的 则删除
+        Iterator<ViewPointTradeBean> iterator = subTrade.iterator();
+        while (iterator.hasNext()) {
+            ViewPointTradeBean next = iterator.next();
+            if (!next.isCollect) {
+                iterator.remove();
+            }
         }
 
-
-        if (Integer.MAX_VALUE == digit) {
-            return viewPointTradeList;
-        }
-        if (start >= viewPointTradeList.size()) {
-            return new ArrayList<>();
-        }
-
-        List<ViewPointTradeBean> subTrade;
-        try {
-            subTrade = viewPointTradeList.subList(start, start + digit);
-        } catch (Exception e) {
-            subTrade = viewPointTradeList.subList(start, viewPointTradeList.size());
-        }
         return subTrade;
     }
 
@@ -357,8 +352,7 @@ public class TradeHandlerUtil {
         jsonParam.put(VarConstant.HTTP_UID, userJson.getUid());
         jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN, userJson.getToken());
 
-        List<ViewPointTradeBean> localityCollectList = getLocalityCollectList(mContext, localityCount, VarConstant
-                .LIST_MAX_SIZE);
+        List<ViewPointTradeBean> localityCollectList = getLocalityCollectList(mContext, localityCount, VarConstant.LIST_MAX_SIZE);
 
         Iterator<ViewPointTradeBean> iterator = localityCollectList.iterator();
         String ids = "";
@@ -415,15 +409,8 @@ public class TradeHandlerUtil {
         });
     }
 
-
-    public static class TradeHandlerBean {
-        public String tradeId;
-        public boolean isFavour = false; //是否赞
-        public boolean isCollect = false; //是否收藏
-    }
-
     public static class EventHandlerBean {
-        public String tradeId;
+        public String tradeId;//
         public int favourState = 0;// 1 赞   0 取消赞
         public int collectState = 0; // 1 收藏   0 取消收藏
         public int commentState = 0; // 1 评论   0 没评论

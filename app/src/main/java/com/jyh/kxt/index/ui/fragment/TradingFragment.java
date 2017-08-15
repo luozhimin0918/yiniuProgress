@@ -19,7 +19,6 @@ import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
-import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
@@ -54,8 +53,6 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_trading, LibActivity.StatusBarColor.THEME1);
-
-        TradeHandlerUtil.getInstance().initTradeHandler(getContext());
 
         ivRightIcon1.setImageResource(R.mipmap.icon_search);
 

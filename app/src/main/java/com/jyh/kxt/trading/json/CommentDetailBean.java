@@ -9,10 +9,14 @@ import java.util.List;
  */
 
 public class CommentDetailBean extends CommentBean {
+
+    /**
+     * 后台返回的
+     */
     private int sub_comment_count;
     private int root_id;
     private List<CommentDetailBean> sub_comment;
-    private String  parent_member_name;
+    private String parent_member_name;
 
     public int getSub_comment_count() {
         return sub_comment_count;

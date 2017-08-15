@@ -3,7 +3,6 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -380,7 +379,7 @@ public class ViewpointAdapter extends BaseAdapter implements
     @Override
     public int getItemViewType(int position) {
         ViewPointTradeBean viewPointTradeBean = dataList.get(position);
-        return viewPointTradeBean.getItemViewType();
+        return viewPointTradeBean.itemViewType;
     }
 
     @Override
@@ -411,7 +410,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         if (tradeList.size() == 0 && fromSource == 0) {//如果没有数据, 则添加类型为2的空数据
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
-            viewPointTradeBean.setItemViewType(2);
+            viewPointTradeBean.itemViewType = 2;
             tradeList.add(viewPointTradeBean);
 
             if (mPullPinnedListView != null) {
@@ -425,10 +424,10 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         if (fromSource == 0) { //如果来源是0 表示初次使用这个数据源  1 则表示读取的缓存数据源
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
-            viewPointTradeBean.setItemViewType(0);
+            viewPointTradeBean.itemViewType = 0;
             tradeList.add(0, viewPointTradeBean);
         }
-        TradeHandlerUtil.getInstance().listCheckState(tradeList);   //对 List 进行赞的遍历
+        TradeHandlerUtil.getInstance().listCheckState(mContext, tradeList);   //对 List 进行赞的遍历
     }
 
     @Override
@@ -458,20 +457,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
 
-        if (tabClickPosition == navigationTabClickPosition) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    PinnedSectionListView.PinnedOffset pinnedOffset = listViewOffset.get(tabClickPosition);
-                    if (pinnedOffset == null) {
-                        mPullPinnedListView.getRefreshableView().setSelection(0);
-                    } else {
-//                mPullPinnedListView.getRefreshableView().smoothScrollToPositionFromTop(pinnedOffset.position, pinnedOffset.offset, 0);
-                        mPullPinnedListView.getRefreshableView().setSelection(pinnedOffset.position);
-                    }
-                }
-            }, 150);
-        }
 
         List<ViewPointTradeBean> viewPointTradeBeen = pointListMap.get(requestNavigationType);
 
@@ -489,12 +474,12 @@ public class ViewpointAdapter extends BaseAdapter implements
                 uId = userInfo.getUid();
             }
         }
-
         if (viewPointTradeBeen == null) {
-            //请求网络显示转圈
+
             final IBaseView iBaseView = (IBaseView) mContext;
             iBaseView.showWaitDialog(null);
 
+            //请求网络显示转圈
             VolleyRequest mVolleyRequest = new VolleyRequest(iBaseView.getContext(), iBaseView.getQueue());
             mVolleyRequest.setTag(getClass().getName());
 
@@ -535,6 +520,14 @@ public class ViewpointAdapter extends BaseAdapter implements
         } else {
             replaceDataAndNotifyDataSetChanged(viewPointTradeBeen, 1);
         }
+
+        PinnedSectionListView.PinnedOffset pinnedOffset = listViewOffset.get(tabClickPosition);
+        if (pinnedOffset == null) {
+            mPullPinnedListView.getRefreshableView().setSelection(0);
+        } else {
+            mPullPinnedListView.getRefreshableView().setSelection(pinnedOffset.position);
+        }
+
     }
 
 
@@ -546,7 +539,7 @@ public class ViewpointAdapter extends BaseAdapter implements
     public void refreshAdapterData(List<ViewPointTradeBean> newTradeBeanList, PullToRefreshBase.Mode mode) {
 
         //对 List 进行赞的遍历
-        TradeHandlerUtil.getInstance().listCheckState(newTradeBeanList);
+        TradeHandlerUtil.getInstance().listCheckState(mContext, newTradeBeanList);
 
         switch (navigationTabClickPosition) {
             case 0:
@@ -589,9 +582,13 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (intentObj.favourState == 1) {
                         viewPointTradeBean.isFavour = true;
                         viewPointTradeBean.num_good += 1;
+                    } else {
+
                     }
                     if (intentObj.collectState == 1) {
                         viewPointTradeBean.isCollect = true;
+                    } else {
+                        viewPointTradeBean.isCollect = false;
                     }
 
                     if (intentObj.commentState == 1) {
@@ -602,6 +599,7 @@ public class ViewpointAdapter extends BaseAdapter implements
         }
         notifyDataSetChanged();
     }
+
 
     /**
      * 退出或者登录之后 关注界面所发生的改变

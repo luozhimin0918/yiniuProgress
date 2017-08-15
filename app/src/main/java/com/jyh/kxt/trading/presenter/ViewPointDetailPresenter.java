@@ -22,6 +22,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.dao.MarkBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -62,6 +63,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
     private List<CommentDetailBean> commentDetailList = new ArrayList<>();
 
     public ViewPointTradeBean mViewPointTradeBean;
+
     public ViewPointDetailPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
@@ -119,6 +121,11 @@ public class ViewPointDetailPresenter extends BasePresenter {
             protected void onResponse(ViewPointTradeBean viewPointTradeBean) {
                 ViewPointDetailPresenter.this.mViewPointTradeBean = viewPointTradeBean;
 
+                MarkBean markBean = TradeHandlerUtil.getInstance().entityCheckState(mContext, mViewPointTradeBean.o_id);
+                if (markBean != null) {
+                    viewPointTradeBean.isCollect = markBean.getCollectState() == 1;
+                    viewPointTradeBean.isFavour = markBean.getFavourState() == 1;
+                }
                 /**
                  * 初始化LinearLayout
                  */
@@ -207,16 +214,13 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 tvTransmitContent,
                 mViewPointTradeBean.forward);
 
-        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(mViewPointTradeBean.o_id);
-
-
-        if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
+        if (mViewPointTradeBean.isFavour) {
             mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
         } else {
             mViewPointDetailActivity.ivZanView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean , 1, true);
+                    boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean, 1, true);
 
                     if (isSaveSuccess) {
                         mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
@@ -230,7 +234,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 }
             });
         }
-        if (tradeHandlerBean != null && tradeHandlerBean.isCollect) {
+        if (mViewPointTradeBean.isCollect) {
             mViewPointDetailActivity.ivCollect.setSelected(true);
         }
 
@@ -238,12 +242,12 @@ public class ViewPointDetailPresenter extends BasePresenter {
             @Override
             public void onClick(View v) {
                 boolean bool = !mViewPointDetailActivity.ivCollect.isSelected();
-                boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean , 2, bool);
+                boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean, 2, bool);
                 if (isSaveSuccess) {
                     mViewPointDetailActivity.ivCollect.setSelected(bool);
 
                     TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(mViewPointTradeBean.o_id);
-                    scBean.collectState = 1;
+                    scBean.collectState = bool ? 1 : 0;
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_HANDLER, scBean));
                 }
             }
@@ -254,7 +258,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
             public void onClick(View v) {
                 if (isToComment) {
                     mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(2);
-                }else{
+                } else {
                     mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(0);
                 }
                 isToComment = !isToComment;

@@ -188,8 +188,7 @@ public class ThumbView extends RelativeLayout {
 
         if (VarConstant.POINT.equals(commentBean.getType())) {
             //交易圈处理
-            TradeHandlerUtil.TradeHandlerBean tradeHandlerBean = TradeHandlerUtil.getInstance().checkHandlerState(String.valueOf(thumbId));
-            if (tradeHandlerBean != null && tradeHandlerBean.isFavour) {
+            if (commentBean != null && commentBean.isFavour) {
                 ivThumb.setImageResource(R.mipmap.icon_comment_like);
                 if (count == 0) {
                     count = 1;

@@ -55,7 +55,6 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_HANDLER) {
             TradeHandlerUtil.EventHandlerBean intentObj = (TradeHandlerUtil.EventHandlerBean) eventBusClass.intentObj;
             viewpointPresenter.viewpointAdapter.handlerEventBus(intentObj);
-
         } else if (eventBusClass.fromCode == EventBusClass.EVENT_LOGIN) {//登录之后刷新关注
             viewpointPresenter.viewpointAdapter.loginAccount();
         } else if (eventBusClass.fromCode == EventBusClass.EVENT_LOGOUT) {//退出登录之后关注数据清空

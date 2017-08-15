@@ -119,7 +119,7 @@ public class CollectPointAdapter extends BaseAdapter {
         } else {
             viewHolder1.flDel.setVisibility(View.GONE);
         }
-        viewHolder1.ivDel.setSelected(viewPointTradeBean.isSel());
+        viewHolder1.ivDel.setSelected(viewPointTradeBean.isSel);
 
         viewHolder1.setData(viewPointTradeBean);
         viewHolder1.setItemViewColor(convertView);
@@ -148,9 +148,9 @@ public class CollectPointAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (isEdit) {
-                    boolean isSelPoint = viewPointTradeBean.isSel();
+                    boolean isSelPoint = viewPointTradeBean.isSel;
 
-                    viewPointTradeBean.setSel(!isSelPoint);
+                    viewPointTradeBean.isSel = !isSelPoint;
                     finalViewHolder.ivDel.setSelected(!isSelPoint);
 
                     if (delNumListener != null) {

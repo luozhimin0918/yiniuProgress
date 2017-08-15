@@ -45,10 +45,13 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -444,15 +447,24 @@ public class ArticleContentPresenter {
 
             private OptionFlowLayout mTagFlowLayout;
             private DiscolorButton mDiscolorButton;
+            private DiscolorButton mDiscolorCloseButton;
 
             @Override
             public void onCreateView(View popupView) {
                 mTagFlowLayout = (OptionFlowLayout) popupView.findViewById(R.id.report_content);
                 mDiscolorButton = (DiscolorButton) popupView.findViewById(R.id.report_btn);
+                mDiscolorCloseButton = (DiscolorButton) popupView.findViewById(R.id.report_btn_close);
 
                 mTagFlowLayout.addOptionView(reportList, R.layout.item_point_jb_tv);
                 mTagFlowLayout.setDefaultOption(0);
                 mTagFlowLayout.setMinOrMaxCheckCount(1, 1);
+
+                mDiscolorCloseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        functionPopupWindow.dismiss();
+                    }
+                });
 
                 mDiscolorButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -516,11 +528,14 @@ public class ArticleContentPresenter {
                     switch (view.getId()) {
                         case R.id.point_function_sc:
                             viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
-                            boolean b = TradeHandlerUtil.getInstance().saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean
-                                    .isCollect);
-                            if (b) {
+                            boolean bool = TradeHandlerUtil.getInstance().saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean.isCollect);
+                            if (bool) {
                                 setCollectState(tvSc, viewPointTradeBean.isCollect);
                             }
+
+                            TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(viewPointTradeBean.o_id);
+                            scBean.collectState = bool ? 1 : 0;
+                            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_COLLECT_CANCEL1, scBean));
                             break;
                         case R.id.point_function_gz:
                             boolean isGz = !"true".equals(tvGz.getTag());
@@ -539,10 +554,12 @@ public class ArticleContentPresenter {
 
             @Override
             public void onCreateView(View popupView) {
+                boolean collectState = TradeHandlerUtil.getInstance().getCollectState(mContext, viewPointTradeBean.o_id);
+                viewPointTradeBean.isCollect = collectState;
 
                 tvSc = (TextView) popupView.findViewById(R.id.point_function_sc);
                 tvSc.setOnClickListener(functionListener);
-                setCollectState(tvSc, viewPointTradeBean.isCollect);
+                setCollectState(tvSc, collectState);
 
                 tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                 tvGz.setOnClickListener(functionListener);

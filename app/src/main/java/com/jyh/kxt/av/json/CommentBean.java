@@ -3,35 +3,43 @@ package com.jyh.kxt.av.json;
 import java.util.List;
 
 /**
- * Created by Mr'Dai on 2017/5/4.
+ * Created by Mr'Dai on 2017/5/4.//    {
+ //        "content": "讲的很好",
+ //            "create_time": 1495420009,
+ //            "id": 39603,
+ //            "is_good": false,
+ //            "member_id": 38717,
+ //            "member_nickname": "daoyao",
+ //            "member_picture": "http://img.kuaixun360.com/Public/Home/images/default_head_pic.jpg",
+ //            "num_good": 0,
+ //            "num_reply": 0,
+ //            "object_id": 541,
+ //            "object_title": "《指标秘籍》宣传片",
+ //            "parent_content": 0,
+ //            "parent_create_time": 0,
+ //            "parent_id": 0,
+ //            "parent_is_good": false,
+ //            "parent_member_id": 0,
+ //            "parent_member_nickname": 0,
+ //            "parent_member_picture": 0,
+ //            "parent_num_good": 0,
+ //            "parent_num_reply": 0,
+ //            "status": 0,
+ //            "type": "video"
+ //    }
  */
 
 public class CommentBean {
 
-//    {
-//        "content": "讲的很好",
-//            "create_time": 1495420009,
-//            "id": 39603,
-//            "is_good": false,
-//            "member_id": 38717,
-//            "member_nickname": "daoyao",
-//            "member_picture": "http://img.kuaixun360.com/Public/Home/images/default_head_pic.jpg",
-//            "num_good": 0,
-//            "num_reply": 0,
-//            "object_id": 541,
-//            "object_title": "《指标秘籍》宣传片",
-//            "parent_content": 0,
-//            "parent_create_time": 0,
-//            "parent_id": 0,
-//            "parent_is_good": false,
-//            "parent_member_id": 0,
-//            "parent_member_nickname": 0,
-//            "parent_member_picture": 0,
-//            "parent_num_good": 0,
-//            "parent_num_reply": 0,
-//            "status": 0,
-//            "type": "video"
-//    }
+    /**
+     * 自定义的
+     */
+    public boolean isFavour = false; //是否赞
+    public boolean isCollect = false; //是否收藏
+
+    /**
+     * 接口返回数据
+     */
     private String content;
     private long create_time;
     private int id;

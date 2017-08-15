@@ -41,4 +41,23 @@
         app:defaultFontColor="@color/font_enable_color"
         app:disabledBackground="@color/line_color3"
         app:disabledFontColor="@color/font_disable_color"/>
+
+
+    <com.jyh.kxt.base.custom.DiscolorButton
+        android:id="@+id/report_btn_close"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="取消"
+        android:textSize="@dimen/content_font_size2"
+        app:clickBackground="@color/bg_click_color"
+        app:clickFontColor="@color/font_click_color"
+        app:cornerRadius="3dp"
+        app:defaultBackground="@color/bg_enable_color"
+        app:defaultFontColor="@color/font_enable_color"
+        app:disabledBackground="@color/line_color3"
+        app:disabledFontColor="@color/font_disable_color"/>
 </LinearLayout>

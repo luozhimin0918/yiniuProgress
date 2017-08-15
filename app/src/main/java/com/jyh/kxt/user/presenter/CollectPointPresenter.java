@@ -1,7 +1,6 @@
 package com.jyh.kxt.user.presenter;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -72,22 +71,39 @@ public class CollectPointPresenter extends BasePresenter {
         }
     }
 
+    public void loadMore(){
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            getLocalityData();
+        } else {
+            requestGetData();
+        }
+    }
+
     private void requestGetData() {
         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, mQueue);
         mVolleyRequest.setTag(getClass().getName());
-        final JSONObject mainParam = mVolleyRequest.getJsonParam();
 
+        JSONObject mainParam = mVolleyRequest.getJsonParam();
         mainParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+
+        if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_END) {
+            String oId = pointList.get(pointList.size() - 1).getO_id();
+            mainParam.put(VarConstant.HTTP_LASTID, oId);
+        }
 
         mVolleyRequest.doGet(HttpConstant.COLLECT_POINT, mainParam, new HttpListener<List<ViewPointTradeBean>>() {
             @Override
             protected void onResponse(List<ViewPointTradeBean> manJson) {
                 collectPointFragment.mPullPinnedListView.onRefreshComplete();
+
                 if (manJson == null || manJson.size() == 0) {
                     collectPointFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
                     collectPointFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
                     collectPointFragment.plRootView.loadEmptyData();
                 } else {
+                    mTradeHandlerUtil.listCheckState(mContext, manJson);   //对 List 进行赞的遍历
+                    mTradeHandlerUtil.saveCollectList(mContext, manJson);
 
                     if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
                         notifyAdapter(manJson);
@@ -95,23 +111,6 @@ public class CollectPointPresenter extends BasePresenter {
                     } else {
                         notifyAdapter(manJson);
                     }
-
-                    List<ViewPointTradeBean> data = collectPointAdapter.getData();
-                    for (ViewPointTradeBean viewPointTradeBean : data) {
-                        viewPointTradeBean.tradeId = viewPointTradeBean.o_id;
-                        viewPointTradeBean.isCollect = true;
-                        TradeHandlerUtil.TradeHandlerBean tradeHandlerBean =
-                                TradeHandlerUtil.getInstance().checkHandlerState (viewPointTradeBean.o_id);
-                        if(tradeHandlerBean == null ){
-                            viewPointTradeBean.isFavour = false;
-                        }else{
-                            viewPointTradeBean.isFavour = tradeHandlerBean.isFavour;
-                        }
-                    }
-
-                    mTradeHandlerUtil.clearCollectBean(mContext);
-                    mTradeHandlerUtil.saveCollectList(mContext,data);
-                    TradeHandlerUtil.getInstance().listCheckState(data);   //对 List 进行赞的遍历
                 }
             }
 
@@ -126,9 +125,12 @@ public class CollectPointPresenter extends BasePresenter {
         if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
             localityCount = 0;
         }
-        List<ViewPointTradeBean> localityCollectList = mTradeHandlerUtil.getLocalityCollectList(mContext, localityCount, VarConstant
-                .LIST_MAX_SIZE);
-        if (localityCollectList.size() != 0) {
+        List<ViewPointTradeBean> localityCollectList = mTradeHandlerUtil.getLocalityCollectList(
+                mContext,
+                localityCount,
+                VarConstant.LIST_MAX_SIZE);
+
+        if (localityCollectList != null && localityCollectList.size() != 0) {
             localityCount += localityCollectList.size();
         }
         notifyAdapter(localityCollectList);
@@ -163,7 +165,6 @@ public class CollectPointPresenter extends BasePresenter {
         } else {
             if (dataList.size() == 0) {
                 ToastView.makeText3(mContext, "暂无更多数据");
-//                collectPointFragment.mPullPinnedListView.noMoreData();
             } else {
                 pointList.addAll(dataList);
                 collectPointAdapter.notifyDataSetChanged();
