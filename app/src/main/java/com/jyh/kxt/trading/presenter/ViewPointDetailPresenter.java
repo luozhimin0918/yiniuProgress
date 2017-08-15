@@ -32,6 +32,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpCallBack;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -119,6 +120,8 @@ public class ViewPointDetailPresenter extends BasePresenter {
         mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DETAIL, mainParam, new HttpListener<ViewPointTradeBean>() {
             @Override
             protected void onResponse(ViewPointTradeBean viewPointTradeBean) {
+                mViewPointDetailActivity.mPllContent.loadOver();
+
                 ViewPointDetailPresenter.this.mViewPointTradeBean = viewPointTradeBean;
 
                 MarkBean markBean = TradeHandlerUtil.getInstance().entityCheckState(mContext, mViewPointTradeBean.o_id);
@@ -170,6 +173,13 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 mViewPointDetailAdapter.setPresenter(ViewPointDetailPresenter.this);
                 mViewPointDetailActivity.mPullPinnedListView.setAdapter(mViewPointDetailAdapter);
             }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+
+                mViewPointDetailActivity.mPllContent.loadError();
+            }
         });
     }
 
@@ -185,7 +195,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
     @BindView(R.id.point_detail_transmit_layout) RelativeLayout rlTransmitLayout;
     @BindView(R.id.point_detail_transmit_text) EmoticonSimpleTextView tvTransmitContent;
 
-    private void headViewHandler(View mHeadDetailView) {
+    private void headViewHandler(final View mHeadDetailView) {
         ButterKnife.bind(this, mHeadDetailView);
 
         estvContent.convertToGif(mViewPointTradeBean.content);
@@ -256,6 +266,16 @@ public class ViewPointDetailPresenter extends BasePresenter {
         mViewPointDetailActivity.ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                View headContentView = mHeadDetailView.findViewById(R.id.head_content);
+//                int headContentHeight = headContentView.getHeight();
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                    mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().scrollListBy(headContentHeight);
+//                } else {
+//                    mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().scrollTo(0, headContentHeight);
+//                }
+//                mViewPointDetailActivity.tvShowComment.performClick();
+
                 if (isToComment) {
                     mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(2);
                 } else {
@@ -266,14 +286,19 @@ public class ViewPointDetailPresenter extends BasePresenter {
         });
 
         String followState = mViewPointTradeBean.is_follow;
-        boolean isFollow = "1".equals(followState);
-        cbAttention.setChecked(isFollow);
-
+        final boolean isFollow = "1".equals(followState);
         cbAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewPointDetailActivity.articlePresenter
-                        .requestAttentionState(String.valueOf(mViewPointTradeBean.author_id), cbAttention.isChecked());
+                mViewPointDetailActivity.articlePresenter.requestAttentionState(
+                        String.valueOf(mViewPointTradeBean.author_id),
+                        cbAttention.isChecked(),
+                        new HttpCallBack() {
+                            @Override
+                            public void onResponse(Status status) {
+                                cbAttention.setChecked(isFollow);
+                            }
+                        });
             }
         });
     }

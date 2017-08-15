@@ -145,6 +145,9 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         try {
             onTabSelect(0);
             stlNavigationBar.setCurrentTab(0);
+            if(viewpointFragment!= null){
+                viewpointFragment.doubleClickFragment();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

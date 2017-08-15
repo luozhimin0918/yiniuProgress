@@ -2,6 +2,7 @@ package com.jyh.kxt.trading.ui.fragment;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -100,5 +101,19 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         View viewPointHotTitle = viewpointPresenter.mGridHotViewLayout.findViewById(R.id.viewpoint_hot_title);
         viewPointHotTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.slidingTabLayout_bgColor));
 //        rollViewPager.setBackground(null);
+    }
+
+    public void doubleClickFragment() {
+        try {
+            viewpointPresenter.viewpointAdapter.onTabSelect(0, 0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPullPinnedListView.getRefreshableView().setSelection(0);
+                }
+            },200);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

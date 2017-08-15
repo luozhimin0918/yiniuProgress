@@ -13,8 +13,8 @@
 
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"
-        android:layout_width="38dp"
-        android:layout_height="38dp"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,7 +37,6 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:textColor="@color/font_color9"
             android:textSize="@dimen/min_font_size"/>
     </LinearLayout>

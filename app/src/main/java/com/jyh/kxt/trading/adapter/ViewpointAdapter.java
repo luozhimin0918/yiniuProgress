@@ -311,7 +311,9 @@ public class ViewpointAdapter extends BaseAdapter implements
                     }
                     break;
                 case R.id.view_point_pl_layout:
-
+                    Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
+                    mContext.startActivity(intent);
                     break;
                 case R.id.view_point_fx_layout:
                     functionPopupWindow = new SimplePopupWindow((Activity) mContext);

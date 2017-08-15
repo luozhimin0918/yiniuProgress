@@ -23,11 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -46,6 +46,7 @@ import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.library.base.http.HttpCallBack;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
@@ -216,7 +217,7 @@ public class ArticleContentPresenter {
     /**
      * 请求关注状态
      */
-    public void requestAttentionState(String authorId, boolean bool) {
+    public void requestAttentionState(String authorId, final boolean bool, final HttpCallBack httpCallBack) {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo != null) {
             IBaseView iBaseView = (IBaseView) mContext;
@@ -237,6 +238,19 @@ public class ArticleContentPresenter {
             mVolleyRequest.doGet(attentionUrl, mainParam, new HttpListener<String>() {
                 @Override
                 protected void onResponse(String jsonObject) {
+                    ToastView.makeText3(mContext, bool ? "关注成功" : "取消成功");
+                    if (httpCallBack != null) {
+                        httpCallBack.onResponse(HttpCallBack.Status.SUCCESS);
+                    }
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    ToastView.makeText3(mContext, bool ? "关注失败" : "取消失败");
+                    if (httpCallBack != null) {
+                        httpCallBack.onResponse(HttpCallBack.Status.ERROR);
+                    }
                 }
             });
         }
@@ -293,7 +307,7 @@ public class ArticleContentPresenter {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String girdImageUrl = finalGridList.get(position);
-                setGridViewItemClick(girdImageUrl, finalGridList);
+                setGridViewItemClick(girdImageUrl, finalGridList,position);
             }
         });
     }
@@ -303,7 +317,7 @@ public class ArticleContentPresenter {
      */
     private PopupUtil imagePopupUtil;
 
-    private void setGridViewItemClick(String girdImageUrl, List<String> gridList) {
+    private void setGridViewItemClick(String girdImageUrl, List<String> gridList, int position) {
 
         imagePopupUtil = new PopupUtil((Activity) mContext);
         ViewPager inflate = (ViewPager) imagePopupUtil.createPopupView(R.layout.pop_viewpager);
@@ -313,8 +327,9 @@ public class ArticleContentPresenter {
         adapter.setOnClickLinstener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imagePopupUtil!=null&&imagePopupUtil.isShowing())
+                if (imagePopupUtil != null && imagePopupUtil.isShowing()) {
                     imagePopupUtil.dismiss();
+                }
             }
         });
         inflate.setAdapter(adapter);
@@ -343,6 +358,8 @@ public class ArticleContentPresenter {
 //                        ivPop.setImageBitmap(resource);
 //
         imagePopupUtil.showAtLocation(inflate, Gravity.CENTER, 0, 0);
+
+        inflate.setCurrentItem(position);
 //                    }
 //                });
     }
@@ -446,6 +463,11 @@ public class ArticleContentPresenter {
     SimplePopupWindow functionPopupWindow;
 
     public void showReportWindow(final String oid, final List<String> reportList) {
+        final UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            return;
+        }
         if (functionPopupWindow != null) {
             functionPopupWindow.dismiss();
         }
@@ -454,13 +476,13 @@ public class ArticleContentPresenter {
 
             private OptionFlowLayout mTagFlowLayout;
             private DiscolorButton mDiscolorButton;
-            private DiscolorButton mDiscolorCloseButton;
+            private ImageView mDiscolorCloseButton;
 
             @Override
             public void onCreateView(View popupView) {
                 mTagFlowLayout = (OptionFlowLayout) popupView.findViewById(R.id.report_content);
                 mDiscolorButton = (DiscolorButton) popupView.findViewById(R.id.report_btn);
-                mDiscolorCloseButton = (DiscolorButton) popupView.findViewById(R.id.report_btn_close);
+                mDiscolorCloseButton = (ImageView) popupView.findViewById(R.id.report_btn_close);
 
                 mTagFlowLayout.addOptionView(reportList, R.layout.item_point_jb_tv);
                 mTagFlowLayout.setDefaultOption(0);
@@ -485,11 +507,6 @@ public class ArticleContentPresenter {
 
                         String reportContent = checkBoxText.get(0);
 
-                        UserJson userInfo = LoginUtils.getUserInfo(mContext);
-                        if (userInfo == null) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
-                            return;
-                        }
                         //读取关注状态
                         IBaseView iBaseView = (IBaseView) mContext;
                         VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
@@ -545,9 +562,15 @@ public class ArticleContentPresenter {
                             EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_COLLECT_CANCEL1, scBean));
                             break;
                         case R.id.point_function_gz:
-                            boolean isGz = !"true".equals(tvGz.getTag());
-                            setAttentionState(tvGz, isGz);
-                            requestAttentionState(viewPointTradeBean.author_id, isGz);
+                            final boolean isGz = !"true".equals(tvGz.getTag());
+                            requestAttentionState(viewPointTradeBean.author_id, isGz, new HttpCallBack() {
+                                @Override
+                                public void onResponse(Status status) {
+                                    if (status == Status.SUCCESS) {
+                                        setAttentionState(tvGz, isGz);
+                                    }
+                                }
+                            });
                             break;
                         case R.id.point_function_jb:
                             showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);

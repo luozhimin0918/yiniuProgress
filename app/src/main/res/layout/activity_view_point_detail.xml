@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_point_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.jyh.kxt.trading.ui.ViewPointDetailActivity">
+
     <include
         android:id="@+id/action_bar"
         layout="@layout/action_bar3"/>
 
     <!--<include layout="@layout/view_point_detail_head"/>-->
-    <com.library.widget.handmark.PullToRefreshListView
-        android:id="@+id/pplv_content"
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_nav"
-        android:overScrollMode="never"
-        app:ptrShowIndicator="false"
         android:layout_below="@+id/action_bar"
-        android:background="@color/theme1">
+        android:layout_above="@+id/ll_nav">
 
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/pplv_content"
+            android:background="@color/theme1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:ptrShowIndicator="false">
 
-    </com.library.widget.handmark.PullToRefreshListView>
+        </com.library.widget.handmark.PullToRefreshListView>
 
+    </com.library.widget.PageLoadLayout>
 
     <LinearLayout
         android:id="@+id/ll_nav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoNavHeight2"
-        android:background="@color/theme1"
         android:layout_alignParentBottom="true"
+        android:background="@color/theme1"
         android:orientation="vertical">
 
         <View

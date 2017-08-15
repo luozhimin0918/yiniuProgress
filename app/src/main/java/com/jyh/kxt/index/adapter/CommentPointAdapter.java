@@ -84,7 +84,10 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         /**
          *    回复的内容
          */
-        String replyMemberName = "回复 @ " + pointJson.getParent_member_name() + " ";
+        String replyMemberName ="";
+        if (!TextUtils.isEmpty(pointJson.getParent_content())) {
+            replyMemberName  = "回复 @ " + pointJson.getParent_member_name() + " ";
+        }
         SpannableStringBuilder contentSpannable = new SpannableStringBuilder(replyMemberName + pointJson.getContent());
         int color1 = ContextCompat.getColor(mContext, R.color.blue);
         ForegroundColorSpan contentForeground = new ForegroundColorSpan(color1);

@@ -243,7 +243,8 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private void updateTabStyles() {
         for (int i = 0; i < mTabCount; i++) {
             View tabView = mTabsContainer.getChildAt(i);
-            tabView.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
+//            tabView.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
+            tabView.setPadding(0, 0, 0, 0);
             TextView tv_tab_title = (TextView) tabView.findViewById(R.id.tv_tab_title);
             tv_tab_title.setTextColor(i == mCurrentTab ? mTextSelectColor : mTextUnselectColor);
             tv_tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextsize);

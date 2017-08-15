@@ -1,63 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/theme1"
-    android:orientation="vertical">
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
-        android:text="请选择举报原因："
-        android:textColor="@color/font_color60"
-        android:textSize="@dimen/describe_font_size2"/>
-
-    <com.library.widget.flowlayout.OptionFlowLayout
-        android:id="@+id/report_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp">
-
-    </com.library.widget.flowlayout.OptionFlowLayout>
-
-    <com.jyh.kxt.base.custom.DiscolorButton
-        android:id="@+id/report_btn"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:layout_margin="15dp"
-        android:text="举报"
-        android:textSize="@dimen/content_font_size2"
-        app:clickBackground="@color/bg_click_color"
-        app:clickFontColor="@color/font_click_color"
-        app:cornerRadius="3dp"
-        app:defaultBackground="@color/bg_enable_color"
-        app:defaultFontColor="@color/font_enable_color"
-        app:disabledBackground="@color/line_color3"
-        app:disabledFontColor="@color/font_disable_color"/>
-
-
-    <com.jyh.kxt.base.custom.DiscolorButton
+    <ImageView
         android:id="@+id/report_btn_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="8dp"
+        android:src="@mipmap/icon_point_qx"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
-        android:text="取消"
-        android:textSize="@dimen/content_font_size2"
-        app:clickBackground="@color/bg_click_color"
-        app:clickFontColor="@color/font_click_color"
-        app:cornerRadius="3dp"
-        app:defaultBackground="@color/bg_enable_color"
-        app:defaultFontColor="@color/font_enable_color"
-        app:disabledBackground="@color/line_color3"
-        app:disabledFontColor="@color/font_disable_color"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:text="请选择举报原因："
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size2"/>
+
+        <com.library.widget.flowlayout.OptionFlowLayout
+            android:id="@+id/report_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
+
+        </com.library.widget.flowlayout.OptionFlowLayout>
+
+        <com.jyh.kxt.base.custom.DiscolorButton
+            android:id="@+id/report_btn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:text="举报"
+            android:textSize="@dimen/content_font_size2"
+            app:clickBackground="@color/bg_click_color"
+            app:clickFontColor="@color/font_click_color"
+            app:cornerRadius="3dp"
+            app:defaultBackground="@color/bg_enable_color"
+            app:defaultFontColor="@color/font_enable_color"
+            app:disabledBackground="@color/line_color3"
+            app:disabledFontColor="@color/font_disable_color"/>
+
+    </LinearLayout>
+</RelativeLayout>

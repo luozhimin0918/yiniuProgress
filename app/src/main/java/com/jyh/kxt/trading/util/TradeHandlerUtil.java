@@ -178,6 +178,7 @@ public class TradeHandlerUtil {
                     ViewPointTradeBeanDao viewPointTradeBeanDao = mDBManager.getDaoSessionWrit().getViewPointTradeBeanDao();
                     viewPointTradeBeanDao.insertOrReplace(viewPointTradeBean);
                 }
+                ToastView.makeText3(mContext,bool ? "收藏成功" : "取消成功");
             }
         } catch (Exception e) {
             e.printStackTrace();

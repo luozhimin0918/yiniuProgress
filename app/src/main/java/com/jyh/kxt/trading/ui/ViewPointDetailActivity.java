@@ -25,6 +25,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.jyh.kxt.user.json.UserJson;
+import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
@@ -37,6 +38,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
 
+    @BindView(R.id.pll_content) public PageLoadLayout mPllContent;
     @BindView(R.id.pplv_content) public PullToRefreshListView mPullPinnedListView;
 
     @BindView(R.id.iv_like) public ImageView ivZanView;
@@ -44,6 +46,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @BindView(R.id.tv_zanCount) public TextView tvZanCount;
 
     @BindView(R.id.iv_collect) public ImageView ivCollect;
+    @BindView(R.id.tv_comment) public TextView tvShowComment;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
 
 
@@ -66,7 +69,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         commentPresenter.setOnlyAllowSmallEmoJe(true);
 
         detailId = getIntent().getStringExtra(IntentConstant.O_ID);
-
+        mPllContent.loadWait();
         initView();
 
         articlePresenter = new ArticleContentPresenter(this);

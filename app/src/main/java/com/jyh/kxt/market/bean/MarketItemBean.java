@@ -21,11 +21,11 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
      * price : 3141.76
      * range : +0.23%
      */
-    @Bindable private String change;
+    @Bindable private String change = "--";
     @Bindable private String code;
     @Bindable private String name;
-    @Bindable private String price;
-    @Bindable private String range;
+    @Bindable private String price = "--";
+    @Bindable private String range = "--";
     //本地变
     @Bindable private String switchTarget;
 
@@ -43,6 +43,9 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public String getChange() {
+        if (change == null) {
+            change = "--";
+        }
         return change;
     }
 
@@ -56,7 +59,7 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public String getName() {
-        if(name == null){
+        if (name == null) {
             name = "";
         }
         return name;
@@ -68,6 +71,9 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public String getPrice() {
+        if (price == null) {
+            price = "--";
+        }
         return price;
     }
 
@@ -79,6 +85,9 @@ public class MarketItemBean extends BaseObservable implements Parcelable {
     }
 
     public String getRange() {
+        if (range == null) {
+            range = "--";
+        }
         return range;
     }
 

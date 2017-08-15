@@ -38,6 +38,10 @@ public class MarketUtil {
     public static void bindingRange(TextView tvLabel, String range) {
         int fontColor;
 
+        if (range == null || "--".equals(range)) {
+            return;
+        }
+
         if (range.contains("-")) {
             fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
         } else {
@@ -90,44 +94,48 @@ public class MarketUtil {
 
     @BindingAdapter(value = {"bindingMarketItem", "bindingFromSource"})
     public static void bindingGlint(final TextView tvLabel, final MarketItemBean marketItemBean, int fromSource) {
-        if (fromSource > 1 && marketItemBean != null) {
-            if (tvLabel.getScaleX() == 1.1f || tvLabel.getScaleY() == 1.1f || tvLabel.getPaint().isFakeBoldText()) {
-                tvLabel.setScaleX(1.0f);
-                tvLabel.setScaleY(1.0f);
-                tvLabel.getPaint().setFakeBoldText(false);
-                return;
-            }
-
-            double aborPrice = Double.valueOf(marketItemBean.getAborPrice());
-            double lastPrice = Double.valueOf(marketItemBean.getPrice());
-
-            //大于等于上一次 涨
-            if (lastPrice > aborPrice) {
-                int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
-                tvLabel.setTextColor(fontColor);
-            } else if (lastPrice < aborPrice) {
-                int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
-                tvLabel.setTextColor(fontColor);
-            } else {
-                return;
-            }
-
-            tvLabel.setScaleX(1.1f);
-            tvLabel.setScaleY(1.1f);
-            tvLabel.getPaint().setFakeBoldText(true);
-            tvLabel.postInvalidate();
-
-            tvLabel.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+        try {
+            if (fromSource > 1 && marketItemBean != null) {
+                if (tvLabel.getScaleX() == 1.1f || tvLabel.getScaleY() == 1.1f || tvLabel.getPaint().isFakeBoldText()) {
                     tvLabel.setScaleX(1.0f);
                     tvLabel.setScaleY(1.0f);
                     tvLabel.getPaint().setFakeBoldText(false);
-                    tvLabel.postInvalidate();
-
-                    bindingRange(tvLabel, marketItemBean.getRange());
+                    return;
                 }
-            }, 500);
+
+                double aborPrice = Double.valueOf(marketItemBean.getAborPrice());
+                double lastPrice = Double.valueOf(marketItemBean.getPrice());
+
+                //大于等于上一次 涨
+                if (lastPrice > aborPrice) {
+                    int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
+                    tvLabel.setTextColor(fontColor);
+                } else if (lastPrice < aborPrice) {
+                    int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.decline_color);
+                    tvLabel.setTextColor(fontColor);
+                } else {
+                    return;
+                }
+
+                tvLabel.setScaleX(1.1f);
+                tvLabel.setScaleY(1.1f);
+                tvLabel.getPaint().setFakeBoldText(true);
+                tvLabel.postInvalidate();
+
+                tvLabel.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvLabel.setScaleX(1.0f);
+                        tvLabel.setScaleY(1.0f);
+                        tvLabel.getPaint().setFakeBoldText(false);
+                        tvLabel.postInvalidate();
+
+                        bindingRange(tvLabel, marketItemBean.getRange());
+                    }
+                }, 500);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

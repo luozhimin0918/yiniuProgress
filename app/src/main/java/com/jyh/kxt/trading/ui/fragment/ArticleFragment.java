@@ -190,4 +190,5 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     public void setSelTab(String selTab) {
         this.selTab = selTab;
     }
+
 }
