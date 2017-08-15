@@ -2,6 +2,7 @@ package com.jyh.kxt.base.util;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class AdUtils {
         } else if (ads.size() == 1) {
             adTv1.setVisibility(View.GONE);
             adTv2.setVisibility(View.GONE);
+            adIv.setVisibility(View.VISIBLE);
             final AdTitleItemBean adItemJson = ads.get(0);
 
             if (isNight) {
@@ -149,6 +151,7 @@ public class AdUtils {
             position,
                               boolean isShowAll) {
         if (ad == null) return;
+        String title = ad.getTitle();
         if (isShowAll) {
             if (position == 0) {
                 //左
@@ -162,7 +165,7 @@ public class AdUtils {
                                 ad.getHref());
                     }
                 });
-                adTv2.setText(ad.getTitle());
+                adTv2.setText(title);
                 String tvColor;
                 if (isNight) {
                     tvColor = ad.getNight_color();
@@ -182,7 +185,7 @@ public class AdUtils {
                                 ad.getHref());
                     }
                 });
-                adTv1.setText(ad.getTitle());
+                adTv1.setText(title);
                 String tvColor;
                 if (isNight) {
                     tvColor = ad.getNight_color();
@@ -196,6 +199,7 @@ public class AdUtils {
             if (adPosition == null || adPosition.equals("1")) {
                 //左
                 adTv1.setVisibility(View.INVISIBLE);
+                adTv1.setText(title);
                 adTv2.setVisibility(View.VISIBLE);
                 adTv2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -206,7 +210,7 @@ public class AdUtils {
                                 ad.getHref());
                     }
                 });
-                adTv2.setText(ad.getTitle());
+                adTv2.setText(title);
                 String tvColor;
                 if (isNight) {
                     tvColor = ad.getNight_color();
@@ -227,7 +231,7 @@ public class AdUtils {
                                 ad.getHref());
                     }
                 });
-                adTv1.setText(ad.getTitle());
+                adTv1.setText(title);
                 String tvColor;
                 if (isNight) {
                     tvColor = ad.getNight_color();
