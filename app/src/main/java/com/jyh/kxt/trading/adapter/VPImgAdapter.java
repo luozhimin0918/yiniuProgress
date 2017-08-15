@@ -3,7 +3,6 @@ package com.jyh.kxt.trading.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,15 +67,10 @@ public class VPImgAdapter extends PagerAdapter {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                        ivPop.setLayoutParams(layoutParams);
                         ivPop.setImageBitmap(resource);
                     }
                 });
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                .MATCH_PARENT);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams .MATCH_PARENT);
         container.addView(view, layoutParams);
         return view;
     }

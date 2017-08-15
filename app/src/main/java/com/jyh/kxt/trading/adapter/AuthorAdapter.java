@@ -26,28 +26,20 @@ import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.annotation.OnTabSelectListener;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
-import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.AuthorActivity;
-import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
-import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
-import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
-import com.library.base.http.VolleyRequest;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
@@ -330,7 +322,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             viewpoints.addAll(viewpointData);
         }
 
-        TradeHandlerUtil.getInstance().listCheckState(viewpointData);
+        TradeHandlerUtil.getInstance().listCheckState(mContext,viewpointData);
         notifyDataSetChanged();
     }
 
@@ -351,7 +343,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     public void addViewPointData(List<ViewPointTradeBean> viewpointData) {
         viewpoints.addAll(viewpointData);
-        TradeHandlerUtil.getInstance().listCheckState(viewpoints);
+        TradeHandlerUtil.getInstance().listCheckState(mContext,viewpoints);
         notifyDataSetChanged();
     }
 

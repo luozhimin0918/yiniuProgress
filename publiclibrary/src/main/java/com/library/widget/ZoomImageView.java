@@ -1,10 +1,10 @@
 package com.library.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -94,21 +94,30 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
             public void onGlobalLayout() {
                 // 移除观察者
                 getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                // 获取控件大小
-                mWidth = getWidth();
-                mHeight = getHeight();
-
-                //通过getDrawable获得Src的图片
-                mDrawable = getDrawable();
-                if (mDrawable == null) {
-                    return;
-                }
-                mDrawableWidth = mDrawable.getIntrinsicWidth();
-                mDrawableHeight = mDrawable.getIntrinsicHeight();
-                initImageViewSize();
-                moveToCenter();
+                updateBitmapMatrix();
             }
         });
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        updateBitmapMatrix();
+    }
+    private void updateBitmapMatrix(){
+        // 获取控件大小
+        mWidth = getWidth();
+        mHeight = getHeight();
+
+        //通过getDrawable获得Src的图片
+        mDrawable = getDrawable();
+        if (mDrawable == null) {
+            return;
+        }
+        mDrawableWidth = mDrawable.getIntrinsicWidth();
+        mDrawableHeight = mDrawable.getIntrinsicHeight();
+        initImageViewSize();
+        moveToCenter();
     }
 
     /**
@@ -278,6 +287,7 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     isFirstMoved = false;
+                    getParent().requestDisallowInterceptTouchEvent(true);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     nowMovingX = event.getX();
@@ -319,6 +329,7 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
                     isFirstMoved = false;
+                    getParent().requestDisallowInterceptTouchEvent(false);
                     break;
             }
 
