@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -262,12 +264,15 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
     private float lastMovedY;
     private boolean isFirstMoved = false;
 
+    private long downTime;
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     isFirstMoved = false;
+                    downTime = System.currentTimeMillis();
                     downX = event.getX();
                     downY = event.getY();
                     break;
@@ -306,6 +311,11 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                     lastMovedY = nowMovingY;
                     break;
                 case MotionEvent.ACTION_UP:
+                    long time = System.currentTimeMillis() - downTime;
+                    if (time < 200) {
+                        if (onClickListener != null)
+                            onClickListener.onClick(this);
+                    }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
                     isFirstMoved = false;
@@ -317,6 +327,14 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
             e.printStackTrace();
             return false;
         }
+    }
+
+    private OnClickListener onClickListener;
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        super.setOnClickListener(l);
+        onClickListener = l;
     }
 
     /**
