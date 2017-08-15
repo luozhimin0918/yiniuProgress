@@ -308,14 +308,6 @@ public class ArticleContentPresenter {
         inflate.setAdapter(new VPImgAdapter(gridList, mContext));
 //        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
 //        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
-        inflate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (imagePopupUtil.isShowing()) {
-                    imagePopupUtil.dismiss();
-                }
-            }
-        });
         PopupUtil.Config config = new PopupUtil.Config();
         config.outsideTouchable = true;
         config.alpha = 0.5f;
