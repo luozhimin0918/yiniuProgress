@@ -493,7 +493,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
+        @OnClick({R.id.view_point_zan_layout,R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
                 case R.id.view_point_zan_layout:
@@ -510,9 +510,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                         }
                     }
                     break;
-                case R.id.view_point_pl_layout:
-
-                    break;
+//                case R.id.view_point_pl_layout:
+//
+//                    break;
                 case R.id.view_point_fx_layout:
                     functionPopupWindow = new SimplePopupWindow((Activity) mContext);
 
