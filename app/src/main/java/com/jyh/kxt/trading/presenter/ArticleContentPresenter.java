@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -37,6 +39,7 @@ import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.trading.adapter.VPImgAdapter;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
@@ -290,7 +293,7 @@ public class ArticleContentPresenter {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String girdImageUrl = finalGridList.get(position);
-                setGridViewItemClick(girdImageUrl);
+                setGridViewItemClick(girdImageUrl, finalGridList);
             }
         });
     }
@@ -300,19 +303,14 @@ public class ArticleContentPresenter {
      */
     private PopupUtil imagePopupUtil;
 
-    private void setGridViewItemClick(String girdImageUrl) {
+    private void setGridViewItemClick(String girdImageUrl, List<String> gridList) {
 
         imagePopupUtil = new PopupUtil((Activity) mContext);
-        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
-        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
-        ivPop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (imagePopupUtil.isShowing()) {
-                    imagePopupUtil.dismiss();
-                }
-            }
-        });
+        ViewPager inflate = (ViewPager) imagePopupUtil.createPopupView(R.layout.pop_viewpager);
+
+        inflate.setAdapter(new VPImgAdapter(gridList, mContext));
+//        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
+//        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
         PopupUtil.Config config = new PopupUtil.Config();
         config.outsideTouchable = true;
         config.alpha = 0.5f;
@@ -321,23 +319,23 @@ public class ArticleContentPresenter {
         config.width = WindowManager.LayoutParams.MATCH_PARENT;
         config.height = WindowManager.LayoutParams.MATCH_PARENT;
         imagePopupUtil.setConfig(config);
-
-        Glide.with(mContext).load(girdImageUrl)
-                .asBitmap()
-                .error(R.mipmap.icon_def_news)
-                .placeholder(R.mipmap.icon_def_news)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                        ivPop.setLayoutParams(layoutParams);
-                        ivPop.setImageBitmap(resource);
-
-                        imagePopupUtil.showAtLocation(ivPop, Gravity.CENTER, 0, 0);
-                    }
-                });
+//
+//        Glide.with(mContext).load(girdImageUrl)
+//                .asBitmap()
+//                .error(R.mipmap.icon_def_news)
+//                .placeholder(R.mipmap.icon_def_news)
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
+//                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                        ivPop.setLayoutParams(layoutParams);
+//                        ivPop.setImageBitmap(resource);
+//
+        imagePopupUtil.showAtLocation(inflate, Gravity.CENTER, 0, 0);
+//                    }
+//                });
     }
 
     /**

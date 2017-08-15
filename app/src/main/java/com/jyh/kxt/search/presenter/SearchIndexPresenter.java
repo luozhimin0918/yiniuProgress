@@ -14,6 +14,7 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.search.ui.SearchMainActivity;
+import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -64,9 +65,6 @@ public class SearchIndexPresenter extends BasePresenter {
         if (!RegexValidateUtil.isEmpty(searchKey)) {
             saveSearchHistory(searchKey);
             this.searchKey = searchKey;
-//            Intent intent = new Intent(mContext, SearchMainActivity.class);
-//            intent.putExtra(SearchMainActivity.SEARCH_KEY, searchKey);
-//            mContext.startActivity(intent);
             activity.isCanBack = true;
             JSONObject jsonParam = request.getJsonParam();
             jsonParam.put(VarConstant.HTTP_CODE, VarConstant.SEARCH_TYPE_QUOTE);

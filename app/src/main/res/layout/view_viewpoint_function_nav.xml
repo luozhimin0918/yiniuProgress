@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.library.widget.tablayout.NavigationTabLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tl="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ntl_title_view"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:orientation="vertical">
 
-    android:background="@color/theme1"
+    <com.library.widget.tablayout.NavigationTabLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tl="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ntl_title_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
 
-    tl:tl_indicator_color="@color/indicator_color"
-    tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+        android:background="@color/theme1"
 
-    tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
-    tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
-    tl:tl_tab_padding="10dp"
-    tl:tl_textSelectColor="@color/tabSelColor"
-    tl:tl_textUnselectColor="@color/tabUnSelColor"
-    tl:tl_textsize="@dimen/describe_font_size4">
+        tl:tl_indicator_color="@color/indicator_color"
+        tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
 
-</com.library.widget.tablayout.NavigationTabLayout>
+        tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+        tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+        tl:tl_tab_padding="10dp"
+        tl:tl_textSelectColor="@color/tabSelColor"
+        tl:tl_textUnselectColor="@color/tabUnSelColor"
+        tl:tl_textsize="@dimen/describe_font_size4"/>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color7"/>
+
+</LinearLayout>

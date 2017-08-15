@@ -3,6 +3,7 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
@@ -155,6 +157,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder0.navigationTabLayout.setIndicatorColor(ContextCompat.getColor(mContext, R.color.indicator_color));
                 viewHolder0.navigationTabLayout.setTextSelectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
                 viewHolder0.navigationTabLayout.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
+                viewHolder0.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
 
                 break;
             case 1:
@@ -230,6 +233,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
     class ViewHolder0 {
         @BindView(R.id.ntl_title_view) NavigationTabLayout navigationTabLayout;
+        @BindView(R.id.v_line) View line;
 
         ViewHolder0(View contentView) {
             ButterKnife.bind(this, contentView);
@@ -251,7 +255,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         @BindView(R.id.view_point_zan_tv) TextView tvZanView;
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
-        @BindView(R.id.view_point_fx_tv) TextView tvShareView;
+        @BindView(R.id.view_point_fx_tv) ImageView tvShareView;
 
         @BindView(R.id.viewpoint_space) View viewSpace;
 
@@ -276,6 +280,17 @@ public class ViewpointAdapter extends BaseAdapter implements
             viewLine1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+            int paddingVal=SystemUtil.dp2px(mContext,8);
+            tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
+                    .icon_point_zan1, 0, 0, 0);
+            tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
+                    .icon_point_pl, 0, 0, 0);
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
         }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
@@ -379,7 +394,7 @@ public class ViewpointAdapter extends BaseAdapter implements
     @Override
     public int getItemViewType(int position) {
         ViewPointTradeBean viewPointTradeBean = dataList.get(position);
-        return viewPointTradeBean.itemViewType;
+        return viewPointTradeBean.getItemViewType();
     }
 
     @Override
@@ -410,7 +425,7 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         if (tradeList.size() == 0 && fromSource == 0) {//如果没有数据, 则添加类型为2的空数据
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
-            viewPointTradeBean.itemViewType = 2;
+            viewPointTradeBean.setItemViewType(2);
             tradeList.add(viewPointTradeBean);
 
             if (mPullPinnedListView != null) {
@@ -424,10 +439,10 @@ public class ViewpointAdapter extends BaseAdapter implements
 
         if (fromSource == 0) { //如果来源是0 表示初次使用这个数据源  1 则表示读取的缓存数据源
             ViewPointTradeBean viewPointTradeBean = new ViewPointTradeBean();
-            viewPointTradeBean.itemViewType = 0;
+            viewPointTradeBean.setItemViewType(0);
             tradeList.add(0, viewPointTradeBean);
         }
-        TradeHandlerUtil.getInstance().listCheckState(mContext, tradeList);   //对 List 进行赞的遍历
+        TradeHandlerUtil.getInstance().listCheckState(tradeList);   //对 List 进行赞的遍历
     }
 
     @Override
@@ -457,6 +472,20 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
 
+        if (tabClickPosition == navigationTabClickPosition) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    PinnedSectionListView.PinnedOffset pinnedOffset = listViewOffset.get(tabClickPosition);
+                    if (pinnedOffset == null) {
+                        mPullPinnedListView.getRefreshableView().setSelection(0);
+                    } else {
+//                mPullPinnedListView.getRefreshableView().smoothScrollToPositionFromTop(pinnedOffset.position, pinnedOffset.offset, 0);
+                        mPullPinnedListView.getRefreshableView().setSelection(pinnedOffset.position);
+                    }
+                }
+            }, 150);
+        }
 
         List<ViewPointTradeBean> viewPointTradeBeen = pointListMap.get(requestNavigationType);
 
@@ -474,12 +503,12 @@ public class ViewpointAdapter extends BaseAdapter implements
                 uId = userInfo.getUid();
             }
         }
-        if (viewPointTradeBeen == null) {
 
+        if (viewPointTradeBeen == null) {
+            //请求网络显示转圈
             final IBaseView iBaseView = (IBaseView) mContext;
             iBaseView.showWaitDialog(null);
 
-            //请求网络显示转圈
             VolleyRequest mVolleyRequest = new VolleyRequest(iBaseView.getContext(), iBaseView.getQueue());
             mVolleyRequest.setTag(getClass().getName());
 
@@ -520,14 +549,6 @@ public class ViewpointAdapter extends BaseAdapter implements
         } else {
             replaceDataAndNotifyDataSetChanged(viewPointTradeBeen, 1);
         }
-
-        PinnedSectionListView.PinnedOffset pinnedOffset = listViewOffset.get(tabClickPosition);
-        if (pinnedOffset == null) {
-            mPullPinnedListView.getRefreshableView().setSelection(0);
-        } else {
-            mPullPinnedListView.getRefreshableView().setSelection(pinnedOffset.position);
-        }
-
     }
 
 
@@ -539,7 +560,7 @@ public class ViewpointAdapter extends BaseAdapter implements
     public void refreshAdapterData(List<ViewPointTradeBean> newTradeBeanList, PullToRefreshBase.Mode mode) {
 
         //对 List 进行赞的遍历
-        TradeHandlerUtil.getInstance().listCheckState(mContext, newTradeBeanList);
+        TradeHandlerUtil.getInstance().listCheckState(newTradeBeanList);
 
         switch (navigationTabClickPosition) {
             case 0:
@@ -582,13 +603,9 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (intentObj.favourState == 1) {
                         viewPointTradeBean.isFavour = true;
                         viewPointTradeBean.num_good += 1;
-                    } else {
-
                     }
                     if (intentObj.collectState == 1) {
                         viewPointTradeBean.isCollect = true;
-                    } else {
-                        viewPointTradeBean.isCollect = false;
                     }
 
                     if (intentObj.commentState == 1) {
@@ -599,7 +616,6 @@ public class ViewpointAdapter extends BaseAdapter implements
         }
         notifyDataSetChanged();
     }
-
 
     /**
      * 退出或者登录之后 关注界面所发生的改变

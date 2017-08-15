@@ -54,6 +54,7 @@ public class ViewpointPresenter extends BasePresenter {
     public View mGridHotViewLayout;
     public RollDotViewPager rollDotViewPager;
     public ViewpointAdapter viewpointAdapter;
+    public View vLine;
 
 
     public ViewpointPresenter(IBaseView iBaseView) {
@@ -151,6 +152,8 @@ public class ViewpointPresenter extends BasePresenter {
                             }
                         }
                     });
+                    vLine = mGridHotViewLayout.findViewById(R.id.v_line);
+
 
                     rollDotViewPager = (RollDotViewPager) mGridHotViewLayout.findViewById(R.id.rdvp_content);
                     rollDotViewPager.setViewPageToDotAbout();

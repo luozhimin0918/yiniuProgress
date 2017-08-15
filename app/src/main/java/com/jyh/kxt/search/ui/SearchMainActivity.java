@@ -8,6 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -17,9 +19,12 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.widget.SearchEditText;
 import com.jyh.kxt.index.ui.ClassifyActivity;
+import com.jyh.kxt.search.adapter.AutoCompleteAdapter;
+import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.SearchType;
 import com.jyh.kxt.search.presenter.SearchMainPresenter;
 import com.jyh.kxt.search.ui.fragment.SearchItemFragment;
+import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.RegexValidateUtil;
@@ -88,13 +93,27 @@ public class SearchMainActivity extends BaseActivity {
                     //监听软键盘搜索按钮
                     String key = edtSearch.getText();
                     presenter.search(key);
+                    edtSearch.dismissDropDown();
+                    edtSearch.setData(AutoCompleteUtils.getData(getContext()));
                     return true;
                 }
                 return false;
             }
         });
         edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
-
+        edtSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListAdapter adapter = edtSearch.getAdapter();
+                if (adapter != null) {
+                    QuoteItemJson item = (QuoteItemJson) adapter.getItem(position);
+                    String name = item.getName();
+                    edtSearch.setText(name);
+                    presenter.search(name);
+                    edtSearch.dismissDropDown();
+                }
+            }
+        });
         presenter = new SearchMainPresenter(this);
 
         plRootView.loadWait();
@@ -116,12 +135,12 @@ public class SearchMainActivity extends BaseActivity {
         }
     }
 
-    public void initNavBar(List<SearchType> o) {
+    public void initNavBar(final List<SearchType> o) {
         if (o == null || o.size() == 0) {
             plRootView.loadEmptyData();
         } else {
             searchTypes = o;
-            int size = o.size();
+            final int size = o.size();
             tabs = new String[size];
             for (int i = 0; i < size; i++) {
                 SearchType searchType = o.get(i);
@@ -143,6 +162,14 @@ public class SearchMainActivity extends BaseActivity {
                 @Override
                 public void onPageSelected(int position) {
                     index = position;
+                    for (int i = 0; i < size; i++) {
+                        String code = o.get(i).getCode();
+                        if (code.equals(VarConstant.SEARCH_TYPE_QUOTE) || code.equals(VarConstant.SEARCH_TYPE_MAIN)) {
+                            edtSearch.setAdapter(new AutoCompleteAdapter(AutoCompleteUtils.getData(getContext()), getContext()));
+                        } else {
+                            edtSearch.setAdapter(null);
+                        }
+                    }
                 }
 
                 @Override
@@ -156,6 +183,12 @@ public class SearchMainActivity extends BaseActivity {
                 if (o.get(i).getCode().equals(searchType)) {
                     stlNavigationBar.setCurrentTab(i);
                 }
+            }
+
+            if (searchType.equals(VarConstant.SEARCH_TYPE_QUOTE) || searchType.equals(VarConstant.SEARCH_TYPE_MAIN)) {
+                edtSearch.setAdapter(new AutoCompleteAdapter(AutoCompleteUtils.getData(getContext()), getContext()));
+            } else {
+                edtSearch.setAdapter(null);
             }
         }
         plRootView.loadOver();

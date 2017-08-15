@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,13 +26,16 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.SearchTypeAdapter;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.widget.SearchEditText;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
+import com.jyh.kxt.search.adapter.AutoCompleteAdapter;
 import com.jyh.kxt.search.adapter.QuoteAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.SearchType;
 import com.jyh.kxt.search.presenter.SearchIndexPresenter;
+import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -137,6 +142,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 String searchKey = searchHistory.get(position);
                 edtSearch.setText(searchKey);
+                edtSearch.dismissDropDown();
                 SearchIndexActivity.this.searchKey = searchKey;
                 presenter.search(searchKey);
                 return false;
@@ -150,6 +156,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                     //监听软键盘搜索按钮
                     String key = edtSearch.getText();
                     SearchIndexActivity.this.searchKey = key;
+                    edtSearch.dismissDropDown();
                     presenter.search(key);
                     return true;
                 }
@@ -157,6 +164,20 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             }
         });
         edtSearch.addTextChangedListener(edtSearch.new TextWatcher());
+        edtSearch.setAdapter(new AutoCompleteAdapter(AutoCompleteUtils.getData(this), this));
+        edtSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListAdapter adapter = edtSearch.getAdapter();
+                if (adapter != null) {
+                    QuoteItemJson quote = (QuoteItemJson) adapter.getItem(position);
+                    String name = quote.getName();
+                    edtSearch.setText(name);
+                    edtSearch.dismissDropDown();
+                    presenter.search(name);
+                }
+            }
+        });
     }
 
     @OnClick({R.id.tv_break, R.id.iv_del})
@@ -276,6 +297,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
             } else {
                 adapter.setData(quotes);
             }
+            AutoCompleteUtils.saveData(this, quotes);
+            edtSearch.setData(AutoCompleteUtils.getData(this));
             adapter.setSearchKey(searchKey);
             ListView refreshableView = rvContent.getRefreshableView();
             if (headView != null) {
@@ -312,6 +335,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     public void refresh(List<QuoteItemJson> quotes) {
         if (quotes != null && quotes.size() > 0) {
             adapter.setData(quotes);
+            AutoCompleteUtils.saveData(this, quotes);
+            edtSearch.setData(AutoCompleteUtils.getData(this));
         }
         rvContent.postDelayed(new Runnable() {
             @Override
@@ -324,6 +349,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     public void loadMore(List<QuoteItemJson> quotes) {
         if (quotes != null || quotes.size() > 0) {
             adapter.addData(quotes);
+            AutoCompleteUtils.saveData(this, quotes);
+            edtSearch.setData(AutoCompleteUtils.getData(this));
         }
         rvContent.postDelayed(new Runnable() {
             @Override
@@ -341,7 +368,8 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         headView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         headView.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color2));
         headView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext(), 40));
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUtil.dp2px(getContext()
+                , 40));
         headView.setLayoutParams(params);
     }
 

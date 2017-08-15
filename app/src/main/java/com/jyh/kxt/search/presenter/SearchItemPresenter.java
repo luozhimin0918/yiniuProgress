@@ -10,6 +10,7 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.search.json.PointJson;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.json.QuoteJson;
 import com.jyh.kxt.search.ui.fragment.SearchItemFragment;
@@ -63,8 +64,8 @@ public class SearchItemPresenter extends BasePresenter {
                                 QuoteJson quoteJson = JSON.parseObject(job.toJSONString(), QuoteJson.class);
                                 fragment.initQuote(quoteJson);
                             } else {
-                                List<ViewPointTradeBean> viewpoints = JSON.parseArray(job.getString("data"), ViewPointTradeBean.class);
-                                fragment.init(viewpoints);
+                                PointJson viewpoints = JSON.parseObject(job.toJSONString(), PointJson.class);
+                                fragment.initMain(viewpoints);
                             }
                         }
                         break;
@@ -122,8 +123,8 @@ public class SearchItemPresenter extends BasePresenter {
                                 QuoteJson quoteJson = JSON.parseObject(job.toJSONString(), QuoteJson.class);
                                 fragment.initQuote(quoteJson);
                             } else {
-                                List<ViewPointTradeBean> viewpoints = JSON.parseArray(job.getString("data"), ViewPointTradeBean.class);
-                                fragment.refresh(viewpoints);
+                                PointJson viewpoints = JSON.parseObject(job.toJSONString(), PointJson.class);
+                                fragment.initMain(viewpoints);
                             }
                         }
                         break;

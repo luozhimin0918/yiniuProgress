@@ -31,11 +31,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.base.util.emoje.DBUtils;
+import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -50,7 +51,6 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
-import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
@@ -173,7 +173,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
-        DBUtils.toSDWriteFile(this, DBManager.dbName);
+//        DBUtils.toSDWriteFile(this, DBManager.dbName);
     }
 
     /**
@@ -417,6 +417,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_activity:
                 //活动
+                Intent activityIntent = new Intent(this, MoreActivity.class);
+                activityIntent.putExtra(IntentConstant.TYPE, VarConstant.EXPLORE_ACTIVITY);
+                startActivity(activityIntent);
                 break;
             case R.id.ll_share:
                 //推荐
