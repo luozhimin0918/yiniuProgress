@@ -29,6 +29,7 @@ public class VPImgAdapter extends PagerAdapter {
     private List<String> urls;
     private Context mContext;
     private List<View> views = new ArrayList<>();
+    private View.OnClickListener onClickLinstener;
 
     public VPImgAdapter(List<String> urls, Context mContext) {
         this.urls = urls;
@@ -59,6 +60,7 @@ public class VPImgAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View view = views.get(position);
         final ImageView ivPop = (ImageView) view.findViewById(R.id.iv_pop);
+        ivPop.setOnClickListener(onClickLinstener);
         Glide.with(mContext).load(urls.get(position))
                 .asBitmap()
                 .error(R.mipmap.icon_def_news)
@@ -77,5 +79,9 @@ public class VPImgAdapter extends PagerAdapter {
                 .MATCH_PARENT);
         container.addView(view, layoutParams);
         return view;
+    }
+
+    public void setOnClickLinstener(View.OnClickListener onClickLinstener) {
+        this.onClickLinstener = onClickLinstener;
     }
 }

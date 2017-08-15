@@ -305,7 +305,16 @@ public class ArticleContentPresenter {
         imagePopupUtil = new PopupUtil((Activity) mContext);
         ViewPager inflate = (ViewPager) imagePopupUtil.createPopupView(R.layout.pop_viewpager);
 
-        inflate.setAdapter(new VPImgAdapter(gridList, mContext));
+        VPImgAdapter adapter = new VPImgAdapter(gridList, mContext);
+
+        adapter.setOnClickLinstener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagePopupUtil!=null&&imagePopupUtil.isShowing())
+                    imagePopupUtil.dismiss();
+            }
+        });
+        inflate.setAdapter(adapter);
 //        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
 //        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
         PopupUtil.Config config = new PopupUtil.Config();
