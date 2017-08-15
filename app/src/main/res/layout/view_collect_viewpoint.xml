@@ -210,11 +210,11 @@
                 android:layout_weight="1"
                 android:gravity="center">
 
-                <TextView
+                <ImageView
                     android:id="@+id/view_point_fx_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableLeft="@mipmap/icon_point_fx"
+                    android:src="@mipmap/icon_point_fx"
                     android:drawablePadding="8dp"
                     android:gravity="center"
                     android:text="0"

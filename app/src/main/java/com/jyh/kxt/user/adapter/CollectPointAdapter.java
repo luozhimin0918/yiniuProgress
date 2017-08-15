@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -191,7 +192,7 @@ public class CollectPointAdapter extends BaseAdapter {
 
         @BindView(R.id.view_point_zan_tv) TextView tvZanView;
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
-        @BindView(R.id.view_point_fx_tv) TextView tvShareView;
+        @BindView(R.id.view_point_fx_tv) ImageView tvShareView;
 
         @BindView(R.id.viewpoint_space) View viewSpace;
 
@@ -218,6 +219,17 @@ public class CollectPointAdapter extends BaseAdapter {
             viewLine1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+            int paddingVal=SystemUtil.dp2px(mContext,8);
+            tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
+                    .icon_point_zan1, 0, 0, 0);
+            tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
+                    .icon_point_pl, 0, 0, 0);
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
         }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})

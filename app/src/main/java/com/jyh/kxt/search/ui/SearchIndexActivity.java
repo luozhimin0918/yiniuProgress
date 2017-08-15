@@ -156,6 +156,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                     //监听软键盘搜索按钮
                     String key = edtSearch.getText();
                     SearchIndexActivity.this.searchKey = key;
+                    edtSearch.dismissDropDown();
                     presenter.search(key);
                     return true;
                 }
@@ -172,6 +173,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                     QuoteItemJson quote = (QuoteItemJson) adapter.getItem(position);
                     String name = quote.getName();
                     edtSearch.setText(name);
+                    edtSearch.dismissDropDown();
                     presenter.search(name);
                 }
             }

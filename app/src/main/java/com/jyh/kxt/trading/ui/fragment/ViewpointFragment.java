@@ -96,6 +96,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mPullPinnedListView.getRefreshableView().setShadowVisible(true);
         viewpointPresenter.viewpointAdapter.notifyDataSetChanged();
         viewpointPresenter.rollDotViewPager.onChangeTheme();
+        viewpointPresenter.vLine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
 
         View viewPointHotTitle = viewpointPresenter.mGridHotViewLayout.findViewById(R.id.viewpoint_hot_title);
         viewPointHotTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.slidingTabLayout_bgColor));

@@ -164,6 +164,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                     searchKey = key;
                     plRootView.loadWait();
                     presenter.search(key);
+                    edtSearch.dismissDropDown();
                     return true;
                 }
                 return false;

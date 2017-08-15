@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -38,6 +39,7 @@ import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
@@ -47,6 +49,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.tablayout.NavigationTabLayout;
@@ -227,9 +230,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
                         final ViewPointTradeBean viewPointTradeBean = viewpoints.get(location);
                         viewpointViewHolder.setData(viewPointTradeBean);
+                        viewpointViewHolder.setItemViewColor(convertView);
 
-                        setTop(viewpointViewHolder.tvContent, location, viewPointTradeBean);
-
+                        viewpointViewHolder.tvContent.convertToGif(viewPointTradeBean.content);
                         viewpointViewHolder.tvNickName.setText(viewPointTradeBean.author_name);
 
                         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
@@ -247,15 +250,6 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                                 viewPointTradeBean.forward);
 
                         articleContentPresenter.setPictureAdapter(viewpointViewHolder.gridPictureLayout, viewPointTradeBean.picture);
-
-                        convertView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
-                                intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
-                                mContext.startActivity(intent);
-                            }
-                        });
                     }
                     break;
                 case TYPE_NODATA:
@@ -472,9 +466,43 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
         @BindView(R.id.view_point_zan_tv) TextView tvZanView;
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
-        @BindView(R.id.view_point_fx_tv) TextView tvShareView;
+        @BindView(R.id.view_point_fx_tv) ImageView tvShareView;
+
+        @BindView(R.id.viewpoint_space) View viewSpace;
+
+        @BindView(R.id.viewpoint_line) View viewLine1;
+        @BindView(R.id.view_line1) View viewLine2;
+        @BindView(R.id.view_line2) View viewLine3;
+
 
         private ViewPointTradeBean viewPointTradeBean;
+
+        public void setItemViewColor(View convertView) {
+            convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
+
+            tvNickName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color62));
+            tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
+            tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+            tvTransmitView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
+            viewSpace.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+            rlTransmitLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.view_point_transmit_content));
+
+            viewLine1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+            viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+            viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+            int paddingVal= SystemUtil.dp2px(mContext,8);
+            tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
+                    .icon_point_zan1, 0, 0, 0);
+            tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
+                    .icon_point_pl, 0, 0, 0);
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
+        }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
@@ -531,6 +559,30 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                 @Override
                 public void onClick(View v) {
                     articleContentPresenter.showFunctionWindow(viewPointTradeBean);
+                }
+            });
+
+            /**
+             * 点击头像
+             */
+            rivUserAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AuthorActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
+                    mContext.startActivity(intent);
+                }
+            });
+
+            /**
+             * 点击昵称
+             */
+            tvNickName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AuthorActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
+                    mContext.startActivity(intent);
                 }
             });
         }

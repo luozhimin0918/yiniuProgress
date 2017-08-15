@@ -109,8 +109,10 @@
             android:background="@drawable/bg_edt"
             android:drawableLeft="@mipmap/icon_drawer_search"
             android:drawablePadding="10dp"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:paddingLeft="7dp"
+            android:singleLine="true"
             android:text="搜索行情/文章/视频/专栏等"
             android:textColor="@color/font_color6"
             android:textSize="@dimen/content_font_size"/>
