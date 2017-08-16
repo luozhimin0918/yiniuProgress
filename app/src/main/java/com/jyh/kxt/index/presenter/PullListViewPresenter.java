@@ -177,6 +177,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
                     return;
                 }
                 baseListAdapter.dataList.addAll(arrayList);
+                baseListAdapter.notifyDataSetChanged();
             }
 
             @Override

@@ -48,6 +48,7 @@ public class MainInitJson {
     private String url_kx_share;
     private String url_video_share;
     private String url_quotes_share;
+    private String download_QR_code;
 
     public String getUrl_quotes_share() {
         return url_quotes_share;
@@ -119,6 +120,14 @@ public class MainInitJson {
 
     public void setUrl_video_share(String url_video_share) {
         this.url_video_share = url_video_share;
+    }
+
+    public String getDownload_QR_code() {
+        return download_QR_code;
+    }
+
+    public void setDownload_QR_code(String download_QR_code) {
+        this.download_QR_code = download_QR_code;
     }
 
     public static class IndexAdBean extends JumpJson {

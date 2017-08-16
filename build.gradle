@@ -39,6 +39,6 @@ ext {
     bakApkName = 'app-release-0714-16-59-44'
     patchMessage = '行情和要闻广告高度后台可配\n视听列表加载到最后少一条数据修复\n广告视屏支持全屏播放'
 
-    versionName = '6.1.3'
-    versionCode = 32
+    versionName = '6.1.4'
+    versionCode = 33
 }

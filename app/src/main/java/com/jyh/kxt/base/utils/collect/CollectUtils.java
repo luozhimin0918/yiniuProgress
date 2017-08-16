@@ -5,7 +5,6 @@ import android.content.Context;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -24,7 +23,6 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.widget.window.ToastView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,6 +61,7 @@ public class CollectUtils {
             //未登录,本地收藏
             CollectLocalUtils.collect(context, type, obj, observerData, umengObserver);
         }
+        ToastView.makeText3(context,"收藏成功");
     }
 
     /**
@@ -93,6 +92,7 @@ public class CollectUtils {
             //未登录,本地收藏
             CollectLocalUtils.unCollect(context, type, obj, observerData, umengObserver);
         }
+        ToastView.makeText3(context,"取消成功");
     }
 
     /**

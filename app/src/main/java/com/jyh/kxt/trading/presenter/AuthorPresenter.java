@@ -243,8 +243,10 @@ public class AuthorPresenter extends BasePresenter {
             protected void onResponse(Object o) {
                 activity.attention(isFollow);
                 if (isFollow) {
+                    ToastView.makeText3(mContext, "取消成功");
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
                 } else {
+                    ToastView.makeText3(mContext, "关注成功");
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, authorId));
                 }
             }

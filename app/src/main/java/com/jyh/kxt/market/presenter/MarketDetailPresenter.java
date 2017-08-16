@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -35,14 +37,15 @@ public class MarketDetailPresenter extends BasePresenter {
     public void requestChartData(String code, int fromSource, HttpListener<String> httpListener) {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
 
+        String time = "1";
 
-        String url = "http://120.26.97.99:15772/chartbyrows?interval=%s&type=%s&code=%s";
-        String marketDataUrl;
-
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("interval", time);
         if (fromSource == 0) {
-            marketDataUrl = String.format(url, "1", "areas", code);
+            jsonParam.put("interval", "1");
+            jsonParam.put("type", "areas");
+            jsonParam.put("code", code);
         } else {
-            String time = "1";
             switch (fromSource) {
                 case 1:
                     time = "5";
@@ -67,12 +70,13 @@ public class MarketDetailPresenter extends BasePresenter {
                     break;
             }
 
-            marketDataUrl = String.format(url, time, "candlestick", code);
+            jsonParam.put("interval", time);
+            jsonParam.put("type", "candlestick");
+            jsonParam.put("code", code);
         }
-
-        volleyRequest.setDefaultDecode(false);
+//        volleyRequest.setDefaultDecode(false);
         volleyRequest.setTag(code);
-        volleyRequest.doGet(marketDataUrl, httpListener);
+        volleyRequest.doPost(HttpConstant.QUOTES_CHART, jsonParam, httpListener);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

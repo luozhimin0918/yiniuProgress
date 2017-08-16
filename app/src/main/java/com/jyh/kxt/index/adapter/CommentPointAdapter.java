@@ -24,7 +24,6 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
-import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.widget.ThumbView;
 import com.jyh.kxt.index.json.PointJson;
@@ -84,14 +83,15 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         /**
          *    回复的内容
          */
-        String replyMemberName ="";
+        String replyMemberName = "";
         if (!TextUtils.isEmpty(pointJson.getParent_content())) {
-            replyMemberName  = "回复 @ " + pointJson.getParent_member_name() + " ";
+            replyMemberName = "回复 @ " + pointJson.getParent_member_name() + " ";
         }
         SpannableStringBuilder contentSpannable = new SpannableStringBuilder(replyMemberName + pointJson.getContent());
         int color1 = ContextCompat.getColor(mContext, R.color.blue);
         ForegroundColorSpan contentForeground = new ForegroundColorSpan(color1);
-        contentSpannable.setSpan(contentForeground, 2, 2+replyMemberName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int spanLength = replyMemberName.length() == 0 ? 2 + replyMemberName.length() : replyMemberName.length();
+        contentSpannable.setSpan(contentForeground, 2, spanLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         viewHolder.tvContent.convertToGif(contentSpannable);
 
         /**
@@ -113,8 +113,15 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
          */
         String pointPublisher = "@ " + pointJson.getPoint_name() + " : ";
         String pointContent = pointPublisher + pointJson.getTitle();
-        viewHolder.tvReadTitle2.convertToGif(2, pointJson, pointPublisher.length(), pointContent, pointJson.getPoint_picture());
 
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(pointContent);
+        viewHolder.tvReadTitle2.replaceAvatar(spannableStringBuilder, pointJson.getPoint_picture());
+
+        int color = ContextCompat.getColor(mContext, R.color.blue);
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(color);
+        spannableStringBuilder.setSpan(redSpan, 0, pointPublisher.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        viewHolder.tvReadTitle2.convertToGif(spannableStringBuilder);
         viewHolder.tvReadTitle2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,7 +211,7 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         @BindView(R.id.tv_comment_content) EmoticonSimpleTextView tvContent;
         @BindView(R.id.tv_read_title1) EmoticonSimpleTextView tvReadTitle1;
 
-        @BindView(R.id.tv_read_title2) EmoticonTextView tvReadTitle2;
+        @BindView(R.id.tv_read_title2) EmoticonSimpleTextView tvReadTitle2;
 
 
         ViewHolder(View view) {

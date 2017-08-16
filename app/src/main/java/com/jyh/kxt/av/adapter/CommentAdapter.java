@@ -214,7 +214,7 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                                 R.layout.item_comment_type1,
                                 baseViewHolder.llReplyContent,
                                 false);
-
+                        replyContentView.setPadding(0, SystemUtil.dp2px(mContext,8), 0, SystemUtil.dp2px(mContext,8));
                         ViewHolder1 viewHolder1 = new ViewHolder1(replyContentView);
                         holderLogic(viewHolder1, mCommentBean);
 
@@ -340,7 +340,7 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
         } else if (basePresenter instanceof MyCommentPresenter) {
             MyCommentPresenter myCommentPresenter = (MyCommentPresenter) basePresenter;
             myCommentPresenter.showReplyMessageView(v, commentBean, parentId);
-        }else if (basePresenter instanceof CommentListPresenter) {
+        } else if (basePresenter instanceof CommentListPresenter) {
             CommentListPresenter commentListPresenter = (CommentListPresenter) basePresenter;
             commentListPresenter.showReplyMessageView(v, commentBean, parentId);
         }

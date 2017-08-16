@@ -31,8 +31,8 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
-//    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
+//            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
     //    public static final String IMG_URL = "http://img.kxt.com/";
@@ -220,6 +220,7 @@ public class HttpConstant {
     public static final String QUOTES_DELFAVOR = BASE_URL + "quotes/delFavor";
     public static final String QUOTES_ADDFAVOR = BASE_URL + "quotes/addFavor";
     public static final String QUOTES_SORT = BASE_URL + "quotes/sort";
+    public static final String QUOTES_CHART = BASE_URL + "quotes/chart";
 
     /**
      * 交易圈

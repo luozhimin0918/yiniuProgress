@@ -14,15 +14,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareBtnJson;
 import com.jyh.kxt.base.json.ShareJson;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.library.base.http.VarConstant;
+import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
@@ -246,12 +250,18 @@ public class UmengShareTool {
         try {
             application = activity.getApplication();
             UMImage urlImage;
-            if (null != bitmap) {
-                urlImage = new UMImage(activity, bitmap);
-            } else {
-                urlImage = new UMImage(activity, R.mipmap.ic_launcher);
-            }
 
+            String config = SPUtils.getString(activity, SpConstant.INIT_LOAD_APP_CONFIG);
+            MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
+            if (mainInitJson != null && mainInitJson.getDownload_QR_code() != null) {
+                urlImage = new UMImage(activity, mainInitJson.getDownload_QR_code());
+            } else {
+                if (null != bitmap) {
+                    urlImage = new UMImage(activity, bitmap);
+                } else {
+                    urlImage = new UMImage(activity, R.mipmap.ic_launcher);
+                }
+            }
 
             ShareAction shareAction = new ShareAction(activity);
 
@@ -412,8 +422,7 @@ public class UmengShareTool {
                                 screenShotBitmap.recycle();
                             }
                             //分享默认的
-                            Bitmap defaultWeiBoShareBitmap =
-                                    BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_weibo);
+                            Bitmap defaultWeiBoShareBitmap = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.share_weibo);
                             shareBean.setBitmap(defaultWeiBoShareBitmap);
                             shareBean.setDiscription(shareBean.getWeiBoDiscript());//替换微博的
                             setShareContent(activity, shareBean.getBitmap(), SHARE_MEDIA.SINA, shareBean);
@@ -421,13 +430,8 @@ public class UmengShareTool {
                         } else if (shareBean.getShareFromSource() == 2) {
 
                             shareBean.setDiscription(shareBean.getWeiBoDiscript());//替换微博的
-                            setShareContent(activity, SHARE_MEDIA.SINA, shareBean);
+                            setShareContent(activity,null, SHARE_MEDIA.SINA, shareBean);
 
-//                            setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
-//                                    .getDiscription(), shareBean.getThumb(), SHARE_MEDIA.SINA);
-
-//                            setShareContent(Activity activity, String title, String weburl, String discription,
-//                                    String thumb, SHARE_MEDIA share_media)
                         } else {
                             setShareContent(activity, shareBean.getTitle(), shareBean.getShareUrl(), shareBean
                                             .getDiscription(),

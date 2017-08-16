@@ -16,6 +16,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
 import com.library.util.SPUtils;
+import com.library.widget.window.ToastView;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -83,6 +84,7 @@ public class AttentionUtils {
             }
         });
 
+        ToastView.makeText3(context, "关注成功");
     }
 
     /**
@@ -121,6 +123,7 @@ public class AttentionUtils {
             }
         });
 
+        ToastView.makeText3(context, "关注成功");
     }
 
     /**
@@ -175,6 +178,7 @@ public class AttentionUtils {
                 observerData.onError(null);
             }
         });
+        ToastView.makeText3(context, "取消成功");
     }
 
     /**
@@ -211,6 +215,7 @@ public class AttentionUtils {
                 observerData.onError(null);
             }
         });
+        ToastView.makeText3(context, "取消成功");
     }
 
     /**

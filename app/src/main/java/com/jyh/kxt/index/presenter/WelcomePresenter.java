@@ -5,7 +5,6 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -92,7 +91,7 @@ public class WelcomePresenter extends BasePresenter {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 try {
-                    Thread.sleep(1500);
+//                    Thread.sleep(1500);
 
                     int showTime = 0;
                     try {

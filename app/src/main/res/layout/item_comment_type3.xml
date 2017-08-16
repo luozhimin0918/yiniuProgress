@@ -116,7 +116,7 @@
             android:layout_marginRight="5dp"
             android:background="@color/line_color7"/>
 
-        <com.jyh.kxt.base.util.emoje.EmoticonTextView
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
             android:id="@+id/tv_read_title2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

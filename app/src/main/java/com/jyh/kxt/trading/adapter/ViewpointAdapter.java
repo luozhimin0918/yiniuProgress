@@ -165,6 +165,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder1.setItemViewColor(convertView);
 
                 viewHolder1.tvContent.convertToGif(viewPointTradeBean.content);
+                viewHolder1.tvContent.setMaxLines(3);
                 viewHolder1.tvNickName.setText(viewPointTradeBean.author_name);
 
                 CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
