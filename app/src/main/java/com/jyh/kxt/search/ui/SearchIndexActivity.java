@@ -194,15 +194,15 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
 
     @Override
     public void onBackPressed() {
-        if (isCanBack) {
-            isCanBack = false;
-            presenter.init();
-            plRootView.loadOver();
-            startView.setVisibility(View.VISIBLE);
-            rvContent.setVisibility(View.GONE);
-        } else {
+//        if (isCanBack) {
+//            isCanBack = false;
+//            presenter.init();
+//            plRootView.loadOver();
+//            startView.setVisibility(View.VISIBLE);
+//            rvContent.setVisibility(View.GONE);
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
     @Override

@@ -520,11 +520,11 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onBackPressed() {
-        if (isCanBreak) {
-            isCanBreak = false;
-            plvContent.setVisibility(View.GONE);
-            presenter.initHistorySearch();
-        } else
+//        if (isCanBreak) {
+//            isCanBreak = false;
+//            plvContent.setVisibility(View.GONE);
+//            presenter.initHistorySearch();
+//        } else
             super.onBackPressed();
     }
 
