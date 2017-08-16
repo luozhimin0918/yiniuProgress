@@ -287,6 +287,7 @@ public class ArticleContentPresenter {
                 Glide.with(mContext)
                         .load(imageUrl)
                         .asBitmap()
+                        .placeholder(R.mipmap.icon_def_news)
                         .override(100, 80)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
@@ -307,7 +308,7 @@ public class ArticleContentPresenter {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String girdImageUrl = finalGridList.get(position);
-                setGridViewItemClick(girdImageUrl, finalGridList,position);
+                setGridViewItemClick(girdImageUrl, finalGridList, position);
             }
         });
     }
@@ -563,6 +564,7 @@ public class ArticleContentPresenter {
                             break;
                         case R.id.point_function_gz:
                             final boolean isGz = !"true".equals(tvGz.getTag());
+                            setAttentionState(tvGz, isGz);
                             requestAttentionState(viewPointTradeBean.author_id, isGz, new HttpCallBack() {
                                 @Override
                                 public void onResponse(Status status) {

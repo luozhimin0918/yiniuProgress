@@ -30,9 +30,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.mychart.MyLineChart;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -412,13 +410,15 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             }
             marketItemList.add(marketItemBean);
             ivOptionalImage.setSelected(true);
-            TSnackbar.make(ivBarBreak, "添加成功", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
-                    .setPromptThemBackground(Prompt.WARNING).show();
+            /*TSnackbar.make(ivBarBreak, "添加成功", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                    .setPromptThemBackground(Prompt.WARNING).show();*/
+            ToastView.makeText3(this,"添加成功");
         } else {
             marketItemList.remove(marketItemBean);
             ivOptionalImage.setSelected(false);
-            TSnackbar.make(ivBarBreak, "取消自选", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
-                    .setPromptThemBackground(Prompt.WARNING).show();
+//            TSnackbar.make(ivBarBreak, "取消自选", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+//                    .setPromptThemBackground(Prompt.WARNING).show();
+            ToastView.makeText3(this,"取消自选");
         }
         updateAddStatus = !updateAddStatus;
 

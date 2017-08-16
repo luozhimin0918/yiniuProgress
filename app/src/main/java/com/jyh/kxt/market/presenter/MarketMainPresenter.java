@@ -87,7 +87,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
     private RollDotViewPager recommendView;
-    private MarketMainBean marketBean;
+//    private MarketMainBean marketBean;
     private ArrayList<SkinnableTextView> mAdTextViewList;
     private TextView tvAd1;
     private TextView tvAd2;
@@ -149,6 +149,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                                 createFavorView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                createFavorView(null);//创建这个视图
                             }
                             break;
                         case "hot":
@@ -308,14 +309,16 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createFavorView(MarketMainBean marketBean) {
-
-        Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
-        if (isInit) {
-            List<MarketItemBean> data = marketBean.getData();
-            data.clear();
-            data.addAll(MarketUtil.getMarketEditOption(mContext));
+        try {
+            Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
+            if (isInit) {
+                List<MarketItemBean> data = marketBean.getData();
+                data.clear();
+                data.addAll(MarketUtil.getMarketEditOption(mContext));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
         createFavorView(marketBean, null);
     }
 
@@ -329,10 +332,10 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
             mainHeaderView.addView(hqLayoutView);
         }
 
-        this.marketBean = marketBean;
-        if (marketBean.getData() == null || marketBean.getData().size() == 0) {
+        if (marketBean == null || marketBean.getData() == null || marketBean.getData().size() == 0) {
             return;
         }
+//        this.marketBean = marketBean;
 
         View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
         TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
