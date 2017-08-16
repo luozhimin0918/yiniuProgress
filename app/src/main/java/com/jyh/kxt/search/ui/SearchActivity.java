@@ -201,7 +201,6 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             try {
                 switch (type) {
                     case VarConstant.SEARCH_TYPE_NEWS:
-                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons == null || newsJsons.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
@@ -236,6 +235,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         }
                         break;
                     case VarConstant.SEARCH_TYPE_ARTICLE:
+                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList == null || newsJsonList.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
@@ -324,7 +324,6 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             try {
                 switch (type) {
                     case VarConstant.SEARCH_TYPE_NEWS:
-                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons != null && newsJsons.size() > 0) {
                             if (newsAdapter == null) {
@@ -353,6 +352,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         }
                         break;
                     case VarConstant.SEARCH_TYPE_ARTICLE:
+                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList != null && newsJsonList.size() > 0) {
                             if (newsAdapter == null) {
@@ -426,7 +426,6 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             try {
                 switch (type) {
                     case VarConstant.SEARCH_TYPE_NEWS:
-                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons == null || newsJsons.size() == 0) {
                         } else {
@@ -445,6 +444,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         }
                         break;
                     case VarConstant.SEARCH_TYPE_ARTICLE:
+                    case VarConstant.SEARCH_TYPE_BLOG:
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList == null || newsJsonList.size() == 0) {
                         } else {
@@ -520,11 +520,11 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onBackPressed() {
-        if (isCanBreak) {
-            isCanBreak = false;
-            plvContent.setVisibility(View.GONE);
-            presenter.initHistorySearch();
-        } else
+//        if (isCanBreak) {
+//            isCanBreak = false;
+//            plvContent.setVisibility(View.GONE);
+//            presenter.initHistorySearch();
+//        } else
             super.onBackPressed();
     }
 

@@ -123,7 +123,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         searchTypes.add(new SearchType("视听", VarConstant.SEARCH_TYPE_VIDEO));
         searchTypes.add(new SearchType("专栏", VarConstant.SEARCH_TYPE_COLUMNIST));
         searchTypes.add(new SearchType("观点", VarConstant.SEARCH_TYPE_VIEWPOINT));
-        searchTypes.add(new SearchType("文章", VarConstant.SEARCH_TYPE_ARTICLE));
+        searchTypes.add(new SearchType("文章", VarConstant.SEARCH_TYPE_BLOG));
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         searchTypeAdapter = new SearchTypeAdapter(this, searchTypes);
         searchTypeAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -194,15 +194,15 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
 
     @Override
     public void onBackPressed() {
-        if (isCanBack) {
-            isCanBack = false;
-            presenter.init();
-            plRootView.loadOver();
-            startView.setVisibility(View.VISIBLE);
-            rvContent.setVisibility(View.GONE);
-        } else {
+//        if (isCanBack) {
+//            isCanBack = false;
+//            presenter.init();
+//            plRootView.loadOver();
+//            startView.setVisibility(View.VISIBLE);
+//            rvContent.setVisibility(View.GONE);
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
     @Override

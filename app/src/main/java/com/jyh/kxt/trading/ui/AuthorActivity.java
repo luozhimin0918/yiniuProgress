@@ -228,9 +228,12 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
 
     private void setHeadView(AuthorDetailsJson authorDetailsJson) {
         tvName.setText(authorDetailsJson.getName());
-        tvFans.setText("粉丝 " + authorDetailsJson.getNum_fans());
-        tvArticle.setText("文章 " + authorDetailsJson.getArticle_num());
-        tvViewpoint.setText("观点 " + authorDetailsJson.getPoint_num());
+        String num_fans = authorDetailsJson.getNum_fans();
+        String article_num = authorDetailsJson.getArticle_num();
+        String point_num = authorDetailsJson.getPoint_num();
+        tvFans.setText("粉丝 " + (num_fans==null?0:num_fans));
+        tvArticle.setText("文章 " + (article_num==null?0:article_num));
+        tvViewpoint.setText("观点 " + (point_num==null?0:point_num));
         tvInfo.setText(authorDetailsJson.getIntroduce());
 
         //关注
@@ -406,7 +409,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         List data = adapter.getData();
         int clickPosition = position - 3;
-        if (data != null && data.size() >= clickPosition) {
+        if (data != null && clickPosition >= 0 && data.size() >= clickPosition) {
             Object bean = data.get(clickPosition);
             if (bean instanceof ViewPointTradeBean) {
             } else {

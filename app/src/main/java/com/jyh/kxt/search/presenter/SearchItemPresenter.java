@@ -9,6 +9,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.search.json.PointJson;
 import com.jyh.kxt.search.json.QuoteItemJson;
@@ -16,6 +17,7 @@ import com.jyh.kxt.search.json.QuoteJson;
 import com.jyh.kxt.search.ui.fragment.SearchItemFragment;
 import com.jyh.kxt.trading.json.ColumnistListJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -52,6 +54,10 @@ public class SearchItemPresenter extends BasePresenter {
         jsonParam.put(VarConstant.HTTP_CODE, searchType);
         jsonParam.put(VarConstant.HTTP_LASTID, lastId);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        if(LoginUtils.isLogined(mContext)){
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+        }
         request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String result) {
@@ -110,6 +116,10 @@ public class SearchItemPresenter extends BasePresenter {
         jsonParam.put(VarConstant.HTTP_CODE, searchType);
         jsonParam.put(VarConstant.HTTP_LASTID, lastId);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        if(LoginUtils.isLogined(mContext)){
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+        }
         request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String result) {
@@ -174,6 +184,10 @@ public class SearchItemPresenter extends BasePresenter {
             jsonParam.put(VarConstant.HTTP_CODE, searchType);
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
             jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+            if(LoginUtils.isLogined(mContext)){
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+            }
             request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<String>() {
                 @Override
                 protected void onResponse(String result) {

@@ -1,8 +1,5 @@
 package com.jyh.kxt.search.presenter;
 
-import android.app.Activity;
-import android.content.Intent;
-
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -11,18 +8,16 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.ui.SearchIndexActivity;
-import com.jyh.kxt.search.ui.SearchMainActivity;
-import com.jyh.kxt.search.util.AutoCompleteUtils;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
-
-import org.apache.http.protocol.HTTP;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +64,10 @@ public class SearchIndexPresenter extends BasePresenter {
             JSONObject jsonParam = request.getJsonParam();
             jsonParam.put(VarConstant.HTTP_CODE, VarConstant.SEARCH_TYPE_QUOTE);
             jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+            if(LoginUtils.isLogined(mContext)){
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+            }
             request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<List<QuoteItemJson>>() {
                 @Override
                 protected void onResponse(List<QuoteItemJson> quotes) {
@@ -111,6 +110,10 @@ public class SearchIndexPresenter extends BasePresenter {
             jsonParam.put(VarConstant.HTTP_CODE, VarConstant.SEARCH_TYPE_QUOTE);
             jsonParam.put(VarConstant.HTTP_WORD, searchKey);
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+            if(LoginUtils.isLogined(mContext)){
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+            }
             request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<List<QuoteItemJson>>() {
                 @Override
                 protected void onResponse(List<QuoteItemJson> quotes) {
@@ -143,6 +146,10 @@ public class SearchIndexPresenter extends BasePresenter {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_CODE, VarConstant.SEARCH_TYPE_QUOTE);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        if(LoginUtils.isLogined(mContext)){
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+        }
         request.doPost(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<List<QuoteItemJson>>() {
             @Override
             protected void onResponse(List<QuoteItemJson> quotes) {

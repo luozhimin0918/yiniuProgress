@@ -114,7 +114,7 @@ public class ColumnistAdapter extends BaseListAdapter<ColumnistListJson> {
         String num_fans = bean.getNum_fans();
         holder.tvViewpoint.setText("观点数: " + (point_num == null || point_num.equals("null") ? 0 : point_num));
         holder.tvArticle.setText("文章数: " + (article_num == null || article_num.equals("null") ? 0 : article_num));
-        holder.tvFans.setText("粉丝: " + (num_fans == null || num_fans.equals("null") ? 0 : article_num));
+        holder.tvFans.setText("粉丝: " + (num_fans == null || num_fans.equals("null") ? 0 : num_fans));
 
         setTheme(holder);
 
