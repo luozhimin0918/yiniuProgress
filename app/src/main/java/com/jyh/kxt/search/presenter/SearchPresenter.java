@@ -10,7 +10,9 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.search.ui.SearchActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -62,6 +64,10 @@ public class SearchPresenter extends BasePresenter {
         jsonParam.put(VarConstant.HTTP_CODE, type);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
         jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+        if(LoginUtils.isLogined(mContext)){
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+        }
 
         request.doGet(HttpConstant.SEARCH_LIST, jsonParam, new HttpListener<String>() {
             @Override
@@ -164,6 +170,10 @@ public class SearchPresenter extends BasePresenter {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_CODE, type);
         jsonParam.put(VarConstant.HTTP_WORD, searchKey);
+        if(LoginUtils.isLogined(mContext)){
+            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+            jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+        }
         request.doGet(HttpConstant.SEARCH_LIST, new HttpListener<String>() {
             @Override
             protected void onResponse(String info) {
@@ -189,6 +199,10 @@ public class SearchPresenter extends BasePresenter {
             jsonParam.put(VarConstant.HTTP_CODE, type);
             jsonParam.put(VarConstant.HTTP_WORD, searchKey);
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+            if(LoginUtils.isLogined(mContext)){
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                jsonParam.put(VarConstant.HTTP_UID,userInfo.getUid());
+            }
             request.doGet(HttpConstant.SEARCH_LIST, new HttpListener<String>() {
                 @Override
                 protected void onResponse(String info) {
