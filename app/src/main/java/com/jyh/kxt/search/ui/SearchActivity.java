@@ -148,6 +148,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 String searchKey = searchHistoryList.get(position);
                 edtSearch.setText(searchKey);
+                SearchActivity.this.searchKey = searchKey;
                 plRootView.loadWait();
                 presenter.search(searchKey);
                 return false;
@@ -576,6 +577,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                     getContext().startActivity(columnistIntent);
                     break;
                 case VarConstant.SEARCH_TYPE_ARTICLE:
+                case VarConstant.SEARCH_TYPE_BLOG:
                     NewsJson newsJson2 = newsAdapter.getData().get(dataPosition);
                     JumpUtils.jump(this, newsJson2.getO_class(), newsJson2.getO_action(), newsJson2.getO_id(), newsJson2
                             .getHref());
