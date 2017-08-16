@@ -277,7 +277,11 @@ public class ViewPointDetailPresenter extends BasePresenter {
 //                mViewPointDetailActivity.tvShowComment.performClick();
 
                 if (isToComment) {
+
                     mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(2);
+                    if (commentDetailList.size() == 0) {
+                        mViewPointDetailActivity.tvShowComment.performClick();
+                    }
                 } else {
                     mViewPointDetailActivity.mPullPinnedListView.getRefreshableView().setSelection(0);
                 }
@@ -287,6 +291,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
 
         String followState = mViewPointTradeBean.is_follow;
         final boolean isFollow = "1".equals(followState);
+        cbAttention.setChecked(isFollow);
         cbAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,7 +301,9 @@ public class ViewPointDetailPresenter extends BasePresenter {
                         new HttpCallBack() {
                             @Override
                             public void onResponse(Status status) {
-                                cbAttention.setChecked(isFollow);
+                                if (Status.ERROR == status) {
+                                    cbAttention.setChecked(!cbAttention.isChecked());
+                                }
                             }
                         });
             }

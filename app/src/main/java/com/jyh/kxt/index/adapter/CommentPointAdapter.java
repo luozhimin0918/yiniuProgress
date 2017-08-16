@@ -91,7 +91,7 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         SpannableStringBuilder contentSpannable = new SpannableStringBuilder(replyMemberName + pointJson.getContent());
         int color1 = ContextCompat.getColor(mContext, R.color.blue);
         ForegroundColorSpan contentForeground = new ForegroundColorSpan(color1);
-        contentSpannable.setSpan(contentForeground, 2, replyMemberName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        contentSpannable.setSpan(contentForeground, 2, 2+replyMemberName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         viewHolder.tvContent.convertToGif(contentSpannable);
 
         /**
