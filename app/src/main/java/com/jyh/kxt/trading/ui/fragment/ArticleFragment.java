@@ -12,6 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.datum.bean.DataGroup;
 import com.jyh.kxt.explore.json.NewsNavJson;
 import com.jyh.kxt.trading.presenter.ArticleFragmentPresenter;
 import com.library.util.RegexValidateUtil;
@@ -45,6 +46,7 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     private String[] tabs;
     private BaseFragmentAdapter adapter;
     private String selTab;
+    private List<NewsNavJson> newsNavJson;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -128,6 +130,7 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
     }
 
     public void init(List<NewsNavJson> newsNavs) {
+        this.newsNavJson = newsNavs;
         int size = newsNavs.size();
         tabs = new String[size];
 
@@ -189,6 +192,18 @@ public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAf
 
     public void setSelTab(String selTab) {
         this.selTab = selTab;
+        int size = fragmentList.size();
+        if (tabs != null && tabs.length > 0 && size > 0) {
+            for (int i = 0; i < size; i++) {
+                NewsNavJson news = newsNavJson.get(i);
+                if (!RegexValidateUtil.isEmpty(selTab)) {
+                    if (selTab.equals(news.getId())) {
+                        vpNewsList.setCurrentItem(i);
+                    }
+                }
+
+            }
+        }
     }
 
 }

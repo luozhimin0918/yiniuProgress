@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -49,6 +50,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     private ArticleFragment articleFragment;
     private ViewpointFragment viewpointFragment;
     private int index;
+    private String tab = null;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -60,7 +62,10 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-        onTabSelect(0);
+        if (tab == null)
+            onTabSelect(0);
+        else
+            onTabSelect(1);
     }
 
     @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1})
@@ -111,7 +116,13 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         this.index = position;
         BaseFragment currentFragment;
         if (position == 1) {
-            currentFragment = articleFragment = articleFragment == null ? new ArticleFragment() : articleFragment;
+            if (articleFragment == null) {
+                articleFragment = new ArticleFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(IntentConstant.TAB, tab);
+                articleFragment.setArguments(bundle);
+            }
+            currentFragment = articleFragment;
         } else {
             currentFragment = viewpointFragment = viewpointFragment == null ? new ViewpointFragment() :
                     viewpointFragment;
@@ -145,7 +156,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         try {
             onTabSelect(0);
             stlNavigationBar.setCurrentTab(0);
-            if(viewpointFragment!= null){
+            if (viewpointFragment != null) {
                 viewpointFragment.doubleClickFragment();
             }
         } catch (Exception e) {
@@ -208,5 +219,11 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
+        if (articleFragment != null)
+            articleFragment.setSelTab(tab);
     }
 }

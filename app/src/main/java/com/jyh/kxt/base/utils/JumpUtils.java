@@ -11,6 +11,7 @@ import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
 import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.index.ui.fragment.TradingFragment;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -104,7 +105,7 @@ public class JumpUtils {
                 //网页跳转
                 Intent intent = new Intent(context, WebActivity.class);
 
-                if(TextUtils.isEmpty(webTitle)){
+                if (TextUtils.isEmpty(webTitle)) {
                     intent.putExtra(IntentConstant.NAME, webTitle);
                 }
 
@@ -621,48 +622,109 @@ public class JumpUtils {
      * @param o_action
      * @param o_id
      */
-    private static void jumpBlog(BaseActivity context, String o_action, String o_id) {
+    private static void jumpBlog(BaseActivity context, String o_action, final String o_id) {
         switch (o_action) {
             case VarConstant.OACTION_INDEX:
                 //专栏列表
-                Intent authorIntent = new Intent(context, AuthorListActivity.class);
-                context.startActivity(authorIntent);
-                break;
-            case VarConstant.OACTION_LIST:
-                AuthorListActivity authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
-                        (AuthorListActivity.class);
-                if (authorActivity == null) {
-                    Intent authorIntent2 = new Intent(context, AuthorListActivity.class);
+//                Intent authorIntent = new Intent(context, AuthorListActivity.class);
+//                context.startActivity(authorIntent);
 
-                    authorIntent2.putExtra(IntentConstant.INDEX, 1);
-                    authorIntent2.putExtra(IntentConstant.TAB, o_id);
-
-                    context.startActivity(authorIntent2);
+                MainActivity mainActivity;
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
                 } else {
-                    ActivityManager.getInstance().moveToStackPeekActivity(AuthorListActivity.class);
-                    authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
-                            (AuthorListActivity.class);
-                    try {
-                        Thread.sleep(200);
-                        authorActivity.onTabSelect(1);
-                        ArticleFragment articleFragment = authorActivity.articleFragment;
-                        if (articleFragment != null) {
-                            String[] tabs = articleFragment.getTabs();
-                            if (tabs == null || tabs.length == 0) {
-                                articleFragment.setSelTab(o_id);
-                            } else {
-                                int length = tabs.length;
-                                for (int i = 0; i < length; i++) {
-                                    if (tabs[i].equals(o_id)) {
-                                        articleFragment.onTabSelect(i);
-                                    }
-                                }
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
+
+                RadioButton rbTrading = mainActivity.rbProbe;
+                boolean rbDatumChecked = rbTrading.isChecked();
+                if (rbDatumChecked) {
+                    mainActivity.exploreFragment.onTabSelect(1);
+                } else {
+                    rbTrading.performClick();
+                    final MainActivity mainActivityCopy = mainActivity;
+                    rbTrading.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mainActivityCopy.exploreFragment.onTabSelect(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    }, 200);
                 }
+
+
+                break;
+            case VarConstant.OACTION_LIST:
+//                AuthorListActivity authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
+//                        (AuthorListActivity.class);
+//                if (authorActivity == null) {
+//                    Intent authorIntent2 = new Intent(context, AuthorListActivity.class);
+//
+//                    authorIntent2.putExtra(IntentConstant.INDEX, 1);
+//                    authorIntent2.putExtra(IntentConstant.TAB, o_id);
+//
+//                    context.startActivity(authorIntent2);
+//                } else {
+//                    ActivityManager.getInstance().moveToStackPeekActivity(AuthorListActivity.class);
+//                    authorActivity = (AuthorListActivity) ActivityManager.getInstance().getSingleActivity
+//                            (AuthorListActivity.class);
+//                    try {
+//                        Thread.sleep(200);
+//                        authorActivity.onTabSelect(1);
+//                        ArticleFragment articleFragment = authorActivity.articleFragment;
+//                        if (articleFragment != null) {
+//                            String[] tabs = articleFragment.getTabs();
+//                            if (tabs == null || tabs.length == 0) {
+//                                articleFragment.setSelTab(o_id);
+//                            } else {
+//                                int length = tabs.length;
+//                                for (int i = 0; i < length; i++) {
+//                                    if (tabs[i].equals(o_id)) {
+//                                        articleFragment.onTabSelect(i);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+
+                MainActivity mainActivity2;
+                if (context instanceof MainActivity) {
+                    mainActivity2 = (MainActivity) context;
+                } else {
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity2 = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                }
+
+                RadioButton rbTrading2 = mainActivity2.rbProbe;
+                boolean rbDatumChecked2 = rbTrading2.isChecked();
+                final TradingFragment tradingFragment = mainActivity2.exploreFragment;
+                if (rbDatumChecked2) {
+                    tradingFragment.setTab(o_id);
+                    tradingFragment.onTabSelect(1);
+                } else {
+                    rbTrading2.performClick();
+                    final MainActivity mainActivityCopy = mainActivity2;
+                    rbTrading2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final TradingFragment tradingFragment = mainActivityCopy.exploreFragment;
+                                tradingFragment.setTab(o_id);
+                                tradingFragment.onTabSelect(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 500);
+                }
+
                 break;
             case VarConstant.OACTION_DETAIL:
                 Intent detailIntent = new Intent(context, NewsContentActivity.class);

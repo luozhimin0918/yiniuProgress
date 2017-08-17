@@ -35,6 +35,7 @@ import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
@@ -77,7 +78,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     public AuthorAdapter(Context context, List<ViewPointTradeBean> viewpoints, List<AuthorNewsJson> news, int type) {
         this.mContext = context;
         this.viewpoints = viewpoints;
-        TradeHandlerUtil.getInstance().listCheckState(mContext,viewpoints);
+        TradeHandlerUtil.getInstance().listCheckState(mContext, viewpoints);
         articleContentPresenter = new ArticleContentPresenter(mContext);
         this.news = news;
         this.type = type;
@@ -220,7 +221,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                         viewpointViewHolder.setData(viewPointTradeBean);
                         viewpointViewHolder.setItemViewColor(convertView);
 
-                        setTop(viewpointViewHolder.tvContent,location,viewPointTradeBean);
+                        setTop(viewpointViewHolder.tvContent, location, viewPointTradeBean);
                         viewpointViewHolder.tvNickName.setText(viewPointTradeBean.author_name);
 
                         CharSequence formatCreateTime = DateFormat.format("MM-dd HH:mm", viewPointTradeBean.time * 1000);
@@ -238,6 +239,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                                 viewPointTradeBean.forward);
 
                         articleContentPresenter.setPictureAdapter(viewpointViewHolder.gridPictureLayout, viewPointTradeBean.picture);
+
                     }
                     break;
                 case TYPE_NODATA:
@@ -321,7 +323,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             viewpoints.addAll(viewpointData);
         }
 
-        TradeHandlerUtil.getInstance().listCheckState(mContext,viewpointData);
+        TradeHandlerUtil.getInstance().listCheckState(mContext, viewpointData);
         notifyDataSetChanged();
     }
 
@@ -342,7 +344,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     public void addViewPointData(List<ViewPointTradeBean> viewpointData) {
         viewpoints.addAll(viewpointData);
-        TradeHandlerUtil.getInstance().listCheckState(mContext,viewpoints);
+        TradeHandlerUtil.getInstance().listCheckState(mContext, viewpoints);
         notifyDataSetChanged();
     }
 
@@ -480,19 +482,19 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
-            int paddingVal= SystemUtil.dp2px(mContext,8);
+            int paddingVal = SystemUtil.dp2px(mContext, 8);
             tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvZanView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
                     .icon_point_zan1, 0, 0, 0);
             tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
                     .icon_point_pl, 0, 0, 0);
-            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout,R.id.view_point_fx_layout})
+        @OnClick({R.id.view_point_zan_layout, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
                 case R.id.view_point_zan_layout:
@@ -550,26 +552,11 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
                 }
             });
 
-            /**
-             * 点击头像
-             */
-            rivUserAvatar.setOnClickListener(new View.OnClickListener() {
+            contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, AuthorActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
-                    mContext.startActivity(intent);
-                }
-            });
-
-            /**
-             * 点击昵称
-             */
-            tvNickName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, AuthorActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.author_id);
+                    Intent intent = new Intent(mContext, ViewPointDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, viewPointTradeBean.o_id);
                     mContext.startActivity(intent);
                 }
             });
