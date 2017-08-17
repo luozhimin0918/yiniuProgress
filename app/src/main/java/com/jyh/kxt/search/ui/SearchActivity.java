@@ -570,8 +570,6 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 case VarConstant.SEARCH_TYPE_COLUMNIST:
                     List<ColumnistListJson> data = columnistAdapter.getData();
                     if (data == null) return;
-                    int size = data.size();
-                    if (size - 1 <= dataPosition) return;
                     Intent columnistIntent = new Intent(getContext(), AuthorActivity.class);
                     columnistIntent.putExtra(IntentConstant.O_ID, data.get(dataPosition).getId());
                     getContext().startActivity(columnistIntent);
