@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-//            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    //            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -157,7 +157,7 @@ public class HttpConstant {
     public static final String COLLECT_NEWS = BASE_URL + "member/favor_article";//收藏列表-文章
     // ?uid={uid}&token={token}&lastid={lastid}
     public static final String COLLECT_VIDEO = BASE_URL + "member/favor_video";//收藏列表-视听
-    public static final String COLLECT_POINT = BASE_URL + "member/favor_point"+VarConstant.HTTP_CONTENT;//收藏列表-观点
+    public static final String COLLECT_POINT = BASE_URL + "member/favor_point" + VarConstant.HTTP_CONTENT;//收藏列表-观点
     public static final String COLLECT_LIST_DEL = BASE_URL + "member/favor_delete";//收藏列表-删除
     // ?uid={uid}&token={token}&type={type:1,
     // 2}&id={1,2,3,4}

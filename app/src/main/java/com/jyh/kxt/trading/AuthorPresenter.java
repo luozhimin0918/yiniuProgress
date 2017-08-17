@@ -200,9 +200,9 @@ public class AuthorPresenter extends BasePresenter {
             protected void onResponse(Object o) {
                 authorActivity.attention(isFollow);
                 if (isFollow) {
-                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
-                } else {
                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, authorId));
+                } else {
+                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
                 }
             }
 

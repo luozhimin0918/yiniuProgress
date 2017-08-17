@@ -52,6 +52,7 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
     public AttentionAuthorAdapter(Context context, List dataList) {
         super(dataList);
         this.context = context;
+        doData();
     }
 
     @Override
@@ -78,19 +79,32 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
             }
         });
 
-        viewHolder.ivAttention.setSelected(true);
+        final boolean is_follow = "1".equals(author.getIs_follow());
+        viewHolder.ivAttention.setSelected(is_follow ? true : false);
 
         viewHolder.ivAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //取消关注
                 if (request != null) {
-                    request.doPost(HttpConstant.EXPLORE_BLOG_DELETEFAVOR, getFollowMap(author.getId()), new HttpListener<Object>() {
+
+                    String url;
+                    if(is_follow){
+                        url=HttpConstant.EXPLORE_BLOG_DELETEFAVOR;
+                    }else{
+                        url=HttpConstant.EXPLORE_BLOG_ADDFAVOR;
+                    }
+
+                    request.doPost(url, getFollowMap(author.getId()), new HttpListener<Object>() {
                         @Override
                         protected void onResponse(Object o) {
-                            dataList.remove(author);
+//                            dataList.remove(author);
+                            author.setIs_follow(is_follow ? "0" : "1");
                             notifyDataSetChanged();
-                            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, null));
+                            if (is_follow)
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, author.getId()));
+                            else
+                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, author.getId()));
                         }
 
                         @Override
@@ -123,11 +137,13 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
     public void setData(List<AuthorDetailsJson> data) {
         dataList.clear();
         dataList.addAll(data);
+        doData();
         notifyDataSetChanged();
     }
 
     public void addData(List<AuthorDetailsJson> data) {
         dataList.addAll(data);
+        doData();
         notifyDataSetChanged();
     }
 
@@ -168,6 +184,12 @@ public class AttentionAuthorAdapter extends BaseListAdapter<AuthorDetailsJson> {
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+    }
+
+    public void doData() {
+        for (AuthorDetailsJson authorDetailsJson : dataList) {
+            authorDetailsJson.setIs_follow("1");
         }
     }
 }

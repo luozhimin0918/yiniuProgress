@@ -2,6 +2,7 @@ package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -60,6 +61,7 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
         }
         presenter = new AttentionAuthorPresenter(this);
         plRootView.setOnAfreshLoadListener(this);
+        plvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         plvContent.setOnRefreshListener(this);
         plvContent.setOnItemClickListener(this);
 
@@ -162,9 +164,24 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
                 if (data == null || data.size() == 0) {
                     plRootView.loadEmptyData();
                 }
-
+                String  id = (String) eventBus.intentObj;
+                for (AuthorDetailsJson authorDetailsJson : data) {
+                    if (authorDetailsJson.getId().equals(id)) {
+                        authorDetailsJson.setIs_follow("0");
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 break;
             case EventBusClass.EVENT_ATTENTION_AUTHOR_ADD:
+                List<AuthorDetailsJson> data1 = adapter.getData();
+                if (data1 == null || data1.size() == 0) return;
+                String  id1 = (String) eventBus.intentObj;
+                for (AuthorDetailsJson authorDetailsJson : data1) {
+                    if (authorDetailsJson.getId().equals(id1)) {
+                        authorDetailsJson.setIs_follow("1");
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -188,12 +205,12 @@ public class AttentionActivity extends BaseActivity implements PageLoadLayout.On
             }
         }
 
-        if (isOnResume) {
-            presenter.resumeRequest(1);
-        }
-        if (!isOnResume) {
-            isOnResume = true;
-        }
+//        if (isOnResume) {
+//            presenter.resumeRequest(1);
+//        }
+//        if (!isOnResume) {
+//            isOnResume = true;
+//        }
     }
 
     @OnClick(R.id.iv_bar_break)
