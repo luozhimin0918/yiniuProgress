@@ -196,6 +196,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plvContent.setVisibility(View.VISIBLE);
         if (info == null || info.equals("")) {
             plRootView.setNullText(getString(R.string.error_search_null));
+            plRootView.setNullImgId(R.mipmap.icon_search_null);
+            plRootView.setNullTextColor(R.color.font_color8);
             plRootView.loadEmptyData();
         } else {
             try {
@@ -204,6 +206,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsons = JSON.parseArray(info, NewsJson.class);
                         if (newsJsons == null || newsJsons.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (newsAdapter == null) {
@@ -221,6 +225,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<VideoListJson> videos = JSON.parseArray(info, VideoListJson.class);
                         if (videos == null || videos.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (videoAdapter == null) {
@@ -239,6 +245,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<NewsJson> newsJsonList = JSON.parseArray(info, NewsJson.class);
                         if (newsJsonList == null || newsJsonList.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (newsAdapter == null) {
@@ -256,6 +264,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ColumnistListJson> columnists = JSON.parseArray(info, ColumnistListJson.class);
                         if (columnists == null || columnists.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (columnistAdapter == null) {
@@ -273,6 +283,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<QuoteItemJson> marketItemBeens = JSON.parseArray(info, QuoteItemJson.class);
                         if (marketItemBeens == null || marketItemBeens.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (marketSearchAdapter == null) {
@@ -292,6 +304,8 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         List<ViewPointTradeBean> viewPoints = JSON.parseArray(info, ViewPointTradeBean.class);
                         if (viewPoints == null || viewPoints.size() == 0) {
                             plRootView.setNullText(getString(R.string.error_search_null));
+                            plRootView.setNullImgId(R.mipmap.icon_search_null);
+                            plRootView.setNullTextColor(R.color.font_color8);
                             plRootView.loadEmptyData();
                         } else {
                             if (viewpointSearchAdapter == null) {
@@ -308,12 +322,16 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                         break;
                     default:
                         plRootView.setNullText(getString(R.string.error_search_null));
+                        plRootView.setNullImgId(R.mipmap.icon_search_null);
+                        plRootView.setNullTextColor(R.color.font_color8);
                         plRootView.loadEmptyData();
                         break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 plRootView.setNullText(getString(R.string.error_search_null));
+                plRootView.setNullImgId(R.mipmap.icon_search_null);
+                plRootView.setNullTextColor(R.color.font_color8);
                 plRootView.loadEmptyData();
             }
         }
@@ -525,7 +543,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
 //            plvContent.setVisibility(View.GONE);
 //            presenter.initHistorySearch();
 //        } else
-            super.onBackPressed();
+        super.onBackPressed();
     }
 
     @Override

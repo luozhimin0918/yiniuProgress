@@ -518,6 +518,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_MAIN:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     plContent.getRefreshableView().addHeaderView(homeHeadView);
@@ -545,6 +547,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_VIEWPOINT:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (viewpointAdapter == null) {
@@ -560,6 +564,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_NEWS:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (newsAdapter == null) {
@@ -575,6 +581,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_VIDEO:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (videoAdapter == null) {
@@ -590,6 +598,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_COLUMNIST:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (columnistAdapter == null) {
@@ -606,6 +616,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_BLOG:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (newsAdapter == null) {
@@ -621,6 +633,8 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
             case VarConstant.SEARCH_TYPE_QUOTE:
                 if (data == null || data.size() == 0) {
                     plRootView.setNullText(getString(R.string.error_search_null));
+                    plRootView.setNullImgId(R.mipmap.icon_search_null);
+                    plRootView.setNullTextColor(R.color.font_color8);
                     plRootView.loadEmptyData();
                 } else {
                     if (quoteAdapter2 == null) {

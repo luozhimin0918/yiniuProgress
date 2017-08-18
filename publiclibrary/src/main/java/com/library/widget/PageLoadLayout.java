@@ -25,6 +25,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
     private LayoutInflater mInflater;
     private int nullImgId = 0;
     private String nullText = null;
+    private int nullTextColor;
 
     public PageLoadLayout(Context context) {
         this(context, null);
@@ -105,6 +106,9 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         if (nullText != null) {
             textView.setText(nullText);
         }
+        if(nullTextColor!=-1){
+            textView.setTextColor(ContextCompat.getColor(getContext(),nullTextColor));
+        }
 
         llLoadView.setOnClickListener(this);
         updateView();
@@ -166,6 +170,10 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
 
     public void setSuccessLoadOver(boolean successLoadOver) {
         isSuccessLoadOver = successLoadOver;
+    }
+
+    public void setNullTextColor(int nullTextColor) {
+        this.nullTextColor = nullTextColor;
     }
 
     public enum BgColor {

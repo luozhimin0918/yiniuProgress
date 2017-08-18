@@ -79,6 +79,8 @@ public class SearchPresenter extends BasePresenter {
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 activity.plRootView.setNullText(mContext.getString(R.string.error_search_null));
+                activity.plRootView.setNullImgId(R.mipmap.icon_search_null);
+                activity.plRootView.setNullTextColor(R.color.font_color8);
                 activity.plRootView.loadEmptyData();
             }
         });
