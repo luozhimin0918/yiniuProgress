@@ -127,7 +127,13 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position < 1) return;
-        AuthorNewsJson authorNewsJson = newsAdapter.getData().get(position - 1);
+        int clickPositon;
+        if (isMain) {
+            clickPositon = position - 2;
+        } else {
+            clickPositon = position - 1;
+        }
+        AuthorNewsJson authorNewsJson = newsAdapter.getData().get(clickPositon);
         JumpUtils.jump((BaseActivity) getActivity(), authorNewsJson.getO_class(), authorNewsJson.getO_action(), authorNewsJson.getO_id(),
                 authorNewsJson
                         .getHref());
