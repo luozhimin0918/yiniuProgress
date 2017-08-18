@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
@@ -67,9 +66,13 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (isShowTitle)
-            if (position == 0) holder.tv.setVisibility(View.VISIBLE);
-            else holder.tv.setVisibility(View.GONE);
+        if (isShowTitle) {
+            if (position == 0) {
+                holder.tv.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv.setVisibility(View.GONE);
+            }
+        }
 
         final AuthorNewsJson news = dataList.get(position);
 
@@ -85,14 +88,15 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
 
         String author;
         String type = news.getType();
-        if("ad".equals(type)){
-            author="广告";
-        }else{
+        if ("ad".equals(type)) {
+            author = "广告";
+        } else {
             author = news.getName();
-            if (!RegexValidateUtil.isEmpty(author))
+            if (!RegexValidateUtil.isEmpty(author)) {
                 author = "文/" + author;
-            else
-                author="";
+            } else {
+                author = "";
+            }
         }
         holder.tvAuthor.setText(author);
         try {
@@ -159,8 +163,9 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
                 String textColor;
                 if (browered) {
                     textColor = browerColor;
-                } else
+                } else {
                     textColor = defalutColor;
+                }
 
                 content = "<font color='" + textColor + "'>" + before + "</font><font color='" + keyColor + "'>" + searchKey +
                         "</font><font " +
@@ -169,7 +174,7 @@ public class NewsAdapter extends BaseListAdapter<AuthorNewsJson> {
             }
         }
         holder.tvTitle.setText(Html.fromHtml(content));
-        holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext,R.color.font_color6));
+        holder.tvAuthor.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
     }
 
     public void addData(List<AuthorNewsJson> newsJsons) {

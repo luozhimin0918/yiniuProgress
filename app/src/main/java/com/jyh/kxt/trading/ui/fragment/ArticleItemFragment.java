@@ -114,8 +114,8 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         }
         if (homeHeadView != null) {
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+            plvContent.getRefreshableView().addHeaderView(homeHeadView);
         }
-        plvContent.getRefreshableView().addHeaderView(homeHeadView);
     }
 
     public void loadMore(List<AuthorNewsJson> list) {

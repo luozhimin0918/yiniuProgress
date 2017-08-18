@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:paddingLeft="18dp"
     android:orientation="horizontal"
+    android:paddingLeft="18dp"
     >
 
     <FrameLayout
@@ -83,6 +83,7 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:lineSpacingMultiplier="1.2"
             android:maxLines="3"
             android:padding="5dp"
             android:textColor="@color/font_color5"
@@ -214,9 +215,9 @@
                     android:id="@+id/view_point_fx_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/icon_point_fx"
                     android:drawablePadding="8dp"
                     android:gravity="center"
+                    android:src="@mipmap/icon_point_fx"
                     android:text="0"
                     android:textColor="@color/font_color9"
                     android:textSize="@dimen/describe_font_size3"/>
