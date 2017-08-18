@@ -27,6 +27,7 @@ import com.jyh.kxt.base.adapter.SearchTypeAdapter;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.widget.SearchEditText;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
@@ -85,6 +86,10 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     private TextView tvFoot1;
     private TextView tvFoot2;
     private ImageView ivFootMore;
+    private TextView seachTv;
+    private LinearLayout nullView;
+    private TextView nullTv;
+    private View footView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +206,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
 //            startView.setVisibility(View.VISIBLE);
 //            rvContent.setVisibility(View.GONE);
 //        } else {
-            super.onBackPressed();
+        super.onBackPressed();
 //        }
     }
 
@@ -229,6 +234,30 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                 tvFoot2.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color17));
             if (ivFootMore != null)
                 ivFootMore.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_comment_more));
+        }
+        if (nullView != null) {
+            nullView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
+            if (seachTv != null) {
+                seachTv.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color2));
+                seachTv.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
+            }
+            if (nullTv != null) {
+                nullTv.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color3));
+                nullTv.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
+            }
+            if (footView2 != null) {
+                footView2.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
+                if (rlView != null)
+                    rlView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
+                if (ivIcon != null)
+                    ivIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search_logo));
+                if (tvFoot1 != null)
+                    tvFoot1.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color5));
+                if (tvFoot2 != null)
+                    tvFoot2.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color17));
+                if (ivFootMore != null)
+                    ivFootMore.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_comment_more));
+            }
         }
 
     }
@@ -288,8 +317,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
         rvContent.setVisibility(View.VISIBLE);
 
         if (quotes == null || quotes.size() == 0) {
-            plRootView.setNullText(getString(R.string.error_search_null));
-            plRootView.loadEmptyData();
+            loadNull();
         } else {
             if (adapter == null) {
                 adapter = new QuoteAdapter(this, quotes);
@@ -314,6 +342,30 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
 
             plRootView.loadOver();
         }
+    }
+
+    private void loadNull() {
+        nullView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_end_search_null, null, false);
+        seachTv = (TextView) nullView.findViewById(R.id.tv_title);
+        seachTv.setText(searchKey);
+        nullTv = (TextView) nullView.findViewById(R.id.tv_null);
+        footView2 = nullView.findViewById(R.id.rl_more);
+        footView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SearchMainActivity.class);
+                intent.putExtra(SearchMainActivity.SEARCH_KEY, searchKey);
+                startActivity(intent);
+            }
+        });
+        rlView = (RelativeLayout) footView2.findViewById(R.id.rl_more);
+        ivIcon = (ImageView) footView2.findViewById(R.id.iv_icon);
+        tvFoot1 = (TextView) footView2.findViewById(R.id.tv1);
+        tvFoot2 = (TextView) footView2.findViewById(R.id.tv2);
+        ivFootMore = (ImageView) footView2.findViewById(R.id.iv_more);
+
+        plRootView.addCustomView(nullView);
+
     }
 
     @Override

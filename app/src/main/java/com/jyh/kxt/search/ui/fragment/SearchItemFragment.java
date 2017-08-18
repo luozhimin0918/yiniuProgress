@@ -170,7 +170,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     } else {
                         viewpointAdapter.setData(dataCopy);
                     }
-                    AutoCompleteUtils.saveData(getContext(),dataCopy);
+                    AutoCompleteUtils.saveData(getContext(), dataCopy);
                     viewpointAdapter.setSearchKey(searchKey);
                 }
                 break;
@@ -245,7 +245,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                         quoteAdapter2.setData(disposeData(data));
                     }
                     quoteAdapter2.setSearchKey(searchKey);
-                    AutoCompleteUtils.saveData(getContext(),data);
+                    AutoCompleteUtils.saveData(getContext(), data);
                 }
                 break;
         }
@@ -344,7 +344,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                         quoteAdapter2.addData(disposeData(data));
                     }
                     quoteAdapter2.setSearchKey(searchKey);
-                    AutoCompleteUtils.saveData(getContext(),data);
+                    AutoCompleteUtils.saveData(getContext(), data);
                 }
                 break;
         }
@@ -409,7 +409,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         vLine3 = viewQuote.findViewById(R.id.v_line3);
 
         quoteAdapter = new QuoteAdapter(getContext(), data);
-        AutoCompleteUtils.saveData(getContext(),data);
+        AutoCompleteUtils.saveData(getContext(), data);
         quoteAdapter.setSearchKey(searchKey);
         rvContentQuote.setAdapter(quoteAdapter);
         fixListViewHeight(rvContentQuote);
@@ -486,12 +486,14 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
         }
         addQuoteView(quoteJson.getData());
         String is_more = quoteJson.getIs_more();
-        if (is_more != null && is_more.equals("1")) {
-            tvMoreQuote.setVisibility(View.VISIBLE);
-        } else {
-            tvMoreQuote.setVisibility(View.GONE);
+        if (tvMoreQuote != null) {
+            if (is_more != null && is_more.equals("1")) {
+                tvMoreQuote.setVisibility(View.VISIBLE);
+            } else {
+                tvMoreQuote.setVisibility(View.GONE);
+            }
         }
-        AutoCompleteUtils.saveData(getContext(),quoteJson.getData());
+        AutoCompleteUtils.saveData(getContext(), quoteJson.getData());
     }
 
 
@@ -629,7 +631,7 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                     }
                     quoteAdapter2.setSearchKey(searchKey);
                     plRootView.loadOver();
-                    AutoCompleteUtils.saveData(getContext(),data);
+                    AutoCompleteUtils.saveData(getContext(), data);
                 }
                 break;
         }
