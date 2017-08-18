@@ -176,7 +176,7 @@ public class NewsContentPresenter extends BasePresenter {
         if (!LoginUtils.isLogined(mContext)) {
             if (loginPop == null) {
                 loginPop = new AlertDialog.Builder(mContext)
-                        .setTitle("提醒")
+                        .setTitle("温馨提示")
                         .setMessage("请先登录")
                         .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                             @Override

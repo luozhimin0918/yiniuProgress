@@ -602,7 +602,7 @@ public class MainPresenter extends BasePresenter {
     public void showQuitDialog() {
         if (logoutDialog == null) {
             logoutDialog = new AlertDialog.Builder(mContext)
-                    .setTitle("提醒")
+                    .setTitle("温馨提示")
                     .setMessage("确认退出当前账号?")
                     .setNegativeButton("确认", new DialogInterface.OnClickListener() {
                         @Override
@@ -630,7 +630,7 @@ public class MainPresenter extends BasePresenter {
     public void showLoginDialog() {
         if (loginPop == null) {
             loginPop = new AlertDialog.Builder(mContext)
-                    .setTitle("提醒")
+                    .setTitle("温馨提示")
                     .setMessage("请先登录")
                     .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                         @Override
