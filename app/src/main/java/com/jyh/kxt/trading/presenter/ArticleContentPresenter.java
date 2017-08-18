@@ -168,8 +168,10 @@ public class ArticleContentPresenter {
         Drawable drawableTop;
         if (isCollect) {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc3);
+            tvSc.setText("已收藏");
         } else {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc);
+            tvSc.setText("收藏");
         }
         tvSc.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
@@ -185,9 +187,11 @@ public class ArticleContentPresenter {
         if (isAttention) {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz3);
             tvGz.setTag("true");
+            tvGz.setText("已关注");
         } else {
             drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz);
             tvGz.setTag("false");
+            tvGz.setText("关注");
         }
         tvGz.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
