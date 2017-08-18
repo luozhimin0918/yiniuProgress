@@ -157,10 +157,10 @@ public class CollectPointAdapter extends BaseAdapter {
                     if (delNumListener != null) {
                         selectItemCount = isSelPoint ? selectItemCount - 1 : selectItemCount + 1;
                         delNumListener.delItem(selectItemCount);
-                        if (selectItemCount == 0) {
-                            delNumListener.delAll(false);
-                        } else if (selectItemCount == dataList.size()) {
+                        if (selectItemCount == dataList.size()) {
                             delNumListener.delAll(true);
+                        } else {
+                            delNumListener.delAll(false);
                         }
                     }
                 } else {
@@ -220,16 +220,16 @@ public class CollectPointAdapter extends BaseAdapter {
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
-            int paddingVal=SystemUtil.dp2px(mContext,8);
+            int paddingVal = SystemUtil.dp2px(mContext, 8);
             tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvZanView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
                     .icon_point_zan1, 0, 0, 0);
             tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
                     .icon_point_pl, 0, 0, 0);
-            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_fx_layout})

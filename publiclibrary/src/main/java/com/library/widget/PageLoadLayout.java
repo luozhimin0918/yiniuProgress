@@ -106,7 +106,7 @@ public class PageLoadLayout extends FrameLayout implements View.OnClickListener 
         if (nullText != null) {
             textView.setText(nullText);
         }
-        if(nullTextColor!=-1){
+        if(nullTextColor!=-1 && nullTextColor!=0){
             textView.setTextColor(ContextCompat.getColor(getContext(),nullTextColor));
         }
 

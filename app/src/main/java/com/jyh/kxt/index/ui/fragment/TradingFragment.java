@@ -134,17 +134,21 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     }
 
     private void replaceFragment(BaseFragment toFragment) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        if (lastFragment != null) {
-            transaction.hide(lastFragment);
+        try {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            if (lastFragment != null) {
+                transaction.hide(lastFragment);
+            }
+            if (toFragment.isAdded()) {
+                transaction.show(toFragment);
+            } else {
+                transaction.add(R.id.fl_content, toFragment, toFragment instanceof ViewpointFragment ?
+                        "ViewpointFragment" : null);
+            }
+            transaction.commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (toFragment.isAdded()) {
-            transaction.show(toFragment);
-        } else {
-            transaction.add(R.id.fl_content, toFragment, toFragment instanceof ViewpointFragment ?
-                    "ViewpointFragment" : null);
-        }
-        transaction.commitAllowingStateLoss();
     }
 
     @Override

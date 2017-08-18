@@ -71,7 +71,7 @@ public class CollectPointPresenter extends BasePresenter {
         }
     }
 
-    public void loadMore(){
+    public void loadMore() {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
             getLocalityData();
@@ -98,12 +98,20 @@ public class CollectPointPresenter extends BasePresenter {
                 collectPointFragment.mPullPinnedListView.onRefreshComplete();
 
                 if (manJson == null || manJson.size() == 0) {
-                    collectPointFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
-                    collectPointFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
-                    collectPointFragment.plRootView.loadEmptyData();
+                    if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
+                        collectPointFragment.plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        collectPointFragment.plRootView.setNullText(mContext.getString(R.string.error_collect_null));
+                        collectPointFragment.plRootView.loadEmptyData();
+                    } else {
+                        notifyAdapter(manJson);
+                    }
                 } else {
                     mTradeHandlerUtil.listCheckState(mContext, manJson);   //对 List 进行赞的遍历
+                    for (ViewPointTradeBean viewPointTradeBean : manJson) {
+                        viewPointTradeBean.isCollect = true;
+                    }
                     mTradeHandlerUtil.saveCollectList(mContext, manJson);
+                    mTradeHandlerUtil.listCheckState(mContext, manJson);   //对 List 进行赞的遍历
 
                     if (pullFromStart == PullToRefreshBase.Mode.PULL_FROM_START) {
                         notifyAdapter(manJson);

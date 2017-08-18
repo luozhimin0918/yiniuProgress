@@ -254,7 +254,7 @@ public class NewsContentPresenter extends BasePresenter {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 long currentTimeMillis = System.currentTimeMillis();
-                if (currentTimeMillis - 1000 > oldTime) {
+                if (currentTimeMillis - 3000 > oldTime) {
                     if (!"loading".equals(tvLoadMore.getTag()) && firstVisibleItem + visibleItemCount ==
                             totalItemCount) {
                         tvLoadMore.setTag("loading");

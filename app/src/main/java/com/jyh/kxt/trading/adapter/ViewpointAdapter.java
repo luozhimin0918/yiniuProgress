@@ -3,6 +3,7 @@ package com.jyh.kxt.trading.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.text.format.DateFormat;
@@ -127,7 +128,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     convertView.setTag(viewHolder1);
                     break;
                 case 2:
-                    convertView = mInflater.inflate(com.library.R.layout.view_point_nodata, parent, false);
+                    convertView = mInflater.inflate( R.layout.view_point_nodata, parent, false);
                     viewHolder2 = new ViewHolder2(convertView);
                     convertView.setTag(viewHolder2);
                     break;
@@ -157,7 +158,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder0.navigationTabLayout.setIndicatorColor(ContextCompat.getColor(mContext, R.color.indicator_color));
                 viewHolder0.navigationTabLayout.setTextSelectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
                 viewHolder0.navigationTabLayout.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
-                viewHolder0.line.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color7));
+                viewHolder0.line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color7));
 
                 break;
             case 1:
@@ -185,11 +186,14 @@ public class ViewpointAdapter extends BaseAdapter implements
                 articleContentPresenter.setPictureAdapter(viewHolder1.gridPictureLayout, viewPointTradeBean.picture);
                 break;
             case 2:
+                viewHolder2.tvNoDataText.setTextColor(Color.parseColor("#2A87F0"));
                 if (navigationTabClickPosition == 2) {
                     boolean loginEd = LoginUtils.isLogined(mContext);
                     if (!loginEd) {
                         viewHolder2.tvNoDataText.setText("登录同步关注");
-                        viewHolder2.tvNoDataText.setTextColor(ContextCompat.getColor(mContext, R.color.blue1));
+                        viewHolder2.tvNoDataText.setBackgroundResource(R.drawable.bg_point_login);
+                        int padding = SystemUtil.dp2px(mContext, 3);
+                        viewHolder2.tvNoDataText.setPadding(padding, padding, padding, padding);
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -198,9 +202,11 @@ public class ViewpointAdapter extends BaseAdapter implements
                         });
                     } else {
                         viewHolder2.tvNoDataText.setText("暂无关注");
+                        viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
                     }
                 } else {
                     viewHolder2.tvNoDataText.setText("暂无任何数据");
+                    viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -282,16 +288,16 @@ public class ViewpointAdapter extends BaseAdapter implements
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
-            int paddingVal=SystemUtil.dp2px(mContext,8);
+            int paddingVal = SystemUtil.dp2px(mContext, 8);
             tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvZanView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
                     .icon_point_zan1, 0, 0, 0);
             tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
                     .icon_point_pl, 0, 0, 0);
-            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
         @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})

@@ -609,7 +609,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void recreate() {
-        super.recreate();
+        super.recreate()
+        ;
     }
 
     /**

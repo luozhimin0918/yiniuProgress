@@ -1,6 +1,7 @@
 package com.jyh.kxt.datum.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
@@ -34,6 +35,11 @@ public class CalendarItemFragment extends BaseFragment {
     public CalendarItemAdapter calendarItemAdapter;
 
     public String calendarDate;
+
+    /**
+     * 是否是今天的
+     */
+    private boolean isToDay = false;
 
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
@@ -69,7 +75,9 @@ public class CalendarItemFragment extends BaseFragment {
         calendarItemAdapter.setParentFragment(this);
         ptrlvContent.setAdapter(calendarItemAdapter);
 
-
+        if (isToDay) {
+            toUnPublished();
+        }
     }
 
     public String getCalendarDate() {
@@ -136,6 +144,40 @@ public class CalendarItemFragment extends BaseFragment {
                     }
                 }
             }, 500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void today(boolean isToDay) {
+        this.isToDay = isToDay;
+    }
+
+    private int unPublishedPosition = 0;
+
+    public void toUnPublished() {
+        try {
+            if (calendarItemAdapter.dataList == null) {
+                return;
+            }
+            for (int i = 0; i < calendarItemAdapter.dataList.size(); i++) {
+                CalendarType calendarType = calendarItemAdapter.dataList.get(i);
+                if (calendarType.getAdapterType() == CalendarFragment.AdapterType.CONTENT1) {
+                    CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) calendarType;
+                    String reality = mCalendarFinanceBean.getReality();
+                    if("--".equals(reality)){
+                        unPublishedPosition = i;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ptrlvContent.getRefreshableView().setSelection(unPublishedPosition + 1);
+                            }
+                        }, 100);
+                        return;
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

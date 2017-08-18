@@ -303,10 +303,10 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
 
                     switch (commentBean.getType()) {
                         case VarConstant.ARTICLE:
-                            intent.putExtra(IntentConstant.O_ACTION, VarConstant.OCLASS_NEWS);
+                            intent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
                             break;
                         case VarConstant.BLOG_ARTICLE:
-                            intent.putExtra(IntentConstant.O_ACTION, VarConstant.OCLASS_BLOG);
+                            intent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_BLOG);
                             break;
                     }
 

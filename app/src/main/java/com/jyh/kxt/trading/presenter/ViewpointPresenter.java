@@ -2,6 +2,7 @@ package com.jyh.kxt.trading.presenter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -83,6 +84,17 @@ public class ViewpointPresenter extends BasePresenter {
         mainParam.put("type", requestNavigationType);
 
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null && "follow".equals(requestNavigationType)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewpointFragment.mPllContent.loadOver();
+                    mViewpointFragment.mPullPinnedListView.onRefreshComplete();
+                    footViewLoadIng(false);
+                }
+            }, 500);
+            return;
+        }
         if (userInfo != null) {
             mainParam.put("uid", userInfo.getUid());
         }
@@ -213,7 +225,10 @@ public class ViewpointPresenter extends BasePresenter {
             tvFootView.setLayoutParams(layoutParams);
             mViewpointFragment.mPullPinnedListView.getRefreshableView().addFooterView(tvFootView);
         } else {
-            mViewpointFragment.mPullPinnedListView.getRefreshableView().removeFooterView(tvFootView);
+            if (tvFootView != null) {
+                mViewpointFragment.mPullPinnedListView.getRefreshableView().removeFooterView(tvFootView);
+                tvFootView = null;
+            }
         }
     }
 

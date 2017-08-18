@@ -122,12 +122,15 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         spannableStringBuilder.setSpan(redSpan, 0, pointPublisher.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         viewHolder.tvReadTitle2.convertToGif(spannableStringBuilder);
-        viewHolder.tvReadTitle2.setOnClickListener(new View.OnClickListener() {
+
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JumpUtils.jump((BaseActivity) mContext, pointJson.getO_class(), pointJson.getO_action(), pointJson.getO_id() + "", null);
             }
         });
+
+
 
         return convertView;
     }

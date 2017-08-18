@@ -91,10 +91,11 @@
                     android:background="@color/font_color14"
                     />
 
-                <TextView
-                    android:id="@+id/tv_fans"
-                    style="@style/AuthorTextViewStyle"/>
 
+                <TextView
+                    android:id="@+id/tv_article"
+                    style="@style/AuthorTextViewStyle"
+                    />
                 <View
                     android:layout_width="2px"
                     android:layout_height="12dp"
@@ -105,9 +106,8 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_article"
-                    style="@style/AuthorTextViewStyle"
-                    />
+                    android:id="@+id/tv_fans"
+                    style="@style/AuthorTextViewStyle"/>
             </LinearLayout>
 
         </RelativeLayout>

@@ -97,8 +97,11 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
                     if (calendarPresenter.dataLongList.get(position) == time) {
                         Bitmap rqBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rili);
                         tabView.setBackground(new BitmapDrawable(rqBitmap));
-
                         CalendarFragment.this.currentTimeTextView = tabView;
+
+
+                        CalendarItemFragment calendarItemFragment = (CalendarItemFragment) fragmentList.get(position);
+                        calendarItemFragment.today(true);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

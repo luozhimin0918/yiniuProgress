@@ -2,7 +2,6 @@ package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.BinderThread;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -18,18 +17,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.base.json.AdItemJson;
-import com.jyh.kxt.base.json.AdTitleIconBean;
-import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.base.util.AdUtils;
-import com.jyh.kxt.base.utils.ColorFormatUtils;
-import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
@@ -43,9 +35,7 @@ import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.user.adapter.CollectVideoAdapter;
 import com.library.util.ObserverCall;
-import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 
 import java.text.ParseException;
@@ -69,7 +59,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
     private String adIconDay, adIconNight;
     private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight
-            = "#1384ED";
+    = "#1384ED";
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -223,7 +213,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                         reality,
                         mCalendarFinanceBean.getEffecttype(),
                         viewHolder1.llExponent,
-                        viewHolder1.tvAlarm);
+                        viewHolder1.tvAlarm, position);
 
                 viewHolder1.vLine.setVisibility(mCalendarFinanceBean.isShowLine() ? View.VISIBLE : View.INVISIBLE);
                 break;
@@ -381,7 +371,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
                                String reality,
                                int effectType,
                                LinearLayout llExponent,
-                               final TextView tvAlarm) {
+                               final TextView tvAlarm, int position) {
 
         llExponent.removeAllViews();
 

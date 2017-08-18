@@ -306,15 +306,19 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         ivCollect.setSelected(isCollect);
 
-        List<SlideJson> ads = flash.getAd();
-        String type = flashJson.getCode();
-        switch (type) {
-            case VarConstant.SOCKET_FLASH_KUAIXUN:
-                initFlash(flashJson.getContent(), ads);
-                break;
-            case VarConstant.SOCKET_FLASH_CJRL:
-                initRl(flashJson.getContent(), ads);
-                break;
+        try {
+            List<SlideJson> ads = flash.getAd();
+            String type = flashJson.getCode();
+            switch (type) {
+                case VarConstant.SOCKET_FLASH_KUAIXUN:
+                    initFlash(flashJson.getContent(), ads);
+                    break;
+                case VarConstant.SOCKET_FLASH_CJRL:
+                    initRl(flashJson.getContent(), ads);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         plRootView.loadOver();
         isLoadOver = true;

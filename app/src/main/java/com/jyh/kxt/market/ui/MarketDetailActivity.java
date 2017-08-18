@@ -701,7 +701,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 CharSequence formatQuoteTime = DateFormat.format("yyyy-MM-dd HH:mm:ss", lastTimeLong);
                 marketTrendBean.setQuotetime(formatQuoteTime.toString());
 
-                marketTrendBean.setVolume(0);//总量
+//                marketTrendBean.setVolume(0);//总量
                 marketTrendBean.setStart(0);//开盘时间
 
                 BaseChartPresenter baseChartPresenter = basePresenterMap.get(0);

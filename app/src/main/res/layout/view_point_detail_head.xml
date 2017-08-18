@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/point_detail_time"
         android:layout_marginTop="10dp"
+        android:lineSpacingMultiplier="1.2"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/content_font_size"/>
 

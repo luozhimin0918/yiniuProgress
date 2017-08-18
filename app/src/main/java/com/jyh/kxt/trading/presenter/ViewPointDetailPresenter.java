@@ -1,5 +1,6 @@
 package com.jyh.kxt.trading.presenter;
 
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpCallBack;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -295,6 +297,14 @@ public class ViewPointDetailPresenter extends BasePresenter {
         cbAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                if (userInfo == null) {
+                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                    cbAttention.setChecked(!cbAttention.isChecked());
+                    return;
+                }
+
                 mViewPointDetailActivity.articlePresenter.requestAttentionState(
                         String.valueOf(mViewPointTradeBean.author_id),
                         cbAttention.isChecked(),

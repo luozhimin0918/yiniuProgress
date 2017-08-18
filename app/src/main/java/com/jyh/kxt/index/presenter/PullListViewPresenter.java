@@ -95,9 +95,6 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
         startParams.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
         startParams.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
 
-        startParams.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
-        startParams.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
-
         this.endParams = JSONObject.parseObject(startParams.toJSONString());
     }
 

@@ -68,7 +68,7 @@ public class CollectActivity extends BaseActivity {
         initFragments();
         vpContent.setAdapter(new BaseFragmentAdapter(getSupportFragmentManager(), fragmentList));
         vpContent.addOnPageChangeListener(collectActityPresenter);
-        vpContent.setOffscreenPageLimit(5);
+//        vpContent.setOffscreenPageLimit(5);
         stlNavigationBar.setViewPager(vpContent, tabs);
         stlNavigationBar.setTabWidth(SystemUtil.px2dp(getContext(), SystemUtil.getScreenDisplay(getContext()).widthPixels / 5));
         stlNavigationBar.setOnTabSelectListener(collectActityPresenter);

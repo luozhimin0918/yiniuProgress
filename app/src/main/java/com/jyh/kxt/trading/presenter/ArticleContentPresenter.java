@@ -559,7 +559,7 @@ public class ArticleContentPresenter {
                             }
 
                             TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(viewPointTradeBean.o_id);
-                            scBean.collectState = bool ? 1 : 0;
+                            scBean.collectState = viewPointTradeBean.isCollect ? 1 : 0;
                             EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_COLLECT_CANCEL1, scBean));
                             break;
                         case R.id.point_function_gz:
@@ -578,9 +578,9 @@ public class ArticleContentPresenter {
                             showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
                             break;
                         case R.id.point_function_qx:
-                            functionPopupWindow.dismiss();
                             break;
                     }
+                    functionPopupWindow.dismiss();
                 }
             };
 

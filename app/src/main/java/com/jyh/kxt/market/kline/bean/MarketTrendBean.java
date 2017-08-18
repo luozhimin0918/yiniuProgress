@@ -20,7 +20,7 @@ public class MarketTrendBean {
     private double open;
     private String quotetime;
     private int start;
-    private int volume;
+//    private int volume;
 
     public double getClose() {
         return close;
@@ -69,12 +69,11 @@ public class MarketTrendBean {
     public void setStart(int start) {
         this.start = start;
     }
-
-    public int getVolume() {
-        return volume;
-    }
-
-    public void setVolume(int volume) {
-        this.volume = volume;
-    }
+//    public int getVolume() {
+//        return volume;
+//    }
+//
+//    public void setVolume(int volume) {
+//        this.volume = volume;
+//    }
 }
