@@ -55,6 +55,7 @@ import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.ui.fragment.NewsItemFragment;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.jyh.kxt.search.json.QuoteItemJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -68,7 +69,9 @@ import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 项目名:Kxt
@@ -412,14 +415,17 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         marketCodeList.clear();
         marketMap.clear();
 
+        Set<String> hotSet = new HashSet<>();
+
         for (MarketItemBean marketItemBean : quotes) {
             marketCodeList.add(marketItemBean.getCode());
             marketMap.put(marketItemBean.getCode(), marketItemBean);
-
+            hotSet.add(JSON.toJSONString(new QuoteItemJson(marketItemBean.getName(), marketItemBean.getCode())));
             marketItemBean.setChange(MarketUtil.replacePositive(marketItemBean.getChange()));
             marketItemBean.setRange(MarketUtil.replacePositive(marketItemBean.getRange()));
         }
 
+        SPUtils.save(mContext, SpConstant.SEARCH_HOT_POINT_MARKET, hotSet);
 
         mRollDotViewPager = new RollDotViewPager(mContext);
         mRollDotViewPager.setShowPaddingLine(false);

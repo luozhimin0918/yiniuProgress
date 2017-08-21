@@ -57,6 +57,10 @@ public class SpConstant {
     public static final String SEARCH_HISTORY_ARTICLE = "search_history_article";
     public static final String SEARCH_HISTORY_COLUMNIST = "search_history_columnist";
     public static final String SEARCH_HISTORY_ALL = "search_history_all";
+    public static final String SEARCH_HISTORY_POINT_MARKET = "search_history_point_market";
+
+
+    public static final String SEARCH_HOT_POINT_MARKET = "search_hot_point_market";
 
     /**
      * 浏览历史

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +52,7 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
@@ -104,8 +106,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public DatumFragment datumFragment;
     public TradingFragment exploreFragment;
     //侧边栏控件
-    public LinearLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout;
+    public ScrollView llHeaderLayout;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint;
 
     private RelativeLayout unLoginView, loginView;
     public RoundImageView loginPhoto;
@@ -113,7 +115,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
-            themeBtn, loginBtn, quitBtn;
+            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
@@ -182,7 +184,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private void initDrawer() {
         drawer.addDrawerListener(this);
 
-        llHeaderLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.nav_header_main, null);
+        llHeaderLayout = (ScrollView) getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         navigationView.addView(llHeaderLayout);
         unLoginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_unlogin);
@@ -208,7 +210,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         themeBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_theme);
         tvTheme = (TextView) llHeaderLayout.findViewById(R.id.tv_theme);
         quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
+        mineBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_mine);
+        pointBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_postPoint);
 
+        tvPoint = (TextView) llHeaderLayout.findViewById(R.id.tv_postPoint);
         tvCollect = ButterKnife.findById(llHeaderLayout, R.id.tv_collect);
         tvFocus = ButterKnife.findById(llHeaderLayout, R.id.tv_focus);
         tvHistory = ButterKnife.findById(llHeaderLayout, R.id.tv_history);
@@ -218,6 +223,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvQuit = ButterKnife.findById(llHeaderLayout, R.id.tv_quit);
         tvSetting = ButterKnife.findById(llHeaderLayout, R.id.tv_setting);
         tvAbout = ButterKnife.findById(llHeaderLayout, R.id.tv_about);
+        tvMine = ButterKnife.findById(llHeaderLayout, R.id.tv_mine);
 
 
         loginPhoto.setOnClickListener(this);
@@ -237,6 +243,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         themeBtn.setOnClickListener(this);
         searchEdt.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
+        mineBtn.setOnClickListener(this);
+        pointBtn.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -502,7 +510,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.ll_quit:
                 mainPresenter.showQuitDialog();
                 break;
+            case R.id.ll_postPoint:
+                //发布观点
 
+                break;
+            case R.id.ll_mine:
+                //我的专栏
+                UserJson userInfo = LoginUtils.getUserInfo(this);
+                if (userInfo != null && userInfo.getWriter_id() != null) {
+                    Intent intent = new Intent(this, AuthorActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, userInfo.getWriter_id());
+                    startActivity(intent);
+                }
+                break;
         }
     }
 
@@ -535,6 +555,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
+            pointBtn.setVisibility(View.VISIBLE);
+
+            if (!RegexValidateUtil.isEmpty(userJson.getWriter_id()) && !RegexValidateUtil.isEmpty(userJson.getWriter_name())) {
+                mineBtn.setVisibility(View.VISIBLE);
+            } else {
+                mineBtn.setVisibility(View.GONE);
+            }
 
             String pictureStr = userJson.getPicture();
             Glide.with(getContext())
@@ -565,6 +592,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
             quitBtn.setVisibility(View.GONE);
+            mineBtn.setVisibility(View.GONE);
+            pointBtn.setVisibility(View.GONE);
 
             loginPhoto.setImageResource(R.mipmap.icon_user_def_photo);
 

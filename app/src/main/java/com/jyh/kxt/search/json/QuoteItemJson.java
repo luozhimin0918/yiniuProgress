@@ -1,5 +1,8 @@
 package com.jyh.kxt.search.json;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * 项目名:KxtProfessional
  * 类描述:
@@ -7,7 +10,7 @@ package com.jyh.kxt.search.json;
  * 创建日期:2017/8/8.
  */
 
-public class QuoteItemJson {
+public class QuoteItemJson implements Parcelable {
 
     /**
      * id : 188
@@ -60,4 +63,46 @@ public class QuoteItemJson {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.code);
+        dest.writeString(this.letter);
+        dest.writeString(this.pinyin);
+    }
+
+    public QuoteItemJson() {
+    }
+
+    public QuoteItemJson(String name, String code) {
+        this.name = name;
+        this.code = code;
+    }
+
+    protected QuoteItemJson(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.code = in.readString();
+        this.letter = in.readString();
+        this.pinyin = in.readString();
+    }
+
+    public static final Parcelable.Creator<QuoteItemJson> CREATOR = new Parcelable.Creator<QuoteItemJson>() {
+        @Override
+        public QuoteItemJson createFromParcel(Parcel source) {
+            return new QuoteItemJson(source);
+        }
+
+        @Override
+        public QuoteItemJson[] newArray(int size) {
+            return new QuoteItemJson[size];
+        }
+    };
 }

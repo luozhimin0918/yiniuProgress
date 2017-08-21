@@ -18,7 +18,6 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.search.ui.SearchActivity;
-import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -27,6 +26,7 @@ import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+import com.superplayer.library.mediaplayer.IjkVideoView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +47,6 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
-
     @BindView(R.id.fl_content) FrameLayout flContent;
     private BaseFragment lastFragment;
     private ArticleFragment articleFragment;
@@ -59,24 +58,22 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_trading, LibActivity.StatusBarColor.THEME1);
 
-        ivRightIcon1.setImageResource(R.mipmap.icon_search);
+        ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
+        ivRightIcon2.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_postpoint));
+
+        ivRightIcon2.setVisibility(View.VISIBLE);
 
         String[] mTitles = getResources().getStringArray(R.array.nav_trading);
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-
-        if (tab == null) {
+        if (tab == null)
             onTabSelect(0);
-        } else {
+        else
             onTabSelect(1);
-        }
-
-        ivRightIcon2.setVisibility(View.VISIBLE);
-        ivRightIcon2.setImageResource(R.mipmap.icon_issue_point);
     }
 
-    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1,R.id.iv_right_icon2})
+    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1, R.id.iv_right_icon2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
@@ -92,8 +89,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 startActivity(intent);
                 break;
             case R.id.iv_right_icon2:
-                Intent publishIntent = new Intent(getContext(), PublishActivity.class);
-                startActivity(publishIntent);
+                startActivityForResult(new Intent(getContext(), com.jyh.kxt.trading.ui.SearchActivity.class), 200);
                 break;
         }
     }
@@ -114,7 +110,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         super.onChangeTheme();
         stlNavigationBar.setBarStrokeColor(
                 ContextCompat.getColor(getContext(), R.color.segmentTabLayout_indicator_color));
-        ivRightIcon1.setImageResource(R.mipmap.icon_search);
+        ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
+        ivRightIcon2.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_postpoint));
         if (articleFragment != null) {
             articleFragment.onChangeTheme();
         }
@@ -239,8 +236,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
     public void setTab(String tab) {
         this.tab = tab;
-        if (articleFragment != null) {
+        if (articleFragment != null)
             articleFragment.setSelTab(tab);
-        }
     }
 }
