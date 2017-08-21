@@ -142,7 +142,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                             //复制链接
                             try {
                                 //获取剪切板服务
-                                ClipboardManager clipboard = (ClipboardManager)getSystemService(Context
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context
                                         .CLIPBOARD_SERVICE);
                                 //然后把数据放在ClipData对象中
                                 ClipData clip = ClipData.newPlainText("simple text", mViewPointTradeBean.shareDict.url);
@@ -159,6 +159,18 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                             break;
                         case R.id.iv_fun_qx:
                             break;
+                        case R.id.iv_fun_top:
+                            //置顶
+                            articlePresenter.setTop(mViewPointTradeBean);
+                            break;
+                        case R.id.iv_fun_share:
+                            //转发
+                            articlePresenter.share(mViewPointTradeBean);
+                            break;
+                        case R.id.iv_fun_del:
+                            //删除
+                            articlePresenter.del(mViewPointTradeBean);
+                            break;
                     }
                 }
             };
@@ -172,18 +184,28 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                 TextView tvFunUrl = (TextView) popupView.findViewById(R.id.iv_fun_url);
                 TextView tvFunJb = (TextView) popupView.findViewById(R.id.iv_fun_jb);
                 TextView tvFunQx = (TextView) popupView.findViewById(R.id.iv_fun_qx);
+                TextView tvFunTop = (TextView) popupView.findViewById(R.id.iv_fun_top);
+                TextView tvFunShare = (TextView) popupView.findViewById(R.id.iv_fun_share);
+                TextView tvFunDel = (TextView) popupView.findViewById(R.id.iv_fun_del);
 
                 UserJson userInfo = LoginUtils.getUserInfo(getContext());
                 if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(mViewPointTradeBean.author_id)) {
                     tvFunJb.setVisibility(View.GONE);
+                    tvFunTop.setVisibility(View.VISIBLE);
+                    tvFunDel.setVisibility(View.VISIBLE);
                 } else {
                     tvFunJb.setVisibility(View.VISIBLE);
+                    tvFunTop.setVisibility(View.GONE);
+                    tvFunDel.setVisibility(View.GONE);
                 }
 
 
                 tvFunUrl.setOnClickListener(functionClickListener);
                 tvFunJb.setOnClickListener(functionClickListener);
                 tvFunQx.setOnClickListener(functionClickListener);
+                tvFunTop.setOnClickListener(functionClickListener);
+                tvFunShare.setOnClickListener(functionClickListener);
+                tvFunDel.setOnClickListener(functionClickListener);
             }
 
             @Override

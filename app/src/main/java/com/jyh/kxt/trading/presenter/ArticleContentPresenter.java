@@ -165,15 +165,15 @@ public class ArticleContentPresenter {
      * @param isCollect
      */
     public void setCollectState(TextView tvSc, boolean isCollect) {
-        Drawable drawableTop;
+//        Drawable drawableTop;
         if (isCollect) {
-            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc3);
+//            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc3);
             tvSc.setText("已收藏");
         } else {
-            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc);
+//            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_sc);
             tvSc.setText("收藏");
         }
-        tvSc.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+//        tvSc.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
 
     public void setAttentionState(TextView tvGz, boolean isAttention) {
@@ -183,17 +183,17 @@ public class ArticleContentPresenter {
             return;
         }
 
-        Drawable drawableTop;
+//        Drawable drawableTop;
         if (isAttention) {
-            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz3);
+//            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz3);
             tvGz.setTag("true");
             tvGz.setText("已关注");
         } else {
-            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz);
+//            drawableTop = ContextCompat.getDrawable(mContext, R.mipmap.icon_point_gz);
             tvGz.setTag("false");
             tvGz.setText("关注");
         }
-        tvGz.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+//        tvGz.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
     }
 
     /**
@@ -550,6 +550,9 @@ public class ArticleContentPresenter {
 
             TextView tvSc;
             TextView tvGz;
+            TextView tvTop;
+            TextView tvShare;
+            TextView tvDel;
 
             View.OnClickListener functionListener = new View.OnClickListener() {
                 @Override
@@ -557,7 +560,8 @@ public class ArticleContentPresenter {
                     switch (view.getId()) {
                         case R.id.point_function_sc:
                             viewPointTradeBean.isCollect = !viewPointTradeBean.isCollect;
-                            boolean bool = TradeHandlerUtil.getInstance().saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean.isCollect);
+                            boolean bool = TradeHandlerUtil.getInstance().saveState(mContext, viewPointTradeBean, 2, viewPointTradeBean
+                                    .isCollect);
                             if (bool) {
                                 setCollectState(tvSc, viewPointTradeBean.isCollect);
                             }
@@ -583,6 +587,18 @@ public class ArticleContentPresenter {
                             break;
                         case R.id.point_function_qx:
                             break;
+                        case R.id.point_function_top:
+                            //置顶
+                            setTop(viewPointTradeBean);
+                            break;
+                        case R.id.point_function_share:
+                            //转发
+                            share(viewPointTradeBean);
+                            break;
+                        case R.id.point_function_del:
+                            //删除
+                            del(viewPointTradeBean);
+                            break;
                     }
                     functionPopupWindow.dismiss();
                 }
@@ -600,6 +616,15 @@ public class ArticleContentPresenter {
                 tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                 tvGz.setOnClickListener(functionListener);
 
+                tvTop = (TextView) popupView.findViewById(R.id.point_function_top);
+                tvTop.setOnClickListener(functionListener);
+
+                tvDel = (TextView) popupView.findViewById(R.id.point_function_del);
+                tvDel.setOnClickListener(functionListener);
+
+                tvShare = (TextView) popupView.findViewById(R.id.point_function_share);
+                tvShare.setOnClickListener(functionListener);
+
                 TextView tvJb = (TextView) popupView.findViewById(R.id.point_function_jb);
                 tvJb.setOnClickListener(functionListener);
                 popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
@@ -610,9 +635,11 @@ public class ArticleContentPresenter {
                 if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(viewPointTradeBean.author_id)) {
                     tvGz.setVisibility(View.GONE);
                     tvJb.setVisibility(View.GONE);
+                    tvTop.setVisibility(View.VISIBLE);
                 } else {
                     tvGz.setVisibility(View.VISIBLE);
                     tvJb.setVisibility(View.VISIBLE);
+                    tvTop.setVisibility(View.GONE);
                 }
             }
 
@@ -623,5 +650,31 @@ public class ArticleContentPresenter {
         });
 
         functionPopupWindow.show(R.layout.pop_point_function);
+    }
+
+    /**
+     * 删除
+     *
+     * @param viewPointTradeBean
+     */
+    public void del(ViewPointTradeBean viewPointTradeBean) {
+
+    }
+
+    /**
+     * 转发
+     *
+     * @param viewPointTradeBean
+     */
+    public void share(ViewPointTradeBean viewPointTradeBean) {
+
+    }
+
+    /**
+     * 置顶
+     *
+     * @param viewPointTradeBean
+     */
+    public void setTop(ViewPointTradeBean viewPointTradeBean) {
     }
 }
