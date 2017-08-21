@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -60,6 +61,7 @@ public class WelcomePresenter extends BasePresenter {
 
                         Glide.with(welcomeActivity)
                                 .load(adImageUrl)
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(welcomeActivity.ivWelcome);
 
                         welcomeActivity.ivWelcome.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +136,7 @@ public class WelcomePresenter extends BasePresenter {
 
                     @Override
                     public void onNext(String t) {
-                        if(!welcomeActivity.tvAdvertTime.isShown()){
+                        if (!welcomeActivity.tvAdvertTime.isShown()) {
                             welcomeActivity.tvAdvertTime.setVisibility(View.VISIBLE);
                         }
                         welcomeActivity.tvAdvertTime.setText(t);

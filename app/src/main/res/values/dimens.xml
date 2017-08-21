@@ -393,4 +393,6 @@
 
     <dimen name="view_point_picture_height">70dp</dimen>
 
+    <dimen name="publish_pictures_size">100dp</dimen>
+
 </resources>

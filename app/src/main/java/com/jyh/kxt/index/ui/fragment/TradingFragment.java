@@ -18,6 +18,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.search.ui.SearchActivity;
+import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -45,6 +46,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
+    @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
+
     @BindView(R.id.fl_content) FrameLayout flContent;
     private BaseFragment lastFragment;
     private ArticleFragment articleFragment;
@@ -62,13 +65,18 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-        if (tab == null)
+
+        if (tab == null) {
             onTabSelect(0);
-        else
+        } else {
             onTabSelect(1);
+        }
+
+        ivRightIcon2.setVisibility(View.VISIBLE);
+        ivRightIcon2.setImageResource(R.mipmap.icon_issue_point);
     }
 
-    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1})
+    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1,R.id.iv_right_icon2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
@@ -82,6 +90,10 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                     intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_BLOG);
                 }
                 startActivity(intent);
+                break;
+            case R.id.iv_right_icon2:
+                Intent publishIntent = new Intent(getContext(), PublishActivity.class);
+                startActivity(publishIntent);
                 break;
         }
     }
@@ -227,7 +239,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
     public void setTab(String tab) {
         this.tab = tab;
-        if (articleFragment != null)
+        if (articleFragment != null) {
             articleFragment.setSelTab(tab);
+        }
     }
 }

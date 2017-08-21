@@ -86,6 +86,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
 
     @Override
     public void OnAfreshLoad() {
+        mPllContent.loadWait();
         viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 

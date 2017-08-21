@@ -384,7 +384,6 @@ public class MainPresenter extends BasePresenter {
                                     .load(loadAd.getPicture())
                                     .downloadOnly(720, 1080);
                             future.get();
-
                             SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
                         } catch (Exception e) {
                             e.printStackTrace();

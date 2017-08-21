@@ -74,6 +74,8 @@ public class ViewpointAdapter extends BaseAdapter implements
     private SimplePopupWindow functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
 
+    private NavigationTabLayout tabLayout;
+    private int navigationOldTabPosition = 0;
     public int navigationTabClickPosition = 0;
     public HashMap<String, List<ViewPointTradeBean>> pointListMap = new HashMap<>();
     public HashMap<Integer, PinnedSectionListView.PinnedOffset> listViewOffset = new HashMap<>();
@@ -128,7 +130,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     convertView.setTag(viewHolder1);
                     break;
                 case 2:
-                    convertView = mInflater.inflate( R.layout.view_point_nodata, parent, false);
+                    convertView = mInflater.inflate(R.layout.view_point_nodata, parent, false);
                     viewHolder2 = new ViewHolder2(convertView);
                     convertView.setTag(viewHolder2);
                     break;
@@ -160,6 +162,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 viewHolder0.navigationTabLayout.setTextUnselectColor(ContextCompat.getColor(mContext, R.color.tabSelColor));
                 viewHolder0.line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color7));
 
+                this.tabLayout = viewHolder0.navigationTabLayout;
                 break;
             case 1:
                 viewHolder1.setData(viewPointTradeBean);
@@ -492,6 +495,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 if (viewPointTradeBeen == null) {
                     ArrayList<ViewPointTradeBean> tradeList = new ArrayList<>();
                     replaceDataAndNotifyDataSetChanged(tradeList, 0);
+                    navigationOldTabPosition = navigationTabClickPosition;
                     return;
                 }
             } else {
@@ -516,6 +520,8 @@ public class ViewpointAdapter extends BaseAdapter implements
             mVolleyRequest.doGet(HttpConstant.TRADE_MAIN, mainParam, new HttpListener<String>() {
                 @Override
                 protected void onResponse(String manJson) {
+                    navigationOldTabPosition = navigationTabClickPosition;
+
                     ViewPointBean viewPointBean = JSONObject.parseObject(manJson, ViewPointBean.class);
                     if (viewPointBean == null) {
                         ArrayList<ViewPointTradeBean> tradeList = new ArrayList<>();
@@ -539,6 +545,10 @@ public class ViewpointAdapter extends BaseAdapter implements
                     super.onErrorResponse(error);
                     iBaseView.dismissWaitDialog();
                     ToastView.makeText3(mContext, "请检查网络~");
+                    if (tabLayout != null) {
+                        navigationTabClickPosition = navigationOldTabPosition;
+                        tabLayout.setCurrentTab(navigationTabClickPosition);
+                    }
                 }
             });
         } else {

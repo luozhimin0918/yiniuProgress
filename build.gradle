@@ -4,7 +4,7 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            url 'https://dl.bintray.com/tinker/maven'
+            url "https://jitpack.io"
         }
     }
     dependencies {
@@ -23,7 +23,7 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url 'https://dl.bintray.com/tinker/maven'
+            url "https://jitpack.io"
         }
     }
 }
@@ -34,6 +34,8 @@ task clean(type: Delete) {
 //检查BaseUrl是否正确
 //想想更新代码是否有变更
 //更改versionName 之后 连接中的参数是否变过了
+
+
 ext {
     // isProtectedApp 一定要改成true 之后打补丁包
     bakApkName = 'app-release-0714-16-59-44'

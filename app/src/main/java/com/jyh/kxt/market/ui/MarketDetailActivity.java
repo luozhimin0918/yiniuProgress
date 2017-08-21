@@ -180,6 +180,9 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 updateChartDate();
                 break;
             case R.id.ll_market_detail_full:
+                if (!pageLoadLayout.isSuccessLoadOver()) {
+                    return;
+                }
                 fullScreenDisplay();
                 break;
         }

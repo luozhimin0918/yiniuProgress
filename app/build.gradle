@@ -312,6 +312,9 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
+
+    compile 'com.github.valuesfeng:androidpicturepicker:1.0.0'
+
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
 }
