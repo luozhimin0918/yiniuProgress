@@ -465,6 +465,10 @@ public class SearchItemFragment extends BaseFragment implements PullToRefreshLis
                 searchKey = (String) eventBus.intentObj;
                 plRootView.loadWait();
                 presenter.init(searchKey);
+            }else if(eventBus.fromCode==EventBusClass.EVENT_VIEW_POINT_TOP){
+                viewpointAdapter.setTop((String)eventBus.intentObj);
+            }else if(eventBus.fromCode==EventBusClass.EVENT_VIEW_POINT_DEL){
+                viewpointAdapter.del((String)eventBus.intentObj);
             }
         }
     }

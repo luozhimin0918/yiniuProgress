@@ -36,6 +36,7 @@ import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -184,6 +185,30 @@ public class ViewpointSearchAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void setTop(String id) {
+        for (ViewPointTradeBean viewpoint : dataList) {
+            if (viewpoint != null && viewpoint.o_id != null && viewpoint.o_id.equals(id)) {
+                if ("1".equals(viewpoint.is_top)) {
+                    viewpoint.setIs_top("0");
+                } else {
+                    viewpoint.setIs_top("1");
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void del(String id) {
+        Iterator<ViewPointTradeBean> iterator = dataList.iterator();
+        while (iterator.hasNext()) {
+            ViewPointTradeBean next = iterator.next();
+            if (next != null && next.o_id != null && next.equals(id)) {
+                iterator.remove();
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     class ViewHolder1 {
         @BindView(R.id.riv_user_avatar) RoundImageView rivUserAvatar;
         @BindView(R.id.tv_nick_name) TextView tvNickName;
@@ -225,19 +250,19 @@ public class ViewpointSearchAdapter extends BaseAdapter {
             viewLine2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
             viewLine3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
-            int paddingVal= SystemUtil.dp2px(mContext,8);
+            int paddingVal = SystemUtil.dp2px(mContext, 8);
             tvZanView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvZanView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvZanView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvZanView, R.mipmap
                     .icon_point_zan1, 0, 0, 0);
             tvPinLunView.setPadding(paddingVal, paddingVal, paddingVal, paddingVal);
-            tvPinLunView.setTextColor(ContextCompat.getColor(mContext,R.color.font_color9));
+            tvPinLunView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color9));
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvPinLunView, R.mipmap
                     .icon_point_pl, 0, 0, 0);
-            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.icon_point_fx));
+            tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout,  R.id.view_point_fx_layout})
+        @OnClick({R.id.view_point_zan_layout, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
                 case R.id.view_point_zan_layout:

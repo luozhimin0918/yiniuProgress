@@ -36,12 +36,17 @@ import com.jyh.kxt.trading.json.ColumnistListJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.flowlayout.TagAdapter;
 import com.library.widget.flowlayout.TagFlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +96,12 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_search, StatusBarColor.THEME1);
+
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -552,9 +563,23 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
         presenter.search(searchKey);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus){
+        if(eventBus.fromCode==EventBusClass.EVENT_VIEW_POINT_TOP){
+            viewpointSearchAdapter.setTop((String)eventBus.intentObj);
+        }else if(eventBus.fromCode==EventBusClass.EVENT_VIEW_POINT_DEL){
+            viewpointSearchAdapter.del((String)eventBus.intentObj);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getQueue().cancelAll(presenter.getClass().getName());
     }
 
