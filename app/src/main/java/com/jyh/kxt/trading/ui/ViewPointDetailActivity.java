@@ -25,10 +25,15 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
 import com.jyh.kxt.user.json.UserJson;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -68,6 +73,12 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         commentPresenter.setOnCommentPublishListener(this);
         commentPresenter.setOnlyAllowSmallEmoJe(true);
 
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         detailId = getIntent().getStringExtra(IntentConstant.O_ID);
         mPllContent.loadWait();
         initView();
@@ -106,6 +117,23 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
             case R.id.iv_bar_function:
                 showShareOrFunction();
                 break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass event) {
+        if (event.fromCode == EventBusClass.EVENT_VIEW_POINT_DEL && detailId.equals(event.intentObj)) {
+            onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

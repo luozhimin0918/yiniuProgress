@@ -631,7 +631,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             ViewPointTradeBean object = viewpoints.get(0);
             viewpoints.remove(0);
             viewpoints.add(topPosition, object);
-            topPosition=0;
+            topPosition = 0;
         }
     }
 }

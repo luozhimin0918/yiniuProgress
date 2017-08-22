@@ -9,6 +9,7 @@ import android.view.ViewConfiguration;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ViewpointPresenter;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.bean.EventBusClass;
@@ -19,6 +20,8 @@ import com.library.widget.listview.PullPinnedListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -48,7 +51,11 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         viewpointPresenter = new ViewpointPresenter(this);
         viewpointPresenter.requestInitData(PullToRefreshBase.Mode.PULL_FROM_START);
 
-        EventBus.getDefault().register(this);
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Subscribe
@@ -60,6 +67,10 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
             viewpointPresenter.viewpointAdapter.loginAccount();
         } else if (eventBusClass.fromCode == EventBusClass.EVENT_LOGOUT) {//退出登录之后关注数据清空
             viewpointPresenter.viewpointAdapter.exitAccount();
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_TOP) {
+            viewpointPresenter.viewpointAdapter.setTop((String)eventBusClass.intentObj);
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_DEL) {
+            viewpointPresenter.viewpointAdapter.delViewpoint((String) eventBusClass.intentObj);
         }
     }
 
@@ -112,7 +123,18 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
                 public void run() {
                     mPullPinnedListView.getRefreshableView().setSelection(0);
                 }
-            },200);
+            }, 200);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getQueue().cancelAll(ViewpointPresenter.class.getName());
+        try {
+            EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

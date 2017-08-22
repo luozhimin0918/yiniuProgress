@@ -634,6 +634,53 @@ public class ViewpointAdapter extends BaseAdapter implements
         notifyDataSetChanged();
     }
 
+    /**
+     * 删除
+     *
+     * @param o_id
+     */
+    public void delViewpoint(String o_id) {
+        Iterator<String> iterator = pointListMap.keySet().iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+
+            List<ViewPointTradeBean> tradeBeanList = pointListMap.get(next);
+            Iterator<ViewPointTradeBean> iterator1 = tradeBeanList.iterator();
+            while (iterator1.hasNext()) {
+                ViewPointTradeBean next1 = iterator1.next();
+                if (next1.o_id != null && next1.o_id.equals(o_id)) {
+                    iterator1.remove();
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 置顶
+     *
+     * @param id
+     */
+    public void setTop(String id) {
+        Iterator<String> iterator = pointListMap.keySet().iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+
+            List<ViewPointTradeBean> tradeBeanList = pointListMap.get(next);
+            Iterator<ViewPointTradeBean> iterator1 = tradeBeanList.iterator();
+            while (iterator1.hasNext()) {
+                ViewPointTradeBean next1 = iterator1.next();
+                if (next1.o_id != null && next1.o_id.equals(id)) {
+                    if ("1".equals(next1.is_top)) {
+                        next1.setIs_top("0");
+                    } else {
+                        next1.setIs_top("1");
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     /**
      * 退出或者登录之后 关注界面所发生的改变

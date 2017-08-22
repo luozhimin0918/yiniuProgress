@@ -380,6 +380,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                             viewPointTradeBean.setIs_top("1");
                             adapter.setTopDataList();
                         }
+                        break;
                     }else{
                         viewPointTradeBean.setIs_top("0");
                     }

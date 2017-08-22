@@ -677,18 +677,19 @@ public class ArticleContentPresenter {
             jsonParam.put(VarConstant.HTTP_WRITER_ID, userInfo.getWriter_id());
             jsonParam.put(VarConstant.HTTP_ID, o_id);
         } else return;
-        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DEL, jsonParam, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String s) {
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_DEL, o_id));
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                ToastView.makeText3(mContext, "删除失败");
-            }
-        });
+//        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DEL, jsonParam, new HttpListener<String>() {
+//            @Override
+//            protected void onResponse(String s) {
+//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_DEL, o_id));
+//            }
+//
+//            @Override
+//            protected void onErrorResponse(VolleyError error) {
+//                super.onErrorResponse(error);
+//                ToastView.makeText3(mContext, "删除失败");
+//            }
+//        });
+        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_DEL, o_id));
     }
 
     /**
