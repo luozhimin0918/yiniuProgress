@@ -653,6 +653,13 @@ public class ViewpointAdapter extends BaseAdapter implements
                 }
             }
         }
+        Iterator<ViewPointTradeBean> dataIterator = dataList.iterator();
+        while (dataIterator.hasNext()) {
+            ViewPointTradeBean next = dataIterator.next();
+            if (next != null && next.o_id != null && next.o_id.equals(o_id)) {
+                dataIterator.remove();
+            }
+        }
         notifyDataSetChanged();
     }
 

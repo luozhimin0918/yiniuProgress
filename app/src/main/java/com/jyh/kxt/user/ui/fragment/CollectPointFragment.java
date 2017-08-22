@@ -110,6 +110,53 @@ public class CollectPointFragment extends BaseFragment implements PageLoadLayout
             if (eventBusClass.fromCode == EVENT_VIEW_COLLECT_CANCEL1) {
                 onResume();
             }
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_TOP) {
+            adapter.setTop((String) eventBusClass.intentObj);
+        } else if (eventBusClass.fromCode == EventBusClass.EVENT_VIEW_POINT_DEL) {
+            del(null, (String) eventBusClass.intentObj);
+            adapter.del((String) eventBusClass.intentObj);
+        }
+    }
+
+    public void del(final ObserverData observerData, final String id) {
+        final List<ViewPointTradeBean> data = adapter.getData();
+        if (LoginUtils.isLogined(getContext())) {
+            TradeHandlerUtil.getInstance().dels(getContext(), new ObserverData<Boolean>() {
+                @Override
+                public void callback(Boolean aBoolean) {
+                    //本地的最新的收藏列表
+                    DBManager mDBManager = DBManager.getInstance(getContext());
+                    Database database = mDBManager.getDaoSessionWrit().getDatabase();
+                    database.execSQL("DELETE FROM POINT_BEAN WHERE oId = " + id);
+                    database.execSQL("UPDATE MARK_BEAN SET COLLECT_STATE = 0 where  O_ID =" + id);
+
+                    observerData.callback(null);
+
+                    if (data.size() == 0) {
+                        plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                        plRootView.setNullText(getString(R.string.error_collect_null));
+                        plRootView.loadEmptyData();
+                    }
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    observerData.onError(e);
+                }
+            }, id);
+        } else {
+            DBManager mDBManager = DBManager.getInstance(getContext());
+            Database database = mDBManager.getDaoSessionWrit().getDatabase();
+            database.execSQL("DELETE FROM POINT_BEAN WHERE oId = " + id);
+            database.execSQL("UPDATE MARK_BEAN SET COLLECT_STATE = 0 where  O_ID =" + id);
+
+            observerData.callback(null);
+
+            if (data.size() == 0) {
+                plRootView.setNullImgId(R.mipmap.icon_collect_null);
+                plRootView.setNullText(getString(R.string.error_collect_null));
+                plRootView.loadEmptyData();
+            }
         }
     }
 

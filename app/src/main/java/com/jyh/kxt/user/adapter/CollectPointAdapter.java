@@ -30,6 +30,7 @@ import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -175,6 +176,29 @@ public class CollectPointAdapter extends BaseAdapter {
 
     public void setDelNumListener(DelNumListener delNumListener) {
         this.delNumListener = delNumListener;
+    }
+
+    public void setTop(String id) {
+        for (ViewPointTradeBean viewpoint : dataList) {
+            if (viewpoint.o_id != null && viewpoint.o_id.equals(id)) {
+                if ("1".equals(viewpoint.is_top)) {
+                    viewpoint.setIs_top("0");
+                } else {
+                    viewpoint.setIs_top("1");
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void del(String id) {
+        Iterator<ViewPointTradeBean> iterator = dataList.iterator();
+        while (iterator.hasNext()) {
+            ViewPointTradeBean next = iterator.next();
+            if (next != null && next.o_id != null && next.o_id.equals(id))
+                iterator.remove();
+        }
+        notifyDataSetChanged();
     }
 
     class ViewHolder1 {
