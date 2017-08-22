@@ -231,9 +231,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         String num_fans = authorDetailsJson.getNum_fans();
         String article_num = authorDetailsJson.getArticle_num();
         String point_num = authorDetailsJson.getPoint_num();
-        tvFans.setText("粉丝 " + (num_fans==null?0:num_fans));
-        tvArticle.setText("文章 " + (article_num==null?0:article_num));
-        tvViewpoint.setText("观点 " + (point_num==null?0:point_num));
+        tvFans.setText("粉丝 " + (num_fans == null ? 0 : num_fans));
+        tvArticle.setText("文章 " + (article_num == null ? 0 : article_num));
+        tvViewpoint.setText("观点 " + (point_num == null ? 0 : point_num));
         tvInfo.setText(authorDetailsJson.getIntroduce());
 
         //关注
@@ -365,6 +365,35 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
             case EventBusClass.EVENT_ATTENTION_OTHER:
                 boolean isAttentionOther = (boolean) eventBus.intentObj;
                 vLike.setSelected(isAttentionOther);
+                break;
+            case EventBusClass.EVENT_VIEW_POINT_TOP:
+                List<ViewPointTradeBean> viewpointData = adapter.getViewpointData();
+                if (viewpointData == null || viewpointData.size() == 0) return;
+                int size = viewpointData.size();
+                for (int i = 0; i < size; i++) {
+                    ViewPointTradeBean viewPointTradeBean=viewpointData.get(i);
+                    if (viewPointTradeBean.o_id.equals(eventBus.intentObj)) {
+                        if ("1".equals(viewPointTradeBean.is_top)) {
+                            viewPointTradeBean.setIs_top("0");
+                            adapter.recoverViewpoint();
+                        } else {
+                            viewPointTradeBean.setIs_top("1");
+                            adapter.setTopDataList();
+                        }
+                    }else{
+                        viewPointTradeBean.setIs_top("0");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            case EventBusClass.EVENT_VIEW_POINT_DEL:
+                List<ViewPointTradeBean> viewpoints = adapter.getViewpointData();
+                if (viewpoints == null || viewpoints.size() == 0) return;
+                for (ViewPointTradeBean viewpoint : viewpoints) {
+                    if (viewpoint.o_id.equals(eventBus.intentObj)) {
+                        adapter.removeViewpoint(viewpoint.o_id);
+                    }
+                }
                 break;
         }
     }

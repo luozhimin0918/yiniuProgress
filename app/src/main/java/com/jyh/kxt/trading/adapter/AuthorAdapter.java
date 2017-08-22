@@ -27,6 +27,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.annotation.OnTabSelectListener;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
@@ -45,6 +46,11 @@ import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.tablayout.NavigationTabLayout;
 import com.library.widget.window.ToastView;
 
+import java.lang.annotation.Retention;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,6 +84,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     public AuthorAdapter(Context context, List<ViewPointTradeBean> viewpoints, List<AuthorNewsJson> news, int type) {
         this.mContext = context;
         this.viewpoints = viewpoints;
+        setTopDataList();
         TradeHandlerUtil.getInstance().listCheckState(mContext, viewpoints);
         articleContentPresenter = new ArticleContentPresenter(mContext);
         this.news = news;
@@ -262,7 +269,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());//设置图片大小
 
             SpannableStringBuilder spannableBuilder = new SpannableStringBuilder("1" + content);
-            spannableBuilder.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BOTTOM), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableBuilder.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tvContent.convertToGif(spannableBuilder);
         } else {
@@ -322,6 +329,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             viewpoints.clear();
             viewpoints.addAll(viewpointData);
         }
+        setTopDataList();
 
         TradeHandlerUtil.getInstance().listCheckState(mContext, viewpointData);
         notifyDataSetChanged();
@@ -344,6 +352,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     public void addViewPointData(List<ViewPointTradeBean> viewpointData) {
         viewpoints.addAll(viewpointData);
+        setTopDataList();
         TradeHandlerUtil.getInstance().listCheckState(mContext, viewpoints);
         notifyDataSetChanged();
     }
@@ -418,6 +427,16 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         if (onTabSelLinstener != null) {
             onTabSelLinstener.tabSel(position);
         }
+    }
+
+    public void removeViewpoint(String o_id) {
+        Iterator<ViewPointTradeBean> iterator = viewpoints.iterator();
+        while (iterator.hasNext()) {
+            ViewPointTradeBean next = iterator.next();
+            if (next.o_id.equals(o_id))
+                iterator.remove();
+        }
+        notifyDataSetChanged();
     }
 
     static class ArticleViewHolder {
@@ -581,6 +600,39 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 
     public void setOnTabSelLinstener(OnTabSelectListener onTabSelLinstener) {
         this.onTabSelLinstener = onTabSelLinstener;
+    }
+
+    public int topPosition = 0;
+
+    /**
+     * 设置置顶数据
+     */
+    public void setTopDataList() {
+        recoverViewpoint();
+        int size = viewpoints.size();
+        for (int i = 0; i < size; i++) {
+            ViewPointTradeBean viewPoint = viewpoints.get(i);
+            if ("1".equals(viewPoint.is_top)) {
+                topPosition = i;
+            }
+        }
+        if (topPosition != 0) {
+            ViewPointTradeBean object = viewpoints.get(topPosition);
+            viewpoints.remove(object);
+            viewpoints.add(0, object);
+        }
+    }
+
+    /**
+     * 还原置顶数据
+     */
+    public void recoverViewpoint() {
+        if (topPosition != 0) {
+            ViewPointTradeBean object = viewpoints.get(0);
+            viewpoints.remove(0);
+            viewpoints.add(topPosition, object);
+            topPosition=0;
+        }
     }
 }
 

@@ -32,9 +32,12 @@ public class EventBusClass {
 
     public static final int EVENT_VIEW_POINT_HANDLER = 17;//观点的Handler 相关
     public static final int EVENT_VIEW_COLLECT_CANCEL1 = 18;//取消收藏
+    public static final int EVENT_VIEW_POINT_DEL = 19;//删除观点
+    public static final int EVENT_VIEW_POINT_TOP = 20;//置顶观点
 
-    public static final int EVENT_SEARCH = 18;//搜索
-    public static final int EVENT_SEARCH_TYPE = 19;//搜索
+    public static final int EVENT_SEARCH = 21;//搜索关键字
+    public static final int EVENT_SEARCH_TYPE = 22;//搜索类型
+
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

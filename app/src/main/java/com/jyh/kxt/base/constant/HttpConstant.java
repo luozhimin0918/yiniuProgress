@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-//    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    //    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -60,6 +60,10 @@ public class HttpConstant {
     public static final String VP_COMMENT_ADDGOOD = BASE_URL + "vpcomment/addGood?content=";
     //是否关注
     public static final String VIEW_POINT_IS_FOLLOW = BASE_URL + "viewpoint/is_follow?content=";
+    //置顶观点
+    public static final String VIEW_POINT_TOP = BASE_URL + "viewpoint/stickTop?content=";
+    //删除观点
+    public static final String VIEW_POINT_DEL = BASE_URL + "viewpoint/delPoint?content=";
     //举报
     public static final String VIEW_POINT_REPORT = BASE_URL + "viewpoint/report?content=";
     public static final String VP_COMMENT_PUBLISH = BASE_URL + "vpcomment/publish?content=";

@@ -42,12 +42,14 @@ import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.adapter.VPImgAdapter;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
+import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpCallBack;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.widget.flowlayout.OptionFlowLayout;
@@ -618,6 +620,10 @@ public class ArticleContentPresenter {
 
                 tvTop = (TextView) popupView.findViewById(R.id.point_function_top);
                 tvTop.setOnClickListener(functionListener);
+                if ("1".equals(viewPointTradeBean.is_top))
+                    tvTop.setText("取消置顶");
+                else
+                    tvTop.setText("置顶");
 
                 tvDel = (TextView) popupView.findViewById(R.id.point_function_del);
                 tvDel.setOnClickListener(functionListener);
@@ -636,10 +642,12 @@ public class ArticleContentPresenter {
                     tvGz.setVisibility(View.GONE);
                     tvJb.setVisibility(View.GONE);
                     tvTop.setVisibility(View.VISIBLE);
+                    tvDel.setVisibility(View.VISIBLE);
                 } else {
                     tvGz.setVisibility(View.VISIBLE);
                     tvJb.setVisibility(View.VISIBLE);
                     tvTop.setVisibility(View.GONE);
+                    tvDel.setVisibility(View.GONE);
                 }
             }
 
@@ -658,7 +666,29 @@ public class ArticleContentPresenter {
      * @param viewPointTradeBean
      */
     public void del(ViewPointTradeBean viewPointTradeBean) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+        JSONObject jsonParam = mVolleyRequest.getJsonParam();
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        final String o_id = viewPointTradeBean.o_id;
+        if (userInfo != null) {
+            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+            jsonParam.put(VarConstant.HTTP_WRITER_ID, userInfo.getWriter_id());
+            jsonParam.put(VarConstant.HTTP_ID, o_id);
+        } else return;
+        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DEL, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_DEL, o_id));
+            }
 
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                ToastView.makeText3(mContext, "删除失败");
+            }
+        });
     }
 
     /**
@@ -667,7 +697,8 @@ public class ArticleContentPresenter {
      * @param viewPointTradeBean
      */
     public void share(ViewPointTradeBean viewPointTradeBean) {
-
+        Intent intent = new Intent(mContext, PublishActivity.class);
+        ((Activity) mContext).startActivityForResult(intent, 987);
     }
 
     /**
@@ -675,6 +706,36 @@ public class ArticleContentPresenter {
      *
      * @param viewPointTradeBean
      */
-    public void setTop(ViewPointTradeBean viewPointTradeBean) {
+    public void setTop(final ViewPointTradeBean viewPointTradeBean) {
+        IBaseView iBaseView = (IBaseView) mContext;
+        VolleyRequest mVolleyRequest = new VolleyRequest(mContext, iBaseView.getQueue());
+        mVolleyRequest.setTag(getClass().getName());
+        JSONObject jsonParam = mVolleyRequest.getJsonParam();
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+
+        final String o_id = viewPointTradeBean.o_id;
+        if (userInfo != null) {
+            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+            jsonParam.put(VarConstant.HTTP_WRITER_ID, userInfo.getWriter_id());
+            if ("1".equals(viewPointTradeBean.is_top)) {
+            } else {
+                jsonParam.put(VarConstant.HTTP_ID, o_id);
+            }
+        } else return;
+        mVolleyRequest.doGet(HttpConstant.VIEW_POINT_TOP, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String s) {
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_POINT_TOP, o_id));
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                if ("1".equals(viewPointTradeBean.is_top))
+                    ToastView.makeText3(mContext, "取消置顶失败");
+                else
+                    ToastView.makeText3(mContext, "置顶失败");
+            }
+        });
     }
 }
