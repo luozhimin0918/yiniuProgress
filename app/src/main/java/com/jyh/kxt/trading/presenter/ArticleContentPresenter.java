@@ -34,6 +34,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.IntentUtil;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -80,7 +81,7 @@ public class ArticleContentPresenter {
         Glide.with(mContext)
                 .load(authorImageUrl)
                 .asBitmap()
-                .override(80, 80).into(
+                .override(100, 100).into(
                 new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
@@ -626,10 +627,11 @@ public class ArticleContentPresenter {
 
                 tvTop = (TextView) popupView.findViewById(R.id.point_function_top);
                 tvTop.setOnClickListener(functionListener);
-                if ("1".equals(viewPointTradeBean.is_top))
+                if ("1".equals(viewPointTradeBean.is_top)) {
                     tvTop.setText("取消置顶");
-                else
+                } else {
                     tvTop.setText("置顶");
+                }
 
                 tvDel = (TextView) popupView.findViewById(R.id.point_function_del);
                 tvDel.setOnClickListener(functionListener);
@@ -703,7 +705,9 @@ public class ArticleContentPresenter {
      * @param viewPointTradeBean
      */
     public void share(ViewPointTradeBean viewPointTradeBean) {
+        IntentUtil.putObject(IntentUtil.OBJECT, viewPointTradeBean);
         Intent intent = new Intent(mContext, PublishActivity.class);
+        intent.putExtra(IntentConstant.TYPE, 1);
         ((Activity) mContext).startActivityForResult(intent, 987);
     }
 
@@ -727,7 +731,9 @@ public class ArticleContentPresenter {
             } else {
                 jsonParam.put(VarConstant.HTTP_ID, o_id);
             }
-        } else return;
+        } else {
+            return;
+        }
         mVolleyRequest.doGet(HttpConstant.VIEW_POINT_TOP, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
@@ -737,10 +743,11 @@ public class ArticleContentPresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                if ("1".equals(viewPointTradeBean.is_top))
+                if ("1".equals(viewPointTradeBean.is_top)) {
                     ToastView.makeText3(mContext, "取消置顶失败");
-                else
+                } else {
                     ToastView.makeText3(mContext, "置顶失败");
+                }
             }
         });
     }

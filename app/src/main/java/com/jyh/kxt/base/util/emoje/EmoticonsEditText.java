@@ -59,6 +59,9 @@ public class EmoticonsEditText extends SkinnableEditText {
     private int textDeleteStart, textDeleteEnd;
 
     private void init() {
+        if (isInEditMode()) {
+            return;
+        }
         textDeleteStart = textDeleteEnd = -1;
 
         DaoSession daoSessionRead = DBManager.getInstance(getContext()).getDaoSessionRead();

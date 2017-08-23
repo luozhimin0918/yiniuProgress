@@ -280,7 +280,11 @@ if (buildWithTinker()) {
     }
 }
 
-
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
+}
 
 greendao {
     schemaVersion 2
@@ -297,6 +301,10 @@ dependencies {
     debugCompile project(path: ':publiclibrary', configuration: 'debug')
     testCompile 'junit:junit:4.12'
     /*compile project(':playerlibrary')*/
+
+
+    compile(name: 'androidpicturepicker', ext: 'aar')
+
     compile project(':superplayerlibrary')
     compile project(':Pushlib')
     compile project(':MPChartLib')
@@ -313,7 +321,6 @@ dependencies {
     compile 'com.trycatch.android:mysnackbar:1.2.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
 
-    compile 'com.github.valuesfeng:androidpicturepicker:1.0.0'
 
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }

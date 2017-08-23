@@ -182,12 +182,11 @@
         </activity>
         <activity
             android:name=".index.ui.CommentListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".trading.ui.PublishActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
         </activity>
         <activity

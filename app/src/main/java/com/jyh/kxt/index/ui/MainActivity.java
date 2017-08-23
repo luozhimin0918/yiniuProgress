@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,8 +35,6 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.explore.ui.MoreActivity;
-import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -46,13 +43,16 @@ import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
+import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
+import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.trading.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public DatumFragment datumFragment;
     public TradingFragment exploreFragment;
     //侧边栏控件
-    public ScrollView llHeaderLayout;
+    public RelativeLayout llHeaderLayout;
     TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint;
 
     private RelativeLayout unLoginView, loginView;
@@ -184,7 +184,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private void initDrawer() {
         drawer.addDrawerListener(this);
 
-        llHeaderLayout = (ScrollView) getLayoutInflater().inflate(R.layout.nav_header_main, null);
+        llHeaderLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         navigationView.addView(llHeaderLayout);
         unLoginView = (RelativeLayout) llHeaderLayout.findViewById(R.id.rl_unlogin);
@@ -512,7 +512,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_postPoint:
                 //发布观点
-
+                UserJson pointUserJson = LoginUtils.getUserInfo(this);
+                if (pointUserJson == null) {
+                    Intent intent = new Intent(this, LoginOrRegisterActivity.class);
+                    startActivity(intent);
+                }
+                Intent publishIntent = new Intent(this, PublishActivity.class);
+                startActivity(publishIntent);
                 break;
             case R.id.ll_mine:
                 //我的专栏

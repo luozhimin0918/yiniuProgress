@@ -9,6 +9,8 @@ import java.util.HashMap;
 public class IntentUtil {
     static HashMap<String, Object> intentMap = new HashMap<>();
 
+    public static final String OBJECT = "object";
+
     public static void putObject(String tag, Object object) {
         intentMap.put(tag, object);
     }

@@ -18,6 +18,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.search.ui.SearchActivity;
+import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
@@ -26,7 +27,6 @@ import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
-import com.superplayer.library.mediaplayer.IjkVideoView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -89,7 +89,9 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 startActivity(intent);
                 break;
             case R.id.iv_right_icon2:
-                startActivityForResult(new Intent(getContext(), com.jyh.kxt.trading.ui.SearchActivity.class), 200);
+//                startActivityForResult(new Intent(getContext(), com.jyh.kxt.trading.ui.SearchActivity.class), 200);
+                Intent publishIntent = new Intent(getContext(), PublishActivity.class);
+                startActivity(publishIntent);
                 break;
         }
     }

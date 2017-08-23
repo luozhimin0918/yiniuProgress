@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_publish"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jyh.kxt.trading.ui.PublishActivity">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/action_bar"
         layout="@layout/action_bar1"/>
 
-
     <ScrollView
         android:id="@+id/publish_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:scrollbars="vertical">
+        android:layout_height="match_parent"
+        android:background="@color/theme1"
+        android:layout_above="@+id/publish_navigation"
+        android:layout_below="@+id/action_bar">
 
         <LinearLayout
             android:id="@+id/publish_content_layout"
@@ -28,20 +26,22 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <EditText
+            <com.jyh.kxt.base.util.emoje.EmoticonsEditText
                 android:id="@+id/publish_content_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="60dp"
                 android:background="@null"
+                android:gravity="top|left"
                 android:hint="输入内容500字以内喔"
                 android:lineSpacingMultiplier="1.2"
                 android:maxLength="500"
+                android:minLines="3"
                 android:textColor="@color/font_color64"
                 android:textSize="@dimen/describe_font_size4"/>
 
             <LinearLayout
                 android:id="@+id/publish_pictures_layout"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/publish_pictures_size"
                 android:orientation="horizontal">
@@ -50,27 +50,73 @@
                     android:id="@+id/publish_picture_add"
                     android:layout_width="@dimen/publish_pictures_size"
                     android:layout_height="@dimen/publish_pictures_size"
-                    android:background="@color/red2"/>
+                    android:background="@mipmap/icon_publish_add"/>
             </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/publish_tran_layout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:background="@color/line_background2">
+
+                <ImageView
+                    android:id="@+id/publish_tran_avatar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/publish_tran_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/publish_tran_avatar"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/font_color64"
+                    android:textSize="@dimen/describe_font_size4"/>
+
+                <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
+                    android:id="@+id/publish_tran_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/publish_tran_nickname"
+                    android:layout_below="@+id/publish_tran_nickname"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/font_color6"
+                    android:textSize="@dimen/describe_font_size1"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/navigation"
+        android:id="@+id/publish_navigation"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/line_background2">
 
         <ImageView
             android:id="@+id/iv_publish_emoji"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:scaleType="center"
             android:src="@mipmap/icon_fb_xn"/>
 
         <ImageView
             android:id="@+id/iv_publish_market"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_toRightOf="@+id/iv_publish_emoji"
             android:scaleType="center"
             android:src="@mipmap/icon_fb_pz"/>
@@ -78,7 +124,7 @@
         <ImageView
             android:id="@+id/iv_publish_picture"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_toRightOf="@+id/iv_publish_market"
             android:scaleType="center"
             android:src="@mipmap/icon_fb_tu"/>
@@ -86,7 +132,7 @@
         <TextView
             android:id="@+id/iv_publish_content_size"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_toLeftOf="@+id/iv_publish_arrows"
             android:gravity="center"
             android:text="0/500"/>
@@ -94,10 +140,17 @@
         <ImageView
             android:id="@+id/iv_publish_arrows"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:scaleType="center"
             android:src="@mipmap/icon_fb_xia"/>
-    </RelativeLayout>
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@+id/publish_emoje_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_publish_emoji">
+
+        </FrameLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -161,7 +161,7 @@ public class EmoticonSimpleTextView extends TextView {
         }
 
         boolean isFindMatcher = false;
-        Matcher matcher = Pattern.compile("\\[([^\\]]*)\\]").matcher(text);
+        Matcher matcher = Pattern.compile("\\[([^\\]]*)\\]").matcher(currentSpannable.toString());
         try {
             while (matcher.find()) {
                 isFindMatcher = true;
@@ -210,6 +210,7 @@ public class EmoticonSimpleTextView extends TextView {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         setText(currentSpannable);

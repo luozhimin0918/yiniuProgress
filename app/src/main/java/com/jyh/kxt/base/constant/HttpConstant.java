@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-    //    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+//        public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -233,4 +233,8 @@ public class HttpConstant {
     public static final String TRADING_COLUMNIST_LIST = BASE_URL + "writer/list";//全部专栏-列表
     public static final String TRADING_COLUMNIST_PROFILE = BASE_URL + "writer/profile";//专栏详情
     public static final String TRADING_TRADE_ARTICLE = BASE_URL + "trade/article/nav";//文章列表
+
+    public static final String VIEWPOINT_PUBLISH = BASE_URL + "viewpoint/publish" ;//发布观点
+
+
 }
