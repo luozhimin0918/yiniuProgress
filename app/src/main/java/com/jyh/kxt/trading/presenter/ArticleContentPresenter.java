@@ -571,6 +571,8 @@ public class ArticleContentPresenter {
                             TradeHandlerUtil.EventHandlerBean scBean = new TradeHandlerUtil.EventHandlerBean(viewPointTradeBean.o_id);
                             scBean.collectState = viewPointTradeBean.isCollect ? 1 : 0;
                             EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_VIEW_COLLECT_CANCEL1, scBean));
+
+                            functionPopupWindow.dismiss();
                             break;
                         case R.id.point_function_gz:
                             final boolean isGz = !"true".equals(tvGz.getTag());
@@ -583,26 +585,30 @@ public class ArticleContentPresenter {
                                     }
                                 }
                             });
+                            functionPopupWindow.dismiss();
                             break;
                         case R.id.point_function_jb:
                             showReportWindow(viewPointTradeBean.o_id, viewPointTradeBean.report);
                             break;
                         case R.id.point_function_qx:
+                            functionPopupWindow.dismiss();
                             break;
                         case R.id.point_function_top:
                             //置顶
                             setTop(viewPointTradeBean);
+                            functionPopupWindow.dismiss();
                             break;
                         case R.id.point_function_share:
                             //转发
                             share(viewPointTradeBean);
+                            functionPopupWindow.dismiss();
                             break;
                         case R.id.point_function_del:
                             //删除
                             del(viewPointTradeBean);
+                            functionPopupWindow.dismiss();
                             break;
                     }
-                    functionPopupWindow.dismiss();
                 }
             };
 

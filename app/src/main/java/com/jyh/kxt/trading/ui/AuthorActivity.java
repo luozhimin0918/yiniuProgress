@@ -29,6 +29,7 @@ import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.AuthorPresenter;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
@@ -97,6 +98,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         plRootView.setOnAfreshLoadListener(this);
         plContent.setOnItemClickListener(this);
         plContent.setOnRefreshListener(this);
+
         refreshableView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -145,6 +147,13 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         }
 
         authorId = getIntent().getStringExtra(IntentConstant.O_ID);
+
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(authorId)) {
+            vLike.setVisibility(View.GONE);
+        } else {
+            vLike.setVisibility(View.VISIBLE);
+        }
 
         presenter = new AuthorPresenter(this, authorId);
         initHeadView();
@@ -371,7 +380,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 if (viewpointData == null || viewpointData.size() == 0) return;
                 int size = viewpointData.size();
                 for (int i = 0; i < size; i++) {
-                    ViewPointTradeBean viewPointTradeBean=viewpointData.get(i);
+                    ViewPointTradeBean viewPointTradeBean = viewpointData.get(i);
                     if (viewPointTradeBean.o_id.equals(eventBus.intentObj)) {
                         if ("1".equals(viewPointTradeBean.is_top)) {
                             viewPointTradeBean.setIs_top("0");
@@ -381,7 +390,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                             adapter.setTopDataList();
                         }
                         break;
-                    }else{
+                    } else {
                         viewPointTradeBean.setIs_top("0");
                     }
                 }
