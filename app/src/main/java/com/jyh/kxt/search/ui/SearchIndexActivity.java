@@ -1,8 +1,10 @@
 package com.jyh.kxt.search.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -90,6 +92,7 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
     private LinearLayout nullView;
     private TextView nullTv;
     private View footView2;
+    private AlertDialog delPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +195,23 @@ public class SearchIndexActivity extends BaseActivity implements PageLoadLayout.
                 onBackPressed();
                 break;
             case R.id.iv_del:
-                presenter.delSearchHistory();
+                if (delPop == null)
+                    delPop = new AlertDialog.Builder(this)
+                            .setTitle("温馨提示")
+                            .setMessage("是否删除搜索记录")
+                            .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    presenter.delSearchHistory();
+                                }
+                            }).setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).create();
+                if (delPop.isShowing()) return;
+                delPop.show();
                 break;
         }
     }

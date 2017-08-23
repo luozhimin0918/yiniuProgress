@@ -23,14 +23,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/contentPadding"
-                    android:text="最近搜索"
-                    android:textColor="@color/font_color2"
-                    android:textSize="@dimen/content_font_size"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/contentPadding"
+                        android:text="最近搜索"
+                        android:textColor="@color/font_color2"
+                        android:textSize="@dimen/content_font_size"/>
+
+                    <ImageView
+                        android:id="@+id/iv_del"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@mipmap/icon_search_del"
+                        android:padding="13dp"/>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
