@@ -24,6 +24,7 @@ import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
+import com.jyh.kxt.trading.presenter.ViewpointPresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
@@ -60,6 +61,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     private ViewPointDetailPresenter viewPointDetailPresenter;
 
     public String detailId;
+    private TextView tvFunTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +126,17 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     public void onEvent(EventBusClass event) {
         if (event.fromCode == EventBusClass.EVENT_VIEW_POINT_DEL && detailId.equals(event.intentObj)) {
             onBackPressed();
+        } else if (event.fromCode == EventBusClass.EVENT_VIEW_POINT_TOP) {
+            ViewPointTradeBean mViewPointTradeBean = viewPointDetailPresenter.mViewPointTradeBean;
+            if (tvFunTop != null && mViewPointTradeBean != null) {
+                if ("1".equals(mViewPointTradeBean.is_top)) {
+                    tvFunTop.setSelected(true);
+                    tvFunTop.setText("取消置顶");
+                } else {
+                    tvFunTop.setSelected(false);
+                    tvFunTop.setText("置顶");
+                }
+            }
         }
     }
 
@@ -212,7 +225,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                 TextView tvFunUrl = (TextView) popupView.findViewById(R.id.iv_fun_url);
                 TextView tvFunJb = (TextView) popupView.findViewById(R.id.iv_fun_jb);
                 TextView tvFunQx = (TextView) popupView.findViewById(R.id.iv_fun_qx);
-                TextView tvFunTop = (TextView) popupView.findViewById(R.id.iv_fun_top);
+                tvFunTop = (TextView) popupView.findViewById(R.id.iv_fun_top);
                 TextView tvFunShare = (TextView) popupView.findViewById(R.id.iv_fun_share);
                 TextView tvFunDel = (TextView) popupView.findViewById(R.id.iv_fun_del);
 
@@ -221,6 +234,13 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                     tvFunJb.setVisibility(View.GONE);
                     tvFunTop.setVisibility(View.VISIBLE);
                     tvFunDel.setVisibility(View.VISIBLE);
+                    if ("1".equals(mViewPointTradeBean.is_top)) {
+                        tvFunTop.setSelected(true);
+                        tvFunTop.setText("取消置顶");
+                    } else {
+                        tvFunTop.setSelected(false);
+                        tvFunTop.setText("置顶");
+                    }
                 } else {
                     tvFunJb.setVisibility(View.VISIBLE);
                     tvFunTop.setVisibility(View.GONE);

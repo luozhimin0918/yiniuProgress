@@ -69,9 +69,11 @@
     </HorizontalScrollView>
 
     <include layout="@layout/view_line"/>
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="100dp">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -113,7 +115,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:drawablePadding="10dp"
-                android:drawableTop="@mipmap/icon_point_top"
+                android:drawableTop="@drawable/sel_viewpoint_top"
                 android:gravity="center"
                 android:text="置顶"
                 android:textColor="@color/font_color3"/>
