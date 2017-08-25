@@ -1,7 +1,9 @@
 package com.jyh.kxt.search.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +93,7 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
     private NewsAdapter newsAdapter;
     private ColumnistAdapter columnistAdapter;
     private ViewpointSearchAdapter viewpointSearchAdapter;
+    private AlertDialog delPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -542,7 +545,23 @@ public class SearchActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 onBackPressed();
                 break;
             case R.id.iv_clear_history:
-                presenter.delHistory();
+                if (delPop == null)
+                    delPop = new AlertDialog.Builder(this)
+                            .setTitle("温馨提示")
+                            .setMessage("是否删除搜索记录")
+                            .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    presenter.delHistory();
+                                }
+                            }).setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).create();
+                if(delPop.isShowing()) return;
+                delPop.show();
                 break;
         }
     }

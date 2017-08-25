@@ -184,4 +184,15 @@ public class SearchPresenter extends BasePresenter {
     public void setMore(boolean more) {
         this.isMore = more;
     }
+
+    public void clearHistory() {
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, new HashSet<String>());
+    }
+
+    public void addHistory(QuoteItemJson quote) {
+        Set<String> historySet = new HashSet<>(SPUtils.getStringSet(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET));
+        if (quote == null) return;
+        historySet.add(JSON.toJSONString(quote));
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, historySet);
+    }
 }

@@ -1,7 +1,9 @@
 package com.jyh.kxt.trading.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.jyh.kxt.search.adapter.QuoteAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.jyh.kxt.trading.presenter.SearchPresenter;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
@@ -51,6 +54,7 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
     @BindView(R.id.sv_before) ScrollView svBefore;
     @BindView(R.id.ll_history) LinearLayout llHistory;
     @BindView(R.id.ll_hot) LinearLayout llHot;
+    @BindView(R.id.iv_del) ImageView ivHistoryDel;
     @BindView(R.id.lv_history) ListView lvHistory;
     @BindView(R.id.lv_hot) ListView lvHot;
 
@@ -60,6 +64,7 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
     private SearchPresenter presenter;
     private String searchKey;
     private QuoteAdapter marketSearchAdapter, historyAdapter, hotAdapter;
+    private AlertDialog delPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +158,7 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
         });
     }
 
-    @OnClick({R.id.iv_break, R.id.tv_break})
+    @OnClick({R.id.iv_break, R.id.tv_break, R.id.iv_del})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -162,18 +167,46 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
             case R.id.tv_break:
                 onBackPressed();
                 break;
+            case R.id.iv_del:
+                if (delPop == null)
+                    delPop = new AlertDialog.Builder(this)
+                            .setTitle("温馨提示")
+                            .setMessage("是否删除搜索记录")
+                            .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    presenter.clearHistory();
+                                    historyAdapter.dataList.clear();
+                                    historyAdapter.notifyDataSetChanged();
+                                    llHistory.setVisibility(View.GONE);
+                                }
+                            }).setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).create();
+                if(delPop.isShowing()) return;
+                delPop.show();
+                break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent();
+        QuoteItemJson quote;
         if (parent == lvHistory) {
-            intent.putExtra("search", historyAdapter.getItem(position));
+            quote = historyAdapter.getItem(position);
         } else if (parent == lvHot) {
-            intent.putExtra("search", hotAdapter.getItem(position));
+            quote = hotAdapter.getItem(position);
         } else {
-            intent.putExtra("search", marketSearchAdapter.getItem(position - 1));
+            quote = marketSearchAdapter.getItem(position - 1);
+        }
+        intent.putExtra("search", quote);
+        presenter.addHistory(quote);
+        if (historyAdapter != null) {
+            historyAdapter.addData(quote);
         }
         setResult(RESULT_OK, intent);
         onBackPressed();
@@ -220,7 +253,6 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
                     marketSearchAdapter.setSearchKey(searchKey);
                     marketSearchAdapter.setData(data);
                 }
-                presenter.saveSearchHistory(data);
                 AutoCompleteUtils.saveData(this, marketItemBeens);
                 edtSearch.setData(AutoCompleteUtils.getData(this));
                 plAfter.loadOver();
@@ -240,7 +272,6 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
                     } else {
                         marketSearchAdapter.setData(data);
                     }
-                    presenter.saveSearchHistory(data);
                     AutoCompleteUtils.saveData(this, marketItemBeens);
                     edtSearch.setData(AutoCompleteUtils.getData(this));
                     marketSearchAdapter.setSearchKey(searchKey);
@@ -265,7 +296,6 @@ public class SearchActivity extends BaseActivity implements AdapterView.OnItemCl
                 } else {
                     List list = disposeData(marketItemBeen);
                     marketSearchAdapter.addData(list);
-                    presenter.saveSearchHistory(list);
                     marketSearchAdapter.setSearchKey(searchKey);
                     AutoCompleteUtils.saveData(this, marketItemBeen);
                     edtSearch.setData(AutoCompleteUtils.getData(this));
