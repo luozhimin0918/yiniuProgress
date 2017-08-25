@@ -4,17 +4,23 @@ import android.content.Intent;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
+import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
 
 import java.io.IOException;
@@ -204,5 +210,39 @@ public class WelcomePresenter extends BasePresenter {
 //                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_REQUEST_MAIN_INIT, null));
 //            }
 //        });
+    }
+
+    public void requestMemberInfo() {
+
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            return;
+        }
+
+        VolleyRequest request = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+        jsonParam.put("accessToken", userInfo.getToken());
+
+        request.setTag("memberInfo");
+        request.doPost(HttpConstant.MEMBER_INFO, jsonParam, new HttpListener<UserJson>() {
+            @Override
+            protected void onResponse(UserJson mUserJson) {
+                LoginUtils.changeUserInfo(mContext, mUserJson);
+
+//                JSONObject jsonObject = JSONObject.parseObject(jsonData);
+//                String writerId = jsonObject.getString("writer_id");
+//                String writerName = jsonObject.getString("writer_name");
+//
+//                if (writerId != null && writerName != null) {
+//
+//                }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
     }
 }

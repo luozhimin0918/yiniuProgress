@@ -126,7 +126,7 @@ public class ArticleContentPresenter {
 
             SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(contentBuffer);
             spannableBuilder.setSpan(
-                    new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.gray_btn_bg_color)),
+                    new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.font_color17)),
                     0,
                     authorInfo.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -700,7 +700,7 @@ public class ArticleContentPresenter {
         if (userInfo.getWriter_id() == null) {
             Intent rzIntent = new Intent(mContext, WebActivity.class);
             rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
-            rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL);
+            rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL+ "?uid=" + userInfo.getUid());
             mContext.startActivity(rzIntent);
 
             return;

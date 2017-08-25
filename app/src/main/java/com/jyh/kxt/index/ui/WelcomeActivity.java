@@ -35,6 +35,7 @@ public class WelcomeActivity extends BaseActivity {
         welcomePresenter = new WelcomePresenter(this);
         welcomePresenter.checkIsShowAdvert();
         welcomePresenter.requestMainData();
+        welcomePresenter.requestMemberInfo();
 
         welcomePresenter.initSharedPreferences();
 

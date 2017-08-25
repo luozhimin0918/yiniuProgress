@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-    //        public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+//            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -240,4 +240,5 @@ public class HttpConstant {
      * 专栏入驻
      */
     public static final String ZLRZ_URL = BASE_URL + "blogapply/apply";
+    public static final String MEMBER_INFO = BASE_URL + "member/user_info";//获取用户信息
 }

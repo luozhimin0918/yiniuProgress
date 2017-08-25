@@ -226,6 +226,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvAbout = ButterKnife.findById(llHeaderLayout, R.id.tv_about);
         tvMine = ButterKnife.findById(llHeaderLayout, R.id.tv_mine);
 
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo == null || userInfo.getUid() == null || userInfo.getWriter_id() == null) {
+            pointBtn.setVisibility(View.GONE);
+            mineBtn.setVisibility(View.GONE);
+        }
 
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
@@ -522,7 +527,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 if (pointUserJson.getWriter_id() == null) {
                     Intent intent = new Intent(this, WebActivity.class);
                     intent.putExtra(IntentConstant.NAME, "专栏入驻");
-                    intent.putExtra(IntentConstant.WEBURL,  HttpConstant.ZLRZ_URL);
+                    intent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + pointUserJson.getUid());
                     startActivity(intent);
                     return;
                 }
@@ -571,12 +576,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
-            pointBtn.setVisibility(View.VISIBLE);
 
             if (!RegexValidateUtil.isEmpty(userJson.getWriter_id()) && !RegexValidateUtil.isEmpty(userJson.getWriter_name())) {
                 mineBtn.setVisibility(View.VISIBLE);
+                pointBtn.setVisibility(View.VISIBLE);
             } else {
                 mineBtn.setVisibility(View.GONE);
+                pointBtn.setVisibility(View.GONE);
             }
 
             String pictureStr = userJson.getPicture();

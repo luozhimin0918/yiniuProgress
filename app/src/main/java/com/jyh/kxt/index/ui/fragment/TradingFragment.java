@@ -101,7 +101,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 if(userInfo.getWriter_id() == null){
                     Intent rzIntent = new Intent(getContext(), WebActivity.class);
                     rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
-                    rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL);
+                    rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL+ "?uid=" + userInfo.getUid());
                     startActivity(rzIntent);
                     return;
                 }

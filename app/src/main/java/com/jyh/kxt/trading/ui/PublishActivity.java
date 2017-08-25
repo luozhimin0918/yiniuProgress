@@ -131,13 +131,13 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
                     Glide.with(this).load(pictures.get(0))
                             .asBitmap()
                             .error(R.drawable.umeng_socialize_delete)
-                            .override(100, 100)
+                            .override(200, 200)
                             .into(publishTranAvatar);
                 } else {
                     Glide.with(this).load(transmitBean.getAuthor_img())
                             .asBitmap()
                             .error(R.drawable.umeng_socialize_delete)
-                            .override(100, 100)
+                            .override(200, 200)
                             .into(publishTranAvatar);
                 }
 
