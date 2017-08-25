@@ -10,7 +10,7 @@
         android:id="@+id/publish_picture_bg"
         android:layout_width="@dimen/publish_pictures_size"
         android:layout_height="@dimen/publish_pictures_size"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/publish_picture_close"

@@ -9,16 +9,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/nav_line"
+        android:gravity="top"
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/rl_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/drawer_image_height"
-            android:layout_marginBottom="@dimen/drawer_head_bottom"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <com.jyh.kxt.base.custom.RoundImageView
                 android:id="@+id/riv_avatar"
@@ -41,9 +41,8 @@
             android:id="@+id/rl_unlogin"
             android:layout_width="match_parent"
             android:layout_height="@dimen/drawer_image_height"
-            android:layout_marginBottom="@dimen/drawer_head_bottom"
             android:background="@mipmap/icon_user_login_bg_unlogin"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,6 +104,7 @@
             android:layout_height="@dimen/drawer_search_height"
             android:layout_marginBottom="10dp"
             android:paddingLeft="@dimen/drawer_edtPadding"
+            android:layout_marginTop="@dimen/drawer_head_bottom"
             android:paddingRight="@dimen/drawer_edtPadding"
             >
 

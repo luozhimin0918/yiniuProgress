@@ -53,6 +53,24 @@ public class FileUtils {
         return cachePath;
     }
 
+    public static File getSDSaveFilePath(Context context, String folderName) {
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
+                !Environment.isExternalStorageRemovable())) {
+            String sdCachePath = context.getExternalCacheDir() + File.separator + folderName;
+
+            File fileExists = new File(sdCachePath);
+            if (!fileExists.exists()) {
+                try {
+                    boolean mkdirs = fileExists.mkdirs();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return fileExists;
+        }
+        return new File(getSaveFilePath(context));
+    }
+
     public static String getSDSaveFilePath(Context context) {
         String sdCachePath = "";
         if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||

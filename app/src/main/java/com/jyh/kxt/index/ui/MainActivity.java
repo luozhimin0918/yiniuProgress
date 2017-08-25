@@ -31,6 +31,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
@@ -516,7 +517,16 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 if (pointUserJson == null) {
                     Intent intent = new Intent(this, LoginOrRegisterActivity.class);
                     startActivity(intent);
+                    return;
                 }
+                if (pointUserJson.getWriter_id() == null) {
+                    Intent intent = new Intent(this, WebActivity.class);
+                    intent.putExtra(IntentConstant.NAME, "专栏入驻");
+                    intent.putExtra(IntentConstant.WEBURL,  HttpConstant.ZLRZ_URL);
+                    startActivity(intent);
+                    return;
+                }
+
                 Intent publishIntent = new Intent(this, PublishActivity.class);
                 startActivity(publishIntent);
                 break;

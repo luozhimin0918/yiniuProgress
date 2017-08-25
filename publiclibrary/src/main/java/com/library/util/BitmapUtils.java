@@ -11,6 +11,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
+import android.os.Build;
 import android.util.Base64;
 import android.widget.ImageView;
 
@@ -145,4 +146,19 @@ public class BitmapUtils {
         });
         imageView.setColorFilter(new ColorMatrixColorFilter(cMatrix));
     }
+
+    /**
+     * 得到bitmap的大小
+     */
+    public static int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount() / 1024 / 10;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount() / 1024 / 10;
+        }
+        // 在低版本中用一行的字节x高度
+        return bitmap.getRowBytes() * bitmap.getHeight() / 1024 / 10;                //earlier version
+    }
+
 }

@@ -135,12 +135,13 @@ public class WebActivity extends BaseActivity {
             if (tvBarTitle.getText().toString().equals(title)) {
                 super.onBackPressed();
             } else {
-                WebView webView = webPresenter.loadX5WebView.getWebView();
-                if (webView.canGoBack()) {
-                    webView.goBack();
-                } else {
-                    super.onBackPressed();
-                }
+//                WebView webView = webPresenter.loadX5WebView.getWebView();
+//                if (webView.canGoBack()) {
+//                    webView.goBack();
+//                } else {
+//                    super.onBackPressed();
+//                }
+                super.onBackPressed();
             }
         } catch (Exception e) {
             e.printStackTrace();

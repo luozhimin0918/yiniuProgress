@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -34,6 +35,7 @@ import com.jyh.kxt.base.util.IntentUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
+import com.jyh.kxt.base.util.emoje.MyForegroundColorSpan;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -218,10 +220,11 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
 
             SpannableString spannableString = new SpannableString(editString);
             spannableString.setSpan(
-                    new ForegroundColorSpan(ContextCompat.getColor(this, R.color.blue1)),
+                    new MyForegroundColorSpan(ContextCompat.getColor(this, R.color.blue1), editString),
                     0,
                     editString.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             editable.insert(index, spannableString);
         }
     }
@@ -319,7 +322,6 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
             publishContentEt.setSelection(builder.length());
         }
     }
-
     private void addImageViewToLayout(List<Uri> pictureUris) {
         int currentPictureCount = publishPicturesLayout.getChildCount() + pictureUris.size();
         int residueCount = 4 - currentPictureCount;
@@ -336,18 +338,36 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
             publishPicturesLayout.addView(mItemImage, 0);
             picturePathList.add(uri.toString());
 
+
             Glide.with(this).load(uri)
                     .asBitmap()
                     .error(R.drawable.umeng_socialize_delete)
-                    .override(/*250, 250*/800,800)
+                    .override(500, 500)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            int bitmapSize = BitmapUtils.getBitmapSize(resource);
                             pictureBg.setImageBitmap(resource);
 
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            resource.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                            String base64 = BitmapUtils.drawableToByte(baos.toByteArray());
+
+                            int quality = 100;
+                            if (bitmapSize <= 100) {
+                                quality = 100;
+                            } else if (bitmapSize > 100 && bitmapSize <= 200) {
+                                quality = 90;
+                            } else if (bitmapSize > 200 && bitmapSize <= 300) {
+                                quality = 80;
+                            } else if (bitmapSize > 300) {
+                                quality = 70;
+                            }
+
+                            resource.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+
+                            Log.e("图片信息", "压缩：" + quality + "  压缩后图片大小: " + BitmapUtils.getBitmapSize(resource));
+
+                            byte[] bitmapBytes = baos.toByteArray();
+                            String base64 = BitmapUtils.drawableToByte(bitmapBytes);
 
                             base64List.add(base64);
                         }

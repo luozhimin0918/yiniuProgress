@@ -13,15 +13,18 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.search.ui.SearchActivity;
 import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
@@ -89,6 +92,20 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                 startActivity(intent);
                 break;
             case R.id.iv_right_icon2:
+
+                UserJson userInfo = LoginUtils.getUserInfo(getContext());
+                if (userInfo == null) {
+                    getContext().startActivity(new Intent(getContext(), LoginOrRegisterActivity.class));
+                    return;
+                }
+                if(userInfo.getWriter_id() == null){
+                    Intent rzIntent = new Intent(getContext(), WebActivity.class);
+                    rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
+                    rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL);
+                    startActivity(rzIntent);
+                    return;
+                }
+
 //                startActivityForResult(new Intent(getContext(), com.jyh.kxt.trading.ui.SearchActivity.class), 200);
                 Intent publishIntent = new Intent(getContext(), PublishActivity.class);
                 startActivity(publishIntent);

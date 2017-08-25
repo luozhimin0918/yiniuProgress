@@ -484,7 +484,6 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
 
-
         List<ViewPointTradeBean> viewPointTradeBeen = pointListMap.get(requestNavigationType);
 
         //如果点击的是关注
@@ -517,7 +516,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 mainParam.put("uid", uId);
             }
 
-            mVolleyRequest.doGet(HttpConstant.TRADE_MAIN, mainParam, new HttpListener<String>() {
+            mVolleyRequest.doPost(HttpConstant.TRADE_MAIN, mainParam, new HttpListener<String>() {
                 @Override
                 protected void onResponse(String manJson) {
                     navigationOldTabPosition = navigationTabClickPosition;

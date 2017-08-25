@@ -9,7 +9,6 @@ import android.view.ViewConfiguration;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ViewpointPresenter;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.library.bean.EventBusClass;
@@ -20,8 +19,6 @@ import com.library.widget.listview.PullPinnedListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -80,7 +77,7 @@ public class ViewpointFragment extends BaseFragment implements PageLoadLayout.On
         mRefreshableView.setDividerHeight(0);
         mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-        mRefreshableView.setFriction(ViewConfiguration.getScrollFriction() * 10);
+        mRefreshableView.setFriction(ViewConfiguration.getScrollFriction() * 5);
         mPullPinnedListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullPinnedListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<PinnedSectionListView>() {
             @Override

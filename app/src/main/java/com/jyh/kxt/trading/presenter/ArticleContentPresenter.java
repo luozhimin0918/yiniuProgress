@@ -40,6 +40,7 @@ import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.trading.adapter.VPImgAdapter;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -294,8 +295,7 @@ public class ArticleContentPresenter {
                 Glide.with(mContext)
                         .load(imageUrl)
                         .asBitmap()
-                        .placeholder(R.mipmap.icon_def_news)
-                        .override(100, 80)
+                        .override(300, 300)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
@@ -327,8 +327,11 @@ public class ArticleContentPresenter {
 
     private void setGridViewItemClick(String girdImageUrl, List<String> gridList, int position) {
 
+        //状态栏和虚拟按键隐藏
         imagePopupUtil = new PopupUtil((Activity) mContext);
-        ViewPager inflate = (ViewPager) imagePopupUtil.createPopupView(R.layout.pop_viewpager);
+
+        ViewPager popupViewPager = (ViewPager) imagePopupUtil.createPopupView(R.layout.pop_viewpager);
+        popupViewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         VPImgAdapter adapter = new VPImgAdapter(gridList, mContext);
 
@@ -340,9 +343,7 @@ public class ArticleContentPresenter {
                 }
             }
         });
-        inflate.setAdapter(adapter);
-//        View inflate = imagePopupUtil.createPopupView(R.layout.pop_img);
-//        final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
+        popupViewPager.setAdapter(adapter);
         PopupUtil.Config config = new PopupUtil.Config();
         config.outsideTouchable = true;
         config.alpha = 0.5f;
@@ -351,25 +352,9 @@ public class ArticleContentPresenter {
         config.width = WindowManager.LayoutParams.MATCH_PARENT;
         config.height = WindowManager.LayoutParams.MATCH_PARENT;
         imagePopupUtil.setConfig(config);
-//
-//        Glide.with(mContext).load(girdImageUrl)
-//                .asBitmap()
-//                .error(R.mipmap.icon_def_news)
-//                .placeholder(R.mipmap.icon_def_news)
-//                .into(new SimpleTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-//                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//                        ivPop.setLayoutParams(layoutParams);
-//                        ivPop.setImageBitmap(resource);
-//
-        imagePopupUtil.showAtLocation(inflate, Gravity.CENTER, 0, 0);
+        imagePopupUtil.showAtLocation(popupViewPager, Gravity.CENTER, 0, 80);
 
-        inflate.setCurrentItem(position);
-//                    }
-//                });
+        popupViewPager.setCurrentItem(position);
     }
 
     /**
@@ -684,7 +669,9 @@ public class ArticleContentPresenter {
             jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
             jsonParam.put(VarConstant.HTTP_WRITER_ID, userInfo.getWriter_id());
             jsonParam.put(VarConstant.HTTP_ID, o_id);
-        } else return;
+        } else {
+            return;
+        }
         mVolleyRequest.doGet(HttpConstant.VIEW_POINT_DEL, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String s) {
@@ -705,6 +692,20 @@ public class ArticleContentPresenter {
      * @param viewPointTradeBean
      */
     public void share(ViewPointTradeBean viewPointTradeBean) {
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        if (userInfo == null) {
+            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            return;
+        }
+        if (userInfo.getWriter_id() == null) {
+            Intent rzIntent = new Intent(mContext, WebActivity.class);
+            rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
+            rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL);
+            mContext.startActivity(rzIntent);
+
+            return;
+        }
+
         IntentUtil.putObject(IntentUtil.OBJECT, viewPointTradeBean);
         Intent intent = new Intent(mContext, PublishActivity.class);
         intent.putExtra(IntentConstant.TYPE, 1);

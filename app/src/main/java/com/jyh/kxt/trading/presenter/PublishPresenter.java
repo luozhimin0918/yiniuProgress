@@ -131,10 +131,12 @@ public class PublishPresenter extends BasePresenter {
             return;
         }
 
+        showUpLoadView();
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
-        jsonParam.put("writer_id", userInfo.getWriter_id());
         jsonParam.put("uid", userInfo.getUid());
+
+        jsonParam.put("writer_id", userInfo.getWriter_id());
         jsonParam.put("content", editContent);
 
         if (publishActivity.base64List.size() != 0) {
@@ -144,8 +146,6 @@ public class PublishPresenter extends BasePresenter {
         if (publishActivity.publishType == 1) {
             jsonParam.put("forward_id", publishActivity.transmitBean.o_id);
         }
-
-        showUpLoadView();
         volleyRequest.setTag("uploading");
         volleyRequest.doPost(HttpConstant.VIEWPOINT_PUBLISH, jsonParam, new HttpListener<String>() {
             @Override

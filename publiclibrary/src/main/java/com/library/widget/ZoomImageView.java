@@ -144,7 +144,7 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
         }
         // 图片宽度小于控件宽度，图片高度小于控件高度
         else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth) {
-            scale = Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+            scale = /*Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth)*/mWidth * 1.0f / mDrawableWidth;
         }
         mScale = scale;
         mMaxScale = mScale * 8.0f;

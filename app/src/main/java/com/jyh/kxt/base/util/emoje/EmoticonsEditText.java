@@ -134,6 +134,22 @@ public class EmoticonsEditText extends SkinnableEditText {
 
                     getText().delete(textDeleteStart, textDeleteEnd).toString();
                 }
+                try {
+                    MyForegroundColorSpan[] listForeground = s.getSpans(0, s.length(), MyForegroundColorSpan.class);
+                    for (int i = 0; i < listForeground.length; i++) {
+                        MyForegroundColorSpan itemSpan = listForeground[i];
+
+                        int start = s.getSpanStart(itemSpan);
+                        int end = s.getSpanEnd(itemSpan);
+
+                        if (!s.toString().substring(start, end).equals(itemSpan.keyWords().trim())) {
+                            s.removeSpan(itemSpan);
+                            s.delete(start, end);
+                        }
+                    }
+                } catch (Exception e) {
+
+                }
             }
         });
     }
