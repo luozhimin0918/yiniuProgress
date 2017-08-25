@@ -574,13 +574,20 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     });
 
             String author_name = newsContentJson.getAuthor_name();
-            if(TextUtils.isEmpty(author_name)){
+            if (TextUtils.isEmpty(author_name)) {
                 tvName.getLayoutParams().height = 5;
-            }else{
+            } else {
                 tvName.setText(author_name);
             }
 
             isAllowAttention = "blog".equals(newsContentJson.getType());
+            UserJson userInfo = LoginUtils.getUserInfo(getContext());
+            if (userInfo != null) {
+                if (userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(newsContentJson.getAuthor_id())) {
+                    isAllowAttention = false;
+                }
+            }
+
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
             } else {
@@ -903,6 +910,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             shareImg, SHARE_MEDIA.SINA);
                     break;
                 case R.id.rl_exist_author:
+
                     if (isAllowAttention) {
                         Intent intent = new Intent(NewsContentActivity.this, AuthorActivity.class);
                         intent.putExtra(IntentConstant.O_ID, newsContentJson.getAuthor_id());

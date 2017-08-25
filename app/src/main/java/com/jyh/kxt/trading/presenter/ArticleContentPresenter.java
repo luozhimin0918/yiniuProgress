@@ -118,7 +118,9 @@ public class ArticleContentPresenter {
             StringBuffer contentBuffer = new StringBuffer(forwardContent.content);
             contentBuffer.insert(0, authorInfo);
 
-            if (forwardContent.picture != null && forwardContent.picture.size() == 1) {
+            if (forwardContent.picture == null || forwardContent.picture.size() == 0) {
+
+            } else if (forwardContent.picture.size() == 1) {
                 contentBuffer.insert(contentBuffer.length(), "[图片]");
             } else {
                 contentBuffer.insert(contentBuffer.length(), "[图片][图片]...");
@@ -700,7 +702,7 @@ public class ArticleContentPresenter {
         if (userInfo.getWriter_id() == null) {
             Intent rzIntent = new Intent(mContext, WebActivity.class);
             rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
-            rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL+ "?uid=" + userInfo.getUid());
+            rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + userInfo.getUid());
             mContext.startActivity(rzIntent);
 
             return;

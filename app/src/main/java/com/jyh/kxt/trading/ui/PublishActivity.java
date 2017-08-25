@@ -330,14 +330,10 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
         }
 
         LayoutInflater mInflater = LayoutInflater.from(this);
-        for (Uri uri : pictureUris) {
+        for (final Uri uri : pictureUris) {
             final RelativeLayout mItemImage = (RelativeLayout) mInflater.inflate(R.layout.item_publish_pictures, publishPicturesLayout, false);
             final ImageView pictureBg = (ImageView) mItemImage.findViewById(R.id.publish_picture_bg);
             ImageView pictureClose = (ImageView) mItemImage.findViewById(R.id.publish_picture_close);
-
-            publishPicturesLayout.addView(mItemImage, 0);
-            picturePathList.add(uri.toString());
-
 
             Glide.with(this).load(uri)
                     .asBitmap()
@@ -368,6 +364,9 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
 
                             byte[] bitmapBytes = baos.toByteArray();
                             String base64 = BitmapUtils.drawableToByte(bitmapBytes);
+
+                            publishPicturesLayout.addView(mItemImage, 0);
+                            picturePathList.add(uri.toString());
 
                             base64List.add(base64);
                         }

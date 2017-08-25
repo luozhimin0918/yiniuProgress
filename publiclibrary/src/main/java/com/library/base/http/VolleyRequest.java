@@ -93,7 +93,6 @@ public class VolleyRequest {
 
     public <T> void doPost(String url, JSONObject mParams, HttpListener<T> mHttpListener) {
         try {
-
             LogUtil.e("参数:", "" + mParams);
             String jwt = EncryptionUtils.createJWT(VarConstant.KEY, mParams.toString());
             HashMap<String, String> hashMap = new HashMap<>();
@@ -126,7 +125,6 @@ public class VolleyRequest {
                 StringRequest stringRequest = new StringRequest(method, url, mParams, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         try {
                             if (response == null || "".equals(response.trim())) {
                                 mHttpListener.onErrorResponse(null);
