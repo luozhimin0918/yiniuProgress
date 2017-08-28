@@ -33,6 +33,7 @@ public class BitmapUtil {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+
     static Bitmap getScaledBitmap(Context context, Uri imageUri, float maxWidth, float maxHeight, Bitmap.Config bitmapConfig) {
         String filePath = FileUtil.getRealPathFromURI(context, imageUri);
         Bitmap scaledBitmap = null;
@@ -196,7 +197,7 @@ public class BitmapUtil {
     }
 
     public static Bitmap compressImage(Context context, Uri imageUri, float maxWidth, float maxHeight,
-                                       int quality ) {
+                                       int quality) {
         Bitmap newBmp = null;
         try {
             newBmp = BitmapUtil.getScaledBitmap(context, imageUri, maxWidth, maxHeight, Bitmap.Config.ARGB_8888);

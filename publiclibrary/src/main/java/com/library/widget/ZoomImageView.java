@@ -104,7 +104,8 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
         super.setImageBitmap(bm);
         updateBitmapMatrix();
     }
-    private void updateBitmapMatrix(){
+
+    private void updateBitmapMatrix() {
         // 获取控件大小
         mWidth = getWidth();
         mHeight = getHeight();
@@ -144,7 +145,17 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
         }
         // 图片宽度小于控件宽度，图片高度小于控件高度
         else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth) {
-            scale = /*Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth)*/mWidth * 1.0f / mDrawableWidth;
+//            scale = Math.min(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+            float widthScale = mWidth * 1.0f / mDrawableWidth;
+            float fixedScale = 1.0f + (widthScale - 1.0f) / 2;
+
+            if (mDrawableHeight == mDrawableWidth) {
+                scale = fixedScale;
+            } else if (mDrawableHeight * widthScale >= mHeight) {
+                scale = fixedScale;
+            } else {
+                scale = widthScale;
+            }
         }
         mScale = scale;
         mMaxScale = mScale * 8.0f;
@@ -323,8 +334,9 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
                 case MotionEvent.ACTION_UP:
                     long time = System.currentTimeMillis() - downTime;
                     if (time < 200) {
-                        if (onClickListener != null)
+                        if (onClickListener != null) {
                             onClickListener.onClick(this);
+                        }
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:

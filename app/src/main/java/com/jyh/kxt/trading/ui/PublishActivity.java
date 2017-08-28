@@ -41,11 +41,13 @@ import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.PublishPresenter;
 import com.library.util.BitmapUtils;
+import com.library.util.ConvertUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -322,6 +324,7 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
             publishContentEt.setSelection(builder.length());
         }
     }
+
     private void addImageViewToLayout(List<Uri> pictureUris) {
         int currentPictureCount = publishPicturesLayout.getChildCount() + pictureUris.size();
         int residueCount = 4 - currentPictureCount;
@@ -331,6 +334,7 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
 
         LayoutInflater mInflater = LayoutInflater.from(this);
         for (final Uri uri : pictureUris) {
+
             final RelativeLayout mItemImage = (RelativeLayout) mInflater.inflate(R.layout.item_publish_pictures, publishPicturesLayout, false);
             final ImageView pictureBg = (ImageView) mItemImage.findViewById(R.id.publish_picture_bg);
             ImageView pictureClose = (ImageView) mItemImage.findViewById(R.id.publish_picture_close);
@@ -338,24 +342,43 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
             Glide.with(this).load(uri)
                     .asBitmap()
                     .error(R.drawable.umeng_socialize_delete)
-                    .override(500, 500)
+                    .override(340, 480)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            int bitmapSize = BitmapUtils.getBitmapSize(resource);
-                            pictureBg.setImageBitmap(resource);
 
+                            String md5Key = ConvertUtils.md5(uri.toString());
+                            int bitmapSize = 250;//默认200
+
+                            try {
+                                File temporaryFile = BitmapUtils.saveBitmap(getContext(), md5Key, resource);
+                                bitmapSize = (int) (temporaryFile.length() / 1000);
+//                                ToastView.makeText(getContext(), "图片大小" + bitmapSize);
+                                temporaryFile.delete();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            pictureBg.setImageBitmap(resource);
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                             int quality = 100;
                             if (bitmapSize <= 100) {
                                 quality = 100;
-                            } else if (bitmapSize > 100 && bitmapSize <= 200) {
+                            } else if (bitmapSize > 100 && bitmapSize <= 150) {
                                 quality = 90;
-                            } else if (bitmapSize > 200 && bitmapSize <= 300) {
+                            } else if (bitmapSize > 150 && bitmapSize <= 200) {
                                 quality = 80;
-                            } else if (bitmapSize > 300) {
-                                quality = 70;
+                            } else if (bitmapSize > 200 && bitmapSize <= 250) {
+                                quality = 75;
+                            } else if (bitmapSize > 250 && bitmapSize <= 300) {
+                                quality = 65;
+                            } else if (bitmapSize > 300 && bitmapSize <= 350) {
+                                quality = 60;
+                            } else if (bitmapSize > 350 && bitmapSize <= 400) {
+                                quality = 55;
+                            } else if (bitmapSize > 400) {
+                                quality = 50;
                             }
 
                             resource.compress(Bitmap.CompressFormat.JPEG, quality, baos);
@@ -368,7 +391,7 @@ public class PublishActivity extends BaseActivity implements SoftKeyBoardListene
                             publishPicturesLayout.addView(mItemImage, 0);
                             picturePathList.add(uri.toString());
 
-                            base64List.add(base64);
+                            base64List.add(0, base64);
                         }
                     });
 

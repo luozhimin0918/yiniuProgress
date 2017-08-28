@@ -16,6 +16,8 @@ import android.util.Base64;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * 项目名:Kxt
@@ -130,6 +132,24 @@ public class BitmapUtils {
         }
     }
 
+    public static File saveBitmap(Context mContext, String fileName, Bitmap imageBitmap) {
+        File bitmapFile = FileUtils.getSDSaveFilePath(mContext, "bitmap");
+        String bitmapSavePath = bitmapFile.getPath() + File.separator + fileName + ".jpg";
+
+        FileOutputStream fos = null;
+        File fileSavePath = new File(bitmapSavePath);
+
+        try {
+            fos = new FileOutputStream(fileSavePath);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fileSavePath;
+    }
+
     /**
      * 改变图片的亮度方法 0--原样 >0---调亮 <0---调暗
      *
@@ -152,13 +172,13 @@ public class BitmapUtils {
      */
     public static int getBitmapSize(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
-            return bitmap.getAllocationByteCount() / 1024 / 10;
+            return bitmap.getAllocationByteCount();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
-            return bitmap.getByteCount() / 1024 / 10;
+            return bitmap.getByteCount();
         }
         // 在低版本中用一行的字节x高度
-        return bitmap.getRowBytes() * bitmap.getHeight() / 1024 / 10;                //earlier version
+        return bitmap.getRowBytes() * bitmap.getHeight();
     }
 
 }
