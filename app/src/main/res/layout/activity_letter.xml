@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme1"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar3"/>
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/pl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.library.widget.PageLoadLayout>
+</LinearLayout>

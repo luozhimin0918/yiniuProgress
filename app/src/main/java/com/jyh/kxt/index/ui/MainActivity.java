@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TradingFragment exploreFragment;
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter;
 
     private RelativeLayout unLoginView, loginView;
     public RoundImageView loginPhoto;
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
-            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn;
+            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
@@ -212,6 +212,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvTheme = (TextView) llHeaderLayout.findViewById(R.id.tv_theme);
         quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
         mineBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_mine);
+        letterBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_letter);
         pointBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_postPoint);
 
         tvPoint = (TextView) llHeaderLayout.findViewById(R.id.tv_postPoint);
@@ -225,6 +226,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvSetting = ButterKnife.findById(llHeaderLayout, R.id.tv_setting);
         tvAbout = ButterKnife.findById(llHeaderLayout, R.id.tv_about);
         tvMine = ButterKnife.findById(llHeaderLayout, R.id.tv_mine);
+        tvLetter = ButterKnife.findById(llHeaderLayout, R.id.tv_letter);
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo == null || userInfo.getUid() == null || userInfo.getWriter_id() == null) {
@@ -251,6 +253,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         quitBtn.setOnClickListener(this);
         mineBtn.setOnClickListener(this);
         pointBtn.setOnClickListener(this);
+        letterBtn.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -543,6 +546,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     intent.putExtra(IntentConstant.O_ID, userInfo.getWriter_id());
                     startActivity(intent);
                 }
+                break;
+            case R.id.ll_letter:
+                //我的私信
+                startActivity(new Intent(this,LetterActivity.class));
                 break;
         }
     }

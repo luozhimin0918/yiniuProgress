@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="80dp"
+              android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/contentPadding">
+
+        <RelativeLayout
+            android:layout_width="@dimen/userPhotoSize1"
+            android:layout_height="@dimen/userPhotoSize1">
+
+            <com.jyh.kxt.base.custom.RoundImageView
+                android:id="@+id/riv_avatar"
+                android:layout_width="@dimen/userPhotoSize1"
+                android:layout_height="@dimen/userPhotoSize1"
+                android:src="@mipmap/icon_user_def_photo"/>
+
+            <View
+                android:id="@+id/v_point"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_point_red"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/contentPadding"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="系统消息"
+            android:textColor="@color/font_color1"
+            android:textSize="@dimen/content_font_size"/>
+
+        <ImageView
+            android:id="@+id/iv_break"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:src="@mipmap/icon_user_break"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color3"/>
+
+</LinearLayout>
