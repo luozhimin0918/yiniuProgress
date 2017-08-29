@@ -3,13 +3,9 @@ package com.jyh.kxt.index.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
@@ -17,7 +13,6 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.index.adapter.LetterListAdapter;
 import com.jyh.kxt.index.json.LetterListJson;
 import com.jyh.kxt.index.presenter.LetterPresenter;
-import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -67,7 +62,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plContent.setOnRefreshListener(this);
         plRootView.setOnAfreshLoadListener(this);
 
-        presenter.scrollListener(plContent.getRefreshableView(),adapter);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function})
@@ -124,6 +118,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     public void init(List<LetterListJson> list) {
         adapter = new LetterListAdapter(list, this, plContent.getRefreshableView());
+        presenter.scrollListener(plContent.getRefreshableView(),adapter);
         plContent.setAdapter(adapter);
         plRootView.loadOver();
     }

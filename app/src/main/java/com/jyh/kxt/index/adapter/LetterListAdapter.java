@@ -49,12 +49,12 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-        ViewHolderSys viewHolderSys=null;
+        ViewHolderSys viewHolderSys = null;
         int type = getItemViewType(position);
         if (convertView == null) {
             if (type == TYPE_SYS) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_letter_sys, parent, false);
-                viewHolderSys=new ViewHolderSys(convertView);
+                viewHolderSys = new ViewHolderSys(convertView);
                 convertView.setTag(viewHolderSys);
             } else {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_letter, parent, false);
@@ -63,7 +63,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             }
         } else {
             if (type == TYPE_SYS) {
-                viewHolderSys= (ViewHolderSys) convertView.getTag();
+                viewHolderSys = (ViewHolderSys) convertView.getTag();
             } else
                 viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -111,15 +111,17 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         try {
             if (dx < -maxDx) dx = -maxDx;
             if (dx > 0) return;
+            int firstVisiblePosition = listView.getFirstVisiblePosition();
             if (delPosition != -1) {
-                int delIndex = delPosition + 1 - listView.getFirstVisiblePosition();
+                int delIndex = delPosition + 1 - firstVisiblePosition;
                 dataList.get(delPosition).setShowDelBtn(false);
                 if (delIndex >= 0) {
                     ViewGroup delBtnItem = (ViewGroup) ((ViewGroup) listView.getChildAt(delIndex)).getChildAt(0);
                     hideDel(delBtnItem);
                 }
             }
-            int index = position - listView.getFirstVisiblePosition();
+            if (position == 0) return;
+            int index = position - firstVisiblePosition;
             ViewGroup itemView = (ViewGroup) ((ViewGroup) (listView.getChildAt(index))).getChildAt(0);
             ViewHelper.setTranslationX(itemView.getChildAt(0), dx);
             ViewHelper.setTranslationX(itemView.getChildAt(1), dx);
@@ -179,7 +181,6 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         ViewHelper.setTranslationX(rootView.getChildAt(1), 0);
         ViewHelper.setTranslationX(rootView.getChildAt(2), 0);
     }
-
 
 
     static class ViewHolder {
