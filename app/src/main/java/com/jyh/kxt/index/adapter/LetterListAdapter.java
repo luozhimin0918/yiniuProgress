@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.adapter;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.index.json.LetterListJson;
 import com.library.util.SystemUtil;
-import com.nineoldandroids.view.ViewHelper;
 
 import java.util.List;
 
@@ -35,15 +35,19 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     private Context mContext;
     private ListView listView;
-    private float maxDx;
 
-    public int delPosition = -1;
+    private float deleteViewWidth;
+    private float chartContentWidth;
+
 
     public LetterListAdapter(List<LetterListJson> dataList, Context mContext, ListView listView) {
         super(dataList);
         this.mContext = mContext;
         this.listView = listView;
-        maxDx = SystemUtil.dp2px(mContext, 60);
+
+        deleteViewWidth = SystemUtil.dp2px(mContext, 60);
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
+        chartContentWidth = screenDisplay.widthPixels + deleteViewWidth;
     }
 
     @Override
@@ -60,12 +64,19 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_letter, parent, false);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
+
+                //重置所有Item的宽度
+                ViewGroup.LayoutParams chartContentParams = viewHolder.llRootView.getLayoutParams();
+                chartContentParams.width = (int) chartContentWidth;
+                viewHolder.llRootView.setLayoutParams(chartContentParams);
+                viewHolder.llRootView.setTranslationX(0);
             }
         } else {
             if (type == TYPE_SYS) {
                 viewHolderSys = (ViewHolderSys) convertView.getTag();
-            } else
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
+            }
         }
 
         if (type == TYPE_SYS) {
@@ -74,6 +85,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             LetterListJson bean = dataList.get(position);
             viewHolder.tvName.setText(bean.getName());
             viewHolder.tvContent.setText(bean.getName());
+
+
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,14 +94,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                     notifyDataSetChanged();
                 }
             });
-
             setTheme(viewHolder);
-
-            if (bean.isShowDelBtn()) {
-                showDel(viewHolder.llRootView);
-            } else {
-                hideDel(viewHolder.llRootView);
-            }
         }
         return convertView;
     }
@@ -105,81 +111,6 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     private void setTheme(ViewHolder viewHolder) {
 
-    }
-
-    public void showDel(int position, float dx, int type) {
-        try {
-            if (dx < -maxDx) dx = -maxDx;
-            if (dx > 0) return;
-            int firstVisiblePosition = listView.getFirstVisiblePosition();
-            if (delPosition != -1) {
-                int delIndex = delPosition + 1 - firstVisiblePosition;
-                dataList.get(delPosition).setShowDelBtn(false);
-                if (delIndex >= 0) {
-                    ViewGroup delBtnItem = (ViewGroup) ((ViewGroup) listView.getChildAt(delIndex)).getChildAt(0);
-                    hideDel(delBtnItem);
-                }
-            }
-            if (position == 0) return;
-            int index = position - firstVisiblePosition;
-            ViewGroup itemView = (ViewGroup) ((ViewGroup) (listView.getChildAt(index))).getChildAt(0);
-            ViewHelper.setTranslationX(itemView.getChildAt(0), dx);
-            ViewHelper.setTranslationX(itemView.getChildAt(1), dx);
-            ViewHelper.setTranslationX(itemView.getChildAt(2), dx);
-
-            if (type == 1) {
-                LetterListJson letterListJson = dataList.get(position - 1);
-                if (dx == -maxDx) {
-                    letterListJson.setShowDelBtn(true);
-                    delPosition = position - 1;
-                    notifyDataSetChanged();
-                } else if (dx == 0) {
-                    letterListJson.setShowDelBtn(false);
-                    notifyDataSetChanged();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            notifyDataSetChanged();
-        }
-    }
-
-    public void hideDel(int position, float dx, int type) {
-        try {
-            if (dx > maxDx) dx = maxDx;
-            if (dx < 0) return;
-            int index = position - listView.getFirstVisiblePosition();
-            ViewGroup itemView = (ViewGroup) ((ViewGroup) (listView.getChildAt(index))).getChildAt(0);
-            ViewHelper.setTranslationX(itemView.getChildAt(0), -maxDx + dx);
-            ViewHelper.setTranslationX(itemView.getChildAt(1), -maxDx + dx);
-            ViewHelper.setTranslationX(itemView.getChildAt(2), -maxDx + dx);
-
-            if (type == 1) {
-                LetterListJson letterListJson = dataList.get(position - 1);
-                if (dx == maxDx) {
-                    letterListJson.setShowDelBtn(false);
-                    notifyDataSetChanged();
-                } else if (dx == 0) {
-                    letterListJson.setShowDelBtn(true);
-                    notifyDataSetChanged();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            notifyDataSetChanged();
-        }
-    }
-
-    private void showDel(ViewGroup rootView) {
-        ViewHelper.setTranslationX(rootView.getChildAt(0), -maxDx);
-        ViewHelper.setTranslationX(rootView.getChildAt(1), -maxDx);
-        ViewHelper.setTranslationX(rootView.getChildAt(2), -maxDx);
-    }
-
-    public void hideDel(ViewGroup rootView) {
-        ViewHelper.setTranslationX(rootView.getChildAt(0), 0);
-        ViewHelper.setTranslationX(rootView.getChildAt(1), 0);
-        ViewHelper.setTranslationX(rootView.getChildAt(2), 0);
     }
 
 
@@ -205,6 +136,41 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
         ViewHolderSys(View view) {
             ButterKnife.bind(this, view);
+        }
+    }
+
+    private int currentTranslationX;
+    private LinearLayout contentLayout;
+
+    public void translationContentView(int position, float distanceX) {
+        int firstVisiblePosition = listView.getFirstVisiblePosition();
+        int index = position - firstVisiblePosition;
+        ViewGroup itemView = (ViewGroup) ((ViewGroup) (listView.getChildAt(index))).getChildAt(0);
+
+        contentLayout = (LinearLayout) itemView.findViewById(R.id.ll_rootView);
+
+        if (Math.abs(currentTranslationX) <= deleteViewWidth) {
+            currentTranslationX -= distanceX;
+            contentLayout.setTranslationX(currentTranslationX);
+        }
+    }
+
+    public void upContentView() {
+        if (contentLayout == null) {
+            return;
+        }
+        if (Math.abs(currentTranslationX) < deleteViewWidth) {
+            contentLayout.setTranslationX(0);
+        } else {
+            contentLayout.setTranslationX(-deleteViewWidth);
+        }
+    }
+
+    public void downHindContentView() {
+        if (contentLayout != null) {
+            contentLayout.setTranslationX(0);
+            contentLayout = null;
+            currentTranslationX = 0;
         }
     }
 }

@@ -130,7 +130,6 @@ public class AuthorActivity extends BaseActivity implements PageLoadLayout.OnAfr
                             event.getAction() == MotionEvent.ACTION_CANCEL) {
                         upYPoint = event.getY();
                         isPullUp = downYPoint - upYPoint > 0;
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
