@@ -27,6 +27,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -60,13 +61,14 @@ import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
+import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.trading.AuthorActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
+import com.jyh.kxt.trading.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -110,6 +112,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) TextView tvCommentCount;
     @BindView(R.id.tv_ding_Count) public TextView tvDianCount;
+
+    @BindView(R.id.news_author_image) RoundImageView newsAuthorImage;
+    @BindView(R.id.news_author_nick) TextView newsAuthorNick;
+    @BindView(R.id.news_author_like) SelectedImageView newsAuthorLike;
+    @BindView(R.id.news_author_chat) TextView newsAuthorChat;
+    @BindView(R.id.news_author_line) View newsAuthorLine;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
@@ -184,7 +192,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         PushUtil.pushToMainActivity(this);
     }
 
-    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id.news_author_chat})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -222,6 +230,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         sharePop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
                     }
                 }
+                break;
+            case R.id.news_author_like:
+
+                break;
+            case R.id.news_author_chat:
+
                 break;
         }
     }
@@ -519,7 +533,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_type) TextView tvType;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_like) ImageView cbLike;
+        @BindView(R.id.iv_like) SelectedImageView cbLike;
+        @BindView(R.id.head_author_chat) TextView tvHeadAuthorChat;
+
+        @BindView(R.id.news_head_line) View viewLine;
 
         @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
         @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
@@ -534,6 +551,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         private TextView tvSource;
         public ThumbView2 attention;
         private boolean isAllowAttention;
+
+        private Bitmap authorBitmap;
 
         /**
          * ----------------创建顶部的Head
@@ -569,7 +588,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
                                 glideAnimation) {
+                            WebViewAndHead.this.authorBitmap = resource;
                             ivPhoto.setImageBitmap(resource);
+                            newsAuthorImage.setImageBitmap(resource);
                         }
                     });
 
@@ -578,6 +599,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvName.getLayoutParams().height = 5;
             } else {
                 tvName.setText(author_name);
+                newsAuthorNick.setText(author_name);
             }
 
             isAllowAttention = "blog".equals(newsContentJson.getType());
@@ -590,12 +612,33 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
+                tvHeadAuthorChat.setVisibility(View.VISIBLE);
             } else {
                 cbLike.setVisibility(View.GONE);
+                tvHeadAuthorChat.setVisibility(View.GONE);
             }
 
             boolean isFollow = "1".equals(newsContentJson.getIs_follow());
             cbLike.setSelected(isFollow);
+            cbLike.setOnSelectedListener(new SelectedImageView.OnSelectedListener() {
+                @Override
+                public void onSelectedUpdate(boolean selected) {
+                    if (selected != newsAuthorLike.isSelected()) {
+                        newsAuthorLike.setSelected(selected);
+                    }
+                }
+            });
+
+            newsAuthorLike.setSelected(isFollow);
+            newsAuthorLike.setOnSelectedListener(new SelectedImageView.OnSelectedListener() {
+                @Override
+                public void onSelectedUpdate(boolean selected) {
+                    if (selected != cbLike.isSelected()) {
+                        cbLike.setSelected(selected);
+                    }
+                }
+            });
+
             cbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -608,12 +651,57 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             tvTitle.setText(newsContentJson.getTitle());
 
             flWebContent.setForeground(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.theme1)));
+            ptrLvMessage.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    //监听是否移动中
+                    try {
+                        int top = Math.abs(headView.getTop());
+                        int linePosition = viewLine.getTop();
+                        if (top >= linePosition) {
+                            if (!newsAuthorNick.isShown()) {
+                                newsAuthorImage.setVisibility(View.VISIBLE);
+                                newsAuthorNick.setVisibility(View.VISIBLE);
+
+                                if (isAllowAttention) {
+                                    newsAuthorLike.setVisibility(View.VISIBLE);
+                                    newsAuthorChat.setVisibility(View.VISIBLE);
+
+                                    newsAuthorLike.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            newsContentPresenter.requestAttention(
+                                                    cbLike.isSelected(),
+                                                    WebViewAndHead.this.newsContentJson.getAuthor_id(), newsAuthorLike);
+                                        }
+                                    });
+                                }
+                            }
+                        } else {
+                            if (newsAuthorNick.isShown()) {
+                                newsAuthorImage.setVisibility(View.GONE);
+                                newsAuthorNick.setVisibility(View.GONE);
+                                newsAuthorLike.setVisibility(View.GONE);
+                                newsAuthorChat.setVisibility(View.GONE);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             /**
              * ----------  创建WebView
              */
             final WebSettings settings = wvContent.getSettings();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             }
 
 //            settings.setBlockNetworkImage(true);

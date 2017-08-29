@@ -152,7 +152,7 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
             if (mDrawableHeight == mDrawableWidth) {
                 scale = fixedScale;
             } else if (mDrawableHeight * widthScale >= mHeight) {
-                scale = fixedScale;
+                scale = /*fixedScale*/widthScale;
             } else {
                 scale = widthScale;
             }
