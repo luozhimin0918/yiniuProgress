@@ -118,7 +118,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     public void init(List<LetterListJson> list) {
         adapter = new LetterListAdapter(list, this, plContent.getRefreshableView());
-        presenter.scrollListener(plContent.getRefreshableView(),adapter);
+        presenter.scrollListener(plContent,adapter);
         plContent.setAdapter(adapter);
         plRootView.loadOver();
     }
