@@ -58,7 +58,6 @@
                     android:layout_marginBottom="9dp"
                     android:layout_marginRight="@dimen/newsContentPadding3"
                     android:background="@mipmap/icon_msg_sxt"
-                    android:text="私信他"
                     />
             </RelativeLayout>
 

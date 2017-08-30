@@ -248,5 +248,6 @@ public class HttpConstant {
      */
     public static final String MSG_USERCENTER = BASE_URL + "member/my_message"+ VarConstant.HTTP_CONTENT;//个人中心我的私信
     public static final String MSG_SYS_LIST = BASE_URL + "message/sys_msg"+ VarConstant.HTTP_CONTENT;//系统消息列表
+    public static final String MSG_USER_BAN = BASE_URL + "message/handle_banned"+ VarConstant.HTTP_CONTENT;//添加|解除屏蔽
 
 }
