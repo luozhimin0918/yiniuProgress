@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 public class PullListViewPresenter extends BasePresenter implements PullToRefreshBase.OnRefreshListener2<ListView>, PageLoadLayout
         .OnAfreshLoadListener {
 
-    enum LoadMode {
+    public enum LoadMode {
         LIST_PULL, PAGE_LOAD
     }
 
@@ -107,6 +107,8 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
         mPullToRefreshListView.setOnRefreshListener(this);
         mPullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPageLoadLayout.setOnAfreshLoadListener(this);
+
+        switchContentView();
 
         return contentView;
     }

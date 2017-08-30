@@ -329,6 +329,10 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".chat.ChatRoomActivity">
+        </activity>
+        <activity android:name=".chat.BlockActivity">
+        </activity>
     </application>
 
 </manifest>

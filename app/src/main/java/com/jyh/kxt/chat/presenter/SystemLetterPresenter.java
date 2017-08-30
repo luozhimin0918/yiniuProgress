@@ -1,4 +1,4 @@
-package com.jyh.kxt.chat.presenter;
+package com.jyh.kxt.index.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -59,7 +59,8 @@ public class SystemLetterPresenter extends BasePresenter {
         List<LetterSysJson> data = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             data.add(new LetterSysJson("12:0" + i,
-                    "系统消息系统消息系统消息系统 http://www.kxt.com 消息系统消息系统消息系统消息系统消息 http://www.baidu.com 系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息"
+                    "系统消息系统消息系统消息系统http://www.kxt.com" +
+                            "消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息"
                     , i + ""));
         }
         activity.initData(data);

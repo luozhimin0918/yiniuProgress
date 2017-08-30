@@ -138,4 +138,7 @@
     <color name="ma10">#FF0000</color>
     <color name="ma30">#AA33AA</color>
 
+    <color name="block_tip_bg">#D5E8F7</color>
+    <color name="block_tip_text">#0077CE</color>
+
 </resources>

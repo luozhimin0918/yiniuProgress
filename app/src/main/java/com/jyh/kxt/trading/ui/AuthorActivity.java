@@ -24,6 +24,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
@@ -238,7 +239,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
             case R.id.v_sxt:
                 if (LoginUtils.isLogined(this)) {
                     // TODO: 2017/8/30  
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(this, ChatRoomActivity.class);
                     intent.putExtra(IntentConstant.U_ID, authorId);
                     startActivity(intent);
                 } else {

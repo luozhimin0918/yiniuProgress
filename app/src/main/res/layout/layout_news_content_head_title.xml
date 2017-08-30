@@ -107,7 +107,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/newsContentPadding1"
             android:paddingRight="@dimen/newsContentPadding1"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_news_title"

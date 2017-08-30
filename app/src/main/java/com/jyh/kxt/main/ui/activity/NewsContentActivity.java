@@ -64,6 +64,7 @@ import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
@@ -152,6 +153,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private String type = VarConstant.OCLASS_ARTICLE;
     private String imgStr;
 
+    private String authorId;
     private boolean isScrollToComment = true;
 
     @Override
@@ -236,7 +238,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
                 break;
             case R.id.news_author_chat:
-
+                if (authorId == null) {
+                    return;
+                }
+                Intent intent = new Intent(this, ChatRoomActivity.class);
+                intent.putExtra(IntentConstant.U_ID, authorId);
+                startActivity(intent);
                 break;
         }
     }
@@ -605,6 +612,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     });
 
             String author_name = newsContentJson.getAuthor_name();
+
+            authorId = newsContentJson.getAuthor_id();
             if (TextUtils.isEmpty(author_name)) {
                 tvName.getLayoutParams().height = 5;
             } else {
@@ -634,6 +643,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
                 tvHeadAuthorChat.setVisibility(View.VISIBLE);
+                tvHeadAuthorChat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(NewsContentActivity.this, ChatRoomActivity.class);
+                        intent.putExtra(IntentConstant.U_ID, authorId);
+                        startActivity(intent);
+                    }
+                });
+
             } else {
                 cbLike.setVisibility(View.GONE);
                 tvHeadAuthorChat.setVisibility(View.GONE);

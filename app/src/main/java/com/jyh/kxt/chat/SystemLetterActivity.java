@@ -9,7 +9,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.chat.adapter.LetterSysAdapter;
 import com.jyh.kxt.chat.json.LetterSysJson;
-import com.jyh.kxt.chat.presenter.SystemLetterPresenter;
+import com.jyh.kxt.index.presenter.SystemLetterPresenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
