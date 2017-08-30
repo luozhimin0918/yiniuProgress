@@ -44,7 +44,7 @@ public class SystemLetterPresenter extends BasePresenter {
 //        JSONObject jsonParam = request.getJsonParam();
 //        UserJson userInfo = LoginUtils.getUserInfo(mContext);
 //        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-//        request.doPost(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
+//        request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
 //            @Override
 //            protected void onResponse(List<LetterSysJson> letterSysJsons) {
 //                activity.initData(letterSysJsons);
@@ -71,7 +71,7 @@ public class SystemLetterPresenter extends BasePresenter {
             UserJson userInfo = LoginUtils.getUserInfo(mContext);
             jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
             jsonParam.put(VarConstant.HTTP_LASTID, lastId);
-            request.doPost(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
+            request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
                 @Override
                 protected void onResponse(List<LetterSysJson> letterSysJsons) {
                     activity.loadMore(letterSysJsons);
@@ -109,7 +109,7 @@ public class SystemLetterPresenter extends BasePresenter {
         JSONObject jsonParam = request.getJsonParam();
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-        request.doPost(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
+        request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
             @Override
             protected void onResponse(List<LetterSysJson> letterSysJsons) {
                 lastId = "";

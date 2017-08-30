@@ -43,10 +43,22 @@
                     android:layout_width="66dp"
                     android:layout_height="30dp"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginRight="@dimen/newsContentPadding3"
+                    android:layout_toLeftOf="@+id/v_sxt"
+                    android:background="@drawable/sel_news_author_attention"
+                    />
+
+                <View
+                    android:id="@+id/v_sxt"
+                    android:layout_width="66dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="9dp"
                     android:layout_marginRight="@dimen/newsContentPadding3"
-                    android:background="@drawable/sel_news_author_attention"
+                    android:background="@mipmap/icon_msg_sxt"
+                    android:text="私信他"
                     />
             </RelativeLayout>
 
@@ -96,6 +108,7 @@
                     android:id="@+id/tv_article"
                     style="@style/AuthorTextViewStyle"
                     />
+
                 <View
                     android:layout_width="2px"
                     android:layout_height="12dp"

@@ -54,7 +54,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     private void initView() {
 
         tvBarTitle.setText("我的私信");
-        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_msg_ban));
 
         plContent.setDividerNull();
         plContent.setMode(PullToRefreshBase.Mode.BOTH);

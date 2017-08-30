@@ -97,23 +97,61 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
         } else {
             LetterListJson bean = dataList.get(position);
-            viewHolder.tvName.setText(bean.getName());
-            viewHolder.tvContent.setText(bean.getName());
+            viewHolder.tvName.setText(bean.getNickname());
+            viewHolder.tvContent.setText(bean.getLast_content());
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    downHindContentView();
                     dataList.remove(position);
                     notifyDataSetChanged();
                 }
             });
+            final ViewHolder finalViewHolder = viewHolder;
+            Glide.with(mContext).load(bean.getAvatar()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+                    .icon_user_def_photo)
+                    .into(new ImageViewTarget<Bitmap>(finalViewHolder.rivAvatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            finalViewHolder.rivAvatar.setImageBitmap(resource);
+                        }
+                    });
+
+            setUnreadNum(viewHolder, bean);
             setTheme(viewHolder);
         }
         return convertView;
     }
 
+    /**
+     * 设置未读信息数
+     *
+     * @param viewHolder
+     * @param bean
+     */
+    private void setUnreadNum(ViewHolder viewHolder, LetterListJson bean) {
+        String num_unread = bean.getNum_unread();
+        if (num_unread == null || num_unread.trim().equals("") || num_unread.trim().equals("0")) {
+            viewHolder.tvNum.setText("");
+            viewHolder.tvNum.setVisibility(View.GONE);
+        } else {
+            int numInt = Integer.parseInt(num_unread);
+            if (numInt > 99) {
+                num_unread = "99+";
+            }
+            viewHolder.tvNum.setText(num_unread);
+            viewHolder.tvNum.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public int getViewTypeCount() {
         return 2;
+    }
+
+    @Override
+    public int getCount() {
+        return super.getCount();
     }
 
     @Override

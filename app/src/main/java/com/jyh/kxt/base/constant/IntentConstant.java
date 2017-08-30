@@ -19,6 +19,7 @@ public class IntentConstant {
     public static final String WEBURL = "webUrl";//网址
     public static final String MARKET = "market";//行情
     public static final String O_ID = "o_id";
+    public static final String U_ID = "u_id";
     public static final String O_CLASS = "o_class";
     public static final String O_ACTION = "o_action";
     public static final String OBJECT = "object";
