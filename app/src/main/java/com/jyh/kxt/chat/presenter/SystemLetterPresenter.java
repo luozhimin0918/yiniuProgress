@@ -1,7 +1,4 @@
-package com.jyh.kxt.index.presenter;
-
-import android.app.Activity;
-import android.widget.ListView;
+package com.jyh.kxt.chat.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -11,8 +8,8 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.index.json.LetterSysJson;
-import com.jyh.kxt.index.ui.SystemLetterActivity;
+import com.jyh.kxt.chat.SystemLetterActivity;
+import com.jyh.kxt.chat.json.LetterSysJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -62,8 +59,7 @@ public class SystemLetterPresenter extends BasePresenter {
         List<LetterSysJson> data = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             data.add(new LetterSysJson("12:0" + i,
-                    "系统消息系统消息系统消息系统http://www.kxt.com" +
-                            "消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息"
+                    "系统消息系统消息系统消息系统 http://www.kxt.com 消息系统消息系统消息系统消息系统消息 http://www.baidu.com 系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息"
                     , i + ""));
         }
         activity.initData(data);

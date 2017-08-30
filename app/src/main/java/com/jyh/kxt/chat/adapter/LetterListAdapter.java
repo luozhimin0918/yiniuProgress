@@ -1,6 +1,8 @@
 package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
@@ -23,7 +27,7 @@ import butterknife.ButterKnife;
 
 /**
  * 项目名:KxtProfessional
- * 类描述:
+ * 类描述:私信对象列表
  * 创建人:苟蒙蒙
  * 创建日期:2017/8/28.
  */
@@ -45,7 +49,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         this.mContext = mContext;
         this.listView = listView;
 
-        deleteViewWidth = SystemUtil.dp2px(mContext, 60);
+        deleteViewWidth = SystemUtil.dp2px(mContext, 70);
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         chartContentWidth = screenDisplay.widthPixels + deleteViewWidth;
     }
@@ -80,13 +84,21 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         }
 
         if (type == TYPE_SYS) {
-
+            final ViewHolderSys finalViewHolderSys = viewHolderSys;
+            Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().into(new ImageViewTarget<Bitmap>(finalViewHolderSys.rivAvatar) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    finalViewHolderSys.rivAvatar.setImageBitmap(resource);
+                }
+            });
+            viewHolderSys.vPoint.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_point_red));
+            viewHolderSys.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
+            viewHolderSys.ivBreak.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_msg_sys_enter));
+            viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
         } else {
             LetterListJson bean = dataList.get(position);
             viewHolder.tvName.setText(bean.getName());
             viewHolder.tvContent.setText(bean.getName());
-
-
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,15 +122,23 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     }
 
     private void setTheme(ViewHolder viewHolder) {
-
+        viewHolder.tvName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
+        viewHolder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        viewHolder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+        viewHolder.tvNum.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        viewHolder.tvNum.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_oval_red));
+        viewHolder.tvDel.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        viewHolder.tvDel.setBackgroundColor(ContextCompat.getColor(mContext, R.color.red2));
+        viewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
     }
-
 
     static class ViewHolder {
         @BindView(R.id.ll_rootView) LinearLayout llRootView;
         @BindView(R.id.riv_avatar) RoundImageView rivAvatar;
         @BindView(R.id.tv_name) TextView tvName;
+        @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.tv_content) TextView tvContent;
+        @BindView(R.id.tv_num) TextView tvNum;
         @BindView(R.id.tv_del) TextView tvDel;
         @BindView(R.id.v_line) View vLine;
 

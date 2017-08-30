@@ -12,7 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.chat.adapter.LetterListAdapter;
 import com.jyh.kxt.chat.json.LetterListJson;
-import com.jyh.kxt.index.presenter.LetterPresenter;
+import com.jyh.kxt.chat.presenter.LetterPresenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;

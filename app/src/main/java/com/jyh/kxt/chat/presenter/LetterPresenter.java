@@ -1,4 +1,4 @@
-package com.jyh.kxt.index.presenter;
+package com.jyh.kxt.chat.presenter;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

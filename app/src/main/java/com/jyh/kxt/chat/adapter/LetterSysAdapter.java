@@ -1,7 +1,16 @@
-package com.jyh.kxt.index.adapter;
+package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +21,7 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.index.json.LetterSysJson;
+import com.jyh.kxt.chat.json.LetterSysJson;
 
 import java.util.List;
 
@@ -46,6 +55,11 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
+        holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+        holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
         Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().into(new ImageViewTarget<Bitmap>(holder.rivAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
@@ -53,12 +67,43 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
             }
         });
 
+
         LetterSysJson bean = dataList.get(position);
         holder.tvTime.setText("12:12");
-        holder.tvContent.setText(bean.getInfo());
+        setURLSpan(holder.tvContent, bean);
         holder.tvTitle.setText("系统");
 
         return convertView;
+    }
+
+    /**
+     * 设置超链接颜色
+     *
+     * @param tvContent
+     * @param bean
+     */
+    private void setURLSpan(TextView tvContent, LetterSysJson bean) {
+        String info = bean.getInfo();
+        //创建一个 SpannableString对象 注意：不要在xml配置android:autoLink属性
+        SpannableString sp = new SpannableString(info);
+        //这句很重要，也可以添加自定义正则表达式
+        Linkify.addLinks(sp, Linkify.ALL);
+        //主要是获取span的位置
+        URLSpan[] spans = sp.getSpans(0, info.length(), URLSpan.class);
+        //这里可以用过循环处理就可以动态实现文本颜色的差别化了
+
+        if (spans!=null&&spans.length>0) {
+            for (URLSpan span : spans) {
+                sp.setSpan(new ForegroundColorSpan(Color.RED), sp.getSpanStart(span), sp.getSpanEnd(span), Spannable
+                        .SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        //设置斜体
+        sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 27, 29, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        //SpannableString对象设置给TextView
+        tvContent.setText(sp);
+        //设置TextView可点击
+        tvContent.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public void setData(List<LetterSysJson> data) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="80dp"
+              android:layout_height="70dp"
               android:background="@color/theme1"
               android:orientation="vertical">
 
@@ -17,7 +17,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="@dimen/contentPadding">
+            android:paddingLeft="@dimen/contentPadding"
+            android:paddingRight="@dimen/contentPadding">
 
             <com.jyh.kxt.base.custom.RoundImageView
                 android:id="@+id/riv_avatar"
@@ -31,31 +32,74 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/contentPadding">
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/contentPadding"
-                    android:text="名字"
-                    android:textColor="@color/font_color1"
-                    android:textSize="@dimen/content_font_size"/>
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="名字"
+                        android:textColor="@color/font_color64"
+                        android:textSize="@dimen/content_font_size2"/>
 
-                <TextView
-                    android:id="@+id/tv_content"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="12:12"
+                        android:textColor="@color/font_color6"
+                        android:textSize="@dimen/describe_font_size1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/contentPadding"
-                    android:text="内容"
-                    android:textColor="@color/font_color3"
-                    android:textSize="@dimen/content_font_size"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/ll_title"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="内容111111111111111111111111111111"
+                        android:textColor="@color/font_color3"
+                        android:textSize="@dimen/describe_font_size3"/>
+
+                    <TextView
+                        android:id="@+id/tv_num"
+                        android:layout_toRightOf="@id/tv_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:minWidth="20dp"
+                        android:background="@drawable/bg_oval_red"
+                        android:text="99+"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:textSize="@dimen/min_min_font_size"
+                        />
+                </LinearLayout>
+
             </RelativeLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_del"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:background="@color/red2"
             android:gravity="center"
             android:text="删除"
@@ -67,6 +111,8 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/line_color3"/>
+        android:layout_marginLeft="@dimen/contentPadding"
+        android:layout_marginRight="@dimen/contentPadding"
+        android:background="@color/line_color6"/>
 
 </LinearLayout>

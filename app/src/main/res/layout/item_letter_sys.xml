@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="80dp"
+              android:layout_height="70dp"
               android:orientation="vertical"
     >
 
@@ -27,8 +27,6 @@
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/bg_point_red"
                 />
         </RelativeLayout>
@@ -41,21 +39,23 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="系统消息"
-            android:textColor="@color/font_color1"
-            android:textSize="@dimen/content_font_size"/>
+            android:textColor="@color/font_color64"
+            android:textSize="@dimen/content_font_size2"/>
 
         <ImageView
             android:id="@+id/iv_break"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="15dp"
-            android:src="@mipmap/icon_user_break"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_msg_sys_enter"
+            android:layout_marginRight="@dimen/contentPadding"/>
     </LinearLayout>
 
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/line_color3"/>
+        android:layout_marginLeft="@dimen/contentPadding"
+        android:layout_marginRight="@dimen/contentPadding"
+        android:background="@color/line_color6"/>
 
 </LinearLayout>

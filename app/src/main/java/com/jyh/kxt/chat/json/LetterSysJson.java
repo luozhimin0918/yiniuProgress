@@ -1,4 +1,4 @@
-package com.jyh.kxt.index.json;
+package com.jyh.kxt.chat.json;
 
 /**
  * 项目名:KxtProfessional
