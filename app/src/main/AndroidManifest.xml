@@ -231,6 +231,9 @@
         <activity
             android:name=".chat.SystemLetterActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".chat.UserSettingActivity"
+            android:screenOrientation="portrait"/>
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->

@@ -42,6 +42,7 @@
     <!--视图背景色-->
     <color name="bg_color1">#F2F5F8</color>
     <color name="bg_color2">#F7F7F7</color>
+    <color name="bg_color3">#F9F9F9</color>
 
     <!-- 验证按钮颜色 -->
     <color name="bg_disable_color">#f7f7f7</color>
