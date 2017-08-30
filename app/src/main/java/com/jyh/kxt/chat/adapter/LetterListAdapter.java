@@ -1,4 +1,4 @@
-package com.jyh.kxt.index.adapter;
+package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.index.json.LetterListJson;
+import com.jyh.kxt.chat.json.LetterListJson;
 import com.library.util.SystemUtil;
 
 import java.util.List;

@@ -43,6 +43,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.utils.UmengShareTool;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.chat.LetterActivity;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.MainPresenter;

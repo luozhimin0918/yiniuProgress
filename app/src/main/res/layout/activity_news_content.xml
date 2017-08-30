@@ -76,6 +76,18 @@
             android:layout_gravity="right"
             android:padding="16dp"
             android:src="@mipmap/icon_nav_more"/>
+
+        <TextView
+            android:id="@+id/tv_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/actionbar_height"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:visibility="gone"
+            android:textColor="@color/actionBar_textColor1"
+            android:textSize="@dimen/content_font_size2"/>
     </RelativeLayout>
 
     <View

@@ -1,4 +1,4 @@
-package com.jyh.kxt.index.ui;
+package com.jyh.kxt.chat;
 
 import android.os.Bundle;
 import android.view.View;

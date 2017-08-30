@@ -118,6 +118,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.news_author_like) SelectedImageView newsAuthorLike;
     @BindView(R.id.news_author_chat) TextView newsAuthorChat;
     @BindView(R.id.news_author_line) View newsAuthorLine;
+    @BindView(R.id.tv_bar_title) TextView newsTitleBar;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
@@ -541,8 +542,14 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
         @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
 
-        @BindView(R.id.tv_news_type) TextView tvNewsType;
+        //        @BindView(R.id.tv_news_type) TextView tvNewsType;
+//        @BindView(R.id.tv_news_time) TextView tvNewsTime;
+
+        @BindView(R.id.tv_news_title) TextView tvNewsTitle;
         @BindView(R.id.tv_news_time) TextView tvNewsTime;
+        @BindView(R.id.tv_news_label) TextView tvNewsLabel;
+
+
         @BindView(R.id.wv_content) public WebView wvContent;
         @BindView(R.id.fl_web_content) FrameLayout flWebContent;
 
@@ -574,10 +581,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvType, R.mipmap.icon_new_bq, 0, 0, 0);
             tvType.setText(newsContentJson.getTypeName());
 
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvNewsLabel, R.mipmap.icon_new_bq, 0, 0, 0);
+            tvNewsLabel.setText(newsContentJson.getTypeName());
+
             long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
             tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+            tvNewsTime.setText(" | " + DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
 
-            rlExistAuthor.setVisibility(View.VISIBLE);
             rlExistAuthor.setOnClickListener(this);
             Glide.with(NewsContentActivity.this)
                     .load(newsContentJson.getAuthor_image())
@@ -599,10 +609,21 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvName.getLayoutParams().height = 5;
             } else {
                 tvName.setText(author_name);
+                tvNewsTitle.setText(author_name);
+
                 newsAuthorNick.setText(author_name);
             }
 
             isAllowAttention = "blog".equals(newsContentJson.getType());
+
+
+            if (isAllowAttention) {
+                rlExistAuthor.setVisibility(View.VISIBLE);
+            } else {
+                rlNotAuthor.setVisibility(View.VISIBLE);
+            }
+
+
             UserJson userInfo = LoginUtils.getUserInfo(getContext());
             if (userInfo != null) {
                 if (userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(newsContentJson.getAuthor_id())) {
@@ -651,50 +672,55 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             tvTitle.setText(newsContentJson.getTitle());
 
             flWebContent.setForeground(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.theme1)));
-            ptrLvMessage.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (!isAllowAttention) {
+                newsTitleBar.setVisibility(View.VISIBLE);
+                newsTitleBar.setText("要闻");
+            } else {
+                ptrLvMessage.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                }
+                    }
 
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    //监听是否移动中
-                    try {
-                        int top = Math.abs(headView.getTop());
-                        int linePosition = viewLine.getTop();
-                        if (top >= linePosition) {
-                            if (!newsAuthorNick.isShown()) {
-                                newsAuthorImage.setVisibility(View.VISIBLE);
-                                newsAuthorNick.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        //监听是否移动中
+                        try {
+                            int top = Math.abs(headView.getTop());
+                            int linePosition = viewLine.getTop();
+                            if (top >= linePosition) {
+                                if (!newsAuthorNick.isShown()) {
+                                    newsAuthorImage.setVisibility(View.VISIBLE);
+                                    newsAuthorNick.setVisibility(View.VISIBLE);
 
-                                if (isAllowAttention) {
-                                    newsAuthorLike.setVisibility(View.VISIBLE);
-                                    newsAuthorChat.setVisibility(View.VISIBLE);
+                                    if (isAllowAttention) {
+                                        newsAuthorLike.setVisibility(View.VISIBLE);
+                                        newsAuthorChat.setVisibility(View.VISIBLE);
 
-                                    newsAuthorLike.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            newsContentPresenter.requestAttention(
-                                                    cbLike.isSelected(),
-                                                    WebViewAndHead.this.newsContentJson.getAuthor_id(), newsAuthorLike);
-                                        }
-                                    });
+                                        newsAuthorLike.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                newsContentPresenter.requestAttention(
+                                                        cbLike.isSelected(),
+                                                        WebViewAndHead.this.newsContentJson.getAuthor_id(), newsAuthorLike);
+                                            }
+                                        });
+                                    }
+                                }
+                            } else {
+                                if (newsAuthorNick.isShown()) {
+                                    newsAuthorImage.setVisibility(View.GONE);
+                                    newsAuthorNick.setVisibility(View.GONE);
+                                    newsAuthorLike.setVisibility(View.GONE);
+                                    newsAuthorChat.setVisibility(View.GONE);
                                 }
                             }
-                        } else {
-                            if (newsAuthorNick.isShown()) {
-                                newsAuthorImage.setVisibility(View.GONE);
-                                newsAuthorNick.setVisibility(View.GONE);
-                                newsAuthorLike.setVisibility(View.GONE);
-                                newsAuthorChat.setVisibility(View.GONE);
-                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
-            });
+                });
+            }
 
             /**
              * ----------  创建WebView

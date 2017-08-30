@@ -79,8 +79,8 @@
                 android:id="@+id/iv_like"
                 android:layout_width="@dimen/newsAuthorAttentionWidth"
                 android:layout_height="@dimen/newsAuthorAttentionHeight"
-                android:layout_toLeftOf="@+id/head_author_chat"
                 android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/head_author_chat"
                 android:background="@drawable/sel_news_attention"
                 android:button="@null"
                 />
@@ -89,13 +89,13 @@
                 android:id="@+id/head_author_chat"
                 android:layout_width="@dimen/newsAuthorAttentionWidth"
                 android:layout_height="@dimen/newsAuthorAttentionHeight"
-                android:visibility="visible"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:text="私信Ta"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/shape_chat_bg"
+                android:gravity="center"
+                android:text="私信Ta"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:visibility="visible"
                 />
         </RelativeLayout>
 
@@ -107,15 +107,14 @@
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/newsContentPadding1"
             android:paddingRight="@dimen/newsContentPadding1"
-            android:paddingTop="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
-                android:id="@+id/tv_news_type"
+                android:id="@+id/tv_news_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="财经要闻"
-                android:textColor="@color/font_color6"
+                android:text="文/莫晓"
+                android:textColor="@color/font_color2"
                 android:textSize="@dimen/describe_font_size1"
                 />
 
@@ -123,9 +122,21 @@
                 android:id="@+id/tv_news_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_news_title"
+                android:text=" | 2017年8月30日 09:36:00"
+                android:textColor="@color/font_color3"
+                android:textSize="@dimen/describe_font_size1"
+                />
+
+            <TextView
+                android:id="@+id/tv_news_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="2017-5-12 11:55:52"
-                android:textColor="@color/font_color6"
+                android:drawableLeft="@mipmap/icon_new_bq"
+                android:drawablePadding="8dp"
+                android:text="贵金属"
+                android:textColor="@color/font_color8"
                 android:textSize="@dimen/describe_font_size1"
                 />
         </RelativeLayout>
@@ -143,13 +154,13 @@
     <FrameLayout
         android:id="@+id/fl_web_content"
         android:layout_width="match_parent"
-        android:minHeight="500dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minHeight="500dp">
 
         <WebView
             android:id="@+id/wv_content"
             android:layout_width="match_parent"
-            android:minHeight="500dp"
-            android:layout_height="wrap_content"></WebView>
+            android:layout_height="wrap_content"
+            android:minHeight="500dp"></WebView>
     </FrameLayout>
 </LinearLayout>

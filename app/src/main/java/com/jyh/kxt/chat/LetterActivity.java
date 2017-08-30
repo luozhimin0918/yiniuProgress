@@ -1,4 +1,4 @@
-package com.jyh.kxt.index.ui;
+package com.jyh.kxt.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.index.adapter.LetterListAdapter;
-import com.jyh.kxt.index.json.LetterListJson;
+import com.jyh.kxt.chat.adapter.LetterListAdapter;
+import com.jyh.kxt.chat.json.LetterListJson;
 import com.jyh.kxt.index.presenter.LetterPresenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
