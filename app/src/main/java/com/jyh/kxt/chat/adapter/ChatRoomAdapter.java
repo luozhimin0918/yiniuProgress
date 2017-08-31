@@ -2,6 +2,7 @@ package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +82,24 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         return convertView;
     }
 
+    /**
+     * 解析参数
+     *
+     * @param position
+     * @param baseViewHolder
+     */
     private void parseHolderData(int position, final BaseViewHolder baseViewHolder) {
         ChatRoomJson chatRoomJson = dataList.get(position);
 
+        long partitionTime = chatRoomJson.getPartitionTime();
+        if (partitionTime != 0) {
+            baseViewHolder.chatRoomTime.setVisibility(View.VISIBLE);
+
+            String partitionLabel = DateFormat.format("MM-dd", partitionTime).toString();
+            baseViewHolder.chatRoomTime.setText(partitionLabel);
+        } else {
+            baseViewHolder.chatRoomTime.setVisibility(View.GONE);
+        }
         /**
          * 内容
          */

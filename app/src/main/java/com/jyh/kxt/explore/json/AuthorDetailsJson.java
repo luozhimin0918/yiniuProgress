@@ -1,9 +1,7 @@
 package com.jyh.kxt.explore.json;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
-import com.jyh.kxt.trading.json.ViewpointJson;
 
 import java.util.List;
 
@@ -31,6 +29,7 @@ public class AuthorDetailsJson {
     private String point_num;//观点数
     private String article_num;//文章数
     private String is_follow;//是否关注
+    private String member_id;//私信的时候的聊天Id
 
     @JSONField(name = "article")
     private List<AuthorNewsJson> list;
@@ -114,5 +113,13 @@ public class AuthorDetailsJson {
 
     public void setView(List<ViewPointTradeBean> views) {
         this.view = views;
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
     }
 }

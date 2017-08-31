@@ -58,7 +58,9 @@ public class ChatRoomPresenter extends BasePresenter {
          */
         baseChatRoomList = new ArrayList<>();
         chatRoomAdapter = new ChatRoomAdapter(mContext, baseChatRoomList);
+
         PullToRefreshListView pullContentView = chatRoomActivity.pullContentView;
+        pullContentView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         pullContentView.setDividerNull();
         pullContentView.getRefreshableView().setTranscriptMode(TRANSCRIPT_MODE_ALWAYS_SCROLL);
         pullContentView.setAdapter(chatRoomAdapter);
@@ -112,18 +114,16 @@ public class ChatRoomPresenter extends BasePresenter {
         volleyRequest.doPost(HttpConstant.MESSAGE_HISTORY, jsonParam, new HttpListener<List<ChatRoomJson>>() {
             @Override
             protected void onResponse(List<ChatRoomJson> chatRoomList) {
-                for (ChatRoomJson chatRoomJson : chatRoomList) {
-                    String senderUid = chatRoomJson.getSender();
-                    if (!userInfo.getUid().equals(senderUid)) {//是我发送的
-                        chatRoomJson.setViewType(1);
-                    } else {
-                        chatRoomJson.setViewType(0);
-                    }
-                }
+                chatRoomActivity.pullContentView.onRefreshComplete();
+
+                analyzeListData(chatRoomList);
                 baseChatRoomList.addAll(chatRoomList);
+
                 if (isInitialLoadHistory) {
                     chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
                     isInitialLoadHistory = false;
+                    //判断是否屏蔽过?
+
                 }
             }
         });
@@ -138,19 +138,76 @@ public class ChatRoomPresenter extends BasePresenter {
             return;
         }
 
+        boolean isConnectedNetWork = SystemUtil.isConnected(mContext);
+        if (!isConnectedNetWork) {
+            showPromptContent("网络好像出现了故障,发送失败");
+            return;
+        }
+
+        analyzeFakeData(chatContent);
 
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("sender", userInfo.getUid());
         jsonParam.put("receiver", chatRoomActivity.otherUid);
-        jsonParam.put("content", userInfo.getUid());
+        jsonParam.put("content", chatContent);
         volleyRequest.doPost(HttpConstant.MESSAGE_SEND_MSG, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String sendResponse) {
+
                 Log.e("to", "onResponse: " + sendResponse);
             }
         });
     }
+
+    /**
+     * 组织假数据
+     */
+    private void analyzeFakeData(String chatContent) {
+        String sendDateTime = String.valueOf(System.currentTimeMillis() / 1000);
+        ChatRoomJson chatRoomJson = new ChatRoomJson();
+        chatRoomJson.setId("");
+        chatRoomJson.setContent(chatContent);
+        chatRoomJson.setDatetime(sendDateTime);
+        chatRoomJson.setSender(userInfo.getUid());
+        chatRoomJson.setReceiver(chatRoomActivity.otherUid);
+        chatRoomJson.setAvatar(userInfo.getPicture());
+
+        baseChatRoomList.add(chatRoomJson);
+        analyzeListData(baseChatRoomList);
+        chatRoomAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 分析列表中的数据
+     *
+     * @param chatRoomList
+     */
+    private void analyzeListData(List<ChatRoomJson> chatRoomList) {
+        long lastSendTime = 0;
+
+        for (ChatRoomJson chatRoomJson : chatRoomList) {
+            String senderUid = chatRoomJson.getSender();
+            if (!userInfo.getUid().equals(senderUid)) {//是我发送的
+                chatRoomJson.setViewType(1);
+            } else {
+                chatRoomJson.setViewType(0);
+            }
+
+            //计算间隔事件
+            long thisSendTime = Long.parseLong(chatRoomJson.getDatetime());
+
+            if (lastSendTime == 0) {
+                lastSendTime = thisSendTime;
+            }
+
+            if (thisSendTime - 1000 * 60 * 5 <= thisSendTime) {
+                lastSendTime = thisSendTime;
+                chatRoomJson.setPartitionTime(thisSendTime);
+            }
+        }
+    }
+
 
     /**
      * 显示提示内容

@@ -37,6 +37,7 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
     @BindView(R.id.fl_emotion_layout) FrameLayout flContent;
 
     public String otherUid;
+    public String otherName;
 
     private EmotionPresenter emotionPresenter;
     private ChatRoomPresenter chatRoomPresenter;
@@ -46,7 +47,8 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room, StatusBarColor.THEME1);
 
-        otherUid = getIntent().getStringExtra(IntentConstant.U_ID);
+        otherUid = /*getIntent().getStringExtra(IntentConstant.U_ID)*/ "58703";
+        otherName = getIntent().getStringExtra(IntentConstant.NAME);
 
         emotionPresenter = new EmotionPresenter(this);
         chatRoomPresenter = new ChatRoomPresenter(this);
@@ -55,6 +57,8 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
         chatRoomPresenter.initPullListView();
 
         SoftKeyBoardListener.setListener(this, this);
+
+        tvBarTitle.setText(otherName);
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.iv_publish_emoji})

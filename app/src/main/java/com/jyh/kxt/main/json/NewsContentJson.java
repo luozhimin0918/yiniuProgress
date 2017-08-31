@@ -45,6 +45,8 @@ public class NewsContentJson {
     private List<NewsJson> article; //相关文章 格式和list格式一致
     private String is_follow;
 
+
+    private String member_id;//私信的时候的聊天Id
     /**
      * 内容样式js
      */
@@ -260,5 +262,13 @@ public class NewsContentJson {
 
     public void setShare_sina_title(String share_sina_title) {
         this.share_sina_title = share_sina_title;
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
     }
 }

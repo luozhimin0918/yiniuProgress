@@ -153,7 +153,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private String type = VarConstant.OCLASS_ARTICLE;
     private String imgStr;
 
-    private String authorId;
+    private String memberId;
+    private String authorName;
     private boolean isScrollToComment = true;
 
     @Override
@@ -238,11 +239,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
                 break;
             case R.id.news_author_chat:
-                if (authorId == null) {
+                if (memberId == null) {
                     return;
                 }
                 Intent intent = new Intent(this, ChatRoomActivity.class);
-                intent.putExtra(IntentConstant.U_ID, authorId);
+                intent.putExtra(IntentConstant.U_ID, memberId);
+                intent.putExtra(IntentConstant.NAME, authorName);
                 startActivity(intent);
                 break;
         }
@@ -611,16 +613,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         }
                     });
 
-            String author_name = newsContentJson.getAuthor_name();
-
-            authorId = newsContentJson.getAuthor_id();
-            if (TextUtils.isEmpty(author_name)) {
+            authorName = newsContentJson.getAuthor_name();
+            memberId = newsContentJson.getMember_id();
+            if (TextUtils.isEmpty(authorName)) {
                 tvName.getLayoutParams().height = 5;
             } else {
-                tvName.setText(author_name);
-                tvNewsTitle.setText(author_name);
+                tvName.setText(authorName);
+                tvNewsTitle.setText(authorName);
 
-                newsAuthorNick.setText(author_name);
+                newsAuthorNick.setText(authorName);
             }
 
             isAllowAttention = "blog".equals(newsContentJson.getType());
@@ -647,7 +648,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(NewsContentActivity.this, ChatRoomActivity.class);
-                        intent.putExtra(IntentConstant.U_ID, authorId);
+                        intent.putExtra(IntentConstant.U_ID, memberId);
+                        intent.putExtra(IntentConstant.NAME, authorName);
                         startActivity(intent);
                     }
                 });

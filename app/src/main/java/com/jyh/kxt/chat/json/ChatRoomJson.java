@@ -26,6 +26,19 @@ public class ChatRoomJson {
     }
 
 
+    /**
+     * 分割时间,如果超过五分钟则有数据
+     */
+    private long partitionTime;
+
+    public long getPartitionTime() {
+        return partitionTime;
+    }
+
+    public void setPartitionTime(long partitionTime) {
+        this.partitionTime = partitionTime;
+    }
+
     private String id;
     private String sender;
     private String receiver;
