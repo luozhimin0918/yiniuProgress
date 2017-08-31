@@ -1,17 +1,36 @@
 package com.jyh.kxt.chat.presenter;
 
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import com.alibaba.fastjson.JSONObject;
+import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.chat.adapter.ChatRoomAdapter;
-import com.jyh.kxt.chat.json.BlockJson;
 import com.jyh.kxt.chat.json.ChatRoomJson;
-import com.jyh.kxt.index.presenter.PullListViewPresenter;
+import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
+import com.library.util.SystemUtil;
+import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.handmark.PullToRefreshListView;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.widget.AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL;
 
 /**
  * Created by Mr'Dai on 2017/8/30.
@@ -20,29 +39,134 @@ import java.util.List;
 public class ChatRoomPresenter extends BasePresenter {
     @BindObject ChatRoomActivity chatRoomActivity;
 
+    private UserJson userInfo;
+    private List<ChatRoomJson> baseChatRoomList;
+    private ChatRoomAdapter chatRoomAdapter;
+
+
+    private boolean isInitialLoadHistory = true;
+
     public ChatRoomPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 
     public void initPullListView() {
-        List<ChatRoomJson> chatRoomList = new ArrayList<>();
+        userInfo = LoginUtils.getUserInfo(mContext);
 
-        for (int i = 0; i < 10; i++) {
-            ChatRoomJson chatRoomJson = new ChatRoomJson();
-            chatRoomJson.setViewType(i % 2 == 0 ? 0 : 1);
-            chatRoomList.add(chatRoomJson);
+        /*
+         * 初始化ListView
+         */
+        baseChatRoomList = new ArrayList<>();
+        chatRoomAdapter = new ChatRoomAdapter(mContext, baseChatRoomList);
+        PullToRefreshListView pullContentView = chatRoomActivity.pullContentView;
+        pullContentView.setDividerNull();
+        pullContentView.getRefreshableView().setTranscriptMode(TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        pullContentView.setAdapter(chatRoomAdapter);
+
+        pullContentView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                requestPullMoreData();
+            }
+        });
+
+        /*
+         * 初始化EditText
+         */
+        chatRoomActivity.publishContentEt.setImeOptions(EditorInfo.IME_ACTION_SEND);
+        chatRoomActivity.publishContentEt.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+        chatRoomActivity.publishContentEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_SEND:
+                        requestSendChitChat();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
+        /**
+         * 默认加载更多数据
+         */
+        chatRoomActivity.tvRoomReminder.setVisibility(View.VISIBLE);
+        chatRoomActivity.tvRoomReminder.setText("正在获取历史数据...");
+
+        requestPullMoreData();
+    }
+
+    /**
+     * 请求加载更多数据
+     */
+    private void requestPullMoreData() {
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("sender", userInfo.getUid());
+        jsonParam.put("receiver", chatRoomActivity.otherUid);
+        if (baseChatRoomList.size() != 0) {
+            jsonParam.put("last_id", "");
+        }
+        volleyRequest.doPost(HttpConstant.MESSAGE_HISTORY, jsonParam, new HttpListener<List<ChatRoomJson>>() {
+            @Override
+            protected void onResponse(List<ChatRoomJson> chatRoomList) {
+                for (ChatRoomJson chatRoomJson : chatRoomList) {
+                    String senderUid = chatRoomJson.getSender();
+                    if (!userInfo.getUid().equals(senderUid)) {//是我发送的
+                        chatRoomJson.setViewType(1);
+                    } else {
+                        chatRoomJson.setViewType(0);
+                    }
+                }
+                baseChatRoomList.addAll(chatRoomList);
+                if (isInitialLoadHistory) {
+                    chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
+                    isInitialLoadHistory = false;
+                }
+            }
+        });
+    }
+
+    /**
+     * 发送内容的 网络请求
+     */
+    private void requestSendChitChat() {
+        String chatContent = chatRoomActivity.publishContentEt.getText().toString();
+        if (TextUtils.isEmpty(chatContent)) {
+            return;
         }
 
-        ChatRoomAdapter chatRoomAdapter = new ChatRoomAdapter(mContext, chatRoomList);
 
-        JSONObject parameterJson = new JSONObject();
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("sender", userInfo.getUid());
+        jsonParam.put("receiver", chatRoomActivity.otherUid);
+        jsonParam.put("content", userInfo.getUid());
+        volleyRequest.doPost(HttpConstant.MESSAGE_SEND_MSG, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String sendResponse) {
+                Log.e("to", "onResponse: " + sendResponse);
+            }
+        });
+    }
 
-        chatRoomActivity.ptrlChartRoomList.setDividerNull();
+    /**
+     * 显示提示内容
+     *
+     * @param reminder
+     */
+    private void showPromptContent(String reminder) {
+        int statusBarHeight = SystemUtil.getStatuBarHeight(mContext);
+        int actionBarHeight = mContext.getResources().getDimensionPixelOffset(R.dimen.actionbar_height);
 
-        chatRoomActivity.pullListViewPresenter.createView(chatRoomActivity.flListLayout);
-        chatRoomActivity.pullListViewPresenter.setLoadMode(PullListViewPresenter.LoadMode.PAGE_LOAD);
-        chatRoomActivity.pullListViewPresenter.setRequestInfo("", parameterJson, BlockJson.class);
-        chatRoomActivity.pullListViewPresenter.setAdapter(chatRoomAdapter);
-//        chatRoomActivity.pullListViewPresenter.startRequest();
+        TSnackbar.make(chatRoomActivity.flListLayout,
+                reminder,
+                TSnackbar.LENGTH_SHORT,
+                TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                .setPromptThemBackground(Prompt.WARNING)
+                .setMinHeight(statusBarHeight, actionBarHeight)
+                .show();
     }
 }

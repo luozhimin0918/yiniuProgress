@@ -38,7 +38,7 @@
             android:layout_toLeftOf="@+id/chat_room_content"
             android:src="@mipmap/icon_msg_error"/>
 
-        <TextView
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
             android:id="@+id/chat_room_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

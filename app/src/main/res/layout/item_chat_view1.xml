@@ -31,9 +31,9 @@
             android:id="@+id/chat_room_portrait"
             android:layout_width="37dp"
             android:layout_height="37dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/icon_user_def_photo"/>
 
-        <TextView
+        <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
             android:id="@+id/chat_room_content"
             android:layout_width="wrap_content"
             android:layout_marginTop="8dp"
@@ -43,11 +43,8 @@
             android:gravity="left|center"
             android:maxWidth="250dp"
             android:layout_marginLeft="8dp"
-            android:text="你好我是中国人"
             android:textColor="@color/font_color64"
             android:textSize="@dimen/describe_font_size3"/>
-
-
 
         <ImageView
             android:id="@+id/chat_room_tip"
@@ -57,6 +54,7 @@
             android:layout_toRightOf="@+id/chat_room_content"
             android:layout_alignTop="@+id/chat_room_content"
             android:layout_alignBottom="@+id/chat_room_content"
+            android:visibility="gone"
             android:src="@mipmap/icon_msg_error"/>
 
     </RelativeLayout>

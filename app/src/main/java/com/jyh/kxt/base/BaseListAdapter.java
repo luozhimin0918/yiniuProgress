@@ -35,4 +35,8 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         dataList.add(t);
         notifyDataSetChanged();
     }
+
+    public void addAllData(List<? extends T> arrayList) {
+        dataList.addAll(arrayList);
+    }
 }

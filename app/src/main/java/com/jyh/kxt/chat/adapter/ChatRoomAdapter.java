@@ -1,15 +1,20 @@
 package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.chat.json.ChatRoomJson;
 
 import java.util.List;
@@ -36,8 +41,8 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder0 viewHolder0;
-        ViewHolder1 viewHolder1;
+        ViewHolder0 viewHolder0 = null;
+        ViewHolder1 viewHolder1 = null;
 
         int itemViewType = getItemViewType(position);
 
@@ -67,36 +72,61 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
 
         switch (itemViewType) {
             case 0:
-
+                parseHolderData(position, viewHolder0);
                 break;
             case 1:
-
+                parseHolderData(position, viewHolder1);
                 break;
         }
-
         return convertView;
     }
 
+    private void parseHolderData(int position, final BaseViewHolder baseViewHolder) {
+        ChatRoomJson chatRoomJson = dataList.get(position);
 
-    class ViewHolder0 {
+        /**
+         * 内容
+         */
+        baseViewHolder.chatRoomContent.convertToGif(chatRoomJson.getContent());
+        /**
+         * 头像
+         */
+        Glide.with(mContext)
+                .load(chatRoomJson.getAvatar())
+                .asBitmap()
+                .placeholder(R.mipmap.icon_user_def_photo)
+                .override(100, 100)
+                .error(R.mipmap.icon_user_def_photo)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        baseViewHolder.chatRoomPortrait.setImageBitmap(resource);
+                    }
+                });
+    }
+
+    class BaseViewHolder {
+
         @BindView(R.id.chat_room_time) TextView chatRoomTime;
         @BindView(R.id.chat_room_portrait) RoundImageView chatRoomPortrait;
-        @BindView(R.id.chat_room_content) TextView chatRoomContent;
+        @BindView(R.id.chat_room_content) EmoticonSimpleTextView chatRoomContent;
         @BindView(R.id.chat_room_tip) ImageView chatRoomTip;
 
-        ViewHolder0(View view) {
+        BaseViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    class ViewHolder1 {
-        @BindView(R.id.chat_room_time) TextView chatRoomTime;
-        @BindView(R.id.chat_room_portrait) RoundImageView chatRoomPortrait;
-        @BindView(R.id.chat_room_content) TextView chatRoomContent;
-        @BindView(R.id.chat_room_tip) ImageView chatRoomTip;
+    class ViewHolder0 extends BaseViewHolder {
+        ViewHolder0(View view) {
+            super(view);
+        }
+    }
 
+    class ViewHolder1 extends BaseViewHolder {
         ViewHolder1(View view) {
-            ButterKnife.bind(this, view);
+            super(view);
         }
     }
 

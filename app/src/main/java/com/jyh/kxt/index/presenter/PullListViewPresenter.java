@@ -145,7 +145,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
                 mPageLoadLayout.loadOver();
 
                 baseListAdapter.dataList.clear();
-                baseListAdapter.dataList.addAll(arrayList);
+                baseListAdapter.addAllData(arrayList);
                 baseListAdapter.notifyDataSetChanged();
 
                 mPullToRefreshListView.onRefreshComplete();
@@ -175,7 +175,7 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
                     mPullToRefreshListView.addFootNoMore();
                     return;
                 }
-                baseListAdapter.dataList.addAll(arrayList);
+                baseListAdapter.addAllData(arrayList);
                 baseListAdapter.notifyDataSetChanged();
             }
 
@@ -241,5 +241,9 @@ public class PullListViewPresenter extends BasePresenter implements PullToRefres
 
     public BaseListAdapter getBaseListAdapter() {
         return baseListAdapter;
+    }
+
+    public PullToRefreshListView getPullToRefreshListView() {
+        return mPullToRefreshListView;
     }
 }

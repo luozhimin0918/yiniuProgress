@@ -3,19 +3,19 @@ package com.jyh.kxt.base.presenter;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.dao.EmojeBean;
-import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonLinearLayout;
 import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
 import com.library.util.SystemUtil;
@@ -26,8 +26,11 @@ import com.library.util.SystemUtil;
 
 public class EmotionPresenter extends BasePresenter {
 
-    private boolean isShowEmoJiView = false;
     private Activity mActivity;
+    /**
+     * 空区的显示状态  0 不显示  1 软键盘 2 EmoJe表情
+     */
+    private int mGapDisplayState = 0;
 
     /**
      * 视图部分
@@ -38,10 +41,15 @@ public class EmotionPresenter extends BasePresenter {
     private ViewGroup vgKeyboardAboveLayout;
     private EmoticonLinearLayout ellEmoJeLayout;
 
-    private SoftKeyBoardListener.OnSoftKeyBoardChangeListener onSoftKeyBoardChangeListener;
+    /**
+     * 空白区域的高度
+     */
+    private int mEmoJeHeight;
+    private int mKeyBoardHeight;
 
     public EmotionPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        mEmoJeHeight = SystemUtil.dp2px(mContext, 215);
     }
 
     public void initEmotionView(Activity mActivity,
@@ -79,73 +87,65 @@ public class EmotionPresenter extends BasePresenter {
                     EmotionPresenter.this.eetContentView.deleteEmoJeClick();
                 }
             });
+
+            eetContentView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (mGapDisplayState == 2 || mGapDisplayState == 0) {
+                        mGapDisplayState = 1;
+
+                        EmotionPresenter.this.ivEmoJeView.setImageResource(R.mipmap.icon_emoje);
+                        if (EmotionPresenter.this.ellEmoJeLayout != null) {
+                            EmotionPresenter.this.flParentLayout.removeView(ellEmoJeLayout);
+                        }
+                        resetGapDisplayHeight();
+
+                        hideSoftInputFromWindow();
+                        return false;
+                    }
+                    return false;
+                }
+            });
+
         }
     }
 
-    public void showOrHideEmoJiView() {
-        isShowEmoJiView = !isShowEmoJiView;
+    /**
+     * 来回切换键盘和EmoJe
+     */
+    public void clickEmoJeView() {
+        if (mGapDisplayState == 0 || mGapDisplayState == 1) {//隐藏键盘
+            if (mGapDisplayState == 1) {
+                hideSoftInputFromWindow();
+            }
+            mGapDisplayState = 2;
 
-        if (isShowEmoJiView) {
-            SystemUtil.closeSoftInputWindow(mActivity);
+            resetGapDisplayHeight();
 
-            ViewGroup.LayoutParams layoutParams = flParentLayout.getLayoutParams();
-            layoutParams.height = 0;
-            flParentLayout.setLayoutParams(layoutParams);
-
-
-            flParentLayout.addView(ellEmoJeLayout);
             ivEmoJeView.setImageResource(R.mipmap.ico_keybor);
-            int bottomMargin = 0;
-            ViewGroup.LayoutParams keyBoardParams = vgKeyboardAboveLayout.getLayoutParams();
-            if (keyBoardParams instanceof RelativeLayout.LayoutParams) {
-                bottomMargin = ((RelativeLayout.LayoutParams) keyBoardParams).bottomMargin;
-            } else if (keyBoardParams instanceof LinearLayout.LayoutParams) {
-                bottomMargin = ((LinearLayout.LayoutParams) keyBoardParams).bottomMargin;
-            } else if (keyBoardParams instanceof FrameLayout.LayoutParams) {
-                bottomMargin = ((FrameLayout.LayoutParams) keyBoardParams).bottomMargin;
-            }
+            flParentLayout.addView(ellEmoJeLayout);
 
-            if (bottomMargin == 0) {
-                showEmoJeContent();
-            } else {
-                onSoftKeyBoardChangeListener = new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
-                    @Override
-                    public void keyBoardShow(int height) {
+        } else if (mGapDisplayState == 2) {//弹出键盘
+            mGapDisplayState = 1;
 
-                    }
-
-                    @Override
-                    public void keyBoardHide(int height) {
-                        showEmoJeContent();
-                    }
-                };
-            }
-        } else {
-            hideEmoJeContent();
             hideSoftInputFromWindow();
+
+            resetGapDisplayHeight();
+
+            ivEmoJeView.setImageResource(R.mipmap.icon_emoje);
+            if (ellEmoJeLayout != null) {
+                flParentLayout.removeView(ellEmoJeLayout);
+            }
         }
     }
 
-    private void hideEmoJeContent() {
-        isShowEmoJiView = false;
-        ivEmoJeView.setImageResource(R.mipmap.icon_emoje);
-        if (ellEmoJeLayout != null) {
-            flParentLayout.removeView(ellEmoJeLayout);
+    private void resetGapDisplayHeight() {
+        if (mGapDisplayState == 0) {
+            return;
         }
-
         ViewGroup.LayoutParams layoutParams = flParentLayout.getLayoutParams();
-        layoutParams.height = 0;
+        layoutParams.height = mGapDisplayState == 1 ? mKeyBoardHeight : mEmoJeHeight;
         flParentLayout.setLayoutParams(layoutParams);
-    }
-
-    private void showEmoJeContent() {
-        int emoJeHeight = SystemUtil.dp2px(mContext, 215);
-
-        ViewGroup.LayoutParams layoutParams = flParentLayout.getLayoutParams();
-        layoutParams.height = emoJeHeight;
-        flParentLayout.setLayoutParams(layoutParams);
-
-        onSoftKeyBoardChangeListener = null;
     }
 
     private void hideSoftInputFromWindow() {
@@ -153,7 +153,23 @@ public class EmotionPresenter extends BasePresenter {
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public SoftKeyBoardListener.OnSoftKeyBoardChangeListener getSoftKeyBoardChangeListener() {
-        return onSoftKeyBoardChangeListener;
+
+    public void keyBoardShow(int height) {
+        if (this.mKeyBoardHeight == 0) {
+            this.mKeyBoardHeight = height;
+            resetGapDisplayHeight();
+        }
+        Log.e("keyBoardShow", "keyBoardShow: " + height);
+    }
+
+    public void keyBoardHide(int height) {
+        if (mGapDisplayState == 1) {//只有键盘弹出时则
+            mGapDisplayState = 0;
+
+            ViewGroup.LayoutParams layoutParams = flParentLayout.getLayoutParams();
+            layoutParams.height = 0;
+            flParentLayout.setLayoutParams(layoutParams);
+        }
+        Log.e("keyBoardHide", "keyBoardHide: " + height);
     }
 }

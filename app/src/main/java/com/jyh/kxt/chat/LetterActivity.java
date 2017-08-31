@@ -90,7 +90,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             Intent intent = new Intent(this, SystemLetterActivity.class);
             startActivity(intent);
         } else {
-
         }
     }
 

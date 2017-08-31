@@ -12,14 +12,14 @@
     <include layout="@layout/action_bar1"/>
 
     <TextView
+        android:id="@+id/chat_room_reminder"
         android:layout_width="match_parent"
         android:layout_height="29dp"
         android:background="@color/block_tip_bg"
         android:gravity="center"
-        android:text="回复消息将自动接触屏蔽"
         android:textColor="@color/block_tip_text"
         android:textSize="@dimen/describe_font_size1"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/fl_list_layout"
@@ -27,8 +27,9 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
 
+
         <com.library.widget.handmark.PullToRefreshListView
-            android:id="@+id/ptrl_chart_room_list"
+            android:id="@+id/ptrl_chat_room_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -40,6 +41,7 @@
     <RelativeLayout
         android:id="@+id/rl_keyboard_above"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content">
 
         <com.jyh.kxt.base.util.emoje.EmoticonsEditText
@@ -55,7 +57,7 @@
             android:gravity="top|left"
             android:lineSpacingMultiplier="1.2"
             android:maxLength="300"
-            android:maxLines="5"
+            android:maxLines="4"
             android:minHeight="36dp"
             android:minLines="1"
             android:padding="8dp"

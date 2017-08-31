@@ -190,6 +190,15 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
+            android:name=".chat.ChatRoomActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".chat.BlockActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".trading.ui.AuthorListActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -332,10 +341,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".chat.ChatRoomActivity">
-        </activity>
-        <activity android:name=".chat.BlockActivity">
-        </activity>
     </application>
 
 </manifest>
