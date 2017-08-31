@@ -109,6 +109,9 @@ public class DBManager {
                     case 1:
                         upgradeToVersion1(db);
                         break;
+                    case 2:
+                        upgradeToVersion2(db);
+                        break;
                     default:
                         break;
                 }
@@ -118,6 +121,10 @@ public class DBManager {
         private void upgradeToVersion1(Database db) {
             MarkBeanDao.createTable(db, false);
             ViewPointTradeBeanDao.createTable(db, false);
+        }
+
+        private void upgradeToVersion2(Database db) {
+            ChatRoomJsonDao.createTable(db, false);
         }
     }
 }

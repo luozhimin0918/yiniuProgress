@@ -27,6 +27,7 @@ public class DaoMaster extends AbstractDaoMaster {
         FlashJsonDao.createTable(db, ifNotExists);
         NewsJsonDao.createTable(db, ifNotExists);
         ViewPointTradeBeanDao.createTable(db, ifNotExists);
+        ChatRoomJsonDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -37,6 +38,7 @@ public class DaoMaster extends AbstractDaoMaster {
         FlashJsonDao.dropTable(db, ifExists);
         NewsJsonDao.dropTable(db, ifExists);
         ViewPointTradeBeanDao.dropTable(db, ifExists);
+        ChatRoomJsonDao.dropTable(db, ifExists);
     }
 
     /**
@@ -61,6 +63,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(FlashJsonDao.class);
         registerDaoClass(NewsJsonDao.class);
         registerDaoClass(ViewPointTradeBeanDao.class);
+        registerDaoClass(ChatRoomJsonDao.class);
     }
 
     public DaoSession newSession() {
