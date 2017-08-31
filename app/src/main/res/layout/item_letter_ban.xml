@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/contentPadding"
+              android:paddingRight="@dimen/contentPadding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+
+        <com.jyh.kxt.base.custom.RoundImageView
+            android:id="@+id/riv_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/contentPadding"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="name"
+            android:textColor="@color/font_color64"
+            android:textSize="@dimen/content_font_size2"/>
+
+        <TextView
+            android:id="@+id/tv_ban"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="解除"
+            android:textSize="@dimen/describe_font_size3"
+            android:textColor="@color/font_color6"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color6"/>
+</LinearLayout>

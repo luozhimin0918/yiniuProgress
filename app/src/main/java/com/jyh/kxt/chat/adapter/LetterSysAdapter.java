@@ -20,8 +20,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.chat.json.LetterSysJson;
+import com.library.util.SPUtils;
 
 import java.util.List;
 
@@ -91,15 +93,15 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
         //主要是获取span的位置
         URLSpan[] spans = sp.getSpans(0, info.length(), URLSpan.class);
         //这里可以用过循环处理就可以动态实现文本颜色的差别化了
-
-        if (spans!=null&&spans.length>0) {
+        int urlColor = ContextCompat.getColor(mContext, R.color.font_color_url);
+        if (spans != null && spans.length > 0) {
             for (URLSpan span : spans) {
-                sp.setSpan(new ForegroundColorSpan(Color.RED), sp.getSpanStart(span), sp.getSpanEnd(span), Spannable
+                sp.setSpan(new ForegroundColorSpan(urlColor), sp.getSpanStart(span), sp.getSpanEnd(span), Spannable
                         .SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
         //设置斜体
-        sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 27, 29, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+//        sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 27, 29, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         //SpannableString对象设置给TextView
         tvContent.setText(sp);
         //设置TextView可点击
