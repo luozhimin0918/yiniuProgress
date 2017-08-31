@@ -64,14 +64,14 @@ public class ChatRoomJson {
     /**
      * 来得到本地保存失败的消息位置
      */
-    private String lastUid;
+    private String foregoingChatId;
 
-    public String getLastUid() {
-        return lastUid;
+    public String getForegoingChatId() {
+        return foregoingChatId;
     }
 
-    public void setLastUid(String lastUid) {
-        this.lastUid = lastUid;
+    public void setForegoingChatId(String foregoingChatId) {
+        this.foregoingChatId = foregoingChatId;
     }
 
     private String id;
@@ -82,10 +82,14 @@ public class ChatRoomJson {
     private String avatar;
     private String datetime;
 
-    @Generated(hash = 1679341003)
-    public ChatRoomJson(String lastUid, String id, String sender, String receiver,
+    @Generated(hash = 1394291781)
+    public ChatRoomJson() {
+    }
+
+    @Generated(hash = 1149951895)
+    public ChatRoomJson(String foregoingChatId, String id, String sender, String receiver,
             String content, String nickname, String avatar, String datetime) {
-        this.lastUid = lastUid;
+        this.foregoingChatId = foregoingChatId;
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
@@ -93,10 +97,6 @@ public class ChatRoomJson {
         this.nickname = nickname;
         this.avatar = avatar;
         this.datetime = datetime;
-    }
-
-    @Generated(hash = 1394291781)
-    public ChatRoomJson() {
     }
 
 

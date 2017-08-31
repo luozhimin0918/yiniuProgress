@@ -13,6 +13,8 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.dao.ChatRoomJsonDao;
+import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.chat.adapter.ChatRoomAdapter;
@@ -175,8 +177,12 @@ public class ChatRoomPresenter extends BasePresenter {
         fakeChatRoom.setReceiver(chatRoomActivity.otherUid);
         fakeChatRoom.setAvatar(userInfo.getPicture());
 
+        //保存假数据到数据库
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        ChatRoomJsonDao chatRoomJsonDao = mDBManager.getDaoSessionWrit().getChatRoomJsonDao();
+        chatRoomJsonDao.insert(fakeChatRoom);
+
         baseChatRoomList.add(fakeChatRoom);
-        analyzeListData(baseChatRoomList);
         chatRoomAdapter.notifyDataSetChanged();
     }
 
