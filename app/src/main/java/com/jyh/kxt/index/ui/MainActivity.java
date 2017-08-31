@@ -550,7 +550,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_letter:
                 //我的私信
-                startActivity(new Intent(this,LetterActivity.class));
+                startActivity(new Intent(this, LetterActivity.class));
                 break;
         }
     }
@@ -584,6 +584,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
+            letterBtn.setVisibility(View.VISIBLE);
 
             if (!RegexValidateUtil.isEmpty(userJson.getWriter_id()) && !RegexValidateUtil.isEmpty(userJson.getWriter_name())) {
                 mineBtn.setVisibility(View.VISIBLE);
@@ -622,6 +623,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
             quitBtn.setVisibility(View.GONE);
+            letterBtn.setVisibility(View.GONE);
             mineBtn.setVisibility(View.GONE);
             pointBtn.setVisibility(View.GONE);
 

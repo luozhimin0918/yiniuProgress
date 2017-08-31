@@ -71,7 +71,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
-
+                startActivity(new Intent(this,BlockActivity.class));
                 break;
         }
     }

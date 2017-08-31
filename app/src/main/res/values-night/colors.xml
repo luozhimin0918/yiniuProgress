@@ -74,6 +74,11 @@
     <color name="font_color63">#3b3b3b</color>
     <color name="font_color64">#777777</color>
 
+    <color name="font_color_ban">#136AA4</color>
+    <color name="font_color_unban">#A3331D</color>
+
+    <color name="font_color_url">#136AA4</color>
+
     <color name="tabSelColor">#909090</color>
     <color name="tabUnSelColor">#666666</color>
 

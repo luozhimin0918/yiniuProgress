@@ -63,4 +63,10 @@ public class BlockActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(getClass().getName());
+    }
 }
