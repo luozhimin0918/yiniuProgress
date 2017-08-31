@@ -69,7 +69,7 @@ import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
-import com.jyh.kxt.trading.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;

@@ -95,11 +95,26 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         if (partitionTime != 0) {
             baseViewHolder.chatRoomTime.setVisibility(View.VISIBLE);
 
-            String partitionLabel = DateFormat.format("MM-dd", partitionTime).toString();
+            String partitionLabel = DateFormat.format("HH:mm", partitionTime).toString();
             baseViewHolder.chatRoomTime.setText(partitionLabel);
         } else {
             baseViewHolder.chatRoomTime.setVisibility(View.GONE);
         }
+
+        /**
+         * 消息的状态
+         */
+        if (chatRoomJson.getMsgSendStatus() == 0) {
+            baseViewHolder.chatRoomTip.setVisibility(View.GONE);
+            baseViewHolder.chatRoomTip.setImageBitmap(null);
+        } else if (chatRoomJson.getMsgSendStatus() == 1) {
+            baseViewHolder.chatRoomTip.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(com.library.R.mipmap.loading).asGif().into(baseViewHolder.chatRoomTip);
+        } else if (chatRoomJson.getMsgSendStatus() == 2) {
+            baseViewHolder.chatRoomTip.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(R.mipmap.icon_msg_error).asGif().into(baseViewHolder.chatRoomTip);
+        }
+
         /**
          * 内容
          */

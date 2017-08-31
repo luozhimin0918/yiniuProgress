@@ -39,6 +39,19 @@ public class ChatRoomJson {
         this.partitionTime = partitionTime;
     }
 
+    /**
+     * 消息发送状态 0 无状态  1 发送中  2 发送失败 （结合ID来使用,如果ID为null）
+     */
+    public int msgSendStatus = 0;
+
+    public int getMsgSendStatus() {
+        return msgSendStatus;
+    }
+
+    public void setMsgSendStatus(int msgSendStatus) {
+        this.msgSendStatus = msgSendStatus;
+    }
+
     private String id;
     private String sender;
     private String receiver;

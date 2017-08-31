@@ -1,7 +1,6 @@
 package com.jyh.kxt.chat.presenter;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,6 +42,7 @@ public class ChatRoomPresenter extends BasePresenter {
     private List<ChatRoomJson> baseChatRoomList;
     private ChatRoomAdapter chatRoomAdapter;
 
+    private ChatRoomJson fakeChatRoom;
 
     private boolean isInitialLoadHistory = true;
 
@@ -146,18 +146,18 @@ public class ChatRoomPresenter extends BasePresenter {
 
         analyzeFakeData(chatContent);
 
-        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
-        JSONObject jsonParam = volleyRequest.getJsonParam();
-        jsonParam.put("sender", userInfo.getUid());
-        jsonParam.put("receiver", chatRoomActivity.otherUid);
-        jsonParam.put("content", chatContent);
-        volleyRequest.doPost(HttpConstant.MESSAGE_SEND_MSG, jsonParam, new HttpListener<String>() {
-            @Override
-            protected void onResponse(String sendResponse) {
-
-                Log.e("to", "onResponse: " + sendResponse);
-            }
-        });
+//        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+//        JSONObject jsonParam = volleyRequest.getJsonParam();
+//        jsonParam.put("sender", userInfo.getUid());
+//        jsonParam.put("receiver", chatRoomActivity.otherUid);
+//        jsonParam.put("content", chatContent);
+//        volleyRequest.doPost(HttpConstant.MESSAGE_SEND_MSG, jsonParam, new HttpListener<String>() {
+//            @Override
+//            protected void onResponse(String sendResponse) {
+//
+//                Log.e("to", "onResponse: " + sendResponse);
+//            }
+//        });
     }
 
     /**
@@ -165,15 +165,17 @@ public class ChatRoomPresenter extends BasePresenter {
      */
     private void analyzeFakeData(String chatContent) {
         String sendDateTime = String.valueOf(System.currentTimeMillis() / 1000);
-        ChatRoomJson chatRoomJson = new ChatRoomJson();
-        chatRoomJson.setId("");
-        chatRoomJson.setContent(chatContent);
-        chatRoomJson.setDatetime(sendDateTime);
-        chatRoomJson.setSender(userInfo.getUid());
-        chatRoomJson.setReceiver(chatRoomActivity.otherUid);
-        chatRoomJson.setAvatar(userInfo.getPicture());
+        fakeChatRoom = new ChatRoomJson();
+        fakeChatRoom.setId("");
+        fakeChatRoom.setViewType(1);
+        fakeChatRoom.setMsgSendStatus(1);
+        fakeChatRoom.setContent(chatContent);
+        fakeChatRoom.setDatetime(sendDateTime);
+        fakeChatRoom.setSender(userInfo.getUid());
+        fakeChatRoom.setReceiver(chatRoomActivity.otherUid);
+        fakeChatRoom.setAvatar(userInfo.getPicture());
 
-        baseChatRoomList.add(chatRoomJson);
+        baseChatRoomList.add(fakeChatRoom);
         analyzeListData(baseChatRoomList);
         chatRoomAdapter.notifyDataSetChanged();
     }
@@ -197,13 +199,13 @@ public class ChatRoomPresenter extends BasePresenter {
             //计算间隔事件
             long thisSendTime = Long.parseLong(chatRoomJson.getDatetime());
 
-            if (lastSendTime == 0) {
-                lastSendTime = thisSendTime;
-            }
-
-            if (thisSendTime - 1000 * 60 * 5 <= thisSendTime) {
+            if (lastSendTime - 1000 * 60 * 5 <= thisSendTime) {
                 lastSendTime = thisSendTime;
                 chatRoomJson.setPartitionTime(thisSendTime);
+            }
+
+            if (lastSendTime == 0) {
+                lastSendTime = thisSendTime;
             }
         }
     }
