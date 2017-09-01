@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.chat.adapter.LetterListAdapter;
+import com.jyh.kxt.chat.json.LetterJson;
 import com.jyh.kxt.chat.json.LetterListJson;
 import com.jyh.kxt.chat.presenter.LetterPresenter;
 import com.library.widget.PageLoadLayout;
@@ -30,13 +32,13 @@ import butterknife.OnClick;
  */
 
 public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, AdapterView.OnItemClickListener,
-        PullToRefreshBase.OnRefreshListener2 {
+        PullToRefreshBase.OnRefreshListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
-    @BindView(R.id.pl_content) PullToRefreshListView plContent;
-    @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.pl_content) public PullToRefreshListView plContent;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
     private LetterPresenter presenter;
     private LetterListAdapter adapter;
@@ -57,7 +59,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_msg_ban));
 
         plContent.setDividerNull();
-        plContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         plContent.setOnItemClickListener(this);
         plContent.setOnRefreshListener(this);
         plRootView.setOnAfreshLoadListener(this);
@@ -71,7 +73,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
-                startActivity(new Intent(this,BlockActivity.class));
+                startActivity(new Intent(this, BlockActivity.class));
                 break;
         }
     }
@@ -90,17 +92,17 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             Intent intent = new Intent(this, SystemLetterActivity.class);
             startActivity(intent);
         } else {
+            Intent intent = new Intent(this, ChatRoomActivity.class);
+            LetterListJson letterListJson = adapter.dataList.get(index - 1);
+            intent.putExtra(IntentConstant.U_ID, letterListJson.getReceiver());
+            intent.putExtra(IntentConstant.NAME, letterListJson.getNickname());
+            startActivity(intent);
         }
     }
 
     @Override
-    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+    public void onRefresh(PullToRefreshBase refreshView) {
         presenter.refresh();
-    }
-
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
-        presenter.loadMore();
     }
 
     @Override
@@ -115,10 +117,20 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         getQueue().cancelAll(LetterPresenter.class.getName());
     }
 
-    public void init(List<LetterListJson> list) {
-        adapter = new LetterListAdapter(list, this, plContent.getRefreshableView());
-        presenter.scrollListener(plContent,adapter);
+    public void init(LetterJson letterJson) {
+        if (letterJson == null) {
+            plRootView.loadEmptyData();
+            return;
+        }
+        adapter = new LetterListAdapter(letterJson.getList(), this, plContent.getRefreshableView());
+        String show_red_dot = letterJson.getShow_red_dot();
+        presenter.scrollListener(plContent, adapter);
         plContent.setAdapter(adapter);
+        adapter.setShowRed(show_red_dot != null && "1".equals(show_red_dot));
         plRootView.loadOver();
+    }
+
+    public void refresh(List<LetterListJson> list) {
+        adapter.setData(list);
     }
 }

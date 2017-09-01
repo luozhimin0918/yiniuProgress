@@ -1,29 +1,40 @@
 package com.jyh.kxt.market.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +44,12 @@ import com.android.volley.VolleyError;
 import com.github.mikephil.charting.mychart.MyLineChart;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
@@ -63,8 +76,10 @@ import com.trycatch.mysnackbar.TSnackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,6 +116,8 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @BindView(R.id.market_chart_zuigao) public TextView marketChartZuigao;
     @BindView(R.id.market_chart_zuidi) public TextView marketChartZuidi;
     @BindView(R.id.market_chart_update_time) public TextView marketChartLastTime;
+    @BindView(R.id.market_chart_minute) RelativeLayout marketChartMinute;
+    @BindView(R.id.tv_chart_minute) TextView marketChartMinuteTv;
 
     @BindView(R.id.market_chart_fenshi) public RelativeLayout rlFenShiView;
 
@@ -138,12 +155,13 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     private ShareJson shareJson;
 
     public boolean portrait = true;
+    private PopupWindow popupUtil;
 
     @OnClick({R.id.ll_market_detail_optional,
-                     R.id.ll_market_detail_share,
-                     R.id.iv_bar_break,
-                     R.id.iv_bar_function,
-                     R.id.ll_market_detail_full})
+            R.id.ll_market_detail_share,
+            R.id.iv_bar_break,
+            R.id.iv_bar_function,
+            R.id.ll_market_detail_full})
     public void onOptionClick(View view) {
         switch (view.getId()) {
             case R.id.ll_market_detail_optional:
@@ -256,15 +274,14 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         });
     }
 
-    @OnClick({R.id.market_chart_fenshi, R.id.market_chart_fen5,
-                     R.id.market_chart_fen15,
-                     R.id.market_chart_fen30, R.id.market_chart_fen60,
-                     R.id.market_chart_rik, R.id.market_chart_zhouk,
-                     R.id.market_chart_yue1})
+    @OnClick({R.id.market_chart_fenshi, R.id.market_chart_day,
+            R.id.market_chart_week,
+            R.id.market_chart_minute,
+            R.id.market_chart_month})
     public void onNavigationItemClick(View view) {
         RelativeLayout itemView = (RelativeLayout) view;
 
-        if (itemView == clickOldNavigationView) {
+        if (itemView!=marketChartMinute&&itemView == clickOldNavigationView) {
             return;
         } else {
             mQueue.cancelAll(marketItemBean.getCode());
@@ -273,31 +290,36 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         switch (view.getId()) {
             case R.id.market_chart_fenshi:
                 clickNavigationPosition = 0;
+                if (popupUtil != null)
+                    popupUtil.dismiss();
+                marketChartMinuteTv.setText("分钟");
+                requestChartData(clickNavigationPosition);
                 break;
-            case R.id.market_chart_fen5:
-                clickNavigationPosition = 1;
-                break;
-            case R.id.market_chart_fen15:
-                clickNavigationPosition = 2;
-                break;
-            case R.id.market_chart_fen30:
-                clickNavigationPosition = 3;
-                break;
-            case R.id.market_chart_fen60:
-                clickNavigationPosition = 4;
-                break;
-            case R.id.market_chart_rik:
+            case R.id.market_chart_day:
                 clickNavigationPosition = 5;
+                if (popupUtil != null)
+                    popupUtil.dismiss();
+                marketChartMinuteTv.setText("分钟");
+                requestChartData(clickNavigationPosition);
                 break;
-            case R.id.market_chart_zhouk:
+            case R.id.market_chart_week:
                 clickNavigationPosition = 6;
+                if (popupUtil != null)
+                    popupUtil.dismiss();
+                marketChartMinuteTv.setText("分钟");
+                requestChartData(clickNavigationPosition);
                 break;
-            case R.id.market_chart_yue1:
+            case R.id.market_chart_month:
                 clickNavigationPosition = 7;
+                if (popupUtil != null)
+                    popupUtil.dismiss();
+                marketChartMinuteTv.setText("分钟");
+                requestChartData(clickNavigationPosition);
+                break;
+            case R.id.market_chart_minute:
+                showMinuteSelView();
                 break;
         }
-
-        requestChartData(clickNavigationPosition);
 
         TextView itemTextView = (TextView) itemView.findViewWithTag("text");
         itemTextView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
@@ -316,6 +338,47 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         }
 
         clickOldNavigationView = itemView;
+    }
+
+    private void showMinuteSelView() {
+        if (popupUtil == null) {
+            popupUtil = new PopupWindow(this);
+            popupUtil.setHeight(SystemUtil.dp2px(this, 160));
+            popupUtil.setWidth(marketChartMinute.getWidth());
+            final ListView popupView = (ListView) LayoutInflater.from(this).inflate(R.layout.pop_list, null, false);
+            popupUtil.setContentView(popupView);
+            popupUtil.setOutsideTouchable(true);
+
+            final List<String> array = Arrays.asList(getResources().getStringArray(R.array.market_second));
+            popupView.setAdapter(new ArrayAdapter<>(this, R.layout.item_market_minute, R.id.tv_minute, array));
+            popupView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    marketChartMinuteTv.setText(array.get(position));
+                    switch (position) {
+                        case 0:
+                            clickNavigationPosition = 1;
+                            break;
+                        case 1:
+                            clickNavigationPosition = 2;
+                            break;
+                        case 2:
+                            clickNavigationPosition = 3;
+                            break;
+                        case 3:
+                            clickNavigationPosition = 4;
+                            break;
+                    }
+                    requestChartData(clickNavigationPosition);
+                    popupUtil.dismiss();
+                }
+            });
+
+        }
+        popupUtil.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_contour));
+        if (!popupUtil.isShowing())
+            popupUtil.showAsDropDown(marketChartMinute);
     }
 
     private void addLineView(View view) {
@@ -415,13 +478,13 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             ivOptionalImage.setSelected(true);
             /*TSnackbar.make(ivBarBreak, "添加成功", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
                     .setPromptThemBackground(Prompt.WARNING).show();*/
-            ToastView.makeText3(this,"添加成功");
+            ToastView.makeText3(this, "添加成功");
         } else {
             marketItemList.remove(marketItemBean);
             ivOptionalImage.setSelected(false);
 //            TSnackbar.make(ivBarBreak, "取消自选", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
 //                    .setPromptThemBackground(Prompt.WARNING).show();
-            ToastView.makeText3(this,"取消自选");
+            ToastView.makeText3(this, "取消自选");
         }
         updateAddStatus = !updateAddStatus;
 

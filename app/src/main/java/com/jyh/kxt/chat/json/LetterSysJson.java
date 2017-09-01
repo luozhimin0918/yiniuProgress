@@ -9,48 +9,32 @@ package com.jyh.kxt.chat.json;
 
 public class LetterSysJson {
 
-    private String time;
-    private String info;
-    private String id;
+    private String content;
+    private String datetime;
 
     public LetterSysJson() {
     }
 
-    public LetterSysJson(String time, String info) {
+    public LetterSysJson(String content, String datetime) {
 
-        this.time = time;
-        this.info = info;
+        this.content = content;
+        this.datetime = datetime;
     }
 
-    public String getId() {
-        return id;
+    public String getContent() {
+
+        return content;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public LetterSysJson(String time, String info, String id) {
-
-        this.time = time;
-        this.info = info;
-        this.id = id;
+    public String getDatetime() {
+        return datetime;
     }
 
-    public String getTime() {
-
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 }

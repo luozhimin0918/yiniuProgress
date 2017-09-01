@@ -1,9 +1,5 @@
 package com.jyh.kxt.chat.json;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
-
 /**
  * Created by Mr'Dai on 2017/8/30.
  */
@@ -15,13 +11,10 @@ import org.greenrobot.greendao.annotation.Generated;
 //    nickname: '思金融雅'    //sender的昵称
 //    avatar: 'http://img.kxt.com/Member/69313/avatar/5982c05f52a72.jpg'  //sender的头像
 //    datetime: 1502780986
-
-@Entity(nameInDb = "CHAT_ROOM_BEAN")
 public class ChatRoomJson {
     /**
      * 这里视图类型分为两种   0 对方视图  1 我的视图
      */
-    @Transient
     private int viewType;
 
     public int getViewType() {
@@ -36,7 +29,6 @@ public class ChatRoomJson {
     /**
      * 分割时间,如果超过五分钟则有数据
      */
-    @Transient
     private long partitionTime;
 
     public long getPartitionTime() {
@@ -50,7 +42,6 @@ public class ChatRoomJson {
     /**
      * 消息发送状态 0 无状态  1 发送中  2 发送失败 （结合ID来使用,如果ID为null）
      */
-    @Transient
     public int msgSendStatus = 0;
 
     public int getMsgSendStatus() {
@@ -61,19 +52,6 @@ public class ChatRoomJson {
         this.msgSendStatus = msgSendStatus;
     }
 
-    /**
-     * 来得到本地保存失败的消息位置
-     */
-    private String foregoingChatId;
-
-    public String getForegoingChatId() {
-        return foregoingChatId;
-    }
-
-    public void setForegoingChatId(String foregoingChatId) {
-        this.foregoingChatId = foregoingChatId;
-    }
-
     private String id;
     private String sender;
     private String receiver;
@@ -81,24 +59,6 @@ public class ChatRoomJson {
     private String nickname;
     private String avatar;
     private String datetime;
-
-    @Generated(hash = 1394291781)
-    public ChatRoomJson() {
-    }
-
-    @Generated(hash = 1149951895)
-    public ChatRoomJson(String foregoingChatId, String id, String sender, String receiver,
-            String content, String nickname, String avatar, String datetime) {
-        this.foregoingChatId = foregoingChatId;
-        this.id = id;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.content = content;
-        this.nickname = nickname;
-        this.avatar = avatar;
-        this.datetime = datetime;
-    }
-
 
     public String getId() {
         return id;

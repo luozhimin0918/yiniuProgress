@@ -47,7 +47,7 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room, StatusBarColor.THEME1);
 
-        otherUid = /*getIntent().getStringExtra(IntentConstant.U_ID)*/ "58703";
+        otherUid = getIntent().getStringExtra(IntentConstant.U_ID);
         otherName = getIntent().getStringExtra(IntentConstant.NAME);
 
         emotionPresenter = new EmotionPresenter(this);

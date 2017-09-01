@@ -31,8 +31,8 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-    //  public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
-//   public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
+    //            public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+//    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
     //    public static final String IMG_URL = "http://img.kxt.com/";
@@ -246,11 +246,11 @@ public class HttpConstant {
     /**
      * 私信
      */
-    public static final String MSG_USERCENTER = BASE_URL + "member/my_message" + VarConstant.HTTP_CONTENT;//个人中心我的私信
-    public static final String MSG_SYS_LIST = BASE_URL + "message/sys_msg" + VarConstant.HTTP_CONTENT;//系统消息列表
-    public static final String MSG_USER_BAN = BASE_URL + "message/handle_banned" + VarConstant.HTTP_CONTENT;//添加|解除屏蔽
-    public static final String MSG_DEL = BASE_URL + "message/del_talk" + VarConstant.HTTP_CONTENT;//删除会话
-    public static final String MSG_BANNED_LIST = BASE_URL + "message/banned_list" + VarConstant.HTTP_CONTENT;//屏蔽的会话列表
+    public static final String MSG_USERCENTER = BASE_URL + "member/my_message"+ VarConstant.HTTP_CONTENT;//个人中心我的私信
+    public static final String MSG_SYS_LIST = BASE_URL + "message/sys_msg"+ VarConstant.HTTP_CONTENT;//系统消息列表
+    public static final String MSG_USER_BAN = BASE_URL + "message/handle_banned"+ VarConstant.HTTP_CONTENT;//添加|解除屏蔽
+    public static final String MSG_DEL = BASE_URL + "message/del_talk"+ VarConstant.HTTP_CONTENT;//删除会话
+    public static final String MSG_BANNED_LIST = BASE_URL + "message/banned_list"+ VarConstant.HTTP_CONTENT;//屏蔽的会话列表
 
     public static final String MESSAGE_HISTORY = BASE_URL + "message/history";//历史消息
     public static final String MESSAGE_SEND_MSG = BASE_URL + "message/send_msg";//发送消息

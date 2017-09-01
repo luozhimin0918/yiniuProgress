@@ -39,6 +39,7 @@ public class BlockAdapter extends BaseListAdapter<BlockJson> {
     public BlockAdapter(Context mContext, List<BlockJson> dataList) {
         super(dataList);
         this.mContext = mContext;
+        request = new VolleyRequest(mContext, ((BlockActivity) mContext).getQueue());
         request.setTag(BlockActivity.class.getName());
     }
 

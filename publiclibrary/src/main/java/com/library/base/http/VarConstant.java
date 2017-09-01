@@ -49,6 +49,7 @@ public class VarConstant {
     public static final String HTTP_RELOAD = "reload";
     public static final String HTTP_CURRENT_PAGE = "current_page";
     public static final String HTTP_RECEIVER = "receiver";
+    public static final String HTTP_SENDER = "sender";
     public static final String HTTP_IS_BANNED = "is_banned";
 
     public static final String HTTP_WORD = "word";

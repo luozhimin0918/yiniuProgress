@@ -9,7 +9,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.chat.adapter.LetterSysAdapter;
 import com.jyh.kxt.chat.json.LetterSysJson;
-import com.jyh.kxt.index.presenter.SystemLetterPresenter;
+import com.jyh.kxt.chat.presenter.SystemLetterPresenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  */
 
 public class SystemLetterActivity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase
-        .OnRefreshListener2 {
+        .OnRefreshListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -58,7 +58,7 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
         plRootView.setOnAfreshLoadListener(this);
 
         plContent.setDividerNull();
-        plContent.setMode(PullToRefreshBase.Mode.BOTH);
+        plContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         plContent.setOnRefreshListener(this);
     }
 
@@ -71,16 +71,6 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
     public void OnAfreshLoad() {
         plRootView.loadWait();
         presenter.init();
-    }
-
-    @Override
-    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
-        presenter.refresh();
-    }
-
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
-        presenter.loadMore();
     }
 
     @Override
@@ -119,5 +109,10 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
         }
         List<LetterSysJson> data = presenter.disposeData(letterSysJsons);
         adapter.setData(data);
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshBase refreshView) {
+        presenter.refresh();
     }
 }

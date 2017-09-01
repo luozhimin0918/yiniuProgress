@@ -54,10 +54,11 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         chartContentWidth = screenDisplay.widthPixels + deleteViewWidth;
     }
 
+    private ViewHolderSys viewHolderSys;
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-        ViewHolderSys viewHolderSys = null;
         int type = getItemViewType(position);
         if (convertView == null) {
             if (type == TYPE_SYS) {
@@ -96,14 +97,21 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolderSys.ivBreak.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_msg_sys_enter));
             viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
         } else {
-            LetterListJson bean = dataList.get(position);
+            final int index = position - 1;
+            LetterListJson bean = dataList.get(index);
             viewHolder.tvName.setText(bean.getNickname());
             viewHolder.tvContent.setText(bean.getLast_content());
+            try {
+                viewHolder.tvTime.setText("" + Long.parseLong(bean.getDatetime()) * 1000);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                viewHolder.tvTime.setText("00:00");
+            }
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     downHindContentView();
-                    dataList.remove(position);
+                    dataList.remove(index);
                     notifyDataSetChanged();
                 }
             });
@@ -151,7 +159,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     @Override
     public int getCount() {
-        return super.getCount();
+        return super.getCount() + 1;
     }
 
     @Override
@@ -168,6 +176,17 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         viewHolder.tvDel.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         viewHolder.tvDel.setBackgroundColor(ContextCompat.getColor(mContext, R.color.red2));
         viewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+    }
+
+    public void setData(List<LetterListJson> data) {
+        dataList.clear();
+        dataList.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void setShowRed(boolean isShowRed) {
+        if (viewHolderSys != null)
+            viewHolderSys.vPoint.setVisibility(isShowRed ? View.VISIBLE : View.GONE);
     }
 
     static class ViewHolder {

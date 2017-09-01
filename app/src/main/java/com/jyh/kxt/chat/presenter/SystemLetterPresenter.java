@@ -1,8 +1,7 @@
-package com.jyh.kxt.index.presenter;
+package com.jyh.kxt.chat.presenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -14,7 +13,6 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
-import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,53 +56,51 @@ public class SystemLetterPresenter extends BasePresenter {
 //        });
         List<LetterSysJson> data = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            data.add(new LetterSysJson("12:0" + i,
-                    "系统消息系统消息系统消息系统http://www.kxt.com" +
-                            "消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息"
-                    , i + ""));
+            data.add(new LetterSysJson("系统消息系统消息系统消息系统 http://www.kxt.com " +
+                    "消息系统消息系统消息系统消息系统消息系统消息系统消息消息系统消息系统消息系统消息", "150278" + i + "981"));
         }
         activity.initData(data);
     }
 
-    public void loadMore() {
-        if (isMore) {
-            JSONObject jsonParam = request.getJsonParam();
-            UserJson userInfo = LoginUtils.getUserInfo(mContext);
-            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
-            request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
-                @Override
-                protected void onResponse(List<LetterSysJson> letterSysJsons) {
-                    activity.loadMore(letterSysJsons);
-                    activity.plRootView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            activity.plContent.onRefreshComplete();
-                        }
-                    }, 200);
-                }
-
-                @Override
-                protected void onErrorResponse(VolleyError error) {
-                    super.onErrorResponse(error);
-                    activity.plRootView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            activity.plContent.onRefreshComplete();
-                        }
-                    }, 200);
-                }
-            });
-        } else {
-            activity.plRootView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    activity.plContent.onRefreshComplete();
-                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
-                }
-            }, 200);
-        }
-    }
+//    public void loadMore() {
+//        if (isMore) {
+//            JSONObject jsonParam = request.getJsonParam();
+//            UserJson userInfo = LoginUtils.getUserInfo(mContext);
+//            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+//            jsonParam.put(VarConstant.HTTP_LASTID, lastId);
+//            request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
+//                @Override
+//                protected void onResponse(List<LetterSysJson> letterSysJsons) {
+//                    activity.loadMore(letterSysJsons);
+//                    activity.plRootView.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            activity.plContent.onRefreshComplete();
+//                        }
+//                    }, 200);
+//                }
+//
+//                @Override
+//                protected void onErrorResponse(VolleyError error) {
+//                    super.onErrorResponse(error);
+//                    activity.plRootView.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            activity.plContent.onRefreshComplete();
+//                        }
+//                    }, 200);
+//                }
+//            });
+//        } else {
+//            activity.plRootView.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    activity.plContent.onRefreshComplete();
+//                    ToastView.makeText3(mContext, mContext.getString(R.string.no_data));
+//                }
+//            }, 200);
+//        }
+//    }
 
     public void refresh() {
         JSONObject jsonParam = request.getJsonParam();
@@ -145,15 +141,15 @@ public class SystemLetterPresenter extends BasePresenter {
      */
     public List<LetterSysJson> disposeData(List<LetterSysJson> data) {
         List<LetterSysJson> letterSysJsons;
-        int size = data.size();
-        if (size > VarConstant.LIST_MAX_SIZE) {
-            isMore = true;
-            letterSysJsons = new ArrayList<>(data.subList(0, VarConstant.LIST_MAX_SIZE));
-            lastId = letterSysJsons.get(VarConstant.LIST_MAX_SIZE - 1).getId();
-        } else {
-            isMore = false;
-            letterSysJsons = new ArrayList<>(data);
-        }
+//        int size = data.size();
+//        if (size > VarConstant.LIST_MAX_SIZE) {
+//            isMore = true;
+//            letterSysJsons = new ArrayList<>(data.subList(0, VarConstant.LIST_MAX_SIZE));
+////            lastId = letterSysJsons.get(VarConstant.LIST_MAX_SIZE - 1).getId();
+//        } else {
+//            isMore = false;
+        letterSysJsons = new ArrayList<>(data);
+//        }
         return letterSysJsons;
     }
 }

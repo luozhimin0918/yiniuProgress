@@ -2,13 +2,11 @@ package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -20,10 +18,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.chat.json.LetterSysJson;
-import com.library.util.SPUtils;
+import com.library.util.DateUtils;
 
 import java.util.List;
 
@@ -71,7 +68,12 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
 
 
         LetterSysJson bean = dataList.get(position);
-        holder.tvTime.setText("12:12");
+        try {
+            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime())*1000));
+        } catch (Exception e) {
+            e.printStackTrace();
+            holder.tvTime.setText("00:00");
+        }
         setURLSpan(holder.tvContent, bean);
         holder.tvTitle.setText("系统");
 
@@ -85,7 +87,7 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
      * @param bean
      */
     private void setURLSpan(TextView tvContent, LetterSysJson bean) {
-        String info = bean.getInfo();
+        String info = bean.getContent();
         //创建一个 SpannableString对象 注意：不要在xml配置android:autoLink属性
         SpannableString sp = new SpannableString(info);
         //这句很重要，也可以添加自定义正则表达式

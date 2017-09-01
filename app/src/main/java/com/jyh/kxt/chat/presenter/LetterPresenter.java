@@ -4,12 +4,19 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.adapter.LetterListAdapter;
+import com.jyh.kxt.chat.json.LetterJson;
 import com.jyh.kxt.chat.json.LetterListJson;
 import com.jyh.kxt.chat.LetterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -36,19 +43,55 @@ public class LetterPresenter extends BasePresenter {
     }
 
     public void init() {
-        List<LetterListJson> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(new LetterListJson("sender", "receiver", "last_content", (-1 + i) + "", (i % 2) + "", "name", "", "12:1" + i));
-        }
-        letterActivity.init(list);
+//        List<LetterListJson> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            list.add(new LetterListJson("sender", "receiver", "last_content", (-1 + i) + "", (i % 2) + "", "name", "", "12:1" + i));
+//        }
+//        letterActivity.init(list);
+
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.MSG_USERCENTER, jsonParam, new HttpListener<LetterJson>() {
+            @Override
+            protected void onResponse(LetterJson letterJson) {
+                letterActivity.init(letterJson);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                letterActivity.plRootView.loadError();
+            }
+        });
     }
 
     public void refresh() {
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.MSG_USERCENTER, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+//                letterActivity.refresh();
+                letterActivity.plContent.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       letterActivity.plContent.onRefreshComplete();
+                    }
+                },200);
+            }
 
-    }
-
-    public void loadMore() {
-
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                letterActivity.plRootView.loadError();
+                letterActivity.plContent.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        letterActivity.plContent.onRefreshComplete();
+                    }
+                },200);
+            }
+        });
     }
 
     private static final int SCROLL_MIN_DISTANCE_X = 15;
