@@ -7,10 +7,13 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.UserSettingActivity;
+import com.jyh.kxt.chat.json.UserSettingJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.widget.window.ToastView;
 
 /**
  * 项目名:KxtProfessional
@@ -26,14 +29,16 @@ public class UserSettingPresenter extends BasePresenter {
 
     public UserSettingPresenter(IBaseView iBaseView) {
         super(iBaseView);
-        request=new VolleyRequest(mContext,mQueue);
+        request = new VolleyRequest(mContext, mQueue);
         request.setTag(getClass().getName());
     }
 
-    public void ban(String receiverUid, String isBan, final ObserverData<Boolean> observerData) {
+    public void ban(String receiverUid, final String isBan, final ObserverData<Boolean> observerData) {
+
         JSONObject jsonParam = request.getJsonParam();
-        jsonParam.put(VarConstant.HTTP_RECEIVER,receiverUid);
-        jsonParam.put(VarConstant.HTTP_IS_BANNED,isBan);
+        jsonParam.put(VarConstant.HTTP_RECEIVER, receiverUid);
+        jsonParam.put(VarConstant.HTTP_IS_BANNED, isBan);
+        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
         request.doGet(HttpConstant.MSG_USER_BAN, jsonParam, new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
@@ -44,6 +49,24 @@ public class UserSettingPresenter extends BasePresenter {
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 observerData.onError(error);
+            }
+        });
+    }
+
+    public void init(String receiver) {
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_RECEIVER, receiver);
+        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.MSG_USER_SET, jsonParam, new HttpListener<UserSettingJson>() {
+            @Override
+            protected void onResponse(UserSettingJson userSettingJson) {
+                activity.init(userSettingJson);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                activity.plRootView.loadError();
             }
         });
     }

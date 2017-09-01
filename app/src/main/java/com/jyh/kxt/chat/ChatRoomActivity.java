@@ -1,5 +1,6 @@
 package com.jyh.kxt.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -69,6 +70,9 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
+                Intent intent = new Intent(this, UserSettingActivity.class);
+                intent.putExtra(IntentConstant.U_ID, otherUid);
+                startActivity(intent);
                 break;
             case R.id.iv_publish_emoji:
                 emotionPresenter.clickEmoJeView();
