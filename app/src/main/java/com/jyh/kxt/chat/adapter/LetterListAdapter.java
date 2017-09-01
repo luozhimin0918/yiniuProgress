@@ -12,14 +12,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.chat.LetterActivity;
 import com.jyh.kxt.chat.json.LetterListJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
 import com.library.util.DateUtils;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 
 import java.util.List;
 
@@ -43,12 +52,16 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     private float deleteViewWidth;
     private float chartContentWidth;
+    private VolleyRequest request;
 
 
-    public LetterListAdapter(List<LetterListJson> dataList, Context mContext, ListView listView) {
+    public LetterListAdapter(List<LetterListJson> dataList, LetterActivity mContext, ListView listView) {
         super(dataList);
         this.mContext = mContext;
         this.listView = listView;
+
+        request = new VolleyRequest(mContext, mContext.presenter.mQueue);
+        request.setTag(mContext.presenter.getClass().getName());
 
         deleteViewWidth = SystemUtil.dp2px(mContext, 70);
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
@@ -111,9 +124,9 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    downHindContentView();
-                    dataList.remove(index);
-                    notifyDataSetChanged();
+
+                    delMsg(index);
+
                 }
             });
             final ViewHolder finalViewHolder = viewHolder;
@@ -130,6 +143,33 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             setTheme(viewHolder);
         }
         return convertView;
+    }
+
+    /**
+     * 删除回话
+     *
+     * @param index
+     */
+    private void delMsg(final int index) {
+        JSONObject jsonParam = request.getJsonParam();
+        LetterListJson bean = dataList.get(index);
+        jsonParam.put(VarConstant.HTTP_RECEIVER, bean.getReceiver());
+        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.MSG_DEL, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                downHindContentView();
+                dataList.remove(index);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                downHindContentView();
+                ToastView.makeText3(mContext, "删除失败");
+            }
+        });
     }
 
     /**

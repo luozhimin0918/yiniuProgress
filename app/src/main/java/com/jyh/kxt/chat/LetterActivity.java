@@ -41,7 +41,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
-    private LetterPresenter presenter;
+    public LetterPresenter presenter;
     private LetterListAdapter adapter;
 
     @Override
@@ -109,7 +109,10 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     protected void onChangeTheme() {
         super.onChangeTheme();
-        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_msg_ban));
+        if (adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -139,4 +142,5 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         adapter.setData(list);
         adapter.setShowRed(show_red_dot != null && "1".equals(show_red_dot));
     }
+
 }

@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 
 public class BasePresenter {
     protected IBaseView iBaseView;
-    protected RequestQueue mQueue;
+    public RequestQueue mQueue;
     protected Context mContext;
 
     public BasePresenter(IBaseView iBaseView) {

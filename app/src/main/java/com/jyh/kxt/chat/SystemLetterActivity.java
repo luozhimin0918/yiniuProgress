@@ -93,15 +93,15 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
         }
         plRootView.loadOver();
     }
-
-    public void loadMore(List<LetterSysJson> letterSysJsons) {
-        if (letterSysJsons == null || letterSysJsons.size() == 0) {
-            presenter.isMore = false;
-            return;
-        }
-        List<LetterSysJson> data = presenter.disposeData(letterSysJsons);
-        adapter.addData(data);
-    }
+//
+//    public void loadMore(List<LetterSysJson> letterSysJsons) {
+//        if (letterSysJsons == null || letterSysJsons.size() == 0) {
+//            presenter.isMore = false;
+//            return;
+//        }
+//        List<LetterSysJson> data = presenter.disposeData(letterSysJsons);
+//        adapter.addData(data);
+//    }
 
     public void refresh(List<LetterSysJson> letterSysJsons) {
         if (letterSysJsons == null || letterSysJsons.size() == 0) {
@@ -114,5 +114,13 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
     @Override
     public void onRefresh(PullToRefreshBase refreshView) {
         presenter.refresh();
+    }
+
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }

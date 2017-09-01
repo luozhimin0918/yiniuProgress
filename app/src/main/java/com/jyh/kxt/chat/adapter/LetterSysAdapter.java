@@ -69,13 +69,13 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
 
         LetterSysJson bean = dataList.get(position);
         try {
-            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime())*1000));
+            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime()) * 1000));
         } catch (Exception e) {
             e.printStackTrace();
             holder.tvTime.setText("00:00");
         }
         setURLSpan(holder.tvContent, bean);
-        holder.tvTitle.setText("系统");
+        holder.tvTitle.setText("系统消息");
 
         return convertView;
     }

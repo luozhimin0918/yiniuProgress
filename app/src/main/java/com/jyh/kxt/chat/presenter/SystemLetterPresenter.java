@@ -29,8 +29,6 @@ public class SystemLetterPresenter extends BasePresenter {
     @BindObject SystemLetterActivity activity;
 
     private VolleyRequest request;
-    public boolean isMore;
-    public String lastId;
 
     public SystemLetterPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -39,27 +37,21 @@ public class SystemLetterPresenter extends BasePresenter {
     }
 
     public void init() {
-//        JSONObject jsonParam = request.getJsonParam();
-//        UserJson userInfo = LoginUtils.getUserInfo(mContext);
-//        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
-//        request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
-//            @Override
-//            protected void onResponse(List<LetterSysJson> letterSysJsons) {
-//                activity.initData(letterSysJsons);
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//                activity.plRootView.loadError();
-//            }
-//        });
-        List<LetterSysJson> data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            data.add(new LetterSysJson("系统消息系统消息系统消息系统 http://www.kxt.com " +
-                    "消息系统消息系统消息系统消息系统消息系统消息系统消息消息系统消息系统消息系统消息", "150278" + i + "981"));
-        }
-        activity.initData(data);
+        JSONObject jsonParam = request.getJsonParam();
+        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        jsonParam.put(VarConstant.HTTP_SENDER, userInfo.getUid());
+        request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
+            @Override
+            protected void onResponse(List<LetterSysJson> letterSysJsons) {
+                activity.initData(letterSysJsons);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                activity.plRootView.loadError();
+            }
+        });
     }
 
 //    public void loadMore() {
@@ -105,12 +97,10 @@ public class SystemLetterPresenter extends BasePresenter {
     public void refresh() {
         JSONObject jsonParam = request.getJsonParam();
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
-        jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+        jsonParam.put(VarConstant.HTTP_SENDER, userInfo.getUid());
         request.doGet(HttpConstant.MSG_SYS_LIST, jsonParam, new HttpListener<List<LetterSysJson>>() {
             @Override
             protected void onResponse(List<LetterSysJson> letterSysJsons) {
-                lastId = "";
-                isMore = false;
                 activity.refresh(letterSysJsons);
                 activity.plRootView.postDelayed(new Runnable() {
                     @Override
