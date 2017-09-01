@@ -49,6 +49,7 @@ public class MainInitJson {
     private String url_video_share;
     private String url_quotes_share;
     private String download_QR_code;
+    private String message_socket_addr;
 
     public String getUrl_quotes_share() {
         return url_quotes_share;
@@ -128,6 +129,14 @@ public class MainInitJson {
 
     public void setDownload_QR_code(String download_QR_code) {
         this.download_QR_code = download_QR_code;
+    }
+
+    public String getMessage_socket_addr() {
+        return message_socket_addr;
+    }
+
+    public void setMessage_socket_addr(String message_socket_addr) {
+        this.message_socket_addr = message_socket_addr;
     }
 
     public static class IndexAdBean extends JumpJson {
@@ -280,4 +289,5 @@ public class MainInitJson {
             this.type = type;
         }
     }
+
 }

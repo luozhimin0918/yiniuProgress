@@ -86,9 +86,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (presenter.isLeftScroll) {
-            return;
-        }
 
         int index = position - 1;
         if (index == 0) {

@@ -1,6 +1,7 @@
 package com.jyh.kxt.chat.presenter;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,24 +16,35 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.dao.ChatRoomJsonDao;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.chat.adapter.ChatRoomAdapter;
 import com.jyh.kxt.chat.json.ChatRoomJson;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.tavendo.autobahn.WebSocketConnection;
+import de.tavendo.autobahn.WebSocketConnectionHandler;
+import de.tavendo.autobahn.WebSocketException;
+import de.tavendo.autobahn.WebSocketOptions;
 
 import static android.widget.AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL;
 
@@ -51,6 +63,7 @@ public class ChatRoomPresenter extends BasePresenter {
     private boolean isBannedForReceiver = false;
     private boolean isInitialLoadHistory = true;
 
+    private WebSocketConnection mConnection = new WebSocketConnection();
 
     public ChatRoomPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -104,6 +117,8 @@ public class ChatRoomPresenter extends BasePresenter {
         chatRoomActivity.tvRoomReminder.setText("正在获取历史数据...");
 
         requestPullMoreData();
+
+        connectionWebSocket();
     }
 
     /**
@@ -197,7 +212,7 @@ public class ChatRoomPresenter extends BasePresenter {
                 if (baseChatRoomList.size() != 0) {
                     int temporaryPosition = baseChatRoomList.indexOf(temporaryChatRoom);
                     baseChatRoomList.remove(temporaryPosition);
-                    baseChatRoomList.add(baseChatRoomList.size() - 1, temporaryChatRoom);
+                    baseChatRoomList.add(baseChatRoomList.size(), temporaryChatRoom);
                 }
 
                 String updateSql = "UPDATE CHAT_ROOM_BEAN SET FOREGOING_CHAT_ID = " +
@@ -251,7 +266,7 @@ public class ChatRoomPresenter extends BasePresenter {
         fakeChatRoom.setDatetime(sendDateTime);
         fakeChatRoom.setSender(userInfo.getUid());
         fakeChatRoom.setReceiver(chatRoomActivity.otherUid);
-        fakeChatRoom.setAvatar(userInfo.getPicture());
+        fakeChatRoom.setAvatar(userInfo.getWriter_avatar());
         fakeChatRoom.setForegoingChatId(foregoingChatId);
 
         //保存假数据到数据库
@@ -281,26 +296,23 @@ public class ChatRoomPresenter extends BasePresenter {
             List<ChatRoomJson> errorChatList = chatRoomJsonDao.queryBuilder().where(ChatRoomJsonDao.Properties.Sender.eq(userInfo.getUid())
                     , ChatRoomJsonDao.Properties.Receiver.eq(chatRoomActivity.otherUid)).list();
 
-            HashMap<String, ChatRoomJson> localChatMap = new HashMap<>();
-            for (ChatRoomJson chatRoomJson : errorChatList) {
-
-                if (chatRoomJson.getForegoingChatId() == null) {
-                    chatRoomList.add(0, chatRoomJson);
-                } else {
-                    localChatMap.put(chatRoomJson.getForegoingChatId(), chatRoomJson);
-                }
-            }
-
+            HashMap<String, ChatRoomJson> netWorkChatMap = new HashMap<>();
             /**
-             * 比对网络请求的数据
+             * 拿到网络上数据
              */
-            for (int index = chatRoomList.size() - 1; index >= 0; index--) {
-                ChatRoomJson listItemChatRoom = chatRoomList.get(index);
-
-                ChatRoomJson mapItemChatRoom = localChatMap.get(listItemChatRoom.getId());
-                if (mapItemChatRoom != null) {
-                    int indexOf = chatRoomList.indexOf(listItemChatRoom);
-                    chatRoomList.add(indexOf + 1, mapItemChatRoom);
+            for (int position = 0; position < chatRoomList.size(); position++) {
+                ChatRoomJson listItemChatRoom = chatRoomList.get(position);
+                netWorkChatMap.put(listItemChatRoom.getId(), listItemChatRoom);
+            }
+            for (ChatRoomJson chatRoomJson : errorChatList) {
+                ChatRoomJson chatRoomIndex = netWorkChatMap.get(chatRoomJson.getForegoingChatId());
+                if (chatRoomIndex != null) {
+                    if (chatRoomJson.getForegoingChatId() == null) {
+                        chatRoomList.add(0, chatRoomJson);
+                    } else {
+                        int indexOf = chatRoomList.indexOf(chatRoomIndex);
+                        chatRoomList.add(indexOf + 1, chatRoomJson);
+                    }
                 }
             }
         }
@@ -330,13 +342,9 @@ public class ChatRoomPresenter extends BasePresenter {
                 //计算间隔事件
                 long thisSendTime = Long.parseLong(chatRoomJson.getDatetime());
 
-                if (lastSendTime == 0) {
+                if (thisSendTime - 60 * 5 >= lastSendTime) {
                     lastSendTime = thisSendTime;
-                } else {
-                    if (lastSendTime + 60 * 5 >= thisSendTime) {
-                        lastSendTime = thisSendTime;
-                        chatRoomJson.setPartitionTime(thisSendTime);
-                    }
+                    chatRoomJson.setPartitionTime(thisSendTime);
                 }
             }
         } catch (Exception e) {
@@ -344,6 +352,67 @@ public class ChatRoomPresenter extends BasePresenter {
         }
     }
 
+    /**
+     * 连接Socket
+     */
+    private void connectionWebSocket() {
+        String indexConfig = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
+        if (!"".equals(indexConfig)) {
+            try {
+                MainInitJson initConfig = JSONObject.parseObject(indexConfig, MainInitJson.class);
+
+
+                WebSocketOptions options = new WebSocketOptions();
+                options.setReceiveTextMessagesRaw(false);
+                options.setSocketConnectTimeout(30000);
+                options.setSocketReceiveTimeout(10000);
+
+                List<BasicNameValuePair> headers = new ArrayList<>();
+                headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
+
+                mConnection.connect(initConfig.getMessage_socket_addr(), null, new WebSocketConnectionHandler() {
+                    @Override
+                    public void onOpen() {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("cmd", "login");
+                        jsonObject.put("r", "kxt");
+                        jsonObject.put("uid", userInfo.getUid());
+                        jsonObject.put("rid", chatRoomActivity.otherUid);
+
+                        jsonObject.put("name", userInfo.getNickname());
+                        jsonObject.put("mark", "login");
+
+                        mConnection.sendTextMessage(jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onTextMessage(String payload) {
+                        Log.e("聊天", "payload: "+payload);
+                        if (payload != null && !"".equals(payload)) {
+
+                            JSONObject payloadBean = JSONObject.parseObject(payload);
+                            String cmd = payloadBean.getString("cmd");
+
+                            if("message".equals(cmd)){
+                                ChatRoomJson chatRoomJson = JSONObject.parseObject(payload, ChatRoomJson.class);
+                                chatRoomJson.setMsgSendStatus(0);
+                                chatRoomJson.setViewType(0);
+                                baseChatRoomList.add(chatRoomJson);
+                                chatRoomAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onClose(int code, String reason) {
+
+                    }
+                }, options, headers);
+            } catch (WebSocketException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 显示提示内容

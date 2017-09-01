@@ -71,9 +71,9 @@ public class LetterPresenter extends BasePresenter {
                 letterActivity.plContent.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                       letterActivity.plContent.onRefreshComplete();
+                        letterActivity.plContent.onRefreshComplete();
                     }
-                },200);
+                }, 200);
             }
 
             @Override
@@ -85,7 +85,7 @@ public class LetterPresenter extends BasePresenter {
                     public void run() {
                         letterActivity.plContent.onRefreshComplete();
                     }
-                },200);
+                }, 200);
             }
         });
     }
@@ -93,8 +93,11 @@ public class LetterPresenter extends BasePresenter {
     private static final int SCROLL_MIN_DISTANCE_X = 15;
     private static final int SCROLL_MIN_DISTANCE_Y = 30;
 
-    public boolean isLeftScroll = false;
-    public boolean isVerticalScroll = true;
+
+    private boolean isLeftScroll = false;
+    private boolean isVerticalScroll = true;
+
+    private boolean isSingleTapUp = false;
 
     public void scrollListener(final PullToRefreshListView refreshableView, final LetterListAdapter adapter) {
 
@@ -106,11 +109,11 @@ public class LetterPresenter extends BasePresenter {
 
             @Override
             public void onShowPress(MotionEvent e) {
-
             }
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
+                isSingleTapUp = true;
                 return false;
             }
 
@@ -157,8 +160,10 @@ public class LetterPresenter extends BasePresenter {
             public boolean onTouch(View v, MotionEvent event) {
                 try {
                     mGestureDetector.onTouchEvent(event);
+
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
+                            isSingleTapUp = false;
                             adapter.downHindContentView();
                             break;
                         case MotionEvent.ACTION_MOVE:
@@ -169,7 +174,7 @@ public class LetterPresenter extends BasePresenter {
                             isVerticalScroll = false;
                             refreshableView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                             adapter.upContentView();
-                            break;
+                            return !isSingleTapUp;
                     }
                     return isLeftScroll;
                 } catch (Exception e) {
@@ -178,5 +183,9 @@ public class LetterPresenter extends BasePresenter {
                 }
             }
         });
+    }
+
+    private boolean isOnItemClick() {
+        return true;
     }
 }

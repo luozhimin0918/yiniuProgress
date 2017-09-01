@@ -59,7 +59,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
             android:layout_toLeftOf="@+id/chat_room_portrait"
             android:background="@drawable/bg_msg_me"
             android:gravity="left|center"

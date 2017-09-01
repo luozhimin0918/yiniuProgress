@@ -226,8 +226,9 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     }
 
     public void setShowRed(boolean isShowRed) {
-        if (viewHolderSys != null)
+        if (viewHolderSys != null) {
             viewHolderSys.vPoint.setVisibility(isShowRed ? View.VISIBLE : View.GONE);
+        }
     }
 
     static class ViewHolder {

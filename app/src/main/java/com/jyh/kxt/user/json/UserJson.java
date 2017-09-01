@@ -33,6 +33,7 @@ public class UserJson {
 
     private String writer_id;
     private String writer_name;
+    private String writer_avatar;
 
     public UserJson() {
     }
@@ -141,4 +142,11 @@ public class UserJson {
         this.birthday = birthday;
     }
 
+    public String getWriter_avatar() {
+        return writer_avatar;
+    }
+
+    public void setWriter_avatar(String writer_avatar) {
+        this.writer_avatar = writer_avatar;
+    }
 }

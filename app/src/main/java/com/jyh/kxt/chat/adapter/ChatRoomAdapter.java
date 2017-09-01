@@ -147,6 +147,7 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         Glide.with(mContext)
                 .load(chatRoomJson.getAvatar())
                 .asBitmap()
+                .centerCrop()
                 .placeholder(R.mipmap.icon_user_def_photo)
                 .override(100, 100)
                 .error(R.mipmap.icon_user_def_photo)

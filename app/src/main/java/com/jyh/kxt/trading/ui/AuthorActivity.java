@@ -80,6 +80,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     private View headView;
     private TextView tvInfo;
     private String authorId;
+    private String authorName;
+
+    private String memberId;
 
     private float downYPoint;
     private float upYPoint;
@@ -171,6 +174,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
      * @param authorDetailsJson
      */
     public void setView(AuthorDetailsJson authorDetailsJson) {
+        memberId = authorDetailsJson.getMember_id();
+        authorName = authorDetailsJson.getName();
+
         setHeadView(authorDetailsJson);
         try {
             List<AuthorNewsJson> news = authorDetailsJson.getList();
@@ -240,7 +246,8 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 if (LoginUtils.isLogined(this)) {
                     // TODO: 2017/8/30  
                     Intent intent = new Intent(this, ChatRoomActivity.class);
-                    intent.putExtra(IntentConstant.U_ID, authorId);
+                    intent.putExtra(IntentConstant.U_ID, memberId);
+                    intent.putExtra(IntentConstant.NAME, authorName);
                     startActivity(intent);
                 } else {
                     startActivity(new Intent(this, LoginOrRegisterActivity.class));
