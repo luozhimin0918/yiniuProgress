@@ -46,7 +46,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_letter);
+        setContentView(R.layout.activity_letter,StatusBarColor.THEME1);
         presenter = new LetterPresenter(this);
         initView();
         plRootView.loadWait();

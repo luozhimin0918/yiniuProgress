@@ -9,9 +9,12 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.adapter.BlockAdapter;
 import com.jyh.kxt.chat.json.BlockJson;
 import com.jyh.kxt.index.presenter.PullListViewPresenter;
+import com.library.base.http.VarConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +53,8 @@ public class BlockActivity extends BaseActivity {
 
         pullListViewPresenter.createView(flBlockContent);
         pullListViewPresenter.setLoadMode(PullListViewPresenter.LoadMode.PAGE_LOAD);
-        pullListViewPresenter.setRequestInfo("", parameterJson, BlockJson.class);
+        parameterJson.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(this).getUid());
+        pullListViewPresenter.setRequestInfo(HttpConstant.MSG_BANNED_LIST, parameterJson, BlockJson.class);
         pullListViewPresenter.setAdapter(blockAdapter);
         pullListViewPresenter.startRequest();
     }

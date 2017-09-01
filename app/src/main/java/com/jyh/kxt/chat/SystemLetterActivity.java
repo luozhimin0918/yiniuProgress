@@ -41,7 +41,7 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_letter);
+        setContentView(R.layout.activity_letter,StatusBarColor.THEME1);
 
         presenter = new SystemLetterPresenter(this);
 

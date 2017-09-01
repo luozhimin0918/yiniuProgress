@@ -51,7 +51,7 @@ public class UserSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_letter_usersetting);
+        setContentView(R.layout.activity_letter_usersetting,StatusBarColor.THEME1);
 
         tvBarTitle.setText("消息设置");
 

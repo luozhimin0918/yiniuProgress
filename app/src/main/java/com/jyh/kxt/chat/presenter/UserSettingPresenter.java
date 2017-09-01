@@ -37,7 +37,7 @@ public class UserSettingPresenter extends BasePresenter {
 
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_RECEIVER, receiverUid);
-        jsonParam.put(VarConstant.HTTP_IS_BANNED, isBan);
+        jsonParam.put(VarConstant.HTTP_IS_BANNED, "1".equals(isBan)?"0":"1");
         jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
         request.doGet(HttpConstant.MSG_USER_BAN, jsonParam, new HttpListener<Object>() {
             @Override

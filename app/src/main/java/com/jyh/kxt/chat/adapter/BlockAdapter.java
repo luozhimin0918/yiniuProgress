@@ -17,9 +17,11 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.BlockActivity;
 import com.jyh.kxt.chat.json.BlockJson;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.widget.window.ToastView;
 
@@ -57,6 +59,7 @@ public class BlockAdapter extends BaseListAdapter<BlockJson> {
         holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
         final BlockJson bean = dataList.get(position);
 
+        holder.tvName.setText(bean.getNickname());
         final ViewHolder finalHolder = holder;
         Glide.with(mContext).load(bean.getAvatar()).asBitmap().
                 error(R.mipmap.icon_user_def_photo)
@@ -80,6 +83,9 @@ public class BlockAdapter extends BaseListAdapter<BlockJson> {
             @Override
             public void onClick(View v) {
                 JSONObject jsonParam = request.getJsonParam();
+                jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
+                jsonParam.put(VarConstant.HTTP_RECEIVER,bean.getReceiver());
+                jsonParam.put(VarConstant.HTTP_IS_BANNED, bean.isBan()?"0":"1");
                 request.doGet(HttpConstant.MSG_USER_BAN, jsonParam, new HttpListener<Object>() {
                     @Override
                     protected void onResponse(Object o) {
