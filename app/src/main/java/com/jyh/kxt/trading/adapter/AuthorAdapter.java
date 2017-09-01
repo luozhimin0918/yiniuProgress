@@ -608,6 +608,9 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
      * 设置置顶数据
      */
     public void setTopDataList() {
+        if (viewpoints == null) {
+            return;
+        }
         recoverViewpoint();
         int size = viewpoints.size();
         for (int i = 0; i < size; i++) {
