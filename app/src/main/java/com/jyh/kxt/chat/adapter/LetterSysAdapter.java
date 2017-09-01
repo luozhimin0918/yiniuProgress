@@ -59,7 +59,7 @@ public class LetterSysAdapter extends BaseListAdapter<LetterSysJson> {
         holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
         holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
 
-        Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().into(new ImageViewTarget<Bitmap>(holder.rivAvatar) {
+        Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().centerCrop().into(new ImageViewTarget<Bitmap>(holder.rivAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 holder.rivAvatar.setImageBitmap(resource);

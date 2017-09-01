@@ -100,7 +100,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
         if (type == TYPE_SYS) {
             final ViewHolderSys finalViewHolderSys = viewHolderSys;
-            Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().into(new ImageViewTarget<Bitmap>(finalViewHolderSys.rivAvatar) {
+            Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().centerCrop().into(new ImageViewTarget<Bitmap>(finalViewHolderSys.rivAvatar) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     finalViewHolderSys.rivAvatar.setImageBitmap(resource);
@@ -132,6 +132,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             final ViewHolder finalViewHolder = viewHolder;
             Glide.with(mContext).load(bean.getAvatar()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
                     .icon_user_def_photo)
+                    .centerCrop()
                     .into(new ImageViewTarget<Bitmap>(finalViewHolder.rivAvatar) {
                         @Override
                         protected void setResource(Bitmap resource) {

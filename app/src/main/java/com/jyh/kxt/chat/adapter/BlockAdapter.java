@@ -64,6 +64,7 @@ public class BlockAdapter extends BaseListAdapter<BlockJson> {
         Glide.with(mContext).load(bean.getAvatar()).asBitmap().
                 error(R.mipmap.icon_user_def_photo)
                 .placeholder(R.mipmap.icon_user_def_photo)
+                .centerCrop()
                 .into(new ImageViewTarget<Bitmap>(finalHolder.rivAvatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
