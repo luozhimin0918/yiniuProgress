@@ -18,6 +18,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.chat.json.LetterListJson;
+import com.library.util.DateUtils;
 import com.library.util.SystemUtil;
 
 import java.util.List;
@@ -102,8 +103,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolder.tvName.setText(bean.getNickname());
             viewHolder.tvContent.setText(bean.getLast_content());
             try {
-                viewHolder.tvTime.setText("" + Long.parseLong(bean.getDatetime()) * 1000);
-            } catch (NumberFormatException e) {
+                viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime()) * 1000));
+            } catch (Exception e) {
                 e.printStackTrace();
                 viewHolder.tvTime.setText("00:00");
             }
