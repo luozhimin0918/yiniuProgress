@@ -67,11 +67,11 @@ public class LetterPresenter extends BasePresenter {
 
     public void refresh() {
         JSONObject jsonParam = request.getJsonParam();
-        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
-        request.doGet(HttpConstant.MSG_USERCENTER, jsonParam, new HttpListener<Object>() {
+        jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.MSG_USERCENTER, jsonParam, new HttpListener<LetterJson>() {
             @Override
-            protected void onResponse(Object o) {
-//                letterActivity.refresh();
+            protected void onResponse(LetterJson letterJson) {
+                letterActivity.refresh(letterJson);
                 letterActivity.plContent.postDelayed(new Runnable() {
                     @Override
                     public void run() {

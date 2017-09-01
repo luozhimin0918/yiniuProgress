@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -130,7 +131,12 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         plRootView.loadOver();
     }
 
-    public void refresh(List<LetterListJson> list) {
+    public void refresh(LetterJson letterJson) {
+        if(letterJson==null) return;
+        String show_red_dot = letterJson.getShow_red_dot();
+        List<LetterListJson> list = letterJson.getList();
+        if (list == null || list.size() == 0) return;
         adapter.setData(list);
+        adapter.setShowRed(show_red_dot != null && "1".equals(show_red_dot));
     }
 }
