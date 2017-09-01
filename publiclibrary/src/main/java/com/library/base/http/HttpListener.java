@@ -22,6 +22,8 @@ public abstract class HttpListener<T> {
     private RequestQueue mQueue;
     private VolleyRequest.MyType superclassTypeParameter;
 
+    private String uniqueIdentification ;
+
     protected boolean onStart() {
         return true;
     }
@@ -100,5 +102,13 @@ public abstract class HttpListener<T> {
             return null;
         }
         return null;
+    }
+
+    public String getUniqueIdentification() {
+        return uniqueIdentification;
+    }
+
+    public void setUniqueIdentification(String uniqueIdentification) {
+        this.uniqueIdentification = uniqueIdentification;
     }
 }

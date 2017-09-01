@@ -192,7 +192,7 @@
         <activity
             android:name=".chat.ChatRoomActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <activity
             android:name=".chat.BlockActivity"

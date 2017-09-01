@@ -11,18 +11,14 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.chat.LetterActivity;
 import com.jyh.kxt.chat.adapter.LetterListAdapter;
 import com.jyh.kxt.chat.json.LetterJson;
-import com.jyh.kxt.chat.json.LetterListJson;
-import com.jyh.kxt.chat.LetterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 项目名:KxtProfessional
@@ -97,8 +93,8 @@ public class LetterPresenter extends BasePresenter {
     private static final int SCROLL_MIN_DISTANCE_X = 15;
     private static final int SCROLL_MIN_DISTANCE_Y = 30;
 
-    private boolean isLeftScroll = false;
-    private boolean isVerticalScroll = true;
+    public boolean isLeftScroll = false;
+    public boolean isVerticalScroll = true;
 
     public void scrollListener(final PullToRefreshListView refreshableView, final LetterListAdapter adapter) {
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.ViewDebug;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,6 +86,10 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (presenter.isLeftScroll) {
+            return;
+        }
+
         int index = position - 1;
         if (index == 0) {
             //系统消息
@@ -110,7 +113,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     protected void onChangeTheme() {
         super.onChangeTheme();
         ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_msg_ban));
-        if (adapter!=null) {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
@@ -135,7 +138,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     }
 
     public void refresh(LetterJson letterJson) {
-        if(letterJson==null) return;
+        if (letterJson == null) return;
         String show_red_dot = letterJson.getShow_red_dot();
         List<LetterListJson> list = letterJson.getList();
         if (list == null || list.size() == 0) return;

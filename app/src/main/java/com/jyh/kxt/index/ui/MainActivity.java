@@ -35,7 +35,9 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.util.emoje.DBUtils;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
@@ -177,7 +179,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
-//        DBUtils.toSDWriteFile(this, DBManager.dbName);
+        DBUtils.toSDWriteFile(this, DBManager.dbName);
     }
 
     /**

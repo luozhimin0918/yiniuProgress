@@ -1,12 +1,15 @@
 package com.jyh.kxt.chat.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +20,7 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.chat.json.ChatRoomJson;
+import com.jyh.kxt.chat.presenter.ChatRoomPresenter;
 
 import java.util.List;
 
@@ -31,10 +35,12 @@ import butterknife.ButterKnife;
 public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
     private Context mContext;
     private LayoutInflater mInflater;
+    private ChatRoomPresenter chatRoomPresenter;
 
-    public ChatRoomAdapter(Context mContext, List<ChatRoomJson> dataList) {
+    public ChatRoomAdapter(Context mContext, List<ChatRoomJson> dataList, ChatRoomPresenter chatRoomPresenter) {
         super(dataList);
         this.mContext = mContext;
+        this.chatRoomPresenter = chatRoomPresenter;
 
         mInflater = LayoutInflater.from(mContext);
     }
@@ -89,7 +95,7 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
      * @param baseViewHolder
      */
     private void parseHolderData(int position, final BaseViewHolder baseViewHolder) {
-        ChatRoomJson chatRoomJson = dataList.get(position);
+        final ChatRoomJson chatRoomJson = dataList.get(position);
 
         long partitionTime = chatRoomJson.getPartitionTime();
         if (partitionTime != 0) {
@@ -104,15 +110,31 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         /**
          * 消息的状态
          */
-        if (chatRoomJson.getMsgSendStatus() == 0) {
-            baseViewHolder.chatRoomTip.setVisibility(View.GONE);
-            baseViewHolder.chatRoomTip.setImageBitmap(null);
-        } else if (chatRoomJson.getMsgSendStatus() == 1) {
-            baseViewHolder.chatRoomTip.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(com.library.R.mipmap.loading).asGif().into(baseViewHolder.chatRoomTip);
+
+        baseViewHolder.progressTip.setVisibility(View.GONE);
+        baseViewHolder.chatRoomTip.setVisibility(View.GONE);
+        baseViewHolder.chatRoomTip.setOnClickListener(null);
+
+        baseViewHolder.chatRoomShield.setVisibility(View.GONE);
+
+        if (chatRoomJson.getMsgSendStatus() == 1) {
+            baseViewHolder.progressTip.setVisibility(View.VISIBLE);
+
         } else if (chatRoomJson.getMsgSendStatus() == 2) {
             baseViewHolder.chatRoomTip.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(R.mipmap.icon_msg_error).asGif().into(baseViewHolder.chatRoomTip);
+
+            Glide.with(mContext).load(R.mipmap.icon_msg_error).into(baseViewHolder.chatRoomTip);
+
+            if (chatRoomJson.getIs_banned_for_receiver() == 1) {
+                baseViewHolder.chatRoomShield.setVisibility(View.VISIBLE);
+            } else {
+                baseViewHolder.chatRoomTip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertResendDialog(chatRoomJson);
+                    }
+                });
+            }
         }
 
         /**
@@ -143,6 +165,8 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         @BindView(R.id.chat_room_portrait) RoundImageView chatRoomPortrait;
         @BindView(R.id.chat_room_content) EmoticonSimpleTextView chatRoomContent;
         @BindView(R.id.chat_room_tip) ImageView chatRoomTip;
+        @BindView(R.id.chat_room_loading) ProgressBar progressTip;
+        @BindView(R.id.chat_room_shield_tip) TextView chatRoomShield;
 
         BaseViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -171,4 +195,19 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         return dataList.get(position).getViewType();
     }
 
+
+    class AlertResendDialog {
+        public AlertResendDialog(final ChatRoomJson chatRoomJson) {
+            new AlertDialog.Builder(mContext)
+                    .setMessage("是否重新发送")
+                    .setPositiveButton("是",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String randomUnique = chatRoomJson.getId();
+                                    chatRoomPresenter.requestSendChitChat(chatRoomJson, randomUnique);
+                                }
+                            }).setNegativeButton("否", null).show();
+        }
+    }
 }

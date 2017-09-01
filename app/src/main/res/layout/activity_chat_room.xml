@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context="com.jyh.kxt.chat.ChatRoomActivity">
 
-    <include layout="@layout/action_bar1"/>
+    <include layout="@layout/action_bar3"/>
 
     <TextView
         android:id="@+id/chat_room_reminder"
@@ -28,12 +28,12 @@
         android:layout_weight="1" >
 
 
-        <com.library.widget.handmark.PullToRefreshListView
+        <ListView
             android:id="@+id/ptrl_chat_room_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.library.widget.handmark.PullToRefreshListView>
+        </ListView>
     </FrameLayout>
 
     <include layout="@layout/view_line"/>
@@ -41,7 +41,6 @@
     <RelativeLayout
         android:id="@+id/rl_keyboard_above"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
 
         <com.jyh.kxt.base.util.emoje.EmoticonsEditText

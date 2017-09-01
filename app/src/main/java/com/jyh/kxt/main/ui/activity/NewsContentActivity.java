@@ -71,6 +71,7 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -242,6 +243,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 if (memberId == null) {
                     return;
                 }
+
+                if (LoginUtils.getUserInfo(getContext()) == null) {
+                    Intent loginIntent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                    startActivity(loginIntent);
+                    return;
+                }
+
                 Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra(IntentConstant.U_ID, memberId);
                 intent.putExtra(IntentConstant.NAME, authorName);
@@ -647,6 +655,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvHeadAuthorChat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (LoginUtils.getUserInfo(getContext()) == null) {
+                            Intent loginIntent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                            startActivity(loginIntent);
+                            return;
+                        }
                         Intent intent = new Intent(NewsContentActivity.this, ChatRoomActivity.class);
                         intent.putExtra(IntentConstant.U_ID, memberId);
                         intent.putExtra(IntentConstant.NAME, authorName);

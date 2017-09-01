@@ -48,6 +48,8 @@ public class VolleyRequest {
 
     private boolean isDefaultDecode = true;
 
+    private String uniqueIdentification;
+
     public VolleyRequest(Context mContext, RequestQueue mQueue) {
         this.mContext = mContext;
         this.mQueue = mQueue;
@@ -110,6 +112,7 @@ public class VolleyRequest {
                              final Map<String, String> mParams,
                              final HttpListener<T> mHttpListener) {
 
+        mHttpListener.setUniqueIdentification(uniqueIdentification);
 
         this.superclassTypeParameter = getSuperclassTypeParameter(mHttpListener.getClass());
         mHttpListener.setCacheConfig(mQueue, url, superclassTypeParameter);
@@ -238,5 +241,13 @@ public class VolleyRequest {
         jsonObject.put(VarConstant.HTTP_VERSION, VarConstant.HTTP_VERSION_VALUE);
         jsonObject.put(VarConstant.HTTP_SYSTEM, VarConstant.HTTP_SYSTEM_VALUE);
         return jsonObject;
+    }
+
+    public void setUniqueIdentification(String uniqueIdentification) {
+        this.uniqueIdentification = uniqueIdentification;
+    }
+
+    public String getUniqueIdentification() {
+        return uniqueIdentification;
     }
 }
