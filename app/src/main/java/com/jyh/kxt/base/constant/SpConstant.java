@@ -107,4 +107,8 @@ public class SpConstant {
     public static final String PATCH_PATH = "patch_path";//补丁路径
 
     public static final String AD_IMAGE_URL = "ad_image_url";
+    /**
+     * 聊天预览信息
+     */
+    public static final String CHAT_PREVIEW = "chat_preview";
 }

@@ -14,7 +14,6 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -130,16 +129,9 @@ public class SystemLetterPresenter extends BasePresenter {
      * @return
      */
     public List<LetterSysJson> disposeData(List<LetterSysJson> data) {
-        List<LetterSysJson> letterSysJsons;
-//        int size = data.size();
-//        if (size > VarConstant.LIST_MAX_SIZE) {
-//            isMore = true;
-//            letterSysJsons = new ArrayList<>(data.subList(0, VarConstant.LIST_MAX_SIZE));
-////            lastId = letterSysJsons.get(VarConstant.LIST_MAX_SIZE - 1).getId();
-//        } else {
-//            isMore = false;
-        letterSysJsons = new ArrayList<>(data);
-//        }
-        return letterSysJsons;
+
+//        SPUtils.save(mContext, SpConstant.LAST_SYS_CHAT,data.get());
+
+        return data;
     }
 }

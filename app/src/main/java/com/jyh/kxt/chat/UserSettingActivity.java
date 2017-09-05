@@ -48,10 +48,12 @@ public class UserSettingActivity extends BaseActivity {
     private String isBan;
     private boolean isWriter;
 
+    private UserSettingJson userSettingJson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_letter_usersetting,StatusBarColor.THEME1);
+        setContentView(R.layout.activity_letter_usersetting, StatusBarColor.THEME1);
 
         tvBarTitle.setText("消息设置");
 
@@ -70,12 +72,14 @@ public class UserSettingActivity extends BaseActivity {
                 break;
             case R.id.ll_user:
                 if (isWriter) {
+
                     Intent intent = new Intent(this, AuthorActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, receiverUid);
+                    intent.putExtra(IntentConstant.O_ID, userSettingJson.getReceiver());
                     startActivity(intent);
                 }
                 break;
             case R.id.ll_ban:
+                showWaitDialog(null);
                 presenter.ban(receiverUid, isBan, new ObserverData<Boolean>() {
                     @Override
                     public void callback(Boolean aBoolean) {
@@ -86,6 +90,9 @@ public class UserSettingActivity extends BaseActivity {
                             isBan = "0";
                             vBan.setSelected(false);
                         }
+                        dismissWaitDialog();
+
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MSG_BAN, isBan.equals("1") ? true : false));
                     }
 
                     @Override
@@ -102,6 +109,8 @@ public class UserSettingActivity extends BaseActivity {
             plRootView.loadError();
             return;
         }
+        this.userSettingJson = userSettingJson;
+
         tvName.setText(userSettingJson.getNickname());
         Glide.with(this).load(userSettingJson.getAvatar()).asBitmap().placeholder(R.mipmap.icon_user_def_photo).error(R.mipmap
                 .icon_user_def_photo).into(new ImageViewTarget<Bitmap>(rivAvatar) {
@@ -112,10 +121,11 @@ public class UserSettingActivity extends BaseActivity {
         });
         isBan = userSettingJson.getIs_banned();
         String is_writer = userSettingJson.getIs_writer();
-        if (is_writer != null && is_writer.equals("1"))
+        if (is_writer != null && is_writer.equals("1")) {
             isWriter = true;
-        else
+        } else {
             isWriter = false;
+        }
         if (isBan != null && "1".equals(isBan)) {
 
             vBan.setSelected(true);
@@ -128,6 +138,5 @@ public class UserSettingActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_MSG_BAN, isBan.equals("1") ? true : false));
     }
 }

@@ -35,7 +35,6 @@ public class LetterPresenter extends BasePresenter {
     public LetterPresenter(IBaseView iBaseView) {
         super(iBaseView);
         request = new VolleyRequest(mContext, mQueue);
-        request.setTag(getClass().getName());
     }
 
     public void init() {

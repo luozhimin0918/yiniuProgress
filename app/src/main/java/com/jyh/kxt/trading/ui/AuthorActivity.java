@@ -244,8 +244,10 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 break;
             case R.id.v_sxt:
                 if (LoginUtils.isLogined(this)) {
-                    // TODO: 2017/8/30  
+                    // TODO: 2017/8/30
                     Intent intent = new Intent(this, ChatRoomActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                     intent.putExtra(IntentConstant.U_ID, memberId);
                     intent.putExtra(IntentConstant.NAME, authorName);
                     startActivity(intent);
@@ -495,8 +497,9 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     @Override
     protected void onChangeTheme() {
         super.onChangeTheme();
-        if (adapter != null)
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

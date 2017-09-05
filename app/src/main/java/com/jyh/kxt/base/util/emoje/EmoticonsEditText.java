@@ -175,4 +175,5 @@ public class EmoticonsEditText extends SkinnableEditText {
         int selectionPosition = getSelectionStart();
         text.delete(selectionPosition - 1, selectionPosition);
     }
+
 }

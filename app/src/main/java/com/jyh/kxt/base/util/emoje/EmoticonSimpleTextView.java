@@ -171,12 +171,20 @@ public class EmoticonSimpleTextView extends TextView {
 
                 String group = matcher.group(1);
 
+
+                String emoJeName;
+                String emoJeUrl;
+
                 String[] splitGroup = group.split(",");
-                if (splitGroup.length < 2) {
+                if (splitGroup.length == 2) {
+                    emoJeName = splitGroup[0];
+                    emoJeUrl = splitGroup[1];
+                } else if (splitGroup.length == 1) {
+                    emoJeName = splitGroup[0];
+                    emoJeUrl = null;
+                } else {
                     continue;
                 }
-                String emoJeName = splitGroup[0];
-                String emoJeUrl = splitGroup[1];
 
 
                 EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(emoJeName);
@@ -209,7 +217,9 @@ public class EmoticonSimpleTextView extends TextView {
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
                     isFindMatcher = false;
-                    startDownloadGif(currentSpannable, matcher.start(), matcher.end(), emoJeUrl, emoJeName);
+                    if (emoJeUrl != null) {
+                        startDownloadGif(currentSpannable, matcher.start(), matcher.end(), emoJeUrl, emoJeName);
+                    }
                 }
             }
         } catch (Exception e) {

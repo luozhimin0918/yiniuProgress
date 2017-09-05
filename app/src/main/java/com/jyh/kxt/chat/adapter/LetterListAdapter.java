@@ -3,6 +3,11 @@ package com.jyh.kxt.chat.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -19,14 +26,20 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.dao.ChatRoomJsonDao;
+import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.chat.LetterActivity;
+import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.json.LetterListJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.DateUtils;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
@@ -55,6 +68,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     private VolleyRequest request;
 
 
+    private boolean isShowSystemMessageRed = false;
+
     public LetterListAdapter(List<LetterListJson> dataList, LetterActivity mContext, ListView listView) {
         super(dataList);
         this.mContext = mContext;
@@ -68,10 +83,10 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         chartContentWidth = screenDisplay.widthPixels + deleteViewWidth;
     }
 
-    private ViewHolderSys viewHolderSys;
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolderSys viewHolderSys = null;
         ViewHolder viewHolder = null;
         int type = getItemViewType(position);
         if (convertView == null) {
@@ -110,11 +125,18 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolderSys.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
             viewHolderSys.ivBreak.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_msg_sys_enter));
             viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+
+
+            if (isShowSystemMessageRed) {
+                viewHolderSys.vPoint.setVisibility(View.VISIBLE);
+            } else {
+                viewHolderSys.vPoint.setVisibility(View.GONE);
+            }
         } else {
             final int index = position - 1;
             LetterListJson bean = dataList.get(index);
             viewHolder.tvName.setText(bean.getNickname());
-            viewHolder.tvContent.setText(bean.getLast_content());
+            chatLastContentHandle(viewHolder, bean);
             try {
                 viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime()) * 1000));
             } catch (Exception e) {
@@ -124,9 +146,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             viewHolder.tvDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     delMsg(index);
-
                 }
             });
             final ViewHolder finalViewHolder = viewHolder;
@@ -147,21 +167,60 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     }
 
     /**
+     * 处理最后一条内容的Handler
+     *
+     * @param viewHolder
+     * @param bean
+     */
+    private void chatLastContentHandle(ViewHolder viewHolder, LetterListJson bean) {
+        SpannableStringBuilder spannableStringBuilder;
+        if (bean.getContentType() == 0) {
+            spannableStringBuilder = new SpannableStringBuilder(bean.getLast_content());
+        } else {
+            spannableStringBuilder = new SpannableStringBuilder(bean.getLocal_content());
+        }
+
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.red2));
+        switch (bean.getContentType()) {
+            case 0:
+
+                break;
+            case 1:
+                SpannableString errorSpannable = new SpannableString("[发送失败] ");
+                errorSpannable.setSpan(redSpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.insert(0, errorSpannable);
+                break;
+            case 2:
+                SpannableString draftSpannable = new SpannableString("[草稿] ");
+                draftSpannable.setSpan(redSpan, 0, draftSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.insert(0, draftSpannable);
+                break;
+        }
+        viewHolder.tvContent.setText(spannableStringBuilder);
+    }
+
+    /**
      * 删除回话
      *
      * @param index
      */
     private void delMsg(final int index) {
-        JSONObject jsonParam = request.getJsonParam();
+        if (!SystemUtil.isConnected(mContext)) {
+            ToastSnack.show(mContext, listView, "网络连接失败");
+            return;
+        }
         LetterListJson bean = dataList.get(index);
-        jsonParam.put(VarConstant.HTTP_RECEIVER, bean.getReceiver());
-        jsonParam.put(VarConstant.HTTP_SENDER, LoginUtils.getUserInfo(mContext).getUid());
+
+        String sender = LoginUtils.getUserInfo(mContext).getUid();
+        String receiver = bean.getReceiver();
+
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_RECEIVER, receiver);
+        jsonParam.put(VarConstant.HTTP_SENDER, sender);
         request.doGet(HttpConstant.MSG_DEL, jsonParam, new HttpListener<Object>() {
             @Override
             protected void onResponse(Object o) {
-                downHindContentView();
-                dataList.remove(index);
-                notifyDataSetChanged();
+
             }
 
             @Override
@@ -171,6 +230,34 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                 ToastView.makeText3(mContext, "删除失败");
             }
         });
+        downHindContentView();
+        dataList.remove(index);
+        notifyDataSetChanged();
+
+        //删除数据库中的失败消息
+        String delSql = "DELETE FROM CHAT_ROOM_BEAN WHERE  SENDER = '" + sender + "' AND RECEIVER = '" + receiver + "'";
+        DBManager mDBManager = DBManager.getInstance(mContext);
+        ChatRoomJsonDao chatRoomJsonDao = mDBManager.getDaoSessionWrit().getChatRoomJsonDao();
+        chatRoomJsonDao.getDatabase().execSQL(delSql);
+
+        //删除本地SP中的草稿信息
+        String chatPreviewDraft = SPUtils.getString(mContext, SpConstant.CHAT_PREVIEW);
+        if (!TextUtils.isEmpty(chatPreviewDraft)) {
+            List<ChatPreviewJson> chatDraftList = JSONArray.parseArray(chatPreviewDraft, ChatPreviewJson.class);
+            if (chatDraftList != null) {
+                int indexOf = -1;
+                for (int i = 0; i < chatDraftList.size(); i++) {
+                    ChatPreviewJson chatPreviewJson = chatDraftList.get(i);
+                    if (chatPreviewJson.getReceiver().equals(receiver)) {
+                        indexOf = i;
+                    }
+                }
+                if (indexOf != -1) {
+                    chatDraftList.remove(indexOf);
+                    SPUtils.save(mContext, SpConstant.CHAT_PREVIEW, JSON.toJSONString(chatDraftList));
+                }
+            }
+        }
     }
 
     /**
@@ -226,10 +313,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         notifyDataSetChanged();
     }
 
-    public void setShowRed(boolean isShowRed) {
-        if (viewHolderSys != null) {
-            viewHolderSys.vPoint.setVisibility(isShowRed ? View.VISIBLE : View.GONE);
-        }
+    public void setShowRed(boolean isShowSystemMessageRed) {
+        this.isShowSystemMessageRed = isShowSystemMessageRed;
     }
 
     static class ViewHolder {
@@ -259,19 +344,29 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         }
     }
 
-    private int currentTranslationX;
+    private float currentTranslationX;
     private LinearLayout contentLayout;
 
     public void translationContentView(int position, float distanceX) {
         int firstVisiblePosition = listView.getFirstVisiblePosition();
         int index = position - firstVisiblePosition;
-        ViewGroup itemView = (ViewGroup) ((ViewGroup) (listView.getChildAt(index))).getChildAt(0);
 
-        contentLayout = (LinearLayout) itemView.findViewById(R.id.ll_rootView);
+        View contentView = listView.getChildAt(index);
+        View itemView = ((ViewGroup) contentView).getChildAt(0);
 
-        if (Math.abs(currentTranslationX) <= deleteViewWidth) {
-            currentTranslationX -= distanceX;
-            contentLayout.setTranslationX(currentTranslationX);
+        if (itemView instanceof ViewGroup) {
+            contentLayout = (LinearLayout) itemView.findViewById(R.id.ll_rootView);
+
+            if (contentLayout != null && currentTranslationX <= 0) {
+                if (Math.abs(currentTranslationX) <= deleteViewWidth) {
+                    currentTranslationX -= distanceX;
+
+                    if (Math.abs(currentTranslationX) >= deleteViewWidth) {
+                        currentTranslationX = -deleteViewWidth;
+                    }
+                    contentLayout.setTranslationX(currentTranslationX);
+                }
+            }
         }
     }
 
@@ -279,7 +374,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         if (contentLayout == null) {
             return;
         }
-        if (Math.abs(currentTranslationX) < deleteViewWidth) {
+        if (Math.abs(currentTranslationX) < deleteViewWidth / 2) {
             contentLayout.setTranslationX(0);
         } else {
             contentLayout.setTranslationX(-deleteViewWidth);

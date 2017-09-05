@@ -1,10 +1,13 @@
 package com.jyh.kxt.chat.presenter;
 
+import android.database.Cursor;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,37 +19,29 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.dao.ChatRoomJsonDao;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.chat.adapter.ChatRoomAdapter;
+import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.json.ChatRoomJson;
-import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.chat.util.ChatSocketUtil;
+import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
-import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketConnectionHandler;
-import de.tavendo.autobahn.WebSocketException;
-import de.tavendo.autobahn.WebSocketOptions;
-
-import static android.widget.AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL;
 
 /**
  * Created by Mr'Dai on 2017/8/30.
@@ -60,16 +55,21 @@ public class ChatRoomPresenter extends BasePresenter {
     private ChatRoomAdapter chatRoomAdapter;
     private HashMap<String, ChatRoomJson> temporaryChatRoomMap;
 
-    private boolean isBannedForReceiver = false;
+    private boolean isAllowLoadMore = true;
+
+    public boolean isBannedForReceiver = false;
+
     private boolean isInitialLoadHistory = true;
 
-    private WebSocketConnection mConnection = new WebSocketConnection();
+    private View listHeaderView;
+
 
     public ChatRoomPresenter(IBaseView iBaseView) {
         super(iBaseView);
     }
 
     public void initPullListView() {
+
         userInfo = LoginUtils.getUserInfo(mContext);
 
         /*
@@ -81,14 +81,35 @@ public class ChatRoomPresenter extends BasePresenter {
         chatRoomAdapter = new ChatRoomAdapter(mContext, baseChatRoomList, this);
 
         ListView lvContentList = chatRoomActivity.lvContentList;
-        lvContentList.setTranscriptMode(TRANSCRIPT_MODE_ALWAYS_SCROLL);
         lvContentList.setAdapter(chatRoomAdapter);
 
+        lvContentList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    //超过25条说明可以加载更多
+                    if (listHeaderView == null && baseChatRoomList.size() > 25 && isAllowLoadMore) {
+                        LayoutInflater mInflater = LayoutInflater.from(mContext);
+                        listHeaderView = mInflater.inflate(R.layout.item_chat_more, chatRoomActivity.lvContentList, false);
+                        chatRoomActivity.lvContentList.addHeaderView(listHeaderView);
+
+                        requestPullMoreData();
+                    }
+                }
+            }
+        });
         /*
          * 初始化EditText
          */
         chatRoomActivity.publishContentEt.setImeOptions(EditorInfo.IME_ACTION_SEND);
-        chatRoomActivity.publishContentEt.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+        chatRoomActivity.publishContentEt.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
+
+        chatRoomActivity.publishContentEt.setSingleLine(false);
         chatRoomActivity.publishContentEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -118,25 +139,64 @@ public class ChatRoomPresenter extends BasePresenter {
 
         requestPullMoreData();
 
-        connectionWebSocket();
+        ChatSocketUtil.getInstance().sendSocketParams(mContext, chatRoomActivity.otherUid, onSocketTextMessage);
+
+
+        String chatPreviewDraft = SPUtils.getString(mContext, SpConstant.CHAT_PREVIEW);
+        if (!TextUtils.isEmpty(chatPreviewDraft)) {
+            List<ChatPreviewJson> chatDraftList = JSONArray.parseArray(chatPreviewDraft, ChatPreviewJson.class);
+            if (chatDraftList != null) {
+                for (ChatPreviewJson chatPreviewJson : chatDraftList) {
+                    String receiver = chatPreviewJson.getReceiver();
+                    if (receiver.equals(chatRoomActivity.otherUid) && chatPreviewJson.getType() == 2) {
+                        String draftContent = chatPreviewJson.getContent();
+                        chatRoomActivity.publishContentEt.setText(draftContent);
+                        chatRoomActivity.publishContentEt.setSelection(draftContent.length());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 退出的时候清空未读数量
+     */
+    public void requestClearUnread() {
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        volleyRequest.setTag("clearUnread");
+
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("sender", userInfo.getUid());
+        jsonParam.put("receiver", chatRoomActivity.otherUid);
+        volleyRequest.doPost(HttpConstant.MESSAGE_CLEAR_UNREAD, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String jsonData) {
+            }
+        });
     }
 
     /**
      * 请求加载更多数据
      */
+
     private void requestPullMoreData() {
         VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("sender", userInfo.getUid());
         jsonParam.put("receiver", chatRoomActivity.otherUid);
         if (baseChatRoomList.size() != 0) {
-            ChatRoomJson lastChatRoomJson = baseChatRoomList.get(baseChatRoomList.size() - 1);
+            ChatRoomJson lastChatRoomJson = baseChatRoomList.get(0);
             jsonParam.put("last_id", lastChatRoomJson.getId());
         }
         volleyRequest.doPost(HttpConstant.MESSAGE_HISTORY, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String chatRoomString) {
                 try {
+                    if (listHeaderView != null) {
+                        chatRoomActivity.lvContentList.removeHeaderView(listHeaderView);
+                        listHeaderView = null;
+                    }
+
                     JSONObject chatRoomObject = JSONObject.parseObject(chatRoomString);
 
                     String chatRoomJsonList = chatRoomObject.getString("list");
@@ -147,13 +207,23 @@ public class ChatRoomPresenter extends BasePresenter {
                     if (chatRoomJsonList != null) {
                         List<ChatRoomJson> chatRoomList = JSONArray.parseArray(chatRoomJsonList, ChatRoomJson.class);
 
-                        analyzeListData(chatRoomList);
-                        baseChatRoomList.addAll(chatRoomList);
-
-                        if (isInitialLoadHistory) {
-                            chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
-                            isInitialLoadHistory = false;
+                        if (chatRoomList.size() == 0) {
+                            isAllowLoadMore = false;
                         }
+
+                        analyzeListData(chatRoomList);
+                        baseChatRoomList.addAll(0, chatRoomList);
+                    } else {
+                        isAllowLoadMore = false;
+                    }
+
+
+                    //通知刷新
+                    chatRoomAdapter.notifyDataSetChanged();
+                    if (isInitialLoadHistory) {
+                        chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
+                        isInitialLoadHistory = false;
+                        chatRoomActivity.lvContentList.setSelection(chatRoomAdapter.getCount());
                     }
 
                     if (isBannedForReceiver) {
@@ -162,7 +232,24 @@ public class ChatRoomPresenter extends BasePresenter {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    if (listHeaderView != null) {
+                        chatRoomActivity.lvContentList.removeHeaderView(listHeaderView);
+                        listHeaderView = null;
+                    }
+
                 }
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+
+                if (listHeaderView != null) {
+                    chatRoomActivity.lvContentList.removeHeaderView(listHeaderView);
+                    listHeaderView = null;
+                }
+
             }
         });
     }
@@ -197,11 +284,17 @@ public class ChatRoomPresenter extends BasePresenter {
 
             @Override
             protected void onResponse(ChatRoomJson mChatRoomJson) {
+
+                if (isBannedForReceiver) {
+                    chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
+                    isBannedForReceiver = false;
+                }
+
+
                 String uniqueIdentification = getUniqueIdentification();
                 ChatRoomJson temporaryChatRoom = temporaryChatRoomMap.get(uniqueIdentification);
 
-                if (mChatRoomJson.getIs_banned_for_receiver() == 1) {
-                    temporaryChatRoom.setIs_banned_for_receiver(1);
+                if (mChatRoomJson.getIs_banned_for_sender() == 1) {
                     onErrorResponse(null);
                     return;
                 }
@@ -250,13 +343,21 @@ public class ChatRoomPresenter extends BasePresenter {
     private ChatRoomJson analyzeFakeData(String randomUnique, String chatContent) {
         String sendDateTime = String.valueOf(System.currentTimeMillis() / 1000);
 
-        String foregoingChatId;
+        String foregoingChatId = null;
         if (baseChatRoomList.size() != 0) {
-            ChatRoomJson lastChatRoom = baseChatRoomList.get(baseChatRoomList.size() - 1);
-            foregoingChatId = lastChatRoom.getId();
+            for (int i = baseChatRoomList.size() - 1; i >= 0; i--) {
+                ChatRoomJson lastChatRoom = baseChatRoomList.get(i);
+                String lastChatRoomId = lastChatRoom.getId();
+                if (lastChatRoomId != null && Double.parseDouble(lastChatRoomId) > 1) {//保证了是成功后面的数据
+                    foregoingChatId = lastChatRoom.getId();
+                    break;
+                }
+            }
         } else {
             foregoingChatId = null;
         }
+
+        String memberAvatar = userInfo.getWriter_avatar() == null ? userInfo.getPicture() : userInfo.getWriter_avatar();
 
         ChatRoomJson fakeChatRoom = new ChatRoomJson();
         fakeChatRoom.setId(randomUnique);//设置默认假数据
@@ -266,12 +367,31 @@ public class ChatRoomPresenter extends BasePresenter {
         fakeChatRoom.setDatetime(sendDateTime);
         fakeChatRoom.setSender(userInfo.getUid());
         fakeChatRoom.setReceiver(chatRoomActivity.otherUid);
-        fakeChatRoom.setAvatar(userInfo.getWriter_avatar());
+        fakeChatRoom.setAvatar(memberAvatar);
         fakeChatRoom.setForegoingChatId(foregoingChatId);
 
-        //保存假数据到数据库
         DBManager mDBManager = DBManager.getInstance(mContext);
         ChatRoomJsonDao chatRoomJsonDao = mDBManager.getDaoSessionWrit().getChatRoomJsonDao();
+        //得到他们聊天记录里面的5条数据
+        String daoCountSql = "SELECT COUNT(*) count FROM CHAT_ROOM_BEAN WHERE  SENDER = '" + userInfo.getUid() + "" +
+                "' AND  RECEIVER = '" + chatRoomActivity.otherUid + "'";
+        Cursor cursor = chatRoomJsonDao.getDatabase().rawQuery(daoCountSql, null);
+
+        int daoCount = 0;
+        while (cursor.moveToNext()) {
+            daoCount = cursor.getInt(cursor.getColumnIndex("count"));
+        }
+        cursor.close();
+
+        if (daoCount > 5) {
+            String daoDeleteSql = "DELETE FROM CHAT_ROOM_BEAN WHERE ID IN " +
+                    "(select id from CHAT_ROOM_BEAN WHERE  SENDER = '" + userInfo.getUid() + "' AND  " +
+                    "RECEIVER = '" + chatRoomActivity.otherUid + "' " +
+                    "limit 0," + (daoCount - 5) + "); ";
+            chatRoomJsonDao.getDatabase().execSQL(daoDeleteSql);
+        }
+
+        //保存假数据到数据库
         chatRoomJsonDao.insert(fakeChatRoom);
 
         baseChatRoomList.add(fakeChatRoom);
@@ -304,7 +424,8 @@ public class ChatRoomPresenter extends BasePresenter {
                 ChatRoomJson listItemChatRoom = chatRoomList.get(position);
                 netWorkChatMap.put(listItemChatRoom.getId(), listItemChatRoom);
             }
-            for (ChatRoomJson chatRoomJson : errorChatList) {
+            for (int i = errorChatList.size() - 1; i >= 0; i--) {
+                ChatRoomJson chatRoomJson = errorChatList.get(i);
                 ChatRoomJson chatRoomIndex = netWorkChatMap.get(chatRoomJson.getForegoingChatId());
                 if (chatRoomIndex != null) {
                     if (chatRoomJson.getForegoingChatId() == null) {
@@ -328,7 +449,7 @@ public class ChatRoomPresenter extends BasePresenter {
             //int i = chatRoomList.size() - 1; i >= 0; i--
             //int i = 0; i < chatRoomList.size(); i++
 
-            for (int i = chatRoomList.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < chatRoomList.size(); i++) {
 
                 ChatRoomJson chatRoomJson = chatRoomList.get(i);
                 String senderUid = chatRoomJson.getSender();
@@ -340,9 +461,14 @@ public class ChatRoomPresenter extends BasePresenter {
                 }
 
                 //计算间隔事件
-                long thisSendTime = Long.parseLong(chatRoomJson.getDatetime());
+                long thisSendTime = Long.parseLong(chatRoomJson.getDatetime()) * 1000;
 
-                if (thisSendTime - 60 * 5 >= lastSendTime) {
+                if (lastSendTime == 0) {
+                    lastSendTime = thisSendTime;
+                    continue;
+                }
+
+                if (thisSendTime - lastSendTime >= 60 * 5 * 1000) {
                     lastSendTime = thisSendTime;
                     chatRoomJson.setPartitionTime(thisSendTime);
                 }
@@ -352,66 +478,9 @@ public class ChatRoomPresenter extends BasePresenter {
         }
     }
 
-    /**
-     * 连接Socket
-     */
-    private void connectionWebSocket() {
-        String indexConfig = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
-        if (!"".equals(indexConfig)) {
-            try {
-                MainInitJson initConfig = JSONObject.parseObject(indexConfig, MainInitJson.class);
 
-
-                WebSocketOptions options = new WebSocketOptions();
-                options.setReceiveTextMessagesRaw(false);
-                options.setSocketConnectTimeout(30000);
-                options.setSocketReceiveTimeout(10000);
-
-                List<BasicNameValuePair> headers = new ArrayList<>();
-                headers.add(new BasicNameValuePair(IntentConstant.SOCKET_ORIGIN, VarConstant.SOCKET_DOMAIN));
-
-                mConnection.connect(initConfig.getMessage_socket_addr(), null, new WebSocketConnectionHandler() {
-                    @Override
-                    public void onOpen() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("cmd", "login");
-                        jsonObject.put("r", "kxt");
-                        jsonObject.put("uid", userInfo.getUid());
-                        jsonObject.put("rid", chatRoomActivity.otherUid);
-
-                        jsonObject.put("name", userInfo.getNickname());
-                        jsonObject.put("mark", "login");
-
-                        mConnection.sendTextMessage(jsonObject.toString());
-                    }
-
-                    @Override
-                    public void onTextMessage(String payload) {
-                        Log.e("聊天", "payload: "+payload);
-                        if (payload != null && !"".equals(payload)) {
-
-                            JSONObject payloadBean = JSONObject.parseObject(payload);
-                            String cmd = payloadBean.getString("cmd");
-
-                            if("message".equals(cmd)){
-                                ChatRoomJson chatRoomJson = JSONObject.parseObject(payload, ChatRoomJson.class);
-                                chatRoomJson.setMsgSendStatus(0);
-                                chatRoomJson.setViewType(0);
-                                baseChatRoomList.add(chatRoomJson);
-                                chatRoomAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onClose(int code, String reason) {
-
-                    }
-                }, options, headers);
-            } catch (WebSocketException e) {
-                e.printStackTrace();
-            }
-        }
+    public void onDestroy() {
+        ChatSocketUtil.getInstance().unOnChatMessage(onSocketTextMessage);
     }
 
     /**
@@ -431,4 +500,17 @@ public class ChatRoomPresenter extends BasePresenter {
                 .setMinHeight(statusBarHeight, actionBarHeight)
                 .show();
     }
+
+    private OnChatMessage onSocketTextMessage = new OnChatMessage() {
+        @Override
+        public void onChatMessage(ChatRoomJson chatRoomJson) {
+            if (chatRoomActivity.otherUid.equals(chatRoomJson.getSender())) {
+                chatRoomJson.setMsgSendStatus(0);
+                chatRoomJson.setViewType(0);
+                baseChatRoomList.add(chatRoomJson);
+                chatRoomAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
 }

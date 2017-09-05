@@ -48,7 +48,7 @@ public class ChatRoomJson {
     }
 
     /**
-     * 对方是否屏蔽了我?
+     * 我是否屏蔽了对方
      */
     @Transient
     private int is_banned_for_receiver;
@@ -59,6 +59,20 @@ public class ChatRoomJson {
 
     public void setIs_banned_for_receiver(int is_banned_for_receiver) {
         this.is_banned_for_receiver = is_banned_for_receiver;
+    }
+
+    /**
+     * 对方是否屏蔽了我?
+     */
+    @Transient
+    private int is_banned_for_sender;
+
+    public int getIs_banned_for_sender() {
+        return is_banned_for_sender;
+    }
+
+    public void setIs_banned_for_sender(int is_banned_for_sender) {
+        this.is_banned_for_sender = is_banned_for_sender;
     }
 
     /**
@@ -101,8 +115,8 @@ public class ChatRoomJson {
 
     @Generated(hash = 1077499007)
     public ChatRoomJson(int msgSendStatus, String foregoingChatId, String id, String sender,
-            String receiver, String content, String nickname, String avatar,
-            String datetime) {
+                        String receiver, String content, String nickname, String avatar,
+                        String datetime) {
         this.msgSendStatus = msgSendStatus;
         this.foregoingChatId = foregoingChatId;
         this.id = id;

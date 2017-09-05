@@ -101,7 +101,7 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         if (partitionTime != 0) {
             baseViewHolder.chatRoomTime.setVisibility(View.VISIBLE);
 
-            String partitionLabel = DateFormat.format("HH:mm", partitionTime).toString();
+            String partitionLabel = DateFormat.format("MM-dd HH:mm", partitionTime).toString();
             baseViewHolder.chatRoomTime.setText(partitionLabel);
         } else {
             baseViewHolder.chatRoomTime.setVisibility(View.GONE);
@@ -125,7 +125,7 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
 
             Glide.with(mContext).load(R.mipmap.icon_msg_error).into(baseViewHolder.chatRoomTip);
 
-            if (chatRoomJson.getIs_banned_for_receiver() == 1) {
+            if (chatRoomJson.getIs_banned_for_sender() == 1) {
                 baseViewHolder.chatRoomShield.setVisibility(View.VISIBLE);
             } else {
                 baseViewHolder.chatRoomTip.setOnClickListener(new View.OnClickListener() {

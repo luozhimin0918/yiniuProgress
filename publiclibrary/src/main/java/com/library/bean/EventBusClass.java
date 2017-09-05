@@ -39,6 +39,7 @@ public class EventBusClass {
     public static final int EVENT_SEARCH_TYPE = 22;//搜索类型
 
     public static final int EVENT_MSG_BAN = 23;//是否被屏蔽
+    public static final int EVENT_DRAFT = 24;//刷新列表,有新的草稿
 
 
     public EventBusClass(int fromCode, Object intentObj) {

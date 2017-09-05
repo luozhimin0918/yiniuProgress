@@ -90,7 +90,7 @@ public class LoadX5WebView extends FrameLayout implements WebBuild {
         mSettings.setAppCacheEnabled(true);
         mSettings.setJavaScriptEnabled(isDefaultJavaScriptEnabled);
 
-        mSettings.setUserAgent("kxtapp" + "_" + VarConstant.HTTP_SYSTEM_VALUE + "_" + VarConstant.HTTP_VERSION_VALUE);
+//        mSettings.setUserAgent("kxtapp" + "_" + VarConstant.HTTP_SYSTEM_VALUE + "_" + VarConstant.HTTP_VERSION_VALUE);
 
         wvContent.setWebViewClient(new MyWebViewClient());
         wvContent.setWebChromeClient(new MyWebChromeClient());

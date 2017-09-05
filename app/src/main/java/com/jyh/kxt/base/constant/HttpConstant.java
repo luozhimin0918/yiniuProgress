@@ -262,4 +262,8 @@ public class HttpConstant {
     public static final String CREDITS_DETAIL = BASE_URL + "credits/detail";//本月明细
     public static final String CREDITS_MON_SUM = BASE_URL + "credits/mon_sum";//月度汇总
 
+
+
+    public static final String MESSAGE_CLEAR_UNREAD = BASE_URL + "message/clear_unread";//清空未读消息
+
 }

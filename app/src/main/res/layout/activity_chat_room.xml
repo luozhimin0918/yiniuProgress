@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_chat_room"
@@ -9,59 +9,56 @@
     android:orientation="vertical"
     tools:context="com.jyh.kxt.chat.ChatRoomActivity">
 
-    <include layout="@layout/action_bar3"/>
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar3"/>
 
     <TextView
         android:id="@+id/chat_room_reminder"
         android:layout_width="match_parent"
         android:layout_height="29dp"
+        android:layout_below="@+id/action_bar"
         android:background="@color/block_tip_bg"
         android:gravity="center"
         android:textColor="@color/block_tip_text"
         android:textSize="@dimen/describe_font_size1"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fl_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_keyboard_above"
+        android:layout_below="@+id/chat_room_reminder"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <ListView
             android:id="@+id/ptrl_chat_room_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:transcriptMode="alwaysScroll">
 
         </ListView>
-    </FrameLayout>
+    </LinearLayout>
 
-    <include layout="@layout/view_line"/>
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/fl_list_layout"
+        android:background="@color/line_background3"
+        android:orientation="vertical">
+
+    </View>
 
     <RelativeLayout
         android:id="@+id/rl_keyboard_above"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.jyh.kxt.base.util.emoje.EmoticonsEditText
-            android:id="@+id/publish_content_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/iv_publish_emoji"
-            android:background="@drawable/shape_edit_comme_bg1"
-            android:gravity="top|left"
-            android:lineSpacingMultiplier="1.2"
-            android:maxLength="300"
-            android:maxLines="4"
-            android:minHeight="36dp"
-            android:minLines="1"
-            android:padding="8dp"
-            android:textColor="@color/font_color64"
-            android:textSize="@dimen/describe_font_size4"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
         <ImageView
             android:id="@+id/iv_publish_emoji"
@@ -71,6 +68,31 @@
             android:layout_alignParentRight="true"
             android:scaleType="center"
             android:src="@mipmap/icon_fb_xn"/>
+
+        <com.jyh.kxt.base.util.emoje.EmoticonsEditText
+            android:id="@+id/publish_content_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:minHeight="40dp"
+
+            android:layout_toLeftOf="@+id/iv_publish_emoji"
+            android:background="@drawable/shape_edit_comme_bg1"
+            android:lineSpacingMultiplier="1.2"
+
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1"
+            android:scrollHorizontally="false"
+
+            android:imeOptions="actionSend"
+
+            android:padding="8dp"
+            android:textColor="@color/font_color64"
+            android:textSize="@dimen/describe_font_size4"/>
 
         <FrameLayout
             android:id="@+id/fl_emotion_layout"
@@ -82,4 +104,4 @@
         </FrameLayout>
 
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
