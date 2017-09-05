@@ -242,7 +242,6 @@ public class HttpConstant {
     public static final String ZLRZ_URL = BASE_URL + "blogapply/apply";
     public static final String MEMBER_INFO = BASE_URL + "member/user_info";//获取用户信息
 
-
     /**
      * 私信
      */
@@ -255,4 +254,12 @@ public class HttpConstant {
 
     public static final String MESSAGE_HISTORY = BASE_URL + "message/history";//历史消息
     public static final String MESSAGE_SEND_MSG = BASE_URL + "message/send_msg";//发送消息
+
+    /**
+     * 积分
+     */
+    public static final String CREDITS_MAIN = BASE_URL + "credits/main";//我的金币
+    public static final String CREDITS_DETAIL = BASE_URL + "credits/detail";//本月明细
+    public static final String CREDITS_MON_SUM = BASE_URL + "credits/mon_sum";//月度汇总
+
 }

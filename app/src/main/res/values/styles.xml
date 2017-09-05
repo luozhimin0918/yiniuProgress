@@ -32,6 +32,11 @@
         <item name="android:windowExitAnimation">@anim/pop_window2_out</item>
     </style>
 
+    <style name="PopupWindow_Style3">
+        <item name="android:windowEnterAnimation">@anim/pop_window3_in</item>
+        <item name="android:windowExitAnimation">@anim/pop_window3_out</item>
+    </style>
+
     <style name="TranslucentBgTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

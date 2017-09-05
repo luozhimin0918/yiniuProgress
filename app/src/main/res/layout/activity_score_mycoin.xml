@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/theme1"
+    >
+
+    <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/actionbar_height">
+
+        <com.library.widget.handmark.PullToRefreshListView
+            android:id="@+id/pl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.library.widget.PageLoadLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/actionbar_height"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_bar_break"
+                android:layout_width="@dimen/actionbar_height"
+                android:layout_height="@dimen/actionbar_height"
+                android:layout_alignParentLeft="true"
+                android:padding="16dp"
+                android:src="@mipmap/ico_break"/>
+
+            <TextView
+                android:id="@+id/tv_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/actionbar_height"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/iv_bar_function"
+                android:layout_toRightOf="@+id/iv_bar_break"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="我的金币"
+                android:textColor="@color/actionBar_textColor1"
+                android:textSize="@dimen/content_font_size2"/>
+
+            <TextView
+                android:id="@+id/iv_bar_function"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/actionbar_height"
+                android:layout_alignParentRight="true"
+                android:minWidth="@dimen/actionbar_height"
+                android:padding="15dp"
+                android:text="金币明细"
+                android:textColor="@color/font_color64"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign_show"
+            android:layout_width="139dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/icon_score_down_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/v_sign_show"
+                android:layout_width="12dp"
+                android:layout_height="6.5dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/sel_sign_arrow"
+                />
+
+            <TextView
+                android:id="@+id/tv_sign_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击收起"
+                android:textColor="@color/font_color64"
+                android:textSize="@dimen/describe_font_size1"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

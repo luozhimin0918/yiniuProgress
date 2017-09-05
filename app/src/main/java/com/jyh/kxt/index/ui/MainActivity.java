@@ -53,7 +53,9 @@ import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
+import com.jyh.kxt.index.ui.fragment.MyCommentFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
+import com.jyh.kxt.score.ui.MyCoinActivity;
 import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.PublishActivity;
@@ -111,7 +113,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TradingFragment exploreFragment;
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign;
+    RelativeLayout rlSign;
+    ImageView ivSign, ivSignEnter;
 
     private RelativeLayout unLoginView, loginView;
     public RoundImageView loginPhoto;
@@ -231,6 +235,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvMine = ButterKnife.findById(llHeaderLayout, R.id.tv_mine);
         tvLetter = ButterKnife.findById(llHeaderLayout, R.id.tv_letter);
 
+        rlSign = ButterKnife.findById(llHeaderLayout, R.id.rl_sign);
+        ivSign = ButterKnife.findById(llHeaderLayout, R.id.iv_sign);
+        ivSignEnter = ButterKnife.findById(llHeaderLayout, R.id.iv_sign_enter);
+        tvSign = ButterKnife.findById(llHeaderLayout, R.id.tv_sign);
+
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo == null || userInfo.getUid() == null || userInfo.getWriter_id() == null) {
             pointBtn.setVisibility(View.GONE);
@@ -257,6 +266,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         mineBtn.setOnClickListener(this);
         pointBtn.setOnClickListener(this);
         letterBtn.setOnClickListener(this);
+        rlSign.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -554,6 +564,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 //我的私信
                 startActivity(new Intent(this, LetterActivity.class));
                 break;
+            case R.id.rl_sign:
+                //签到
+                startActivity(new Intent(this, MyCoinActivity.class));
+                break;
         }
     }
 
@@ -761,6 +775,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvSetting.setTextColor(fontColor);
         tvAbout.setTextColor(fontColor);
         tvTheme.setTextColor(fontColor);
+
+        ivSign.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_score_sign_small));
+        ivSignEnter.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_score_enter));
+        tvSign.setTextColor(ContextCompat.getColor(this, R.color.white));
     }
 
     @Override

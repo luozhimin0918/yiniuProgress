@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/theme1"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme1">
 
 
     <LinearLayout
@@ -24,17 +24,57 @@
                 android:id="@+id/riv_avatar"
                 android:layout_width="@dimen/drawer_head_login_avatarSize"
                 android:layout_height="@dimen/drawer_head_login_avatarSize"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/contentPadding"
                 app:outsideRound="true"/>
 
             <TextView
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/riv_avatar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/drawer_head_login_name_marginTop"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/riv_avatar"
                 android:textColor="#fff"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_sign"
+                android:layout_width="87.5dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/icon_score_sign_bg">
+
+                <ImageView
+                    android:id="@+id/iv_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/contentPadding"
+                    android:src="@mipmap/icon_score_sign_small"/>
+
+                <TextView
+                    android:id="@+id/tv_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/iv_sign"
+                    android:text="签到"
+                    android:textSize="@dimen/describe_font_size1"
+                    android:textColor="@color/white"/>
+
+                <ImageView
+                    android:id="@+id/iv_sign_enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/icon_score_enter"
+                    android:layout_marginRight="5dp"/>
+
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -103,8 +143,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/drawer_search_height"
             android:layout_marginBottom="10dp"
-            android:paddingLeft="@dimen/drawer_edtPadding"
             android:layout_marginTop="@dimen/drawer_head_bottom"
+            android:paddingLeft="@dimen/drawer_edtPadding"
             android:paddingRight="@dimen/drawer_edtPadding"
             >
 
@@ -187,6 +227,7 @@
                         android:textColor="@color/font_color5"
                         android:textSize="@dimen/content_font_size2"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/ll_letter"
                     android:layout_width="match_parent"

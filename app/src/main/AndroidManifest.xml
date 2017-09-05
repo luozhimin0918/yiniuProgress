@@ -243,6 +243,12 @@
         <activity
             android:name=".chat.UserSettingActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".score.ui.MyCoinActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".score.ui.CoinHistoryActivity"
+            android:screenOrientation="portrait"/>
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->
