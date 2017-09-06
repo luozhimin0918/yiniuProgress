@@ -249,6 +249,10 @@
         <activity
             android:name=".score.ui.CoinHistoryActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".score.ui.MyCoin2Activity"
+            android:screenOrientation="portrait"/>
+
         <!-- umeng推送 -->
         <service android:name=".push.KXTPushIntentService"/>
         <!-- umeng分享 -->
@@ -347,8 +351,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".score.ui.MyCoin2Activity">
-        </activity>
     </application>
 
 </manifest>
