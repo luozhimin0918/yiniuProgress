@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,22 +8,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/action_bar1"/>
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar1"/>
+
+
+    <FrameLayout
+        android:id="@+id/pull_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar">
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_score_bg"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar">
 
         <com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer
             android:id="@+id/mdsd_sign_content"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             app:animateOnClick="true"
             app:content="@+id/sd_coin_content"
@@ -42,8 +48,8 @@
             <RelativeLayout
                 android:id="@+id/sd_coin_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffffff">
+                android:layout_height="230dp"
+                android:background="@color/theme1">
 
                 <TextView
                     android:id="@+id/tv_punch_card_tip"
@@ -68,5 +74,4 @@
             </RelativeLayout>
         </com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer>
     </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>
