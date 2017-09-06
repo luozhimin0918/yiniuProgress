@@ -222,8 +222,8 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
 
         if (mVertical) {
             int height = heightSpecSize - handle.getMeasuredHeight() - mTopOffset;
-            mContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec
-                    .EXACTLY));
+            mContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         } else {
             int width = widthSpecSize - handle.getMeasuredWidth() - mTopOffset;
             mContent.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightSpecSize, MeasureSpec
@@ -617,7 +617,7 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
             } else {
                 final int top = handle.getTop();
                 int deltaY = position - top;
-                Log.e("moveHandle", "top: "+top +"   deltaY:"+deltaY+"   position"+position);
+                Log.e("moveHandle", "top: " + top + "   deltaY:" + deltaY + "   position" + position);
                 if (position < mTopOffset) {
                     deltaY = mTopOffset - top;
                 } else if (deltaY > mBottomOffset + getBottom() - getTop() - mHandleHeight - top) {
