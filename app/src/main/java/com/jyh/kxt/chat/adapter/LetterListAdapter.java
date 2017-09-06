@@ -176,8 +176,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             errorSpannable.setSpan(graySpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             spannableStringBuilder.insert(bean.getNickname().length(), errorSpannable);
-            viewHolder.tvName.setText(spannableStringBuilder);
         }
+        viewHolder.tvName.setText(spannableStringBuilder);
     }
 
     /**

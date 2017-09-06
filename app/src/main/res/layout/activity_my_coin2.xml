@@ -29,10 +29,19 @@
 
             </com.library.widget.handmark.PullToRefreshListView>
 
+            <View
+                android:id="@+id/mdsd_alpha_view"
+                android:layout_width="match_parent"
+                android:alpha="0"
+                android:background="#AA000000"
+                android:layout_height="match_parent" >
+
+            </View>
+
             <com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer
                 android:id="@+id/mdsd_sign_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="230dp"
                 android:orientation="vertical"
                 app:animateOnClick="true"
                 app:content="@+id/sd_coin_content"
@@ -59,7 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="15dp"
                         android:text="签到成功"
                         android:textColor="@color/font_color64"
                         android:textSize="24sp"/>
@@ -69,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="125dp"
                         android:layout_below="@+id/tv_punch_card_tip"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:padding="8dp">
 
                     </com.library.widget.flowlayout.FlowLayout>

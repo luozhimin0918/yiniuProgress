@@ -60,8 +60,7 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
     private int mHandleHeight;
     private int mHandleWidth;
 
-    private OnDrawerOpenListener mOnDrawerOpenListener;
-    private OnDrawerCloseListener mOnDrawerCloseListener;
+    private OnDrawerListener mOnDrawerListener;
     private OnDrawerScrollListener mOnDrawerScrollListener;
 
     private final Handler mHandler = new SlidingHandler();
@@ -81,16 +80,28 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
     private int mMaximumMajorVelocity;
     private int mMaximumAcceleration;
     private final int mVelocityUnits;
+    private View alphaView;
+
+    public void setAlphaView(View alphaView) {
+        this.alphaView = alphaView;
+    }
 
     /**
      * Callback invoked when the drawer is opened.
      */
-    public static interface OnDrawerOpenListener {
+    public static interface OnDrawerListener {
 
         /**
          * Invoked when the drawer becomes fully open.
          */
         public void onDrawerOpened();
+
+        /**
+         * Invoked when the drawer becomes fully closed.
+         */
+        public void onDrawerClosed();
+
+        public void onSlideOffset(int offset, double percentage);
     }
 
     /**
@@ -186,6 +197,13 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
 
         a.recycle();
         setAlwaysDrawnWithCacheEnabled(false);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -222,8 +240,8 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
 
         if (mVertical) {
             int height = heightSpecSize - handle.getMeasuredHeight() - mTopOffset;
-            mContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+            mContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec
+                    .EXACTLY));
         } else {
             int width = widthSpecSize - handle.getMeasuredWidth() - mTopOffset;
             mContent.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightSpecSize, MeasureSpec
@@ -616,8 +634,18 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
                 invalidate();
             } else {
                 final int top = handle.getTop();
+                double bfb = (double) top / (double) getHeight();
+
+                if (mOnDrawerListener != null) {
+                    mOnDrawerListener.onSlideOffset(top, bfb);
+                }
+
+                alphaView.setAlpha((float) bfb);
+                if (!alphaView.isShown()) {
+                    alphaView.setVisibility(View.VISIBLE);
+                }
+
                 int deltaY = position - top;
-                Log.e("moveHandle", "top: " + top + "   deltaY:" + deltaY + "   position" + position);
                 if (position < mTopOffset) {
                     deltaY = mTopOffset - top;
                 } else if (deltaY > mBottomOffset + getBottom() - getTop() - mHandleHeight - top) {
@@ -899,9 +927,12 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         }
 
         mExpanded = false;
-        if (mOnDrawerCloseListener != null) {
-            mOnDrawerCloseListener.onDrawerClosed();
+        if (mOnDrawerListener != null) {
+            mOnDrawerListener.onDrawerClosed();
         }
+        alphaView.setAlpha(0);
+        alphaView.setVisibility(View.GONE);
+        alphaView.setOnClickListener(null);
     }
 
     private void openDrawer() {
@@ -914,29 +945,28 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
 
         mExpanded = true;
 
-        if (mOnDrawerOpenListener != null) {
-            mOnDrawerOpenListener.onDrawerOpened();
+        if (mOnDrawerListener != null) {
+            mOnDrawerListener.onDrawerOpened();
         }
+
+        alphaView.setAlpha(1);
+        alphaView.setVisibility(View.VISIBLE);
+        alphaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateToggle();
+            }
+        });
     }
 
     /**
      * Sets the listener that receives a notification when the drawer becomes
      * open.
      *
-     * @param onDrawerOpenListener The listener to be notified when the drawer is opened.
+     * @param onDrawerListener The listener to be notified when the drawer is opened.
      */
-    public void setOnDrawerOpenListener(OnDrawerOpenListener onDrawerOpenListener) {
-        mOnDrawerOpenListener = onDrawerOpenListener;
-    }
-
-    /**
-     * Sets the listener that receives a notification when the drawer becomes
-     * close.
-     *
-     * @param onDrawerCloseListener The listener to be notified when the drawer is closed.
-     */
-    public void setOnDrawerCloseListener(OnDrawerCloseListener onDrawerCloseListener) {
-        mOnDrawerCloseListener = onDrawerCloseListener;
+    public void setOnDrawerListener(OnDrawerListener onDrawerListener) {
+        mOnDrawerListener = onDrawerListener;
     }
 
     /**

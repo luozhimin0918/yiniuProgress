@@ -1,6 +1,8 @@
 package com.jyh.kxt.score.ui;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +33,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.taobao.accs.ACCSManager.mContext;
-
-public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshBase.OnRefreshListener {
+public class MyCoin2Activity extends BaseActivity implements
+        PageLoadLayout.OnAfreshLoadListener,
+        PullToRefreshBase.OnRefreshListener {
 
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
@@ -41,6 +43,8 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
     @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.fl_punch_card_tab) public FlowLayout flPunchCardTab;
+
+    @BindView(R.id.mdsd_alpha_view) View mdsdAlphaView;
     @BindView(R.id.mdsd_sign_content) MultiDirectionSlidingDrawer mdsdSignContent;
 
     private MyCoin2Presenter myCoin2Presenter;
@@ -68,6 +72,8 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
         myCoin2Presenter = new MyCoin2Presenter(this);
         myCoin2Presenter.requestInitCoin(false);
 
+        mdsdSignContent.setAlphaView(mdsdAlphaView);
+        mdsdSignContent.open();
     }
 
     private void initView() {
@@ -88,11 +94,6 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
         myCoin2Presenter.requestInitCoin(true);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getQueue().cancelAll(MyCoin2Presenter.class.getName());
-    }
 
     public void loadWait() {
         mdsdSignContent.close();
@@ -115,41 +116,9 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
     }
 
     public void init(MyCoinJson myCoinJson) {
-//        PunchCardJson punch_card = myCoinJson.getPunch_card();
-//        int punch_card_days = punch_card.getPunch_card_days();
-//        int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-//        List<SignJson> singList = punch_card.getPubch_card_award();
-//        //数据模拟
-//        PunchCardJson punchCardJson = new PunchCardJson();
-//        punchCardJson.setPunch_card_days(signDays);
-//        punchCardJson.setPubch_card_award(singList);
-//        myCoin2Presenter.initPunchCard(punchCardJson);
-//
-//        String my_award_num = myCoinJson.getMy_award_num();
-//        coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
-//        List<TaskAllJson> data = myCoinJson.getData();
-//        if (data == null || data.size() == 0) {
-//            loadEmptyData();
-//            return;
-//        } else {
-//            List adapterData = new ArrayList();
-//            for (TaskAllJson taskAllJson : data) {
-//                String title = taskAllJson.getTitle();
-//                adapterData.add(title);
-//                adapterData.addAll(taskAllJson.getData());
-//            }
-//            if (headView != null)
-//                plContent.getRefreshableView().removeHeaderView(headView);
-//            initHeadViewLayout();
-//            plContent.getRefreshableView().addHeaderView(headView);
-//            if (adapter == null) {
-//                adapter = new TaskAdapter(adapterData, getContext());
-//                plContent.setAdapter(adapter);
-//            } else {
-//                adapter.setData(adapterData);
-//            }
-//            loadOver();
-//        }
+        /*
+         打卡的
+         */
         PunchCardJson punchCardJson = new PunchCardJson();
 
         List<SignJson> singList = new ArrayList<>();
@@ -165,17 +134,21 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
         punchCardJson.setPubch_card_award(singList);
         myCoin2Presenter.initPunchCard(punchCardJson);
 
-        List taskData=new ArrayList();
+        /*
+            任务列表
+         */
+        List taskData = new ArrayList();
         taskData.add("新手任务");
-        for(int i=0;i<5;i++){
-            taskData.add(new TaskJson("任务"+(i+1),(3+i)+"","0","0","","",""));
+        for (int i = 0; i < 5; i++) {
+            taskData.add(new TaskJson("任务" + (i + 1), (3 + i) + "", "0", "0", "", "", ""));
         }
         taskData.add("每日任务");
-        for(int i=0;i<5;i++){
-            taskData.add(new TaskJson("任务"+(i+1),(3+i)+"","1","3","","",""));
+        for (int i = 0; i < 5; i++) {
+            taskData.add(new TaskJson("任务" + (i + 1), (3 + i) + "", "1", "3", "", "", ""));
         }
-        if (headView != null)
+        if (headView != null) {
             plContent.getRefreshableView().removeHeaderView(headView);
+        }
         initHeadViewLayout();
         plContent.getRefreshableView().addHeaderView(headView);
         if (adapter == null) {
@@ -237,10 +210,16 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
     protected void onChangeTheme() {
         super.onChangeTheme();
         if (headView != null) {
-            hvRootView.setBackground(ContextCompat.getDrawable(mContext, R.mipmap.icon_score_bg));
-            hvTvScore.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            hvTvCoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            hvIvCoin.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_score_coin));
+            hvRootView.setBackground(ContextCompat.getDrawable(this, R.mipmap.icon_score_bg));
+            hvTvScore.setTextColor(ContextCompat.getColor(this, R.color.white));
+            hvTvCoin.setTextColor(ContextCompat.getColor(this, R.color.white));
+            hvIvCoin.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_score_coin));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getQueue().cancelAll(MyCoin2Presenter.class.getName());
     }
 }
