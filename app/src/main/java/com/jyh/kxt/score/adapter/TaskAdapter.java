@@ -95,7 +95,7 @@ public class TaskAdapter extends BaseListAdapter {
                     viewHolder.tvSchedule.setVisibility(View.VISIBLE);
                     if (task_succ_num == null || task_succ_num.trim().equals(""))
                         task_succ_num = "0";
-                    viewHolder.tvSchedule.setText("完成 " + task_succ_num + "\\/" + task_sum_num);
+                    viewHolder.tvSchedule.setText("完成 " + task_succ_num + "/" + task_sum_num);
                 }
             }
             viewHolder.tvTitle.setText(task.getTask_describe());

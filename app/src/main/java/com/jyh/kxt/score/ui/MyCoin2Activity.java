@@ -12,11 +12,13 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer;
+import com.jyh.kxt.main.json.PreloadIndex;
 import com.jyh.kxt.score.adapter.TaskAdapter;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.json.TaskAllJson;
+import com.jyh.kxt.score.json.TaskJson;
 import com.jyh.kxt.score.presenter.MyCoin2Presenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
@@ -113,42 +115,76 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
     }
 
     public void init(MyCoinJson myCoinJson) {
-        PunchCardJson punch_card = myCoinJson.getPunch_card();
-        int punch_card_days = punch_card.getPunch_card_days();
-        int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        List<SignJson> singList = punch_card.getPubch_card_award();
-        //打卡数据模拟
+//        PunchCardJson punch_card = myCoinJson.getPunch_card();
+//        int punch_card_days = punch_card.getPunch_card_days();
+//        int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
+//        List<SignJson> singList = punch_card.getPubch_card_award();
+//        //数据模拟
+//        PunchCardJson punchCardJson = new PunchCardJson();
+//        punchCardJson.setPunch_card_days(signDays);
+//        punchCardJson.setPubch_card_award(singList);
+//        myCoin2Presenter.initPunchCard(punchCardJson);
+//
+//        String my_award_num = myCoinJson.getMy_award_num();
+//        coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
+//        List<TaskAllJson> data = myCoinJson.getData();
+//        if (data == null || data.size() == 0) {
+//            loadEmptyData();
+//            return;
+//        } else {
+//            List adapterData = new ArrayList();
+//            for (TaskAllJson taskAllJson : data) {
+//                String title = taskAllJson.getTitle();
+//                adapterData.add(title);
+//                adapterData.addAll(taskAllJson.getData());
+//            }
+//            if (headView != null)
+//                plContent.getRefreshableView().removeHeaderView(headView);
+//            initHeadViewLayout();
+//            plContent.getRefreshableView().addHeaderView(headView);
+//            if (adapter == null) {
+//                adapter = new TaskAdapter(adapterData, getContext());
+//                plContent.setAdapter(adapter);
+//            } else {
+//                adapter.setData(adapterData);
+//            }
+//            loadOver();
+//        }
         PunchCardJson punchCardJson = new PunchCardJson();
-        punchCardJson.setPunch_card_days(signDays);
+
+        List<SignJson> singList = new ArrayList<>();
+        singList.add(new SignJson("3", "1", "首签"));
+        singList.add(new SignJson("5", "2", "第2天"));
+        singList.add(new SignJson("7", "3", "第3天"));
+        singList.add(new SignJson("9", "4", "第4天"));
+        singList.add(new SignJson("11", "5", "第5天"));
+        singList.add(new SignJson("13", "6", "第6天"));
+        singList.add(new SignJson("15", "7", "第7天"));
+
+        punchCardJson.setPunch_card_days(3);
         punchCardJson.setPubch_card_award(singList);
         myCoin2Presenter.initPunchCard(punchCardJson);
 
-        String my_award_num = myCoinJson.getMy_award_num();
-        coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
-        List<TaskAllJson> data = myCoinJson.getData();
-        if (data == null || data.size() == 0) {
-            loadEmptyData();
-            return;
-        } else {
-            List adapterData = new ArrayList();
-            for (TaskAllJson taskAllJson : data) {
-                String title = taskAllJson.getTitle();
-                adapterData.add(title);
-                adapterData.addAll(taskAllJson.getData());
-            }
-            if (headView != null)
-                plContent.getRefreshableView().removeHeaderView(headView);
-            initHeadViewLayout();
-            plContent.getRefreshableView().addHeaderView(headView);
-            if (adapter == null) {
-                adapter = new TaskAdapter(adapterData, mContext);
-                plContent.setAdapter(adapter);
-            } else {
-                adapter.setData(adapterData);
-            }
-            loadOver();
+        List taskData=new ArrayList();
+        taskData.add("新手任务");
+        for(int i=0;i<5;i++){
+            taskData.add(new TaskJson("任务"+(i+1),(3+i)+"","0","0","","",""));
         }
-
+        taskData.add("每日任务");
+        for(int i=0;i<5;i++){
+            taskData.add(new TaskJson("任务"+(i+1),(3+i)+"","1","3","","",""));
+        }
+        if (headView != null)
+            plContent.getRefreshableView().removeHeaderView(headView);
+        initHeadViewLayout();
+        plContent.getRefreshableView().addHeaderView(headView);
+        if (adapter == null) {
+            adapter = new TaskAdapter(taskData, getContext());
+            plContent.setAdapter(adapter);
+        } else {
+            adapter.setData(taskData);
+        }
+        plRootView.loadOver();
     }
 
     public void refresh(MyCoinJson myCoinJson) {
@@ -175,7 +211,7 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
             }
             initHeadViewLayout();
             if (adapter == null) {
-                adapter = new TaskAdapter(adapterData, mContext);
+                adapter = new TaskAdapter(adapterData, getContext());
                 plContent.setAdapter(adapter);
             } else {
                 adapter.setData(adapterData);
@@ -188,7 +224,7 @@ public class MyCoin2Activity extends BaseActivity implements PageLoadLayout.OnAf
      */
     public void initHeadViewLayout() {
         if (headView == null) {
-            headView = LayoutInflater.from(mContext).inflate(R.layout.head_sign, null, false);
+            headView = LayoutInflater.from(getContext()).inflate(R.layout.head_sign, null, false);
             hvRootView = ButterKnife.findById(headView, R.id.rl_rootView);
             hvTvScore = ButterKnife.findById(headView, R.id.tv_score);
             hvTvCoin = ButterKnife.findById(headView, R.id.tv_coin);
