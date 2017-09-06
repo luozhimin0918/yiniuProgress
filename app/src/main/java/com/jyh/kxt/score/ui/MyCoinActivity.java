@@ -75,7 +75,7 @@ public class MyCoinActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.ll_sign_show})
     public void onClick(View view) {
-        switch (view.getId()) {
+        switch (view.getId())  {
             case R.id.iv_bar_break:
                 onBackPressed();
                 break;
