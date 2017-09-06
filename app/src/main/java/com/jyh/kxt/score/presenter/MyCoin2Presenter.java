@@ -7,13 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.ui.MyCoin2Activity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
@@ -28,32 +36,56 @@ public class MyCoin2Presenter extends BasePresenter {
 
     @BindObject MyCoin2Activity myCoin2Activity;
 
+    private VolleyRequest request;
+
     public MyCoin2Presenter(IBaseView iBaseView) {
         super(iBaseView);
+        request = new VolleyRequest(mContext, mQueue);
+        request.setTag(getClass().getName());
     }
 
     /**
      * 初始化金币接口
      */
-    public void requestInitCoin() {
+    public void requestInitCoin(final boolean isRefresh) {
 
         //各种数据请求之后回调
+        JSONObject param = request.getJsonParam();
+        param.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.CREDITS_MAIN, param, new HttpListener<MyCoinJson>() {
+            @Override
+            protected void onResponse(MyCoinJson myCoinJson) {
+                if (myCoinJson == null) {
+                    myCoin2Activity.loadEmptyData();
+                    return;
+                }
+                if (isRefresh) {
+                    myCoin2Activity.refresh(myCoinJson);
+                    myCoin2Activity.plContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            myCoin2Activity.plContent.onRefreshComplete();
+                        }
+                    }, 200);
+                } else
+                    myCoin2Activity.init(myCoinJson);
+            }
 
-        //打卡数据模拟
-        PunchCardJson punchCardJson = new PunchCardJson();
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                if (isRefresh) {
+                    myCoin2Activity.plContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            myCoin2Activity.plContent.onRefreshComplete();
+                        }
+                    }, 200);
+                } else
+                    myCoin2Activity.loadError(error);
+            }
+        });
 
-        List<SignJson> singList = new ArrayList<>();
-        singList.add(new SignJson("3", "1", "首签"));
-        singList.add(new SignJson("5", "2", "第2天"));
-        singList.add(new SignJson("7", "3", "第3天"));
-        singList.add(new SignJson("9", "4", "第4天"));
-        singList.add(new SignJson("11", "5", "第5天"));
-        singList.add(new SignJson("13", "6", "第6天"));
-        singList.add(new SignJson("15", "7", "第7天"));
-
-        punchCardJson.setPunch_card_days(3);
-        punchCardJson.setPubch_card_award(singList);
-        initPunchCard(punchCardJson);
     }
 
     /**
@@ -68,7 +100,7 @@ public class MyCoin2Presenter extends BasePresenter {
      *
      * @param punchCardJson
      */
-    private void initPunchCard(PunchCardJson punchCardJson) {
+    public void initPunchCard(PunchCardJson punchCardJson) {
         int punchCardDays = punchCardJson.getPunch_card_days();
 
         List<SignJson> signJsonList = punchCardJson.getPubch_card_award();
@@ -134,4 +166,5 @@ public class MyCoin2Presenter extends BasePresenter {
         punchCardView.setSelected(true);
         ivSignGou.setVisibility(View.VISIBLE);
     }
+
 }

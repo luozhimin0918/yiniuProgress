@@ -13,6 +13,7 @@
         layout="@layout/action_bar1"/>
 
     <com.library.widget.PageLoadLayout
+        android:id="@+id/pl_rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/action_bar">
@@ -21,12 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/pull_content"
+            <com.library.widget.handmark.PullToRefreshListView
+                android:id="@+id/pl_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </FrameLayout>
+            </com.library.widget.handmark.PullToRefreshListView>
 
             <com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer
                 android:id="@+id/mdsd_sign_content"
