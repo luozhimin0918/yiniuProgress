@@ -3,6 +3,7 @@ package com.jyh.kxt.chat;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,10 +72,9 @@ public class UserSettingActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.ll_user:
-                if (isWriter) {
-
+                if (isWriter && !TextUtils.isEmpty(userSettingJson.getWriter_id())) {
                     Intent intent = new Intent(this, AuthorActivity.class);
-                    intent.putExtra(IntentConstant.O_ID, userSettingJson.getReceiver());
+                    intent.putExtra(IntentConstant.O_ID, userSettingJson.getWriter_id());
                     startActivity(intent);
                 }
                 break;

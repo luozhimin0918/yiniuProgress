@@ -227,6 +227,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
         if (bean.getNum_unread() != null) {
             mActivity.unreadMessageCount -= Integer.parseInt(bean.getNum_unread());
+            mActivity.deleteMessage(bean);
         }
 
         String sender = LoginUtils.getUserInfo(mActivity).getUid();

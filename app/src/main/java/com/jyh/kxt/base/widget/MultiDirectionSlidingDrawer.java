@@ -198,12 +198,12 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         a.recycle();
         setAlwaysDrawnWithCacheEnabled(false);
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -641,10 +641,15 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
                 }
 
                 alphaView.setAlpha((float) bfb);
-                if (!alphaView.isShown()) {
-                    alphaView.setVisibility(View.VISIBLE);
+                if (mExpanded) {
+                    if (!alphaView.isShown()) {
+                        alphaView.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (alphaView.isShown()) {
+                        alphaView.setVisibility(View.GONE);
+                    }
                 }
-
                 int deltaY = position - top;
                 if (position < mTopOffset) {
                     deltaY = mTopOffset - top;

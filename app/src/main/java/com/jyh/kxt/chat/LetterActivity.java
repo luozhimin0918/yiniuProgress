@@ -355,4 +355,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         ChatSocketUtil.getInstance().unOnChatMessage(this);
     }
 
+    public void deleteMessage(LetterListJson bean) {
+    }
 }

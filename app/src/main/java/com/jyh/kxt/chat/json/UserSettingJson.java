@@ -13,18 +13,9 @@ public class UserSettingJson {
     private String is_banned;
     private String nickname;    //昵称
     private String avatar;    //头像
+    private String writer_id;
 
-    public UserSettingJson() {
-    }
 
-    public UserSettingJson(String receiver, String is_writer, String is_banned, String nickname, String avatar) {
-
-        this.receiver = receiver;
-        this.is_writer = is_writer;
-        this.is_banned = is_banned;
-        this.nickname = nickname;
-        this.avatar = avatar;
-    }
 
     public String getReceiver() {
 
@@ -65,5 +56,13 @@ public class UserSettingJson {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getWriter_id() {
+        return writer_id;
+    }
+
+    public void setWriter_id(String writer_id) {
+        this.writer_id = writer_id;
     }
 }
