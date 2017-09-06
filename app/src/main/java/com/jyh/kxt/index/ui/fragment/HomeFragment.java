@@ -62,6 +62,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
+    @BindView(R.id.bar_red_dot) TextView tvRedDot;
 
     public NewsFragment newsFragment;
     private FlashFragment flashFragment;
@@ -353,9 +354,15 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         try {
             if (user == null) {
                 ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+                tvRedDot.setVisibility(View.GONE);
             } else {
                 Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                         .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
+                if (user.getIs_unread_msg() == 1) {
+                    tvRedDot.setVisibility(View.VISIBLE);
+                } else {
+                    tvRedDot.setVisibility(View.GONE);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

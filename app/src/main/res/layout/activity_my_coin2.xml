@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_coin2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_score_bg"/>
+
+        <com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer
+            android:id="@+id/mdsd_sign_content"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            app:animateOnClick="true"
+            app:content="@+id/sd_coin_content"
+            app:draw_direction="topToBottom"
+            app:handle="@+id/sd_coin_handle">
+
+            <TextView
+                android:id="@+id/sd_coin_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/icon_score_down_bg"
+                android:gravity="center"
+                android:text="已经连续签到2天"/>
+
+            <RelativeLayout
+                android:id="@+id/sd_coin_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff">
+
+                <TextView
+                    android:id="@+id/tv_punch_card_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:text="签到成功"
+                    android:textColor="@color/font_color64"
+                    android:textSize="24sp"/>
+
+                <com.library.widget.flowlayout.FlowLayout
+                    android:id="@+id/fl_punch_card_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:layout_below="@+id/tv_punch_card_tip"
+                    android:layout_marginTop="20dp"
+                    android:padding="8dp">
+
+                </com.library.widget.flowlayout.FlowLayout>
+
+            </RelativeLayout>
+        </com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer>
+    </RelativeLayout>
+
+</LinearLayout>

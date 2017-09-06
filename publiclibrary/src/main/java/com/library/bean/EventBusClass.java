@@ -40,6 +40,7 @@ public class EventBusClass {
 
     public static final int EVENT_MSG_BAN = 23;//是否被屏蔽
     public static final int EVENT_DRAFT = 24;//刷新列表,有新的草稿
+    public static final int EVENT_UNREAD_MSG = 25;//是否存在未读消息
 
 
     public EventBusClass(int fromCode, Object intentObj) {

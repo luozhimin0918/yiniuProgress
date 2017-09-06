@@ -41,7 +41,7 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_letter,StatusBarColor.THEME1);
+        setContentView(R.layout.activity_letter, StatusBarColor.THEME1);
 
         presenter = new SystemLetterPresenter(this);
 
@@ -93,15 +93,6 @@ public class SystemLetterActivity extends BaseActivity implements PageLoadLayout
         }
         plRootView.loadOver();
     }
-//
-//    public void loadMore(List<LetterSysJson> letterSysJsons) {
-//        if (letterSysJsons == null || letterSysJsons.size() == 0) {
-//            presenter.isMore = false;
-//            return;
-//        }
-//        List<LetterSysJson> data = presenter.disposeData(letterSysJsons);
-//        adapter.addData(data);
-//    }
 
     public void refresh(List<LetterSysJson> letterSysJsons) {
         if (letterSysJsons == null || letterSysJsons.size() == 0) {

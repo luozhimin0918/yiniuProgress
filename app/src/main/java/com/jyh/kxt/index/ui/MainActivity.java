@@ -53,9 +53,8 @@ import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
-import com.jyh.kxt.index.ui.fragment.MyCommentFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
-import com.jyh.kxt.score.ui.MyCoinActivity;
+import com.jyh.kxt.score.ui.MyCoin2Activity;
 import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.PublishActivity;
@@ -113,7 +112,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TradingFragment exploreFragment;
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
@@ -240,11 +239,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         ivSignEnter = ButterKnife.findById(llHeaderLayout, R.id.iv_sign_enter);
         tvSign = ButterKnife.findById(llHeaderLayout, R.id.tv_sign);
 
-        UserJson userInfo = LoginUtils.getUserInfo(this);
-        if (userInfo == null || userInfo.getUid() == null || userInfo.getWriter_id() == null) {
-            pointBtn.setVisibility(View.GONE);
-            mineBtn.setVisibility(View.GONE);
-        }
+        tvRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_red_dot);
+
 
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
@@ -566,7 +562,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.rl_sign:
                 //签到
-                startActivity(new Intent(this, MyCoinActivity.class));
+                startActivity(new Intent(this, MyCoin2Activity.class));
                 break;
         }
     }
@@ -584,6 +580,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case EventBusClass.EVENT_CHANGEUSERINFO:
                 changeUserStatus((UserJson) eventBus.intentObj);
                 break;
+            case EventBusClass.EVENT_UNREAD_MSG:
+
+                break;
         }
     }
 
@@ -597,6 +596,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
 
         if (userJson != null) {
+
+            if (userJson.getIs_unread_msg() == 1) {
+                tvRedDot.setVisibility(View.VISIBLE);
+            } else {
+                tvRedDot.setVisibility(View.GONE);
+            }
+
+
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
@@ -636,6 +643,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
             loginName.setText(userJson.getNickname());
         } else {
+            tvRedDot.setVisibility(View.GONE);
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
             quitBtn.setVisibility(View.GONE);

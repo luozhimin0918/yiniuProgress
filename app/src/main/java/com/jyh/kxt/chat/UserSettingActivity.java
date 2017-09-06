@@ -97,6 +97,8 @@ public class UserSettingActivity extends BaseActivity {
 
                     @Override
                     public void onError(Exception e) {
+                        dismissWaitDialog();
+
                         ToastView.makeText3(getContext(), "0".equals(isBan) ? "添加屏蔽失败" : "解除屏蔽失败");
                     }
                 });

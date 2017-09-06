@@ -295,6 +295,7 @@ public class ChatRoomPresenter extends BasePresenter {
                 ChatRoomJson temporaryChatRoom = temporaryChatRoomMap.get(uniqueIdentification);
 
                 if (mChatRoomJson.getIs_banned_for_sender() == 1) {
+                    temporaryChatRoom.setIs_banned_for_sender(1);
                     onErrorResponse(null);
                     return;
                 }

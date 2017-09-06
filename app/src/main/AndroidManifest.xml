@@ -347,6 +347,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".score.ui.MyCoin2Activity">
+        </activity>
     </application>
 
 </manifest>

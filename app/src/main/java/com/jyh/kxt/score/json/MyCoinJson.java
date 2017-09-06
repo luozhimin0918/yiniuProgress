@@ -11,24 +11,24 @@ import java.util.List;
 
 public class MyCoinJson {
 
-    private PunchCard punch_card;//签到
+    private PunchCardJson punch_card;//签到
     private String my_award_num;//我的金币数
     private List<TaskAllJson> data;//任务列表
 
     public MyCoinJson() {
     }
 
-    public MyCoinJson(PunchCard punch_card, String my_award_num, List<TaskAllJson> data) {
+    public MyCoinJson(PunchCardJson punch_card, String my_award_num, List<TaskAllJson> data) {
         this.punch_card = punch_card;
         this.my_award_num = my_award_num;
         this.data = data;
     }
 
-    public PunchCard getPunch_card() {
+    public PunchCardJson getPunch_card() {
         return punch_card;
     }
 
-    public void setPunch_card(PunchCard punch_card) {
+    public void setPunch_card(PunchCardJson punch_card) {
         this.punch_card = punch_card;
     }
 

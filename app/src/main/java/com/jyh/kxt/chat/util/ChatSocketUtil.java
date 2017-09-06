@@ -1,6 +1,7 @@
 package com.jyh.kxt.chat.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.base.constant.IntentConstant;
@@ -36,7 +37,7 @@ public class ChatSocketUtil {
     }
 
 
-    private WebSocketConnection mConnection = new WebSocketConnection();
+    private WebSocketConnection mConnection;
     private List<OnChatMessage> onSocketTextMessageList = new ArrayList<>();
 
     public void sendSocketParams(Context mContext, String otherUid, OnChatMessage onChatMessage) {
@@ -45,14 +46,14 @@ public class ChatSocketUtil {
                 return;
             }
 
+            if (mConnection == null) {
+                mConnection = new WebSocketConnection();
+            }
+
             onSocketTextMessageList.add(onChatMessage);
 
             if (!mConnection.isConnected()) {
                 requestConnectSocket(mContext, otherUid);
-            } else {
-//                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("cmd", "login");
-//                mConnection.sendTextMessage(jsonObject.toJSONString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,16 +106,6 @@ public class ChatSocketUtil {
 
                                     if ("message".equals(cmd)) {
                                         ChatRoomJson chatRoomJson = JSONObject.parseObject(payload, ChatRoomJson.class);
-
-                                        String receiver = chatRoomJson.getReceiver();
-                                        String sender = chatRoomJson.getSender();
-
-//                                        String uid = userInfo.getUid();
-//                                        if(uid.equals(receiver)){ //如果接收人是本人  则颠倒数据
-//                                            chatRoomJson.setReceiver(sender);
-//                                            chatRoomJson.setSender(receiver);
-//                                        }
-
                                         onSocketTextMessage.onChatMessage(chatRoomJson);
                                     }
                                 }
@@ -137,6 +128,11 @@ public class ChatSocketUtil {
     public void unOnChatMessage(OnChatMessage onSocketTextMessage) {
         try {
             onSocketTextMessageList.remove(onSocketTextMessage);
+            if (onSocketTextMessageList.size() == 0) {
+                Log.e("unOnChatMessage", "unOnChatMessage: 关闭Socket,无回调监听");
+                mConnection.disconnect();
+                mConnection = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

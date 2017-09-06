@@ -61,8 +61,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@id/iv_sign"
                     android:text="签到"
-                    android:textSize="@dimen/describe_font_size1"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/describe_font_size1"/>
 
                 <ImageView
                     android:id="@+id/iv_sign_enter"
@@ -70,8 +70,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/icon_score_enter"
-                    android:layout_marginRight="5dp"/>
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/icon_score_enter"/>
 
             </RelativeLayout>
 
@@ -252,6 +252,15 @@
                         android:text="我的私信"
                         android:textColor="@color/font_color5"
                         android:textSize="@dimen/content_font_size2"/>
+
+                    <TextView
+                        android:id="@+id/head_red_dot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/bg_oval_red"
+                        android:textSize="@dimen/min_min_font_size"
+                        />
                 </LinearLayout>
 
                 <LinearLayout

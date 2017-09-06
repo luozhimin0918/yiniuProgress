@@ -1,6 +1,5 @@
 package com.jyh.kxt.chat.adapter;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
@@ -60,7 +59,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     private final int TYPE_SYS = 0;
     private final int TYPE_LETTER = 1;
 
-    private Context mContext;
+    private LetterActivity mActivity;
     private ListView listView;
 
     private float deleteViewWidth;
@@ -70,16 +69,16 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     private boolean isShowSystemMessageRed = false;
 
-    public LetterListAdapter(List<LetterListJson> dataList, LetterActivity mContext, ListView listView) {
+    public LetterListAdapter(List<LetterListJson> dataList, LetterActivity mActivity, ListView listView) {
         super(dataList);
-        this.mContext = mContext;
+        this.mActivity = mActivity;
         this.listView = listView;
 
-        request = new VolleyRequest(mContext, mContext.presenter.mQueue);
-        request.setTag(mContext.presenter.getClass().getName());
+        request = new VolleyRequest(mActivity, mActivity.presenter.mQueue);
+        request.setTag(mActivity.presenter.getClass().getName());
 
-        deleteViewWidth = SystemUtil.dp2px(mContext, 70);
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
+        deleteViewWidth = SystemUtil.dp2px(mActivity, 70);
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mActivity);
         chartContentWidth = screenDisplay.widthPixels + deleteViewWidth;
     }
 
@@ -91,11 +90,11 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         int type = getItemViewType(position);
         if (convertView == null) {
             if (type == TYPE_SYS) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_letter_sys, parent, false);
+                convertView = LayoutInflater.from(mActivity).inflate(R.layout.item_letter_sys, parent, false);
                 viewHolderSys = new ViewHolderSys(convertView);
                 convertView.setTag(viewHolderSys);
             } else {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_letter, parent, false);
+                convertView = LayoutInflater.from(mActivity).inflate(R.layout.item_letter, parent, false);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
 
@@ -115,16 +114,16 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
         if (type == TYPE_SYS) {
             final ViewHolderSys finalViewHolderSys = viewHolderSys;
-            Glide.with(mContext).load(R.mipmap.icon_msg_sys).asBitmap().centerCrop().into(new ImageViewTarget<Bitmap>(finalViewHolderSys.rivAvatar) {
+            Glide.with(mActivity).load(R.mipmap.icon_msg_sys).asBitmap().centerCrop().into(new ImageViewTarget<Bitmap>(finalViewHolderSys.rivAvatar) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     finalViewHolderSys.rivAvatar.setImageBitmap(resource);
                 }
             });
-            viewHolderSys.vPoint.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_point_red));
-            viewHolderSys.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
-            viewHolderSys.ivBreak.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_msg_sys_enter));
-            viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+            viewHolderSys.vPoint.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_point_red));
+            viewHolderSys.tvContent.setTextColor(ContextCompat.getColor(mActivity, R.color.font_color64));
+            viewHolderSys.ivBreak.setImageDrawable(ContextCompat.getDrawable(mActivity, R.mipmap.icon_msg_sys_enter));
+            viewHolderSys.vLine.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.line_color6));
 
 
             if (isShowSystemMessageRed) {
@@ -135,7 +134,8 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         } else {
             final int index = position - 1;
             LetterListJson bean = dataList.get(index);
-            viewHolder.tvName.setText(bean.getNickname());
+
+            chatNickNameHandle(viewHolder, bean);
             chatLastContentHandle(viewHolder, bean);
             try {
                 viewHolder.tvTime.setText(DateUtils.transformTime(Long.parseLong(bean.getDatetime()) * 1000));
@@ -150,7 +150,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                 }
             });
             final ViewHolder finalViewHolder = viewHolder;
-            Glide.with(mContext).load(bean.getAvatar()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
+            Glide.with(mActivity).load(bean.getAvatar()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap
                     .icon_user_def_photo)
                     .centerCrop()
                     .into(new ImageViewTarget<Bitmap>(finalViewHolder.rivAvatar) {
@@ -164,6 +164,20 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             setTheme(viewHolder);
         }
         return convertView;
+    }
+
+    private void chatNickNameHandle(ViewHolder viewHolder, LetterListJson bean) {
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(bean.getNickname());
+        if ("1".equals(bean.getIs_banned())) {
+
+            ForegroundColorSpan graySpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.font_color3));
+            SpannableString errorSpannable = new SpannableString(" [已屏蔽]");
+            errorSpannable.setSpan(graySpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            spannableStringBuilder.insert(bean.getNickname().length(), errorSpannable);
+            viewHolder.tvName.setText(spannableStringBuilder);
+        }
     }
 
     /**
@@ -180,7 +194,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             spannableStringBuilder = new SpannableStringBuilder(bean.getLocal_content());
         }
 
-        ForegroundColorSpan redSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.red2));
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.red2));
         switch (bean.getContentType()) {
             case 0:
 
@@ -205,13 +219,17 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
      * @param index
      */
     private void delMsg(final int index) {
-        if (!SystemUtil.isConnected(mContext)) {
-            ToastSnack.show(mContext, listView, "网络连接失败");
+        if (!SystemUtil.isConnected(mActivity)) {
+            ToastSnack.show(mActivity, listView, "网络连接失败");
             return;
         }
         LetterListJson bean = dataList.get(index);
 
-        String sender = LoginUtils.getUserInfo(mContext).getUid();
+        if (bean.getNum_unread() != null) {
+            mActivity.unreadMessageCount -= Integer.parseInt(bean.getNum_unread());
+        }
+
+        String sender = LoginUtils.getUserInfo(mActivity).getUid();
         String receiver = bean.getReceiver();
 
         JSONObject jsonParam = request.getJsonParam();
@@ -227,7 +245,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 downHindContentView();
-                ToastView.makeText3(mContext, "删除失败");
+                ToastView.makeText3(mActivity, "删除失败");
             }
         });
         downHindContentView();
@@ -236,12 +254,12 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
         //删除数据库中的失败消息
         String delSql = "DELETE FROM CHAT_ROOM_BEAN WHERE  SENDER = '" + sender + "' AND RECEIVER = '" + receiver + "'";
-        DBManager mDBManager = DBManager.getInstance(mContext);
+        DBManager mDBManager = DBManager.getInstance(mActivity);
         ChatRoomJsonDao chatRoomJsonDao = mDBManager.getDaoSessionWrit().getChatRoomJsonDao();
         chatRoomJsonDao.getDatabase().execSQL(delSql);
 
         //删除本地SP中的草稿信息
-        String chatPreviewDraft = SPUtils.getString(mContext, SpConstant.CHAT_PREVIEW);
+        String chatPreviewDraft = SPUtils.getString(mActivity, SpConstant.CHAT_PREVIEW);
         if (!TextUtils.isEmpty(chatPreviewDraft)) {
             List<ChatPreviewJson> chatDraftList = JSONArray.parseArray(chatPreviewDraft, ChatPreviewJson.class);
             if (chatDraftList != null) {
@@ -254,10 +272,12 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                 }
                 if (indexOf != -1) {
                     chatDraftList.remove(indexOf);
-                    SPUtils.save(mContext, SpConstant.CHAT_PREVIEW, JSON.toJSONString(chatDraftList));
+                    SPUtils.save(mActivity, SpConstant.CHAT_PREVIEW, JSON.toJSONString(chatDraftList));
                 }
             }
         }
+
+
     }
 
     /**
@@ -297,14 +317,14 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
     }
 
     private void setTheme(ViewHolder viewHolder) {
-        viewHolder.tvName.setTextColor(ContextCompat.getColor(mContext, R.color.font_color64));
-        viewHolder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color6));
-        viewHolder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
-        viewHolder.tvNum.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-        viewHolder.tvNum.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_oval_red));
-        viewHolder.tvDel.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-        viewHolder.tvDel.setBackgroundColor(ContextCompat.getColor(mContext, R.color.red2));
-        viewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color6));
+        viewHolder.tvName.setTextColor(ContextCompat.getColor(mActivity, R.color.font_color64));
+        viewHolder.tvTime.setTextColor(ContextCompat.getColor(mActivity, R.color.font_color6));
+        viewHolder.tvContent.setTextColor(ContextCompat.getColor(mActivity, R.color.font_color3));
+        viewHolder.tvNum.setTextColor(ContextCompat.getColor(mActivity, R.color.white));
+        viewHolder.tvNum.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_oval_red));
+        viewHolder.tvDel.setTextColor(ContextCompat.getColor(mActivity, R.color.white));
+        viewHolder.tvDel.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.red2));
+        viewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.line_color6));
     }
 
     public void setData(List<LetterListJson> data) {

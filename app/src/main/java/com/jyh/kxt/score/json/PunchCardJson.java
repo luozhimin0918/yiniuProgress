@@ -9,23 +9,18 @@ import java.util.List;
  * 创建日期:2017/9/5.
  */
 
-public class PunchCard {
-    private String punch_card_days; //连续打卡天数
+public class PunchCardJson {
+    private int punch_card_days; //连续打卡天数
     private List<SignJson> pubch_card_award; //打卡的奖励
 
-    public PunchCard() {
+    public PunchCardJson() {
     }
 
-    public PunchCard(String punch_card_days, List<SignJson> pubch_card_award) {
-        this.punch_card_days = punch_card_days;
-        this.pubch_card_award = pubch_card_award;
-    }
-
-    public String getPunch_card_days() {
+    public int getPunch_card_days() {
         return punch_card_days;
     }
 
-    public void setPunch_card_days(String punch_card_days) {
+    public void setPunch_card_days(int punch_card_days) {
         this.punch_card_days = punch_card_days;
     }
 

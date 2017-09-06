@@ -42,6 +42,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.tv_right_icon1) TextView tvRightIcon1;
+    @BindView(R.id.bar_red_dot) TextView tvRedDot;
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
 
@@ -145,9 +146,15 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
     private void changeUserImg(UserJson user) {
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+            tvRedDot.setVisibility(View.GONE);
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
+            if (user.getIs_unread_msg() == 1) {
+                tvRedDot.setVisibility(View.VISIBLE);
+            } else {
+                tvRedDot.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
@@ -51,6 +52,9 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.fl_content) FrameLayout flContent;
+
+    @BindView(R.id.bar_red_dot) TextView tvRedDot;
+
     private BaseFragment lastFragment;
     private ArticleFragment articleFragment;
     private ViewpointFragment viewpointFragment;
@@ -70,10 +74,11 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-        if (tab == null)
+        if (tab == null) {
             onTabSelect(0);
-        else
+        } else {
             onTabSelect(1);
+        }
     }
 
     @OnClick({R.id.iv_left_icon, R.id.iv_right_icon1, R.id.iv_right_icon2})
@@ -98,10 +103,10 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                     getContext().startActivity(new Intent(getContext(), LoginOrRegisterActivity.class));
                     return;
                 }
-                if(userInfo.getWriter_id() == null){
+                if (userInfo.getWriter_id() == null) {
                     Intent rzIntent = new Intent(getContext(), WebActivity.class);
                     rzIntent.putExtra(IntentConstant.NAME, "专栏入驻");
-                    rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL+ "?uid=" + userInfo.getUid());
+                    rzIntent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + userInfo.getUid());
                     startActivity(rzIntent);
                     return;
                 }
@@ -244,9 +249,15 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
         try {
             if (user == null) {
                 ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+                tvRedDot.setVisibility(View.GONE);
             } else {
                 Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                         .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
+                if (user.getIs_unread_msg() == 1) {
+                    tvRedDot.setVisibility(View.VISIBLE);
+                } else {
+                    tvRedDot.setVisibility(View.GONE);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,7 +266,8 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
     public void setTab(String tab) {
         this.tab = tab;
-        if (articleFragment != null)
+        if (articleFragment != null) {
             articleFragment.setSelTab(tab);
+        }
     }
 }

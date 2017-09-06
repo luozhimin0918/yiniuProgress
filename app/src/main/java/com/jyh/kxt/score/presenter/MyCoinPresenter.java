@@ -23,7 +23,7 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.score.json.MyCoinJson;
-import com.jyh.kxt.score.json.PunchCard;
+import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.ui.CoinHistoryActivity;
 import com.jyh.kxt.score.ui.MyCoinActivity;
@@ -306,9 +306,9 @@ public class MyCoinPresenter extends BasePresenter implements View.OnClickListen
                     activity.loadEmptyData();
                     return;
                 }
-                PunchCard punch_card = myCoinJson.getPunch_card();
-                String punch_card_days = punch_card.getPunch_card_days();
-                signDays = ((punch_card_days == null || "".equals(punch_card_days.trim())) ? 0 : Integer.parseInt(punch_card_days)) % 7;
+                PunchCardJson punch_card = myCoinJson.getPunch_card();
+                int punch_card_days = punch_card.getPunch_card_days();
+                signDays = punch_card_days == 0? 0 : punch_card_days % 7;
                 signs = punch_card.getPubch_card_award();
                 if (isRefresh) {
                     activity.refresh(myCoinJson);

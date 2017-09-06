@@ -10,13 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.ui.fragment.RankFragment;
 import com.jyh.kxt.av.ui.fragment.VideoFragment;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -51,6 +51,7 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
     @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
     @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
+    @BindView(R.id.bar_red_dot) TextView tvRedDot;
 
     public VideoFragment videoFragment;
     private RankFragment rankFragment;
@@ -149,10 +150,16 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
     private void changeUserImg(UserJson user) {
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+            tvRedDot.setVisibility(View.GONE);
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap
                             .icon_user_def_photo).into(ivLeftIcon);
+            if (user.getIs_unread_msg() == 1) {
+                tvRedDot.setVisibility(View.VISIBLE);
+            } else {
+                tvRedDot.setVisibility(View.GONE);
+            }
         }
     }
 

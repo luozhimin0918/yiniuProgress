@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.dao.ChatRoomJsonDao;
 import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.chat.adapter.LetterListAdapter;
 import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.json.ChatRoomJson;
@@ -26,6 +28,7 @@ import com.jyh.kxt.chat.json.LetterListJson;
 import com.jyh.kxt.chat.presenter.LetterPresenter;
 import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
 import com.library.util.SPUtils;
@@ -60,12 +63,24 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
+    /**
+     * 未读消息,通过这个数量来控制主页面是否有红点产生
+     */
+    public int unreadMessageCount = 0;
+
+    private LetterJson letterJson;
+
     public LetterPresenter presenter;
     private LetterListAdapter adapter;
 
     private Set<String> letterLastIdSet = new HashSet<>();
     private HashMap<String, LetterListJson> letterReceiverSet = new HashMap<>();
 
+    /**
+     * 回调消息
+     *
+     * @param chatRoomJson
+     */
     @Override
     public void onChatMessage(ChatRoomJson chatRoomJson) {
         String sender = chatRoomJson.getSender();
@@ -117,7 +132,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
 
         ChatSocketUtil.getInstance().sendSocketParams(this, "", this);
-
     }
 
     private void initView() {
@@ -153,13 +167,14 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         int index = position - 1;
         if (index == 0) {
-            //系统消息
-            adapter.setShowRed(false);
-            adapter.notifyDataSetChanged();
-
+            //系统消息是否存在红点
+            if ("1".equals(letterJson.getShow_red_dot())) {
+                adapter.setShowRed(false);
+                adapter.notifyDataSetChanged();
+                unreadMessageCount -= 1;
+            }
             Intent intent = new Intent(this, SystemLetterActivity.class);
             startActivity(intent);
         } else {
@@ -182,27 +197,50 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             plRootView.loadEmptyData();
             return;
         }
+
+        this.letterJson = letterJson;
+
         List<LetterListJson> list = letterJson.getList();
         analysisListData(list);
+
         adapter = new LetterListAdapter(list, this, plContent.getRefreshableView());
-        String show_red_dot = letterJson.getShow_red_dot();
         presenter.scrollListener(plContent, adapter);
+        //是否存在红点
+        String show_red_dot = letterJson.getShow_red_dot();
+        boolean isShowRedDot = show_red_dot != null && "1".equals(show_red_dot);
+        adapter.setShowRed(isShowRedDot);
         plContent.setAdapter(adapter);
-        adapter.setShowRed(show_red_dot != null && "1".equals(show_red_dot));
+
+        if (isShowRedDot) {
+            unreadMessageCount += 1;
+        }
+
         plRootView.loadOver();
     }
 
     public void refresh(LetterJson letterJson) {
-        if (letterJson == null) return;
-        String show_red_dot = letterJson.getShow_red_dot();
+        if (letterJson == null) {
+            return;
+        }
+
+        this.letterJson = letterJson;
+
         List<LetterListJson> list = letterJson.getList();
-        if (list == null || list.size() == 0) return;
+        if (list == null || list.size() == 0) {
+            return;
+        }
         adapter.setData(list);
 
         analysisListData(list);
-        adapter.notifyDataSetChanged();
+        //是否存在红点
+        String show_red_dot = letterJson.getShow_red_dot();
+        boolean isShowRedDot = show_red_dot != null && "1".equals(show_red_dot);
+        if (isShowRedDot) {
+            unreadMessageCount += 1;
+        }
+        adapter.setShowRed(isShowRedDot);
 
-        adapter.setShowRed(show_red_dot != null && "1".equals(show_red_dot));
+        adapter.notifyDataSetChanged();
     }
 
     @Subscribe
@@ -220,12 +258,19 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
              */
             letterLastIdSet.clear();
             letterReceiverSet.clear();
+            unreadMessageCount = 0;//刷新重置
 
             for (LetterListJson letterListJson : letterList) {
                 letterLastIdSet.add(letterListJson.getLast_id());
                 letterReceiverSet.put(letterListJson.getReceiver(), letterListJson);
 
                 letterListJson.setContentType(0);
+
+
+                String numUnread = letterListJson.getNum_unread();
+                if (numUnread != null) {
+                    unreadMessageCount += Integer.parseInt(numUnread);
+                }
             }
 
             /**
@@ -295,6 +340,15 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        Log.e(TAG, "unreadMessageCount: "+unreadMessageCount );
+
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null) {
+            userInfo.setIs_unread_msg(unreadMessageCount == 0 ? 0 : 1);
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
+        }
+
         EventBus.getDefault().unregister(this);
         getQueue().cancelAll(LetterPresenter.class.getName());
 

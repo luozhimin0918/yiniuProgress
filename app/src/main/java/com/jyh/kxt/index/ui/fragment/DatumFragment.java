@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
@@ -84,6 +85,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     @BindView(R.id.iv_right_icon2) ImageView ivCalendar;
     @BindView(R.id.iv_right_icon1) ImageView ivFiltrate;
     @BindView(R.id.fl_root_content) FrameLayout flRootContent;
+    @BindView(R.id.bar_red_dot) TextView tvRedDot;
 
     private DatumPresenter datumPresenter;
     public PopupUtil filtratePopup;
@@ -499,10 +501,16 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     private void changeUserImg(UserJson user) {
         if (user == null) {
             ivLeftIcon.setImageResource(R.mipmap.icon_user_def_photo);
+            tvRedDot.setVisibility(View.GONE);
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap
                             .icon_user_def_photo).into(ivLeftIcon);
+            if (user.getIs_unread_msg() == 1) {
+                tvRedDot.setVisibility(View.VISIBLE);
+            } else {
+                tvRedDot.setVisibility(View.GONE);
+            }
         }
     }
 

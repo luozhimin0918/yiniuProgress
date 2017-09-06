@@ -35,6 +35,8 @@ public class UserJson {
     private String writer_name;
     private String writer_avatar;
 
+    private int is_unread_msg;
+
     public UserJson() {
     }
 
@@ -148,5 +150,13 @@ public class UserJson {
 
     public void setWriter_avatar(String writer_avatar) {
         this.writer_avatar = writer_avatar;
+    }
+
+    public int getIs_unread_msg() {
+        return is_unread_msg;
+    }
+
+    public void setIs_unread_msg(int is_unread_msg) {
+        this.is_unread_msg = is_unread_msg;
     }
 }

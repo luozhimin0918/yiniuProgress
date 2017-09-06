@@ -38,12 +38,6 @@ public class LetterPresenter extends BasePresenter {
     }
 
     public void init() {
-//        List<LetterListJson> list = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            list.add(new LetterListJson("sender", "receiver", "last_content", (-1 + i) + "", (i % 2) + "", "name", "", "12:1" + i));
-//        }
-//        letterActivity.init(list);
-
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
         request.doGet(HttpConstant.MSG_USERCENTER, jsonParam, new HttpListener<LetterJson>() {
