@@ -8,10 +8,11 @@ package com.jyh.kxt.score.json;
  */
 
 public class TaskJson {
-    private String task_describe;//任务描述
-    private String task_award;   //奖励
-    private String task_succ_num;   //成功数量
-    private String task_sum_num;   //任务总数量
+
+    private String title;//任务描述
+    private String award;   //奖励
+    private String num_finished;   //成功数量
+    private String total_tasks;   //任务总数量
     private String o_class;//跳转到某个Intent
     private String o_id;
     private String o_action;
@@ -19,48 +20,36 @@ public class TaskJson {
     public TaskJson() {
     }
 
-    public TaskJson(String task_describe, String task_award, String task_succ_num, String task_sum_num, String o_class, String o_id,
-                    String o_action) {
-
-        this.task_describe = task_describe;
-        this.task_award = task_award;
-        this.task_succ_num = task_succ_num;
-        this.task_sum_num = task_sum_num;
-        this.o_class = o_class;
-        this.o_id = o_id;
-        this.o_action = o_action;
+    public String getTitle() {
+        return title;
     }
 
-    public String getTask_describe() {
-        return task_describe;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setTask_describe(String task_describe) {
-        this.task_describe = task_describe;
+    public String getAward() {
+        return award;
     }
 
-    public String getTask_award() {
-        return task_award;
+    public void setAward(String award) {
+        this.award = award;
     }
 
-    public void setTask_award(String task_award) {
-        this.task_award = task_award;
+    public String getNum_finished() {
+        return num_finished;
     }
 
-    public String getTask_succ_num() {
-        return task_succ_num;
+    public void setNum_finished(String num_finished) {
+        this.num_finished = num_finished;
     }
 
-    public void setTask_succ_num(String task_succ_num) {
-        this.task_succ_num = task_succ_num;
+    public String getTotal_tasks() {
+        return total_tasks;
     }
 
-    public String getTask_sum_num() {
-        return task_sum_num;
-    }
-
-    public void setTask_sum_num(String task_sum_num) {
-        this.task_sum_num = task_sum_num;
+    public void setTotal_tasks(String total_tasks) {
+        this.total_tasks = total_tasks;
     }
 
     public String getO_class() {
@@ -84,6 +73,17 @@ public class TaskJson {
     }
 
     public void setO_action(String o_action) {
+        this.o_action = o_action;
+    }
+
+    public TaskJson(String title, String award, String num_finished, String total_tasks, String o_class, String o_id, String o_action) {
+
+        this.title = title;
+        this.award = award;
+        this.num_finished = num_finished;
+        this.total_tasks = total_tasks;
+        this.o_class = o_class;
+        this.o_id = o_id;
         this.o_action = o_action;
     }
 }

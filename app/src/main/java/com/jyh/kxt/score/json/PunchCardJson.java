@@ -10,25 +10,32 @@ import java.util.List;
  */
 
 public class PunchCardJson {
-    private int punch_card_days; //连续打卡天数
-    private List<SignJson> pubch_card_award; //打卡的奖励
+    private int days; //连续打卡天数
+    private List<SignJson> rules; //打卡的奖励
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public List<SignJson> getRules() {
+        return rules;
+    }
+
+    public void setRules(List<SignJson> rules) {
+        this.rules = rules;
+    }
 
     public PunchCardJson() {
+
     }
 
-    public int getPunch_card_days() {
-        return punch_card_days;
-    }
+    public PunchCardJson(int days, List<SignJson> rules) {
 
-    public void setPunch_card_days(int punch_card_days) {
-        this.punch_card_days = punch_card_days;
-    }
-
-    public List<SignJson> getPubch_card_award() {
-        return pubch_card_award;
-    }
-
-    public void setPubch_card_award(List<SignJson> pubch_card_award) {
-        this.pubch_card_award = pubch_card_award;
+        this.days = days;
+        this.rules = rules;
     }
 }

@@ -116,64 +116,59 @@ public class MyCoin2Activity extends BaseActivity implements
     }
 
     public void init(MyCoinJson myCoinJson) {
-        /*
-         打卡的
-         */
+
+        PunchCardJson punch_card = myCoinJson.getPunch_card();
+        int punch_card_days = punch_card.getDays();
+        int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
+        List<SignJson> singList = punch_card.getRules();
+        //数据模拟
         PunchCardJson punchCardJson = new PunchCardJson();
-
-        List<SignJson> singList = new ArrayList<>();
-        singList.add(new SignJson("3", "1", "首签"));
-        singList.add(new SignJson("5", "2", "第2天"));
-        singList.add(new SignJson("7", "3", "第3天"));
-        singList.add(new SignJson("9", "4", "第4天"));
-        singList.add(new SignJson("11", "5", "第5天"));
-        singList.add(new SignJson("13", "6", "第6天"));
-        singList.add(new SignJson("15", "7", "第7天"));
-
-        punchCardJson.setPunch_card_days(3);
-        punchCardJson.setPubch_card_award(singList);
+        punchCardJson.setDays(signDays);
+        punchCardJson.setRules(singList);
         myCoin2Presenter.initPunchCard(punchCardJson);
 
-        /*
-            任务列表
-         */
-        List taskData = new ArrayList();
-        taskData.add("新手任务");
-        for (int i = 0; i < 5; i++) {
-            taskData.add(new TaskJson("任务" + (i + 1), (3 + i) + "", "0", "0", "", "", ""));
-        }
-        taskData.add("每日任务");
-        for (int i = 0; i < 5; i++) {
-            taskData.add(new TaskJson("任务" + (i + 1), (3 + i) + "", "1", "3", "", "", ""));
-        }
-        if (headView != null) {
-            plContent.getRefreshableView().removeHeaderView(headView);
-        }
-        initHeadViewLayout();
-        plContent.getRefreshableView().addHeaderView(headView);
-        if (adapter == null) {
-            adapter = new TaskAdapter(taskData, getContext());
-            plContent.setAdapter(adapter);
+        String my_award_num = myCoinJson.getNum_coins();
+        coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
+        List<TaskAllJson> data = myCoinJson.getTask();
+        if (data == null || data.size() == 0) {
+            loadEmptyData();
+            return;
         } else {
-            adapter.setData(taskData);
+            List adapterData = new ArrayList();
+            for (TaskAllJson taskAllJson : data) {
+                String title = taskAllJson.getTitle();
+                adapterData.add(title);
+                adapterData.addAll(taskAllJson.getData());
+            }
+            if (headView != null)
+                plContent.getRefreshableView().removeHeaderView(headView);
+            initHeadViewLayout();
+            plContent.getRefreshableView().addHeaderView(headView);
+            if (adapter == null) {
+                adapter = new TaskAdapter(adapterData, getContext());
+                plContent.setAdapter(adapter);
+            } else {
+                adapter.setData(adapterData);
+            }
+            loadOver();
         }
-        plRootView.loadOver();
+
     }
 
     public void refresh(MyCoinJson myCoinJson) {
         PunchCardJson punch_card = myCoinJson.getPunch_card();
-        int punch_card_days = punch_card.getPunch_card_days();
+        int punch_card_days = punch_card.getDays();
         int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        List<SignJson> singList = punch_card.getPubch_card_award();
+        List<SignJson> singList = punch_card.getRules();
         //打卡数据模拟
         PunchCardJson punchCardJson = new PunchCardJson();
-        punchCardJson.setPunch_card_days(signDays);
-        punchCardJson.setPubch_card_award(singList);
+        punchCardJson.setDays(signDays);
+        punchCardJson.setRules(singList);
         myCoin2Presenter.initPunchCard(punchCardJson);
 
-        String my_award_num = myCoinJson.getMy_award_num();
+        String my_award_num = myCoinJson.getNum_coins();
         coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
-        List<TaskAllJson> data = myCoinJson.getData();
+        List<TaskAllJson> data = myCoinJson.getTask();
         if (data == null || data.size() == 0) {
         } else {
             List adapterData = new ArrayList();

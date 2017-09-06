@@ -258,10 +258,9 @@ public class HttpConstant {
     /**
      * 积分
      */
-    public static final String CREDITS_MAIN = BASE_URL + "credits/main";//我的金币
-    public static final String CREDITS_DETAIL = BASE_URL + "credits/detail";//本月明细
-    public static final String CREDITS_MON_SUM = BASE_URL + "credits/mon_sum";//月度汇总
-
+    public static final String CREDITS_MAIN = BASE_URL + "coins/main" + VarConstant.HTTP_CONTENT;//我的金币
+    public static final String CREDITS_DETAIL = BASE_URL + "credits/detail" + VarConstant.HTTP_CONTENT;//本月明细
+    public static final String CREDITS_MON_SUM = BASE_URL + "credits/mon_sum" + VarConstant.HTTP_CONTENT;//月度汇总
 
 
     public static final String MESSAGE_CLEAR_UNREAD = BASE_URL + "message/clear_unread";//清空未读消息

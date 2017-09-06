@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 
 /**
  * 项目名:KxtProfessional
- * 类描述:
+ * 类描述:任务Adapter
  * 创建人:苟蒙蒙
  * 创建日期:2017/9/5.
  */
@@ -84,8 +84,8 @@ public class TaskAdapter extends BaseListAdapter {
             viewHolder.tvSchedule.setTextColor(ContextCompat.getColor(mContext, R.color.font_color17));
 
             TaskJson task = (TaskJson) dataList.get(position);
-            String task_succ_num = task.getTask_succ_num();
-            String task_sum_num = task.getTask_sum_num();
+            String task_succ_num = task.getNum_finished();
+            String task_sum_num = task.getTotal_tasks();
             if (task_sum_num == null || task_sum_num.trim().equals("")) {
                 viewHolder.tvSchedule.setVisibility(View.GONE);
             } else {
@@ -98,8 +98,8 @@ public class TaskAdapter extends BaseListAdapter {
                     viewHolder.tvSchedule.setText("完成 " + task_succ_num + "/" + task_sum_num);
                 }
             }
-            viewHolder.tvTitle.setText(task.getTask_describe());
-            viewHolder.tvScoreNum.setText(task.getTask_award());
+            viewHolder.tvTitle.setText(task.getTitle());
+            viewHolder.tvScoreNum.setText(task.getAward());
         }
 
         return convertView;

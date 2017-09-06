@@ -50,42 +50,41 @@ public class MyCoin2Presenter extends BasePresenter {
     public void requestInitCoin(final boolean isRefresh) {
 
         //各种数据请求之后回调
-//        JSONObject param = request.getJsonParam();
-//        param.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
-//        request.doGet(HttpConstant.CREDITS_MAIN, param, new HttpListener<MyCoinJson>() {
-//            @Override
-//            protected void onResponse(MyCoinJson myCoinJson) {
-//                if (myCoinJson == null) {
-//                    myCoin2Activity.loadEmptyData();
-//                    return;
-//                }
-//                if (isRefresh) {
-//                    myCoin2Activity.refresh(myCoinJson);
-//                    myCoin2Activity.plContent.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            myCoin2Activity.plContent.onRefreshComplete();
-//                        }
-//                    }, 200);
-//                } else
-//                    myCoin2Activity.init(myCoinJson);
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//                if (isRefresh) {
-//                    myCoin2Activity.plContent.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            myCoin2Activity.plContent.onRefreshComplete();
-//                        }
-//                    }, 200);
-//                } else
-//                    myCoin2Activity.loadError(error);
-//            }
-//        });
-        myCoin2Activity.init(null);
+        JSONObject param = request.getJsonParam();
+        param.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+        request.doGet(HttpConstant.CREDITS_MAIN, param, new HttpListener<MyCoinJson>() {
+            @Override
+            protected void onResponse(MyCoinJson myCoinJson) {
+                if (myCoinJson == null) {
+                    myCoin2Activity.loadEmptyData();
+                    return;
+                }
+                if (isRefresh) {
+                    myCoin2Activity.refresh(myCoinJson);
+                    myCoin2Activity.plContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            myCoin2Activity.plContent.onRefreshComplete();
+                        }
+                    }, 200);
+                } else
+                    myCoin2Activity.init(myCoinJson);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                if (isRefresh) {
+                    myCoin2Activity.plContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            myCoin2Activity.plContent.onRefreshComplete();
+                        }
+                    }, 200);
+                } else
+                    myCoin2Activity.loadError(error);
+            }
+        });
 
     }
 
@@ -102,9 +101,9 @@ public class MyCoin2Presenter extends BasePresenter {
      * @param punchCardJson
      */
     public void initPunchCard(PunchCardJson punchCardJson) {
-        int punchCardDays = punchCardJson.getPunch_card_days();
+        int punchCardDays = punchCardJson.getDays();
 
-        List<SignJson> signJsonList = punchCardJson.getPubch_card_award();
+        List<SignJson> signJsonList = punchCardJson.getRules();
 
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         int widthScreen = screenDisplay.widthPixels;
