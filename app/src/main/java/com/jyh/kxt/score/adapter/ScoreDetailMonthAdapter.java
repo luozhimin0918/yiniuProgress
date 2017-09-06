@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 /**
  * 项目名:KxtProfessional
- * 类描述:
+ * 类描述:积分明细 - 月度汇总
  * 创建人:苟蒙蒙
  * 创建日期:2017/9/5.
  */

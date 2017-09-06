@@ -1,9 +1,6 @@
 package com.jyh.kxt.score.ui.fragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSONObject;
@@ -11,19 +8,12 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.utils.MarketConnectUtil;
-import com.jyh.kxt.chat.adapter.BlockAdapter;
-import com.jyh.kxt.chat.json.BlockJson;
 import com.jyh.kxt.index.presenter.PullListViewPresenter;
 import com.jyh.kxt.score.adapter.ScoreDetailDayAdapter;
 import com.jyh.kxt.score.adapter.ScoreDetailMonthAdapter;
 import com.jyh.kxt.score.json.ScoreDetailDayJson;
 import com.jyh.kxt.score.json.ScoreDetailMonthJson;
 import com.library.base.http.VarConstant;
-import com.library.widget.PageLoadLayout;
-import com.library.widget.handmark.PullToRefreshBase;
-import com.library.widget.handmark.PullToRefreshListView;
-import com.sina.weibo.sdk.call.Position;
 
 import java.util.ArrayList;
 import java.util.List;
