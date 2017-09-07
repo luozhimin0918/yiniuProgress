@@ -10,20 +10,12 @@ package com.jyh.kxt.score.json;
 public class SignJson {
     private String award;//奖励
     private String code;//签到的code值( 1 对应 首签   2 .....)
-    private String describe;//"首签"
+    private String description;//"首签"
 
     public SignJson() {
     }
 
-    public SignJson(String award, String code, String describe) {
-
-        this.award = award;
-        this.code = code;
-        this.describe = describe;
-    }
-
     public String getAward() {
-
         return award;
     }
 
@@ -39,11 +31,18 @@ public class SignJson {
         this.code = code;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public SignJson(String award, String code, String description) {
+
+        this.award = award;
+        this.code = code;
+        this.description = description;
     }
 }

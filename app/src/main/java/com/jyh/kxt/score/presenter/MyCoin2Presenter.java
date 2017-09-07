@@ -90,9 +90,29 @@ public class MyCoin2Presenter extends BasePresenter {
 
     /**
      * 请求签到
+     *
+     * @param punchCardView
+     * @param signJsonList
+     * @param position
      */
-    private void requestPunchCard() {
+    private void requestPunchCard(final View punchCardView, List<SignJson> signJsonList, int position) {
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+        jsonParam.put(VarConstant.HTTP_CODE, signJsonList.get(position).getCode());
+        request.doGet(HttpConstant.CREDITS_PUNCH_CARD, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                fuelPunchCardView(punchCardView);
+                punchCardView.setOnClickListener(null);//点击事件清除
+                ToastView.makeText(mContext, "签到成功!");
+            }
 
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                ToastView.makeText(mContext, "签到失败!");
+            }
+        });
     }
 
     /**
@@ -101,9 +121,9 @@ public class MyCoin2Presenter extends BasePresenter {
      * @param punchCardJson
      */
     public void initPunchCard(PunchCardJson punchCardJson) {
-        int punchCardDays = punchCardJson.getDays();
+        final int punchCardDays = punchCardJson.getDays();
 
-        List<SignJson> signJsonList = punchCardJson.getRules();
+        final List<SignJson> signJsonList = punchCardJson.getRules();
 
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
         int widthScreen = screenDisplay.widthPixels;
@@ -123,7 +143,7 @@ public class MyCoin2Presenter extends BasePresenter {
             TextView tvSignScore = (TextView) punchCardView.findViewById(R.id.tv_sign1_score);
             TextView tvSignDay = (TextView) punchCardView.findViewById(R.id.tv_sign1_day);
 
-            tvSignDay.setText(signJson.getDescribe());
+            tvSignDay.setText(signJson.getDescription());
             tvSignScore.setText("+" + signJson.getAward());
 
             ViewGroup.LayoutParams layoutParams = punchCardView.getLayoutParams();
@@ -140,13 +160,11 @@ public class MyCoin2Presenter extends BasePresenter {
             }
 
             if (position == punchCardDays) {//签到点击
+                final int finalPosition = position;
                 punchCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fuelPunchCardView(punchCardView);
-                        punchCardView.setOnClickListener(null);//点击事件清除
-                        requestPunchCard();
-                        ToastView.makeText(mContext, "签到成功!");
+                        requestPunchCard(punchCardView, signJsonList, finalPosition);
                     }
                 });
             }

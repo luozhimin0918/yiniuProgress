@@ -261,6 +261,7 @@ public class HttpConstant {
     public static final String CREDITS_MAIN = BASE_URL + "coins/main" + VarConstant.HTTP_CONTENT;//我的金币
     public static final String CREDITS_DETAIL = BASE_URL + "coins/month_detail" + VarConstant.HTTP_CONTENT;//本月明细
     public static final String CREDITS_MON_SUM = BASE_URL + "coins/month_summary" + VarConstant.HTTP_CONTENT;//月度汇总
+    public static final String CREDITS_PUNCH_CARD = BASE_URL + "coins/punch_card" + VarConstant.HTTP_CONTENT;//签到
 
 
     public static final String MESSAGE_CLEAR_UNREAD = BASE_URL + "message/clear_unread";//清空未读消息

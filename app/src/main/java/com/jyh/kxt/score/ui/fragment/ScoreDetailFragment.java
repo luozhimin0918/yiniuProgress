@@ -1,7 +1,9 @@
 package com.jyh.kxt.score.ui.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
@@ -34,6 +36,7 @@ public class ScoreDetailFragment extends BaseFragment {
     public static final String TYPE_MONTH = "2";
 
     @BindView(R.id.pl_rootView) public FrameLayout plRootView;
+    @BindView(R.id.rl_title) RelativeLayout rlTitle;
 
     private String type;
     private PullListViewPresenter presenter;
@@ -44,16 +47,19 @@ public class ScoreDetailFragment extends BaseFragment {
         type = getArguments().getString(TYPE);
         presenter = new PullListViewPresenter(this);
         presenter.createView(plRootView);
+        presenter.getPullToRefreshListView().setDividerNull();
         presenter.setLoadMode(PullListViewPresenter.LoadMode.PAGE_LOAD);
         JSONObject parameterJson = new JSONObject();
         parameterJson.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(getContext()).getUid());
 
         if (TYPE_DAY.equals(type)) {
+            rlTitle.setVisibility(View.GONE);
             List<ScoreDetailDayJson> scoreDetailDayJsons = new ArrayList<>();
             ScoreDetailDayAdapter scoreDetailDayAdapter = new ScoreDetailDayAdapter(scoreDetailDayJsons, getContext());
             presenter.setRequestInfo(HttpConstant.CREDITS_DETAIL, parameterJson, ScoreDetailDayJson.class);
             presenter.setAdapter(scoreDetailDayAdapter);
         } else {
+            rlTitle.setVisibility(View.VISIBLE);
             List<ScoreDetailMonthJson> scoreDetailMonthJsons = new ArrayList<>();
             ScoreDetailMonthAdapter scoreDetailMonthAdapter = new ScoreDetailMonthAdapter(scoreDetailMonthJsons, getContext());
             presenter.setRequestInfo(HttpConstant.CREDITS_MON_SUM, parameterJson, ScoreDetailMonthJson.class);
@@ -65,10 +71,10 @@ public class ScoreDetailFragment extends BaseFragment {
             public void beforeParameter(List dataList, JSONObject jsonObject) {
                 Object obj = dataList.get(dataList.size() - 1);
                 if (obj instanceof ScoreDetailDayJson) {
-                    ScoreDetailDayJson bean= (ScoreDetailDayJson) obj;
+                    ScoreDetailDayJson bean = (ScoreDetailDayJson) obj;
                     jsonObject.put(VarConstant.HTTP_LASTID, "");
                 } else if (obj instanceof ScoreDetailMonthJson) {
-                    ScoreDetailMonthJson bean= (ScoreDetailMonthJson) obj;
+                    ScoreDetailMonthJson bean = (ScoreDetailMonthJson) obj;
                     jsonObject.put(VarConstant.HTTP_LASTID, "");
                 }
             }

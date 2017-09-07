@@ -1,8 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                   android:id="@+id/pl_rootView"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="match_parent"
-                                   android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-</FrameLayout>
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="收入"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size3"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/contentPadding"
+            android:text="月份"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size3"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/contentPadding"
+            android:text="支出"
+            android:textColor="@color/font_color60"
+            android:textSize="@dimen/describe_font_size3"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color2"/>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/pl_rootView"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+        />
+
+</LinearLayout>
