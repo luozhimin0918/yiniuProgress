@@ -99,7 +99,8 @@ public class TaskAdapter extends BaseListAdapter {
                 }
             }
             viewHolder.tvTitle.setText(task.getTitle());
-            viewHolder.tvScoreNum.setText(task.getAward());
+            String award = task.getAward();
+            viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
         }
 
         return convertView;

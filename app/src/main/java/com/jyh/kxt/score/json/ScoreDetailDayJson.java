@@ -8,42 +8,41 @@ package com.jyh.kxt.score.json;
  */
 
 public class ScoreDetailDayJson {
-    private String task_title;    //标题 签到...
-    private String task_time;    //任务时间
-    private String task_award;    //任务奖励积分
+    private String title;    //标题 签到...
+    private String time;    //任务时间
+    private String award;    //任务奖励积分
 
     public ScoreDetailDayJson() {
     }
 
-    public ScoreDetailDayJson(String task_title, String task_time, String task_award) {
-
-        this.task_title = task_title;
-        this.task_time = task_time;
-        this.task_award = task_award;
+    public String getTitle() {
+        return title;
     }
 
-    public String getTask_title() {
-
-        return task_title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setTask_title(String task_title) {
-        this.task_title = task_title;
+    public String getTime() {
+        return time;
     }
 
-    public String getTask_time() {
-        return task_time;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public void setTask_time(String task_time) {
-        this.task_time = task_time;
+    public String getAward() {
+        return award;
     }
 
-    public String getTask_award() {
-        return task_award;
+    public void setAward(String award) {
+        this.award = award;
     }
 
-    public void setTask_award(String task_award) {
-        this.task_award = task_award;
+    public ScoreDetailDayJson(String title, String time, String award) {
+
+        this.title = title;
+        this.time = time;
+        this.award = award;
     }
 }

@@ -44,9 +44,9 @@ public class ScoreDetailMonthAdapter extends BaseListAdapter<ScoreDetailMonthJso
         }
 
         ScoreDetailMonthJson bean = dataList.get(position);
-        holder.tvIn.setText(bean.getTask_award_in());
-        holder.tvOut.setText(bean.getTask_award_out());
-        holder.tvTime.setText(bean.getTask_title());
+        holder.tvIn.setText(bean.getIncome());
+        holder.tvOut.setText(bean.getExpend());
+        holder.tvTime.setText(bean.getMonth());
 
         holder.tvIn.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
         holder.tvOut.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));

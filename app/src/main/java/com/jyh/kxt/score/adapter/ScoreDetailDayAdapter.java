@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.score.json.ScoreDetailDayJson;
+import com.library.util.DateUtils;
 
 import java.util.List;
 
@@ -44,14 +45,21 @@ public class ScoreDetailDayAdapter extends BaseListAdapter<ScoreDetailDayJson> {
         }
 
         ScoreDetailDayJson bean = dataList.get(position);
-        holder.tvContent.setText(bean.getTask_title());
-        holder.tvNum.setText(bean.getTask_award());
-        holder.tvTime.setText(bean.getTask_time());
+        holder.tvContent.setText(bean.getTitle());
+        holder.tvNum.setText(bean.getAward());
+        String time = bean.getTime();
+        try {
+            time = DateUtils.transformTime(Long.parseLong(time) * 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            time = "00:00";
+        }
+        holder.tvTime.setText(time);
 
-        holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
-        holder.tvNum.setTextColor(ContextCompat.getColor(mContext,R.color.font_color8));
-        holder.tvTime.setTextColor(ContextCompat.getColor(mContext,R.color.font_color17));
-        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color2));
+        holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+        holder.tvNum.setTextColor(ContextCompat.getColor(mContext, R.color.font_color8));
+        holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color17));
+        holder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color2));
 
         return convertView;
     }

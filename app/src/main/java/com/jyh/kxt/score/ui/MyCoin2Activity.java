@@ -1,5 +1,6 @@
 package com.jyh.kxt.score.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MyCoin2Activity extends BaseActivity implements
         PageLoadLayout.OnAfreshLoadListener,
@@ -74,6 +76,18 @@ public class MyCoin2Activity extends BaseActivity implements
 
         mdsdSignContent.setAlphaView(mdsdAlphaView);
         mdsdSignContent.open();
+    }
+
+    @OnClick({R.id.iv_bar_break,R.id.iv_bar_function})
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
+            case R.id.iv_bar_function:
+                startActivity(new Intent(this,CoinHistoryActivity.class));
+                break;
+        }
     }
 
     private void initView() {
