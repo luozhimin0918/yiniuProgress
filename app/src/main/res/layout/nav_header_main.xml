@@ -39,7 +39,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_sign"
-                android:layout_width="87.5dp"
+                android:layout_width="75dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -260,6 +260,7 @@
                         android:layout_marginLeft="8dp"
                         android:background="@drawable/bg_oval_red"
                         android:textSize="@dimen/min_min_font_size"
+                        android:visibility="gone"
                         />
                 </LinearLayout>
 

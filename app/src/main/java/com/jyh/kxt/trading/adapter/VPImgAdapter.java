@@ -67,8 +67,6 @@ public class VPImgAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = views.get(position);
 
-        Log.e("ViewPager", "instantiateItem: "+view);
-
         try {
             final ImageView ivPop = (ImageView) view.findViewById(R.id.iv_pop);
             View downBitmapToSd = view.findViewById(R.id.iv_download);

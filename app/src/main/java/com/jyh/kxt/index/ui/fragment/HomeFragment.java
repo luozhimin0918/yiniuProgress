@@ -393,6 +393,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     public void onEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
+            case EventBusClass.EVENT_LOGIN_UPDATE:
                 UserJson userJson = (UserJson) eventBus.intentObj;
                 changeUserImg(userJson);
                 break;

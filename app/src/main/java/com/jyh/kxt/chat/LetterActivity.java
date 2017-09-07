@@ -334,7 +334,9 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             }
 
             userInfo.setIs_unread_msg(unreadMessageCount == 0 ? 0 : 1);
-            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
+            LoginUtils.changeUserInfo(this, userInfo);//重新保存
+
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
         }
 
         EventBus.getDefault().unregister(this);

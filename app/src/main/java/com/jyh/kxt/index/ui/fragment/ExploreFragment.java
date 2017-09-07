@@ -195,8 +195,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         Context mContext = getContext();
         btnRecyclerView = new RecyclerView(mContext);
         int carouselHeight = (int) mContext.getResources().getDimension(R.dimen.index_btn_height);
-        if (shortcuts.size() <= 4)
+        if (shortcuts.size() <= 4) {
             carouselHeight = carouselHeight / 2;
+        }
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 carouselHeight);
         decor = new DividerGridItemDecoration(mContext);
@@ -405,8 +406,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
      * @param articles
      */
     public void addArticle(List<AuthorNewsJson> articles) {
-        if (homeHeadView != null)
+        if (homeHeadView != null) {
             plvContent.getRefreshableView().removeHeaderView(homeHeadView);
+        }
         plvContent.getRefreshableView().addHeaderView(homeHeadView);
         if (newsAdapter == null) {
             newsAdapter = new NewsAdapter(getContext(), articles);
@@ -530,6 +532,7 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
+            case EventBusClass.EVENT_LOGIN_UPDATE:
                 UserJson userJson = (UserJson) eventBus.intentObj;
                 changeUserImg(userJson);
                 break;
@@ -546,8 +549,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
     public void onChangeTheme() {
         super.onChangeTheme();
 
-        if (plvContent != null)
+        if (plvContent != null) {
             plvContent.setDividerNull();
+        }
 
         if (newsAdapter != null) newsAdapter.notifyDataSetChanged();
         if (authorAdapter != null) authorAdapter.notifyDataSetChanged();
@@ -557,8 +561,9 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         for (View headLine : headLines) {
             headLine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.line_color2));
         }
-        if (carouseView != null)
+        if (carouseView != null) {
             carouseView.onChangeTheme();
+        }
         if (btnRecyclerView != null && decor != null) {
             btnRecyclerView.removeItemDecoration(decor);
             decor = null;

@@ -571,6 +571,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public void onEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
+            case EventBusClass.EVENT_LOGIN_UPDATE:
                 UserJson userJson = (UserJson) eventBus.intentObj;
                 changeUserStatus(userJson);
                 break;

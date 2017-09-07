@@ -12,6 +12,7 @@ public class EventBusClass {
     public static final int EVENT_FLASH_FILTRATE = 1;//快讯筛选
     public static final int EVENT_LOGIN = 2;//登录
     public static final int EVENT_LOGOUT = 3;//退出登录
+
     public static final int EVENT_CLEAR_BROWER = 4;//删除浏览记录
     public static final int EVENT_CHANGEUSERINFO = 5;//更新用户信息
     public static final int EVENT_COLLECT_VIDEO = 6;//视听收藏状态改变
@@ -42,6 +43,7 @@ public class EventBusClass {
     public static final int EVENT_DRAFT = 24;//刷新列表,有新的草稿
     public static final int EVENT_UNREAD_MSG = 25;//是否存在未读消息
 
+    public static final int EVENT_LOGIN_UPDATE = 26;//刷新红点状态
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;
