@@ -62,7 +62,7 @@ public class UmengShareTool {
         PlatformConfig.setWeixin(VarConstant.WX_APPID, VarConstant.WX_APPSECRET);
         PlatformConfig.setQQZone(VarConstant.QQ_APPID, VarConstant.QQ_APPKEY);
         PlatformConfig.setSinaWeibo(VarConstant.SINA_APPKEY, VarConstant.SINA_APPSECRET, VarConstant.SINA_CALLBACK);
-        Config.DEBUG = true;
+//        Config.DEBUG = true;
         UMShareConfig config = new UMShareConfig();
         config.isNeedAuthOnGetUserInfo(false);
         config.isOpenShareEditActivity(true);

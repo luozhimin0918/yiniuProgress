@@ -67,9 +67,7 @@ public class MyCoin2Activity extends BaseActivity implements
         tvBarTitle.setText("我的金币");
         ivBarFunction.setText("金币明细");
 
-
         mdsdSignContent.setAlphaView(mdsdAlphaView);
-        mdsdSignContent.open();
 
         initView();
 
@@ -113,6 +111,7 @@ public class MyCoin2Activity extends BaseActivity implements
 
 
     public void init(MyCoinJson myCoinJson) {
+        mdsdSignContent.animateOpen();
         /**
          * 打卡数据
          */
