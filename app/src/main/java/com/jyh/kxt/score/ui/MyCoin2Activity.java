@@ -206,7 +206,7 @@ public class MyCoin2Activity extends BaseActivity implements
      */
     public void initHeadViewLayout() {
         if (headView == null) {
-            headView = LayoutInflater.from(getContext()).inflate(R.layout.head_sign, null, false);
+            headView = LayoutInflater.from(getContext()).inflate(R.layout.head_sign, plContent, false);
             hvRootView = ButterKnife.findById(headView, R.id.rl_rootView);
             hvTvScore = ButterKnife.findById(headView, R.id.tv_score);
             hvTvCoin = ButterKnife.findById(headView, R.id.tv_coin);

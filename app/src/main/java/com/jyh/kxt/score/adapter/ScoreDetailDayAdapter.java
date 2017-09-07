@@ -46,7 +46,13 @@ public class ScoreDetailDayAdapter extends BaseListAdapter<ScoreDetailDayJson> {
 
         ScoreDetailDayJson bean = dataList.get(position);
         holder.tvContent.setText(bean.getTitle());
-        holder.tvNum.setText(bean.getAward());
+        String award = bean.getAward();
+        if (award == null || "".equals(award.trim())) {
+            award = "";
+        } else {
+            award = "金币" + award;
+        }
+        holder.tvNum.setText(award);
         String time = bean.getTime();
         try {
             time = DateUtils.transformTime(Long.parseLong(time) * 1000);
