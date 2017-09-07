@@ -63,10 +63,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
 
-    /**
-     * 未读消息,通过这个数量来控制主页面是否有红点产生
-     */
-    public int unreadMessageCount = 0;
 
     private LetterJson letterJson;
 
@@ -87,7 +83,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
 
         Activity stackPeekActivity = ActivityManager.getInstance().getStackPeekActivity();
         if (stackPeekActivity == this) {
-
             LetterListJson letterListJson = letterReceiverSet.get(sender);
             String currentTime = (System.currentTimeMillis() / 1000) + "";
             if (letterListJson != null) {
@@ -107,13 +102,16 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
                 letterListJson.setDatetime(currentTime);
                 letterListJson.setLast_content(chatRoomJson.getContent());
                 letterListJson.setNum_unread("1");
-                letterListJson.setReceiver(chatRoomJson.getReceiver());
+
+                letterListJson.setReceiver(chatRoomJson.getSender());
+                letterListJson.setSender(chatRoomJson.getReceiver());
+
                 letterListJson.setAvatar(chatRoomJson.getAvatar());
                 letterListJson.setLast_id(chatRoomJson.getId());
                 letterListJson.setNickname(chatRoomJson.getNickname());
 
                 adapter.dataList.add(0, letterListJson);
-                letterReceiverSet.put(letterListJson.getReceiver(), letterListJson);
+                letterReceiverSet.put(sender, letterListJson);
             }
 
             adapter.notifyDataSetChanged();
@@ -173,7 +171,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             if ("1".equals(letterJson.getShow_red_dot())) {
                 adapter.setShowRed(false);
                 adapter.notifyDataSetChanged();
-                unreadMessageCount -= 1;
             }
             Intent intent = new Intent(this, SystemLetterActivity.class);
             startActivity(intent);
@@ -211,9 +208,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         adapter.setShowRed(isShowRedDot);
         plContent.setAdapter(adapter);
 
-        if (isShowRedDot) {
-            unreadMessageCount += 1;
-        }
 
         plRootView.loadOver();
     }
@@ -235,9 +229,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         //是否存在红点
         String show_red_dot = letterJson.getShow_red_dot();
         boolean isShowRedDot = show_red_dot != null && "1".equals(show_red_dot);
-        if (isShowRedDot) {
-            unreadMessageCount += 1;
-        }
         adapter.setShowRed(isShowRedDot);
 
         adapter.notifyDataSetChanged();
@@ -258,19 +249,12 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
              */
             letterLastIdSet.clear();
             letterReceiverSet.clear();
-            unreadMessageCount = 0;//刷新重置
 
             for (LetterListJson letterListJson : letterList) {
                 letterLastIdSet.add(letterListJson.getLast_id());
                 letterReceiverSet.put(letterListJson.getReceiver(), letterListJson);
 
                 letterListJson.setContentType(0);
-
-
-                String numUnread = letterListJson.getNum_unread();
-                if (numUnread != null) {
-                    unreadMessageCount += Integer.parseInt(numUnread);
-                }
             }
 
             /**
@@ -341,10 +325,14 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.e(TAG, "unreadMessageCount: "+unreadMessageCount );
-
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo != null) {
+            int unreadMessageCount = 0;
+            List<LetterListJson> dataList = adapter.dataList;
+            for (LetterListJson letterListJson : dataList) {
+                unreadMessageCount += Integer.parseInt(letterListJson.getNum_unread());
+            }
+
             userInfo.setIs_unread_msg(unreadMessageCount == 0 ? 0 : 1);
             EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
         }
@@ -356,5 +344,10 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     }
 
     public void deleteMessage(LetterListJson bean) {
+        try {
+            letterReceiverSet.remove(bean.getReceiver());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

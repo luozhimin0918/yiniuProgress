@@ -641,15 +641,10 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
                 }
 
                 alphaView.setAlpha((float) bfb);
-                if (mExpanded) {
-                    if (!alphaView.isShown()) {
-                        alphaView.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    if (alphaView.isShown()) {
-                        alphaView.setVisibility(View.GONE);
-                    }
+                if (!alphaView.isShown()) {
+                    alphaView.setVisibility(View.VISIBLE);
                 }
+
                 int deltaY = position - top;
                 if (position < mTopOffset) {
                     deltaY = mTopOffset - top;
@@ -935,9 +930,14 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         if (mOnDrawerListener != null) {
             mOnDrawerListener.onDrawerClosed();
         }
-        alphaView.setAlpha(0);
-        alphaView.setVisibility(View.GONE);
-        alphaView.setOnClickListener(null);
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alphaView.setAlpha(0);
+                alphaView.setVisibility(View.GONE);
+                alphaView.setOnClickListener(null);
+            }
+        }, 100);
     }
 
     private void openDrawer() {
@@ -953,15 +953,19 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         if (mOnDrawerListener != null) {
             mOnDrawerListener.onDrawerOpened();
         }
-
-        alphaView.setAlpha(1);
-        alphaView.setVisibility(View.VISIBLE);
-        alphaView.setOnClickListener(new View.OnClickListener() {
+        postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                animateToggle();
+            public void run() {
+                alphaView.setAlpha(1);
+                alphaView.setVisibility(View.VISIBLE);
+                alphaView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        animateClose();
+                    }
+                });
             }
-        });
+        }, 100);
     }
 
     /**

@@ -14,7 +14,7 @@ public class LetterListJson {
 
     private String local_content;//本地消息，发送失败或者草稿数据
 
-    private String num_unread;  //未读数量
+    private String num_unread = "0";  //未读数量
     private String is_banned;   //是否屏蔽
     private String nickname;  //昵称
     private String avatar;   //头像

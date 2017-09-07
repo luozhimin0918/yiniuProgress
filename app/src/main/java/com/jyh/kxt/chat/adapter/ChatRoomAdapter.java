@@ -120,12 +120,12 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
         if (chatRoomJson.getMsgSendStatus() == 1) {
             baseViewHolder.progressTip.setVisibility(View.VISIBLE);
 
-        } else if (chatRoomJson.getMsgSendStatus() == 2) {
+        } else if (chatRoomJson.getMsgSendStatus() == 2 || chatRoomJson.getMsgSendStatus() == 3) {
             baseViewHolder.chatRoomTip.setVisibility(View.VISIBLE);
 
             Glide.with(mContext).load(R.mipmap.icon_msg_error).into(baseViewHolder.chatRoomTip);
 
-            if (chatRoomJson.getIs_banned_for_sender() == 1) {
+            if (chatRoomJson.getIs_banned_for_sender() == 1 || chatRoomJson.getMsgSendStatus() == 3) {
                 baseViewHolder.chatRoomShield.setVisibility(View.VISIBLE);
             } else {
                 baseViewHolder.chatRoomTip.setOnClickListener(new View.OnClickListener() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class VPImgAdapter extends PagerAdapter {
         this.mContext = mContext;
         LayoutInflater from = LayoutInflater.from(mContext);
         for (String url : urls) {
-            views.add(from.inflate(R.layout.pop_img, null, false));
+            views.add(from.inflate(R.layout.pop_img, null));
         }
     }
 
@@ -59,61 +60,67 @@ public class VPImgAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-//        super.destroyItem(container, position, object);
         container.removeView(views.get(position));
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = views.get(position);
-        final ImageView ivPop = (ImageView) view.findViewById(R.id.iv_pop);
-        View downBitmapToSd = view.findViewById(R.id.iv_download);
 
-        ivPop.setOnClickListener(onClickLinstener);
+        Log.e("ViewPager", "instantiateItem: "+view);
 
-        Glide.with(mContext).load(urls.get(position))
-                .asBitmap()
-                .error(R.mipmap.icon_def_news)
-                .placeholder(R.mipmap.icon_def_news)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ivPop.setImageBitmap(resource);
+        try {
+            final ImageView ivPop = (ImageView) view.findViewById(R.id.iv_pop);
+            View downBitmapToSd = view.findViewById(R.id.iv_download);
+
+            ivPop.setOnClickListener(onClickLinstener);
+
+            Glide.with(mContext).load(urls.get(position))
+                    .asBitmap()
+                    .error(R.mipmap.icon_def_news)
+                    .placeholder(R.mipmap.icon_def_news)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            ivPop.setImageBitmap(resource);
+                        }
+                    });
+            downBitmapToSd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        String httpUrl = urls.get(position);
+                        String md5Key = ConvertUtils.md5(httpUrl);
+
+                        File bitmapFile = FileUtils.getSDSaveFilePath(mContext, "bitmap");
+                        String bitmapSavePath = bitmapFile.getPath() + File.separator + md5Key + ".jpg";
+
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) ivPop.getDrawable();
+                        Bitmap imageBitmap = bitmapDrawable.getBitmap();
+
+                        FileOutputStream fos = new FileOutputStream(new File(bitmapSavePath));
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        fos.flush();
+                        fos.close();
+
+                        ToastView.makeText3(mContext, "图片已保存至:" + bitmapSavePath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                        TSnackbar.make(v, "图片保存失败!",
+                                TSnackbar.LENGTH_SHORT,
+                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                                .setPromptThemBackground(Prompt.WARNING)
+                                .show();
                     }
-                });
-        downBitmapToSd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    String httpUrl = urls.get(position);
-                    String md5Key = ConvertUtils.md5(httpUrl);
-
-                    File bitmapFile = FileUtils.getSDSaveFilePath(mContext, "bitmap");
-                    String bitmapSavePath = bitmapFile.getPath() + File.separator + md5Key + ".jpg";
-
-                    BitmapDrawable bitmapDrawable = (BitmapDrawable) ivPop.getDrawable();
-                    Bitmap imageBitmap = bitmapDrawable.getBitmap();
-
-                    FileOutputStream fos = new FileOutputStream(new File(bitmapSavePath));
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    fos.flush();
-                    fos.close();
-
-                    ToastView.makeText3(mContext, "图片已保存至:" + bitmapSavePath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                    TSnackbar.make(v, "图片保存失败!",
-                            TSnackbar.LENGTH_SHORT,
-                            TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
-                            .setPromptThemBackground(Prompt.WARNING)
-                            .show();
                 }
-            }
-        });
+            });
 
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        container.addView(view, layoutParams);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            container.addView(view, layoutParams);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return view;
     }
 

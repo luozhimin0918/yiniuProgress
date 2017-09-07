@@ -29,6 +29,9 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.dao.ChatRoomJsonDao;
 import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.util.emoje.EmoticonReplaceTextView;
+import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
+import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.chat.LetterActivity;
@@ -210,7 +213,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
                 spannableStringBuilder.insert(0, draftSpannable);
                 break;
         }
-        viewHolder.tvContent.setText(spannableStringBuilder);
+        viewHolder.tvContent.convertEmoJeToText(spannableStringBuilder,"[表情]");
     }
 
     /**
@@ -226,7 +229,6 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         LetterListJson bean = dataList.get(index);
 
         if (bean.getNum_unread() != null) {
-            mActivity.unreadMessageCount -= Integer.parseInt(bean.getNum_unread());
             mActivity.deleteMessage(bean);
         }
 
@@ -343,7 +345,7 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
         @BindView(R.id.riv_avatar) RoundImageView rivAvatar;
         @BindView(R.id.tv_name) TextView tvName;
         @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.tv_content) TextView tvContent;
+        @BindView(R.id.tv_content) EmoticonReplaceTextView tvContent;
         @BindView(R.id.tv_num) TextView tvNum;
         @BindView(R.id.tv_del) TextView tvDel;
         @BindView(R.id.v_line) View vLine;

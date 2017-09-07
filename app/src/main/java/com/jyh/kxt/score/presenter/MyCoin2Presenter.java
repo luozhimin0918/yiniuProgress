@@ -25,7 +25,6 @@ import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ import java.util.List;
 
 public class MyCoin2Presenter extends BasePresenter {
 
-    @BindObject MyCoin2Activity myCoin2Activity;
+    @BindObject private MyCoin2Activity myCoin2Activity;
 
     private VolleyRequest request;
 
@@ -48,17 +47,19 @@ public class MyCoin2Presenter extends BasePresenter {
      * 初始化金币接口
      */
     public void requestInitCoin(final boolean isRefresh) {
-
         //各种数据请求之后回调
         JSONObject param = request.getJsonParam();
         param.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
+
         request.doGet(HttpConstant.CREDITS_MAIN, param, new HttpListener<MyCoinJson>() {
             @Override
             protected void onResponse(MyCoinJson myCoinJson) {
+
                 if (myCoinJson == null) {
-                    myCoin2Activity.loadEmptyData();
+                    myCoin2Activity.plRootView.loadEmptyData();
                     return;
                 }
+
                 if (isRefresh) {
                     myCoin2Activity.refresh(myCoinJson);
                     myCoin2Activity.plContent.postDelayed(new Runnable() {
@@ -67,8 +68,9 @@ public class MyCoin2Presenter extends BasePresenter {
                             myCoin2Activity.plContent.onRefreshComplete();
                         }
                     }, 200);
-                } else
+                } else {
                     myCoin2Activity.init(myCoinJson);
+                }
             }
 
             @Override
@@ -81,8 +83,9 @@ public class MyCoin2Presenter extends BasePresenter {
                             myCoin2Activity.plContent.onRefreshComplete();
                         }
                     }, 200);
-                } else
-                    myCoin2Activity.loadError(error);
+                } else {
+                    myCoin2Activity.plRootView.loadError();
+                }
             }
         });
 

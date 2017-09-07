@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_rootView"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:background="@mipmap/icon_score_bg"
-                android:id="@+id/rl_rootView"
     >
 
     <TextView
@@ -15,8 +15,21 @@
         android:layout_marginLeft="@dimen/contentPadding"
         android:layout_marginRight="@dimen/contentPadding"
         android:text="162"
+        android:includeFontPadding="false"
         android:textColor="@color/white"
         android:textSize="55sp"/>
+
+
+    <TextView
+        android:id="@+id/tv_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_score"
+        android:layout_alignBottom="@+id/tv_score"
+        android:text="金币"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
+        android:textSize="@dimen/describe_font_size4"/>
 
     <ImageView
         android:id="@+id/iv_sign"
@@ -24,18 +37,5 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tv_coin"
         android:layout_toLeftOf="@+id/tv_score"
-        android:layout_toStartOf="@+id/tv_score"
         android:src="@mipmap/icon_score_coin"/>
-
-    <TextView
-        android:id="@+id/tv_coin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/tv_score"
-        android:layout_toRightOf="@id/tv_score"
-        android:includeFontPadding="false"
-        android:text="金币"
-        android:textColor="@color/white"
-        android:textSize="@dimen/describe_font_size4"/>
-
 </RelativeLayout>

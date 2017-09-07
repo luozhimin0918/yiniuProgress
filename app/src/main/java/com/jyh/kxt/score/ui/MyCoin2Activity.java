@@ -2,8 +2,6 @@ package com.jyh.kxt.score.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +13,11 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer;
-import com.jyh.kxt.main.json.PreloadIndex;
 import com.jyh.kxt.score.adapter.TaskAdapter;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.json.TaskAllJson;
-import com.jyh.kxt.score.json.TaskJson;
 import com.jyh.kxt.score.presenter.MyCoin2Presenter;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
@@ -42,7 +38,7 @@ public class MyCoin2Activity extends BaseActivity implements
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-    @BindView(R.id.pl_rootView) PageLoadLayout plRootView;
+    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.fl_punch_card_tab) public FlowLayout flPunchCardTab;
 
@@ -51,13 +47,15 @@ public class MyCoin2Activity extends BaseActivity implements
 
     private MyCoin2Presenter myCoin2Presenter;
 
-    private int coinNum;//金币数
     //头部布局
     private View headView;
+
     private RelativeLayout hvRootView;
     private TextView hvTvScore;
     private TextView hvTvCoin;
     private ImageView hvIvCoin;
+
+    private int coinNum;//金币数
 
     private TaskAdapter adapter;
 
@@ -69,26 +67,18 @@ public class MyCoin2Activity extends BaseActivity implements
         tvBarTitle.setText("我的金币");
         ivBarFunction.setText("金币明细");
 
-        initView();
-
-        myCoin2Presenter = new MyCoin2Presenter(this);
-        myCoin2Presenter.requestInitCoin(false);
 
         mdsdSignContent.setAlphaView(mdsdAlphaView);
         mdsdSignContent.open();
+
+        initView();
+
+        myCoin2Presenter = new MyCoin2Presenter(this);
+
+        plRootView.loadWait();
+        myCoin2Presenter.requestInitCoin(false);
     }
 
-    @OnClick({R.id.iv_bar_break,R.id.iv_bar_function})
-    public void onClick(View view){
-        switch (view.getId()){
-            case R.id.iv_bar_break:
-                onBackPressed();
-                break;
-            case R.id.iv_bar_function:
-                startActivity(new Intent(this,CoinHistoryActivity.class));
-                break;
-        }
-    }
 
     private void initView() {
         plRootView.setOnAfreshLoadListener(this);
@@ -97,10 +87,16 @@ public class MyCoin2Activity extends BaseActivity implements
         plContent.setOnRefreshListener(this);
     }
 
-    @Override
-    public void OnAfreshLoad() {
-        plRootView.loadWait();
-        myCoin2Presenter.requestInitCoin(false);
+    @OnClick({R.id.iv_bar_break, R.id.iv_bar_function})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_bar_break:
+                onBackPressed();
+                break;
+            case R.id.iv_bar_function:
+                startActivity(new Intent(this, CoinHistoryActivity.class));
+                break;
+        }
     }
 
     @Override
@@ -109,28 +105,17 @@ public class MyCoin2Activity extends BaseActivity implements
     }
 
 
-    public void loadWait() {
-        mdsdSignContent.close();
+    @Override
+    public void OnAfreshLoad() {
         plRootView.loadWait();
+        myCoin2Presenter.requestInitCoin(false);
     }
 
-    public void loadEmptyData() {
-        mdsdSignContent.close();
-        plRootView.loadEmptyData();
-    }
-
-    public void loadOver() {
-        mdsdSignContent.open();
-        plRootView.loadOver();
-    }
-
-    public void loadError(VolleyError error) {
-        mdsdSignContent.close();
-        plRootView.loadError();
-    }
 
     public void init(MyCoinJson myCoinJson) {
-
+        /**
+         * 打卡数据
+         */
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
@@ -145,8 +130,7 @@ public class MyCoin2Activity extends BaseActivity implements
         coinNum = my_award_num == null || my_award_num.trim().equals("") ? 0 : Integer.parseInt(my_award_num);
         List<TaskAllJson> data = myCoinJson.getTask();
         if (data == null || data.size() == 0) {
-            loadEmptyData();
-            return;
+            plRootView.loadEmptyData();
         } else {
             List adapterData = new ArrayList();
             for (TaskAllJson taskAllJson : data) {
@@ -154,19 +138,20 @@ public class MyCoin2Activity extends BaseActivity implements
                 adapterData.add(title);
                 adapterData.addAll(taskAllJson.getData());
             }
-            if (headView != null)
+            if (headView != null) {
                 plContent.getRefreshableView().removeHeaderView(headView);
+            }
             initHeadViewLayout();
             plContent.getRefreshableView().addHeaderView(headView);
+
             if (adapter == null) {
                 adapter = new TaskAdapter(adapterData, getContext());
                 plContent.setAdapter(adapter);
             } else {
                 adapter.setData(adapterData);
             }
-            loadOver();
+            plRootView.loadOver();
         }
-
     }
 
     public void refresh(MyCoinJson myCoinJson) {
@@ -206,7 +191,7 @@ public class MyCoin2Activity extends BaseActivity implements
      */
     public void initHeadViewLayout() {
         if (headView == null) {
-            headView = LayoutInflater.from(getContext()).inflate(R.layout.head_sign, plContent, false);
+            headView = LayoutInflater.from(getContext()).inflate(R.layout.head_sign, plContent.getRefreshableView(), false);
             hvRootView = ButterKnife.findById(headView, R.id.rl_rootView);
             hvTvScore = ButterKnife.findById(headView, R.id.tv_score);
             hvTvCoin = ButterKnife.findById(headView, R.id.tv_coin);

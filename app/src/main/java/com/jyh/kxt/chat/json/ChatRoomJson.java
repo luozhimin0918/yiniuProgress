@@ -76,7 +76,7 @@ public class ChatRoomJson {
     }
 
     /**
-     * 消息发送状态 0 无状态  1 发送中  2 发送失败 （结合ID来使用,如果ID为null）
+     * 消息发送状态 0 无状态  1 发送中  2 发送失败  （结合ID来使用,如果ID为null） 3 因为屏蔽导致的失败
      */
     public int msgSendStatus = 0;
 

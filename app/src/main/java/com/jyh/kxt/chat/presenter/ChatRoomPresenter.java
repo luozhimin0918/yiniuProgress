@@ -1,6 +1,8 @@
 package com.jyh.kxt.chat.presenter;
 
 import android.database.Cursor;
+import android.database.DataSetObserver;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -93,7 +95,10 @@ public class ChatRoomPresenter extends BasePresenter {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem == 0) {
                     //超过25条说明可以加载更多
-                    if (listHeaderView == null && baseChatRoomList.size() > 25 && isAllowLoadMore) {
+                    if (listHeaderView == null && baseChatRoomList.size() >= 30 && isAllowLoadMore) {
+
+                        chatRoomActivity.lvContentList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_NORMAL);
+
                         LayoutInflater mInflater = LayoutInflater.from(mContext);
                         listHeaderView = mInflater.inflate(R.layout.item_chat_more, chatRoomActivity.lvContentList, false);
                         chatRoomActivity.lvContentList.addHeaderView(listHeaderView);
@@ -204,8 +209,9 @@ public class ChatRoomPresenter extends BasePresenter {
 
                     isBannedForReceiver = "1".equals(bannedForReceiver);
 
+                    List<ChatRoomJson> chatRoomList = null;
                     if (chatRoomJsonList != null) {
-                        List<ChatRoomJson> chatRoomList = JSONArray.parseArray(chatRoomJsonList, ChatRoomJson.class);
+                        chatRoomList = JSONArray.parseArray(chatRoomJsonList, ChatRoomJson.class);
 
                         if (chatRoomList.size() == 0) {
                             isAllowLoadMore = false;
@@ -217,13 +223,18 @@ public class ChatRoomPresenter extends BasePresenter {
                         isAllowLoadMore = false;
                     }
 
-
                     //通知刷新
                     chatRoomAdapter.notifyDataSetChanged();
+
                     if (isInitialLoadHistory) {
                         chatRoomActivity.tvRoomReminder.setVisibility(View.GONE);
-                        isInitialLoadHistory = false;
                         chatRoomActivity.lvContentList.setSelection(chatRoomAdapter.getCount());
+                        isInitialLoadHistory = false;
+                    } else {
+                        chatRoomActivity.lvContentList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_NORMAL);
+                        if (chatRoomList != null) {
+                            chatRoomActivity.lvContentList.setSelection(chatRoomList.size());
+                        }
                     }
 
                     if (isBannedForReceiver) {
@@ -328,9 +339,15 @@ public class ChatRoomPresenter extends BasePresenter {
                  * 发送出现错误
                  */
                 ChatRoomJson temporaryChatRoom = temporaryChatRoomMap.get(uniqueIdentification);
-                temporaryChatRoom.setMsgSendStatus(2);
+                if (temporaryChatRoom.getIs_banned_for_sender() == 1) {
+                    temporaryChatRoom.setMsgSendStatus(3);
+                } else {
+                    temporaryChatRoom.setMsgSendStatus(2);
+                }
 
-                String updateSql = "UPDATE CHAT_ROOM_BEAN SET  MSG_SEND_STATUS = 2 WHERE ID = '" + uniqueIdentification + "'";
+                int sendStatus = temporaryChatRoom.getMsgSendStatus();
+
+                String updateSql = "UPDATE CHAT_ROOM_BEAN SET  MSG_SEND_STATUS = "+sendStatus+" WHERE ID = '" + uniqueIdentification + "'";
                 database.execSQL(updateSql);
 
                 chatRoomAdapter.notifyDataSetChanged();
@@ -506,6 +523,8 @@ public class ChatRoomPresenter extends BasePresenter {
         @Override
         public void onChatMessage(ChatRoomJson chatRoomJson) {
             if (chatRoomActivity.otherUid.equals(chatRoomJson.getSender())) {
+                chatRoomActivity.lvContentList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
                 chatRoomJson.setMsgSendStatus(0);
                 chatRoomJson.setViewType(0);
                 baseChatRoomList.add(chatRoomJson);

@@ -96,10 +96,9 @@ public class ChatSocketUtil {
 
                     @Override
                     public void onTextMessage(String payload) {
-                        if (onSocketTextMessageList.size() != 0 && payload != null && !"".equals(payload)) {
-                            for (OnChatMessage onSocketTextMessage : onSocketTextMessageList) {
-
-                                if (payload != null && !"".equals(payload)) {
+                        try {
+                            if (onSocketTextMessageList.size() != 0 && payload != null && !"".equals(payload)) {
+                                for (OnChatMessage onSocketTextMessage : onSocketTextMessageList) {
 
                                     JSONObject payloadBean = JSONObject.parseObject(payload);
                                     String cmd = payloadBean.getString("cmd");
@@ -110,6 +109,8 @@ public class ChatSocketUtil {
                                     }
                                 }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -55,8 +56,8 @@ public class EmoticonSimpleTextView extends TextView {
     private int emoJeSize = SystemUtil.dp2px(getContext(), 60);
     private int emoJeSize2 = SystemUtil.dp2px(getContext(), 25);
 
-    boolean dontConsumeNonUrlClicks = true;
-    boolean linkHit;
+    private boolean linkHit;
+    private boolean dontConsumeNonUrlClicks = true;
 
 
     public EmoticonSimpleTextView(Context context) {
@@ -372,6 +373,7 @@ public class EmoticonSimpleTextView extends TextView {
             return Touch.onTouchEvent(widget, buffer, event);
         }
     }
+
 
     @Override
     public boolean hasFocus() {
