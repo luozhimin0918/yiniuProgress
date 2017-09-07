@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.score.json.TaskJson;
 
 import java.util.List;
@@ -83,7 +85,7 @@ public class TaskAdapter extends BaseListAdapter {
             viewHolder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
             viewHolder.tvSchedule.setTextColor(ContextCompat.getColor(mContext, R.color.font_color17));
 
-            TaskJson task = (TaskJson) dataList.get(position);
+            final TaskJson task = (TaskJson) dataList.get(position);
             String task_succ_num = task.getNum_finished();
             String task_sum_num = task.getTotal_tasks();
             if (task_sum_num == null || task_sum_num.trim().equals("")) {
@@ -101,6 +103,14 @@ public class TaskAdapter extends BaseListAdapter {
             viewHolder.tvTitle.setText(task.getTitle());
             String award = task.getAward();
             viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
+
+            viewHolder.ivTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JumpUtils.jump((BaseActivity) mContext,task.getO_class(),task.getO_action(),task.getO_id(),null);
+                }
+            });
+
         }
 
         return convertView;
