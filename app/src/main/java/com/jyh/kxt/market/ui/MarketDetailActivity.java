@@ -975,9 +975,19 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         int id = clickOldNavigationView.getId();
         switch (id) {
             case R.id.market_chart_fen5_land:
+                marketChartMinuteTv.setText("5分");
+                setHighLightView(marketChartMinute);
+                break;
             case R.id.market_chart_fen15_land:
+                marketChartMinuteTv.setText("15分");
+                setHighLightView(marketChartMinute);
+                break;
             case R.id.market_chart_fen30_land:
+                marketChartMinuteTv.setText("30分");
+                setHighLightView(marketChartMinute);
+                break;
             case R.id.market_chart_fen60_land:
+                marketChartMinuteTv.setText("60分");
                 setHighLightView(marketChartMinute);
                 break;
             case R.id.market_chart_fenshi:
