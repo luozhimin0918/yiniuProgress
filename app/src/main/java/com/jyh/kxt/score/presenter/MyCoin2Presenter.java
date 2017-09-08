@@ -107,6 +107,7 @@ public class MyCoin2Presenter extends BasePresenter {
             protected void onResponse(Object o) {
                 fuelPunchCardView(punchCardView);
                 punchCardView.setOnClickListener(null);//点击事件清除
+                myCoin2Activity.punchCardSucceed();
                 ToastView.makeText(mContext, "签到成功!");
             }
 

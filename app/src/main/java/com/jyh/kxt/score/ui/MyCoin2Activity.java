@@ -60,6 +60,7 @@ public class MyCoin2Activity extends BaseActivity implements
     private int coinNum;//金币数
 
     private TaskAdapter adapter;
+    private int signDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +136,8 @@ public class MyCoin2Activity extends BaseActivity implements
          */
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
-        int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        tvPunchCard.setText("已经连续签到"+punch_card_days+"天");
+        signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
+        tvPunchCard.setText("已经连续签到" + punch_card_days + "天");
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
         PunchCardJson punchCardJson = new PunchCardJson();
@@ -233,5 +234,9 @@ public class MyCoin2Activity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         getQueue().cancelAll(MyCoin2Presenter.class.getName());
+    }
+
+    public void punchCardSucceed() {
+        tvPunchCard.setText("已经连续签到" + (signDays++) + "天");
     }
 }
