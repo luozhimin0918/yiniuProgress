@@ -72,10 +72,10 @@ public class ScoreDetailFragment extends BaseFragment {
                 Object obj = dataList.get(dataList.size() - 1);
                 if (obj instanceof ScoreDetailDayJson) {
                     ScoreDetailDayJson bean = (ScoreDetailDayJson) obj;
-                    jsonObject.put(VarConstant.HTTP_LASTID, "");
+                    jsonObject.put(VarConstant.HTTP_LASTID, bean.getId());
                 } else if (obj instanceof ScoreDetailMonthJson) {
                     ScoreDetailMonthJson bean = (ScoreDetailMonthJson) obj;
-                    jsonObject.put(VarConstant.HTTP_LASTID, "");
+                    jsonObject.put(VarConstant.HTTP_LASTID, bean.getId());
                 }
             }
         });

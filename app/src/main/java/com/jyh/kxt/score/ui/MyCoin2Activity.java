@@ -41,6 +41,8 @@ public class MyCoin2Activity extends BaseActivity implements
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.pl_content) public PullToRefreshListView plContent;
     @BindView(R.id.fl_punch_card_tab) public FlowLayout flPunchCardTab;
+    @BindView(R.id.tv_punch_card_handle) TextView tvPunchCard;
+    @BindView(R.id.iv_punch_card_handle) ImageView ivPunchCard;
 
     @BindView(R.id.mdsd_alpha_view) View mdsdAlphaView;
     @BindView(R.id.mdsd_sign_content) MultiDirectionSlidingDrawer mdsdSignContent;
@@ -68,6 +70,22 @@ public class MyCoin2Activity extends BaseActivity implements
         ivBarFunction.setText("金币明细");
 
         mdsdSignContent.setAlphaView(mdsdAlphaView);
+        mdsdSignContent.setOnDrawerListener(new MultiDirectionSlidingDrawer.OnDrawerListener() {
+            @Override
+            public void onDrawerOpened() {
+                ivPunchCard.setSelected(true);
+            }
+
+            @Override
+            public void onDrawerClosed() {
+                ivPunchCard.setSelected(false);
+            }
+
+            @Override
+            public void onSlideOffset(int offset, double percentage) {
+
+            }
+        });
 
         initView();
 
@@ -118,6 +136,7 @@ public class MyCoin2Activity extends BaseActivity implements
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         int signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
+        tvPunchCard.setText("已经连续签到"+punch_card_days+"天");
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
         PunchCardJson punchCardJson = new PunchCardJson();

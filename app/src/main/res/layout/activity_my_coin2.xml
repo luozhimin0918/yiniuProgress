@@ -64,12 +64,14 @@
                         android:textSize="@dimen/describe_font_size1"/>
 
                     <ImageView
+                        android:id="@+id/iv_punch_card_handle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/tv_punch_card_handle"
-                        android:src="@mipmap/icon_score_arrow_down"/>
+                        android:src="@drawable/sel_sign_arrow"
+                        />
 
                 </RelativeLayout>
 

@@ -8,11 +8,20 @@ package com.jyh.kxt.score.json;
  */
 
 public class ScoreDetailDayJson {
+    private String id;
     private String title;    //标题 签到...
     private String time;    //任务时间
     private String award;    //任务奖励积分
 
     public ScoreDetailDayJson() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,8 +48,8 @@ public class ScoreDetailDayJson {
         this.award = award;
     }
 
-    public ScoreDetailDayJson(String title, String time, String award) {
-
+    public ScoreDetailDayJson(String id, String title, String time, String award) {
+        this.id = id;
         this.title = title;
         this.time = time;
         this.award = award;

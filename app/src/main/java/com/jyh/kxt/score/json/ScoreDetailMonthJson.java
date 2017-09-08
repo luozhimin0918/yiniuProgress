@@ -8,12 +8,21 @@ package com.jyh.kxt.score.json;
  */
 
 public class ScoreDetailMonthJson {
+    private String id;
     private String month;    //月份title
     private String income;    //积分收入
     private String expend;    //积分支出
 
     public ScoreDetailMonthJson() {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMonth() {
@@ -40,7 +49,8 @@ public class ScoreDetailMonthJson {
         this.expend = expend;
     }
 
-    public ScoreDetailMonthJson(String month, String income, String expend) {
+    public ScoreDetailMonthJson(String id, String month, String income, String expend) {
+        this.id = id;
         this.month = month;
         this.income = income;
         this.expend = expend;
