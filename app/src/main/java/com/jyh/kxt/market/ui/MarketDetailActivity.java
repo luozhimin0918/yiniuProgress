@@ -971,6 +971,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             tbPortrair.setVisibility(View.VISIBLE);
         }
 
+        //保存选择状态
         int id = clickOldNavigationView.getId();
         switch (id) {
             case R.id.market_chart_fen5_land:
