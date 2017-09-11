@@ -16,8 +16,17 @@ public class TaskJson {
     private String o_class;//跳转到某个Intent
     private String o_id;
     private String o_action;
+    private String is_finished;
 
     public TaskJson() {
+    }
+
+    public String getIs_finished() {
+        return is_finished;
+    }
+
+    public void setIs_finished(String is_finished) {
+        this.is_finished = is_finished;
     }
 
     public String getTitle() {
@@ -76,8 +85,8 @@ public class TaskJson {
         this.o_action = o_action;
     }
 
-    public TaskJson(String title, String award, String num_finished, String total_tasks, String o_class, String o_id, String o_action) {
-
+    public TaskJson(String title, String award, String num_finished, String total_tasks, String o_class, String o_id, String o_action,
+                    String is_finished) {
         this.title = title;
         this.award = award;
         this.num_finished = num_finished;
@@ -85,5 +94,6 @@ public class TaskJson {
         this.o_class = o_class;
         this.o_id = o_id;
         this.o_action = o_action;
+        this.is_finished = is_finished;
     }
 }

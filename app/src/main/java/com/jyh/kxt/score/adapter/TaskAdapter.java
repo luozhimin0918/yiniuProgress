@@ -13,6 +13,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.score.json.TaskJson;
+import com.library.util.RegexValidateUtil;
 
 import java.util.List;
 
@@ -86,28 +87,34 @@ public class TaskAdapter extends BaseListAdapter {
             viewHolder.tvSchedule.setTextColor(ContextCompat.getColor(mContext, R.color.font_color17));
 
             final TaskJson task = (TaskJson) dataList.get(position);
-            String task_succ_num = task.getNum_finished();
-            String task_sum_num = task.getTotal_tasks();
-            if (task_sum_num == null || task_sum_num.trim().equals("")) {
-                viewHolder.tvSchedule.setVisibility(View.GONE);
-            } else {
-                if (task_sum_num.trim().equals("1") || task_sum_num.trim().equals("0")) {
-                    viewHolder.tvSchedule.setVisibility(View.GONE);
-                } else {
-                    viewHolder.tvSchedule.setVisibility(View.VISIBLE);
-                    if (task_succ_num == null || task_succ_num.trim().equals(""))
-                        task_succ_num = "0";
-                    viewHolder.tvSchedule.setText("完成 " + task_succ_num + "/" + task_sum_num);
+            String is_finished = task.getIs_finished();
+            if (RegexValidateUtil.isEmpty(is_finished)) {
+                viewHolder.tvSchedule.setVisibility(View.VISIBLE);
+                String task_succ_num = task.getNum_finished();
+                String task_sum_num = task.getTotal_tasks();
+                if (task_sum_num == null || task_sum_num.trim().equals("")) {
+                    task_sum_num = "0";
                 }
+                if (task_succ_num == null || task_succ_num.trim().equals(""))
+                    task_succ_num = "0";
+
+                viewHolder.tvSchedule.setText("完成 " + task_succ_num + "/" + task_sum_num);
+                viewHolder.ivTask.setSelected(!task_sum_num.equals("0") && task_sum_num.equals(task_succ_num));
+            } else {
+                viewHolder.tvSchedule.setVisibility(View.GONE);
+                viewHolder.ivTask.setSelected("1".equals(is_finished));
             }
+
             viewHolder.tvTitle.setText(task.getTitle());
             String award = task.getAward();
             viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
 
+            final ViewHolder finalViewHolder = viewHolder;
             viewHolder.ivTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtils.jump((BaseActivity) mContext,task.getO_class(),task.getO_action(),task.getO_id(),null);
+                    if (finalViewHolder.ivTask.isSelected()) return;
+                    JumpUtils.jump((BaseActivity) mContext, task.getO_class(), task.getO_action(), task.getO_id(), null);
                 }
             });
 

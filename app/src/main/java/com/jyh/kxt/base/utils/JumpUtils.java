@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
@@ -22,11 +23,12 @@ import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
+import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.VarConstant;
 import com.library.manager.ActivityManager;
 import com.library.util.DateUtils;
-import com.library.util.ObserverCall;
 import com.library.util.RegexValidateUtil;
 
 import cn.magicwindow.MLink;
@@ -104,6 +106,9 @@ public class JumpUtils {
                     case VarConstant.OCLASS_MEMBER:
                         jumpMember(context, o_action, o_id);
                         break;
+                    case VarConstant.OCLASS_TRADE:
+                        jumpTrade(context, o_action, o_id);
+                        break;
                 }
             } else {
                 //网页跳转
@@ -119,6 +124,27 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void jumpTrade(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_MAIN:
+                boolean logined = LoginUtils.isLogined(context);
+                if (!logined) return;
+                UserJson userInfo = LoginUtils.getUserInfo(context);
+                if (!RegexValidateUtil.isEmpty(userInfo.getWriter_id()) && !RegexValidateUtil.isEmpty(userInfo.getWriter_name())) {
+                    //发布观点
+                    Intent intent = new Intent(context, PublishActivity.class);
+                    context.startActivity(intent);
+                } else {
+                    //入驻专栏
+                    Intent intent = new Intent(context, WebActivity.class);
+                    intent.putExtra(IntentConstant.NAME, "专栏入驻");
+                    intent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + userInfo.getUid());
+                    context.startActivity(intent);
+                }
+                break;
         }
     }
 
@@ -255,7 +281,7 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity
                             (MainActivity.class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                     RadioButton rbMarket = mainActivity.rbMarket;
@@ -278,7 +304,7 @@ public class JumpUtils {
                     final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity
                                     .class);
-                    if(mainActivityList!=null&&mainActivityList.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivityList != null && mainActivityList.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivityList.drawer.closeDrawer(GravityCompat.START);
                     }
                     RadioButton rbMarketList = mainActivityList.rbMarket;
@@ -323,7 +349,7 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity.class);
-                    if(mainActivityZx!=null&&mainActivityZx.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivityZx != null && mainActivityZx.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivityZx.drawer.closeDrawer(GravityCompat.START);
                     }
                     RadioButton rbMarketZx = mainActivityZx.rbMarket;
@@ -376,7 +402,7 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -407,7 +433,7 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
-                    if(mainActivityList!=null&&mainActivityList.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivityList != null && mainActivityList.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivityList.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -486,7 +512,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -527,7 +553,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -577,7 +603,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -612,7 +638,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityRl = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivityRl!=null&&mainActivityRl.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivityRl != null && mainActivityRl.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivityRl.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -702,7 +728,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
@@ -773,7 +799,7 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity2 = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                    if(mainActivity2!=null&&mainActivity2.drawer.isDrawerOpen(GravityCompat.START)){
+                    if (mainActivity2 != null && mainActivity2.drawer.isDrawerOpen(GravityCompat.START)) {
                         mainActivity2.drawer.closeDrawer(GravityCompat.START);
                     }
                 }
