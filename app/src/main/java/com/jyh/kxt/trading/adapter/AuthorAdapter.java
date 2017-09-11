@@ -78,7 +78,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
     private List<AuthorNewsJson> news;
     private int type = 0;
     private TradeHandlerUtil mTradeHandlerUtil;
-    private SimplePopupWindow functionPopupWindow;
+    private PopupUtil functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
 
     public AuthorAdapter(Context context, List<ViewPointTradeBean> viewpoints, List<AuthorNewsJson> news, int type) {
@@ -534,20 +534,7 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
 //
 //                    break;
                 case R.id.view_point_fx_layout:
-                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
-
-                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
-                        @Override
-                        public void onCreateView(View popupView) {
-                            articleContentPresenter.shareToPlatform(popupView, viewPointTradeBean.shareDict);
-                        }
-
-                        @Override
-                        public void onDismiss() {
-
-                        }
-                    });
-                    functionPopupWindow.show(R.layout.pop_point_share);
+                    functionPopupWindow = articleContentPresenter.shareToPlatform( viewPointTradeBean.shareDict);
                     break;
             }
         }

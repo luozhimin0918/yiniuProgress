@@ -13,8 +13,9 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.json.ShareJson;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.json.UmengShareBean;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.LoadX5WebView;
 import com.jyh.kxt.index.presenter.WebPresenter;
 import com.library.util.RegexValidateUtil;
@@ -119,10 +120,17 @@ public class WebActivity extends BaseActivity {
                 if (webPresenter != null && webPresenter.loadX5WebView != null) {
                     LoadX5WebView x5WebView = webPresenter.loadX5WebView;
                     if (!RegexValidateUtil.isEmpty(x5WebView.shareUrl)) {
-                        UmengShareTool.initUmengLayout(this, new ShareJson(x5WebView.shareTitle, x5WebView.shareUrl,
-                                "", x5WebView
-                                .sharePic, null,
-                                UmengShareTool.TYPE_DEFAULT, null, null, null, false, false), null, ivBarBreak, null);
+
+                        UmengShareBean umengShareBean = new UmengShareBean();
+                        umengShareBean.setTitle(x5WebView.shareTitle);
+                        umengShareBean.setDetail("");
+                        umengShareBean.setImageUrl(x5WebView.sharePic);
+                        umengShareBean.setWebUrl(x5WebView.shareUrl);
+
+                        umengShareBean.setFromSource(UmengShareUtil.SHARE_KX);
+
+                        UmengShareUI umengShareUI = new UmengShareUI(this);
+                        umengShareUI.showSharePopup(umengShareBean);
                     }
                 }
                 break;

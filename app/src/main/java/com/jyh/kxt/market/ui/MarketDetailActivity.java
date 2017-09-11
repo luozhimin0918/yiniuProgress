@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -42,11 +41,12 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.impl.OnSocketTextMessage;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.market.bean.MarketDetailBean;
 import com.jyh.kxt.market.bean.MarketItemBean;
@@ -76,7 +76,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -159,7 +158,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
      * 是否允许添加, true 表示可以添加  图标为+  网络请求为删除  K线图修改的
      */
     private boolean updateAddStatus = true;
-    private ShareJson shareJson;
+    //    private ShareJson shareJson;
 
     public boolean portrait = true;
     private PopupWindow popupUtil;
@@ -181,22 +180,15 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 if (!pageLoadLayout.isSuccessLoadOver()) {
                     return;
                 }
-                shareJson = new ShareJson(mDetailShare.getTitle(),
-                        mDetailShare.getUrl(),
-                        mDetailShare.getDescript(),
-                        null,
-                        null,
-                        UmengShareTool.TYPE_DEFAULT,
-                        null,
-                        null,
-                        null,
-                        false, false);
-                shareJson.setShareFromSource(2);
-                shareJson.setWeiBoDiscript(mMarketDetailBean.getShare_sina_title());
-                UmengShareTool.initUmengLayout(MarketDetailActivity.this,
-                        shareJson,
-                        marketItemBean,
-                        view, null);
+                UmengShareBean umengShareBean = new UmengShareBean();
+                umengShareBean.setTitle(mDetailShare.getTitle());
+                umengShareBean.setDetail(mDetailShare.getDescript());
+                umengShareBean.setSinaTitle(mMarketDetailBean.getShare_sina_title());
+                umengShareBean.setFromSource(UmengShareUtil.SHARE_MARKET);
+                umengShareBean.setWebUrl(mDetailShare.getUrl());
+
+                UmengShareUI umengShareUI = new UmengShareUI(this);
+                umengShareUI.showSharePopup(umengShareBean);
                 break;
             case R.id.iv_bar_break:
                 onBackPressed();
@@ -744,7 +736,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 colors[1] = 0xff0AB76C;
             }
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 marketHeadLayout.setBackgroundDrawable(gradientDrawable);
             } else {
                 marketHeadLayout.setBackground(gradientDrawable);
@@ -1047,7 +1039,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override
@@ -1068,16 +1060,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            if (shareJson != null) {
-                Bitmap shareBitmap = shareJson.getBitmap();
-                if (shareBitmap != null && !shareBitmap.isRecycled()) {
-                    shareBitmap.recycle();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }

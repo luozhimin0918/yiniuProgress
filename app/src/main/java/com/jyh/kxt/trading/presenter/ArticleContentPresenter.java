@@ -28,17 +28,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.custom.RoundImageView;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.IntentUtil;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.trading.adapter.VPImgAdapter;
@@ -361,93 +364,20 @@ public class ArticleContentPresenter {
 
     /**
      * 分享到平台上
-     *
-     * @param popupView
      */
-    public void shareToPlatform(View popupView, final ShareDictBean shareDict) {
+    public PopupUtil shareToPlatform( ShareDictBean shareDict) {
 
-        View pyq = popupView.findViewById(R.id.iv_pyq);
-        View weixin = popupView.findViewById(R.id.iv_wxhy);
-        View sina = popupView.findViewById(R.id.iv_xl);
-        View qq = popupView.findViewById(R.id.iv_qq);
-        View zone = popupView.findViewById(R.id.iv_qq_kj);
+        UmengShareBean umengShareBean = new UmengShareBean();
+        umengShareBean.setTitle(shareDict.title);
+        umengShareBean.setDetail(shareDict.descript);
+        umengShareBean.setImageUrl(shareDict.img);
+        umengShareBean.setWebUrl(shareDict.url);
+        umengShareBean.setSinaTitle(shareDict.descript_sina);
 
+        umengShareBean.setFromSource(UmengShareUtil.SHARE_VIEWPOINT);
 
-        pyq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                    UmengShareTool.setShareContent((Activity) mContext,
-                            shareDict.title,
-                            shareDict.url,
-                            shareDict.descript,
-                            shareDict.img,
-                            SHARE_MEDIA.WEIXIN_CIRCLE);
-                } else {
-                    ToastView.makeText3(mContext, "未安装微信");
-                }
-            }
-        });
-        weixin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
-                    UmengShareTool.setShareContent((Activity) mContext,
-                            shareDict.title,
-                            shareDict.url,
-                            shareDict.descript,
-                            shareDict.img,
-                            SHARE_MEDIA.WEIXIN);
-                } else {
-                    ToastView.makeText3(mContext, "未安装微信");
-                }
-            }
-        });
-        sina.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UmengShareTool.setShareContent((Activity) mContext,
-                        shareDict.title,
-                        shareDict.url,
-                        shareDict.descript_sina,
-                        shareDict.img,
-                        SHARE_MEDIA.SINA);
-            }
-        });
-        qq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
-                    UmengShareTool.setShareContent((Activity) mContext,
-                            shareDict.title,
-                            shareDict.url,
-                            shareDict.descript,
-                            shareDict.img,
-                            SHARE_MEDIA.QQ);
-                } else {
-                    ToastView.makeText3(mContext, "未安装QQ");
-                }
-            }
-        });
-        zone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-                if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QZONE)) {
-                    UmengShareTool.setShareContent((Activity) mContext,
-                            shareDict.title,
-                            shareDict.url,
-                            shareDict.descript,
-                            shareDict.img,
-                            SHARE_MEDIA.QQ);
-                } else {
-                    ToastView.makeText3(mContext, "未安装QQ");
-                }
-            }
-        });
+        UmengShareUI umengShareUI = new UmengShareUI((BaseActivity) mContext);
+        return umengShareUI.showSharePopup(umengShareBean);
     }
 
     /**
@@ -626,23 +556,35 @@ public class ArticleContentPresenter {
                 tvShare = (TextView) popupView.findViewById(R.id.point_function_share);
                 tvShare.setOnClickListener(functionListener);
 
+
                 TextView tvJb = (TextView) popupView.findViewById(R.id.point_function_jb);
                 tvJb.setOnClickListener(functionListener);
                 popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
 
                 requestGetGzState(tvGz, viewPointTradeBean.author_id);
 
+                tvShare.setVisibility(View.GONE);
+                tvTop.setVisibility(View.GONE);
+                tvDel.setVisibility(View.GONE);
+
                 UserJson userInfo = LoginUtils.getUserInfo(mContext);
-                if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(viewPointTradeBean.author_id)) {
-                    tvGz.setVisibility(View.GONE);
-                    tvJb.setVisibility(View.GONE);
-                    tvTop.setVisibility(View.VISIBLE);
-                    tvDel.setVisibility(View.VISIBLE);
+                if (userInfo != null) {
+                    //是专栏作者
+                    if (userInfo.getWriter_id() != null) {
+                        tvShare.setVisibility(View.VISIBLE);
+                        //是我的本人观点
+                        if (userInfo.getWriter_id().equals(viewPointTradeBean.author_id)) {
+
+                            tvGz.setVisibility(View.GONE);
+                            tvJb.setVisibility(View.GONE);
+
+                            tvTop.setVisibility(View.VISIBLE);
+                            tvDel.setVisibility(View.VISIBLE);
+                        }
+                    }
                 } else {
                     tvGz.setVisibility(View.VISIBLE);
                     tvJb.setVisibility(View.VISIBLE);
-                    tvTop.setVisibility(View.GONE);
-                    tvDel.setVisibility(View.GONE);
                 }
             }
 

@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -55,7 +56,7 @@ public class CollectPointAdapter extends BaseAdapter {
     private List<ViewPointTradeBean> dataList;
 
     private TradeHandlerUtil mTradeHandlerUtil;
-    private SimplePopupWindow functionPopupWindow;
+    private PopupWindow functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
     private DelNumListener delNumListener;
 
@@ -195,8 +196,9 @@ public class CollectPointAdapter extends BaseAdapter {
         Iterator<ViewPointTradeBean> iterator = dataList.iterator();
         while (iterator.hasNext()) {
             ViewPointTradeBean next = iterator.next();
-            if (next != null && next.o_id != null && next.o_id.equals(id))
+            if (next != null && next.o_id != null && next.o_id.equals(id)) {
                 iterator.remove();
+            }
         }
         notifyDataSetChanged();
     }
@@ -277,20 +279,7 @@ public class CollectPointAdapter extends BaseAdapter {
 //
 //                    break;
                 case R.id.view_point_fx_layout:
-                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
-
-                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
-                        @Override
-                        public void onCreateView(View popupView) {
-                            articleContentPresenter.shareToPlatform(popupView, viewPointTradeBean.shareDict);
-                        }
-
-                        @Override
-                        public void onDismiss() {
-
-                        }
-                    });
-                    functionPopupWindow.show(R.layout.pop_point_share);
+                    functionPopupWindow = articleContentPresenter.shareToPlatform(viewPointTradeBean.shareDict);
                     break;
             }
         }

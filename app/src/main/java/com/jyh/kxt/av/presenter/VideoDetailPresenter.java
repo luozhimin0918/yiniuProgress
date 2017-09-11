@@ -29,11 +29,12 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -497,18 +498,16 @@ public class VideoDetailPresenter extends BasePresenter {
      */
     public void share() {
         if (videoDetailBean != null) {
-            ShareJson shareBean = new ShareJson(videoDetailBean.getTitle(),
-                    videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()),
-                    videoDetailBean.getIntroduce(), videoDetailBean.getShare_image(), null, UmengShareTool
-                    .TYPE_DEFAULT, videoDetailBean
-                    .getId(), null, null,
-                    false, false);
-            shareBean.setShareFromSource(2);
-            shareBean.setWeiBoDiscript(videoDetailBean.getShare_sina_title());
-            UmengShareTool.initUmengLayout((BaseActivity) mContext,
-                    shareBean,
-                    videoDetailBean,
-                    videoDetailActivity.spVideo, null);
+
+            UmengShareBean umengShareBean = new UmengShareBean();
+            umengShareBean.setTitle(videoDetailBean.getTitle());
+            umengShareBean.setDetail(videoDetailBean.getIntroduce());
+            umengShareBean.setSinaTitle(videoDetailBean.getShare_sina_title());
+            umengShareBean.setWebUrl(videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()));
+            umengShareBean.setFromSource(UmengShareUtil.SHARE_VIDEO);
+
+            UmengShareUI umengShareUI = new UmengShareUI(videoDetailActivity);
+            umengShareUI.showSharePopup(umengShareBean);
         }
     }
 

@@ -17,29 +17,20 @@
 package com.jyh.kxt.base.tinker.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentCallbacks;
-import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
-import com.jyh.kxt.base.utils.CrashHandler;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.jyh.kxt.push.KXTPushIntentService;
-import com.library.util.LogUtil;
-import com.library.widget.window.ToastView;
 import com.tencent.tinker.anno.DefaultLifeCycle;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
@@ -127,7 +118,7 @@ public class SampleApplicationLike extends DefaultApplicationLike {
     }
 
     private void initApplication() {
-        UmengShareTool.initUmeng(SampleApplicationContext.context);
+        UmengShareUtil.initUmeng(SampleApplicationContext.context);
         final Handler handler = new Handler();
         PushAgent mPushAgent = PushAgent.getInstance(SampleApplicationContext.context);
 

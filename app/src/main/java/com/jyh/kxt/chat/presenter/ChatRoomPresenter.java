@@ -1,8 +1,6 @@
 package com.jyh.kxt.chat.presenter;
 
 import android.database.Cursor;
-import android.database.DataSetObserver;
-import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;

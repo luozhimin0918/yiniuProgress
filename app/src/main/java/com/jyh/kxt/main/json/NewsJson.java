@@ -82,7 +82,7 @@ public class NewsJson implements Parcelable {
     }
 
     public String getDatetime() {
-        return RegexValidateUtil.isEmpty(datetime) ? create_time : datetime;
+        return /*RegexValidateUtil.isEmpty(datetime) ? create_time :*/ datetime;
     }
 
     public void setDatetime(String datetime) {

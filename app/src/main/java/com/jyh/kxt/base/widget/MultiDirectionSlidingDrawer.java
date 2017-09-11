@@ -634,7 +634,7 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
                 invalidate();
             } else {
                 final int top = handle.getTop();
-                double bfb = (double) top / (double) getHeight();
+                double bfb = (double) top / (double) (getHeight() - handle.getHeight());
 
                 if (mOnDrawerListener != null) {
                     mOnDrawerListener.onSlideOffset(top, bfb);
@@ -935,7 +935,15 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
             public void run() {
                 alphaView.setAlpha(0);
                 alphaView.setVisibility(View.GONE);
-                alphaView.setOnClickListener(null);
+                alphaView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!mExpanded){
+                            alphaView.setAlpha(0);
+                            alphaView.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
         }, 100);
     }

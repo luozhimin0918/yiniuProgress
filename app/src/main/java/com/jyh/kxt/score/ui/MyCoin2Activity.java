@@ -9,11 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer;
-import com.jyh.kxt.main.json.PreloadIndex;
 import com.jyh.kxt.score.adapter.TaskAdapter;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
@@ -45,8 +43,11 @@ public class MyCoin2Activity extends BaseActivity implements
     @BindView(R.id.tv_punch_card_handle) TextView tvPunchCard;
     @BindView(R.id.iv_punch_card_handle) ImageView ivPunchCard;
 
-    @BindView(R.id.mdsd_alpha_view) View mdsdAlphaView;
-    @BindView(R.id.mdsd_sign_content) MultiDirectionSlidingDrawer mdsdSignContent;
+    /**
+     * 抽屉相关视图
+     */
+    @BindView(R.id.mdsd_alpha_view) View vAlphaView;
+    @BindView(R.id.mdsd_sign_content) MultiDirectionSlidingDrawer drawerSignContent;
 
     private MyCoin2Presenter myCoin2Presenter;
 
@@ -71,8 +72,8 @@ public class MyCoin2Activity extends BaseActivity implements
         tvBarTitle.setText("我的金币");
         ivBarFunction.setText("金币明细");
 
-        mdsdSignContent.setAlphaView(mdsdAlphaView);
-        mdsdSignContent.setOnDrawerListener(new MultiDirectionSlidingDrawer.OnDrawerListener() {
+        drawerSignContent.setAlphaView(vAlphaView);
+        drawerSignContent.setOnDrawerListener(new MultiDirectionSlidingDrawer.OnDrawerListener() {
             @Override
             public void onDrawerOpened() {
                 ivPunchCard.setSelected(true);
@@ -88,6 +89,7 @@ public class MyCoin2Activity extends BaseActivity implements
 
             }
         });
+        drawerSignContent.setAlphaView(vAlphaView);
 
         initView();
 
@@ -136,7 +138,7 @@ public class MyCoin2Activity extends BaseActivity implements
 
 
     public void init(MyCoinJson myCoinJson) {
-        mdsdSignContent.animateOpen();
+        drawerSignContent.animateOpen();
         /**
          * 打卡数据
          */

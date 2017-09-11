@@ -19,7 +19,8 @@ import com.jyh.kxt.av.presenter.VideoDetailPresenter;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.push.PushUtil;
 import com.library.manager.ActivityManager;
@@ -195,7 +196,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.jyh.kxt.trading.ui;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,24 +15,31 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.ShareItemJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.presenter.CommentPresenter;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.OnPopupFunListener;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.presenter.ViewPointDetailPresenter;
-import com.jyh.kxt.trading.presenter.ViewpointPresenter;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,7 +66,6 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     private ViewPointDetailPresenter viewPointDetailPresenter;
 
     public String detailId;
-    private TextView tvFunTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,15 +132,15 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
             onBackPressed();
         } else if (event.fromCode == EventBusClass.EVENT_VIEW_POINT_TOP) {
             ViewPointTradeBean mViewPointTradeBean = viewPointDetailPresenter.mViewPointTradeBean;
-            if (tvFunTop != null && mViewPointTradeBean != null) {
-                if ("1".equals(mViewPointTradeBean.is_top)) {
-                    tvFunTop.setSelected(true);
-                    tvFunTop.setText("取消置顶");
-                } else {
-                    tvFunTop.setSelected(false);
-                    tvFunTop.setText("置顶");
-                }
-            }
+//            if (tvFunTop != null && mViewPointTradeBean != null) {
+//                if ("1".equals(mViewPointTradeBean.is_top)) {
+//                    tvFunTop.setSelected(true);
+//                    tvFunTop.setText("取消置顶");
+//                } else {
+//                    tvFunTop.setSelected(false);
+//                    tvFunTop.setText("置顶");
+//                }
+//            }
         }
     }
 
@@ -162,14 +166,84 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     }
 
 
-    private SimplePopupWindow functionPopupWindow;
+    private PopupUtil functionPopupWindow;
 
     private void showShareOrFunction() {
         if (viewPointDetailPresenter.mViewPointTradeBean == null) {
             return;
         }
+        final ViewPointTradeBean mViewPointTradeBean = viewPointDetailPresenter.mViewPointTradeBean;
 
-        functionPopupWindow = new SimplePopupWindow(this);
+        ShareDictBean shareDict = viewPointDetailPresenter.mViewPointTradeBean.shareDict;
+
+        UmengShareBean umengShareBean = new UmengShareBean();
+        umengShareBean.setTitle(shareDict.title);
+        umengShareBean.setDetail(shareDict.descript);
+        umengShareBean.setSinaTitle(shareDict.descript_sina);
+        umengShareBean.setWebUrl(shareDict.url);
+
+        umengShareBean.setFromSource(UmengShareUtil.SHARE_VIEWPOINT);
+
+
+        //创建下面的功能Adapter
+        List<ShareItemJson> functionList = new ArrayList<>();
+
+        functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+
+        UserJson userInfo = LoginUtils.getUserInfo(getContext());
+        if (userInfo != null) {
+            functionList.add(new ShareItemJson(R.mipmap.icon_point_jb, "举报"));
+
+            if (userInfo.getWriter_id() != null) {
+                functionList.add(new ShareItemJson(R.mipmap.icon_point_share, "转发"));
+
+                if (userInfo.getWriter_id().equals(mViewPointTradeBean.author_id)) {
+                    functionList.add(new ShareItemJson(R.mipmap.icon_point_del, "删除"));
+
+                    ShareItemJson stickTop = new ShareItemJson(R.drawable.sel_viewpoint_top, "置顶");
+                    functionList.add(stickTop);
+
+                    if ("1".equals(mViewPointTradeBean.is_top)) {
+                        stickTop.isSelectedView = true;
+                        stickTop.title = "取消置顶";
+                    } else {
+                        stickTop.isSelectedView = false;
+                        stickTop.title = "置顶";
+                    }
+                }
+            }
+        }
+        functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_point_qx, "取消"));
+
+        UmengShareUI umengShareUI = new UmengShareUI(this);
+        functionPopupWindow = umengShareUI.showSharePopup(umengShareBean, functionList);
+
+        umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
+            @Override
+            public void onClickItem(View itemView, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
+                functionPopupWindow.dismiss();
+
+                int icon = mShareItemJson.icon;
+                switch (icon) {
+                    case R.mipmap.icon_point_jb:
+                        articlePresenter.showReportWindow(mViewPointTradeBean.o_id, mViewPointTradeBean.report);
+                        break;
+                    case R.drawable.sel_viewpoint_top:
+                        articlePresenter.setTop(mViewPointTradeBean);
+                        break;
+                    case R.mipmap.icon_point_share:
+                        articlePresenter.share(mViewPointTradeBean);
+                        break;
+                    case R.mipmap.icon_point_del:
+                        articlePresenter.del(mViewPointTradeBean);
+                        break;
+                }
+            }
+        });
+
+
+
+        /*functionPopupWindow = new SimplePopupWindow(this);
         functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
 
             ViewPointTradeBean mViewPointTradeBean;
@@ -229,24 +303,31 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
                 TextView tvFunShare = (TextView) popupView.findViewById(R.id.iv_fun_share);
                 TextView tvFunDel = (TextView) popupView.findViewById(R.id.iv_fun_del);
 
-                UserJson userInfo = LoginUtils.getUserInfo(getContext());
-                if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(mViewPointTradeBean.author_id)) {
-                    tvFunJb.setVisibility(View.GONE);
-                    tvFunTop.setVisibility(View.VISIBLE);
-                    tvFunDel.setVisibility(View.VISIBLE);
-                    if ("1".equals(mViewPointTradeBean.is_top)) {
-                        tvFunTop.setSelected(true);
-                        tvFunTop.setText("取消置顶");
-                    } else {
-                        tvFunTop.setSelected(false);
-                        tvFunTop.setText("置顶");
-                    }
-                } else {
-                    tvFunJb.setVisibility(View.VISIBLE);
-                    tvFunTop.setVisibility(View.GONE);
-                    tvFunDel.setVisibility(View.GONE);
-                }
 
+                tvFunTop.setVisibility(View.GONE);
+                tvFunDel.setVisibility(View.GONE);
+                tvFunJb.setVisibility(View.GONE);
+
+                UserJson userInfo = LoginUtils.getUserInfo(getContext());
+                if (userInfo != null) {
+                    tvFunJb.setVisibility(View.VISIBLE);
+
+                    if (userInfo.getWriter_id() != null) {
+
+                        if (userInfo.getWriter_id().equals(mViewPointTradeBean.author_id)) {
+                            tvFunTop.setVisibility(View.VISIBLE);
+                            tvFunDel.setVisibility(View.VISIBLE);
+
+                            if ("1".equals(mViewPointTradeBean.is_top)) {
+                                tvFunTop.setSelected(true);
+                                tvFunTop.setText("取消置顶");
+                            } else {
+                                tvFunTop.setSelected(false);
+                                tvFunTop.setText("置顶");
+                            }
+                        }
+                    }
+                }
 
                 tvFunUrl.setOnClickListener(functionClickListener);
                 tvFunJb.setOnClickListener(functionClickListener);
@@ -261,6 +342,6 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
             }
         });
-        functionPopupWindow.show(R.layout.pop_point_share_fun);
+        functionPopupWindow.show(R.layout.pop_point_share_fun);*/
     }
 }

@@ -43,9 +43,12 @@ import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.chat.LetterActivity;
+import com.jyh.kxt.chat.json.ChatRoomJson;
+import com.jyh.kxt.chat.util.ChatSocketUtil;
+import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.jyh.kxt.index.presenter.MainPresenter;
@@ -90,7 +93,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 主界面
  */
 @MLinkDefaultRouter
-public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener {
+public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener, OnChatMessage {
 
     @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.drawer_layout) public DrawerLayout drawer;
@@ -184,6 +187,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
         DBUtils.toSDWriteFile(this, DBManager.dbName);
+
+
+        ChatSocketUtil.getInstance().sendSocketParams(this, null, this);
     }
 
     /**
@@ -662,7 +668,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
         if (currentFragment != null) {
             currentFragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -731,10 +738,22 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
     }
 
+    @Override
+    public void onChatMessage(ChatRoomJson chatRoomJson) {
+
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null) {
+            userInfo.setIs_unread_msg(1);
+            LoginUtils.changeUserInfo(this, userInfo);//重新保存
+            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
+        }
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ChatSocketUtil.getInstance().unOnChatMessage(this);
+
         try {
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
@@ -745,6 +764,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public void showUserCenter() {
         drawer.openDrawer(Gravity.LEFT);
     }
+
+
 
     @Override
     protected void onChangeTheme() {
@@ -891,4 +912,5 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             MLinkAPIFactory.createAPI(this).checkYYB();
         }
     }
+
 }

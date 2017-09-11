@@ -30,10 +30,11 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.MainInitJson;
@@ -868,11 +869,16 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             break;
                     }
 
-                    ShareJson shareBean = new ShareJson(title, shareUrl,
-                            discription, image, null,
-                            UmengShareTool.TYPE_DEFAULT, null, null, null, false, false);
-                    UmengShareTool.initUmengLayout((BaseActivity) context, shareBean, flash, ivShare, null);
+                    UmengShareBean umengShareBean = new UmengShareBean();
+                    umengShareBean.setTitle(title);
+                    umengShareBean.setDetail(discription);
+                    umengShareBean.setImageUrl(image);
+                    umengShareBean.setWebUrl(shareUrl);
 
+                    umengShareBean.setFromSource(UmengShareUtil.SHARE_KX);
+
+                    UmengShareUI umengShareUI = new UmengShareUI((BaseActivity) context);
+                    umengShareUI.showSharePopup(umengShareBean);
                 } catch (Exception e) {
                     e.printStackTrace();
                     ToastView.makeText3(context, "分享失败");

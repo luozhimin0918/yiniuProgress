@@ -2,7 +2,6 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -34,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -46,19 +42,18 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.adapter.FunctionAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.json.ShareBtnJson;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.SelectedImageView;
@@ -83,14 +78,9 @@ import com.library.widget.PageLoadLayout;
 import com.library.widget.ZoomImageView;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,6 +97,8 @@ import static com.library.base.http.VarConstant.APP_WEB_URL;
 
 public class NewsContentActivity extends BaseActivity implements CommentPresenter.OnCommentClickListener,
         CommentPresenter.OnCommentPublishListener, PageLoadLayout.OnAfreshLoadListener {
+
+    @BindView(R.id.actionbar) RelativeLayout mActionBarLayout;
 
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
@@ -127,7 +119,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     public WebViewAndHead webViewAndHead;
 
     public String objectId;
-    private PopupUtil sharePop;
     private String title;
     private String shareUrl;
     private String shareImg;
@@ -135,10 +126,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     public boolean isCollect;
     private boolean isLoadOver;
 
+    private UmengShareUI umengShareUI;
+    private PopupUtil mSharePop;
     private String fontS, fontM, fontB;//字体大小代码
     private String content;//内容
     private String night;//夜间模式
-    private RecyclerView recyclerView;
     private SelectLineView selectView;
     private TextView tvTheme;
     private LinearLayout llTheme;
@@ -146,10 +138,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private TextView tvFontS;
     private TextView tvFontM;
     private TextView tvFontB;
-    private View vLine;
-    private View popupView;
+    private View customLayout;
     private int commentCount;
-    private FunctionAdapter functionAdapter;
     private String font;//字体大小
     private String type = VarConstant.OCLASS_ARTICLE;
     private String imgStr;
@@ -229,10 +219,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             case R.id.iv_share:
                 //分享
                 if (isLoadOver) {
-                    if (sharePop == null) {
+                    if (mSharePop == null) {
                         initShareLayout();
                     } else {
-                        sharePop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                        mSharePop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
                     }
                 }
                 break;
@@ -258,48 +248,30 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         }
     }
 
+
     private void initShareLayout() {
+        UmengShareBean umengShareBean = new UmengShareBean();
+        umengShareBean.setFromSource(UmengShareUtil.SHARE_ARTICLE);
+        umengShareBean.setTitle(title);
+        umengShareBean.setWebUrl(shareUrl);
+        umengShareBean.setImageUrl(shareImg);
 
-        sharePop = new PopupUtil(NewsContentActivity.this);
-        PopupUtil.Config config = new PopupUtil.Config();
+        umengShareBean.setSinaTitle(newsContentPresenter.newsContentJson.getShare_sina_title());//替换微博的
 
-        config.outsideTouchable = true;
-        config.alpha = 0.5f;
-        config.bgColor = 0X00000000;
-
-        config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = WindowManager.LayoutParams.MATCH_PARENT;
-        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        sharePop.setConfig(config);
-
-        popupView = sharePop.createPopupView(R.layout.pop_news_share);
-        sharePop.showAtLocation(popupView, Gravity.BOTTOM, 0, 0);
+        umengShareUI = new UmengShareUI(this);
+        customLayout = umengShareUI.getCustomLayout(R.layout.pop_news_share);
+        mSharePop = umengShareUI.showSharePopup(umengShareBean, customLayout);
 
         int color = ContextCompat.getColor(NewsContentActivity.this, R.color.theme1);
-        popupView.setBackgroundColor(color);
+        customLayout.setBackgroundColor(color);
 
-        recyclerView = (RecyclerView) popupView.findViewById(R.id.rv_share);
-
-        selectView = (SelectLineView) popupView.findViewById(R.id.sv_fontSize);
-        Space space = (Space) popupView.findViewById(R.id.sp);
-        tvTheme = (TextView) popupView.findViewById(R.id.tv_theme);
-        llTheme = (LinearLayout) popupView.findViewById(R.id.ll_theme);
-        ivTheme = (ImageView) popupView.findViewById(R.id.iv_theme);
-        tvFontS = (TextView) popupView.findViewById(R.id.tv_font_s);
-        tvFontM = (TextView) popupView.findViewById(R.id.tv_font_m);
-        tvFontB = (TextView) popupView.findViewById(R.id.tv_font_b);
-        vLine = popupView.findViewById(R.id.v_line);
-
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(manager);
-
-        List<ShareBtnJson> list = new ArrayList<>();
-        list.add(new ShareBtnJson(R.mipmap.icon_share_qyq, "朋友圈"));
-        list.add(new ShareBtnJson(R.mipmap.icon_share_wx, "微信好友"));
-        list.add(new ShareBtnJson(R.mipmap.icon_share_sina, "新浪"));
-        list.add(new ShareBtnJson(R.mipmap.icon_share_qq, "QQ"));
-        list.add(new ShareBtnJson(R.mipmap.icon_share_zone, "QQ空间"));
+        selectView = (SelectLineView) customLayout.findViewById(R.id.sv_fontSize);
+        tvTheme = (TextView) customLayout.findViewById(R.id.tv_theme);
+        llTheme = (LinearLayout) customLayout.findViewById(R.id.ll_theme);
+        ivTheme = (ImageView) customLayout.findViewById(R.id.iv_theme);
+        tvFontS = (TextView) customLayout.findViewById(R.id.tv_font_s);
+        tvFontM = (TextView) customLayout.findViewById(R.id.tv_font_m);
+        tvFontB = (TextView) customLayout.findViewById(R.id.tv_font_b);
 
         int alertTheme = ThemeUtil.getAlertTheme(getContext());
         switch (alertTheme) {
@@ -310,9 +282,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 tvTheme.setText("夜间模式");
                 break;
         }
-
-        functionAdapter = new FunctionAdapter(list, this);
-        recyclerView.setAdapter(functionAdapter);
 
         selectView.setSelectItemListener(new SelectLineView.SelectItemListener() {
             @Override
@@ -369,96 +338,19 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 changePopTheme();
             }
         });
-
-        functionAdapter.setOnClickListener(
-                new FunctionAdapter.OnClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        try {
-                            UMShareAPI umShareAPI = UMShareAPI.get(NewsContentActivity.this);
-                            switch (position) {
-                                case 0:
-                                    //朋友圈
-                                    if (umShareAPI.isInstall(NewsContentActivity.this,
-                                            SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                                        UmengShareTool.setShareContent(NewsContentActivity
-                                                        .this, title, shareUrl, "",
-                                                shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
-                                    } else {
-                                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                                    }
-                                    break;
-                                case 1:
-                                    //微信
-                                    if (umShareAPI.isInstall(NewsContentActivity.this,
-                                            SHARE_MEDIA.WEIXIN)) {
-                                        UmengShareTool.setShareContent(NewsContentActivity
-                                                        .this, title, shareUrl, "",
-                                                shareImg, SHARE_MEDIA.WEIXIN);
-                                    } else {
-                                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                                    }
-                                    break;
-                                case 2:
-                                    //分享默认的
-                                    ShareJson shareBean = new ShareJson();
-
-                                    Bitmap defaultWeiBoShareBitmap =
-                                            BitmapFactory.decodeResource(NewsContentActivity.this.getResources(), R
-                                                    .mipmap.share_weibo);
-                                    shareBean.setBitmap(defaultWeiBoShareBitmap);
-                                    shareBean.setDiscription(newsContentPresenter.newsContentJson.getShare_sina_title
-                                            ());//替换微博的
-
-                                    UmengShareTool.setShareContent(NewsContentActivity.this, shareBean.getBitmap(),
-                                            SHARE_MEDIA.SINA, shareBean);
-                                    break;
-                                case 3:
-                                    //QQ
-                                    if (umShareAPI.isInstall(NewsContentActivity.this,
-                                            SHARE_MEDIA.QQ)) {
-                                        UmengShareTool.setShareContent(NewsContentActivity
-                                                        .this, title, shareUrl, "",
-                                                shareImg, SHARE_MEDIA.QQ);
-                                    } else {
-                                        ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
-                                    }
-                                    break;
-                                case 4:
-                                    //QQ空间
-                                    if (umShareAPI.isInstall(NewsContentActivity.this,
-                                            SHARE_MEDIA.QZONE)) {
-                                        UmengShareTool.setShareContent(NewsContentActivity
-                                                        .this, title, shareUrl, "",
-                                                shareImg, SHARE_MEDIA.QZONE);
-                                    } else {
-                                        ToastView.makeText3(NewsContentActivity.this, "未安装QQ");
-                                    }
-                                    break;
-                            }
-
-                            sharePop.dismiss();
-                        } catch (Exception e) {
-                            sharePop.dismiss();
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-        );
-
     }
 
     private void changePopTheme() {
-        if (sharePop == null) return;
+        if (mSharePop == null) {
+            return;
+        }
         selectView.changeTheme();
         tvTheme.setTextColor(ContextCompat.getColor(NewsContentActivity.this, R.color.font_color60));
-        popupView.setBackgroundColor(ContextCompat.getColor(NewsContentActivity.this, R.color.theme1));
+        customLayout.setBackgroundColor(ContextCompat.getColor(NewsContentActivity.this, R.color.theme1));
         ivTheme.setImageDrawable(ContextCompat.getDrawable(NewsContentActivity.this, R.mipmap.icon_drawer_theme));
         tvFontS.setTextColor(ContextCompat.getColor(NewsContentActivity.this, R.color.font_color60));
         tvFontM.setTextColor(ContextCompat.getColor(NewsContentActivity.this, R.color.font_color60));
         tvFontB.setTextColor(ContextCompat.getColor(NewsContentActivity.this, R.color.font_color60));
-        vLine.setBackgroundColor(ContextCompat.getColor(NewsContentActivity.this, R.color.line_color2));
     }
 
     @Override
@@ -1026,38 +918,36 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             });
         }
 
+
+        private UmengShareBean umengShareBean;
+        private UmengShareUtil umengShareUtil;
+
         @Override
         public void onClick(View v) {
+            if (umengShareBean == null) {
+                umengShareBean = new UmengShareBean();
+                umengShareBean.setTitle(title);
+                umengShareBean.setDetail("");
+                umengShareBean.setImageUrl(shareImg);
+                umengShareBean.setWebUrl(shareUrl);
+
+                umengShareUtil = new UmengShareUtil(NewsContentActivity.this);
+            }
+
             switch (v.getId()) {
                 case R.id.tv_attention:
                     newsContentPresenter.attention(objectId);
                     break;
                 case R.id.rv_pyq:
-
-                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA
-                            .WEIXIN_CIRCLE)) {
-                        UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
-                                shareImg, SHARE_MEDIA.WEIXIN_CIRCLE);
-                    } else {
-                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                    }
-
+                    umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN_CIRCLE, umengShareBean);
                     break;
                 case R.id.ll_wx:
-                    if (UMShareAPI.get(NewsContentActivity.this).isInstall(NewsContentActivity.this, SHARE_MEDIA
-                            .WEIXIN)) {
-                        UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
-                                shareImg, SHARE_MEDIA.WEIXIN);
-                    } else {
-                        ToastView.makeText3(NewsContentActivity.this, "未安装微信");
-                    }
+                    umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN, umengShareBean);
                     break;
                 case R.id.rl_sina:
-                    UmengShareTool.setShareContent(NewsContentActivity.this, title, shareUrl, "",
-                            shareImg, SHARE_MEDIA.SINA);
+                    umengShareUtil.shareContent1(SHARE_MEDIA.SINA, umengShareBean);
                     break;
                 case R.id.rl_exist_author:
-
                     if (isAllowAttention) {
                         Intent intent = new Intent(NewsContentActivity.this, AuthorActivity.class);
                         intent.putExtra(IntentConstant.O_ID, newsContentJson.getAuthor_id());
@@ -1092,9 +982,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             webViewAndHead.tvSource.setText(Html.fromHtml(content));
             webViewAndHead.attention.onChangeTheme();
-            if (functionAdapter != null) {
-                functionAdapter.notifyDataSetChanged();
-            }
             if (newsContentPresenter != null && newsContentPresenter.commentAdapter != null) {
                 newsContentPresenter.commentAdapter.notifyDataSetInvalidated();
             }
@@ -1115,6 +1002,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         null,
                         null);
             }
+            if (umengShareUI != null) {
+                umengShareUI.onChangeTheme();
+            }
+            mActionBarLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.theme1));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1123,7 +1014,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 
     class ImgClickListener implements View.OnClickListener {

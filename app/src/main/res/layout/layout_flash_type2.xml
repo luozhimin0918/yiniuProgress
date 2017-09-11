@@ -106,10 +106,4 @@
             android:minWidth="@dimen/flash_info_minWidth"
             android:orientation="horizontal"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/iv_adRL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
 </LinearLayout>

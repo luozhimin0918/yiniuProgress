@@ -14,7 +14,7 @@ import android.widget.ScrollView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragmentAdapter;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.user.ui.fragment.LoginFragment;
 import com.jyh.kxt.user.ui.fragment.RegisterFragment;
 import com.library.bean.EventBusClass;
@@ -109,6 +109,6 @@ public class LoginOrRegisterActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 }

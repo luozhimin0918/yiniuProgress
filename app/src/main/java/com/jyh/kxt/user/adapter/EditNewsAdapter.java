@@ -76,22 +76,38 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         holder.tvTitle.setText(news.getTitle());
         String author;
         String type = news.getType();
-        if("ad".equals(type)){
-            author="广告";
-        }else{
+        if ("ad".equals(type)) {
+            author = "广告";
+
+            try {
+                String adDatetime = news.getDatetime();
+                if (adDatetime == null) {
+                    holder.tvTime.setText("");
+                } else {
+                    String adDateTimeStr = DateUtils.transformTime(Long.parseLong(adDatetime) * 1000);
+                    holder.tvTime.setText(adDateTimeStr);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                holder.tvTime.setText("00:00");
+            }
+        } else {
+
             author = news.getAuthor();
-            if (!RegexValidateUtil.isEmpty(author))
+            if (!RegexValidateUtil.isEmpty(author)) {
                 author = "文/" + author;
-            else
-                author="";
+            } else {
+                author = "";
+            }
+            try {
+                holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));
+            } catch (Exception e) {
+                e.printStackTrace();
+                holder.tvTime.setText("00:00");
+            }
         }
         holder.tvAuthor.setText(author);
-        try {
-            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(news.getDatetime()) * 1000));
-        } catch (Exception e) {
-            e.printStackTrace();
-            holder.tvTime.setText("00:00");
-        }
+
 
 //        final ViewHolder finalHolder = holder;
 //        holder.flDel.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +123,7 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
 
     /**
      * 添加或移除选中状态
+     *
      * @param finalHolder
      * @param news
      */
@@ -128,8 +145,9 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
                 e.printStackTrace();
             }
         }
-        if (observerData != null)
+        if (observerData != null) {
             observerData.delItem(delIds.size());
+        }
     }
 
     private void setTheme(ViewHolder holder, NewsJson news) {
@@ -186,8 +204,9 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
      * @param ids
      */
     public void removeById(String ids) {
-        if (RegexValidateUtil.isEmpty(ids))
+        if (RegexValidateUtil.isEmpty(ids)) {
             return;
+        }
         List<String> list = Arrays.asList(ids.split(","));
 
         Iterator<NewsJson> iterator = dataList.iterator();
@@ -224,8 +243,8 @@ public class EditNewsAdapter extends BaseListAdapter<NewsJson> {
         }
     }
 
-    public void notifyDefaul(){
-        for(NewsJson jj:dataList){
+    public void notifyDefaul() {
+        for (NewsJson jj : dataList) {
             jj.setSel(false);
         }
         delIds.clear();

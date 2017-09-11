@@ -94,7 +94,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
         public FunctionViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.tv_btn);
-            imageView = (ImageView) itemView.findViewById(R.id.iv_btn);
+            imageView = (ImageView) itemView.findViewById(R.id.iv_share_icon);
         }
     }
 

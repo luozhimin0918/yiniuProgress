@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,7 +59,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
     private List<ViewPointTradeBean> dataList;
 
     private TradeHandlerUtil mTradeHandlerUtil;
-    private SimplePopupWindow functionPopupWindow;
+    private PopupWindow functionPopupWindow;
     private ArticleContentPresenter articleContentPresenter;
     private String searchKey;
 
@@ -283,20 +284,7 @@ public class ViewpointSearchAdapter extends BaseAdapter {
 //
 //                    break;
                 case R.id.view_point_fx_layout:
-                    functionPopupWindow = new SimplePopupWindow((Activity) mContext);
-
-                    functionPopupWindow.setSimplePopupListener(new SimplePopupWindow.SimplePopupListener() {
-                        @Override
-                        public void onCreateView(View popupView) {
-                            articleContentPresenter.shareToPlatform(popupView, viewPointTradeBean.shareDict);
-                        }
-
-                        @Override
-                        public void onDismiss() {
-
-                        }
-                    });
-                    functionPopupWindow.show(R.layout.pop_point_share);
+                    functionPopupWindow = articleContentPresenter.shareToPlatform(viewPointTradeBean.shareDict);
                     break;
             }
         }

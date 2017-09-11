@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,12 @@ import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.ShareItemJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.utils.NativeStore;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.OnPopupFunListener;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.library.base.http.VarConstant;
@@ -35,10 +39,8 @@ import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 项目名:Kxt
@@ -93,6 +95,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         final VideoListJson video = list.get(position);
         boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
         video.setCollect(collect);
+
         boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
         video.setGood(good);
 
@@ -129,8 +132,6 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             @Override
             public void onClick(View v) {
                 if (url_video_share == null) {
-
-
                     TSnackbar.make(v,
                             "分享失败了喔,可能因为网络状况不好",
                             TSnackbar.LENGTH_LONG,
@@ -140,46 +141,46 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                                     .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
                     return;
                 }
-                ShareJson shareBean = new ShareJson(video.getTitle(), url_video_share.replace("{id}",
-                        video.getId()),
-                        video.getIntroduce(), video.getShare_image(), null, UmengShareTool.TYPE_VIDEO,
-                        video.getId(), VarConstant.COLLECT_TYPE_VIDEO, VarConstant.GOOD_TYPE_VIDEO, NativeStore
-                        .isThumbSucceed(mContext,
-                                VarConstant.GOOD_TYPE_VIDEO, video
-                                        .getId()), CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO,
-                        video));
-                shareBean.setShareFromSource(2);
-                shareBean.setWeiBoDiscript(video.getShare_sina_title());
-                UmengShareTool.initUmengLayout((BaseActivity) mContext, shareBean,
-                        video, holder.ivMore, new ObserverData<Map<String, Boolean>>() {
-                            @Override
-                            public void callback(Map<String, Boolean> o) {
-                                Set<String> set = o.keySet();
-                                Iterator<String> iterator = set.iterator();
-                                while (iterator.hasNext()) {
-                                    String key = iterator.next();
-                                    Boolean b = o.get(key);
-                                    switch (key) {
-                                        case VarConstant.FUNCTION_TYPE_COLLECT:
-                                            //更改video 收藏状态
-                                            video.setCollect(b);
-                                            break;
-                                        case VarConstant.FUNCTION_TYPE_GOOD:
-                                            //更改video 点赞状态
-                                            video.setGood(b);
-                                            break;
-                                    }
-                                }
-                            }
+                UmengShareBean umengShareBean = new UmengShareBean();
+                umengShareBean.setFromSource(UmengShareUtil.SHARE_ARTICLE);
+                umengShareBean.setTitle(video.getTitle());
+                umengShareBean.setWebUrl(url_video_share.replace("{id}", video.getId()));
+                umengShareBean.setImageUrl(video.getShare_image());
+                umengShareBean.setSinaTitle(video.getShare_sina_title());//替换微博的
 
-                            @Override
-                            public void onError(Exception e) {
-                                //失败
-                                if (e != null && e.getMessage() != null) {
-                                    ToastView.makeText3(mContext, e.getMessage());
-                                }
-                            }
-                        });
+                List<ShareItemJson> functionList = new ArrayList<>();
+                functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+
+                //收藏
+                ShareItemJson collectShare = new ShareItemJson(R.drawable.sel_share_collect, "收藏");
+                functionList.add(collectShare);
+                collectShare.isSelectedView = video.isCollect();
+
+                //赞
+                ShareItemJson favourShare = new ShareItemJson(R.drawable.sel_share_ding, "赞");
+                functionList.add(favourShare);
+                favourShare.isSelectedView = video.isGood();
+
+                functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
+
+
+                UmengShareUI umengShareUI = new UmengShareUI((BaseActivity) mContext);
+                umengShareUI.showSharePopup(umengShareBean, functionList);
+
+                umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
+                    @Override
+                    public void onClickItem(final View view, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
+
+                        switch (mShareItemJson.icon) {
+                            case R.drawable.sel_share_collect:
+                                clickCollect(video, mShareItemJson, recyclerAdapter);
+                                break;
+                            case R.drawable.sel_share_ding:
+                                clickFavour(video, mShareItemJson, recyclerAdapter);
+                                break;
+                        }
+                    }
+                });
             }
         });
         holder.tvCommentCount.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +200,83 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 mContext.startActivity(intent);
             }
         });
-
         return convertView;
+    }
+
+    /**
+     * 点赞
+     */
+    private void clickFavour(final VideoListJson video, final ShareItemJson mShareItemJson, final RecyclerView.Adapter recyclerAdapter) {
+        if (mShareItemJson.isSelectedView) {
+            ToastView.makeText3(VideoAdapter.this.mContext, "已点赞");
+        } else {
+            NativeStore.addThumbID(VideoAdapter.this.mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId(), null,
+                    new ObserverData<Boolean>() {
+                        @Override
+                        public void callback(Boolean aBoolean) {
+                            mShareItemJson.isSelectedView = true;
+                            video.setIsGood(true);
+                            recyclerAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ToastView.makeText3(mContext, "点赞失败");
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 点击收藏
+     *
+     * @param video
+     * @param mShareItemJson
+     * @param recyclerAdapter
+     */
+    private void clickCollect(final VideoListJson video, final ShareItemJson mShareItemJson, final RecyclerView.Adapter recyclerAdapter) {
+        final BaseActivity mActivity = (BaseActivity) VideoAdapter.this.mContext;
+
+        boolean isCollectVideo = CollectUtils.isCollect(VideoAdapter.this.mContext,
+                VarConstant.COLLECT_TYPE_VIDEO,
+                video);
+
+        if (isCollectVideo) {
+            CollectUtils.unCollect(VideoAdapter.this.mContext, VarConstant.COLLECT_TYPE_VIDEO, video, null,
+                    new ObserverData<Boolean>() {
+                        @Override
+                        public void callback(Boolean o) {
+                            mShareItemJson.isSelectedView = false;
+                            video.setIsCollect(false);
+                            recyclerAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ToastView.makeText3(mActivity, "收藏失败");
+                        }
+                    });
+
+        } else {
+            CollectUtils.collect(VideoAdapter.this.mContext,
+                    VarConstant.COLLECT_TYPE_VIDEO,
+                    video,
+                    null,
+                    new ObserverData<Boolean>() {
+                        @Override
+                        public void callback(Boolean o) {
+                            //改变umeng面板收藏按钮状态
+                            mShareItemJson.isSelectedView = true;
+                            video.setIsCollect(true);
+                            recyclerAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ToastView.makeText3(mActivity, "收藏失败");
+                        }
+                    });
+        }
     }
 
     private void setTheme(ViewHolder holder) {

@@ -102,9 +102,11 @@ public class MyCoin2Presenter extends BasePresenter {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
         jsonParam.put(VarConstant.HTTP_CODE, signJsonList.get(position).getCode());
-        request.doGet(HttpConstant.CREDITS_PUNCH_CARD, jsonParam, new HttpListener<Object>() {
+        request.doGet(HttpConstant.CREDITS_PUNCH_CARD, jsonParam, new HttpListener<String>() {
+
             @Override
-            protected void onResponse(Object o) {
+            protected void onResponse(String s) {
+
                 fuelPunchCardView(punchCardView);
                 punchCardView.setOnClickListener(null);//点击事件清除
                 myCoin2Activity.punchCardSucceed();
@@ -137,7 +139,6 @@ public class MyCoin2Presenter extends BasePresenter {
         int itemWidth = (widthScreen - (itemMargin * 8) - (tablePadding * 2)) / 4;
 
         LayoutInflater factory = LayoutInflater.from(mContext);
-
 
         for (int position = 0; position < signJsonList.size(); position++) {
             SignJson signJson = signJsonList.get(position);

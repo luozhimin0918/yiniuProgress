@@ -33,11 +33,12 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
-import com.jyh.kxt.base.json.ShareJson;
+import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
@@ -111,7 +112,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     private TextView tvContentBefore;
     private TextView tvContentForecast;
     private TextView tvContentReality;
-    private LinearLayout llRLAD;
     private LinearLayout layoutTj;
     private View layoutRL;
     private View layoutFlash;
@@ -185,17 +185,22 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 break;
             case R.id.iv_share:
                 try {
-                    ShareJson shareBean = new ShareJson(title, shareUrl, discription, image, null,
-                            UmengShareTool.TYPE_DEFAULT, null, null, null, false, false);
-                    shareBean.setShareFromSource(2);
+                    UmengShareBean umengShareBean = new UmengShareBean();
+                    umengShareBean.setTitle(title);
+                    umengShareBean.setDetail(discription);
+                    umengShareBean.setImageUrl(image);
+                    umengShareBean.setWebUrl(shareUrl);
 
                     if (mFlashContentJson != null && !TextUtils.isEmpty(mFlashContentJson.getShare_sina_title())) {
-                        shareBean.setWeiBoDiscript(mFlashContentJson.getShare_sina_title());
+                        umengShareBean.setSinaTitle(mFlashContentJson.getShare_sina_title());
                     } else {
-                        shareBean.setWeiBoDiscript(title + shareUrl + " @快讯通财经");
+                        umengShareBean.setSinaTitle(title + shareUrl + " @快讯通财经");
                     }
 
-                    UmengShareTool.initUmengLayout(this, shareBean, flashJson, ivShare, null);
+                    umengShareBean.setFromSource(UmengShareUtil.SHARE_KX);
+
+                    UmengShareUI umengShareUI = new UmengShareUI(this);
+                    umengShareUI.showSharePopup(umengShareBean);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -269,7 +274,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         tvTime = (TextView) flashHeadView.findViewById(R.id.tv_time);
         tvFlashTitle = (TextView) flashHeadView.findViewById(R.id.tv_flash_title);
         tvFlashContent = (TextView) flashHeadView.findViewById(R.id.tv_flash_content);
-        llFlashAd = (LinearLayout) flashHeadView.findViewById(R.id.iv_adFlash);
+        llFlashAd = (LinearLayout) flashHeadView.findViewById(R.id.ll_ad_flash);
 
         ivFlashImage = (ImageView) flashHeadView.findViewById(R.id.iv_flash_image);
         tvRlTitle = (TextView) flashHeadView.findViewById(R.id.tv_rl_title);
@@ -279,7 +284,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         tvContentBefore = (TextView) flashHeadView.findViewById(R.id.tv_describe_Before);
         tvContentForecast = (TextView) flashHeadView.findViewById(R.id.tv_describe_Forecast);
         tvContentReality = (TextView) flashHeadView.findViewById(R.id.tv_describe_Reality);
-        llRLAD = (LinearLayout) flashHeadView.findViewById(R.id.iv_adRL);
         layoutTj = (LinearLayout) flashHeadView.findViewById(R.id.ll_tj);
         layoutRL = flashHeadView.findViewById(R.id.layout_rl);
         layoutFlash = flashHeadView.findViewById(R.id.layout_flash);
@@ -310,6 +314,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         try {
             List<SlideJson> ads = flash.getAd();
+
             String type = flashJson.getCode();
             switch (type) {
                 case VarConstant.SOCKET_FLASH_KUAIXUN:
@@ -358,19 +363,16 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             tvFlashTitle.setText(contentStr.replace("<br/>", "\n").replace("<br />", "\n"));
         }
 
-        String importance = flash_kx.getImportance();
-
         if (ads != null && ads.size() > 0) {
             for (final SlideJson ad : ads) {
                 ImageView ivAd = new ImageView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup
                                 .LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
                 ivAd.setLayoutParams(params);
                 llFlashAd.addView(ivAd);
-                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video)
-                        .placeholder(R.mipmap
-                                .icon_def_video).into(ivAd);
+                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video).into(ivAd);
                 ivAd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -380,6 +382,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 });
             }
         }
+
+        String importance = flash_kx.getImportance();
 
         if (VarConstant.IMPORTANCE_HIGH.equals(importance)) {
             tvFlashTitle.setTextColor(ContextCompat.getColor(this, R.color.font_color11));
@@ -463,8 +467,9 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup
                                 .LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
                 ivAd.setLayoutParams(params);
-                llRLAD.addView(ivAd);
+                llFlashAd.addView(ivAd);
                 Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video)
                         .placeholder(R.mipmap
                                 .icon_def_video).into(ivAd);

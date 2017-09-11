@@ -8,10 +8,11 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.utils.UmengShareTool;
+import com.jyh.kxt.base.json.UmengShareBean;
+import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.library.util.NetUtils;
 import com.library.widget.window.ToastView;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.BindView;
@@ -26,6 +27,9 @@ import butterknife.OnClick;
 
 public class ShareActivity extends BaseActivity {
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
+
+    private UmengShareUtil umengShareUtil;
+    private UmengShareBean umengShareBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,35 +47,30 @@ public class ShareActivity extends BaseActivity {
                 onBackPressed();
                 break;
         }
+
+        if (umengShareUtil == null) {
+            umengShareUtil = new UmengShareUtil(this);
+
+            umengShareBean = new UmengShareBean();
+            umengShareBean.setTitle("快讯通财经");
+            umengShareBean.setDetail("财经快讯速递专家");
+            umengShareBean.setWebUrl(HttpConstant.OFFICIAL);
+        }
+
         if (NetUtils.isNetworkAvailable(this)) {
             switch (view.getId()) {
                 case R.id.rl_wx:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN)) {
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
-                                SHARE_MEDIA.WEIXIN);
-                    } else {
-                        ToastView.makeText3(getContext(), "未安装微信");
-                    }
+                    umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN, umengShareBean);
                     break;
                 case R.id.rl_pyq:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.WEIXIN)) {
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
-                                SHARE_MEDIA.WEIXIN_CIRCLE);
-                    } else {
-                        ToastView.makeText3(getContext(), "未安装微信");
-                    }
+
+                    umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN_CIRCLE, umengShareBean);
                     break;
                 case R.id.rl_sina:
-                    UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "", SHARE_MEDIA
-                            .SINA);
+                    umengShareUtil.shareContent1(SHARE_MEDIA.SINA, umengShareBean);
                     break;
                 case R.id.rl_qq:
-                    if (UMShareAPI.get(this).isInstall(this, SHARE_MEDIA.QQ)) {
-                        UmengShareTool.setShareContent(this, "快讯通财经", HttpConstant.OFFICIAL, "财经快讯速递专家", "",
-                                SHARE_MEDIA.QQ);
-                    } else {
-                        ToastView.makeText3(getContext(), "未安装QQ");
-                    }
+                    umengShareUtil.shareContent1(SHARE_MEDIA.QQ, umengShareBean);
                     break;
             }
         } else {
@@ -82,6 +81,6 @@ public class ShareActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UmengShareTool.onActivityResult(this, requestCode, resultCode, data);
+        UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 }

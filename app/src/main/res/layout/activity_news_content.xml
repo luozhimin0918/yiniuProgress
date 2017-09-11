@@ -7,8 +7,10 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/actionbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_height"
+        android:background="@color/theme1"
         android:gravity="center_vertical">
 
         <ImageView
