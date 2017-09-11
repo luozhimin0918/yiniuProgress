@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.utils;
 
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.widget.RadioButton;
 
@@ -254,6 +255,9 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity
                             (MainActivity.class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                     RadioButton rbMarket = mainActivity.rbMarket;
                     boolean rbMarketChecked = rbMarket.isChecked();
                     if (rbMarketChecked) {
@@ -274,6 +278,9 @@ public class JumpUtils {
                     final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity
                                     .class);
+                    if(mainActivityList!=null&&mainActivityList.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivityList.drawer.closeDrawer(GravityCompat.START);
+                    }
                     RadioButton rbMarketList = mainActivityList.rbMarket;
                     boolean rbMarketCheckedList = rbMarketList.isChecked();
                     final MarketVPFragment marketVPFragment = (MarketVPFragment) mainActivityList.marketFragment
@@ -316,6 +323,9 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity.class);
+                    if(mainActivityZx!=null&&mainActivityZx.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivityZx.drawer.closeDrawer(GravityCompat.START);
+                    }
                     RadioButton rbMarketZx = mainActivityZx.rbMarket;
                     boolean rbMarketCheckedZx = rbMarketZx.isChecked();
                     if (rbMarketCheckedZx) {
@@ -366,6 +376,9 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
                 final MainActivity mainActivityCopy = mainActivity;
                 RadioButton rbHome = mainActivity.rbHome;
@@ -394,6 +407,9 @@ public class JumpUtils {
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
+                    if(mainActivityList!=null&&mainActivityList.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivityList.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
                 final MainActivity mainActivityListCopy = mainActivityList;
                 RadioButton rbHomeList = mainActivityList.rbHome;
@@ -470,6 +486,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
                 final MainActivity mainActivityCopy = mainActivity;
                 RadioButton rbHomeFlash = mainActivity.rbHome;
@@ -508,6 +527,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
                 RadioButton rbAudio = mainActivity.rbAudioVisual;
                 boolean videoChecked = rbAudio.isChecked();
@@ -555,6 +577,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
 
                 RadioButton rbDatum = mainActivity.rbDatum;
@@ -587,6 +612,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityRl = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivityRl!=null&&mainActivityRl.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivityRl.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
 
                 RadioButton rlDatum = mainActivityRl.rbDatum;
@@ -674,6 +702,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivity!=null&&mainActivity.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
 
                 RadioButton rbTrading = mainActivity.rbProbe;
@@ -742,6 +773,9 @@ public class JumpUtils {
                     context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity2 = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                    if(mainActivity2!=null&&mainActivity2.drawer.isDrawerOpen(GravityCompat.START)){
+                        mainActivity2.drawer.closeDrawer(GravityCompat.START);
+                    }
                 }
 
                 RadioButton rbTrading2 = mainActivity2.rbProbe;

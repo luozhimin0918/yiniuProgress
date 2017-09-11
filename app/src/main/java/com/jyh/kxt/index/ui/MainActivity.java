@@ -93,7 +93,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener {
 
     @BindView(R.id.ll_content) LinearLayout llContent;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.drawer_layout) public DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.rb_home) public RadioButton rbHome;
     @BindView(R.id.rb_audio_visual) public RadioButton rbAudioVisual;
@@ -112,7 +112,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TradingFragment exploreFragment;
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign,
+            tvRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
