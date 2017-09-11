@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer;
+import com.jyh.kxt.main.json.PreloadIndex;
 import com.jyh.kxt.score.adapter.TaskAdapter;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
@@ -96,6 +97,11 @@ public class MyCoin2Activity extends BaseActivity implements
         myCoin2Presenter.requestInitCoin(false);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myCoin2Presenter.requestInitCoin(true);
+    }
 
     private void initView() {
         plRootView.setOnAfreshLoadListener(this);

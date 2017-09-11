@@ -9,13 +9,11 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
-import com.jyh.kxt.explore.ui.AuthorListActivity;
 import com.jyh.kxt.explore.ui.MoreActivity;
-import com.jyh.kxt.index.ui.fragment.TradingFragment;
-import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
-import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.ShareActivity;
 import com.jyh.kxt.index.ui.WebActivity;
+import com.jyh.kxt.index.ui.fragment.TradingFragment;
 import com.jyh.kxt.main.ui.activity.DpActivity;
 import com.jyh.kxt.main.ui.activity.FlashActivity;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
@@ -23,9 +21,11 @@ import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
+import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.library.base.http.VarConstant;
 import com.library.manager.ActivityManager;
 import com.library.util.DateUtils;
+import com.library.util.ObserverCall;
 import com.library.util.RegexValidateUtil;
 
 import cn.magicwindow.MLink;
@@ -100,6 +100,9 @@ public class JumpUtils {
                     case VarConstant.OCLASS_VIEWPOINT:
                         jumpViewPoint(context, o_action, o_id);
                         break;
+                    case VarConstant.OCLASS_MEMBER:
+                        jumpMember(context, o_action, o_id);
+                        break;
                 }
             } else {
                 //网页跳转
@@ -115,6 +118,16 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void jumpMember(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_RECOMMEND:
+                Intent intent = new Intent(context, ShareActivity.class);
+                context.startActivity(intent);
+                break;
+
         }
     }
 
@@ -225,6 +238,8 @@ public class JumpUtils {
                     break;
             }
         } else {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             switch (o_action) {
                 case VarConstant.OACTION_DETAIL:
                     //行情详情
@@ -235,6 +250,7 @@ public class JumpUtils {
                     context.startActivity(marketIntent);
                     break;
                 case VarConstant.OACTION_INDEX:
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity
                             (MainActivity.class);
@@ -253,6 +269,7 @@ public class JumpUtils {
                     }
                     break;
                 case VarConstant.OACTION_LIST:
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivityList = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity
@@ -295,6 +312,7 @@ public class JumpUtils {
                     }
                     break;
                 case VarConstant.OACTION_ZX:
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     final MainActivity mainActivityZx = (MainActivity) ActivityManager.getInstance()
                             .getSingleActivity(MainActivity.class);
@@ -342,6 +360,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivity = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
@@ -367,6 +388,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivityList = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityList = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity
                             .class);
@@ -441,6 +465,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivity = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
@@ -472,10 +499,13 @@ public class JumpUtils {
     private static void jumpVideo(BaseActivity context, String o_action, final String o_id) throws Exception {
         switch (o_action) {
             case VarConstant.OACTION_LIST:
-                final MainActivity mainActivity;
+                MainActivity mainActivity;
                 if (context instanceof MainActivity) {
                     mainActivity = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
@@ -490,8 +520,8 @@ public class JumpUtils {
                     rbAudio.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mainActivity.avFragment.onTabSelect(0);
-                            mainActivity.avFragment.videoFragment.setJumpId(o_id);
+                            mainActivityCopy.avFragment.onTabSelect(0);
+                            mainActivityCopy.avFragment.videoFragment.setJumpId(o_id);
                         }
                     }, 200);
                 }
@@ -520,6 +550,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivity = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
@@ -549,6 +582,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivityRl = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivityRl = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
@@ -633,6 +669,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivity = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
@@ -698,6 +737,9 @@ public class JumpUtils {
                 if (context instanceof MainActivity) {
                     mainActivity2 = (MainActivity) context;
                 } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    context.startActivity(intent);
                     ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
                     mainActivity2 = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
                 }
