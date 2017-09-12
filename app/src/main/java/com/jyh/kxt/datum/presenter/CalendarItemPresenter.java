@@ -7,7 +7,6 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.datum.bean.CalendarBean;
@@ -160,6 +159,7 @@ public class CalendarItemPresenter extends BasePresenter {
         titleBean.setIcon(icon);
         titleBean.setShowAd(true);
         calendarTypeList.add(titleBean);
+
 
         if (data == null || data.size() == 0) {
             addNotData("暂无数据信息");

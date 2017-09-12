@@ -16,14 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.library.widget.handmark.PullToRefreshListView
+            <com.library.widget.listview.PullPinnedListView
                 android:id="@+id/ptrlv_content"
                 android:overScrollMode="never"
                 app:ptrShowIndicator="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </com.library.widget.handmark.PullToRefreshListView>
+            </com.library.widget.listview.PullPinnedListView>
         </com.library.widget.PageLoadLayout>
     </FrameLayout>
 </LinearLayout>

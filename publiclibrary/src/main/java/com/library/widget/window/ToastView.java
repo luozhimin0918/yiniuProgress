@@ -64,4 +64,20 @@ public class ToastView {
         toast = Toast.makeText(context, txt, Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    public static void makeTextGold(Context context, String txt) {
+        if (context == null) {
+            return;
+        }
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.widget_toast_gold, null);
+        TextView tvTip = (TextView) view.findViewById(R.id.tips_msg);
+        tvTip.setText(txt);
+
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.show();
+    }
 }

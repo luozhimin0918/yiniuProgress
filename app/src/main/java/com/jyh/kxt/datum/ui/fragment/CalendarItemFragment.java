@@ -2,7 +2,6 @@ package com.jyh.kxt.datum.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
 import com.jyh.kxt.R;
@@ -15,7 +14,8 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.library.util.ObserverCall;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
-import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.listview.PinnedSectionListView;
+import com.library.widget.listview.PullPinnedListView;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +29,7 @@ import butterknife.BindView;
 
 public class CalendarItemFragment extends BaseFragment {
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
-    @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
+    @BindView(R.id.ptrlv_content) public PullPinnedListView ptrlvContent;
 
     public CalendarItemPresenter mCalendarItemPresenter;
     public CalendarItemAdapter calendarItemAdapter;
@@ -58,9 +58,9 @@ public class CalendarItemFragment extends BaseFragment {
         ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ptrlvContent.setDividerNull();
         ptrlvContent.getRefreshableView().setDividerHeight(0);
-        ptrlvContent.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        ptrlvContent.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<PinnedSectionListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onRefresh(PullToRefreshBase<PinnedSectionListView> refreshView) {
                 mCalendarItemPresenter.calendarTypeList.clear();
                 mCalendarItemPresenter.requestPublishData();
             }

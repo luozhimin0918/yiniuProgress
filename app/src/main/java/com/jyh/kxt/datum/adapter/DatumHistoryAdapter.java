@@ -131,19 +131,25 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
                 mViewHolder1.tvYuce.setText(itemDataBean.getForecast());
                 mViewHolder1.tvGongbu.setText(itemDataBean.getReality());
 
-                if (listType == 1) {
+                if (listType == 1 || listType == 2) {
                     try {
-                        String reality = itemDataBean.getReality();
-                        double realityDouble = Double.parseDouble(reality);
-                        int color;
-                        if (realityDouble < 0) {
-                            color = ContextCompat.getColor(mContext, R.color.decline_color);
+                        double comparisonChange = 0;
+                        if (listType == 1) {
+                            String reality = itemDataBean.getReality();
+                            comparisonChange = Double.parseDouble(reality);
+                        } else {
+                            comparisonChange = itemDataBean.getChange();
                         }
-                        else if (realityDouble > 0) {
+
+                        int color;
+                        if (comparisonChange < 0) {
+                            color = ContextCompat.getColor(mContext, R.color.decline_color);
+                        } else if (comparisonChange > 0) {
                             color = ContextCompat.getColor(mContext, R.color.rise_color);
-                        }else{
+                        } else {
                             color = ContextCompat.getColor(mContext, R.color.font_color60);
                         }
+
                         mViewHolder1.tvTime.setTextColor(color);
                         mViewHolder1.tvQian.setTextColor(color);
                         mViewHolder1.tvYuce.setTextColor(color);

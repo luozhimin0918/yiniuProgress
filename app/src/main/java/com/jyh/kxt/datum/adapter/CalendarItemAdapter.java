@@ -37,6 +37,7 @@ import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
+import com.library.widget.listview.PinnedSectionListView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,7 +52,7 @@ import butterknife.ButterKnife;
  * Created by Mr'Dai on 2017/4/11.
  */
 
-public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
+public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implements PinnedSectionListView.PinnedSectionListAdapter {
 
     private Context mContext;
     private LayoutInflater layoutInflater;
@@ -59,7 +60,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
 
     private String adIconDay, adIconNight;
     private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight
-    = "#1384ED";
+            = "#1384ED";
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -300,6 +301,16 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> {
             viewHolder0.tvAd2.setVisibility(View.GONE);
             viewHolder0.ivAd.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * This method shall return 'true' if views of given type has to be pinned.
+     *
+     * @param viewType
+     */
+    @Override
+    public boolean isItemViewTypePinned(int viewType) {
+        return viewType == 0;
     }
 
     class ViewBaseHolder {

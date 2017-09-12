@@ -65,6 +65,9 @@ public class HistoryListBean {
         private int listAdapterType = 1;
         private String listAdapterTypeName ;
 
+        //针对CFTC的
+        private double change;
+
         public String getBefore() {
             return before;
         }
@@ -119,6 +122,14 @@ public class HistoryListBean {
 
         public void setListAdapterTypeName(String listAdapterTypeName) {
             this.listAdapterTypeName = listAdapterTypeName;
+        }
+
+        public double getChange() {
+            return change;
+        }
+
+        public void setChange(double change) {
+            this.change = change;
         }
     }
 }

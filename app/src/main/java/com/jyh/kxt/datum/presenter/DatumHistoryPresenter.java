@@ -191,6 +191,7 @@ public class DatumHistoryPresenter extends BasePresenter {
                     headDataBean.setForecast(dataBean.getBear());
                     headDataBean.setReality(dataBean.getOnly());
                     headDataBean.setTime(dataBean.getTime());
+                    headDataBean.setChange(dataBean.getChange());
 
                     adapterList.add(headDataBean);
                 }

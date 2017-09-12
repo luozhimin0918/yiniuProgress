@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -369,4 +370,11 @@ public class PullPinnedListView extends PullToRefreshAdapterViewBase<PinnedSecti
             }
         }
     }
+
+    public void setDividerNull() {
+        mRefreshableView.setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.line_background4)));
+        mRefreshableView.setDividerHeight(0);
+        mRefreshableView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+    }
+
 }

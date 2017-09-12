@@ -75,7 +75,7 @@ public class HistoryCftcListBean {
 
         private String bear;
         private String bull;
-        private String change;
+        private double change;
         private String only;
         private String open;
         private String openchange;
@@ -99,11 +99,11 @@ public class HistoryCftcListBean {
             this.bull = bull;
         }
 
-        public String getChange() {
+        public double getChange() {
             return change;
         }
 
-        public void setChange(String change) {
+        public void setChange(double change) {
             this.change = change;
         }
 
