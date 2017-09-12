@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-    <include layout="@layout/action_bar1"/>
+    <include layout="@layout/action_bar5"/>
 
     <com.library.widget.PageLoadLayout
         android:id="@+id/pl_rootView"
@@ -22,7 +22,7 @@
 
     </com.library.widget.PageLoadLayout>
 
-    <View
+   <!-- <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/font_color3"/>
@@ -54,7 +54,7 @@
             android:src="@mipmap/icon_nav_theme"/>
 
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
 </LinearLayout>

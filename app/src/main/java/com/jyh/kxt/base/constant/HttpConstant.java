@@ -125,6 +125,7 @@ public class HttpConstant {
      * 快讯详情
      */
     public static final String FLASH_INFO = BASE_URL + "kuaixun/detail";//id
+    public static final String FLASH_AD = BASE_URL + "kuaixun/ad" + VarConstant.HTTP_CONTENT;//快讯广告
 
     public static final String CJRL = BASE_URL + "cjrl/data" + JWT;
 
