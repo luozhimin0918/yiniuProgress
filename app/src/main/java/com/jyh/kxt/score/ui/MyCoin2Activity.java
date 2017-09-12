@@ -239,6 +239,9 @@ public class MyCoin2Activity extends BaseActivity implements
             hvTvCoin.setTextColor(ContextCompat.getColor(this, R.color.white));
             hvIvCoin.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_score_coin));
         }
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+        ivBarFunction.setTextColor(ContextCompat.getColor(this, R.color.actionBar_textColor1));
     }
 
     @Override
@@ -248,6 +251,6 @@ public class MyCoin2Activity extends BaseActivity implements
     }
 
     public void punchCardSucceed() {
-        tvPunchCard.setText("已经连续签到" + (signDays++) + "天");
+        tvPunchCard.setText("已经连续签到" + (++signDays) + "天");
     }
 }

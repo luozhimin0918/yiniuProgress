@@ -128,21 +128,42 @@ public class JumpUtils {
     }
 
     private static void jumpTrade(BaseActivity context, String o_action, String o_id) {
+        MainActivity mainActivity;
         switch (o_action) {
             case VarConstant.OACTION_MAIN:
-                boolean logined = LoginUtils.isLogined(context);
-                if (!logined) return;
-                UserJson userInfo = LoginUtils.getUserInfo(context);
-                if (!RegexValidateUtil.isEmpty(userInfo.getWriter_id()) && !RegexValidateUtil.isEmpty(userInfo.getWriter_name())) {
-                    //发布观点
-                    Intent intent = new Intent(context, PublishActivity.class);
-                    context.startActivity(intent);
+//                boolean logined = LoginUtils.isLogined(context);
+//                if (!logined) return;
+//                UserJson userInfo = LoginUtils.getUserInfo(context);
+//                if (!RegexValidateUtil.isEmpty(userInfo.getWriter_id()) && !RegexValidateUtil.isEmpty(userInfo.getWriter_name())) {
+//                    //发布观点
+//                    Intent intent = new Intent(context, PublishActivity.class);
+//                    context.startActivity(intent);
+//                } else {
+//                    //入驻专栏
+//                    Intent intent = new Intent(context, WebActivity.class);
+//                    intent.putExtra(IntentConstant.NAME, "专栏入驻");
+//                    intent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + userInfo.getUid());
+//                    context.startActivity(intent);
+//                }
+
+                if (context instanceof MainActivity) {
+                    mainActivity = (MainActivity) context;
                 } else {
-                    //入驻专栏
-                    Intent intent = new Intent(context, WebActivity.class);
-                    intent.putExtra(IntentConstant.NAME, "专栏入驻");
-                    intent.putExtra(IntentConstant.WEBURL, HttpConstant.ZLRZ_URL + "?uid=" + userInfo.getUid());
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     context.startActivity(intent);
+                    ActivityManager.getInstance().moveToStackPeekActivity(MainActivity.class);
+                    mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity
+                            (MainActivity.class);
+                }
+                if (mainActivity != null && mainActivity.drawer.isDrawerOpen(GravityCompat.START)) {
+                    mainActivity.drawer.closeDrawer(GravityCompat.START);
+                }
+                RadioButton rbMarket = mainActivity.rbProbe;
+                boolean rbMarketChecked = rbMarket.isChecked();
+                if (rbMarketChecked) {
+                } else {
+                    rbMarket.performClick();
                 }
                 break;
         }

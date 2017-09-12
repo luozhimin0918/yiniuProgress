@@ -242,7 +242,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/drawer_item_imgPadding"
                         android:layout_marginRight="@dimen/drawer_item_imgPadding"
-                        android:src="@mipmap/icon_drawer_mine"/>
+                        android:src="@mipmap/icon_drawer_letter"/>
 
                     <TextView
                         android:id="@+id/tv_letter"
