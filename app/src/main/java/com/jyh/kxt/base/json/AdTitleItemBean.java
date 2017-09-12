@@ -15,7 +15,7 @@ public class AdTitleItemBean implements Parcelable {
      * title : • 数据直播赢丰财富
      * href : http://521bm.com/6001
      * datetime : 1500862440
-     * position : 0
+     * position : 0  //1 左边  2 右边
      * author :
      * o_class :
      * o_action :
@@ -30,7 +30,7 @@ public class AdTitleItemBean implements Parcelable {
     private String title;
     private String href;
     private String datetime;
-    private String position;
+    private int position;
     private String author;
     private String o_class;
     private String o_action;
@@ -65,11 +65,11 @@ public class AdTitleItemBean implements Parcelable {
         this.datetime = datetime;
     }
 
-    public String getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(int position) {
         this.position = position;
     }
 
@@ -155,7 +155,7 @@ public class AdTitleItemBean implements Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.href);
         dest.writeString(this.datetime);
-        dest.writeString(this.position);
+        dest.writeInt(this.position);
         dest.writeString(this.author);
         dest.writeString(this.o_class);
         dest.writeString(this.o_action);
@@ -174,7 +174,7 @@ public class AdTitleItemBean implements Parcelable {
         this.title = in.readString();
         this.href = in.readString();
         this.datetime = in.readString();
-        this.position = in.readString();
+        this.position = in.readInt();
         this.author = in.readString();
         this.o_class = in.readString();
         this.o_action = in.readString();

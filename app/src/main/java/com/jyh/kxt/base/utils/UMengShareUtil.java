@@ -1,15 +1,11 @@
 package com.jyh.kxt.base.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.UmengShareBean;

@@ -152,7 +152,7 @@ public class CalendarItemPresenter extends BasePresenter {
     //生成经济数据数组
     private void generateFinanceListData(List<AdTitleItemBean> ads, AdTitleIconBean icon, List<String> data, int status) {
         CalendarTitleBean titleBean = new CalendarTitleBean();
-        titleBean.setAdapterType(CalendarFragment.AdapterType.TITLE);
+        titleBean.setAdapterType(CalendarFragment.AdapterType.AD_TITLE);
         titleBean.setName("数据");
         titleBean.setSpaceType(0);
         titleBean.setAds(ads);

@@ -2,8 +2,6 @@ package com.jyh.kxt.market.presenter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
@@ -34,19 +31,15 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
-import com.jyh.kxt.base.util.AdUtils;
-import com.jyh.kxt.base.utils.ColorFormatUtils;
-import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
-import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.databinding.ItemMarketRecommend2Binding;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.main.json.AdJson;
-import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.market.adapter.MarketGridAdapter;
 import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketHotBean;
@@ -87,13 +80,15 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
     private RollDotViewPager recommendView;
-//    private MarketMainBean marketBean;
+    //    private MarketMainBean marketBean;
     private ArrayList<SkinnableTextView> mAdTextViewList;
     private TextView tvAd1;
     private TextView tvAd2;
     private ImageView ivAd;
     private List<AdTitleItemBean> ads;
     private AdTitleIconBean adIcon;
+
+    private AdvertLayout advertLayout;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -316,7 +311,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 data.clear();
                 data.addAll(MarketUtil.getMarketEditOption(mContext));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         createFavorView(marketBean, null);
@@ -410,26 +405,28 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         MarketHotBean.DataBean data = marketBean.getData();
 
-        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue1, null);
-        TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
-        tvAd1 = (TextView) titleBlue.findViewById(R.id.tv_advert1);
-        tvAd2 = (TextView) titleBlue.findViewById(R.id.tv_advert2);
-        ivAd = (ImageView) titleBlue.findViewById(R.id.iv_ad);
-
-        int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-        tvAd1.setMaxWidth(adTvMaxWidth);
-
-
-        ads = data.getAd();
-        adIcon = data.getIcon();
-        AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, ads, adIcon);
+//        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue1, null);
+//        TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
+//        tvAd1 = (TextView) titleBlue.findViewById(R.id.tv_advert1);
+//        tvAd2 = (TextView) titleBlue.findViewById(R.id.tv_advert2);
+//        ivAd = (ImageView) titleBlue.findViewById(R.id.iv_ad);
 //
-        tvTitle.setText("热门行情");
+//        int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
+//        tvAd1.setMaxWidth(adTvMaxWidth);
+//
+//
+//        ads = data.getAd();
+//        adIcon = data.getIcon();
+//        AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, ads, adIcon);
+////
+//        tvTitle.setText("热门行情");
+//
+//        Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.iocn_blue_sx);
+//        tvTitle.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
+        advertLayout = new AdvertLayout(mContext);
+        advertLayout.setAdvertData("热门行情", data.getAd(), data.getIcon());
 
-        Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.iocn_blue_sx);
-        tvTitle.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
-
-        mainHeaderView.addView(titleBlue);
+        mainHeaderView.addView(advertLayout);
 
         View navigationView = LayoutInflater.from(mContext).inflate(R.layout.view_market_navigation, null);
         navigationView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_background2));
@@ -541,8 +538,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 }
             }
 
-            AdUtils.onChangeTheme(mContext, isNight, tvAd1, tvAd2, ivAd, ads, adIcon);
-
+            if (advertLayout != null) {
+                advertLayout.onChangerTheme();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

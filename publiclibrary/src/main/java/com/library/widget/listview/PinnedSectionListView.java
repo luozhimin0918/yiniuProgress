@@ -225,7 +225,6 @@ public class PinnedSectionListView extends ListView {
         if (pinnedShadow == null) pinnedShadow = new PinnedSection();
         // request new view using recycled view, if such
         View pinnedView = getAdapter().getView(position, pinnedShadow.view, PinnedSectionListView.this);
-
         // read layout parameters
         ViewGroup.LayoutParams layoutParams = pinnedView.getLayoutParams();
         if (layoutParams == null) {

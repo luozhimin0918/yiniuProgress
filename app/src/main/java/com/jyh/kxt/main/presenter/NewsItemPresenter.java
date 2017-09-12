@@ -37,11 +37,11 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
-import com.jyh.kxt.base.util.AdUtils;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -110,6 +110,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private ImageView ivAd;
     private List<AdTitleItemBean> adTexts;
     private AdTitleIconBean adIcon;
+
+    private AdvertLayout advertLayout;
 
 
     public NewsItemPresenter(IBaseView iBaseView) {
@@ -247,28 +249,32 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 if (homeHeadView != null) {
                     newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
                 }
-                LinearLayout layout = new LinearLayout(mContext);
+//                LinearLayout layout = new LinearLayout(mContext);
+//
+//                LayoutInflater inflater = LayoutInflater.from(mContext);
+//                View titleLayout = inflater.inflate(R.layout.view_title_blue1, null, false);
+//                tvTitle = (TextView) titleLayout.findViewById(R.id.tv_title);
+//                tvTitle.setText("财经要闻");
+//                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+//
+//
+//                tvAd1 = (TextView) titleLayout.findViewById(R.id.tv_advert1);
+//                tvAd2 = (TextView) titleLayout.findViewById(R.id.tv_advert2);
+//                ivAd = (ImageView) titleLayout.findViewById(R.id.iv_ad);
+//
+//                Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
+//
+//                int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
+//                tvAd1.setMaxWidth(adTvMaxWidth);
+//                adTexts = data.getAd();
+//                adIcon = data.getIcon();
+//                AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, adTexts, adIcon);
+//                layout.addView(titleLayout);
+                advertLayout = new AdvertLayout(mContext);
+                advertLayout.setAdvertData("财经要闻", data.getAd(), data.getIcon());
 
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                View titleLayout = inflater.inflate(R.layout.view_title_blue1, null, false);
-                tvTitle = (TextView) titleLayout.findViewById(R.id.tv_title);
-                tvTitle.setText("财经要闻");
-                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
+                homeHeadView.addView(advertLayout);
 
-
-                tvAd1 = (TextView) titleLayout.findViewById(R.id.tv_advert1);
-                tvAd2 = (TextView) titleLayout.findViewById(R.id.tv_advert2);
-                ivAd = (ImageView) titleLayout.findViewById(R.id.iv_ad);
-
-                Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
-
-                int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-                tvAd1.setMaxWidth(adTvMaxWidth);
-                adTexts = data.getAd();
-                adIcon = data.getIcon();
-                AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, adTexts, adIcon);
-                layout.addView(titleLayout);
-                homeHeadView.addView(layout);
                 newsItemFragment.plvContent.getRefreshableView().addHeaderView(homeHeadView);
                 newsItemFragment.plRootView.loadOver();
             }
@@ -879,8 +885,9 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                 tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
             }
 
-            AdUtils.onChangeTheme(mContext, isNight, tvAd1, tvAd2, ivAd, adTexts, adIcon);
-
+            if (advertLayout != null) {
+                advertLayout.onChangerTheme();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

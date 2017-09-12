@@ -42,7 +42,7 @@ public class CalendarFragment extends BaseFragment implements ViewPager.OnPageCh
 
 
     public static enum AdapterType {
-        TITLE, CONTENT1, CONTENT2, CONTENT3, NO_DATA
+        TITLE, CONTENT1, CONTENT2, CONTENT3, NO_DATA, AD_TITLE
     }
 
     private CalendarPresenter calendarPresenter;

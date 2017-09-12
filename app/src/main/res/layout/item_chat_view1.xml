@@ -42,6 +42,7 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/chat_room_portrait"
             android:background="@drawable/bg_msg_other"
+            android:textIsSelectable="true"
             android:gravity="left|center"
             android:maxWidth="250dp"
             android:textColor="@color/font_color64"

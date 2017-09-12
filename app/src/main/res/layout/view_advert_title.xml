@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_title_content"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:background="@color/theme1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_advert_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:drawableLeft="@mipmap/iocn_blue_sx"
+        android:gravity="center"
+        android:text="数据走势"
+        android:textColor="@color/font_color60"
+        android:textSize="@dimen/title_font_size"/>
+
+    <ImageView
+        android:id="@+id/iv_advert_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/ll_advert_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/iv_advert_icon"
+        android:layout_toRightOf="@+id/tv_advert_title"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <FrameLayout
+            android:id="@+id/fl_advert_content1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_advert_content2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

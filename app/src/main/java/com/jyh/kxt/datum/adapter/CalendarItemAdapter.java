@@ -21,8 +21,8 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.base.util.AdUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
@@ -59,8 +59,11 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     private CalendarItemFragment parentFragment;
 
     private String adIconDay, adIconNight;
-    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight
-            = "#1384ED";
+    private String
+            ad1TvColorDay = "#1384ED",
+            ad1TvColorNight = "#1384ED",
+            ad2TvColorDay = "#1384ED",
+            ad2TvColorNight = "#1384ED";
 
     public CalendarItemAdapter(Context mContext, List<CalendarType> dataList) {
         super(dataList);
@@ -86,7 +89,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         if (view == null) {
             switch (itemType) {
                 case 0:
+                case 5:
                     view = layoutInflater.inflate(R.layout.item_calendar_title, null);
+                    view.setVisibility(View.VISIBLE);
                     viewHolder0 = new ViewHolder0(view);
                     view.setTag(viewHolder0);
                     break;
@@ -116,6 +121,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         } else {
             switch (itemType) {
                 case 0:
+                case 5:
                     viewHolder0 = (ViewHolder0) view.getTag();
                     break;
                 case 1:
@@ -136,10 +142,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
         switch (itemType) {
             case 0:
+            case 5:
                 CalendarTitleBean mCalendarTitleBean = (CalendarTitleBean) mCalendarType;
-                viewHolder0.tvTitle.setText(mCalendarTitleBean.getName());
-                viewHolder0.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color60));
-                viewHolder0.tvTitle.setVisibility(View.VISIBLE);
 
                 View paddingTagView = viewHolder0.llContent.findViewWithTag("paddingView");
                 if (paddingTagView != null) {
@@ -158,9 +162,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                     mPaddingView.setLayoutParams(lp);
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
-
-                setAd(viewHolder0, mCalendarTitleBean);
-
+                viewHolder0.alLayout.setAdvertData("数据",mCalendarTitleBean.getAds(),mCalendarTitleBean.getIcon());
                 break;
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
@@ -288,20 +290,6 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         return view;
     }
 
-    private void setAd(ViewHolder0 viewHolder0, CalendarTitleBean mCalendarTitleBean) {
-        if (mCalendarTitleBean.isShowAd()) {
-            int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-            viewHolder0.tvAd1.setMaxWidth(adTvMaxWidth);
-
-            AdUtils.setAd(mContext, viewHolder0.tvAd1, viewHolder0.tvAd2, viewHolder0.ivAd, mCalendarTitleBean.getAds(),
-                    mCalendarTitleBean.getIcon());
-
-        } else {
-            viewHolder0.tvAd1.setVisibility(View.GONE);
-            viewHolder0.tvAd2.setVisibility(View.GONE);
-            viewHolder0.ivAd.setVisibility(View.GONE);
-        }
-    }
 
     /**
      * This method shall return 'true' if views of given type has to be pinned.
@@ -310,8 +298,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
      */
     @Override
     public boolean isItemViewTypePinned(int viewType) {
-        return viewType == 0;
+        return viewType == 5;
     }
+
 
     class ViewBaseHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoqi;
@@ -320,10 +309,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
     class ViewHolder0 {
         @BindView(R.id.ll_title_content) LinearLayout llContent;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.tv_advert1) TextView tvAd1;
-        @BindView(R.id.tv_advert2) TextView tvAd2;
-        @BindView(R.id.iv_ad) ImageView ivAd;
+        @BindView(R.id.al_advert_layout) AdvertLayout alLayout;
 
         public ViewHolder0(View view) {
             ButterKnife.bind(this, view);
@@ -656,6 +642,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 return 3;
             case NO_DATA:
                 return 4;
+            case AD_TITLE:
+                return 5;
             default:
                 return 0;
         }
@@ -663,7 +651,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
     @Override
     public int getViewTypeCount() {
-        return 5;
+        return 6;
     }
 
 }
