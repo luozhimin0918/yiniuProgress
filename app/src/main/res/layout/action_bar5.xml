@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/navigationBarHeight"
+    android:background="@color/theme1">
+
+    <ImageView
+        android:id="@+id/iv_bar_break"
+        android:layout_width="@dimen/actionbar_height"
+        android:layout_height="@dimen/actionbar_height"
+        android:layout_alignParentLeft="true"
+        android:padding="16dp"
+        android:src="@mipmap/ico_break"
+        />
+
+    <TextView
+        android:id="@+id/tv_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/actionbar_height"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:maxLength="12"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/actionBar_textColor1"
+        android:textSize="@dimen/content_font_size2"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_right_icon2"
+            android:layout_width="@dimen/navigationBarRightImageViewSize"
+            android:layout_height="@dimen/navigationBarRightImageViewSize"
+            android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight1"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_right_icon1"
+            android:layout_width="@dimen/navigationBarRightImageViewSize"
+            android:layout_height="@dimen/navigationBarRightImageViewSize"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/line_color7"/>
+</RelativeLayout>

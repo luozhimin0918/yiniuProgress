@@ -44,6 +44,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     @BindView(R.id.lv_content) public FastInfoPullPinnedListView lvContent;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.fab_top) public ImageView fabTop;
+    @BindView(R.id.iv_ad) public ImageView ivAd;
 
     public FlashPresenter flashPresenter;
 
@@ -115,6 +116,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             }
         });
         flashPresenter.init();
+        flashPresenter.setAd();
     }
 
     @Override

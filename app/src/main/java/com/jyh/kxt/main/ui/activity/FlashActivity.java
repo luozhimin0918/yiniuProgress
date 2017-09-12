@@ -83,11 +83,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
     @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
-    @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-    @BindView(R.id.iv_break) ImageView ivBreak;
-    @BindView(R.id.iv_collect) ImageView ivCollect;
-    @BindView(R.id.iv_share) ImageView ivShare;
-    @BindView(R.id.iv_more) ImageView ivMore;
+    @BindView(R.id.iv_right_icon2) ImageView ivRight2;
+    @BindView(R.id.iv_right_icon1) ImageView ivRight1;
+//    @BindView(R.id.iv_break) ImageView ivBreak;
+//    @BindView(R.id.iv_collect) ImageView ivCollect;
+//    @BindView(R.id.iv_share) ImageView ivShare;
+//    @BindView(R.id.iv_more) ImageView ivMore;
 
     private FlashActivityPresenter flashActivityPresenter;
     private String id;
@@ -130,8 +131,10 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         plvContent.setOnItemClickListener(this);
         plRootView.setOnAfreshLoadListener(this);
 
-        ivBarBreak.setVisibility(View.INVISIBLE);
         tvBarTitle.setText("快讯");
+        ivRight1.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
+        ivRight2.setVisibility(View.VISIBLE);
+        ivRight2.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.sel_nav_collect));
 
         plRootView.loadWait();
         id = getIntent().getStringExtra(IntentConstant.O_ID);
@@ -140,20 +143,27 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
     }
 
-    @OnClick({R.id.iv_break, R.id.iv_collect, R.id.iv_share, R.id.iv_more})
+    @Override
+    protected void onChangeTheme() {
+        super.onChangeTheme();
+        ivRight1.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
+        ivRight2.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.sel_nav_collect));
+    }
+
+    @OnClick({R.id.iv_bar_break, R.id.iv_right_icon2, R.id.iv_right_icon1})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_break:
+            case R.id.iv_bar_break:
                 onBackPressed();
                 PushUtil.pushToMainActivity(this);
                 break;
-            case R.id.iv_collect:
+            case R.id.iv_right_icon2:
                 if (isLoadOver) {
                     if (isCollect) {
                         CollectUtils.unCollect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson, new ObserverData() {
                             @Override
                             public void callback(Object o) {
-                                ivCollect.setSelected(false);
+                                ivRight2.setSelected(false);
                                 isCollect = false;
                                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH,
                                         flashJson));
@@ -168,7 +178,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                         CollectUtils.collect(this, VarConstant.COLLECT_TYPE_FLASH, flashJson, new ObserverData() {
                             @Override
                             public void callback(Object o) {
-                                ivCollect.setSelected(true);
+                                ivRight2.setSelected(true);
                                 isCollect = true;
                                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COLLECT_FLASH,
                                         flashJson));
@@ -183,7 +193,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 }
 
                 break;
-            case R.id.iv_share:
+            case R.id.iv_right_icon1:
                 try {
                     if (discription == null) {
                         discription = "";
@@ -207,19 +217,6 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                     umengShareUI.showSharePopup(umengShareBean);
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-                break;
-            case R.id.iv_more:
-                int theme = ThemeUtil.getAlertTheme(getContext());
-                switch (theme) {
-                    case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, false);
-                        break;
-                    case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                        setDayNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        SPUtils.save(getContext(), SpConstant.SETTING_DAY_NIGHT, true);
-                        break;
                 }
                 break;
         }
@@ -293,8 +290,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutFlash = flashHeadView.findViewById(R.id.layout_flash);
 
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
-        int headHeight = screenDisplay.heightPixels - SystemUtil.dp2px(this, 266) - SystemUtil.getStatuBarHeight
-                (this);//两个item高度84*2 + 上下导航栏高度(48+50)
+        int headHeight = screenDisplay.heightPixels - SystemUtil.dp2px(this, 214) - SystemUtil.getStatuBarHeight
+                (this);//两个item高度84*2 + 上导航栏高度(48)
         flashHeadView.setMinimumHeight(headHeight);
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams
@@ -314,7 +311,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         shareUrl = url_kx_share.replace("{id}", flashJson.getUid());
 
-        ivCollect.setSelected(isCollect);
+        ivRight2.setSelected(isCollect);
 
         try {
             List<SlideJson> ads = flash.getAd();

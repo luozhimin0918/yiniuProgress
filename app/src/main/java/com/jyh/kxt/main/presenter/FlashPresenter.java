@@ -11,19 +11,25 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.json.AdItemJson;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
@@ -127,7 +133,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
             request.doGet(HttpConstant.SOCKET_TOKEN_KX + EncryptionUtils.createJWT(com.library
                     .base.http
-                    .VarConstant.KEY, object.toString()), new HttpListener<String>() {
+                    .VarConstant.KEY, object.toJSONString()), new HttpListener<String>() {
                 @Override
                 protected void onResponse(String str) {
                     try {
@@ -516,6 +522,29 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                 }
             }, 200);
         }
+        setAd();
+    }
+
+    public void setAd() {
+        VolleyRequest volleyRequest = new VolleyRequest(mContext, mQueue);
+        volleyRequest.setTag(getClass().getName());
+        volleyRequest.doGet(HttpConstant.FLASH_AD, request.getJsonParam(), new HttpListener<AdItemJson>() {
+            @Override
+            protected void onResponse(final AdItemJson o) {
+                if (o != null && o.getPicture() != null) {
+                    Glide.with(mContext).load(o.getPicture()).into(flashFragment.ivAd);
+                    flashFragment.ivAd.setVisibility(View.VISIBLE);
+                    flashFragment.ivAd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JumpUtils.jump((BaseActivity) mContext, null, null, null, o.getHref());
+                        }
+                    });
+                } else {
+                    flashFragment.ivAd.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
