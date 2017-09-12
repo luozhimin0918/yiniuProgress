@@ -85,6 +85,7 @@ public class TaskAdapter extends BaseListAdapter {
             viewHolder.tvScoreNum.setTextColor(ContextCompat.getColor(mContext, R.color.font_color8));
             viewHolder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
             viewHolder.tvSchedule.setTextColor(ContextCompat.getColor(mContext, R.color.font_color17));
+            viewHolder.vLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color2));
 
             final TaskJson task = (TaskJson) dataList.get(position);
             String is_finished = task.getIs_finished();
@@ -145,6 +146,7 @@ public class TaskAdapter extends BaseListAdapter {
         @BindView(R.id.tv_scoreNum) TextView tvScoreNum;
         @BindView(R.id.tv_title) TextView tvTitle;
         @BindView(R.id.tv_schedule) TextView tvSchedule;
+        @BindView(R.id.v_line) View vLine;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

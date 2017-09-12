@@ -6,6 +6,7 @@
     android:id="@+id/activity_my_coin2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme1"
     android:orientation="vertical">
 
     <include
@@ -67,8 +68,8 @@
                         android:id="@+id/iv_punch_card_handle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@+id/tv_punch_card_handle"
                         android:src="@drawable/sel_sign_arrow"
                         />
