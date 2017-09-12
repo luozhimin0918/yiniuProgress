@@ -59,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="已经连续签到2天"
+                        android:text=""
                         android:textColor="@color/font_color64"
                         android:textSize="@dimen/describe_font_size1"/>
 

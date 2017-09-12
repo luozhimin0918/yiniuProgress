@@ -185,9 +185,13 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 break;
             case R.id.iv_share:
                 try {
+                    if (discription == null) {
+                        discription = "";
+                    }
+                    String discReplace = discription.replace("<br />", "\n").replace("<br/>", "");
                     UmengShareBean umengShareBean = new UmengShareBean();
                     umengShareBean.setTitle(title);
-                    umengShareBean.setDetail(discription);
+                    umengShareBean.setDetail(discReplace);
                     umengShareBean.setImageUrl(image);
                     umengShareBean.setWebUrl(shareUrl);
 

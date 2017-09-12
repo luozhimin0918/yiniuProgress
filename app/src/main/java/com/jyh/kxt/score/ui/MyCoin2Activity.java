@@ -71,17 +71,20 @@ public class MyCoin2Activity extends BaseActivity implements
 
         tvBarTitle.setText("我的金币");
         ivBarFunction.setText("金币明细");
+        ivBarFunction.setTextColor(ContextCompat.getColor(this, R.color.actionBar_textColor1));
 
         drawerSignContent.setAlphaView(vAlphaView);
         drawerSignContent.setOnDrawerListener(new MultiDirectionSlidingDrawer.OnDrawerListener() {
             @Override
             public void onDrawerOpened() {
                 ivPunchCard.setSelected(true);
+                tvPunchCard.setText("点击收起");
             }
 
             @Override
             public void onDrawerClosed() {
                 ivPunchCard.setSelected(false);
+                tvPunchCard.setText("连续签到" + signDays + "天");
             }
 
             @Override
@@ -89,8 +92,6 @@ public class MyCoin2Activity extends BaseActivity implements
 
             }
         });
-        drawerSignContent.setAlphaView(vAlphaView);
-
         initView();
 
         myCoin2Presenter = new MyCoin2Presenter(this);
@@ -138,14 +139,13 @@ public class MyCoin2Activity extends BaseActivity implements
 
 
     public void init(MyCoinJson myCoinJson) {
-        drawerSignContent.animateOpen();
         /**
          * 打卡数据
          */
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        tvPunchCard.setText("已经连续签到" + punch_card_days + "天");
+
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
         PunchCardJson punchCardJson = new PunchCardJson();
@@ -178,6 +178,8 @@ public class MyCoin2Activity extends BaseActivity implements
                 adapter.setData(adapterData);
             }
             plRootView.loadOver();
+
+            drawerSignContent.open();
         }
     }
 

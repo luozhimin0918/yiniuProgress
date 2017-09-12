@@ -132,4 +132,7 @@
     <color name="marker_bg">#242424</color>
 
     <color name="marker_line">#2E528D</color>
+
+    <color name="block_tip_bg">#2E528D</color>
+    <color name="block_tip_text">#1187C9</color>
 </resources>

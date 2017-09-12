@@ -115,9 +115,9 @@ public class DatumHistoryAdapter extends BaseAdapter implements FastInfoPinnedLi
                         listType = 1;
                         break;
                     case "cftc":
-                        mViewHolder0.tvTitle1.setText("多投持仓");
+                        mViewHolder0.tvTitle1.setText("多头持仓");
                         mViewHolder0.tvTitle2.setText("空头持仓");
-                        mViewHolder0.tvTitle3.setText("多空净投仓");
+                        mViewHolder0.tvTitle3.setText("多空净持仓");
                         listType = 2;
                         break;
                 }

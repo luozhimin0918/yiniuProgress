@@ -930,15 +930,15 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         if (mOnDrawerListener != null) {
             mOnDrawerListener.onDrawerClosed();
         }
+        alphaView.setAlpha(0);
+        alphaView.setVisibility(View.GONE);
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                alphaView.setAlpha(0);
-                alphaView.setVisibility(View.GONE);
                 alphaView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!mExpanded){
+                        if (!mExpanded) {
                             alphaView.setAlpha(0);
                             alphaView.setVisibility(View.GONE);
                         }
@@ -961,11 +961,12 @@ public class MultiDirectionSlidingDrawer extends ViewGroup {
         if (mOnDrawerListener != null) {
             mOnDrawerListener.onDrawerOpened();
         }
+        alphaView.setAlpha(1);
+        alphaView.setVisibility(View.VISIBLE);
+
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                alphaView.setAlpha(1);
-                alphaView.setVisibility(View.VISIBLE);
                 alphaView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
