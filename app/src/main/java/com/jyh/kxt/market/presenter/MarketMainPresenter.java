@@ -87,7 +87,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
     private RollDotViewPager recommendView;
-//    private MarketMainBean marketBean;
+    //    private MarketMainBean marketBean;
     private ArrayList<SkinnableTextView> mAdTextViewList;
     private TextView tvAd1;
     private TextView tvAd2;
@@ -233,7 +233,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         try {
             mAdTextViewList = new ArrayList<>();
             List<AdItemJson> mTextAd = ads.getText_ad();
-            if (mTextAd != null) {
+            if (mTextAd == null || mTextAd.size() == 0) {
                 return;
             }
             LayoutInflater mInflater = LayoutInflater.from(mContext);
@@ -316,7 +316,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                 data.clear();
                 data.addAll(MarketUtil.getMarketEditOption(mContext));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         createFavorView(marketBean, null);

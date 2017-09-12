@@ -504,7 +504,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         try {
             mAdTextViewList = new ArrayList<>();
             List<AdItemJson> mTextAd = ads.getText_ad();
-            if (mTextAd != null) {
+            if (mTextAd == null || mTextAd.size() == 0) {
                 return;
             }
             LayoutInflater mInflater = LayoutInflater.from(mContext);
