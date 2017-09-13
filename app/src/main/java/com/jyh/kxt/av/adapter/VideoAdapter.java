@@ -146,6 +146,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 umengShareBean.setTitle(video.getTitle());
                 umengShareBean.setWebUrl(url_video_share.replace("{id}", video.getId()));
                 umengShareBean.setImageUrl(video.getShare_image());
+                umengShareBean.setDetail(video.getIntroduce());
                 umengShareBean.setSinaTitle(video.getShare_sina_title());//替换微博的
 
                 List<ShareItemJson> functionList = new ArrayList<>();

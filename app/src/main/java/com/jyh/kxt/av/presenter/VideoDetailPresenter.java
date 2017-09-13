@@ -502,6 +502,7 @@ public class VideoDetailPresenter extends BasePresenter {
             umengShareBean.setTitle(videoDetailBean.getTitle());
             umengShareBean.setDetail(videoDetailBean.getIntroduce());
             umengShareBean.setSinaTitle(videoDetailBean.getShare_sina_title());
+            umengShareBean.setImageUrl(videoDetailBean.getShare_image());
             umengShareBean.setWebUrl(videoDetailBean.getUrl_share().replace("{id}", videoDetailBean.getId()));
             umengShareBean.setFromSource(UmengShareUtil.SHARE_VIDEO);
 
