@@ -301,6 +301,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         return viewType == 5;
     }
 
+    public void dispatchTouchEvent(View view) {
+
+    }
 
 
     class ViewBaseHolder {
