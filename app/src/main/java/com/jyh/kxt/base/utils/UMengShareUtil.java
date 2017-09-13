@@ -27,6 +27,7 @@ import com.umeng.socialize.media.UMWeb;
  */
 
 public class UmengShareUtil {
+
     /**
      * 文章
      */
@@ -92,15 +93,15 @@ public class UmengShareUtil {
     private UmengShareBean mUmengShareBean;
     private MyUmShareListener umShareListener;
 
-    public UmengShareUtil(BaseActivity mActivity ,UmengShareBean mUmengShareBean) {
-        this(mActivity, null,mUmengShareBean);
+    public UmengShareUtil(BaseActivity mActivity, UmengShareBean mUmengShareBean) {
+        this(mActivity, null, mUmengShareBean);
     }
 
-    public UmengShareUtil(BaseActivity mActivity, PopupWindow popupWindow,UmengShareBean mUmengShareBean) {
+    public UmengShareUtil(BaseActivity mActivity, PopupWindow popupWindow, UmengShareBean mUmengShareBean) {
         this.mActivity = mActivity;
         this.mUmShareAPI = UMShareAPI.get(mActivity);
         this.mUmengShareBean = mUmengShareBean;
-        this.umShareListener = new MyUmShareListener(mActivity, popupWindow,mUmengShareBean);
+        this.umShareListener = new MyUmShareListener(mActivity, popupWindow, mUmengShareBean);
     }
 
     /**

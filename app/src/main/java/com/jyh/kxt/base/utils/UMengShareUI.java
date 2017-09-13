@@ -79,6 +79,7 @@ public class UmengShareUI {
      * @param umengShareBean
      * @param shareItemList  如果不为空  则显示RecycleView
      * @param customView     如果不为空,则添加一个视图进入
+     *                       二者选其一
      */
     private PopupUtil showSharePopup2(@NotNull final UmengShareBean umengShareBean, List<ShareItemJson> shareItemList, View customView) {
         this.customView = customView;
@@ -190,13 +191,12 @@ public class UmengShareUI {
      * 平台点击分享的类
      */
     private class PlatformClickShare implements OnPopupFunListener {
-
         UmengShareBean mUmengShareBean;
         UmengShareUtil mUmengShareUtil;
 
         PlatformClickShare(UmengShareBean mUmengShareBean) {
             this.mUmengShareBean = mUmengShareBean;
-            this.mUmengShareUtil = new UmengShareUtil(mActivity, mSharePopup,mUmengShareBean);
+            this.mUmengShareUtil = new UmengShareUtil(mActivity, mSharePopup, mUmengShareBean);
         }
 
         @Override
@@ -212,7 +212,6 @@ public class UmengShareUI {
                     mUmengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN, mUmengShareBean);
                     break;
                 case R.mipmap.icon_share_sina:
-                    //  分享到微博
                     if (!TextUtils.isEmpty(mUmengShareBean.getSinaTitle())) {
                         mUmengShareBean.setDetail(mUmengShareBean.getSinaTitle());
                         mUmengShareUtil.shareContent2(SHARE_MEDIA.SINA, mUmengShareBean);
