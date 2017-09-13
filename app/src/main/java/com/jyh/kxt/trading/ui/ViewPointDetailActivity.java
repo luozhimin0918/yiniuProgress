@@ -23,7 +23,6 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
-import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;

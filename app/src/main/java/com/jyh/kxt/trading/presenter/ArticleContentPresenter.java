@@ -59,8 +59,6 @@ import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.widget.flowlayout.OptionFlowLayout;
 import com.library.widget.window.ToastView;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 

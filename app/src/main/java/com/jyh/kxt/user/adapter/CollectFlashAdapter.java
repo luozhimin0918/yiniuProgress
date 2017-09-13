@@ -39,7 +39,6 @@ import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.index.json.MainInitJson;
-import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.json.flash.Flash_KX;
 import com.jyh.kxt.main.json.flash.Flash_NEWS;

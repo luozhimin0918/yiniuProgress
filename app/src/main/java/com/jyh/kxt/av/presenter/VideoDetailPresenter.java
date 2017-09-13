@@ -23,7 +23,6 @@ import com.jyh.kxt.av.json.CommentBean;
 import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
