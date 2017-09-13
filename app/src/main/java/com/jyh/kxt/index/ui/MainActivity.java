@@ -509,7 +509,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
                 break;
             case R.id.iv_sina:
-                //新浪
+                //微博
                 if (NetUtils.isNetworkAvailable(this)) {
                     UmengLoginTool.umenglogin(this, SHARE_MEDIA.SINA);
                 } else {

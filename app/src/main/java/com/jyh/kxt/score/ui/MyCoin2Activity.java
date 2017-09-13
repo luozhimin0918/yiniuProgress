@@ -1,5 +1,6 @@
 package com.jyh.kxt.score.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
-import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,8 +120,7 @@ public class MyCoin2Activity extends BaseActivity implements
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
-                ToastView.makeTextGold(this,"恭喜获得2积分");
-//                startActivity(new Intent(this, CoinHistoryActivity.class));
+                startActivity(new Intent(this, CoinHistoryActivity.class));
                 break;
         }
     }

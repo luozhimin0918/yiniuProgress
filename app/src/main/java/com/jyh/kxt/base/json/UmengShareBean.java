@@ -15,7 +15,7 @@ public class UmengShareBean {
     private String webUrl;
     private String imageUrl;
 
-    //分享新浪需要的
+    //分享微博需要的
     private String sinaTitle;
 
     public int getFromSource() {

@@ -18,6 +18,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.jyh.kxt.base.utils.UmengShareUtil.SHARE_INVITE;
+
 /**
  * 项目名:Kxt
  * 类描述:分享
@@ -48,14 +50,16 @@ public class ShareActivity extends BaseActivity {
                 break;
         }
 
-        if (umengShareUtil == null) {
-            umengShareUtil = new UmengShareUtil(this);
-            umengShareBean = new UmengShareBean();
-        }
-
+        umengShareBean = new UmengShareBean();
         umengShareBean.setTitle("快讯通财经");
         umengShareBean.setDetail("财经快讯速递专家");
         umengShareBean.setWebUrl(HttpConstant.OFFICIAL);
+        umengShareBean.setFromSource(SHARE_INVITE);
+
+        if (umengShareUtil == null) {
+            umengShareUtil = new UmengShareUtil(this, umengShareBean);
+        }
+
 
         if (NetUtils.isNetworkAvailable(this)) {
             switch (view.getId()) {

@@ -98,6 +98,8 @@ public class PinnedSectionListView extends ListView {
      */
     PinnedSection mPinnedSection;
 
+    IPinnedTouch iPinnedTouch;
+
     /**
      * Pinned view Y-translation. We use it to stick pinned view to the next section.
      */
@@ -179,10 +181,15 @@ public class PinnedSectionListView extends ListView {
         initView();
     }
 
+
     private void initView() {
         setOnScrollListener(mOnScrollListener);
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         initShadow(true);
+    }
+
+    public void setPinnedTouch(IPinnedTouch iPinnedTouch) {
+        this.iPinnedTouch = iPinnedTouch;
     }
 
     //-- public API methods
@@ -203,13 +210,19 @@ public class PinnedSectionListView extends ListView {
                     new int[]{ContextCompat.getColor(getContext(), R.color.pinned_shadow1),
                             ContextCompat.getColor(getContext(), R.color.pinned_shadow2),
                             ContextCompat.getColor(getContext(), R.color.pinned_shadow3)});
-            mShadowHeight = (int) (5 * getResources().getDisplayMetrics().density);
+            if (mShadowHeight == 0) {
+                mShadowHeight = (int) (5 * getResources().getDisplayMetrics().density);
+            }
         } else {
             if (mShadowDrawable != null) {
                 mShadowDrawable = null;
                 mShadowHeight = 0;
             }
         }
+    }
+
+    public void setShadowHeight(int mShadowHeight) {
+        this.mShadowHeight = mShadowHeight;
     }
 
     /**
@@ -483,6 +496,10 @@ public class PinnedSectionListView extends ListView {
         if (mTouchTarget != null) {
             if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
                 mTouchTarget.dispatchTouchEvent(ev);
+
+                if (iPinnedTouch != null) {
+                    iPinnedTouch.dispatchTouchEvent(mTouchTarget);
+                }
                 //如果isAcceptTouchRect 开启之后才返回false
                 if (mTouchTarget instanceof NavigationTabLayout) {
                     NavigationTabLayout mNavigationTabLayout = (NavigationTabLayout) mTouchTarget;

@@ -302,6 +302,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
 
+
     class ViewBaseHolder {
         @BindView(R.id.iv_guoqi) ImageView ivGuoqi;
         @BindView(R.id.v_line) View vLine;

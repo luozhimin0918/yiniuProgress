@@ -2,6 +2,7 @@ package com.jyh.kxt.datum.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 
 import com.android.volley.RequestQueue;
 import com.jyh.kxt.R;
@@ -14,6 +15,7 @@ import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.library.util.ObserverCall;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.listview.IPinnedTouch;
 import com.library.widget.listview.PinnedSectionListView;
 import com.library.widget.listview.PullPinnedListView;
 
@@ -58,6 +60,17 @@ public class CalendarItemFragment extends BaseFragment {
         ptrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ptrlvContent.setDividerNull();
         ptrlvContent.getRefreshableView().setDividerHeight(0);
+        ptrlvContent.getRefreshableView().setShadowHeight(1);
+        //分发点击
+        ptrlvContent.getRefreshableView().setPinnedTouch(new IPinnedTouch() {
+            @Override
+            public void dispatchTouchEvent(View view) {
+                if(calendarItemAdapter!= null){
+                    calendarItemAdapter.dispatchTouchEvent(view);
+                }
+            }
+        });
+
         ptrlvContent.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<PinnedSectionListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<PinnedSectionListView> refreshView) {
@@ -166,7 +179,7 @@ public class CalendarItemFragment extends BaseFragment {
                 if (calendarType.getAdapterType() == CalendarFragment.AdapterType.CONTENT1) {
                     CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) calendarType;
                     String reality = mCalendarFinanceBean.getReality();
-                    if("--".equals(reality)){
+                    if ("--".equals(reality)) {
                         unPublishedPosition = i;
                         new Handler().postDelayed(new Runnable() {
                             @Override

@@ -931,7 +931,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 umengShareBean.setImageUrl(shareImg);
                 umengShareBean.setWebUrl(shareUrl);
 
-                umengShareUtil = new UmengShareUtil(NewsContentActivity.this);
+                umengShareUtil = new UmengShareUtil(NewsContentActivity.this, umengShareBean);
             }
 
             switch (v.getId()) {

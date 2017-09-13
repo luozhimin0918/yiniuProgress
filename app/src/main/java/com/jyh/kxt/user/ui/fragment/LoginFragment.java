@@ -96,7 +96,7 @@ public class LoginFragment extends BaseFragment {
                     ToastView.makeText3(getContext(), "暂无网络,请稍后再试");
                 break;
             case R.id.iv_sina:
-                //新浪
+                //微博
                 if (NetUtils.isNetworkAvailable(getContext()))
                     UmengLoginTool.umenglogin((BaseActivity) getActivity(), SHARE_MEDIA.SINA);
                 else

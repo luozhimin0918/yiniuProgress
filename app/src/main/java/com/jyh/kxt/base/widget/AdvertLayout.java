@@ -39,6 +39,7 @@ public class AdvertLayout extends FrameLayout {
 
     @BindView(R.id.ll_advert_content) LinearLayout llAdvertContent;
 
+    private View advertRootTitle;
     private AdTitleIconBean adTitleIconBean;
     private List<AdTitleItemBean> adTitleItemList;
 
@@ -63,9 +64,9 @@ public class AdvertLayout extends FrameLayout {
 
     public void setAdvertData(String title, List<AdTitleItemBean> adTitleItemList, AdTitleIconBean adTitleIconBean) {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
-        View advertTitle = mInflater.inflate(R.layout.view_advert_title, this, false);
-        ButterKnife.bind(this, advertTitle);
-        addView(advertTitle);
+        advertRootTitle = mInflater.inflate(R.layout.view_advert_title, this, false);
+        ButterKnife.bind(this, advertRootTitle);
+        addView(advertRootTitle);
 
 
         this.adTitleIconBean = adTitleIconBean;
@@ -89,6 +90,7 @@ public class AdvertLayout extends FrameLayout {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
 
+        advertRootTitle.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.theme1));
         tvAdvertTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color60));
 
         if (adTitleItemList == null || adTitleItemList.size() == 0) {

@@ -2,7 +2,14 @@ package com.jyh.kxt.base.utils;
 
 import android.widget.PopupWindow;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.json.UmengShareBean;
+import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
+import com.library.util.LogUtil;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -13,14 +20,13 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 public class MyUmShareListener implements UMShareListener {
     private BaseActivity mActivity;
     private PopupWindow popupWindow;
+    private UmengShareBean mUmengShareBean;
 
-    public MyUmShareListener(BaseActivity mActivity) {
-        this.mActivity = mActivity;
-    }
 
-    public MyUmShareListener(BaseActivity mActivity, PopupWindow popupWindow) {
+    public MyUmShareListener(BaseActivity mActivity, PopupWindow popupWindow, UmengShareBean mUmengShareBean) {
         this.mActivity = mActivity;
         this.popupWindow = popupWindow;
+        this.mUmengShareBean = mUmengShareBean;
     }
 
     @Override
@@ -40,6 +46,7 @@ public class MyUmShareListener implements UMShareListener {
         if (popupWindow != null) {
             popupWindow.dismiss();
         }
+        postAddCoins();
     }
 
     @Override
@@ -92,9 +99,51 @@ public class MyUmShareListener implements UMShareListener {
                 platformName = "QQ空间";
                 break;
             case SINA:
-                platformName = "新浪微博";
+                platformName = "微博";
                 break;
         }
         return platformName;
+    }
+
+    private void postAddCoins() {
+        LogUtil.e(LogUtil.TAG, "请求分享积分增加");
+
+        UserJson userInfo = LoginUtils.getUserInfo(mActivity);
+        if (userInfo == null) {
+            return;
+        }
+
+        VolleyRequest volleyRequest = new VolleyRequest(mActivity.getContext(), mActivity.getQueue());
+
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+        jsonParam.put("uid", userInfo.getUid());
+
+        switch (mUmengShareBean.getFromSource()){
+            case UmengShareUtil.SHARE_ARTICLE:
+                jsonParam.put("type", "share_article");
+                break;
+            case UmengShareUtil.SHARE_VIDEO:
+                jsonParam.put("type", "share_video");
+                break;
+            case UmengShareUtil.SHARE_KX:
+                jsonParam.put("type", "share_kx");
+                break;
+            case UmengShareUtil.SHARE_MARKET:
+                jsonParam.put("type", "share_market");
+                break;
+            case UmengShareUtil.SHARE_VIEWPOINT:
+                jsonParam.put("type", "share_viewpoint");
+                break;
+            case UmengShareUtil.SHARE_INVITE:
+                jsonParam.put("type", "share_invite");
+                break;
+        }
+
+        volleyRequest.doPost(HttpConstant.COINS_ADD, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String jsonData) {
+
+            }
+        });
     }
 }

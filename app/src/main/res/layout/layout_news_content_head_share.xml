@@ -144,7 +144,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/iv_sina"
                 android:gravity="center"
-                android:text="新浪"
+                android:text="微博"
                 android:textColor="@color/font_color6"
                 android:textSize="@dimen/min_font_size"
                 />

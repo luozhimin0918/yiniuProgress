@@ -89,16 +89,18 @@ public class UmengShareUtil {
 
     private BaseActivity mActivity;
     private UMShareAPI mUmShareAPI;
+    private UmengShareBean mUmengShareBean;
     private MyUmShareListener umShareListener;
 
-    public UmengShareUtil(BaseActivity mActivity) {
-        this(mActivity, null);
+    public UmengShareUtil(BaseActivity mActivity ,UmengShareBean mUmengShareBean) {
+        this(mActivity, null,mUmengShareBean);
     }
 
-    public UmengShareUtil(BaseActivity mActivity, PopupWindow popupWindow) {
+    public UmengShareUtil(BaseActivity mActivity, PopupWindow popupWindow,UmengShareBean mUmengShareBean) {
         this.mActivity = mActivity;
         this.mUmShareAPI = UMShareAPI.get(mActivity);
-        this.umShareListener = new MyUmShareListener(mActivity, popupWindow);
+        this.mUmengShareBean = mUmengShareBean;
+        this.umShareListener = new MyUmShareListener(mActivity, popupWindow,mUmengShareBean);
     }
 
     /**
@@ -142,7 +144,7 @@ public class UmengShareUtil {
 
     /**
      * 纯图片分享
-     * 分享新浪
+     * 分享微博
      */
     public void shareContent2(SHARE_MEDIA shareMedia, UmengShareBean umengShareBean) {
         if (!mUmShareAPI.isInstall(mActivity, shareMedia)) {

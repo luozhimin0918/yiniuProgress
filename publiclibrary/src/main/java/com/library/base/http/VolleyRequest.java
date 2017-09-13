@@ -2,6 +2,7 @@ package com.library.base.http;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -142,6 +143,12 @@ public class VolleyRequest {
                                     int status = object.getInt("status");
                                     String data = object.getString("data");
                                     msg = object.optString("msg");
+
+                                    //新增积分提示
+                                    String integralMsg = object.optString("integral_msg");
+                                    if (!TextUtils.isEmpty(integralMsg)) {
+                                        ToastView.makeTextGold(mContext, integralMsg);
+                                    }
 
                                     if (status == 1) {
                                         T resultT = null;

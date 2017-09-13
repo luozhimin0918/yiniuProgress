@@ -16,7 +16,7 @@
         android:gravity="center"
         android:text="数据走势"
         android:textColor="@color/font_color60"
-        android:textSize="@dimen/title_font_size"/>
+        android:textSize="@dimen/content_font_size2"/>
 
     <ImageView
         android:id="@+id/iv_advert_icon"
@@ -29,6 +29,7 @@
         android:id="@+id/ll_advert_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
         android:layout_toLeftOf="@+id/iv_advert_icon"
         android:layout_toRightOf="@+id/tv_advert_title"
         android:orientation="horizontal"

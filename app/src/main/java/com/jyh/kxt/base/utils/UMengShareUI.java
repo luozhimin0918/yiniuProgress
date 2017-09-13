@@ -118,7 +118,7 @@ public class UmengShareUI {
         List<ShareItemJson> platformList = new ArrayList<>();
         platformList.add(new ShareItemJson(R.mipmap.icon_share_qyq, "朋友圈"));
         platformList.add(new ShareItemJson(R.mipmap.icon_share_wx, "微信好友"));
-        platformList.add(new ShareItemJson(R.mipmap.icon_share_sina, "新浪"));
+        platformList.add(new ShareItemJson(R.mipmap.icon_share_sina, "微博"));
         platformList.add(new ShareItemJson(R.mipmap.icon_share_qq, "QQ"));
         platformList.add(new ShareItemJson(R.mipmap.icon_share_zone, "QQ空间"));
         platformAdapter = new ShareWindowAdapter(platformList, mActivity);
@@ -196,7 +196,7 @@ public class UmengShareUI {
 
         PlatformClickShare(UmengShareBean mUmengShareBean) {
             this.mUmengShareBean = mUmengShareBean;
-            this.mUmengShareUtil = new UmengShareUtil(mActivity, mSharePopup);
+            this.mUmengShareUtil = new UmengShareUtil(mActivity, mSharePopup,mUmengShareBean);
         }
 
         @Override
@@ -212,7 +212,7 @@ public class UmengShareUI {
                     mUmengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN, mUmengShareBean);
                     break;
                 case R.mipmap.icon_share_sina:
-                    //  分享到新浪
+                    //  分享到微博
                     if (!TextUtils.isEmpty(mUmengShareBean.getSinaTitle())) {
                         mUmengShareBean.setDetail(mUmengShareBean.getSinaTitle());
                         mUmengShareUtil.shareContent2(SHARE_MEDIA.SINA, mUmengShareBean);
