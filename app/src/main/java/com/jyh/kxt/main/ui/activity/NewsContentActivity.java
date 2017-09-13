@@ -51,6 +51,7 @@ import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
@@ -78,6 +79,7 @@ import com.library.widget.PageLoadLayout;
 import com.library.widget.ZoomImageView;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -187,7 +189,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         PushUtil.pushToMainActivity(this);
     }
 
-    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id.news_author_chat})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
+            .news_author_chat})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -231,6 +234,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.news_author_chat:
                 if (memberId == null) {
+                    ToastView.makeText3(getContext(), "数据错误");
                     return;
                 }
 
@@ -550,6 +554,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         if (LoginUtils.getUserInfo(getContext()) == null) {
                             Intent loginIntent = new Intent(getContext(), LoginOrRegisterActivity.class);
                             startActivity(loginIntent);
+                            return;
+                        }
+                        if (memberId == null) {
+                            ToastView.makeText3(getContext(), "数据错误");
                             return;
                         }
                         Intent intent = new Intent(NewsContentActivity.this, ChatRoomActivity.class);
