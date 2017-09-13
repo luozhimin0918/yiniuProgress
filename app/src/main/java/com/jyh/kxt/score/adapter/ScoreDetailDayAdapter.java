@@ -50,7 +50,10 @@ public class ScoreDetailDayAdapter extends BaseListAdapter<ScoreDetailDayJson> {
         if (award == null || "".equals(award.trim())) {
             award = "";
         } else {
-            award = "金币" + award;
+            if (award.contains("+") || award.contains("-"))
+                award = "金币" + award;
+            else
+                award = "金币+" + award;
         }
         holder.tvNum.setText(award);
         String time = bean.getTime();
