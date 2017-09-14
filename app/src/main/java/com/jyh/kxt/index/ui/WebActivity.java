@@ -1,8 +1,10 @@
 package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +14,10 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.ShareItemJson;
 import com.jyh.kxt.base.json.UmengShareBean;
+import com.jyh.kxt.base.util.PopupUtil;
+import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.LoadX5WebView;
@@ -20,6 +25,9 @@ import com.jyh.kxt.index.presenter.WebPresenter;
 import com.library.util.RegexValidateUtil;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -92,7 +100,6 @@ public class WebActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
-                //todo 增加分享列表
                 if (webPresenter != null && webPresenter.loadX5WebView != null) {
                     LoadX5WebView x5WebView = webPresenter.loadX5WebView;
 
@@ -104,10 +111,34 @@ public class WebActivity extends BaseActivity {
                         umengShareBean.setImageUrl(x5WebView.sharePic);
                     }
 
+                    //创建下面的功能Adapter
+                    List<ShareItemJson> functionList = new ArrayList<>();
+                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_open, "浏览器"));
+                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_refresh, "刷新"));
+                    functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+                    functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
+
                     umengShareBean.setWebUrl(x5WebView.shareUrl == null ? url : x5WebView.shareUrl);
                     umengShareBean.setFromSource(UmengShareUtil.SHARE_ADVERT);
-                    UmengShareUI umengShareUI = new UmengShareUI(this);
-                    umengShareUI.showSharePopup(umengShareBean);
+                    final UmengShareUI umengShareUI = new UmengShareUI(this);
+                    final PopupUtil popupUtil = umengShareUI.showSharePopup(umengShareBean, functionList);
+                    umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
+                        @Override
+                        public void onClickItem(View itemView, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
+                            int icon = mShareItemJson.icon;
+                            switch (icon) {
+                                case R.mipmap.icon_share_link_open:
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(url));
+                                    startActivity(intent);
+                                    break;
+                                case R.mipmap.icon_share_link_refresh:
+                                    webPresenter.loadX5WebView.getWebView().reload();
+                                    break;
+                            }
+                            popupUtil.dismiss();
+                        }
+                    });
                 }
                 break;
         }
