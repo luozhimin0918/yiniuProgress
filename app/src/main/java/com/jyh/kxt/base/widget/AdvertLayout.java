@@ -90,7 +90,7 @@ public class AdvertLayout extends FrameLayout {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
 
-        advertRootTitle.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.theme1));
+        advertRootTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
         tvAdvertTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.font_color60));
 
         if (adTitleItemList == null || adTitleItemList.size() == 0) {

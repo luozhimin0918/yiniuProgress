@@ -549,7 +549,11 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                 }
             }
 
-
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                flashFragment.ivAd.setVisibility(View.GONE);
+            }
         });
     }
 

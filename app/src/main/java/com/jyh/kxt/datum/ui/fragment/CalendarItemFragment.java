@@ -2,6 +2,7 @@ package com.jyh.kxt.datum.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.android.volley.RequestQueue;
@@ -64,9 +65,9 @@ public class CalendarItemFragment extends BaseFragment {
         //分发点击
         ptrlvContent.getRefreshableView().setPinnedTouch(new IPinnedTouch() {
             @Override
-            public void dispatchTouchEvent(View view) {
+            public void dispatchTouchEvent(View view,MotionEvent ev) {
                 if(calendarItemAdapter!= null){
-                    calendarItemAdapter.dispatchTouchEvent(view);
+                    calendarItemAdapter.dispatchTouchEvent(view,ev);
                 }
             }
         });

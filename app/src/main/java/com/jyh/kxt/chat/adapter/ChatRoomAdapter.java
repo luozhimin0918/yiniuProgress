@@ -141,6 +141,24 @@ public class ChatRoomAdapter extends BaseListAdapter<ChatRoomJson> {
          * 内容
          */
         baseViewHolder.chatRoomContent.convertToGif(chatRoomJson.getContent());
+//        baseViewHolder.chatRoomContent.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                View chatFunView = LayoutInflater.from(mContext).inflate(R.layout.view_chat_popup, null, false);
+//
+//                PopupWindow mPopupWindow = new PopupWindow();
+//                mPopupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//                mPopupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//                mPopupWindow.setTouchable(true);
+//                mPopupWindow.setOutsideTouchable(true);
+//
+//                mPopupWindow.setContentView(chatFunView);
+//                mPopupWindow.showAtLocation(chatFunView, Gravity.NO_GRAVITY, (int) v.getX(), (int) v.getY());
+//
+//                return false;
+//            }
+//        });
         /**
          * 头像
          */

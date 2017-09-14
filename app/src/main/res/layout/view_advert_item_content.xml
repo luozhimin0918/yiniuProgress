@@ -10,6 +10,7 @@
     android:maxLines="1"
     android:maxWidth="100dp"
     android:paddingLeft="10dp"
+    android:tag="advert"
     android:paddingRight="10dp"
     android:text="广告内容1广告内容1广告内容1广告内容1广告内容1"
     android:textColor="@color/font_color62"

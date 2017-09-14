@@ -1,5 +1,6 @@
 package com.library.widget.listview;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -12,5 +13,5 @@ public interface IPinnedTouch {
      *
      * @return
      */
-    void dispatchTouchEvent(View view);
+    void dispatchTouchEvent(View view,MotionEvent ev);
 }

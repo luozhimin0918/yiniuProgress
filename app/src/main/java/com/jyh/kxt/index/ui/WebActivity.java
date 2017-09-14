@@ -140,17 +140,10 @@ public class WebActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (tvBarTitle.getText().toString().equals(title)) {
-                super.onBackPressed();
-            } else {
-//                WebView webView = webPresenter.loadX5WebView.getWebView();
-//                if (webView.canGoBack()) {
-//                    webView.goBack();
-//                } else {
-//                    super.onBackPressed();
-//                }
-                super.onBackPressed();
-            }
+            super.onBackPressed();
+
+            webPresenter.loadX5WebView.getWebView().loadUrl("about:blank");
+
         } catch (Exception e) {
             e.printStackTrace();
             super.onBackPressed();

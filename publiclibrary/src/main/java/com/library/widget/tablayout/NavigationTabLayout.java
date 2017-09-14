@@ -276,7 +276,6 @@ public class NavigationTabLayout extends LinearLayout {
     }
 
     private boolean isPinnedViewTouched(View view, float x, float y) {
-
         if (mTouchRect != null) {
             Rect rect = new Rect();
             view.getHitRect(rect);

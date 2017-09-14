@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -325,24 +324,29 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
     protected void onDestroy() {
         super.onDestroy();
 
-        UserJson userInfo = LoginUtils.getUserInfo(this);
-        if (userInfo != null) {
-            int unreadMessageCount = 0;
-            List<LetterListJson> dataList = adapter.dataList;
-            for (LetterListJson letterListJson : dataList) {
-                unreadMessageCount += Integer.parseInt(letterListJson.getNum_unread());
+        try {
+            ChatSocketUtil.getInstance().unOnChatMessage(this);
+
+            UserJson userInfo = LoginUtils.getUserInfo(this);
+            if (userInfo != null) {
+                int unreadMessageCount = 0;
+                List<LetterListJson> dataList = adapter.dataList;
+                for (LetterListJson letterListJson : dataList) {
+                    unreadMessageCount += Integer.parseInt(letterListJson.getNum_unread());
+                }
+
+                userInfo.setIs_unread_msg(unreadMessageCount == 0 ? 0 : 1);
+                LoginUtils.changeUserInfo(this, userInfo);//重新保存
+
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
             }
 
-            userInfo.setIs_unread_msg(unreadMessageCount == 0 ? 0 : 1);
-            LoginUtils.changeUserInfo(this, userInfo);//重新保存
+            EventBus.getDefault().unregister(this);
+            getQueue().cancelAll(LetterPresenter.class.getName());
 
-            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-
-        EventBus.getDefault().unregister(this);
-        getQueue().cancelAll(LetterPresenter.class.getName());
-
-        ChatSocketUtil.getInstance().unOnChatMessage(this);
     }
 
     public void deleteMessage(LetterListJson bean) {

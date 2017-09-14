@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
+import com.library.util.ViewCompatUtil;
 import com.library.widget.listview.PinnedSectionListView;
 
 import java.text.ParseException;
@@ -162,7 +164,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                     mPaddingView.setLayoutParams(lp);
                     viewHolder0.llContent.addView(mPaddingView, 0);
                 }
-                viewHolder0.alLayout.setAdvertData("数据",mCalendarTitleBean.getAds(),mCalendarTitleBean.getIcon());
+                viewHolder0.alLayout.setAdvertData(mCalendarTitleBean.getName(), mCalendarTitleBean.getAds(), mCalendarTitleBean.getIcon());
                 break;
             case 1:
                 CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
@@ -301,8 +303,12 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         return viewType == 5;
     }
 
-    public void dispatchTouchEvent(View view) {
-
+    public void dispatchTouchEvent(View view, MotionEvent ev) {
+        View advertLayout = view.findViewById(R.id.al_advert_layout);
+        if (advertLayout instanceof AdvertLayout) {
+            AdvertLayout myAdvertLayout = (AdvertLayout) advertLayout;
+            ViewCompatUtil.performClickView(myAdvertLayout, ev.getX(), ev.getY());
+        }
     }
 
 
