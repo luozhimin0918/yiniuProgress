@@ -53,6 +53,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.NativeStore;
+import com.jyh.kxt.base.utils.SaveImage;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
@@ -1099,7 +1100,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.iv_download:
-                    newsContentPresenter.new SaveImage().execute(imgStr);
+                    new SaveImage(getContext()).execute(imgStr);
                     break;
                 case R.id.iv_pop:
 

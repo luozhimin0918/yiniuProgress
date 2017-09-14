@@ -33,6 +33,7 @@ import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.utils.SaveImage;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -85,7 +86,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private List flashJsons;
     private Context context;
 
-    public FastInfoAdapter(List<FlashJson> flashJsons, Context context) {
+    public FastInfoAdapter(List<FlashJson> flashJsons, final Context context) {
 
         if (flashJsons != null) {
             Iterator<FlashJson> iterator = flashJsons.iterator();
@@ -132,12 +133,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         inspiritDateInfo(this.flashJsons);
 
-        ivDownView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -458,6 +453,12 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                                                 popupUtil.showAtLocation(parent, Gravity.CENTER, 0, 0);
                                             }
                                         });
+                            }
+                        });
+                        ivDownView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new SaveImage(context).execute(kx.getImage());
                             }
                         });
 

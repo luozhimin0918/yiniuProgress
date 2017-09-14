@@ -36,6 +36,7 @@ import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.utils.SaveImage;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
@@ -409,6 +410,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                     });
                     final ImageView ivPop = (ImageView) inflate.findViewById(R.id.iv_pop);
                     ImageView ivDownView = (ImageView) inflate.findViewById(R.id.iv_download);
+                    ivDownView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new SaveImage(getContext()).execute(image);
+                        }
+                    });
                     PopupUtil.Config config = new PopupUtil.Config();
 
                     config.outsideTouchable = true;
@@ -441,6 +448,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
             });
             Glide.with(this).load(image).error(R.mipmap.icon_def_news).placeholder(R.mipmap
                     .icon_def_news).into(ivFlashImage);
+
         } else {
         }
     }

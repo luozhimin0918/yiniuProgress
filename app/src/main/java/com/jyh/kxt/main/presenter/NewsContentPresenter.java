@@ -493,55 +493,5 @@ public class NewsContentPresenter extends BasePresenter {
         }
     }
 
-    /***
-     * 功能：用线程保存图片
-     *
-     * @author wangyp
-     */
-    public class SaveImage extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            String result = "";
-            try {
-                String sdcard = Environment.getExternalStorageDirectory()
-                        .toString();
-                File file = new File(sdcard + "/Download");
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                String imgurl = params[0];
-                int idx = imgurl.lastIndexOf(".");
-                String ext = imgurl.substring(idx);
-                file = new File(sdcard + "/Download/" + new Date().getTime()
-                        + ext);
-                InputStream inputStream = null;
-                URL url = new URL(imgurl);
-                HttpURLConnection conn = (HttpURLConnection) url
-                        .openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(20000);
-                if (conn.getResponseCode() == 200) {
-                    inputStream = conn.getInputStream();
-                }
-                byte[] buffer = new byte[4096];
-                int len = 0;
-                FileOutputStream outStream = new FileOutputStream(file);
-                while ((len = inputStream.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, len);
-                }
-                outStream.close();
-                result = "图片已保存至：" + file.getAbsolutePath();
-                mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                        Uri.fromFile(file)));
-            } catch (Exception e) {
-                result = "保存失败！" + e.getLocalizedMessage();
-            }
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            ToastView.makeText3(mContext, result);
-        }
-    }
 }
