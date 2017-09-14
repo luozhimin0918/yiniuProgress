@@ -83,7 +83,7 @@ public class ValidationUtil {
 	}
 	
 	protected boolean isWebUrl(String text) {
-		//TODO: Fix the pattern for api level < 8
+		//: Fix the pattern for api level < 8
 		return matches(text, Build.VERSION.SDK_INT>=8?Patterns.WEB_URL:Pattern.compile(".*"));
 	}
 	

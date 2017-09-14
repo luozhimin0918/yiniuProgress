@@ -35,13 +35,13 @@ public class PreLoadX5Service extends Service {
 
         @Override
         public void onViewInitFinished(boolean arg0) {
-            // TODO Auto-generated method stub
+            //  Auto-generated method stub
             Log.e("0912", " onViewInitFinished is " + arg0);
         }
 
         @Override
         public void onCoreInitFinished() {
-            // TODO Auto-generated method stub
+            //  Auto-generated method stub
 
         }
     };

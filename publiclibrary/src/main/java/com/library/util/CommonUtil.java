@@ -153,7 +153,7 @@ public class CommonUtil {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
 
-                // TODO handle non-primary volumes
+                //  handle non-primary volumes
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {

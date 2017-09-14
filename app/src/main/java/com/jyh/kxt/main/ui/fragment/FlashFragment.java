@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
@@ -72,6 +73,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     private boolean flashSound = false;
 
     private View funView;
+    private ImageView imgFiltrate;
 
     public FlashPresenter flashPresenter;
 
@@ -199,32 +201,47 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
      *
      * @param flActionBarFun
      */
-    public void onTabSelect(FrameLayout flActionBarFun) {
+    private Context mFragmentContext;
+    private MainInitJson mainInitJson;
+
+    public void onTabSelect(final FrameLayout flActionBarFun) {
         try {
             flActionBarFun.removeAllViews();
-            if (funView != null) {
-                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(),
-                        SpConstant.INIT_LOAD_APP_CONFIG),
-                        MainInitJson.class);
+            mFragmentContext = flActionBarFun.getContext();
 
+            if (funView == null) {
+                String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
+                mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
                 String advertUrl = mainInitJson.getIndex_ad().getIcon();
 
-                funView = LayoutInflater.from(getContext()).inflate(R.layout.action_bar_flash, flActionBarFun, false);
+                funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_flash, flActionBarFun, false);
 
                 ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
-                ImageView imgFiltrate = (ImageView) funView.findViewById(R.id.iv_right_icon1);
+                imgFiltrate = (ImageView) funView.findViewById(R.id.iv_right_icon1);
 
                 //默认筛选位置
-                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
+                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(mFragmentContext, R.mipmap.icon_rili_sx));
 
-                Glide.with(getContext()).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
-
+                Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
 
                 //点击事件
                 imgFiltrate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         flashFiltrate();
+                    }
+                });
+
+                //点击事件
+                imgAdvert.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getIndex_ad());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -356,6 +373,10 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                 flashPresenter.adapter.notifyDataSetChanged();
             }
             lvContent.getRefreshableView().invalidatePinnedView();
+
+            if (imgFiltrate != null) {
+                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

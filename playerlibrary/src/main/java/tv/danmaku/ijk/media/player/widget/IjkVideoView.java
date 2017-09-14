@@ -294,7 +294,7 @@ public class IjkVideoView extends FrameLayout
 		try {
 			mMediaPlayer = createPlayer();
 
-			// TODO: create SubtitleController in MediaPlayer, but we need
+			// : create SubtitleController in MediaPlayer, but we need
 			// a context for the subtitle renderers
 			final Context context = getContext();
 			// REMOVED: SubtitleController

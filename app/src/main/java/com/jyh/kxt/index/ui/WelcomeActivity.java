@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.http.GlobalHttpRequest;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
 
@@ -36,10 +37,12 @@ public class WelcomeActivity extends BaseActivity {
         welcomePresenter.checkIsShowAdvert();
         welcomePresenter.requestMainData();
         welcomePresenter.requestMemberInfo();
+        GlobalHttpRequest.getInstance().getSignInfo(this, null);
 
         welcomePresenter.initSharedPreferences();
 
         MLink.getInstance(this).registerWithAnnotation(this);
+
         Log.i("welcome", getIntent().toString());
         JumpUtils.MwJump(getIntent(), this);
     }

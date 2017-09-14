@@ -137,6 +137,9 @@ public class MyUmShareListener implements UMShareListener {
             case UmengShareUtil.SHARE_INVITE:
                 jsonParam.put("type", "share_invite");
                 break;
+            case UmengShareUtil.SHARE_ADVERT:
+                jsonParam.put("type", "share_ad");
+                break;
         }
 
         volleyRequest.doPost(HttpConstant.COINS_ADD, jsonParam, new HttpListener<String>() {

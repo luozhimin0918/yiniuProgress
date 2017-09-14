@@ -31,11 +31,13 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.dao.DBManager;
+import com.jyh.kxt.base.http.GlobalHttpRequest;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.util.emoje.DBUtils;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
@@ -67,6 +69,7 @@ import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
+import com.library.base.http.HttpDeliveryListener;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
@@ -348,7 +351,17 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onDrawerOpened(View drawerView) {
+        GlobalHttpRequest.getInstance().getSignInfo(this, new HttpDeliveryListener<SignInfoJson>() {
+            @Override
+            public void onResponse(SignInfoJson signInfoJson) {
 
+            }
+
+            @Override
+            public void onErrorResponse() {
+
+            }
+        });
     }
 
     @Override
@@ -823,7 +836,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
                 switch (mwPath) {
                     case "/comment":
-                        //todo 旧版中的点评 及现在的要闻
                         oclass = VarConstant.OCLASS_NEWS;
                         oaction = VarConstant.OACTION_DIANPING;
                         break;

@@ -1,16 +1,19 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -24,6 +27,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.main.json.NewsNavJson;
@@ -144,30 +148,28 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      *
      * @param flActionBarFun
      */
+    private Context mFragmentContext;
+    private MainInitJson mainInitJson;
+
     public void onTabSelect(FrameLayout flActionBarFun) {
         try {
             flActionBarFun.removeAllViews();
-            if (funView != null) {
-                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(),
-                        SpConstant.INIT_LOAD_APP_CONFIG),
-                        MainInitJson.class);
+            mFragmentContext = flActionBarFun.getContext();
 
+            if (funView == null) {
+                String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
+                mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
                 String advertUrl = mainInitJson.getIndex_ad().getIcon();
 
-                funView = LayoutInflater.from(getContext()).inflate(R.layout.action_bar_news, flActionBarFun, false);
+                funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_news, flActionBarFun, false);
 
+                //图标广告
                 ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
-                TextView txtAdvert = (TextView) funView.findViewById(R.id.tv_right_txt);
-
-                txtAdvert.setText("测试广告");
-                Glide.with(getContext()).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
-
-                //点击事件
                 imgAdvert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         try {
-                            String appConfig = SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG);
+                            String appConfig = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
 
                             MainActivity mainActivity = (MainActivity) getActivity();
 
@@ -177,6 +179,25 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
+                });
+                imgAdvert.setVisibility(View.GONE);
+
+                //文字广告
+                RelativeLayout rvTxtAdvertLayout = (RelativeLayout) funView.findViewById(R.id.rl_txt_advert);
+                ImageView ivTxtAdvertJB = (ImageView) funView.findViewById(R.id.iv_txt_advert_jb);
+                TextView tvTxtAdvertName = (TextView) funView.findViewById(R.id.tv_right_txt);
+
+                tvTxtAdvertName.setTextColor(ContextCompat.getColor(mFragmentContext, R.color.font_color2));
+                tvTxtAdvertName.setText("盈利翻倍");
+                Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
+
+                tvTxtAdvertName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent webIntent = new Intent(mFragmentContext, WebActivity.class);
+                        webIntent.putExtra(IntentConstant.WEBURL, "https://www.baidu.com/");
+                        startActivity(webIntent);
                     }
                 });
             }

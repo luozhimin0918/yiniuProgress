@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.utils.UmengShareUI;
@@ -38,8 +37,9 @@ public class WebActivity extends BaseActivity {
     @BindView(R.id.iv_bar_function) ImageView ivBarFunction;
 
     private WebPresenter webPresenter;
-    private String title;
+    private String title = "";
     private String url;
+
     public boolean javaScriptEnabled = true;
     private boolean autoObtainTitle = false;
     private boolean initialLoadTitle = true;
@@ -58,35 +58,10 @@ public class WebActivity extends BaseActivity {
 
         webPresenter = new WebPresenter(this);
 
-        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_nav_share));
-        ivBarFunction.setVisibility(View.INVISIBLE);
-
+        ivBarFunction.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.icon_video_more));
+        ivBarFunction.setVisibility(View.VISIBLE);
         webPresenter.addWebView(title, url);
-        webPresenter.setOnJsListener(new ObserverData<Boolean>() {
-            @Override
-            public void callback(final Boolean showBtn) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (showBtn) {
-                            ivBarFunction.setVisibility(View.VISIBLE);
-                        } else {
-                            ivBarFunction.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
-            }
 
-            @Override
-            public void onError(Exception e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ivBarFunction.setVisibility(View.INVISIBLE);
-                    }
-                });
-            }
-        });
         if (!TextUtils.isEmpty(title)) {
             tvBarTitle.setText(title);
         } else {
@@ -117,21 +92,22 @@ public class WebActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.iv_bar_function:
+                //todo 增加分享列表
                 if (webPresenter != null && webPresenter.loadX5WebView != null) {
                     LoadX5WebView x5WebView = webPresenter.loadX5WebView;
-                    if (!RegexValidateUtil.isEmpty(x5WebView.shareUrl)) {
 
-                        UmengShareBean umengShareBean = new UmengShareBean();
-                        umengShareBean.setTitle(x5WebView.shareTitle);
-                        umengShareBean.setDetail("");
+                    UmengShareBean umengShareBean = new UmengShareBean();
+                    umengShareBean.setTitle(x5WebView.shareTitle == null ? title : x5WebView.shareTitle);
+                    umengShareBean.setDetail("");
+
+                    if (x5WebView.sharePic != null) {
                         umengShareBean.setImageUrl(x5WebView.sharePic);
-                        umengShareBean.setWebUrl(x5WebView.shareUrl);
-
-                        umengShareBean.setFromSource(UmengShareUtil.SHARE_KX);
-
-                        UmengShareUI umengShareUI = new UmengShareUI(this);
-                        umengShareUI.showSharePopup(umengShareBean);
                     }
+
+                    umengShareBean.setWebUrl(x5WebView.shareUrl == null ? url : x5WebView.shareUrl);
+                    umengShareBean.setFromSource(UmengShareUtil.SHARE_ADVERT);
+                    UmengShareUI umengShareUI = new UmengShareUI(this);
+                    umengShareUI.showSharePopup(umengShareBean);
                 }
                 break;
         }
@@ -140,10 +116,8 @@ public class WebActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         try {
-            super.onBackPressed();
-
             webPresenter.loadX5WebView.getWebView().loadUrl("about:blank");
-
+            super.onBackPressed();
         } catch (Exception e) {
             e.printStackTrace();
             super.onBackPressed();

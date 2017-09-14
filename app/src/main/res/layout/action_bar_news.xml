@@ -9,20 +9,37 @@
     <ImageView
         android:id="@+id/iv_right_icon"
         android:layout_width="@dimen/navigationBarRightImageViewSize"
-        android:layout_centerVertical="true"
         android:layout_height="@dimen/navigationBarRightImageViewSize"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight1"
-        android:background="@color/red2"
         android:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/tv_right_txt"
+    <RelativeLayout
+        android:id="@+id/rl_txt_advert"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
-        android:maxLength="5"
-        android:visibility="visible"/>
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_txt_advert_jb"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
+            android:background="@color/font_color6"/>
+
+        <TextView
+            android:id="@+id/tv_right_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/describe_font_size3"
+            android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
+            android:maxLength="5"
+            android:text="广告图标"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
 </RelativeLayout>

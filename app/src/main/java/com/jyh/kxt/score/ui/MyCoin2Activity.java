@@ -2,6 +2,7 @@ package com.jyh.kxt.score.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -145,6 +146,7 @@ public class MyCoin2Activity extends BaseActivity implements
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
+        tvPunchCard.setText("已经连续签到" + (++signDays) + "天");
 
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
@@ -179,7 +181,12 @@ public class MyCoin2Activity extends BaseActivity implements
             }
             plRootView.loadOver();
 
-            drawerSignContent.open();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drawerSignContent.animateOpen();
+                }
+            },200);
         }
     }
 

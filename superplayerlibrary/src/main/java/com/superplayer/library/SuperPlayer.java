@@ -708,7 +708,7 @@ public class SuperPlayer extends RelativeLayout {
         }
     }*/
 
-    // TODO
+    //
     private void tryFullScreen(boolean fullScreen) {
         if (activity instanceof AppCompatActivity) {
             ActionBar supportActionBar = ((AppCompatActivity) activity)
@@ -723,7 +723,7 @@ public class SuperPlayer extends RelativeLayout {
         }
         setFullScreen(fullScreen);
     }
-    // TODO 这个是防止项目没有引用v7包
+    //  这个是防止项目没有引用v7包
 //	private void tryFullScreen(boolean fullScreen) {
 //		if (activity instanceof Activity) {
 //			android.app.ActionBar supportActionBar = ((Activity) activity)
@@ -1499,7 +1499,7 @@ public class SuperPlayer extends RelativeLayout {
                 onNetChangeListener.onWifi();
             } else if (NetUtils.getNetworkType(activity) == 2
                     || NetUtils.getNetworkType(activity) == 4) {// 网络不是手机网络或者是以太网
-                // TODO 更新状态是暂停状态
+                //  更新状态是暂停状态
                 statusChange(STATUS_PAUSE);
                 videoView.pause();
                 updatePausePlay();

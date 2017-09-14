@@ -244,7 +244,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 break;
             case R.id.v_sxt:
                 if (LoginUtils.isLogined(this)) {
-                    // TODO: 2017/8/30
+                    // : 2017/8/30
                     Intent intent = new Intent(this, ChatRoomActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

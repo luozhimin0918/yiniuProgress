@@ -213,7 +213,6 @@ public class WelcomePresenter extends BasePresenter {
     }
 
     public void requestMemberInfo() {
-
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
             return;
@@ -229,14 +228,6 @@ public class WelcomePresenter extends BasePresenter {
             @Override
             protected void onResponse(UserJson mUserJson) {
                 LoginUtils.changeUserInfo(mContext, mUserJson);
-
-//                JSONObject jsonObject = JSONObject.parseObject(jsonData);
-//                String writerId = jsonObject.getString("writer_id");
-//                String writerName = jsonObject.getString("writer_name");
-//
-//                if (writerId != null && writerName != null) {
-//
-//                }
             }
 
             @Override

@@ -13,7 +13,7 @@ import com.jyh.kxt.R;
 
 /**
  * Created by geminiwen on 16/6/16.
- * TODO change divider
+ *  change divider
  */
 public class SkinnableRelativeLayout extends RelativeLayout implements Skinnable {
     private AttrsHelper mAttrsHelper;

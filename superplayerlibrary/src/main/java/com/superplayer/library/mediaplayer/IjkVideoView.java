@@ -306,7 +306,7 @@ public class IjkVideoView extends FrameLayout implements
 				IjkMediaPlayer ijkMediaPlayer = null;
 				if (mUri != null) {
 					ijkMediaPlayer = new IjkMediaPlayer();
-					//TODO 设置是否打印debug （调试的时候使用IjkMediaPlayer.IJK_LOG_DEBUG，上线的时候使用IjkMediaPlayer.IJK_LOG_ERROR）
+					// 设置是否打印debug （调试的时候使用IjkMediaPlayer.IJK_LOG_DEBUG，上线的时候使用IjkMediaPlayer.IJK_LOG_ERROR）
 					ijkMediaPlayer
 							.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
 
@@ -373,7 +373,7 @@ public class IjkVideoView extends FrameLayout implements
 				mMediaPlayer = new TextureMediaPlayer(mMediaPlayer);
 			}
 
-			// TODO: create SubtitleController in MediaPlayer, but we need
+			// : create SubtitleController in MediaPlayer, but we need
 			// a context for the subtitle renderers
 			final Context context = getContext();
 			// REMOVED: SubtitleController

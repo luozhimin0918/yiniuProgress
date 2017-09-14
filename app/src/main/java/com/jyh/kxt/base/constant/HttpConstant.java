@@ -31,9 +31,9 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-                    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+//                    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
-//    public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
+    public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
     //    public static final String IMG_URL = "http://img.kxt.com/";
     public static final String IMG_URL = "";
@@ -268,5 +268,7 @@ public class HttpConstant {
     public static final String MESSAGE_CLEAR_UNREAD = BASE_URL + "message/clear_unread";//清空未读消息
 
     public static final String COINS_ADD = BASE_URL + "coins/add";//增加金币分享
+    public static final String COINS_SIGN = BASE_URL + "coins/sign_info";//签到状态
+
 
 }

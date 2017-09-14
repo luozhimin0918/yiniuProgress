@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,8 +28,6 @@ import com.library.widget.tablayout.listener.OnTabSelectListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -86,7 +83,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             flashFragment.onTabSelect(flActionBarFun);
         }
         replaceFragment(currentFragment);
-
         stlNavigationBar.setCurrentTab(position);
         lastFragment = currentFragment;
     }
@@ -117,28 +113,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     public void closePopWindowAdvert() {
 
-    }
-
-    /**
-     * 通过反射获取图片id
-     *
-     * @param imageView
-     * @return
-     */
-    public int getImageId(ImageView imageView) {
-        Field[] fields = imageView.getClass().getDeclaredFields();
-        int imgid = 0;
-        for (Field f : fields) {
-            if (f.getName().equals("mResource")) {
-                f.setAccessible(true);
-                try {
-                    imgid = f.getInt(imageView);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return imgid;
     }
 
 

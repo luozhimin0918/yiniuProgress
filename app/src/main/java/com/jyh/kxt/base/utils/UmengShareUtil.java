@@ -53,6 +53,10 @@ public class UmengShareUtil {
      */
     public static final short SHARE_INVITE = 5;
 
+    /**
+     * 分享广告
+     */
+    public static final short SHARE_ADVERT = 6;
 
     /**
      * 功能 复制连接

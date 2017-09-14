@@ -25,7 +25,7 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
             if (event == null) {
                 return;
             }
-            // TODO Auto-generated method stub
+            //  Auto-generated method stub
             // 如果相等的话就说明网络状态发生了变化
             if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 int netWorkState = NetUtils.getNetConnectState(context);

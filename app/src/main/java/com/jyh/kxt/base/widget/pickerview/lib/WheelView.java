@@ -674,7 +674,7 @@ public class WheelView extends View {
                 if (!eventConsumed) {//屏幕点击或者拖拽事件
 
                     /**
-                     * TODO<关于弧长的计算>
+                     * <关于弧长的计算>
                      *
                      * 弧长公式： L = α*R
                      * 反余弦公式：arccos(cosα) = α

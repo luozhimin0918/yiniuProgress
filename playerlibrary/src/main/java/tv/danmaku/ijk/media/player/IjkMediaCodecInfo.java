@@ -97,7 +97,7 @@ public class IjkMediaCodecInfo {
         sKnownCodecList.put("OMX.MARVELL.VIDEO.HW.CODA7542DECODER", RANK_TESTED);
         sKnownCodecList.put("OMX.MARVELL.VIDEO.H264DECODER", RANK_SOFTWARE);
 
-        // ----- TODO: need test -----
+        // ----- : need test -----
         sKnownCodecList.remove("OMX.Action.Video.Decoder");
         sKnownCodecList.remove("OMX.allwinner.video.decoder.avc");
         sKnownCodecList.remove("OMX.BRCM.vc4.decoder.avc");
