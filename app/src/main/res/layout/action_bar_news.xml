@@ -23,6 +23,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
-        android:text="中国风格吗"
+        android:maxLength="5"
         android:visibility="visible"/>
 </RelativeLayout>

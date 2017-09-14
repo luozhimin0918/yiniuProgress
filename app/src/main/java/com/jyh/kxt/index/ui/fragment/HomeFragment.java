@@ -5,50 +5,32 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SwitchCompat;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.widget.OptionLayout;
-import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
-import com.library.util.SPUtils;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
-import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,18 +42,16 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
 
     @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
     @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
-    @BindView(R.id.iv_right_icon2) ImageView ivRightIcon2;
-    @BindView(R.id.iv_right_icon1) ImageView ivRightIcon1;
     @BindView(R.id.bar_red_dot) TextView tvRedDot;
+
+    @BindView(R.id.fl_bar_fun) FrameLayout flActionBarFun;
 
     public NewsFragment newsFragment;
     private FlashFragment flashFragment;
+
     private BaseFragment lastFragment;
     private BaseFragment currentFragment;
 
-    private boolean isShowRightTopAdvert = false;
-    private boolean flashTop;
-    private boolean flashSound;
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -91,20 +71,24 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         onTabSelect(0);
     }
 
+    @Override
+    public void onTabReselect(int position) {
+
+    }
 
     @Override
     public void onTabSelect(int position) {
-        BaseFragment currentFragment;
         if (position == 0) {
             currentFragment = newsFragment = newsFragment == null ? new NewsFragment() : newsFragment;
+            newsFragment.onTabSelect(flActionBarFun);
         } else {
             currentFragment = flashFragment = flashFragment == null ? new FlashFragment() : flashFragment;
+            flashFragment.onTabSelect(flActionBarFun);
         }
         replaceFragment(currentFragment);
 
         stlNavigationBar.setCurrentTab(position);
         lastFragment = currentFragment;
-        changeRightIcon(position);
     }
 
     private void replaceFragment(BaseFragment toFragment) {
@@ -120,90 +104,19 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         transaction.commitAllowingStateLoss();
     }
 
-    /**
-     * 更改右上角图片
-     *
-     * @param position
-     */
-    private void changeRightIcon(int position) {
-        if (position == 0) {
-            currentFragment = newsFragment;
-            ivRightIcon2.setVisibility(View.GONE);
-        } else {
-            currentFragment = flashFragment;
 
-            ivRightIcon1.setVisibility(View.VISIBLE);
-            ivRightIcon2.setVisibility(View.VISIBLE);
-            ivRightIcon2.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
-        }
-
-        if (!isShowRightTopAdvert) {
-            ivRightIcon1.setVisibility(View.GONE);
-        } else {
-            ivRightIcon1.setVisibility(View.VISIBLE);
-        }
-        setGifIcon();
-    }
-
-    @Override
-    public void onTabReselect(int position) {
-        stlNavigationBar.setCurrentTab(position);
-    }
-
-    @OnClick({R.id.iv_left_icon, R.id.iv_right_icon2, R.id.iv_right_icon1})
+    @OnClick({R.id.iv_left_icon })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
                 //个人中心
                 ((MainActivity) getActivity()).showUserCenter();
                 break;
-            case R.id.iv_right_icon2:
-
-                try {
-                    FastInfoAdapter adapter = flashFragment.flashPresenter.adapter;
-                    if (adapter == null || adapter.isAdapterNullData()) {
-                        ToastView.makeText3(getContext(), "暂无可筛选数据");
-                        return;
-                    }
-                    flashFiltrate();  //快讯筛选
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.iv_right_icon1:
-                try {
-                    showPopWindowAdvert();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
         }
     }
 
     public void closePopWindowAdvert() {
-        isShowRightTopAdvert = true;
-        ivRightIcon1.setVisibility(View.VISIBLE);
 
-//        if (currentFragment instanceof NewsFragment) {
-//            setGifIcon();
-//        } else if (currentFragment instanceof FlashFragment) {
-//            setGifIcon();
-//        }
-        setGifIcon();
-    }
-
-    public void showPopWindowAdvert() {
-        try {
-            String appConfig = SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG);
-
-            MainActivity mainActivity = (MainActivity) getActivity();
-
-            MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
-            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -228,103 +141,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         return imgid;
     }
 
-    /**
-     * 快讯筛选
-     */
-    boolean onlyShowHigh = false;
-
-    private void flashFiltrate() {
-        final PopupUtil filtratePopup = new PopupUtil(getActivity());
-        View view = filtratePopup.createPopupView(R.layout.pop_flash_filtrate);
-
-        TextView tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
-        TextView tvSure = (TextView) view.findViewById(R.id.tv_sure);
-        final OptionLayout olContent = (OptionLayout) view.findViewById(R.id.ol_content);
-
-        olContent.setMinSelectCount(1);
-        olContent.setMaxSelectCount(3);
-        olContent.setSelectMode(OptionLayout.SelectMode.CheckMode);
-
-        final SwitchCompat scHigh = (SwitchCompat) view.findViewById(R.id.sc_high);
-        final SwitchCompat scTop = (SwitchCompat) view.findViewById(R.id.sc_top);
-        final SwitchCompat scSound = (SwitchCompat) view.findViewById(R.id.sc_sound);
-
-        Set<String> set = SPUtils.getStringSet(getContext(), SpConstant.FLASH_FILTRATE);
-        scHigh.setChecked(onlyShowHigh = SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH));
-        scTop.setChecked(flashTop = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_TOP));
-        scSound.setChecked(flashSound = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_SOUND));
-        if (set.size() == 0 || set.size() == 3) {
-            set.clear();
-            set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
-            olContent.setSelectItemIndex(set);
-        } else {
-            olContent.setSelectItemIndex(set);
-        }
-
-        PopupUtil.Config config = new PopupUtil.Config();
-
-        config.outsideTouchable = true;
-        config.alpha = 0.5f;
-        config.bgColor = 0X00000000;
-
-        config.animationStyle = R.style.PopupWindow_Style2;
-        config.width = WindowManager.LayoutParams.MATCH_PARENT;
-        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        filtratePopup.setConfig(config);
-
-        filtratePopup.showAtLocation(stlNavigationBar, Gravity.BOTTOM, 0, 0);
-
-        filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Set<String> set = new HashSet<>();
-                set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
-                olContent.setSelectItemIndex(set);
-                scHigh.setChecked(false);
-            }
-        });
-
-        tvSure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, olContent.getSelectedMap());
-                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
-                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
-                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
-                flashFragment.flashFiltrate();
-                filtratePopup.dismiss();
-            }
-        });
-
-
-        scHigh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onlyShowHigh = isChecked;
-            }
-        });
-        scTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                flashTop = isChecked;
-            }
-        });
-        scSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                flashSound = isChecked;
-            }
-        });
-
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -334,7 +150,12 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onPageSelected(int position) {
         stlNavigationBar.setCurrentTab(position);
-        changeRightIcon(position);
+
+        if (position == 0) {
+            newsFragment.onTabSelect(flActionBarFun);
+        } else {
+            flashFragment.onTabSelect(flActionBarFun);
+        }
     }
 
     @Override
@@ -409,9 +230,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (getContext() != null && newsFragment == currentFragment) {
-            setGifIcon();
-        }
+
         if (newsFragment != null) {
             newsFragment.onChangeTheme();
         }
@@ -455,37 +274,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         }
         if (flashFragment != null) {
             flashFragment.onNetChange(netMobile);
-        }
-    }
-
-    private void setGifIcon() {
-        if (getContext() != null) {
-            try {
-                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(), SpConstant
-                        .INIT_LOAD_APP_CONFIG), MainInitJson
-                        .class);
-                String icon = mainInitJson.getIndex_ad().getIcon();
-                if (TextUtils.isEmpty(icon)) {
-                    int theme = ThemeUtil.getAlertTheme(getContext());
-                    switch (theme) {
-                        case android.support.v7.appcompat.R.style.Theme_AppCompat_DayNight_Dialog_Alert:
-                            Glide.with(getContext()).load(R.mipmap.icon_advert_night).into(new
-                                    GlideDrawableImageViewTarget
-                                    (ivRightIcon1));
-                            break;
-                        case android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert:
-                            Glide.with(getContext()).load(R.mipmap.icon_advert_day).into(new
-                                    GlideDrawableImageViewTarget
-                                    (ivRightIcon1));
-                            break;
-                    }
-
-                } else {
-                    Glide.with(getContext()).load(icon).into(new GlideDrawableImageViewTarget(ivRightIcon1));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 }

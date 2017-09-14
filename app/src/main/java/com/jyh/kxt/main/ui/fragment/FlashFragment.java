@@ -1,17 +1,30 @@
 package com.jyh.kxt.main.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.SwitchCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
+import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.widget.OptionLayout;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.adapter.FastInfoAdapter;
 import com.jyh.kxt.main.json.flash.FlashJson;
@@ -22,13 +35,18 @@ import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.NetUtils;
+import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -45,6 +63,15 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
     @BindView(R.id.fab_top) public ImageView fabTop;
     @BindView(R.id.iv_ad) public ImageView ivAd;
+
+    /**
+     * 快讯筛选
+     */
+    private boolean onlyShowHigh = false;
+    private boolean flashTop = false;
+    private boolean flashSound = false;
+
+    private View funView;
 
     public FlashPresenter flashPresenter;
 
@@ -167,13 +194,150 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         }
     }
 
+    /**
+     * 切换的时候使用
+     *
+     * @param flActionBarFun
+     */
+    public void onTabSelect(FrameLayout flActionBarFun) {
+        try {
+            flActionBarFun.removeAllViews();
+            if (funView != null) {
+                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(),
+                        SpConstant.INIT_LOAD_APP_CONFIG),
+                        MainInitJson.class);
+
+                String advertUrl = mainInitJson.getIndex_ad().getIcon();
+
+                funView = LayoutInflater.from(getContext()).inflate(R.layout.action_bar_flash, flActionBarFun, false);
+
+                ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
+                ImageView imgFiltrate = (ImageView) funView.findViewById(R.id.iv_right_icon1);
+
+                //默认筛选位置
+                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_rili_sx));
+
+                Glide.with(getContext()).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
+
+
+                //点击事件
+                imgFiltrate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        flashFiltrate();
+                    }
+                });
+            }
+            flActionBarFun.addView(funView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void flashFiltrate() {
+        FastInfoAdapter adapter = flashPresenter.adapter;
+        if (adapter == null || adapter.isAdapterNullData()) {
+            ToastView.makeText3(getContext(), "暂无可筛选数据");
+            return;
+        }
+        final PopupUtil filtratePopup = new PopupUtil(getActivity());
+        View view = filtratePopup.createPopupView(R.layout.pop_flash_filtrate);
+
+        TextView tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
+        TextView tvSure = (TextView) view.findViewById(R.id.tv_sure);
+        final OptionLayout olContent = (OptionLayout) view.findViewById(R.id.ol_content);
+
+        olContent.setMinSelectCount(1);
+        olContent.setMaxSelectCount(3);
+        olContent.setSelectMode(OptionLayout.SelectMode.CheckMode);
+
+        final SwitchCompat scHigh = (SwitchCompat) view.findViewById(R.id.sc_high);
+        final SwitchCompat scTop = (SwitchCompat) view.findViewById(R.id.sc_top);
+        final SwitchCompat scSound = (SwitchCompat) view.findViewById(R.id.sc_sound);
+
+        Set<String> set = SPUtils.getStringSet(getContext(), SpConstant.FLASH_FILTRATE);
+        scHigh.setChecked(onlyShowHigh = SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH));
+        scTop.setChecked(flashTop = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_TOP));
+        scSound.setChecked(flashSound = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_SOUND));
+        if (set.size() == 0 || set.size() == 3) {
+            set.clear();
+            set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
+            olContent.setSelectItemIndex(set);
+        } else {
+            olContent.setSelectItemIndex(set);
+        }
+
+        PopupUtil.Config config = new PopupUtil.Config();
+
+        config.outsideTouchable = true;
+        config.alpha = 0.5f;
+        config.bgColor = 0X00000000;
+
+        config.animationStyle = R.style.PopupWindow_Style2;
+        config.width = WindowManager.LayoutParams.MATCH_PARENT;
+        config.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        filtratePopup.setConfig(config);
+
+        filtratePopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+
+        filtratePopup.setOnDismissListener(new PopupUtil.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<String> set = new HashSet<>();
+                set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
+                olContent.setSelectItemIndex(set);
+                scHigh.setChecked(false);
+            }
+        });
+
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, olContent.getSelectedMap());
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
+
+                flashPresenter.filtrate();
+
+                filtratePopup.dismiss();
+            }
+        });
+
+
+        scHigh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onlyShowHigh = isChecked;
+            }
+        });
+        scTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                flashTop = isChecked;
+            }
+        });
+        scSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                flashSound = isChecked;
+            }
+        });
+
+    }
+
     @Override
     public void OnAfreshLoad() {
         flashPresenter.init();
-    }
-
-    public void flashFiltrate() {
-        flashPresenter.filtrate();
     }
 
     @Override

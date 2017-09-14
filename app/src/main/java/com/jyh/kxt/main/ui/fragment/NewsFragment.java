@@ -7,19 +7,30 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.index.json.MainInitJson;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.json.AdJson;
 import com.jyh.kxt.main.json.MainNewsContentJson;
-import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.presenter.NewsPresenter;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
 
@@ -50,13 +61,15 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     private FragmentManager childFragmentManager;
     private String selTab;
 
+
+    private View funView;
+
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_news);
         newsPresenter = new NewsPresenter(this);
         newsPresenter.init();
         plRootView.setOnAfreshLoadListener(this);
-//        EventBus.getDefault().register(this);
     }
 
     @OnClick(R.id.iv_more)
@@ -68,14 +81,6 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         }
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEvent(EventBusClass eventBus) {
-//        switch (eventBus.fromCode) {
-//            case EventBusClass.EVENT_REQUEST_MAIN_INIT://初始化程序,无论成功与否都发送
-//
-//                break;
-//        }
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -134,6 +139,53 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     }
 
+    /**
+     * 切换的时候使用
+     *
+     * @param flActionBarFun
+     */
+    public void onTabSelect(FrameLayout flActionBarFun) {
+        try {
+            flActionBarFun.removeAllViews();
+            if (funView != null) {
+                MainInitJson mainInitJson = JSON.parseObject(SPUtils.getString(getContext(),
+                        SpConstant.INIT_LOAD_APP_CONFIG),
+                        MainInitJson.class);
+
+                String advertUrl = mainInitJson.getIndex_ad().getIcon();
+
+                funView = LayoutInflater.from(getContext()).inflate(R.layout.action_bar_news, flActionBarFun, false);
+
+                ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
+                TextView txtAdvert = (TextView) funView.findViewById(R.id.tv_right_txt);
+
+                txtAdvert.setText("测试广告");
+                Glide.with(getContext()).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
+
+                //点击事件
+                imgAdvert.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            String appConfig = SPUtils.getString(getContext(), SpConstant.INIT_LOAD_APP_CONFIG);
+
+                            MainActivity mainActivity = (MainActivity) getActivity();
+
+                            MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
+                            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
+                            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+            flActionBarFun.addView(funView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void OnAfreshLoad() {
         if (fragmentList != null && adapter != null) {
@@ -147,7 +199,6 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        EventBus.getDefault().unregister(this);
         getQueue().cancelAll(newsPresenter.getClass().getName());
     }
 
@@ -193,4 +244,5 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     public void setSelTab(String selTab) {
         this.selTab = selTab;
     }
+
 }
