@@ -131,6 +131,7 @@ public class JumpUtils {
         MainActivity mainActivity;
         switch (o_action) {
             case VarConstant.OACTION_MAIN:
+            case VarConstant.OACTION_LIST:
 //                boolean logined = LoginUtils.isLogined(context);
 //                if (!logined) return;
 //                UserJson userInfo = LoginUtils.getUserInfo(context);
