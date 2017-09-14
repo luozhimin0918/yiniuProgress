@@ -178,6 +178,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         UmengShareBean umengShareBean = new UmengShareBean();
         umengShareBean.setTitle(shareDict.title);
         umengShareBean.setDetail(shareDict.descript);
+        umengShareBean.setImageUrl(shareDict.img);
         umengShareBean.setSinaTitle(shareDict.descript_sina);
         umengShareBean.setWebUrl(shareDict.url);
 
