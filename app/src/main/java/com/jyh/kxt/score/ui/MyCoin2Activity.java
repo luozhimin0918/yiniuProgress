@@ -72,6 +72,7 @@ public class MyCoin2Activity extends BaseActivity implements
     public boolean signed;//签到状态
     public int sign_state;
     public int task_state;
+    private boolean isFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +108,16 @@ public class MyCoin2Activity extends BaseActivity implements
 
         plRootView.loadWait();
         myCoin2Presenter.requestInitCoin(false);
+        isFirst = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        myCoin2Presenter.requestInitCoin(true);
+        if (!isFirst) {
+            myCoin2Presenter.requestInitCoin(true);
+        }
+        isFirst = false;
     }
 
     private void initView() {
