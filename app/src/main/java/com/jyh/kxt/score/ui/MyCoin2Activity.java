@@ -61,11 +61,11 @@ public class MyCoin2Activity extends BaseActivity implements
     private View headView;
 
     private RelativeLayout hvRootView;
-    private TextView hvTvScore;
+    public TextView hvTvScore;
     private TextView hvTvCoin;
     private ImageView hvIvCoin;
 
-    private int coinNum;//金币数
+    public int coinNum;//金币数
 
     private TaskAdapter adapter;
     private int signDays;

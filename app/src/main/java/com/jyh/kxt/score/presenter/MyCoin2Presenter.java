@@ -105,7 +105,8 @@ public class MyCoin2Presenter extends BasePresenter {
     private void requestPunchCard(final View punchCardView, List<SignJson> signJsonList, int position) {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(mContext).getUid());
-        jsonParam.put(VarConstant.HTTP_CODE, signJsonList.get(position).getCode());
+        final SignJson signJson = signJsonList.get(position);
+        jsonParam.put(VarConstant.HTTP_CODE, signJson.getCode());
         request.doGet(HttpConstant.CREDITS_PUNCH_CARD, jsonParam, new HttpListener<String>() {
 
             @Override
@@ -116,6 +117,16 @@ public class MyCoin2Presenter extends BasePresenter {
                 myCoin2Activity.punchCardSucceed();
                 myCoin2Activity.signed = true;
                 myCoin2Activity.sign_state = 1;
+                String award = signJson.getAward();
+                int awardInt;
+                try {
+                    awardInt = award == null ? 0 : Integer.parseInt(award);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    awardInt = 0;
+                }
+                myCoin2Activity.coinNum += awardInt;
+                myCoin2Activity.hvTvScore.setText(myCoin2Activity.coinNum + "");
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo
                         (mContext).getUid(), 1, myCoin2Activity.task_state)));
                 ToastView.makeText(mContext, "签到成功!");
