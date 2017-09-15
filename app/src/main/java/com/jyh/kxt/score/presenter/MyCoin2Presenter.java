@@ -13,6 +13,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.score.json.MyCoinJson;
@@ -22,8 +23,11 @@ import com.jyh.kxt.score.ui.MyCoin2Activity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -110,6 +114,10 @@ public class MyCoin2Presenter extends BasePresenter {
                 fuelPunchCardView(punchCardView);
                 punchCardView.setOnClickListener(null);//点击事件清除
                 myCoin2Activity.punchCardSucceed();
+                myCoin2Activity.signed = true;
+                myCoin2Activity.sign_state = 1;
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo
+                        (mContext).getUid(), 1, myCoin2Activity.task_state)));
                 ToastView.makeText(mContext, "签到成功!");
             }
 
@@ -164,7 +172,7 @@ public class MyCoin2Presenter extends BasePresenter {
                 fuelPunchCardView(punchCardView);
             }
 
-            if (position == punchCardDays) {//签到点击
+            if (position == punchCardDays && !myCoin2Activity.signed) {//签到点击
                 final int finalPosition = position;
                 punchCardView.setOnClickListener(new View.OnClickListener() {
                     @Override

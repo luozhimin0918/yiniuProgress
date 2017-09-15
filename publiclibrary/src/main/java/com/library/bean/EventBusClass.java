@@ -45,6 +45,10 @@ public class EventBusClass {
 
     public static final int EVENT_LOGIN_UPDATE = 26;//刷新红点状态
 
+    public static final int EVENT_COIN_SIGN = 27;//签到状态
+    public static final int EVENT_COIN_TASK = 28;//任务完成状态
+
+
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;
         this.intentObj = intentObj;

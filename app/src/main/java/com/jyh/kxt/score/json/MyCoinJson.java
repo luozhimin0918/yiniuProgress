@@ -11,6 +11,8 @@ import java.util.List;
 
 public class MyCoinJson {
 
+    private int sign_state;//签到状态
+    private int task_state;//任务完成状态
     private PunchCardJson punch_card;//签到
     private String num_coins;//我的金币数
     private List<TaskAllJson> task;//任务列表
@@ -26,8 +28,23 @@ public class MyCoinJson {
     }
 
     public PunchCardJson getPunch_card() {
-
         return punch_card;
+    }
+
+    public int getSign_state() {
+        return sign_state;
+    }
+
+    public void setSign_state(int sign_state) {
+        this.sign_state = sign_state;
+    }
+
+    public int getTask_state() {
+        return task_state;
+    }
+
+    public void setTask_state(int task_state) {
+        this.task_state = task_state;
     }
 
     public void setPunch_card(PunchCardJson punch_card) {

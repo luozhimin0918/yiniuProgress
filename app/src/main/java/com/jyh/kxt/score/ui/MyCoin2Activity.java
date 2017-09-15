@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.bean.SignInfoJson;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.MultiDirectionSlidingDrawer;
 import com.jyh.kxt.score.adapter.TaskAdapter;
 import com.jyh.kxt.score.json.MyCoinJson;
@@ -19,10 +21,13 @@ import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.json.TaskAllJson;
 import com.jyh.kxt.score.presenter.MyCoin2Presenter;
+import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.flowlayout.FlowLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +69,9 @@ public class MyCoin2Activity extends BaseActivity implements
 
     private TaskAdapter adapter;
     private int signDays;
+    public boolean signed;//签到状态
+    public int sign_state;
+    public int task_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +151,11 @@ public class MyCoin2Activity extends BaseActivity implements
         /**
          * 打卡数据
          */
+        sign_state = myCoinJson.getSign_state();
+        signed = sign_state == 1;
+        task_state = myCoinJson.getTask_state();
+        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo(this).getUid
+                (), sign_state, task_state)));
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
@@ -186,7 +199,7 @@ public class MyCoin2Activity extends BaseActivity implements
                 public void run() {
                     drawerSignContent.animateOpen();
                 }
-            },200);
+            }, 200);
         }
     }
 
