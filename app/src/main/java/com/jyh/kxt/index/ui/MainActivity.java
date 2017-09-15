@@ -133,6 +133,14 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
+    //未签到
+    private RelativeLayout rlUnSign;
+
+    //任务未完成
+    private RelativeLayout rlUnTask;
+
+    private TextView tvTaskHint;
+
     //魔窗web跳转参数
     public static String mwId = null;//跳转id
     public static String mwType = null;//跳转类型 true 列表页
@@ -252,6 +260,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_red_dot);
 
 
+        //签到未签到状态
+
+        rlUnSign = ButterKnife.findById(llHeaderLayout, R.id.rl_un_sign);
+        rlUnTask = ButterKnife.findById(llHeaderLayout, R.id.rl_un_task);
+        tvTaskHint = ButterKnife.findById(llHeaderLayout, R.id.tv_task_hint);
+
+
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
         ivSina.setOnClickListener(this);
@@ -351,17 +366,17 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onDrawerOpened(View drawerView) {
-        GlobalHttpRequest.getInstance().getSignInfo(this, new HttpDeliveryListener<SignInfoJson>() {
-            @Override
-            public void onResponse(SignInfoJson signInfoJson) {
-
-            }
-
-            @Override
-            public void onErrorResponse() {
-
-            }
-        });
+//        GlobalHttpRequest.getInstance().getSignInfo(this, new HttpDeliveryListener<SignInfoJson>() {
+//            @Override
+//            public void onResponse(SignInfoJson signInfoJson) {
+//                updateLeftSignState(signInfoJson);
+//            }
+//
+//            @Override
+//            public void onErrorResponse() {
+//
+//            }
+//        });
     }
 
     @Override
@@ -381,26 +396,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (DoubleClickUtils.isFastDoubleClick(2000)) {
-                /*try {
-                    int currentVersion = Build.VERSION.SDK_INT;
-                    if (currentVersion > Build.VERSION_CODES.ECLAIR_MR1) {
-                        Intent startMain = new Intent(Intent.ACTION_MAIN);
-                        startMain.addCategory(Intent.CATEGORY_HOME);
-                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(startMain);
-                        System.exit(0);
-                    } else {// android2.1
-                        android.app.ActivityManager am = (android.app.ActivityManager) MainActivity.this
-                                .getSystemService
-                                        (ACTIVITY_SERVICE);
-                        am.restartPackage(getPackageName());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                */
-               /* ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
-                android.os.Process.killProcess(android.os.Process.myPid());*/
                 try {
                     int currentVersion = Build.VERSION.SDK_INT;
                     if (currentVersion > Build.VERSION_CODES.ECLAIR_MR1) {
@@ -431,15 +426,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.riv_avatar:
-                //个人中心
-//                Pair[] pairs = {
-//                        new Pair<View, String>(loginPhoto, EditUserInfoActivity.VIEW_NAME_IMG),
-//                        new Pair<View, String>(loginName, EditUserInfoActivity.VIEW_NAME_TITLE)};
-//
-//                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation
-//                        (this, pairs);
-//                Intent intent = new Intent(this, EditUserInfoActivity.class);
-//                ActivityCompat.startActivity(this, intent, activityOptionsCompat.toBundle());
                 startActivity(new Intent(this, EditUserInfoActivity.class));
                 break;
             case R.id.ll_collect:
@@ -663,6 +649,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     });
 
             loginName.setText(userJson.getNickname());
+
+
+            GlobalHttpRequest.getInstance().getSignInfo(this, new HttpDeliveryListener<SignInfoJson>() {
+                @Override
+                public void onResponse(SignInfoJson signInfoJson) {
+                    updateLeftSignState(signInfoJson);
+                }
+
+                @Override
+                public void onErrorResponse() {
+
+                }
+            });
         } else {
             tvRedDot.setVisibility(View.GONE);
             loginView.setVisibility(View.GONE);
@@ -777,7 +776,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public void showUserCenter() {
         drawer.openDrawer(Gravity.LEFT);
     }
-
 
 
     @Override
@@ -925,4 +923,31 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
     }
 
+
+    /**
+     * 刷新左边的签到状态
+     *
+     * @param signInfoJson
+     */
+    private void updateLeftSignState(SignInfoJson signInfoJson) {
+        //fixkxt 2017/9/15 9:13 describe: 检查是否可以正常签到
+
+        if (signInfoJson.getSign_state() == 0) {
+            rlUnSign.setVisibility(View.VISIBLE);
+        } else {
+            rlUnSign.setVisibility(View.GONE);
+        }
+
+        if (signInfoJson.getTask_state() == 0) {
+            rlUnTask.setVisibility(View.VISIBLE);
+        } else {
+            rlUnTask.setVisibility(View.GONE);
+        }
+
+        if (signInfoJson.getSign_state() == 1 && signInfoJson.getTask_state() == 1) {
+            //任务已经完成
+            tvTaskHint.setText("任务完成");
+            rlUnTask.setVisibility(View.VISIBLE);
+        }
+    }
 }

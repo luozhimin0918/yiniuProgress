@@ -49,7 +49,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     private BaseFragment lastFragment;
     private BaseFragment currentFragment;
 
-
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -66,6 +65,23 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
         onTabSelect(0);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBus) {
+        switch (eventBus.fromCode) {
+            case EventBusClass.EVENT_LOGIN:
+            case EventBusClass.EVENT_LOGIN_UPDATE:
+                UserJson userJson = (UserJson) eventBus.intentObj;
+                changeUserImg(userJson);
+                break;
+            case EventBusClass.EVENT_LOGOUT:
+                changeUserImg(null);
+                break;
+            case EventBusClass.EVENT_CHANGEUSERINFO:
+                changeUserImg((UserJson) eventBus.intentObj);
+                break;
+        }
     }
 
     @Override
@@ -101,7 +117,7 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
     }
 
 
-    @OnClick({R.id.iv_left_icon })
+    @OnClick({R.id.iv_left_icon})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_left_icon:
@@ -174,32 +190,6 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        try {
-            EventBus.getDefault().unregister(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(EventBusClass eventBus) {
-        switch (eventBus.fromCode) {
-            case EventBusClass.EVENT_LOGIN:
-            case EventBusClass.EVENT_LOGIN_UPDATE:
-                UserJson userJson = (UserJson) eventBus.intentObj;
-                changeUserImg(userJson);
-                break;
-            case EventBusClass.EVENT_LOGOUT:
-                changeUserImg(null);
-                break;
-            case EventBusClass.EVENT_CHANGEUSERINFO:
-                changeUserImg((UserJson) eventBus.intentObj);
-                break;
-        }
-    }
 
     @Override
     public void onChangeTheme() {
@@ -225,6 +215,16 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
                     newsFragment.sendSocketParams();
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

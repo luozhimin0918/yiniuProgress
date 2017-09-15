@@ -31,15 +31,18 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-//检查BaseUrl是否正确
-//想想更新代码是否有变更
-//更改versionName 之后 连接中的参数是否变过了
-
-
+/**
+ * 发布须知!!!!!!!!!!!!!!!!!!!!!!!!
+ *
+ * 1. 检查BaseUrl是否正确
+ * 2. 代码是否最新
+ * 3. 检查所有的fixKxt
+ *
+ * 发布须知!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 ext {
-    // isProtectedApp 一定要改成true 之后打补丁包
     bakApkName = 'app-release-0714-16-59-44'
-    patchMessage = '行情和要闻广告高度后台可配\n视听列表加载到最后少一条数据修复\n广告视屏支持全屏播放'
+    patchMessage = '暂无提示'
 
     versionName = '6.1.4'
     versionCode = 33

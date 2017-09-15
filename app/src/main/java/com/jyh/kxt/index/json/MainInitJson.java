@@ -1,7 +1,6 @@
 package com.jyh.kxt.index.json;
 
 import com.jyh.kxt.base.json.JumpJson;
-import com.library.base.http.VarConstant;
 
 /**
  * Created by Mr'Dai on 2017/5/24.
@@ -41,6 +40,7 @@ public class MainInitJson {
 
     private String icon;
     private IndexAdBean index_ad;
+    private IndexAdBean flash_ad;//快讯广告
     private LoadAdBean load_ad;
     private String quotes_chart_url;
     private String url_contact;
@@ -139,7 +139,7 @@ public class MainInitJson {
         this.message_socket_addr = message_socket_addr;
     }
 
-    public static class IndexAdBean extends JumpJson {
+    public static class IndexAdBean extends HomeAdJson {
         /**
          * href : http://www.kxt.com/topic
          * o_action :
@@ -151,83 +151,61 @@ public class MainInitJson {
          * type : webview
          */
 
-        private String href;
-        private String picture;
-        private int showTime;
-        private String title;
-        private String type;
-        private String icon;
-        private int left_screen_size;
-        private int show;//0不主动显示   1 主动显示
+        //要闻文字
+        private String txt_ad_name;
+        private String txt_ad_href;
+        private String txt_ad_color;
 
-        public String getHref() {
-            String connector = "?";
-            if (href.contains("?"))
-                connector = "&";
-            href = href + connector + VarConstant.HTTP_VERSION + "=" + VarConstant.HTTP_VERSION_VALUE
-                    + "&" + VarConstant.HTTP_SYSTEM + "=" + VarConstant.HTTP_SYSTEM_VALUE;
-            return href;
+        private String txt_ad_icon_day;
+        private String txt_ad_icon_night;
+        private int ad_type;
+
+        public String getTxt_ad_name() {
+            return txt_ad_name;
         }
 
-        public void setHref(String href) {
-            this.href = href;
+        public void setTxt_ad_name(String txt_ad_name) {
+            this.txt_ad_name = txt_ad_name;
         }
 
-
-        public String getPicture() {
-            return picture;
+        public String getTxt_ad_href() {
+            return txt_ad_href;
         }
 
-        public void setPicture(String picture) {
-            this.picture = picture;
+        public void setTxt_ad_href(String txt_ad_href) {
+            this.txt_ad_href = txt_ad_href;
         }
 
-        public int getShowTime() {
-            return showTime;
+        public String getTxt_ad_color() {
+            return txt_ad_color;
         }
 
-        public void setShowTime(int showTime) {
-            this.showTime = showTime;
+        public void setTxt_ad_color(String txt_ad_color) {
+            this.txt_ad_color = txt_ad_color;
         }
 
-        public String getTitle() {
-            return title;
+        public String getTxt_ad_icon_day() {
+            return txt_ad_icon_day;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setTxt_ad_icon_day(String txt_ad_icon_day) {
+            this.txt_ad_icon_day = txt_ad_icon_day;
         }
 
-        public String getType() {
-            return type;
+        public String getTxt_ad_icon_night() {
+            return txt_ad_icon_night;
         }
 
-        public String getIcon() {
-            return icon;
+        public void setTxt_ad_icon_night(String txt_ad_icon_night) {
+            this.txt_ad_icon_night = txt_ad_icon_night;
         }
 
-        public void setIcon(String icon) {
-            this.icon = icon;
+        public int getAd_type() {
+            return ad_type;
         }
 
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public int getLeft_screen_size() {
-            return left_screen_size;
-        }
-
-        public void setLeft_screen_size(int left_screen_size) {
-            this.left_screen_size = left_screen_size;
-        }
-
-        public int getShow() {
-            return show;
-        }
-
-        public void setShow(int show) {
-            this.show = show;
+        public void setAd_type(int ad_type) {
+            this.ad_type = ad_type;
         }
     }
 

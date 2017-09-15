@@ -45,6 +45,7 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.index.json.HomeAdJson;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
@@ -357,23 +358,14 @@ public class MainPresenter extends BasePresenter {
      *
      * @param jsonStr
      */
+    //fixkxt 2017/9/15 9:25 describe: 创建假数据测试
     private void initLoadAppConfig(String jsonStr) {
         try {
             SPUtils.save(mContext, SpConstant.INIT_LOAD_APP_CONFIG, jsonStr);
 
-            final MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
-            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-
-            if (indexAd != null) {
-                if (indexAd.getShow() == 1) {
-                    showPopAdvertisement(indexAd);
-                } else {
-                    mMainActivity.homeFragment.closePopWindowAdvert();
-                }
-            }
-
+            //保存启动页图片
+            MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
             String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
-
             final MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
             if (loadAd != null && loadAd.getPicture() != null && !adImageUrl.equals(loadAd.getPicture())) {
                 new Thread(new Runnable() {
@@ -397,7 +389,7 @@ public class MainPresenter extends BasePresenter {
     }
 
 
-    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd) {
+    public void showPopAdvertisement(final HomeAdJson indexAd) {
         if (indexAd == null) {
             return;
         }

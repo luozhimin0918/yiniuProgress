@@ -1,13 +1,17 @@
 package com.jyh.kxt.base.bean;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Mr'Dai on 2017/9/14.
  */
 
 public class SignInfoJson {
     private String uid;
-    private int sign_state;
-    private int task_state;
+    private int sign_state;  //是否签到
+    private int task_state; //任务是否完成
     private long acquireTime;
 
     public int getSign_state() {
@@ -38,7 +42,17 @@ public class SignInfoJson {
         return acquireTime;
     }
 
-    public void setAcquireTime(long acquireTime) {
-        this.acquireTime = acquireTime;
+    /**
+     * 系统时间
+     */
+    public void setAcquireTime() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String formatYMD = sdf.format(new Date());
+            Date parseYMD = sdf.parse(formatYMD);
+            this.acquireTime = parseYMD.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

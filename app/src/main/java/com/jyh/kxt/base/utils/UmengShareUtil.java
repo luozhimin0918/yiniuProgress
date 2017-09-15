@@ -68,15 +68,6 @@ public class UmengShareUtil {
      */
     public static final int FUN_CLOSE_POP = 1002;
 
-    /**
-     * 功能 收藏
-     */
-    public static final int FUN_COLLECT = 1003;
-
-    /**
-     * 功能 点赞
-     */
-    public static final int FUN_FAVOUR = 1004;
 
     /**
      * 初始化umeng
@@ -165,7 +156,9 @@ public class UmengShareUtil {
             MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
             if (mainInitJson != null && mainInitJson.getDownload_QR_code() != null) {
                 urlImage = new UMImage(mActivity, mainInitJson.getDownload_QR_code());
-            } else {
+            } else if (!TextUtils.isEmpty(umengShareBean.getImageUrl())) {
+                urlImage = new UMImage(mActivity, umengShareBean.getImageUrl());
+            }else{
                 urlImage = new UMImage(mActivity, R.mipmap.share_weibo);
             }
 

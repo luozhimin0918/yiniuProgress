@@ -3,11 +3,11 @@ package com.jyh.kxt.main.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,47 +159,25 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             if (funView == null) {
                 String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
                 mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
-                String advertUrl = mainInitJson.getIndex_ad().getIcon();
 
-                funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_news, flActionBarFun, false);
+                MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
 
-                //图标广告
+
+                funView = LayoutInflater.from(mFragmentContext).inflate(
+                        R.layout.action_bar_news,
+                        flActionBarFun,
+                        false);
+
                 ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
-                imgAdvert.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            String appConfig = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
-
-                            MainActivity mainActivity = (MainActivity) getActivity();
-
-                            MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
-                            MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-                            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                imgAdvert.setVisibility(View.GONE);
-
-                //文字广告
                 RelativeLayout rvTxtAdvertLayout = (RelativeLayout) funView.findViewById(R.id.rl_txt_advert);
-                ImageView ivTxtAdvertJB = (ImageView) funView.findViewById(R.id.iv_txt_advert_jb);
-                TextView tvTxtAdvertName = (TextView) funView.findViewById(R.id.tv_right_txt);
 
-                tvTxtAdvertName.setTextColor(ContextCompat.getColor(mFragmentContext, R.color.font_color2));
-                tvTxtAdvertName.setText("盈利翻倍");
-                Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
-
-                tvTxtAdvertName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent webIntent = new Intent(mFragmentContext, WebActivity.class);
-                        webIntent.putExtra(IntentConstant.WEBURL, "https://www.baidu.com/");
-                        startActivity(webIntent);
-                    }
-                });
+                if (indexAd.getAd_type() == 0) {
+                    rvTxtAdvertLayout.setVisibility(View.GONE);
+                    showImageAd(imgAdvert, indexAd);
+                } else {
+                    imgAdvert.setVisibility(View.GONE);
+                    showTextAd(rvTxtAdvertLayout, indexAd);
+                }
             }
             flActionBarFun.addView(funView);
         } catch (Exception e) {
@@ -266,4 +244,59 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         this.selTab = selTab;
     }
 
+    /**
+     * 显示图片广告
+     *
+     * @param imgAdvert
+     * @param indexAd
+     */
+    private void showImageAd(ImageView imgAdvert, MainInitJson.IndexAdBean indexAd) {
+        imgAdvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String appConfig = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
+
+                    MainActivity mainActivity = (MainActivity) getActivity();
+
+                    MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
+                    MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
+                    mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 显示文字广告
+     *
+     * @param rvTxtAdvertLayout
+     * @param indexAd
+     */
+    private void showTextAd(RelativeLayout rvTxtAdvertLayout, MainInitJson.IndexAdBean indexAd) {
+        //白天还是夜间
+        boolean localTheme = SPUtils.getBoolean(mFragmentContext, SpConstant.SETTING_DAY_NIGHT);
+        String advertUrl = localTheme ? indexAd.getTxt_ad_icon_day() : indexAd.getTxt_ad_icon_night();
+
+        ImageView ivTxtAdvertJB = (ImageView) funView.findViewById(R.id.iv_txt_advert_jb);
+        TextView tvTxtAdvertName = (TextView) funView.findViewById(R.id.tv_right_txt);
+
+        int txtColor = Color.parseColor(indexAd.getTxt_ad_color());
+        tvTxtAdvertName.setTextColor(txtColor);
+
+        tvTxtAdvertName.setText(indexAd.getTitle());
+
+        Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(ivTxtAdvertJB));
+
+        tvTxtAdvertName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent webIntent = new Intent(mFragmentContext, WebActivity.class);
+                webIntent.putExtra(IntentConstant.WEBURL, "https://www.baidu.com/");
+                startActivity(webIntent);
+            }
+        });
+    }
 }

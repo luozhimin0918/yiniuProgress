@@ -42,37 +42,63 @@
                 android:layout_width="75dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
+                android:visibility="visible"
                 android:layout_centerVertical="true"
                 android:background="@mipmap/icon_score_sign_bg">
 
-                <ImageView
-                    android:id="@+id/iv_sign"
+                <RelativeLayout
+                    android:id="@+id/rl_un_sign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/contentPadding"
-                    android:src="@mipmap/icon_score_sign_small"/>
+                    android:visibility="visible"
+                    android:layout_centerVertical="true">
 
-                <TextView
-                    android:id="@+id/tv_sign"
+                    <ImageView
+                        android:id="@+id/iv_sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/contentPadding"
+                        android:src="@mipmap/icon_score_sign_small"/>
+
+                    <TextView
+                        android:id="@+id/tv_sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/iv_sign"
+                        android:text="签到"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/describe_font_size1"/>
+
+                    <ImageView
+                        android:id="@+id/iv_sign_enter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        android:src="@mipmap/icon_score_enter"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_un_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@id/iv_sign"
-                    android:text="签到"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/describe_font_size1"/>
+                    android:visibility="gone"
+                    android:layout_centerVertical="true">
 
-                <ImageView
-                    android:id="@+id/iv_sign_enter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:src="@mipmap/icon_score_enter"/>
-
+                    <TextView
+                        android:id="@+id/tv_task_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/white"
+                        android:layout_marginRight="5dp"
+                        android:textSize="@dimen/describe_font_size1"
+                        android:layout_height="wrap_content"
+                        android:text="任务未完成"/>
+                </RelativeLayout>
             </RelativeLayout>
 
         </RelativeLayout>
