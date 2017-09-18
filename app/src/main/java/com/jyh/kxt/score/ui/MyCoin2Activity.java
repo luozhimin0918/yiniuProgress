@@ -49,6 +49,7 @@ public class MyCoin2Activity extends BaseActivity implements
     @BindView(R.id.fl_punch_card_tab) public FlowLayout flPunchCardTab;
     @BindView(R.id.tv_punch_card_handle) TextView tvPunchCard;
     @BindView(R.id.iv_punch_card_handle) ImageView ivPunchCard;
+    @BindView(R.id.tv_punch_card_tip) TextView tvSignStatu;
 
     /**
      * 抽屉相关视图
@@ -204,13 +205,17 @@ public class MyCoin2Activity extends BaseActivity implements
                 adapter.setData(adapterData);
             }
             plRootView.loadOver();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    drawerSignContent.animateOpen();
-                }
-            }, 200);
+            if (signed) {
+                tvSignStatu.setText("签到成功");
+            } else {
+                tvSignStatu.setText("未签到");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawerSignContent.animateOpen();
+                    }
+                }, 200);
+            }
         }
     }
 
