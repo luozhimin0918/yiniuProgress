@@ -18,7 +18,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="分享"
                 android:textColor="@color/font_color5"
                 android:textSize="@dimen/content_font_size"
                 android:id="@+id/tv_content"/>
@@ -29,7 +28,6 @@
                 android:layout_below="@id/tv_content"
                 android:textColor="@color/font_color17"
                 android:textSize="@dimen/describe_font_size1"
-                android:text="12.12 12:12"
                 android:id="@+id/tv_time"/>
 
         </LinearLayout>
@@ -42,7 +40,6 @@
             android:layout_centerVertical="true"
             android:textSize="@dimen/describe_font_size4"
             android:textColor="@color/font_color8"
-            android:text="1111"
             />
 
     </RelativeLayout>

@@ -238,8 +238,13 @@ public class MyCoin2Activity extends BaseActivity implements
             List adapterData = new ArrayList();
             for (TaskAllJson taskAllJson : data) {
                 String title = taskAllJson.getTitle();
-                adapterData.add(title);
-                adapterData.addAll(taskAllJson.getData());
+                List<TaskJson> data1 = taskAllJson.getData();
+                if (data1 == null || data1.size() == 0) {
+
+                } else {
+                    adapterData.add(title);
+                    adapterData.addAll(data1);
+                }
             }
             initHeadViewLayout();
             if (adapter == null) {
