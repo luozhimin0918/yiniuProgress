@@ -16,6 +16,7 @@ import com.jyh.kxt.score.adapter.ScoreDetailMonthAdapter;
 import com.jyh.kxt.score.json.ScoreDetailDayJson;
 import com.jyh.kxt.score.json.ScoreDetailMonthJson;
 import com.library.base.http.VarConstant;
+import com.library.widget.handmark.PullToRefreshBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class ScoreDetailFragment extends BaseFragment {
             presenter.setAdapter(scoreDetailDayAdapter);
         } else {
             rlTitle.setVisibility(View.VISIBLE);
+            presenter.getPullToRefreshListView().setMode(PullToRefreshBase.Mode.PULL_FROM_START);
             List<ScoreDetailMonthJson> scoreDetailMonthJsons = new ArrayList<>();
             ScoreDetailMonthAdapter scoreDetailMonthAdapter = new ScoreDetailMonthAdapter(scoreDetailMonthJsons, getContext());
             presenter.setRequestInfo(HttpConstant.CREDITS_MON_SUM, parameterJson, ScoreDetailMonthJson.class);

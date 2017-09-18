@@ -292,5 +292,6 @@ public class MyCoin2Activity extends BaseActivity implements
 
     public void punchCardSucceed() {
         tvPunchCard.setText("已经连续签到" + (++signDays) + "天");
+        tvSignStatu.setText("签到成功");
     }
 }
