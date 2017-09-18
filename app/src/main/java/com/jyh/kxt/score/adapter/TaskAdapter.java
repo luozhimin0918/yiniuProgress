@@ -106,7 +106,7 @@ public class TaskAdapter extends BaseListAdapter {
                 viewHolder.ivTask.setSelected("1".equals(is_finished));
             }
 
-            viewHolder.tvTitle.setText(task.getTitle());
+            viewHolder.tvTitle.setText(task.getDescription());
             String award = task.getAward();
             viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
 

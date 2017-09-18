@@ -20,6 +20,7 @@ import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
 import com.jyh.kxt.score.json.TaskAllJson;
+import com.jyh.kxt.score.json.TaskJson;
 import com.jyh.kxt.score.presenter.MyCoin2Presenter;
 import com.library.bean.EventBusClass;
 import com.library.widget.PageLoadLayout;
@@ -182,8 +183,13 @@ public class MyCoin2Activity extends BaseActivity implements
             List adapterData = new ArrayList();
             for (TaskAllJson taskAllJson : data) {
                 String title = taskAllJson.getTitle();
-                adapterData.add(title);
-                adapterData.addAll(taskAllJson.getData());
+                List<TaskJson> data1 = taskAllJson.getData();
+                if (data1 == null || data1.size() == 0) {
+
+                } else {
+                    adapterData.add(title);
+                    adapterData.addAll(data1);
+                }
             }
             if (headView != null) {
                 plContent.getRefreshableView().removeHeaderView(headView);

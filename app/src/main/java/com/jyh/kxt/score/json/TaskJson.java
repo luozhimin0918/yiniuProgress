@@ -9,7 +9,7 @@ package com.jyh.kxt.score.json;
 
 public class TaskJson {
 
-    private String title;//任务描述
+    private String description;//任务描述
     private String award;   //奖励
     private String num_finished;   //成功数量
     private String total_tasks;   //任务总数量
@@ -29,12 +29,12 @@ public class TaskJson {
         this.is_finished = is_finished;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getAward() {
@@ -85,9 +85,9 @@ public class TaskJson {
         this.o_action = o_action;
     }
 
-    public TaskJson(String title, String award, String num_finished, String total_tasks, String o_class, String o_id, String o_action,
-                    String is_finished) {
-        this.title = title;
+    public TaskJson(String description, String award, String num_finished, String total_tasks, String o_class, String o_id, String
+            o_action, String is_finished) {
+        this.description = description;
         this.award = award;
         this.num_finished = num_finished;
         this.total_tasks = total_tasks;
