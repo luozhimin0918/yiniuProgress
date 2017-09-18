@@ -45,7 +45,6 @@ import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.index.json.HomeAdJson;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
@@ -389,7 +388,7 @@ public class MainPresenter extends BasePresenter {
     }
 
 
-    public void showPopAdvertisement(final HomeAdJson indexAd) {
+    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd) {
         if (indexAd == null) {
             return;
         }

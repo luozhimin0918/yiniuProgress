@@ -134,10 +134,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private long oldClickNavigationTime;
 
     //未签到
-    private RelativeLayout rlUnSign;
+    private LinearLayout rlUnSign;
 
     //任务未完成
-    private RelativeLayout rlUnTask;
+    private LinearLayout rlUnTask;
 
     private TextView tvTaskHint;
 
@@ -590,6 +590,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case EventBusClass.EVENT_UNREAD_MSG:
 
                 break;
+            case EventBusClass.EVENT_COIN_SIGN:
+                SignInfoJson signInfoJson = (SignInfoJson) eventBus.intentObj;
+                GlobalHttpRequest.getInstance().setSignInfoJson(signInfoJson);
+                updateLeftSignState(signInfoJson);
+                break;
         }
     }
 
@@ -930,8 +935,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * @param signInfoJson
      */
     private void updateLeftSignState(SignInfoJson signInfoJson) {
-        //fixkxt 2017/9/15 9:13 describe: 检查是否可以正常签到
-
+        //fixkxt 2017/9/15 9:13 describe: 签到状态
         if (signInfoJson.getSign_state() == 0) {
             rlUnSign.setVisibility(View.VISIBLE);
         } else {

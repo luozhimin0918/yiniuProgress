@@ -154,11 +154,11 @@ public class UmengShareUtil {
             String config = SPUtils.getString(mActivity, SpConstant.INIT_LOAD_APP_CONFIG);
 
             MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
-            if (mainInitJson != null && mainInitJson.getDownload_QR_code() != null) {
-                urlImage = new UMImage(mActivity, mainInitJson.getDownload_QR_code());
-            } else if (!TextUtils.isEmpty(umengShareBean.getImageUrl())) {
+            if (!TextUtils.isEmpty(umengShareBean.getImageUrl())) {
                 urlImage = new UMImage(mActivity, umengShareBean.getImageUrl());
-            }else{
+            } else if (mainInitJson != null && mainInitJson.getDownload_QR_code() != null) {
+                urlImage = new UMImage(mActivity, mainInitJson.getDownload_QR_code());
+            } else {
                 urlImage = new UMImage(mActivity, R.mipmap.share_weibo);
             }
 

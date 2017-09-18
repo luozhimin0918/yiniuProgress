@@ -36,7 +36,11 @@ public class GlobalHttpRequest {
     /**
      * 签到状态，任务状态,存放临时内存
      */
-    private static SignInfoJson signInfoJson;
+    private SignInfoJson signInfoJson;
+
+    public void setSignInfoJson(SignInfoJson signInfoJson) {
+        this.signInfoJson = signInfoJson;
+    }
 
     /**
      * 获取签到任务
@@ -48,7 +52,7 @@ public class GlobalHttpRequest {
         Context mContext = iBaseView.getContext();
         RequestQueue mQueue = iBaseView.getQueue();
 
-        UserJson userInfo = LoginUtils.getUserInfo(mContext);
+        final UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
             return;
         }
@@ -80,11 +84,14 @@ public class GlobalHttpRequest {
         JSONObject jsonParam = request.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
 
-        request.doPost(HttpConstant.COINS_SIGN, jsonParam, new HttpListener<SignInfoJson>() {
+        request.doPost(HttpConstant.COINS_SIGN, jsonParam, new HttpListener<String>() {
             @Override
-            protected void onResponse(SignInfoJson signState) {
-                signInfoJson = signState;
-                signInfoJson.setAcquireTime();
+            protected void onResponse(String mySignStr) {
+                JSONObject signJsonObj = JSONObject.parseObject(mySignStr);
+                int sign_state = signJsonObj.getIntValue("sign_state");
+                int task_state = signJsonObj.getIntValue("task_state");
+
+                signInfoJson = new SignInfoJson(userInfo.getUid(), sign_state, task_state);
 
                 if (deliveryListener != null) {
                     deliveryListener.onResponse(signInfoJson);

@@ -65,15 +65,19 @@ public class MyUmShareListener implements UMShareListener {
 
     @Override
     public void onCancel(SHARE_MEDIA platform) {
-        mActivity.dismissWaitDialog();
-        String platformName = getPlatformName(platform);
-        if (SHARE_MEDIA.WEIXIN_FAVORITE.equals(platform)) {
-            ToastView.makeText3(mActivity, platformName + "分享取消");
-        } else {
-            ToastView.makeText3(mActivity, platformName + "分享取消");
-        }
-        if (popupWindow != null) {
-            popupWindow.dismiss();
+        try {
+            mActivity.dismissWaitDialog();
+//        String platformName = getPlatformName(platform);
+//        if (SHARE_MEDIA.WEIXIN_FAVORITE.equals(platform)) {
+//            ToastView.makeText3(mActivity, platformName + "分享取消");
+//        } else {
+//            ToastView.makeText3(mActivity, platformName + "分享取消");
+//        }
+            if (popupWindow != null) {
+                popupWindow.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -118,7 +122,7 @@ public class MyUmShareListener implements UMShareListener {
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put("uid", userInfo.getUid());
 
-        switch (mUmengShareBean.getFromSource()){
+        switch (mUmengShareBean.getFromSource()) {
             case UmengShareUtil.SHARE_ARTICLE:
                 jsonParam.put("type", "share_article");
                 break;

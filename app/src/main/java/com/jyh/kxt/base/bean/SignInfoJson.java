@@ -56,6 +56,8 @@ public class SignInfoJson {
         }
     }
 
+
+
     public SignInfoJson(String uid, int sign_state, int task_state) {
         this.uid = uid;
         this.sign_state = sign_state;

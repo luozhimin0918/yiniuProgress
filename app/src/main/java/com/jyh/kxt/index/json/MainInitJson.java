@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.json;
 
 import com.jyh.kxt.base.json.JumpJson;
+import com.library.base.http.VarConstant;
 
 /**
  * Created by Mr'Dai on 2017/5/24.
@@ -39,8 +40,11 @@ public class MainInitJson {
 //    }
 
     private String icon;
-    private IndexAdBean index_ad;
+
     private IndexAdBean flash_ad;//快讯广告
+    private IndexAdBean index_ad;
+    private TextAdBean index_top_ad;
+
     private LoadAdBean load_ad;
     private String quotes_chart_url;
     private String url_contact;
@@ -50,6 +54,14 @@ public class MainInitJson {
     private String url_quotes_share;
     private String download_QR_code;
     private String message_socket_addr;
+
+    public TextAdBean getIndex_top_ad() {
+        return index_top_ad;
+    }
+
+    public void setIndex_top_ad(TextAdBean index_top_ad) {
+        this.index_top_ad = index_top_ad;
+    }
 
     public String getUrl_quotes_share() {
         return url_quotes_share;
@@ -73,6 +85,14 @@ public class MainInitJson {
 
     public void setIndex_ad(IndexAdBean index_ad) {
         this.index_ad = index_ad;
+    }
+
+    public IndexAdBean getFlash_ad() {
+        return flash_ad;
+    }
+
+    public void setFlash_ad(IndexAdBean flash_ad) {
+        this.flash_ad = flash_ad;
     }
 
     public LoadAdBean getLoad_ad() {
@@ -139,76 +159,185 @@ public class MainInitJson {
         this.message_socket_addr = message_socket_addr;
     }
 
-    public static class IndexAdBean extends HomeAdJson {
+    public static class TextAdBean extends JumpJson{
+
         /**
-         * href : http://www.kxt.com/topic
-         * o_action :
-         * o_class :
-         * o_id : 2
-         * picture : /Uploads/Picture/2017-05-18/591d0b79ae970.jpg
-         * showTime : 3137160
-         * title : webview模式测试数据
-         * type : webview
+         * day_color : #1c9cf2
+         * day_icon : http://img.kxt.com/Uploads/Picture/2017-07-24/5975707c9b7ea.png
+         * font_family : PingFang
+         * font_size : 26px
+         * href : http://www.kxt.com/apiaction/ad_jump?system=app&code=SY-YW-T-T&href=aHR0cDovLzUyMWJtLmNvbS82MDAx
+         * night_color : #136aa4
+         * night_icon : http://img.kxt.com/Uploads/Picture/2017-07-24/5975706fdf3cd.png
+         * o_id : 23
+         * position : 1
+         * title : • 要闻顶部ad
          */
 
-        //要闻文字
-        private String txt_ad_name;
-        private String txt_ad_href;
-        private String txt_ad_color;
+        private String day_color;
+        private String day_icon;
+        private String font_family;
+        private String font_size;
+        private String href;
+        private String night_color;
+        private String night_icon;
+        private int position;
+        private String title;
 
-        private String txt_ad_icon_day;
-        private String txt_ad_icon_night;
-        private int ad_type;
-
-        public String getTxt_ad_name() {
-            return txt_ad_name;
+        public String getDay_color() {
+            return day_color;
         }
 
-        public void setTxt_ad_name(String txt_ad_name) {
-            this.txt_ad_name = txt_ad_name;
+        public void setDay_color(String day_color) {
+            this.day_color = day_color;
         }
 
-        public String getTxt_ad_href() {
-            return txt_ad_href;
+        public String getDay_icon() {
+            return day_icon;
         }
 
-        public void setTxt_ad_href(String txt_ad_href) {
-            this.txt_ad_href = txt_ad_href;
+        public void setDay_icon(String day_icon) {
+            this.day_icon = day_icon;
         }
 
-        public String getTxt_ad_color() {
-            return txt_ad_color;
+        public String getFont_family() {
+            return font_family;
         }
 
-        public void setTxt_ad_color(String txt_ad_color) {
-            this.txt_ad_color = txt_ad_color;
+        public void setFont_family(String font_family) {
+            this.font_family = font_family;
         }
 
-        public String getTxt_ad_icon_day() {
-            return txt_ad_icon_day;
+        public String getFont_size() {
+            return font_size;
         }
 
-        public void setTxt_ad_icon_day(String txt_ad_icon_day) {
-            this.txt_ad_icon_day = txt_ad_icon_day;
+        public void setFont_size(String font_size) {
+            this.font_size = font_size;
         }
 
-        public String getTxt_ad_icon_night() {
-            return txt_ad_icon_night;
+        public String getHref() {
+            return href;
         }
 
-        public void setTxt_ad_icon_night(String txt_ad_icon_night) {
-            this.txt_ad_icon_night = txt_ad_icon_night;
+        public void setHref(String href) {
+            this.href = href;
         }
 
-        public int getAd_type() {
-            return ad_type;
+        public String getNight_color() {
+            return night_color;
         }
 
-        public void setAd_type(int ad_type) {
-            this.ad_type = ad_type;
+        public void setNight_color(String night_color) {
+            this.night_color = night_color;
+        }
+
+        public String getNight_icon() {
+            return night_icon;
+        }
+
+        public void setNight_icon(String night_icon) {
+            this.night_icon = night_icon;
+        }
+
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
     }
 
+    public static class IndexAdBean extends JumpJson {
+        private String href;
+        private String picture;
+        private int showTime;
+        private String title;
+        private String type;
+        private String icon;
+        private int left_screen_size;
+        private int show;//0不主动显示   1 主动显示
+
+
+        public String getHref() {
+            String connector = "?";
+            if (href.contains("?"))
+                connector = "&";
+            href = href + connector + VarConstant.HTTP_VERSION + "=" + VarConstant.HTTP_VERSION_VALUE
+                    + "&" + VarConstant.HTTP_SYSTEM + "=" + VarConstant.HTTP_SYSTEM_VALUE;
+            return href;
+        }
+
+        public void setHref(String href) {
+            this.href = href;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        public int getShowTime() {
+            return showTime;
+        }
+
+        public void setShowTime(int showTime) {
+            this.showTime = showTime;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+
+        public int getLeft_screen_size() {
+            return left_screen_size;
+        }
+
+        public void setLeft_screen_size(int left_screen_size) {
+            this.left_screen_size = left_screen_size;
+        }
+
+        public int getShow() {
+            return show;
+        }
+
+        public void setShow(int show) {
+            this.show = show;
+        }
+    }
     public static class LoadAdBean extends JumpJson {
         /**
          * href : http://appapi.kxt.com/Topic/index/id/3.html

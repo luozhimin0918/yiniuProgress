@@ -16,6 +16,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
@@ -181,14 +182,30 @@ public class MyCoin2Presenter extends BasePresenter {
 
             if (position < punchCardDays) {
                 fuelPunchCardView(punchCardView);
+                punchCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
             }
 
-            if (position == punchCardDays && !myCoin2Activity.signed) {//签到点击
+            if (position > punchCardDays) {
+                punchCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
+            }
+            if (position == punchCardDays) {//签到点击
                 final int finalPosition = position;
                 punchCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        requestPunchCard(punchCardView, signJsonList, finalPosition);
+                        if (!myCoin2Activity.signed) {
+                            requestPunchCard(punchCardView, signJsonList, finalPosition);
+                        } else {
+                            ToastSnack.show(mContext, v, "今天已经签到了喔");
+                        }
                     }
                 });
             }

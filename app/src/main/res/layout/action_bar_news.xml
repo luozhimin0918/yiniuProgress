@@ -22,12 +22,11 @@
 
         <ImageView
             android:id="@+id/iv_txt_advert_jb"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="7dp"
-            android:layout_marginTop="7dp"
-            android:background="@color/font_color6"/>
+            android:layout_marginTop="7dp" />
 
         <TextView
             android:id="@+id/tv_right_txt"
@@ -38,7 +37,6 @@
             android:textSize="@dimen/describe_font_size3"
             android:layout_marginRight="@dimen/navigationBarRightImageViewMarginRight2"
             android:maxLength="5"
-            android:text="广告图标"
             android:visibility="visible"/>
 
     </RelativeLayout>

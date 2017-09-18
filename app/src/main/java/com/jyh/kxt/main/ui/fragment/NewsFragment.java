@@ -17,9 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.BaseFragmentAdapter;
@@ -160,9 +158,6 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                 String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
                 mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
 
-                MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-
-
                 funView = LayoutInflater.from(mFragmentContext).inflate(
                         R.layout.action_bar_news,
                         flActionBarFun,
@@ -171,12 +166,13 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                 ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
                 RelativeLayout rvTxtAdvertLayout = (RelativeLayout) funView.findViewById(R.id.rl_txt_advert);
 
-                if (indexAd.getAd_type() == 0) {
+                if (mainInitJson.getIndex_ad() != null) {
                     rvTxtAdvertLayout.setVisibility(View.GONE);
-                    showImageAd(imgAdvert, indexAd);
-                } else {
+
+                    showImageAd(imgAdvert);
+                } else if (mainInitJson.getFlash_ad() != null) {
                     imgAdvert.setVisibility(View.GONE);
-                    showTextAd(rvTxtAdvertLayout, indexAd);
+                    showTextAd();
                 }
             }
             flActionBarFun.addView(funView);
@@ -204,14 +200,22 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     @Override
     public void onChangeTheme() {
         super.onChangeTheme();
-        if (fragmentList != null) {
-            for (Fragment fragment : fragmentList) {
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).onChangeTheme();
+        try {
+            if (fragmentList != null) {
+                for (Fragment fragment : fragmentList) {
+                    if (fragment instanceof BaseFragment) {
+                        ((BaseFragment) fragment).onChangeTheme();
+                    }
                 }
             }
+            if (stlNavigationBar != null) {
+                stlNavigationBar.notifyDataSetChanged();
+            }
+
+            showTextAd();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (stlNavigationBar != null) stlNavigationBar.notifyDataSetChanged();
     }
 
     @Override
@@ -248,20 +252,17 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      * 显示图片广告
      *
      * @param imgAdvert
-     * @param indexAd
      */
-    private void showImageAd(ImageView imgAdvert, MainInitJson.IndexAdBean indexAd) {
+    private void showImageAd(ImageView imgAdvert) {
+        String advertIconUrl = mainInitJson.getIndex_ad().getIcon();
+        Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
+
         imgAdvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    String appConfig = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
-
                     MainActivity mainActivity = (MainActivity) getActivity();
-
-                    MainInitJson mainInitJson = JSONObject.parseObject(appConfig, MainInitJson.class);
-                    MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
-                    mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+                    mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getIndex_ad());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -271,32 +272,39 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
     /**
      * 显示文字广告
-     *
-     * @param rvTxtAdvertLayout
-     * @param indexAd
      */
-    private void showTextAd(RelativeLayout rvTxtAdvertLayout, MainInitJson.IndexAdBean indexAd) {
-        //白天还是夜间
-        boolean localTheme = SPUtils.getBoolean(mFragmentContext, SpConstant.SETTING_DAY_NIGHT);
-        String advertUrl = localTheme ? indexAd.getTxt_ad_icon_day() : indexAd.getTxt_ad_icon_night();
+    //fixkxt 2017/9/15 16:47 describe: 文字广告首页
+    private void showTextAd() {
+//        //白天还是夜间
+        if (mainInitJson == null || mainInitJson.getFlash_ad() == null) {
+            return;
+        }
+        try {
+            final MainInitJson.TextAdBean indexTxtAd = mainInitJson.getIndex_top_ad();
 
-        ImageView ivTxtAdvertJB = (ImageView) funView.findViewById(R.id.iv_txt_advert_jb);
-        TextView tvTxtAdvertName = (TextView) funView.findViewById(R.id.tv_right_txt);
+            boolean localTheme = SPUtils.getBoolean(mFragmentContext, SpConstant.SETTING_DAY_NIGHT);
+            String advertUrl = localTheme ? indexTxtAd.getNight_icon() : indexTxtAd.getDay_icon();
 
-        int txtColor = Color.parseColor(indexAd.getTxt_ad_color());
-        tvTxtAdvertName.setTextColor(txtColor);
+            ImageView ivTxtAdvertJB = (ImageView) funView.findViewById(R.id.iv_txt_advert_jb);
+            TextView tvTxtAdvertName = (TextView) funView.findViewById(R.id.tv_right_txt);
 
-        tvTxtAdvertName.setText(indexAd.getTitle());
+            String titleTxtColor = localTheme ? indexTxtAd.getNight_color() : indexTxtAd.getDay_color();
+            tvTxtAdvertName.setTextColor(Color.parseColor(String.valueOf(titleTxtColor)));
 
-        Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(ivTxtAdvertJB));
+            tvTxtAdvertName.setText(indexTxtAd.getTitle());
 
-        tvTxtAdvertName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent webIntent = new Intent(mFragmentContext, WebActivity.class);
-                webIntent.putExtra(IntentConstant.WEBURL, "https://www.baidu.com/");
-                startActivity(webIntent);
-            }
-        });
+            Glide.with(mFragmentContext).load(advertUrl).into(ivTxtAdvertJB);
+
+            tvTxtAdvertName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent webIntent = new Intent(mFragmentContext, WebActivity.class);
+                    webIntent.putExtra(IntentConstant.WEBURL, indexTxtAd.getHref());
+                    startActivity(webIntent);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

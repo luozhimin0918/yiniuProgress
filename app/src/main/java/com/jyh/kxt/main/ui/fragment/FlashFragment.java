@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.SpConstant;
@@ -212,7 +211,11 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             if (funView == null) {
                 String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
                 mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
-                String advertUrl = mainInitJson.getIndex_ad().getIcon();
+                MainInitJson.IndexAdBean flash_ad = mainInitJson.getFlash_ad();
+                if (flash_ad == null) {
+                    return;
+                }
+                String advertIconUrl = flash_ad.getIcon();
 
                 funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_flash, flActionBarFun, false);
 
@@ -222,7 +225,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                 //默认筛选位置
                 imgFiltrate.setImageDrawable(ContextCompat.getDrawable(mFragmentContext, R.mipmap.icon_rili_sx));
 
-                Glide.with(mFragmentContext).load(advertUrl).into(new GlideDrawableImageViewTarget(imgAdvert));
+                Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
 
                 //点击事件
                 imgFiltrate.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +241,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     public void onClick(View v) {
                         try {
                             MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getIndex_ad());
+                            mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
