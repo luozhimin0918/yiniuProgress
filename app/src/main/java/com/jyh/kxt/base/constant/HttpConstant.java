@@ -31,7 +31,7 @@ public class HttpConstant {
 
     public static final String OFFICIAL = "http://www.kxt.com";//官网
 
-//                    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    //                    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
@@ -269,6 +269,11 @@ public class HttpConstant {
 
     public static final String COINS_ADD = BASE_URL + "coins/add";//增加金币分享
     public static final String COINS_SIGN = BASE_URL + "coins/sign_info";//签到状态
+
+    /**
+     * web分享
+     */
+    public static final String SHARE_WEB = BASE_URL + "webview/share"+VarConstant.HTTP_CONTENT;
 
 
 }

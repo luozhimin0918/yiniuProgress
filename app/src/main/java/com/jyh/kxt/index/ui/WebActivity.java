@@ -21,6 +21,7 @@ import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.widget.LoadX5WebView;
+import com.jyh.kxt.index.json.WebShareJson;
 import com.jyh.kxt.index.presenter.WebPresenter;
 import com.library.util.RegexValidateUtil;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -51,6 +52,7 @@ public class WebActivity extends BaseActivity {
     public boolean javaScriptEnabled = true;
     private boolean autoObtainTitle = false;
     private boolean initialLoadTitle = true;
+    private WebShareJson webShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,14 +105,18 @@ public class WebActivity extends BaseActivity {
                 if (webPresenter != null && webPresenter.loadX5WebView != null) {
                     LoadX5WebView x5WebView = webPresenter.loadX5WebView;
 
-                    UmengShareBean umengShareBean = new UmengShareBean();
-                    umengShareBean.setTitle(x5WebView.shareTitle == null ? title : x5WebView.shareTitle);
-                    umengShareBean.setDetail("");
+                    UmengShareBean umengShareBean = null;
+                    if (webShare != null) {
+                        umengShareBean = new UmengShareBean();
+                        umengShareBean.setTitle(webShare.getTitle() == null ? title : webShare.getTitle());
+                        umengShareBean.setDetail(webShare.getDescription()==null ? "" : webShare.getDescription());
 
-                    if (x5WebView.sharePic != null) {
-                        umengShareBean.setImageUrl(x5WebView.sharePic);
+                        if (webShare.getShare_pic() != null) {
+                            umengShareBean.setImageUrl(webShare.getShare_pic());
+                        }
+                        umengShareBean.setWebUrl(webShare.getHref() == null ? url : webShare.getShare_pic());
+                        umengShareBean.setFromSource(UmengShareUtil.SHARE_ADVERT);
                     }
-
                     //创建下面的功能Adapter
                     List<ShareItemJson> functionList = new ArrayList<>();
                     functionList.add(new ShareItemJson(R.mipmap.icon_share_link_open, "浏览器"));
@@ -118,8 +124,6 @@ public class WebActivity extends BaseActivity {
                     functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
                     functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
 
-                    umengShareBean.setWebUrl(x5WebView.shareUrl == null ? url : x5WebView.shareUrl);
-                    umengShareBean.setFromSource(UmengShareUtil.SHARE_ADVERT);
                     final UmengShareUI umengShareUI = new UmengShareUI(this);
                     final PopupUtil popupUtil = umengShareUI.showSharePopup(umengShareBean, functionList);
                     umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
@@ -153,5 +157,9 @@ public class WebActivity extends BaseActivity {
             e.printStackTrace();
             super.onBackPressed();
         }
+    }
+
+    public void setWebShare(WebShareJson webShare) {
+        this.webShare = webShare;
     }
 }

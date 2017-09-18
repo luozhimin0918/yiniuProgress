@@ -202,8 +202,12 @@ public class UmengShareUI {
         @Override
         public void onClickItem(View view, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
 
-            int icon = mShareItemJson.icon;
+            if (mUmengShareBean == null) {
+                ToastView.makeText3(view.getContext(), "数据加载中,请稍后再试");
+                return;
+            }
 
+            int icon = mShareItemJson.icon;
             switch (icon) {
                 case R.mipmap.icon_share_qyq:
                     mUmengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN_CIRCLE, mUmengShareBean);
