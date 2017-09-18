@@ -273,7 +273,6 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
     /**
      * 显示文字广告
      */
-    //fixkxt 2017/9/15 16:47 describe: 文字广告首页
     private void showTextAd() {
 //        //白天还是夜间
         if (mainInitJson == null || mainInitJson.getFlash_ad() == null) {

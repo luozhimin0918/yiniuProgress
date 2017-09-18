@@ -48,7 +48,6 @@ public class GlobalHttpRequest {
      * @param iBaseView
      */
     public void getSignInfo(IBaseView iBaseView, final HttpDeliveryListener<SignInfoJson> deliveryListener) {
-        //fixkxt 2017/9/15 9:13 describe:  需要检查接口返回
         Context mContext = iBaseView.getContext();
         RequestQueue mQueue = iBaseView.getQueue();
 

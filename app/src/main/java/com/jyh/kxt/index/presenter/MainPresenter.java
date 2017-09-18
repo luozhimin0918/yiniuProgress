@@ -357,7 +357,6 @@ public class MainPresenter extends BasePresenter {
      *
      * @param jsonStr
      */
-    //fixkxt 2017/9/15 9:25 describe: 创建假数据测试
     private void initLoadAppConfig(String jsonStr) {
         try {
             SPUtils.save(mContext, SpConstant.INIT_LOAD_APP_CONFIG, jsonStr);
