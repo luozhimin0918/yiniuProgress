@@ -182,33 +182,27 @@ public class MyCoin2Presenter extends BasePresenter {
 
             if (position < punchCardDays) {
                 fuelPunchCardView(punchCardView);
-                punchCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
             }
 
-            if (position > punchCardDays) {
-                punchCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            final int finalPosition1 = position;
+            punchCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((finalPosition1 + 1) == punchCardDays) {
+                        final int finalPosition = finalPosition1;
+                        punchCardView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!myCoin2Activity.signed) {
+                                    requestPunchCard(punchCardView, signJsonList, finalPosition);
+                                } else {
+                                    ToastSnack.show(mContext, v, "今天已经签到了喔");
+                                }
+                            }
+                        });
                     }
-                });
-            }
-            if (position == punchCardDays) {//签到点击
-                final int finalPosition = position;
-                punchCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!myCoin2Activity.signed) {
-                            requestPunchCard(punchCardView, signJsonList, finalPosition);
-                        } else {
-                            ToastSnack.show(mContext, v, "今天已经签到了喔");
-                        }
-                    }
-                });
-            }
+                }
+            });
         }
     }
 
