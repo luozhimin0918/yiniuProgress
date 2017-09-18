@@ -44,6 +44,6 @@ ext {
     bakApkName = 'app-release-0714-16-59-44'
     patchMessage = '暂无提示'
 
-    versionName = '6.1.4'
-    versionCode = 33
+    versionName = '6.1.5'
+    versionCode = 34
 }

@@ -366,18 +366,22 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         if (ads != null && ads.size() > 0) {
             for (final SlideJson ad : ads) {
                 ImageView ivAd = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup
-                                .LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
                 ivAd.setLayoutParams(params);
                 llFlashAd.addView(ivAd);
-                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video).into(ivAd);
+
+                Glide.with(this).load(ad.getPicture()).error(R.mipmap.icon_def_video).into(ivAd);
                 ivAd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        JumpUtils.jump(FlashActivity.this, ad.getO_class(), ad.getO_action(), ad.getO_id(), ad
-                                .getHref());
+                        JumpUtils.jump(FlashActivity.this,
+                                ad.getO_class(),
+                                ad.getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
                     }
                 });
             }
@@ -469,17 +473,26 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                 (ivRlFlag);
 
         if (ads != null && ads.size() > 0) {
-            for (SlideJson ad : ads) {
+            for (final SlideJson ad : ads) {
                 ImageView ivAd = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup
-                                .LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
                 ivAd.setLayoutParams(params);
                 llFlashAd.addView(ivAd);
-                Glide.with(this).load(HttpConstant.IMG_URL + ad.getPicture()).error(R.mipmap.icon_def_video)
-                        .placeholder(R.mipmap
-                                .icon_def_video).into(ivAd);
+
+                Glide.with(this).load(ad.getPicture()).error(R.mipmap.icon_def_video).into(ivAd);
+                ivAd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JumpUtils.jump(FlashActivity.this,
+                                ad.getO_class(),
+                                ad.getO_action(),
+                                ad.getO_id(),
+                                ad.getHref());
+                    }
+                });
             }
         }
 

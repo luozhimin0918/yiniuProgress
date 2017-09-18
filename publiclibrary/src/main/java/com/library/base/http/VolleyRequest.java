@@ -131,6 +131,8 @@ public class VolleyRequest {
                     public void onResponse(String response) {
                         try {
                             if (response == null || "".equals(response.trim())) {
+                                LogUtil.e("toJsonString", "响应: response 为空");
+
                                 mHttpListener.onErrorResponse(null);
                                 return;
                             }

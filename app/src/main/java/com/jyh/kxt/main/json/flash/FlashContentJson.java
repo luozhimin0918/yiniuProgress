@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,9 @@ public class FlashContentJson implements Parcelable {
     }
 
     public List<SlideJson> getAd() {
+        if (ad == null) {
+            ad = new ArrayList<>();
+        }
         return ad;
     }
 

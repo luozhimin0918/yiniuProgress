@@ -15,6 +15,12 @@
         android:paddingLeft="@dimen/newsContentPadding3"
         android:paddingRight="@dimen/newsContentPadding3"/>
 
+    <LinearLayout
+        android:id="@+id/ll_news_content_ad"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:id="@+id/tv_source"
         android:layout_width="wrap_content"
