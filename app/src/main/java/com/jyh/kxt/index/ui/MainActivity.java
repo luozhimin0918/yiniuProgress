@@ -935,7 +935,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * @param signInfoJson
      */
     private void updateLeftSignState(SignInfoJson signInfoJson) {
-
         if (signInfoJson.getSign_state() == 0) {
             rlUnSign.setVisibility(View.VISIBLE);
         } else {

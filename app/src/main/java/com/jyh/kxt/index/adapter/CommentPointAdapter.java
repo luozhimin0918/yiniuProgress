@@ -91,7 +91,9 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
         int color1 = ContextCompat.getColor(mContext, R.color.blue);
         ForegroundColorSpan contentForeground = new ForegroundColorSpan(color1);
         int spanLength = replyMemberName.length() == 0 ? 2 + replyMemberName.length() : replyMemberName.length();
-        contentSpannable.setSpan(contentForeground, 2, spanLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (spanLength > 2) {
+            contentSpannable.setSpan(contentForeground, 2, spanLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         viewHolder.tvContent.convertToGif(contentSpannable);
 
         /**
@@ -129,7 +131,6 @@ public class CommentPointAdapter extends BaseListAdapter<PointJson> {
                 JumpUtils.jump((BaseActivity) mContext, pointJson.getO_class(), pointJson.getO_action(), pointJson.getO_id() + "", null);
             }
         });
-
 
 
         return convertView;

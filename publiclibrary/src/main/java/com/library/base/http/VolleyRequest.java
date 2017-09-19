@@ -149,7 +149,7 @@ public class VolleyRequest {
                                     //新增积分提示
                                     String integralMsg = object.optString("integral_msg");
                                     if (!TextUtils.isEmpty(integralMsg)) {
-                                        ToastView.makeTextGold(mContext, integralMsg);
+                                        ToastView.makeTextGold(mContext, "恭喜获得"+integralMsg+"金币");
                                     }
 
                                     if (status == 1) {
