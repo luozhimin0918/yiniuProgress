@@ -692,7 +692,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         //更改最新价格
 
         BaseChartPresenter baseChartPresenter = basePresenterMap.get(0);
-        if (baseChartPresenter != null) {
+        if (baseChartPresenter != null && baseChartPresenter instanceof MinutePresenter) {
             MinutePresenter minutePresenter = (MinutePresenter) baseChartPresenter;
             MyLineChart chartView = (MyLineChart) minutePresenter.getChartView();
             if (chartView.mChartTouchListener.getTouchMode() != 7) {
@@ -1028,8 +1028,12 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
-                baseChartPresenter.getChartView().invalidate();
+                try {
+                    BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
+                    baseChartPresenter.getChartView().invalidate();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 500);
     }
