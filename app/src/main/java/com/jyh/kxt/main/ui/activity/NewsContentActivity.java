@@ -2,7 +2,6 @@ package com.jyh.kxt.main.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -38,7 +37,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.jyh.kxt.R;
@@ -58,6 +56,7 @@ import com.jyh.kxt.base.utils.SaveImage;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
+import com.jyh.kxt.base.widget.AdvertImageLayout;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
@@ -474,7 +473,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         public LinearLayout headView;
         private NewsContentJson newsContentJson;
         private TextView tvSource;
-        private LinearLayout newsContentAd;
+        private AdvertImageLayout newsContentAd;
         public ThumbView2 attention;
         private boolean isAllowAttention;
 
@@ -815,42 +814,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             LinearLayout llShareContent = (LinearLayout) LayoutInflater.from(NewsContentActivity.this).
                     inflate(R.layout.layout_news_content_head_share, headView, false);
 
-            newsContentAd = (LinearLayout) llShareContent.findViewById(R.id.ll_news_content_ad);
+            newsContentAd = (AdvertImageLayout) llShareContent.findViewById(R.id.ll_news_content_ad);
             tvSource = (TextView) llShareContent.findViewById(R.id.tv_source);
 
 
-            //fixkxt 2017/9/18 13:35 describe: 要闻的广告
+            //fixkxt 2017/9/18 13:35 describe: 要闻的广告需要测试
             List<SlideJson> ads = newsContentJson.getAds();
-
-            if (ads.size() > 0) {
-                for (final SlideJson ad : ads) {
-                    final ImageView mAdImageView = new ImageView(NewsContentActivity.this);
-
-                    LinearLayout.LayoutParams adImageParams = new LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
-                    adImageParams.setMargins(0, 0, 0, SystemUtil.dp2px(getContext(), 5));
-
-                    mAdImageView.setBackgroundColor(Color.RED);
-                    newsContentAd.addView(mAdImageView, adImageParams);
-
-
-                    //改变ImageView 高度
-                    Glide.with(NewsContentActivity.this)
-                            .load(ad.getPicture())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .into(mAdImageView);
-
-                    mAdImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            JumpUtils.jump(NewsContentActivity.this, ad.getO_class(), ad.getO_action(), ad.getO_id(), ad
-                                    .getHref());
-                        }
-                    });
-                }
-            }
-
+            newsContentAd.addAdvertViews(ads);
 
             View attentionBtn = llShareContent.findViewById(R.id.ll_attention);
             View sharePYQ = llShareContent.findViewById(R.id.rv_pyq);

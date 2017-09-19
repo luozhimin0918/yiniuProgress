@@ -27,6 +27,7 @@ import com.jyh.kxt.base.dao.MarkBean;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.AdvertImageLayout;
 import com.jyh.kxt.trading.adapter.ViewPointDetailAdapter;
 import com.jyh.kxt.trading.json.CommentDetailBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -157,6 +158,9 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 mViewPointDetailActivity.commentPresenter.bindListView(headLinearLayout);
                 mViewPointDetailActivity.commentPresenter.createMoreView(null);
 
+                LinearLayout headView = mViewPointDetailActivity.commentPresenter.getHeadView();
+                AdvertImageLayout advertImageLayout = (AdvertImageLayout) headView.findViewById(R.id.comment_top_advert);
+                advertImageLayout.addAdvertViews(viewPointTradeBean.getAds());
                 /**
                  * 添加头部到ListView
                  */

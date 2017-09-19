@@ -15,12 +15,21 @@
             android:layout_height="@dimen/line_height"
             android:background="@color/line_color2"/>
 
+
+        <com.jyh.kxt.base.widget.AdvertImageLayout
+            android:id="@+id/recommend_top_advert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_line">
+
+        </com.jyh.kxt.base.widget.AdvertImageLayout>
+
         <TextView
             android:id="@+id/tv_recommend_label"
-            android:layout_below="@+id/view_line"
             android:layout_width="wrap_content"
-
             android:layout_height="30dp"
+
+            android:layout_below="@+id/recommend_top_advert"
             android:drawableLeft="@mipmap/icon_video_line"
             android:gravity="center"
             android:text="往期节目"
@@ -51,6 +60,13 @@
         android:background="@color/line_color2"/>
 
 
+    <com.jyh.kxt.base.widget.AdvertImageLayout
+        android:id="@+id/comment_top_advert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.jyh.kxt.base.widget.AdvertImageLayout>
+
     <TextView
         android:id="@+id/tv_comment_count_title"
         android:layout_width="wrap_content"
@@ -66,9 +82,9 @@
         android:id="@+id/tv_reply_message"
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
         android:background="@color/bg_color2"
         android:gravity="center"
         android:textColor="@color/font_color6"/>

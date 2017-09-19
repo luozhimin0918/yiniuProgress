@@ -1,5 +1,7 @@
 package com.jyh.kxt.av.json;
 
+import com.jyh.kxt.main.json.SlideJson;
+
 import java.util.List;
 
 /**
@@ -33,6 +35,8 @@ public class VideoDetailBean {
     private String introduce;
     private List<VideoDetailVideoBean> video;
     private String share_sina_title;
+
+    private List<SlideJson> ads;
 
     public String getShare_image() {
         return share_image;
@@ -152,5 +156,13 @@ public class VideoDetailBean {
 
     public void setShare_sina_title(String share_sina_title) {
         this.share_sina_title = share_sina_title;
+    }
+
+    public List<SlideJson> getAds() {
+        return ads;
+    }
+
+    public void setAds(List<SlideJson> ads) {
+        this.ads = ads;
     }
 }

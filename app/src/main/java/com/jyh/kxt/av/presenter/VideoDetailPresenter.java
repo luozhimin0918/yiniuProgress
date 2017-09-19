@@ -35,6 +35,7 @@ import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.base.widget.AdvertImageLayout;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -144,6 +145,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     videoDetailActivity.commentPresenter.bindListView(videoDetailActivity.rvMessage);
 
                     headView = videoDetailActivity.commentPresenter.getHeadView();
+
                     View detailTitle = LayoutInflater
                             .from(mContext)
                             .inflate(R.layout.activity_video_detail_title, headView, false);

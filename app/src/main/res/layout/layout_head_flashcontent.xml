@@ -43,7 +43,7 @@
         android:layout_marginBottom="5dp"
         android:layout_height="wrap_content"/>
 
-    <LinearLayout
+    <com.jyh.kxt.base.widget.AdvertImageLayout
         android:id="@+id/ll_ad_flash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

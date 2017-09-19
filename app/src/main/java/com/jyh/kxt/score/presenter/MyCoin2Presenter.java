@@ -16,7 +16,6 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.score.json.MyCoinJson;
 import com.jyh.kxt.score.json.PunchCardJson;
 import com.jyh.kxt.score.json.SignJson;
@@ -115,7 +114,6 @@ public class MyCoin2Presenter extends BasePresenter {
 
                 fuelPunchCardView(punchCardView);
                 punchCardView.setOnClickListener(null);//点击事件清除
-                myCoin2Activity.punchCardSucceed();
                 myCoin2Activity.signed = true;
                 myCoin2Activity.sign_state = 1;
                 String award = signJson.getAward();
@@ -126,8 +124,8 @@ public class MyCoin2Presenter extends BasePresenter {
                     e.printStackTrace();
                     awardInt = 0;
                 }
-                myCoin2Activity.coinNum += awardInt;
-                myCoin2Activity.hvTvScore.setText(myCoin2Activity.coinNum + "");
+
+                myCoin2Activity.punchCardSucceed(awardInt);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo
                         (mContext).getUid(), 1, myCoin2Activity.task_state)));
                 ToastView.makeText(mContext, "签到成功!");
@@ -184,22 +182,19 @@ public class MyCoin2Presenter extends BasePresenter {
                 fuelPunchCardView(punchCardView);
             }
 
-            final int finalPosition1 = position;
+            final int finalPosition = position;
             punchCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ((finalPosition1 + 1) == punchCardDays) {
-                        final int finalPosition = finalPosition1;
-                        punchCardView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!myCoin2Activity.signed) {
+                    if (!myCoin2Activity.signed) {
+                        if (finalPosition == punchCardDays) {
+                            punchCardView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
                                     requestPunchCard(punchCardView, signJsonList, finalPosition);
-                                } else {
-                                    ToastSnack.show(mContext, v, "今天已经签到了喔");
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             });

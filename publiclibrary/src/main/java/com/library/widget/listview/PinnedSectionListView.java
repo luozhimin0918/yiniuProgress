@@ -494,13 +494,6 @@ public class PinnedSectionListView extends ListView {
         if (mTouchTarget != null) {
             if (isPinnedViewTouched(mTouchTarget, x, y)) { // forward event to pinned view
                 mTouchTarget.dispatchTouchEvent(ev);
-                //如果isAcceptTouchRect 开启之后才返回false
-                if (mTouchTarget instanceof NavigationTabLayout) {
-                    NavigationTabLayout mNavigationTabLayout = (NavigationTabLayout) mTouchTarget;
-                    if (mNavigationTabLayout.isAcceptTouchRect()) {
-                        return false;
-                    }
-                }
             }
 
             if (action == MotionEvent.ACTION_UP) { // perform onClick on pinned view
@@ -508,7 +501,13 @@ public class PinnedSectionListView extends ListView {
 
 
                 if (iPinnedTouch != null) {
-                    iPinnedTouch.dispatchTouchEvent(mTouchTarget,ev);
+                    iPinnedTouch.dispatchTouchEvent(mTouchTarget, ev);
+                }  //如果isAcceptTouchRect 开启之后才返回false
+                if (mTouchTarget instanceof NavigationTabLayout) {
+                    NavigationTabLayout mNavigationTabLayout = (NavigationTabLayout) mTouchTarget;
+                    if (mNavigationTabLayout.isAcceptTouchRect()) {
+                        return false;
+                    }
                 }
 
                 performPinnedItemClick();

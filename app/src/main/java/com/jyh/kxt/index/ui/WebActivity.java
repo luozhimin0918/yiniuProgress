@@ -119,9 +119,10 @@ public class WebActivity extends BaseActivity {
                     }
                     //创建下面的功能Adapter
                     List<ShareItemJson> functionList = new ArrayList<>();
-                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_open, "浏览器"));
-                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_refresh, "刷新"));
+
                     functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_refresh, "刷新"));
+                    functionList.add(new ShareItemJson(R.mipmap.icon_share_link_open, "浏览器"));
                     functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
 
                     final UmengShareUI umengShareUI = new UmengShareUI(this);
