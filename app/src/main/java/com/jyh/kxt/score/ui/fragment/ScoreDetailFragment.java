@@ -52,7 +52,7 @@ public class ScoreDetailFragment extends BaseFragment {
         presenter.setLoadMode(PullListViewPresenter.LoadMode.PAGE_LOAD);
         JSONObject parameterJson = new JSONObject();
         parameterJson.put(VarConstant.HTTP_UID, LoginUtils.getUserInfo(getContext()).getUid());
-
+        presenter.getPullToRefreshListView().setMode(PullToRefreshBase.Mode.DISABLED);
         if (TYPE_DAY.equals(type)) {
             rlTitle.setVisibility(View.GONE);
             List<ScoreDetailDayJson> scoreDetailDayJsons = new ArrayList<>();
@@ -61,7 +61,6 @@ public class ScoreDetailFragment extends BaseFragment {
             presenter.setAdapter(scoreDetailDayAdapter);
         } else {
             rlTitle.setVisibility(View.VISIBLE);
-            presenter.getPullToRefreshListView().setMode(PullToRefreshBase.Mode.PULL_FROM_START);
             List<ScoreDetailMonthJson> scoreDetailMonthJsons = new ArrayList<>();
             ScoreDetailMonthAdapter scoreDetailMonthAdapter = new ScoreDetailMonthAdapter(scoreDetailMonthJsons, getContext());
             presenter.setRequestInfo(HttpConstant.CREDITS_MON_SUM, parameterJson, ScoreDetailMonthJson.class);
