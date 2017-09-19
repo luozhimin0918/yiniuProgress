@@ -212,22 +212,10 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                 String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
                 mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
                 MainInitJson.IndexAdBean flash_ad = mainInitJson.getFlash_ad();
-                if (flash_ad == null) {
-                    return;
-                }
-                String advertIconUrl = flash_ad.getIcon();
 
                 funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_flash, flActionBarFun, false);
-
-                ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
                 imgFiltrate = (ImageView) funView.findViewById(R.id.iv_right_icon1);
-
-                //默认筛选位置
-                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(mFragmentContext, R.mipmap.icon_rili_sx));
-
-                Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
-
-                //点击事件
+                imgFiltrate.setImageDrawable(ContextCompat.getDrawable(mFragmentContext, R.mipmap.icon_rili_sx)); //默认筛选位置
                 imgFiltrate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -235,18 +223,27 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     }
                 });
 
-                //点击事件
-                imgAdvert.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
+
+                if (flash_ad != null) {
+                    imgAdvert.setVisibility(View.VISIBLE);
+                    String advertIconUrl = flash_ad.getIcon();
+                    Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
+                    imgAdvert.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                MainActivity mainActivity = (MainActivity) getActivity();
+                                mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    imgAdvert.setVisibility(View.GONE);
+                }
             }
             flActionBarFun.addView(funView);
         } catch (Exception e) {

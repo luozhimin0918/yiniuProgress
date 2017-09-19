@@ -109,7 +109,7 @@ public class WebActivity extends BaseActivity {
                     if (webShare != null) {
                         umengShareBean = new UmengShareBean();
                         umengShareBean.setTitle(webShare.getTitle() == null ? title : webShare.getTitle());
-                        umengShareBean.setDetail(webShare.getDescription()==null ? "" : webShare.getDescription());
+                        umengShareBean.setDetail(webShare.getDescription() == null ? "" : webShare.getDescription());
 
                         if (webShare.getShare_pic() != null) {
                             umengShareBean.setImageUrl(webShare.getShare_pic());
@@ -152,8 +152,8 @@ public class WebActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         try {
-            webPresenter.loadX5WebView.getWebView().loadUrl("about:blank");
-            super.onBackPressed();
+            webPresenter.loadX5WebView.getWebView().reload();
+            finish();
         } catch (Exception e) {
             e.printStackTrace();
             super.onBackPressed();

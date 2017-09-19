@@ -138,10 +138,9 @@ public class CalendarItemPresenter extends BasePresenter {
             if (status == 0) {
                 calendarItemFragment.setCalendarAdapter(calendarTypeList);
                 calendarItemFragment.addCityData(hashSetCity, hashSetSelectedCity);
-
-            } else {
-                calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
             }
+            calendarItemFragment.calendarItemAdapter.notifyDataSetChanged();
+
             calendarItemFragment.ptrlvContent.onRefreshComplete();
         } catch (Exception e) {
             e.printStackTrace();
