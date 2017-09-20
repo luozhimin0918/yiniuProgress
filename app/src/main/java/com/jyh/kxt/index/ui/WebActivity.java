@@ -114,7 +114,7 @@ public class WebActivity extends BaseActivity {
                         if (webShare.getShare_pic() != null) {
                             umengShareBean.setImageUrl(webShare.getShare_pic());
                         }
-                        umengShareBean.setWebUrl(webShare.getHref() == null ? url : webShare.getShare_pic());
+                        umengShareBean.setWebUrl(webShare.getHref() == null ? url : webShare.getHref());
                         umengShareBean.setFromSource(UmengShareUtil.SHARE_ADVERT);
                     }
                     //创建下面的功能Adapter
