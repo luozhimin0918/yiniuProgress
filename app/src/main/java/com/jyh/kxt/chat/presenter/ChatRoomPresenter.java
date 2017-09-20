@@ -118,14 +118,7 @@ public class ChatRoomPresenter extends BasePresenter {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEND:
-                        String chatContent = chatRoomActivity.publishContentEt.getText().toString();
-                        if (TextUtils.isEmpty(chatContent)) {
-                            return true;
-                        }
-                        String randomUnique = String.valueOf(Math.random());
-
-                        ChatRoomJson fakeChatRoom = analyzeFakeData(randomUnique, chatContent);
-                        requestSendChitChat(fakeChatRoom, randomUnique);
+                        prepareSendInfo();
                         break;
                     default:
                         break;
@@ -159,6 +152,17 @@ public class ChatRoomPresenter extends BasePresenter {
                 }
             }
         }
+    }
+
+    public void prepareSendInfo() {
+        String chatContent = chatRoomActivity.publishContentEt.getText().toString();
+        if (TextUtils.isEmpty(chatContent)) {
+            return;
+        }
+        String randomUnique = String.valueOf(Math.random());
+
+        ChatRoomJson fakeChatRoom = analyzeFakeData(randomUnique, chatContent);
+        requestSendChitChat(fakeChatRoom, randomUnique);
     }
 
     /**
@@ -345,7 +349,7 @@ public class ChatRoomPresenter extends BasePresenter {
 
                 int sendStatus = temporaryChatRoom.getMsgSendStatus();
 
-                String updateSql = "UPDATE CHAT_ROOM_BEAN SET  MSG_SEND_STATUS = "+sendStatus+" WHERE ID = '" + uniqueIdentification + "'";
+                String updateSql = "UPDATE CHAT_ROOM_BEAN SET  MSG_SEND_STATUS = " + sendStatus + " WHERE ID = '" + uniqueIdentification + "'";
                 database.execSQL(updateSql);
 
                 chatRoomAdapter.notifyDataSetChanged();

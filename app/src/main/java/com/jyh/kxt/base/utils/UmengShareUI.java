@@ -207,6 +207,10 @@ public class UmengShareUI {
                 return;
             }
 
+            if (mSharePopup.isShowing()) {
+                mSharePopup.dismiss();
+            }
+
             int icon = mShareItemJson.icon;
             switch (icon) {
                 case R.mipmap.icon_share_qyq:

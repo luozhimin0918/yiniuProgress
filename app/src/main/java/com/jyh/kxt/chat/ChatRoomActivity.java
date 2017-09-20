@@ -47,9 +47,11 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
 
     @BindView(R.id.publish_content_et) public EmoticonsEditText publishContentEt;
     @BindView(R.id.iv_publish_emoji) ImageView ivPublishEmoji;
+    @BindView(R.id.iv_publish_send)  public ImageView ivPublishSend;
 
     @BindView(R.id.rl_keyboard_above) RelativeLayout rlKeyboardAboveLayout;
     @BindView(R.id.fl_emotion_layout) FrameLayout flContent;
+
 
     public String otherUid;
     public String otherName;
@@ -94,7 +96,7 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
         }
     }
 
-    @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.iv_publish_emoji})
+    @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.iv_publish_emoji, R.id.iv_publish_send})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -107,6 +109,9 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
                 break;
             case R.id.iv_publish_emoji:
                 emotionPresenter.clickEmoJeView();
+                break;
+            case R.id.iv_publish_send:
+                chatRoomPresenter.prepareSendInfo();
                 break;
         }
     }

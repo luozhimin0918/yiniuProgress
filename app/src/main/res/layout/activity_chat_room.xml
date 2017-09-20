@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/theme1"
     android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.jyh.kxt.chat.ChatRoomActivity">
 
     <include
@@ -60,14 +61,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:id="@+id/iv_publish_emoji"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <LinearLayout
+            android:id="@+id/ll_publish_fun_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/publish_content_et"
-            android:layout_alignParentRight="true"
-            android:scaleType="center"
-            android:src="@mipmap/icon_fb_xn"/>
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/iv_publish_emoji"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@mipmap/icon_fb_xn"/>
+
+            <ImageView
+                android:id="@+id/iv_publish_send"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@mipmap/icon_chat_sen"/>
+        </LinearLayout>
 
         <com.jyh.kxt.base.util.emoje.EmoticonsEditText
             android:id="@+id/publish_content_et"
@@ -77,20 +91,20 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:minHeight="40dp"
+            android:layout_toLeftOf="@+id/ll_publish_fun_content"
 
-            android:layout_toLeftOf="@+id/iv_publish_emoji"
             android:background="@drawable/shape_edit_comme_bg1"
-            android:lineSpacingMultiplier="1.2"
-
-            android:inputType="textMultiLine"
-            android:maxLines="4"
-            android:minLines="1"
-            android:scrollHorizontally="false"
-
             android:imeOptions="actionSend"
+            android:inputType="textMultiLine"
+
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="4"
+            android:minHeight="40dp"
+            android:minLines="1"
 
             android:padding="8dp"
+
+            android:scrollHorizontally="false"
             android:textColor="@color/font_color64"
             android:textSize="@dimen/describe_font_size4"/>
 
