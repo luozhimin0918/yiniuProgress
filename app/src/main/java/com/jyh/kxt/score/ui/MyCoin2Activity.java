@@ -166,7 +166,7 @@ public class MyCoin2Activity extends BaseActivity implements
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        tvPunchCard.setText("已经连续签到" + (++signDays) + "天");
+        tvPunchCard.setText("已经连续签到" +signDays + "天");
 
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
