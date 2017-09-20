@@ -194,7 +194,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
-            .news_author_chat})
+            .news_author_chat, R.id.tv_comment})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -202,6 +202,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
+            case R.id.tv_comment:
                 //回复
                 if (isScrollToComment) {
                     ptrLvMessage.getRefreshableView().setSelection(2);
