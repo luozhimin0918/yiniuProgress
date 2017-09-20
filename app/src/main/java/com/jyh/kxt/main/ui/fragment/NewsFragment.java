@@ -290,7 +290,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             String titleTxtColor = localTheme ? indexTxtAd.getNight_color() : indexTxtAd.getDay_color();
             tvTxtAdvertName.setTextColor(Color.parseColor(String.valueOf(titleTxtColor)));
 
-            tvTxtAdvertName.setText(indexTxtAd.getTitle());
+            tvTxtAdvertName.setText(indexTxtAd.getTitle() );
 
             Glide.with(mFragmentContext).load(advertUrl).into(ivTxtAdvertJB);
 

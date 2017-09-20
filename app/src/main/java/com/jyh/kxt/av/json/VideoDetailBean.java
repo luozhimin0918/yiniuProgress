@@ -36,7 +36,7 @@ public class VideoDetailBean {
     private List<VideoDetailVideoBean> video;
     private String share_sina_title;
 
-    private List<SlideJson> ads;
+    private List<SlideJson> ad;
 
     public String getShare_image() {
         return share_image;
@@ -158,11 +158,11 @@ public class VideoDetailBean {
         this.share_sina_title = share_sina_title;
     }
 
-    public List<SlideJson> getAds() {
-        return ads;
+    public List<SlideJson> getAd() {
+        return ad;
     }
 
-    public void setAds(List<SlideJson> ads) {
-        this.ads = ads;
+    public void setAd(List<SlideJson> ad) {
+        this.ad = ad;
     }
 }

@@ -819,7 +819,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
 
             //fixkxt 2017/9/18 13:35 describe: 要闻的广告需要测试
-            List<SlideJson> ads = newsContentJson.getAds();
+            List<SlideJson> ads = newsContentJson.getAd();
             newsContentAd.addAdvertViews(ads);
 
             View attentionBtn = llShareContent.findViewById(R.id.ll_attention);

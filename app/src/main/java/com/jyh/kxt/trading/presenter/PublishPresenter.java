@@ -164,9 +164,7 @@ public class PublishPresenter extends BasePresenter {
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 alertDialog.dismiss();
-                if (error != null && error.getMessage() != null) {
-                    ToastView.makeText3(mContext, error.getMessage());
-                }
+                ToastView.makeText3(mContext, "发布失败");
             }
         });
     }

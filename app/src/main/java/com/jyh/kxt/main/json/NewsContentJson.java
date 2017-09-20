@@ -3,7 +3,6 @@ package com.jyh.kxt.main.json;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.jyh.kxt.av.json.CommentBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class NewsContentJson {
     private String source;          //文章来源
     private List<CommentBean> comment;    //评论列表  格式和评论接口单条格式一致
     private List<NewsJson> article; //相关文章 格式和list格式一致
-    private List<SlideJson> ads;//文章广告
+    private List<SlideJson> ad;//文章广告
 
     private String is_follow;
 
@@ -275,14 +274,11 @@ public class NewsContentJson {
         this.member_id = member_id;
     }
 
-    public List<SlideJson> getAds() {
-        if (ads == null) {
-            ads = new ArrayList<>();
-        }
-        return ads;
+    public List<SlideJson> getAd() {
+        return ad;
     }
 
-    public void setAds(List<SlideJson> ads) {
-        this.ads = ads;
+    public void setAd(List<SlideJson> ad) {
+        this.ad = ad;
     }
 }

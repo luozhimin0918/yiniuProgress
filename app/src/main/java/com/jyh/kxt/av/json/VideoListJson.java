@@ -188,7 +188,7 @@ public class VideoListJson implements Parcelable {
     }
 
     public String getShare_sina_title() {
-        if(share_sina_title == null){
+        if (share_sina_title == null) {
 
         }
         return share_sina_title;
@@ -285,4 +285,61 @@ public class VideoListJson implements Parcelable {
             return new VideoListJson[size];
         }
     };
+
+
+    //新的广告对象
+    @Transient
+    private String type; //如果是ad类型
+
+    @Transient
+    private String href;
+
+    @Transient
+    private String o_action;
+
+    @Transient
+    private String o_class;
+
+    @Transient
+    private String o_id;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public String getO_action() {
+        return o_action;
+    }
+
+    public void setO_action(String o_action) {
+        this.o_action = o_action;
+    }
+
+    public String getO_class() {
+        return o_class;
+    }
+
+    public void setO_class(String o_class) {
+        this.o_class = o_class;
+    }
+
+    public String getO_id() {
+        return o_id;
+    }
+
+    public void setO_id(String o_id) {
+        this.o_id = o_id;
+    }
 }

@@ -24,6 +24,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.ShareItemJson;
 import com.jyh.kxt.base.json.UmengShareBean;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
@@ -54,11 +55,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     private String url_video_share;
     private Context mContext;
     private List<VideoListJson> list;
+    private LayoutInflater mInflater;
 
     public VideoAdapter(Context context, List<VideoListJson> list) {
         super(list);
         this.mContext = context;
         this.list = list;
+        mInflater = LayoutInflater.from(mContext);
+
         try {
             String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
@@ -69,149 +73,200 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     }
 
     @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        VideoListJson videoListJson = list.get(position);
+        if (!"ad".equals(videoListJson.getType())) { //不是广告
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    //fixkxt 2017/9/19 14:59 describe: 增加视听列表的广告
+    @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        final ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_video, null);
-            holder.iv = (ImageView) convertView.findViewById(R.id.iv_img);
-            holder.ivMore = (ImageView) convertView.findViewById(R.id.iv_more);
-            holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-            holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
-            holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
-            holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
-            holder.tvZanCount = (TextView) convertView.findViewById(R.id.tv_zanCount);
-            holder.ivPlay = (ImageView) convertView.findViewById(R.id.iv_playBtn);
-            holder.vLine = convertView.findViewById(R.id.v_line);
+        ViewHolder holder = null;
+        ViewHolderAd holderAd = null;
 
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        setTheme(holder);
-
+        int itemViewType = getItemViewType(position);
         final VideoListJson video = list.get(position);
-        boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
-        video.setCollect(collect);
 
-        boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
-        video.setGood(good);
-
-        Glide.with(mContext)
-                .load(HttpConstant.IMG_URL + video.getPicture())
-                .error(R.mipmap.icon_def_video)
-                .override(400, 300)
-                .placeholder(R.mipmap.icon_def_video)
-                .into(holder.iv);
-        holder.tvTitle.setText(video.getTitle());
-        holder.tvZanCount.setText(video.getNum_good());
-
-        try {
-            holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils
-                    .TYPE_YMD));
-        } catch (Exception e) {
-            e.printStackTrace();
-            holder.tvTime.setText("2017-1-1");
-        }
-        holder.tvCommentCount.setText(video.getNum_comment());
-
-        int numPlay = 0;
-        try {
-            numPlay = Integer.parseInt(video.getNum_play());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (numPlay < 10000) {
-            holder.tvPlayCount.setText(String.valueOf(numPlay));
+        if (convertView == null) {
+            switch (itemViewType) {
+                case 0:
+                    holder = new ViewHolder();
+                    convertView = mInflater.inflate(R.layout.item_video, null);
+                    holder.iv = (ImageView) convertView.findViewById(R.id.iv_img);
+                    holder.ivMore = (ImageView) convertView.findViewById(R.id.iv_more);
+                    holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                    holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+                    holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
+                    holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
+                    holder.tvZanCount = (TextView) convertView.findViewById(R.id.tv_zanCount);
+                    holder.ivPlay = (ImageView) convertView.findViewById(R.id.iv_playBtn);
+                    holder.vLine = convertView.findViewById(R.id.v_line);
+                    convertView.setTag(holder);
+                    break;
+                case 1:
+                    holderAd = new ViewHolderAd();
+                    convertView = mInflater.inflate(R.layout.item_video_ad_img, parent, false);
+                    holderAd.ivAdvertView = (ImageView) convertView.findViewById(R.id.view_image);
+                    convertView.setTag(holderAd);
+                    break;
+            }
         } else {
-            float wanPlay = (float) numPlay / 10000;
-            BigDecimal b = new BigDecimal(wanPlay);
-            float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            holder.tvPlayCount.setText(f1 + "万");
+            switch (itemViewType) {
+                case 0:
+                    holder = (ViewHolder) convertView.getTag();
+                    break;
+                case 1:
+                    holderAd = (ViewHolderAd) convertView.getTag();
+                    break;
+            }
         }
 
 
-        holder.ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (url_video_share == null) {
-                    TSnackbar.make(v,
-                            "分享失败了喔,可能因为网络状况不好",
-                            TSnackbar.LENGTH_LONG,
-                            TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
-                            .setPromptThemBackground(Prompt.WARNING)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    return;
-                }
-                UmengShareBean umengShareBean = new UmengShareBean();
-                umengShareBean.setFromSource(UmengShareUtil.SHARE_ARTICLE);
-                umengShareBean.setTitle(video.getTitle());
-                umengShareBean.setWebUrl(url_video_share.replace("{id}", video.getId()));
-                umengShareBean.setImageUrl(video.getShare_image());
-                umengShareBean.setDetail(video.getIntroduce());
-                umengShareBean.setSinaTitle(video.getShare_sina_title());//替换微博的
+        if (itemViewType == 0) {
+            setTheme(holder);
 
-                List<ShareItemJson> functionList = new ArrayList<>();
-                functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+            boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
+            video.setCollect(collect);
 
-                //收藏
-                ShareItemJson collectShare = new ShareItemJson(R.drawable.sel_share_collect, "收藏");
-                functionList.add(collectShare);
-                collectShare.isSelectedView = video.isCollect();
+            boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
+            video.setGood(good);
 
-                //赞
-                ShareItemJson favourShare = new ShareItemJson(R.drawable.sel_share_ding, "赞");
-                functionList.add(favourShare);
-                favourShare.isSelectedView = video.isGood();
+            Glide.with(mContext)
+                    .load(HttpConstant.IMG_URL + video.getPicture())
+                    .error(R.mipmap.icon_def_video)
+                    .override(400, 300)
+                    .placeholder(R.mipmap.icon_def_video)
+                    .into(holder.iv);
+            holder.tvTitle.setText(video.getTitle());
+            holder.tvZanCount.setText(video.getNum_good());
 
-                functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
+            try {
+                holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils
+                        .TYPE_YMD));
+            } catch (Exception e) {
+                e.printStackTrace();
+                holder.tvTime.setText("2017-1-1");
+            }
+            holder.tvCommentCount.setText(video.getNum_comment());
+
+            int numPlay = 0;
+            try {
+                numPlay = Integer.parseInt(video.getNum_play());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (numPlay < 10000) {
+                holder.tvPlayCount.setText(String.valueOf(numPlay));
+            } else {
+                float wanPlay = (float) numPlay / 10000;
+                BigDecimal b = new BigDecimal(wanPlay);
+                float f1 = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+                holder.tvPlayCount.setText(f1 + "万");
+            }
 
 
-                UmengShareUI umengShareUI = new UmengShareUI((BaseActivity) mContext);
-                umengShareUI.showSharePopup(umengShareBean, functionList);
-
-                umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
-                    @Override
-                    public void onClickItem(final View view, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
-
-                        switch (mShareItemJson.icon) {
-                            case R.drawable.sel_share_collect:
-                                clickCollect(video, mShareItemJson, recyclerAdapter);
-                                break;
-                            case R.drawable.sel_share_ding:
-                                clickFavour(video, mShareItemJson, recyclerAdapter);
-                                break;
-                        }
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (url_video_share == null) {
+                        TSnackbar.make(v,
+                                "分享失败了喔,可能因为网络状况不好",
+                                TSnackbar.LENGTH_LONG,
+                                TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
+                                .setPromptThemBackground(Prompt.WARNING)
+                                .setMinHeight(SystemUtil.getStatuBarHeight(mContext), mContext.getResources()
+                                        .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                        return;
                     }
-                });
-            }
-        });
-        holder.tvCommentCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, VideoDetailActivity.class);
-                intent.putExtra(IntentConstant.O_ID, video.getId());
-                mContext.startActivity(intent);
-            }
-        });
+                    UmengShareBean umengShareBean = new UmengShareBean();
+                    umengShareBean.setFromSource(UmengShareUtil.SHARE_ARTICLE);
+                    umengShareBean.setTitle(video.getTitle());
+                    umengShareBean.setWebUrl(url_video_share.replace("{id}", video.getId()));
+                    umengShareBean.setImageUrl(video.getShare_image());
+                    umengShareBean.setDetail(video.getIntroduce());
+                    umengShareBean.setSinaTitle(video.getShare_sina_title());//替换微博的
 
-        holder.iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, VideoDetailActivity.class);
-                intent.putExtra(IntentConstant.O_ID, video.getId());
-                mContext.startActivity(intent);
-            }
-        });
+                    List<ShareItemJson> functionList = new ArrayList<>();
+                    functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+
+                    //收藏
+                    ShareItemJson collectShare = new ShareItemJson(R.drawable.sel_share_collect, "收藏");
+                    functionList.add(collectShare);
+                    collectShare.isSelectedView = video.isCollect();
+
+                    //赞
+                    ShareItemJson favourShare = new ShareItemJson(R.drawable.sel_share_ding, "赞");
+                    functionList.add(favourShare);
+                    favourShare.isSelectedView = video.isGood();
+
+                    functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
+
+
+                    UmengShareUI umengShareUI = new UmengShareUI((BaseActivity) mContext);
+                    umengShareUI.showSharePopup(umengShareBean, functionList);
+
+                    umengShareUI.setOnPopupFunListener(new OnPopupFunListener() {
+                        @Override
+                        public void onClickItem(final View view, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
+
+                            switch (mShareItemJson.icon) {
+                                case R.drawable.sel_share_collect:
+                                    clickCollect(video, mShareItemJson, recyclerAdapter);
+                                    break;
+                                case R.drawable.sel_share_ding:
+                                    clickFavour(video, mShareItemJson, recyclerAdapter);
+                                    break;
+                            }
+                        }
+                    });
+                }
+            });
+            holder.tvCommentCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, video.getId());
+                    mContext.startActivity(intent);
+                }
+            });
+
+            holder.iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                    intent.putExtra(IntentConstant.O_ID, video.getId());
+                    mContext.startActivity(intent);
+                }
+            });
+        } else if (itemViewType == 1) {
+            Glide.with(mContext).load(video.getPicture()).into(holderAd.ivAdvertView);
+            holderAd.ivAdvertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JumpUtils.jump((BaseActivity) mContext,
+                            video.getO_class(),
+                            video.getO_action(),
+                            video.getO_id(),
+                            video.getHref());
+                }
+            });
+        }
         return convertView;
     }
 
     /**
      * 点赞
      */
+
     private void clickFavour(final VideoListJson video, final ShareItemJson mShareItemJson, final RecyclerView.Adapter recyclerAdapter) {
         if (mShareItemJson.isSelectedView) {
             ToastView.makeText3(VideoAdapter.this.mContext, "已点赞");
@@ -333,6 +388,11 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
     public List<VideoListJson> getData() {
         return dataList;
+    }
+
+
+    class ViewHolderAd {
+        public ImageView ivAdvertView;
     }
 
     class ViewHolder {

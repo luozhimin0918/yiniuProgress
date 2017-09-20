@@ -160,7 +160,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
 
                 LinearLayout headView = mViewPointDetailActivity.commentPresenter.getHeadView();
                 AdvertImageLayout advertImageLayout = (AdvertImageLayout) headView.findViewById(R.id.comment_top_advert);
-                advertImageLayout.addAdvertViews(viewPointTradeBean.getAds());
+                advertImageLayout.addAdvertViews(viewPointTradeBean.getAd());
                 /**
                  * 添加头部到ListView
                  */

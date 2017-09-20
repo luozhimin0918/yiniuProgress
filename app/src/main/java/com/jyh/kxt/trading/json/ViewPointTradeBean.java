@@ -70,7 +70,7 @@ public class ViewPointTradeBean {
 
 
     @Transient
-    private List<SlideJson> ads;
+    private List<SlideJson> ad;
 
     @Unique
     public String o_id;
@@ -255,11 +255,11 @@ public class ViewPointTradeBean {
         this.is_follow = is_follow;
     }
 
-    public List<SlideJson> getAds() {
-        return ads;
+    public List<SlideJson> getAd() {
+        return ad;
     }
 
-    public void setAds(List<SlideJson> ads) {
-        this.ads = ads;
+    public void setAd(List<SlideJson> ad) {
+        this.ad = ad;
     }
 }
