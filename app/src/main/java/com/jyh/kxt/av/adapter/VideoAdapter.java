@@ -117,7 +117,12 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         }
         holder.tvCommentCount.setText(video.getNum_comment());
 
-        int numPlay = Integer.parseInt(video.getNum_play());
+        int numPlay = 0;
+        try {
+            numPlay = Integer.parseInt(video.getNum_play());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (numPlay < 10000) {
             holder.tvPlayCount.setText(String.valueOf(numPlay));
         } else {
