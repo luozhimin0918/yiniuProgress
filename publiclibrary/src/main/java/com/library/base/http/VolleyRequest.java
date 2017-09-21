@@ -49,6 +49,8 @@ public class VolleyRequest {
 
     private boolean isDefaultDecode = true;
 
+    private boolean isEnablePreCache = false;
+
     private String uniqueIdentification;
 
     public VolleyRequest(Context mContext, RequestQueue mQueue) {
@@ -162,6 +164,11 @@ public class VolleyRequest {
                                             resultT = (T) JsonUtil.parseArray(data, (Class) classType);
                                         }
                                         mHttpListener.onResponse(resultT);
+
+                                        if (isEnablePreCache) {
+                                            PreCacheHttpResponse.getInstance().addCacheData(url, resultT);
+                                        }
+
                                     } else {
                                         mHttpListener.onErrorResponse(new VolleyError(msg));
                                     }
@@ -231,6 +238,10 @@ public class VolleyRequest {
         }
 
         return myType;
+    }
+
+    public void enablePreCache() {
+        isEnablePreCache = true;
     }
 
 

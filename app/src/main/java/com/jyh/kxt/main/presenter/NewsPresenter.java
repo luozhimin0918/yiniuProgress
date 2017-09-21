@@ -15,6 +15,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.json.MainNewsContentJson;
+import com.library.base.http.PreCacheHttpResponse;
 import com.library.util.JsonUtil;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.ClassifyActivity;
@@ -84,7 +85,7 @@ public class NewsPresenter extends BasePresenter {
             request.setTag(getClass().getName());
         }
 
-        request.doGet(HttpConstant.INDEX_MAIN, new HttpListener<List<TypeDataJson>>() {
+        HttpListener<List<TypeDataJson>> listHttpListener = new HttpListener<List<TypeDataJson>>() {
             @Override
             protected boolean onStart() {
                 MainActivity mainActivity = (MainActivity) newsFragment.getActivity();
@@ -196,8 +197,20 @@ public class NewsPresenter extends BasePresenter {
                     }
                 }
             }
-        });
+        };
 
+        Object cacheData = PreCacheHttpResponse.getInstance().getCacheData(HttpConstant.INDEX_MAIN);
+        if (cacheData != null) {
+            try {
+                List<TypeDataJson> typeDataList = (List<TypeDataJson>) cacheData;
+                listHttpListener.onPreCacheResponse(typeDataList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.doGet(HttpConstant.INDEX_MAIN, listHttpListener);
+            }
+        } else {
+            request.doGet(HttpConstant.INDEX_MAIN, listHttpListener);
+        }
     }
 
     /**

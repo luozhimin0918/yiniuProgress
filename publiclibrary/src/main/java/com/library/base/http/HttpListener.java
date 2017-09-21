@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.library.util.EncryptionUtils;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * @author Mr'Dai
@@ -22,7 +23,7 @@ public abstract class HttpListener<T> {
     private RequestQueue mQueue;
     private VolleyRequest.MyType superclassTypeParameter;
 
-    private String uniqueIdentification ;
+    private String uniqueIdentification;
 
     protected boolean onStart() {
         return true;
@@ -110,5 +111,9 @@ public abstract class HttpListener<T> {
 
     public void setUniqueIdentification(String uniqueIdentification) {
         this.uniqueIdentification = uniqueIdentification;
+    }
+
+    public void onPreCacheResponse(T preCacheData) {
+        onResponse(preCacheData);
     }
 }
