@@ -166,7 +166,7 @@ public class MyCoin2Activity extends BaseActivity implements
         PunchCardJson punch_card = myCoinJson.getPunch_card();
         int punch_card_days = punch_card.getDays();
         signDays = punch_card_days == 0 ? 0 : punch_card_days % 7;
-        tvPunchCard.setText("已经连续签到" +signDays + "天");
+        tvPunchCard.setText("已经连续签到" + signDays + "天");
 
         List<SignJson> singList = punch_card.getRules();
         //数据模拟
@@ -184,11 +184,15 @@ public class MyCoin2Activity extends BaseActivity implements
             List adapterData = new ArrayList();
             for (TaskAllJson taskAllJson : data) {
                 String title = taskAllJson.getTitle();
+                String type = "daily_task".equals(taskAllJson.getType()) ? "0" : "1";
                 List<TaskJson> data1 = taskAllJson.getData();
                 if (data1 == null || data1.size() == 0) {
 
                 } else {
                     adapterData.add(title);
+                    for (TaskJson taskJson : data1) {
+                        taskJson.setType(type);
+                    }
                     adapterData.addAll(data1);
                 }
             }
@@ -238,11 +242,15 @@ public class MyCoin2Activity extends BaseActivity implements
             List adapterData = new ArrayList();
             for (TaskAllJson taskAllJson : data) {
                 String title = taskAllJson.getTitle();
+                String type = "daily_task".equals(taskAllJson.getType()) ? "0" : "1";
                 List<TaskJson> data1 = taskAllJson.getData();
                 if (data1 == null || data1.size() == 0) {
 
                 } else {
                     adapterData.add(title);
+                    for (TaskJson taskJson : data1) {
+                        taskJson.setType(type);
+                    }
                     adapterData.addAll(data1);
                 }
             }

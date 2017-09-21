@@ -17,8 +17,26 @@ public class TaskJson {
     private String o_id;
     private String o_action;
     private String is_finished;
+    private String type;//0 每日任务 1 新手任务
+    private String title;
 
     public TaskJson() {
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getIs_finished() {
@@ -86,7 +104,7 @@ public class TaskJson {
     }
 
     public TaskJson(String description, String award, String num_finished, String total_tasks, String o_class, String o_id, String
-            o_action, String is_finished) {
+            o_action, String is_finished, String type, String title) {
         this.description = description;
         this.award = award;
         this.num_finished = num_finished;
@@ -95,5 +113,7 @@ public class TaskJson {
         this.o_id = o_id;
         this.o_action = o_action;
         this.is_finished = is_finished;
+        this.type = type;
+        this.title = title;
     }
 }

@@ -89,8 +89,7 @@ public class TaskAdapter extends BaseListAdapter {
 
             final TaskJson task = (TaskJson) dataList.get(position);
             String is_finished = task.getIs_finished();
-            if (RegexValidateUtil.isEmpty(is_finished)) {
-                viewHolder.tvSchedule.setVisibility(View.VISIBLE);
+            if (task.getType().equals("0")) {
                 String task_succ_num = task.getNum_finished();
                 String task_sum_num = task.getTotal_tasks();
                 if (task_sum_num == null || task_sum_num.trim().equals("")) {
@@ -101,12 +100,14 @@ public class TaskAdapter extends BaseListAdapter {
 
                 viewHolder.tvSchedule.setText("完成 " + task_succ_num + "/" + task_sum_num);
                 viewHolder.ivTask.setSelected(!task_sum_num.equals("0") && task_sum_num.equals(task_succ_num));
+                viewHolder.tvTitle.setText(task.getDescription());
             } else {
-                viewHolder.tvSchedule.setVisibility(View.GONE);
                 viewHolder.ivTask.setSelected("1".equals(is_finished));
+                viewHolder.tvTitle.setText(task.getTitle());
+                viewHolder.tvSchedule.setText(task.getDescription());
             }
 
-            viewHolder.tvTitle.setText(task.getDescription());
+
             String award = task.getAward();
             viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
 
@@ -114,7 +115,7 @@ public class TaskAdapter extends BaseListAdapter {
             final String o_action = task.getO_action();
             final String o_id = task.getO_id();
 
-            if (o_class == null && o_action == null && o_id == null) {
+            if (RegexValidateUtil.isEmpty(o_class) && RegexValidateUtil.isEmpty(o_action) && RegexValidateUtil.isEmpty(o_id)) {
                 viewHolder.ivTask.setVisibility(View.GONE);
             } else {
                 viewHolder.ivTask.setVisibility(View.VISIBLE);
