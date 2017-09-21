@@ -202,7 +202,7 @@ public class UmengShareUI {
         @Override
         public void onClickItem(View view, ShareItemJson mShareItemJson, RecyclerView.Adapter recyclerAdapter) {
 
-            if (mUmengShareBean == null) {
+            if (mUmengShareBean == null || mUmengShareBean.getWebUrl() == null) {
                 ToastView.makeText3(view.getContext(), "数据加载中,请稍后再试");
                 return;
             }
