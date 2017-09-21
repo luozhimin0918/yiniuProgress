@@ -168,9 +168,8 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
 
                 if (mainInitJson.getIndex_ad() != null) {
                     rvTxtAdvertLayout.setVisibility(View.GONE);
-
                     showImageAd(imgAdvert);
-                } else if (mainInitJson.getFlash_ad() != null) {
+                } else if (mainInitJson.getIndex_top_ad() != null) {
                     imgAdvert.setVisibility(View.GONE);
                     showTextAd();
                 }
@@ -254,8 +253,14 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      * @param imgAdvert
      */
     private void showImageAd(ImageView imgAdvert) {
-        String advertIconUrl = mainInitJson.getIndex_ad().getIcon();
+        MainInitJson.IndexAdBean indexAd = mainInitJson.getIndex_ad();
+        String advertIconUrl = indexAd.getIcon();
         Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
+
+        if (indexAd.getShow() == 1) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+        }
 
         imgAdvert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +295,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             String titleTxtColor = localTheme ? indexTxtAd.getNight_color() : indexTxtAd.getDay_color();
             tvTxtAdvertName.setTextColor(Color.parseColor(String.valueOf(titleTxtColor)));
 
-            tvTxtAdvertName.setText(indexTxtAd.getTitle() );
+            tvTxtAdvertName.setText(indexTxtAd.getTitle());
 
             Glide.with(mFragmentContext).load(advertUrl).into(ivTxtAdvertJB);
 

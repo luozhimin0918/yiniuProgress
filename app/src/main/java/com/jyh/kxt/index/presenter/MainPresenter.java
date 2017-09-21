@@ -363,6 +363,12 @@ public class MainPresenter extends BasePresenter {
 
             //保存启动页图片
             MainInitJson mainInitJson = JSONObject.parseObject(jsonStr, MainInitJson.class);
+
+            if (mMainActivity.homeFragment != null) {
+                mMainActivity.homeFragment.notifyNavLayout();
+            }
+
+
             String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
             final MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
             if (loadAd != null && loadAd.getPicture() != null && !adImageUrl.equals(loadAd.getPicture())) {

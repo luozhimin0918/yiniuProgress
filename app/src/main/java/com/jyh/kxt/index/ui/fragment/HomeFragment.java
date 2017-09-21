@@ -16,6 +16,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.ui.fragment.FlashFragment;
 import com.jyh.kxt.main.ui.fragment.NewsFragment;
@@ -146,6 +147,11 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         } else {
             flashFragment.onTabSelect(flActionBarFun);
         }
+    }
+
+    public void notifyNavLayout() {
+        int currentTab = stlNavigationBar.getCurrentTab();
+        onPageSelected(currentTab);
     }
 
     @Override

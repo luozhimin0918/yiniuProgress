@@ -211,7 +211,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             if (funView == null) {
                 String loadInit = SPUtils.getString(mFragmentContext, SpConstant.INIT_LOAD_APP_CONFIG);
                 mainInitJson = JSON.parseObject(loadInit, MainInitJson.class);
-                MainInitJson.IndexAdBean flash_ad = mainInitJson.getFlash_ad();
+                MainInitJson.IndexAdBean flashAd = mainInitJson.getFlash_ad();
 
                 funView = LayoutInflater.from(mFragmentContext).inflate(R.layout.action_bar_flash, flActionBarFun, false);
                 imgFiltrate = (ImageView) funView.findViewById(R.id.iv_right_icon1);
@@ -226,9 +226,16 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
 
                 ImageView imgAdvert = (ImageView) funView.findViewById(R.id.iv_right_icon);
 
-                if (flash_ad != null) {
+                if (flashAd != null) {
                     imgAdvert.setVisibility(View.VISIBLE);
-                    String advertIconUrl = flash_ad.getIcon();
+                    String advertIconUrl = flashAd.getIcon();
+
+                    if(flashAd.getShow() == 1){
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.mainPresenter.showPopAdvertisement(flashAd);
+                    }
+
+
                     Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
                     imgAdvert.setOnClickListener(new View.OnClickListener() {
                         @Override
