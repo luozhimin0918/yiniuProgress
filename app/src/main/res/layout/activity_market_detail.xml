@@ -144,7 +144,7 @@
                             android:gravity="center"
                             android:tag="text"
                             android:text="分时"
-                            android:textColor="@color/blue1"/>
+                            android:textColor="@color/font_color2"/>
 
                     </RelativeLayout>
 

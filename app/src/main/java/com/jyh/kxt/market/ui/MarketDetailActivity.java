@@ -161,6 +161,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
 
     public boolean portrait = true;
     private PopupWindow popupUtil;
+    private RelativeLayout itemView;
 
     @OnClick({R.id.ll_market_detail_optional,
             R.id.ll_market_detail_share,
@@ -294,16 +295,21 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                     switch (position) {
                         case 0:
                             clickNavigationPosition = 1;
+                            setHighLightView(itemView);
                             break;
                         case 1:
                             clickNavigationPosition = 2;
+                            setHighLightView(itemView);
                             break;
                         case 2:
                             clickNavigationPosition = 3;
+                            setHighLightView(itemView);
                             break;
                         case 3:
                             clickNavigationPosition = 4;
+                            setHighLightView(itemView);
                             break;
+
                     }
                     requestChartData(clickNavigationPosition);
                     popupUtil.dismiss();
@@ -411,7 +417,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
             R.id.market_chart_fen30_land,
             R.id.market_chart_fen60_land})
     public void onNavigationItemClick(View view) {
-        RelativeLayout itemView = (RelativeLayout) view;
+        itemView = (RelativeLayout) view;
 
         if (itemView != marketChartMinute && itemView == clickOldNavigationView) {
         } else {
@@ -420,18 +426,22 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 case R.id.market_chart_fen5_land:
                     clickNavigationPosition = 1;
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_fen15_land:
                     clickNavigationPosition = 2;
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_fen30_land:
                     clickNavigationPosition = 3;
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_fen60_land:
                     clickNavigationPosition = 4;
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_fenshi:
                 case R.id.market_chart_fenshi_land:
@@ -440,6 +450,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                         popupUtil.dismiss();
                     marketChartMinuteTv.setText("分钟");
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_day:
                 case R.id.market_chart_rik_land:
@@ -448,6 +459,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                         popupUtil.dismiss();
                     marketChartMinuteTv.setText("分钟");
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_week:
                 case R.id.market_chart_zhouk_land:
@@ -456,6 +468,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                         popupUtil.dismiss();
                     marketChartMinuteTv.setText("分钟");
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_month:
                 case R.id.market_chart_yue1_land:
@@ -464,14 +477,13 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                         popupUtil.dismiss();
                     marketChartMinuteTv.setText("分钟");
                     requestChartData(clickNavigationPosition);
+                    setHighLightView(itemView);
                     break;
                 case R.id.market_chart_minute:
                     showMinuteSelView();
                     break;
             }
         }
-
-        setHighLightView(itemView);
     }
 
     /**
