@@ -189,11 +189,10 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
         List<ShareItemJson> functionList = new ArrayList<>();
 
         functionList.add(new ShareItemJson(UmengShareUtil.FUN_COPY_URL, R.mipmap.icon_share_link, "复制链接"));
+        functionList.add(new ShareItemJson(R.mipmap.icon_point_jb, "举报"));
 
         UserJson userInfo = LoginUtils.getUserInfo(getContext());
         if (userInfo != null) {
-            functionList.add(new ShareItemJson(R.mipmap.icon_point_jb, "举报"));
-
             if (userInfo.getWriter_id() != null) {
                 functionList.add(new ShareItemJson(R.mipmap.icon_point_share, "转发"));
 
