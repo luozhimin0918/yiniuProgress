@@ -110,12 +110,22 @@ public class TaskAdapter extends BaseListAdapter {
             String award = task.getAward();
             viewHolder.tvScoreNum.setText((award == null || "".equals(award.trim())) ? "" : "+" + award);
 
+            final String o_class = task.getO_class();
+            final String o_action = task.getO_action();
+            final String o_id = task.getO_id();
+
+            if (o_class == null && o_action == null && o_id == null) {
+                viewHolder.ivTask.setVisibility(View.GONE);
+            } else {
+                viewHolder.ivTask.setVisibility(View.VISIBLE);
+            }
+
             final ViewHolder finalViewHolder = viewHolder;
             viewHolder.ivTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (finalViewHolder.ivTask.isSelected()) return;
-                    JumpUtils.jump((BaseActivity) mContext, task.getO_class(), task.getO_action(), task.getO_id(), null);
+                    JumpUtils.jump((BaseActivity) mContext, o_class, o_action, o_id, null);
                 }
             });
 
