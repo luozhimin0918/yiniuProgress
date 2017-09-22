@@ -65,7 +65,13 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
         stlNavigationBar.setTabData(mTitles);
         stlNavigationBar.setOnTabSelectListener(this);
         changeUserImg(LoginUtils.getUserInfo(getContext()));
-        onTabSelect(0);
+
+        stlNavigationBar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onTabSelect(0);
+            }
+        },600);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

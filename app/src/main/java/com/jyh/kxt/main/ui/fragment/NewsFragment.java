@@ -32,6 +32,7 @@ import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.main.presenter.NewsPresenter;
 import com.jyh.kxt.market.bean.MarketItemBean;
+import com.library.manager.ActivityManager;
 import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.tablayout.SlidingTabLayout;
@@ -258,8 +259,12 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         Glide.with(mFragmentContext).load(advertIconUrl).into(imgAdvert);
 
         if (indexAd.getShow() == 1) {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+            try {
+                MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         imgAdvert.setOnClickListener(new View.OnClickListener() {

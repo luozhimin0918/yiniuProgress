@@ -34,6 +34,7 @@ import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.jyh.kxt.main.widget.FastInfoPullPinnedListView;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
+import com.library.manager.ActivityManager;
 import com.library.util.NetUtils;
 import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
@@ -230,9 +231,13 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     imgAdvert.setVisibility(View.VISIBLE);
                     String advertIconUrl = flashAd.getIcon();
 
-                    if(flashAd.getShow() == 1){
-                        MainActivity mainActivity = (MainActivity) getActivity();
-                        mainActivity.mainPresenter.showPopAdvertisement(flashAd);
+                    if (flashAd.getShow() == 1) {
+                        try {
+                            MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
+                            mainActivity.mainPresenter.showPopAdvertisement(flashAd);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
 

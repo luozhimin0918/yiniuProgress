@@ -378,7 +378,7 @@ public class MainPresenter extends BasePresenter {
                         try {
                             FutureTarget<File> future = Glide.with(mContext)
                                     .load(loadAd.getPicture())
-                                    .downloadOnly(720, 1080);
+                                    .downloadOnly(/*720, 1080*/320,480);
                             future.get();
                             SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
                         } catch (Exception e) {
@@ -404,7 +404,7 @@ public class MainPresenter extends BasePresenter {
         alertDialog.setView(contentView);
 
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
-        animation.setDuration(1 * 1000);
+        animation.setDuration(1000);
         animation.setInterpolator(new AnticipateOvershootInterpolator());
         contentView.startAnimation(animation);
 
