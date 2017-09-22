@@ -285,7 +285,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      */
     private void showTextAd() {
 //        //白天还是夜间
-        if (mainInitJson == null || mainInitJson.getFlash_ad() == null) {
+        if (mainInitJson == null || mainInitJson.getIndex_top_ad() == null) {
             return;
         }
         try {
