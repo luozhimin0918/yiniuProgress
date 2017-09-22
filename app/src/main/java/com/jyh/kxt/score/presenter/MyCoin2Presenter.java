@@ -1,5 +1,7 @@
 package com.jyh.kxt.score.presenter;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,6 +131,7 @@ public class MyCoin2Presenter extends BasePresenter {
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo
                         (mContext).getUid(), 1, myCoin2Activity.task_state)));
                 ToastView.makeText(mContext, "签到成功!");
+                playSound();
             }
 
             @Override
@@ -215,4 +218,16 @@ public class MyCoin2Presenter extends BasePresenter {
         ivSignGou.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 新消息声音
+     */
+    private SoundPool mSoundPool;
+
+    private void playSound() {
+        if (mSoundPool == null) {
+            mSoundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        }
+        mSoundPool.load(mContext, R.raw.money, 1);
+        mSoundPool.play(1, 1, 1, 0, 0, 1);
+    }
 }
