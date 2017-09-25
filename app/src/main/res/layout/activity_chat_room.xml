@@ -75,12 +75,6 @@
                 android:scaleType="center"
                 android:src="@mipmap/icon_fb_xn"/>
 
-            <ImageView
-                android:id="@+id/iv_publish_send"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:scaleType="center"
-                android:src="@mipmap/icon_chat_sen"/>
         </LinearLayout>
 
         <com.jyh.kxt.base.util.emoje.EmoticonsEditText

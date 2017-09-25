@@ -22,6 +22,7 @@ import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
 import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.presenter.ChatRoomPresenter;
+import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
 
@@ -47,7 +48,6 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
 
     @BindView(R.id.publish_content_et) public EmoticonsEditText publishContentEt;
     @BindView(R.id.iv_publish_emoji) ImageView ivPublishEmoji;
-    @BindView(R.id.iv_publish_send)  public ImageView ivPublishSend;
 
     @BindView(R.id.rl_keyboard_above) RelativeLayout rlKeyboardAboveLayout;
     @BindView(R.id.fl_emotion_layout) FrameLayout flContent;
@@ -72,12 +72,18 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
 
         emotionPresenter.initEmotionView(this, flContent, publishContentEt, rlKeyboardAboveLayout, ivPublishEmoji);
         chatRoomPresenter.initPullListView();
+        emotionPresenter.setSendMessage(new EmotionPresenter.ISendMessage() {
+            @Override
+            public void sendMessage() {
+                chatRoomPresenter.prepareSendInfo();
+            }
+        });
 
         SoftKeyBoardListener.setListener(this, this);
 
         tvBarTitle.setText(otherName);
         ivBarFunction.setImageResource(R.mipmap.icon_msg_usercenter);
-
+        ChatSocketUtil.getInstance().setChatRoomIn(true);
         EventBus.getDefault().register(this);
     }
 
@@ -96,7 +102,7 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
         }
     }
 
-    @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.iv_publish_emoji, R.id.iv_publish_send})
+    @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.iv_publish_emoji})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -109,9 +115,6 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
                 break;
             case R.id.iv_publish_emoji:
                 emotionPresenter.clickEmoJeView();
-                break;
-            case R.id.iv_publish_send:
-                chatRoomPresenter.prepareSendInfo();
                 break;
         }
     }
@@ -181,6 +184,7 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
             chatRoomPresenter.onDestroy();
         }
         super.onDestroy();
+        ChatSocketUtil.getInstance().setChatRoomIn(false);
         EventBus.getDefault().unregister(this);
     }
 }

@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -274,14 +273,14 @@ public class EmoticonSimpleTextView extends TextView {
                             TextGifDrawable gifDrawable = new TextGifDrawable(gifFile);
                             gifDrawable.setTextView(EmoticonSimpleTextView.this);
 
-                            if ("default".equals(emoJeName) ||
-                                    "paobing".equals(emoJeName) ||
-                                    "baolixiong".equals(emoJeName)) {
-
-                                gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
-                            } else {
-                                gifDrawable.setBounds(0, 0, emoJeSize, emoJeSize);
-                            }
+//                            if ("default".equals(emoJeName) ||
+//                                    "paobing".equals(emoJeName) ||
+//                                    "baolixiong".equals(emoJeName)) {
+//
+//                                gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
+//                            } else {
+//                                gifDrawable.setBounds(0, 0, emoJeSize, emoJeSize);
+//                            }
                             ImageSpan mEmoJeImageSpan = new ImageSpan(gifDrawable, ImageSpan.ALIGN_BASELINE);
                             currentSpannable.setSpan(
                                     mEmoJeImageSpan,

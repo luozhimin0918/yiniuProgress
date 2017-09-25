@@ -28,6 +28,7 @@ import de.tavendo.autobahn.WebSocketOptions;
 
 public class ChatSocketUtil {
     private static ChatSocketUtil chatSocketUtil;
+    private boolean isChatRoomIn;
 
     public static ChatSocketUtil getInstance() {
         if (chatSocketUtil == null) {
@@ -137,5 +138,13 @@ public class ChatSocketUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isChatRoomIn() {
+        return isChatRoomIn;
+    }
+
+    public void setChatRoomIn(boolean chatRoomIn) {
+        isChatRoomIn = chatRoomIn;
     }
 }

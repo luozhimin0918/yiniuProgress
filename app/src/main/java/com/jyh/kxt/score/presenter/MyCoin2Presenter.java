@@ -215,7 +215,6 @@ public class MyCoin2Presenter extends BasePresenter {
                                     myCoin2Activity.drawerSignContent.animateClose();
 
                                     signInScore = signJson.getAward();
-
                                     playAnimation(v);
                                     playSound();
 

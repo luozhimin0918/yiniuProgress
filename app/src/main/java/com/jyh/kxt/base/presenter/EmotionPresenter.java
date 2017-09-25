@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
@@ -26,6 +27,10 @@ import com.library.util.SystemUtil;
 
 public class EmotionPresenter extends BasePresenter {
 
+    public interface ISendMessage {
+        public void sendMessage();
+    }
+
     private Activity mActivity;
     /**
      * 空区的显示状态  0 不显示  1 软键盘 2 EmoJe表情
@@ -40,6 +45,24 @@ public class EmotionPresenter extends BasePresenter {
     private EmoticonsEditText eetContentView;
     private ViewGroup vgKeyboardAboveLayout;
     private EmoticonLinearLayout ellEmoJeLayout;
+
+    private TextView tvSendMessage;
+
+    private ISendMessage iSendMessage;
+
+    public void setSendMessage(ISendMessage iSendMessage) {
+        this.iSendMessage = iSendMessage;
+
+        if (tvSendMessage != null) {
+            tvSendMessage.setVisibility(View.VISIBLE);
+            tvSendMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EmotionPresenter.this.iSendMessage.sendMessage();
+                }
+            });
+        }
+    }
 
     /**
      * 空白区域的高度
@@ -72,6 +95,8 @@ public class EmotionPresenter extends BasePresenter {
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ellEmoJeLayout = (EmoticonLinearLayout) inflater.inflate(R.layout.view_emoje_content, flParentLayout, false);
+            tvSendMessage = (TextView) ellEmoJeLayout.findViewById(R.id.dtv_send_msg);
+
             ellEmoJeLayout.setLayoutParams(emoJeParams);
             ellEmoJeLayout.setOnlyAllowSmallEmoJe(true);
             ellEmoJeLayout.initData();
@@ -106,7 +131,9 @@ public class EmotionPresenter extends BasePresenter {
                     return false;
                 }
             });
-
+            if (iSendMessage == null) {
+                tvSendMessage.setVisibility(View.GONE);
+            }
         }
     }
 

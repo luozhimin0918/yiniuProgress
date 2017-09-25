@@ -757,6 +757,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onChatMessage(ChatRoomJson chatRoomJson) {
+        if (ChatSocketUtil.getInstance().isChatRoomIn()) {
+            return;
+        }
 
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo != null) {
@@ -935,10 +938,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * @param signInfoJson
      */
     private void updateLeftSignState(SignInfoJson signInfoJson) {
+
+        rlUnSign.setVisibility(View.GONE);
+        rlUnTask.setVisibility(View.GONE);
+
         if (signInfoJson.getSign_state() == 0) {
             rlUnSign.setVisibility(View.VISIBLE);
         } else {
-            rlUnSign.setVisibility(View.GONE);
 
             if (signInfoJson.getTask_state() == 0) {
                 rlUnTask.setVisibility(View.VISIBLE);
@@ -946,7 +952,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 rlUnTask.setVisibility(View.GONE);
             }
         }
-
 
         if (signInfoJson.getSign_state() == 1 && signInfoJson.getTask_state() == 1) {
             //任务已经完成

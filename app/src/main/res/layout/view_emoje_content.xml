@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/theme1"
     android:orientation="vertical">
 
@@ -10,10 +11,10 @@
     <com.jyh.kxt.base.util.emoje.EmoticonViewPager
         android:id="@+id/view_eiv"
         android:layout_width="match_parent"
-        android:tag="evp_emoje"
         android:layout_height="170dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:tag="evp_emoje">
     </com.jyh.kxt.base.util.emoje.EmoticonViewPager>
 
     <!--圆圈 ○●○○○-->
@@ -28,20 +29,45 @@
 
     </LinearLayout>
 
-    <include android:id="@+id/view_line" layout="@layout/view_line"></include>
+    <include
+        android:id="@+id/view_line"
+        layout="@layout/view_line"></include>
 
-    <HorizontalScrollView
+    <RelativeLayout
+        android:id="@+id/rl_nav_view"
         android:layout_width="match_parent"
         android:layout_height="40dp">
-        <!--表情包导航栏 -->
-        <LinearLayout
-            android:id="@+id/ll_emoje_nav"
+
+        <HorizontalScrollView
             android:layout_width="match_parent"
+            android:layout_toLeftOf="@+id/dtv_send_msg"
+            android:layout_height="40dp">
+            <!--表情包导航栏 -->
+            <LinearLayout
+                android:id="@+id/ll_emoje_nav"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:tag="ll_label">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <com.jyh.kxt.base.custom.DiscolorTextView
+            android:visibility="gone"
+            android:id="@+id/dtv_send_msg"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:tag="ll_label">
+            android:minWidth="60dp"
+            android:layout_weight="1"
+            android:background="@color/font_color8"
+            android:gravity="center"
+            android:text="发送"
+            app:clickFontColor="@color/font_color8"
+            app:defaultFontColor="@color/font_color4"
+            android:textSize="@dimen/describe_font_size2"/>
 
-        </LinearLayout>
-    </HorizontalScrollView>
-
+    </RelativeLayout>
 </com.jyh.kxt.base.util.emoje.EmoticonLinearLayout>
