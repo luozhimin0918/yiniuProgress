@@ -38,6 +38,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -204,7 +205,9 @@ public class MyCoin2Presenter extends BasePresenter {
                 @Override
                 public void onClick(final View v) {
 
-                    if (!myCoin2Activity.signed) {
+                    if (myCoin2Activity.signed) {
+                        ToastView.makeText3(mContext, "今日已签到");
+                    } else {
                         if (finalPosition == punchCardDays) {
                             punchCardView.setOnClickListener(new View.OnClickListener() {
                                 @Override
