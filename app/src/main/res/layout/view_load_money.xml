@@ -39,7 +39,7 @@
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
                 android:text="+15"
-                android:textSize="20sp"/>
+                android:textSize="23sp"/>
 
         </RelativeLayout>
     </FrameLayout>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -205,6 +206,12 @@ public class MyCoin2Presenter extends BasePresenter {
                 @Override
                 public void onClick(final View v) {
 
+//                    myCoin2Activity.drawerSignContent.animateClose();
+//
+//                    signInScore = "5";
+//                    playAnimation(v);
+//                    playSound();
+
                     if (myCoin2Activity.signed) {
                         ToastView.makeText3(mContext, "今日已签到");
                     } else {
@@ -308,7 +315,7 @@ public class MyCoin2Presenter extends BasePresenter {
 
                                         //移动 ->  平移 -> 缩放  -> 透明  动画
                                         Point startPoint = new Point();
-                                        startPoint.x = (int) (clickView.getX() + clickView.getWidth() / 2);
+                                        startPoint.x = (int) (clickView.getX() + clickView.getWidth() / 2 - loadMoneyLayout.getWidth() / 2);
                                         startPoint.y = (int) (clickView.getY() + clickView.getHeight() / 2);
 
                                         // 能否直接得到popupView 的位置
@@ -317,7 +324,8 @@ public class MyCoin2Presenter extends BasePresenter {
                                         endPoint.y = screenDisplay.heightPixels / 2 - loadMoneyLayout.getHeight() / 2;
 
                                         ValueAnimator anim = ValueAnimator.ofObject(new GoldPointEvaluator(), startPoint, endPoint);
-                                        anim.setDuration(2 * 1000);
+                                        anim.setInterpolator(new DecelerateInterpolator());
+                                        anim.setDuration(1500);
 
                                         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                             @Override
@@ -403,7 +411,7 @@ public class MyCoin2Presenter extends BasePresenter {
 
                         LinearInterpolator linearInterpolator = new LinearInterpolator();
                         mRotateAnimation.setInterpolator(linearInterpolator);
-                        mRotateAnimation.setDuration(2000);
+                        mRotateAnimation.setDuration(1000);
                         //设置动画持续时间
                         mRotateAnimation.setRepeatCount(-1);
                         //设置重复次数
@@ -425,7 +433,7 @@ public class MyCoin2Presenter extends BasePresenter {
                             loadMoneyEncircle.clearAnimation();
                             loadMoneyEncircle.setVisibility(View.GONE);
 
-                            loadMoneyAdd.setText(signInScore);
+                            loadMoneyAdd.setText("+ " + signInScore);
                             loadMoneyAdd.setVisibility(View.VISIBLE);
                             moneyAddAnimation = AnimationUtils.loadAnimation(mContext, R.anim.moeny_add_anim);
                             loadMoneyAdd.startAnimation(moneyAddAnimation);
@@ -438,10 +446,10 @@ public class MyCoin2Presenter extends BasePresenter {
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
-                                    loadMoneyAdd.clearAnimation();
                                     loadMoneyAdd.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                            loadMoneyAdd.clearAnimation();
                                             simplePopupWindow.dismiss();
                                         }
                                     }, 500);
