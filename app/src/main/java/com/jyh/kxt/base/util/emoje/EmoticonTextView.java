@@ -201,14 +201,7 @@ public class EmoticonTextView extends TextView {
                             TextGifDrawable gifDrawable = new TextGifDrawable(gifFile);
                             gifDrawable.setTextView(EmoticonTextView.this);
 
-//                            if ("default".equals(emoJeName) ||
-//                                    "paobing".equals(emoJeName) ||
-//                                    "baolixiong".equals(emoJeName)) {
-//
-//                                gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
-//                            } else {
-//                                gifDrawable.setBounds(0, 0, emoJeSize, emoJeSize);
-//                            }
+                            gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
                             ImageSpan mEmoJeImageSpan = new ImageSpan(gifDrawable, ImageSpan.ALIGN_BASELINE);
                             currentSpannable.setSpan(
                                     mEmoJeImageSpan,
