@@ -36,24 +36,25 @@
     <ImageView
         android:id="@+id/iv_flash_image"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:scaleType="fitXY"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="5dp"
-        android:layout_height="wrap_content"/>
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
 
-    <com.jyh.kxt.base.widget.AdvertImageLayout
-        android:id="@+id/ll_ad_flash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         />
+
+    <com.jyh.kxt.base.widget.AdvertImageLayout
+        android:id="@+id/ll_ad_flash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 
     <LinearLayout
         android:id="@+id/ll_tj"
