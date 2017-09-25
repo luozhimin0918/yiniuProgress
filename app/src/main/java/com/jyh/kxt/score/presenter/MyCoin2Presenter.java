@@ -1,14 +1,9 @@
 package com.jyh.kxt.score.presenter;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.view.ViewCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +38,6 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
-import com.library.widget.window.ToastView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -53,7 +46,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -266,6 +258,9 @@ public class MyCoin2Presenter extends BasePresenter {
 
     private void playAnimation(final View clickView) {
 
+        if (simplePopupWindow != null) {
+            return;
+        }
         simplePopupWindow = new SimplePopupWindow(myCoin2Activity, 1.0f, Gravity.CENTER, 0, WindowManager.LayoutParams.MATCH_PARENT);
         simplePopupWindow.setSimplePopupListener(
                 new SimplePopupWindow.SimplePopupListener() {
