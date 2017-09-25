@@ -2,6 +2,8 @@ package com.jyh.kxt.base.widget;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,20 @@ public class SimplePopupWindow extends PopupWindow {
         initPopupWindow();
     }
 
+    private float alpha = 0.5f;
+    private int style = 0;
+    private int gravity = Gravity.BOTTOM;
+    private int height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+    public SimplePopupWindow(Activity mActivity, float alpha, int gravity, int style,int height) {
+        this.mActivity = mActivity;
+        this.alpha = alpha;
+        this.gravity = gravity;
+        this.style = style;
+        this.height = height;
+        initPopupWindow();
+    }
+
     public interface SimplePopupListener {
         void onCreateView(View popupView);
 
@@ -38,7 +54,7 @@ public class SimplePopupWindow extends PopupWindow {
 
     public void initPopupWindow() {
         setWidth(WindowManager.LayoutParams.MATCH_PARENT);
-        setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        setHeight(height);
 
         setFocusable(true);
         setOutsideTouchable(true);
@@ -46,8 +62,10 @@ public class SimplePopupWindow extends PopupWindow {
         ColorDrawable dw = new ColorDrawable(0X00000000);
         setBackgroundDrawable(dw);
 
-        setAnimationStyle(R.style.PopupWindow_Style2);
-        darkenBackground(mActivity, 0.5f);
+        if (style != 0) {
+            setAnimationStyle(R.style.PopupWindow_Style2);
+        }
+        darkenBackground(mActivity, alpha);
 
         setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -69,7 +87,7 @@ public class SimplePopupWindow extends PopupWindow {
             simplePopupListener.onCreateView(popupView);
         }
         setContentView(popupView);
-        showAtLocation(popupView, Gravity.BOTTOM, 0, 0);
+        showAtLocation(popupView, gravity, 0, 0);
     }
 
     private void darkenBackground(Activity mActivity, float alpha) {
@@ -77,4 +95,5 @@ public class SimplePopupWindow extends PopupWindow {
         lp.alpha = alpha;
         mActivity.getWindow().setAttributes(lp);
     }
+
 }

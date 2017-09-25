@@ -55,7 +55,7 @@ public class MyCoin2Activity extends BaseActivity implements
      * 抽屉相关视图
      */
     @BindView(R.id.mdsd_alpha_view) View vAlphaView;
-    @BindView(R.id.mdsd_sign_content) MultiDirectionSlidingDrawer drawerSignContent;
+    @BindView(R.id.mdsd_sign_content) public MultiDirectionSlidingDrawer drawerSignContent;
 
     private MyCoin2Presenter myCoin2Presenter;
 
