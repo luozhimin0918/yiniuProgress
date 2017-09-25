@@ -1,5 +1,6 @@
 package com.jyh.kxt.base.constant;
 
+import com.jyh.kxt.BuildConfig;
 import com.library.base.http.VarConstant;
 import com.library.util.EncryptionUtils;
 
@@ -29,13 +30,25 @@ public class HttpConstant {
 
     }
 
-    public static final String OFFICIAL = "http://www.kxt.com";//官网
+    //默认使用测试环境
+    public static String BASE_URL = "https://kxtadi.kuaixun56.com/";
 
-    //                    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
-//    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
-    public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
+    static {
+        if (!BuildConfig.DEBUG) {
+            BASE_URL = "https://kxtadi.kuaixun56.com/";
+        } else {
+            BASE_URL = "http://test.kxtadi.kuaixun56.com/";
+        }
+    }
+
+    // public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
+    // public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
+    // final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
     //    public static final String IMG_URL = "http://img.kxt.com/";
+
+    public static final String OFFICIAL = "http://www.kxt.com";//官网
+
     public static final String IMG_URL = "";
     public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
@@ -273,7 +286,7 @@ public class HttpConstant {
     /**
      * web分享
      */
-    public static final String SHARE_WEB = BASE_URL + "webview/share"+VarConstant.HTTP_CONTENT;
+    public static final String SHARE_WEB = BASE_URL + "webview/share" + VarConstant.HTTP_CONTENT;
 
 
 }

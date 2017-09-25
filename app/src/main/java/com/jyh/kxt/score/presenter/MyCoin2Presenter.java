@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
@@ -64,6 +65,8 @@ public class MyCoin2Presenter extends BasePresenter {
     @BindObject private MyCoin2Activity myCoin2Activity;
 
     private VolleyRequest request;
+
+    private String signInScore;
 
     public MyCoin2Presenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -152,14 +155,11 @@ public class MyCoin2Presenter extends BasePresenter {
                 myCoin2Activity.punchCardSucceed(awardInt);
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_COIN_SIGN, new SignInfoJson(LoginUtils.getUserInfo
                         (mContext).getUid(), 1, myCoin2Activity.task_state)));
-                ToastView.makeText(mContext, "签到成功!");
-                playSound();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                ToastView.makeText(mContext, "签到失败!");
             }
         });
     }
@@ -184,7 +184,7 @@ public class MyCoin2Presenter extends BasePresenter {
         LayoutInflater factory = LayoutInflater.from(mContext);
 
         for (int position = 0; position < signJsonList.size(); position++) {
-            SignJson signJson = signJsonList.get(position);
+            final SignJson signJson = signJsonList.get(position);
 
             final View punchCardView = factory.inflate(R.layout.item_punch_card, myCoin2Activity.flPunchCardTab, false);
 
@@ -211,15 +211,19 @@ public class MyCoin2Presenter extends BasePresenter {
             punchCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    myCoin2Activity.drawerSignContent.animateClose();
-                    playAnimation(v);
-                    playSound();
 
                     if (!myCoin2Activity.signed) {
                         if (finalPosition == punchCardDays) {
                             punchCardView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    myCoin2Activity.drawerSignContent.animateClose();
+
+                                    signInScore = signJson.getAward();
+
+                                    playAnimation(v);
+                                    playSound();
+
                                     requestPunchCard(punchCardView, signJsonList, finalPosition);
                                 }
                             });
@@ -269,7 +273,6 @@ public class MyCoin2Presenter extends BasePresenter {
                     private ImageView loadMoneyEncircle;
                     private ImageView loadMoneyInherent;
                     private TextView loadMoneyAdd;
-                    private TextView loadMoneyAddTip;
                     private RelativeLayout loadMoneyLayout;
 
                     private View popupView;
@@ -282,7 +285,6 @@ public class MyCoin2Presenter extends BasePresenter {
                         loadMoneyEncircle = ButterKnife.findById(popupView, R.id.load_money_encircle);
                         loadMoneyInherent = ButterKnife.findById(popupView, R.id.load_money_inherent);
                         loadMoneyAdd = ButterKnife.findById(popupView, R.id.load_money_add);
-                        loadMoneyAddTip = ButterKnife.findById(popupView, R.id.load_money_add_tip);
                         loadMoneyLayout = ButterKnife.findById(popupView, R.id.load_money_layout);
 
 
@@ -299,7 +301,7 @@ public class MyCoin2Presenter extends BasePresenter {
                                                                int oldRight,
                                                                int oldBottom) {
 
-                                        if (isAnimationStart) {
+                                        if (isAnimationStart) { //防止多次OnLayoutChange
                                             return;
                                         }
                                         isAnimationStart = true;
@@ -321,12 +323,12 @@ public class MyCoin2Presenter extends BasePresenter {
                                         anim.setDuration(2 * 1000);
 
                                         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
                                             @Override
                                             public void onAnimationUpdate(ValueAnimator animation) {
                                                 onUpdateDraw(animation);
                                             }
                                         });
+
                                         anim.addListener(new Animator.AnimatorListener() {
                                             @Override
                                             public void onAnimationStart(Animator animation) {
@@ -335,29 +337,7 @@ public class MyCoin2Presenter extends BasePresenter {
 
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
-                                                if (rotate3dAnimation != null) {
-                                                    rotate3dAnimation.setRepeatCount(1);
-                                                }
-                                                if (mRotateAnimation != null) {
-                                                    mRotateAnimation.setRepeatCount(2);
-                                                    mRotateAnimation.setAnimationListener(new Animation.AnimationListener() {
-                                                        @Override
-                                                        public void onAnimationStart(Animation animation) {
-
-                                                        }
-
-                                                        @Override
-                                                        public void onAnimationEnd(Animation animation) {
-                                                            loadMoneyEncircle.clearAnimation();
-                                                            loadMoneyEncircle.setVisibility(View.GONE);
-                                                        }
-
-                                                        @Override
-                                                        public void onAnimationRepeat(Animation animation) {
-
-                                                        }
-                                                    });
-                                                }
+                                                playEndAnimation();
                                             }
 
                                             @Override
@@ -386,22 +366,21 @@ public class MyCoin2Presenter extends BasePresenter {
                         Point currentPoint = (Point) animation.getAnimatedValue();
 
                         //animatedFraction来控制    缩放，透明，旋转
-
                         ViewHelper.setTranslationX(loadMoneyLayout, currentPoint.x);
                         ViewHelper.setTranslationY(loadMoneyLayout, currentPoint.y);
 
-                        //缩放
-                        ViewHelper.setScaleX(loadMoneyLayout, animatedFraction);
-                        ViewHelper.setScaleY(loadMoneyLayout, animatedFraction);
-
                         float alphaFraction = animatedFraction + 0.2f;
                         if (alphaFraction <= 1) {
+                            ViewHelper.setScaleX(loadMoneyLayout, animatedFraction);
+                            ViewHelper.setScaleY(loadMoneyLayout, animatedFraction);
+
                             ViewHelper.setAlpha(loadMoneyLayout, alphaFraction);
                         }
                     }
 
                     private Rotate3dAnimation rotate3dAnimation;
                     private RotateAnimation mRotateAnimation;
+                    private Animation moneyAddAnimation;
 
                     private void playCircleAnimation() {
                         //开始3D旋转
@@ -412,7 +391,7 @@ public class MyCoin2Presenter extends BasePresenter {
                                 0,
                                 0,
                                 false);
-                        rotate3dAnimation.setDuration(3000);
+                        rotate3dAnimation.setDuration(1000);
                         rotate3dAnimation.setRepeatCount(-1);
                         loadMoneyInherent.setAnimation(rotate3dAnimation);
                         rotate3dAnimation.start();
@@ -427,18 +406,57 @@ public class MyCoin2Presenter extends BasePresenter {
 
                         LinearInterpolator linearInterpolator = new LinearInterpolator();
                         mRotateAnimation.setInterpolator(linearInterpolator);
-                        mRotateAnimation.setDuration(1000);
+                        mRotateAnimation.setDuration(2000);
                         //设置动画持续时间
                         mRotateAnimation.setRepeatCount(-1);
                         //设置重复次数
                         mRotateAnimation.setFillAfter(true);
                         //动画执行完后是否停留在执行完的状态
-                        mRotateAnimation.setStartOffset(10);
-                        //执行前的等待时间
                         loadMoneyEncircle.setAnimation(mRotateAnimation);
                         mRotateAnimation.start();
                     }
 
+
+                    private void playEndAnimation() {
+                        if (rotate3dAnimation != null) {
+                            rotate3dAnimation.cancel();
+                        }
+                        if (mRotateAnimation != null) {
+
+                            mRotateAnimation.cancel();
+
+                            loadMoneyEncircle.clearAnimation();
+                            loadMoneyEncircle.setVisibility(View.GONE);
+
+                            loadMoneyAdd.setText(signInScore);
+                            loadMoneyAdd.setVisibility(View.VISIBLE);
+                            moneyAddAnimation = AnimationUtils.loadAnimation(mContext, R.anim.moeny_add_anim);
+                            loadMoneyAdd.startAnimation(moneyAddAnimation);
+
+                            moneyAddAnimation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    loadMoneyAdd.clearAnimation();
+                                    loadMoneyAdd.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            simplePopupWindow.dismiss();
+                                        }
+                                    }, 500);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+                    }
 
                     @Override
                     public void onDismiss() {

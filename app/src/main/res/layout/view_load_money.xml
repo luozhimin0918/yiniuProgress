@@ -37,15 +37,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="+4"/>
+                android:visibility="invisible"
+                android:text="+15"
+                android:textSize="20sp"/>
 
-            <TextView
-                android:id="@+id/load_money_add_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="恭喜获得5积分"/>
         </RelativeLayout>
     </FrameLayout>
 
