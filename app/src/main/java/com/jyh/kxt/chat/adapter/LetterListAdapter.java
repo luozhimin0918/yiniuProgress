@@ -30,8 +30,6 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.dao.ChatRoomJsonDao;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.util.emoje.EmoticonReplaceTextView;
-import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
-import com.jyh.kxt.base.util.emoje.EmoticonTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.chat.LetterActivity;
@@ -171,16 +169,20 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
 
     private void chatNickNameHandle(ViewHolder viewHolder, LetterListJson bean) {
 
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(bean.getNickname());
-        if ("1".equals(bean.getIs_banned())) {
+        try {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(bean.getNickname());
+            if ("1".equals(bean.getIs_banned())) {
 
-            ForegroundColorSpan graySpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.font_color3));
-            SpannableString errorSpannable = new SpannableString(" [已屏蔽]");
-            errorSpannable.setSpan(graySpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ForegroundColorSpan graySpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.font_color3));
+                SpannableString errorSpannable = new SpannableString(" [已屏蔽]");
+                errorSpannable.setSpan(graySpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            spannableStringBuilder.insert(bean.getNickname().length(), errorSpannable);
+                spannableStringBuilder.insert(bean.getNickname().length(), errorSpannable);
+            }
+            viewHolder.tvName.setText(spannableStringBuilder);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        viewHolder.tvName.setText(spannableStringBuilder);
     }
 
     /**
@@ -190,30 +192,34 @@ public class LetterListAdapter extends BaseListAdapter<LetterListJson> {
      * @param bean
      */
     private void chatLastContentHandle(ViewHolder viewHolder, LetterListJson bean) {
-        SpannableStringBuilder spannableStringBuilder;
-        if (bean.getContentType() == 0) {
-            spannableStringBuilder = new SpannableStringBuilder(bean.getLast_content());
-        } else {
-            spannableStringBuilder = new SpannableStringBuilder(bean.getLocal_content());
-        }
+        try {
+            SpannableStringBuilder spannableStringBuilder;
+            if (bean.getContentType() == 0) {
+                spannableStringBuilder = new SpannableStringBuilder(bean.getLast_content());
+            } else {
+                spannableStringBuilder = new SpannableStringBuilder(bean.getLocal_content());
+            }
 
-        ForegroundColorSpan redSpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.red2));
-        switch (bean.getContentType()) {
-            case 0:
+            ForegroundColorSpan redSpan = new ForegroundColorSpan(ContextCompat.getColor(mActivity, R.color.red2));
+            switch (bean.getContentType()) {
+                case 0:
 
-                break;
-            case 1:
-                SpannableString errorSpannable = new SpannableString("[发送失败] ");
-                errorSpannable.setSpan(redSpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannableStringBuilder.insert(0, errorSpannable);
-                break;
-            case 2:
-                SpannableString draftSpannable = new SpannableString("[草稿] ");
-                draftSpannable.setSpan(redSpan, 0, draftSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannableStringBuilder.insert(0, draftSpannable);
-                break;
+                    break;
+                case 1:
+                    SpannableString errorSpannable = new SpannableString("[发送失败] ");
+                    errorSpannable.setSpan(redSpan, 0, errorSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableStringBuilder.insert(0, errorSpannable);
+                    break;
+                case 2:
+                    SpannableString draftSpannable = new SpannableString("[草稿] ");
+                    draftSpannable.setSpan(redSpan, 0, draftSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableStringBuilder.insert(0, draftSpannable);
+                    break;
+            }
+            viewHolder.tvContent.convertEmoJeToText(spannableStringBuilder,"[表情]");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        viewHolder.tvContent.convertEmoJeToText(spannableStringBuilder,"[表情]");
     }
 
     /**
