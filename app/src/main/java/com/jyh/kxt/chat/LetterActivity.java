@@ -328,7 +328,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             ChatSocketUtil.getInstance().unOnChatMessage(this);
 
             UserJson userInfo = LoginUtils.getUserInfo(this);
-            if (userInfo != null) {
+            if (userInfo != null && adapter != null && adapter.dataList != null) {
                 int unreadMessageCount = 0;
                 List<LetterListJson> dataList = adapter.dataList;
                 for (LetterListJson letterListJson : dataList) {
@@ -344,7 +344,7 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
             EventBus.getDefault().unregister(this);
             getQueue().cancelAll(LetterPresenter.class.getName());
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -87,7 +87,7 @@ public class ChatSocketUtil {
                         jsonObject.put("cmd", "login");
                         jsonObject.put("r", "kxt");
                         jsonObject.put("uid", userInfo.getUid());
-                        jsonObject.put("rid", otherUid);
+                        jsonObject.put("rid", "1");
 
                         jsonObject.put("name", userInfo.getNickname());
                         jsonObject.put("mark", "login");
