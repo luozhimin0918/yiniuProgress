@@ -25,6 +25,7 @@ import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
+import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.VarConstant;
 import com.library.manager.ActivityManager;
@@ -759,6 +760,9 @@ public class JumpUtils {
                 boolean rbDatumChecked = rbTrading.isChecked();
                 if (rbDatumChecked) {
                     mainActivity.exploreFragment.onTabSelect(1);
+                    ArticleFragment articleFragment = mainActivity.exploreFragment.articleFragment;
+                    if (articleFragment != null&&articleFragment.stlNavigationBar!=null)
+                        articleFragment.stlNavigationBar.setCurrentTab(0);
                 } else {
                     rbTrading.performClick();
                     final MainActivity mainActivityCopy = mainActivity;
@@ -767,6 +771,9 @@ public class JumpUtils {
                         public void run() {
                             try {
                                 mainActivityCopy.exploreFragment.onTabSelect(1);
+                                ArticleFragment articleFragment = mainActivityCopy.exploreFragment.articleFragment;
+                                if (articleFragment != null&&articleFragment.stlNavigationBar!=null)
+                                    articleFragment.stlNavigationBar.setCurrentTab(0);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

@@ -56,7 +56,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
     @BindView(R.id.bar_red_dot) TextView tvRedDot;
 
     private BaseFragment lastFragment;
-    private ArticleFragment articleFragment;
+    public ArticleFragment articleFragment;
     private ViewpointFragment viewpointFragment;
     private int index;
     private String tab = null;
