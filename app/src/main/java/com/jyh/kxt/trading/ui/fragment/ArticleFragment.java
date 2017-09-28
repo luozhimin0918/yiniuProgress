@@ -36,7 +36,7 @@ import butterknife.OnClick;
 public class ArticleFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, ViewPager
         .OnPageChangeListener,
         OnTabSelectListener {
-    @BindView(R.id.stl_navigation_bar) SlidingTabLayout stlNavigationBar;
+    @BindView(R.id.stl_navigation_bar) public SlidingTabLayout stlNavigationBar;
     @BindView(R.id.iv_more) ImageView ivMore;
     @BindView(R.id.vp_news_list) ViewPager vpNewsList;
     @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
