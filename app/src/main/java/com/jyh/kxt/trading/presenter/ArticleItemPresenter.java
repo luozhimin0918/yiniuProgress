@@ -73,9 +73,9 @@ public class ArticleItemPresenter extends BasePresenter {
                             case "slide":
                                 try {
                                     fragment.initHeadViewLayout();
-                                    JSONArray array= (JSONArray) typeDataJson.getData();
-                                    List<SlideJson> slides=JSON.parseArray(array.toString(), SlideJson.class);
-                                    if(slides!=null&&slides.size()!=0){
+                                    JSONArray array = (JSONArray) typeDataJson.getData();
+                                    List<SlideJson> slides = JSON.parseArray(array.toString(), SlideJson.class);
+                                    if (slides != null && slides.size() != 0) {
                                         fragment.addCarouselView(slides);
                                     }
                                 } catch (Exception e) {
@@ -83,8 +83,8 @@ public class ArticleItemPresenter extends BasePresenter {
                                 }
                                 break;
                             case "main":
-                                JSONArray array= (JSONArray) typeDataJson.getData();
-                                List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+                                JSONArray array = (JSONArray) typeDataJson.getData();
+                                List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(array.toString(), AuthorNewsJson.class);
                                 if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
                                     fragment.plRootView.loadEmptyData();
                                 } else {
@@ -159,9 +159,9 @@ public class ArticleItemPresenter extends BasePresenter {
                             case "slide":
                                 try {
                                     fragment.initHeadViewLayout();
-                                    JSONArray array= (JSONArray) typeDataJson.getData();
-                                    List<SlideJson> slides=JSON.parseArray(array.toString(), SlideJson.class);
-                                    if(slides!=null&&slides.size()!=0){
+                                    JSONArray array = (JSONArray) typeDataJson.getData();
+                                    List<SlideJson> slides = JSON.parseArray(array.toString(), SlideJson.class);
+                                    if (slides != null && slides.size() != 0) {
                                         fragment.addCarouselView(slides);
                                     }
                                 } catch (Exception e) {
@@ -169,8 +169,8 @@ public class ArticleItemPresenter extends BasePresenter {
                                 }
                                 break;
                             case "main":
-                                JSONArray array= (JSONArray) typeDataJson.getData();
-                                List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+                                JSONArray array = (JSONArray) typeDataJson.getData();
+                                List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(array.toString(), AuthorNewsJson.class);
                                 if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
                                 } else {
                                     int size = authorNewsJsons.size();
@@ -245,52 +245,52 @@ public class ArticleItemPresenter extends BasePresenter {
                 @Override
                 protected void onResponse(String s) {
 
-                    if (isMain) {
-
-                        List<TypeDataJson> typeDataJsons = JSON.parseArray(s, TypeDataJson.class);
-                        for (TypeDataJson typeDataJson : typeDataJsons) {
-                            String dataType = typeDataJson.getType();
-                            switch (dataType) {
-                                case "slide":
-                                    break;
-                                case "main":
-                                    JSONArray array= (JSONArray) typeDataJson.getData();
-                                    List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
-                                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
-                                    } else {
-                                        int size = authorNewsJsons.size();
-                                        List<AuthorNewsJson> list;
-                                        if (size > VarConstant.LIST_MAX_SIZE) {
-                                            isMore = true;
-                                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-                                        } else {
-                                            isMore = false;
-                                            list = new ArrayList<>(authorNewsJsons);
-                                        }
-                                        fragment.loadMore(list);
-                                    }
-                                    break;
-                            }
-                        }
-
+//                    if (isMain) {
+//
+//                        List<TypeDataJson> typeDataJsons = JSON.parseArray(s, TypeDataJson.class);
+//                        for (TypeDataJson typeDataJson : typeDataJsons) {
+//                            String dataType = typeDataJson.getType();
+//                            switch (dataType) {
+//                                case "slide":
+//                                    break;
+//                                case "main":
+//                                    JSONArray array= (JSONArray) typeDataJson.getData();
+//                                    List<AuthorNewsJson> authorNewsJsons=JSON.parseArray(array.toString(),AuthorNewsJson.class);
+//                                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+//                                    } else {
+//                                        int size = authorNewsJsons.size();
+//                                        List<AuthorNewsJson> list;
+//                                        if (size > VarConstant.LIST_MAX_SIZE) {
+//                                            isMore = true;
+//                                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+//                                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
+//                                        } else {
+//                                            isMore = false;
+//                                            list = new ArrayList<>(authorNewsJsons);
+//                                        }
+//                                        fragment.loadMore(list);
+//                                    }
+//                                    break;
+//                            }
+//                        }
+//
+//                    } else {
+                    List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
+                    if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
                     } else {
-                        List<AuthorNewsJson> authorNewsJsons = JSON.parseArray(s, AuthorNewsJson.class);
-                        if (authorNewsJsons == null || authorNewsJsons.size() == 0) {
+                        int size = authorNewsJsons.size();
+                        List<AuthorNewsJson> list;
+                        if (size > VarConstant.LIST_MAX_SIZE) {
+                            isMore = true;
+                            list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
+                            lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
                         } else {
-                            int size = authorNewsJsons.size();
-                            List<AuthorNewsJson> list;
-                            if (size > VarConstant.LIST_MAX_SIZE) {
-                                isMore = true;
-                                list = new ArrayList<>(authorNewsJsons.subList(0, VarConstant.LIST_MAX_SIZE));
-                                lastId = list.get(VarConstant.LIST_MAX_SIZE - 1).getO_id();
-                            } else {
-                                isMore = false;
-                                list = new ArrayList<>(authorNewsJsons);
-                            }
-                            fragment.loadMore(list);
+                            isMore = false;
+                            list = new ArrayList<>(authorNewsJsons);
                         }
+                        fragment.loadMore(list);
                     }
+//                    }
 
                     fragment.plRootView.postDelayed(new Runnable() {
                         @Override
