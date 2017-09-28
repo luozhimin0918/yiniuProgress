@@ -15,11 +15,6 @@
         android:paddingLeft="@dimen/newsContentPadding3"
         android:paddingRight="@dimen/newsContentPadding3"/>
 
-    <com.jyh.kxt.base.widget.AdvertImageLayout
-        android:id="@+id/ll_news_content_ad"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/tv_source"
@@ -160,4 +155,9 @@
 
     </LinearLayout>
 
+    <com.jyh.kxt.base.widget.AdvertImageLayout
+        android:id="@+id/ll_news_content_ad"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
