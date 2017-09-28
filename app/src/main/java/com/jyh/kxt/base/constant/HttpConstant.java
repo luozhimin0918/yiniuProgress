@@ -32,9 +32,8 @@ public class HttpConstant {
 
     //默认使用测试环境
     public static String BASE_URL = "https://kxtadi.kuaixun56.com/";
-
-    // public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
-    // final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
+    // public static   String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
+//     public static   String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
     static {
         if (BuildConfig.DEBUG) {
             BASE_URL = "http://test.kxtadi.kuaixun56.com/";
