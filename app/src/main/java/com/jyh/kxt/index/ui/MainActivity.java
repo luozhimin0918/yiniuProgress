@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
-            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn;
+            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn, coinBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
@@ -238,6 +238,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         mineBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_mine);
         letterBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_letter);
         pointBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_postPoint);
+        coinBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_coin);
 
         tvPoint = (TextView) llHeaderLayout.findViewById(R.id.tv_postPoint);
         tvCollect = ButterKnife.findById(llHeaderLayout, R.id.tv_collect);
@@ -288,6 +289,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         pointBtn.setOnClickListener(this);
         letterBtn.setOnClickListener(this);
         rlSign.setOnClickListener(this);
+        coinBtn.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -568,6 +570,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.rl_sign:
                 //签到
+            case R.id.ll_coin:
+                //我的金币
                 startActivity(new Intent(this, MyCoin2Activity.class));
                 break;
         }
@@ -620,6 +624,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             unLoginView.setVisibility(View.GONE);
             quitBtn.setVisibility(View.VISIBLE);
             letterBtn.setVisibility(View.VISIBLE);
+            coinBtn.setVisibility(View.VISIBLE);
 
             if (!RegexValidateUtil.isEmpty(userJson.getWriter_id()) && !RegexValidateUtil.isEmpty(userJson.getWriter_name())) {
                 mineBtn.setVisibility(View.VISIBLE);
@@ -675,6 +680,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             letterBtn.setVisibility(View.GONE);
             mineBtn.setVisibility(View.GONE);
             pointBtn.setVisibility(View.GONE);
+            coinBtn.setVisibility(View.GONE);
 
             loginPhoto.setImageResource(R.mipmap.icon_user_def_photo);
 
