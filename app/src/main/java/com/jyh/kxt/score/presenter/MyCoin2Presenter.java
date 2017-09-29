@@ -205,29 +205,17 @@ public class MyCoin2Presenter extends BasePresenter {
             punchCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-
-//                    myCoin2Activity.drawerSignContent.animateClose();
-//
-//                    signInScore = "5";
-//                    playAnimation(v);
-//                    playSound();
-
                     if (myCoin2Activity.signed) {
                         ToastView.makeText3(mContext, "今日已签到");
                     } else {
                         if (finalPosition == punchCardDays) {
-                            punchCardView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myCoin2Activity.drawerSignContent.animateClose();
+                            myCoin2Activity.drawerSignContent.animateClose();
 
-                                    signInScore = signJson.getAward();
-                                    playAnimation(v);
-                                    playSound();
+                            signInScore = signJson.getAward();
+                            playAnimation(v);
+                            playSound();
 
-                                    requestPunchCard(punchCardView, signJsonList, finalPosition);
-                                }
-                            });
+                            requestPunchCard(punchCardView, signJsonList, finalPosition);
                         }
                     }
                 }

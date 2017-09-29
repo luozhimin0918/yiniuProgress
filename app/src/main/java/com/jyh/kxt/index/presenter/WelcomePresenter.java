@@ -1,12 +1,16 @@
 package com.jyh.kxt.index.presenter;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -45,6 +49,7 @@ public class WelcomePresenter extends BasePresenter {
 
     @BindObject WelcomeActivity welcomeActivity;
     public boolean isClickToWebAd = false;
+    private boolean isShowResidueTime = false;
 
     public WelcomePresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -67,10 +72,26 @@ public class WelcomePresenter extends BasePresenter {
 
                         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
 
+//                        Glide.with(welcomeActivity)
+//                                .load(adImageUrl)
+//                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                                .into(welcomeActivity.ivWelcome);
                         Glide.with(welcomeActivity)
                                 .load(adImageUrl)
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .into(welcomeActivity.ivWelcome);
+                                .into(new GlideDrawableImageViewTarget(welcomeActivity.ivWelcome) {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                                        super.onResourceReady(resource, animation);
+                                        advertTimeManage();
+                                    }
+
+                                    @Override
+                                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                        super.onLoadFailed(e, errorDrawable);
+                                        showGif();
+                                    }
+                                });
 
                         welcomeActivity.ivWelcome.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -84,8 +105,6 @@ public class WelcomePresenter extends BasePresenter {
                                         loadAd.getHref());
                             }
                         });
-
-                        advertTimeManage();
                         return;
                     }
                 }
@@ -97,6 +116,11 @@ public class WelcomePresenter extends BasePresenter {
     }
 
     public void advertTimeManage() {
+        if (isShowResidueTime) {
+            return;
+        }
+        isShowResidueTime = true;
+
         Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
