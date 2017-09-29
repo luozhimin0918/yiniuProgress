@@ -261,7 +261,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
         if (indexAd.getShow() == 1) {
             try {
                 MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                mainActivity.mainPresenter.showPopAdvertisement(indexAd);
+                mainActivity.mainPresenter.showPopAdvertisement(indexAd,true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -272,7 +272,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
             public void onClick(View v) {
                 try {
                     MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getIndex_ad());
+                    mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getIndex_ad(),false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

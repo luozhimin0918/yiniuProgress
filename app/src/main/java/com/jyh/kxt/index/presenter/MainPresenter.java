@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
@@ -378,7 +379,7 @@ public class MainPresenter extends BasePresenter {
                         try {
                             FutureTarget<File> future = Glide.with(mContext)
                                     .load(loadAd.getPicture())
-                                    .downloadOnly(/*720, 1080*/320,480);
+                                    .downloadOnly(/*720, 1080*/320, 480);
                             future.get();
                             SPUtils.save(mContext, SpConstant.AD_IMAGE_URL, loadAd.getPicture());
                         } catch (Exception e) {
@@ -392,16 +393,17 @@ public class MainPresenter extends BasePresenter {
         }
     }
 
+    private AlertDialog mAlertDialog;
 
-    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd) {
+    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd,boolean isHelpClose) {
         if (indexAd == null) {
             return;
         }
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
 
         AlertDialog.Builder advertBuilderDialog = new AlertDialog.Builder(mContext, R.style.dialog3);
-        final AlertDialog alertDialog = advertBuilderDialog.create();
-        alertDialog.setView(contentView);
+        mAlertDialog = advertBuilderDialog.create();
+        mAlertDialog.setView(contentView);
 
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
         animation.setDuration(1000);
@@ -459,7 +461,7 @@ public class MainPresenter extends BasePresenter {
                         return;
                     }
                     JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
-                    alertDialog.dismiss();
+                    mAlertDialog.dismiss();
                 }
             });
 
@@ -496,7 +498,7 @@ public class MainPresenter extends BasePresenter {
                     Intent intent3 = new Intent(Intent.ACTION_VIEW);
                     intent3.setData(Uri.parse(indexAd.getHref()));
                     mContext.startActivity(intent3);
-                    alertDialog.dismiss();
+                    mAlertDialog.dismiss();
                 }
             });
 
@@ -540,7 +542,7 @@ public class MainPresenter extends BasePresenter {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     JumpUtils.jump(mMainActivity, indexAd, indexAd.getTitle(), url);
-                    alertDialog.dismiss();
+                    mAlertDialog.dismiss();
                     return true;
                 }
 
@@ -560,28 +562,49 @@ public class MainPresenter extends BasePresenter {
         ivCloseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+                mAlertDialog.dismiss();
             }
         });
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        mAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 mMainActivity.homeFragment.closePopWindowAdvert();
                 WindowManager.LayoutParams lp = mMainActivity.getWindow().getAttributes();
                 lp.alpha = 1.0f;
                 mMainActivity.getWindow().setAttributes(lp);
+
+                adCloseHandler.removeCallbacksAndMessages(null);
             }
         });
 
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+                mAlertDialog.dismiss();
             }
         });
 
-        alertDialog.show();
+        mAlertDialog.show();
+
+        if (indexAd.getShowTime() > 0 && isHelpClose) {
+            adCloseHandler.sendEmptyMessageDelayed(1, indexAd.getShowTime());
+        }
     }
+
+
+    private Handler adCloseHandler = new Handler(mMainActivity.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            try {
+                if (mAlertDialog != null) {
+                    mAlertDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     private void dynamicUpdateViewSize(View view, int viewWidth, int viewHeight) {
 

@@ -234,7 +234,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     if (flashAd.getShow() == 1) {
                         try {
                             MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                            mainActivity.mainPresenter.showPopAdvertisement(flashAd);
+                            mainActivity.mainPresenter.showPopAdvertisement(flashAd,true);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -247,7 +247,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                         public void onClick(View v) {
                             try {
                                 MainActivity mainActivity = (MainActivity) getActivity();
-                                mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad());
+                                mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad(),false);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
