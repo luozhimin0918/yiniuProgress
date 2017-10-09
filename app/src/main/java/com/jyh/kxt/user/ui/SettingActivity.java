@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.tinker.app.BaseBuildInfo;
 import com.jyh.kxt.base.tinker.app.BuildInfo;
 import com.jyh.kxt.base.utils.GlideCacheUtil;
+import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.user.presenter.SettingPresenter;
 import com.library.util.FileUtils;
 import com.library.util.SPUtils;
@@ -209,6 +211,17 @@ public class SettingActivity extends BaseActivity {
                                             .getManifestTinkerID(getApplicationContext())));
                                 }
                                 sb.append(String.format("[BaseBuildInfo Message] %s \n", BaseBuildInfo.TEST_MESSAGE));
+
+                                try {
+                                    String patchInfo = SPUtils.getString(SettingActivity.this, SpConstant.PATCH_INFO);
+                                    if(patchInfo != null){
+                                        PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
+                                        sb.append(String.format("[补丁描述] %s \n", patchJson.getDescription()));
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 tvIntroducePatch.setText(sb.toString());
                                 break;
                             case 1:
