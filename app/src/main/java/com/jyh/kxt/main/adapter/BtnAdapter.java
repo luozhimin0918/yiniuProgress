@@ -98,15 +98,11 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
      */
     public static void jump(final MainActivity context, SlideJson slideJson) {
         if (slideJson == null || context == null) return;
-        if (TextUtils.isEmpty(slideJson.getHref())) {
-            String o_class = slideJson.getO_class();
-            String o_action = slideJson.getO_action();
-            String o_id = slideJson.getO_id();
-            JumpUtils.jump(context, o_class, o_action, o_id, null);
-        } else {
-            Intent intent = new Intent(context, WebActivity.class);
-            context.startActivity(intent);
-        }
+        String o_class = slideJson.getO_class();
+        String o_action = slideJson.getO_action();
+        String o_id = slideJson.getO_id();
+        String href = slideJson.getHref();
+        JumpUtils.jump(context, o_class, o_action, o_id, href);
     }
 
 }
