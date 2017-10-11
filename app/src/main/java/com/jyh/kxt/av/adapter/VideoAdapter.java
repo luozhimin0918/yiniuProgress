@@ -87,7 +87,6 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         }
     }
 
-    //fixkxt 2017/9/19 14:59 describe: 增加视听列表的广告
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder = null;

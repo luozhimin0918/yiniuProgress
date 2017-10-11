@@ -41,7 +41,6 @@ public class AdvertImageLayout extends LinearLayout {
     }
 
     public void addAdvertViews(List<SlideJson> slideAdvertList) {
-        //fixkxt 2017/9/18 17:56 describe: 需要测试广告是否添加成功
 //        slideAdvertList = new ArrayList<>();
 //
 //        SlideJson slideJson = new SlideJson();

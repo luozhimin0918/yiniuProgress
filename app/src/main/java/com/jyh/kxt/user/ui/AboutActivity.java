@@ -13,10 +13,13 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.WebActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
+import com.umeng.message.PushAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,7 +36,11 @@ public class AboutActivity extends BaseActivity {
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
+    @BindView(R.id.about_tv_hint_userinfo) TextView tvHintUserInfo;
+
     private MainInitJson config;
+
+    private int clickBarTitleCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,8 @@ public class AboutActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.iv_bar_break, R.id.rl_statement, R.id.rl_contact, R.id.rl_feedback, R.id.rl_visit})
+    @OnClick({R.id.iv_bar_break, R.id.rl_statement, R.id.rl_contact, R.id.rl_feedback, R.id.rl_visit,
+            R.id.tv_bar_title})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -97,8 +105,30 @@ public class AboutActivity extends BaseActivity {
                 intent3.setData(Uri.parse(HttpConstant.OFFICIAL));
                 startActivity(intent3);
                 break;
+            case R.id.tv_bar_title:
+                clickBarTitleCount++;
+                if (clickBarTitleCount >= 5) {
+                    userHideInfo();
+                }
+                break;
         }
     }
 
+    private void userHideInfo() {
+        try {
+            StringBuilder mHideBuffer = new StringBuilder();
 
+            String device_token = PushAgent.getInstance(this).getRegistrationId();
+            mHideBuffer.append("device_token:" + device_token + "\n");
+
+            UserJson userInfo = LoginUtils.getUserInfo(this);
+            if (userInfo != null) {
+                mHideBuffer.append("uid:" + userInfo.getUid() + "\n");
+            }
+            tvHintUserInfo.setVisibility(View.VISIBLE);
+            tvHintUserInfo.setText(mHideBuffer.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

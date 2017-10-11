@@ -819,7 +819,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             tvSource = (TextView) llShareContent.findViewById(R.id.tv_source);
 
 
-            //fixkxt 2017/9/18 13:35 describe: 要闻的广告需要测试
             List<SlideJson> ads = newsContentJson.getAd();
             newsContentAd.addAdvertViews(ads);
 
