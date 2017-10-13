@@ -57,12 +57,7 @@ public class RegisterActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
-                if (step == 0) {
                     onBackPressed();
-                } else {
-                    // TODO: 2017/10/13 您还未设置昵称或密码，退出将导致注册失败
-                    showErrorView();
-                }
                 break;
             case R.id.db_register:
                 if (step == 0) {
@@ -73,6 +68,15 @@ public class RegisterActivity extends BaseActivity {
                     // TODO: 2017/10/13  完成注册
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (step == 0) {
+            super.onBackPressed();
+        } else {
+            showErrorView();
         }
     }
 

@@ -239,9 +239,9 @@ public class FunctionEditText extends LinearLayout {
         LinearLayout.LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         params.weight = 1;
         edt.setLayoutParams(params);
-        topLayout.addView(edt);
-
         edt.setGravity(Gravity.CENTER_VERTICAL);
+        edt.setPadding(0,0,0,0);
+        topLayout.addView(edt);
     }
 
     /**
