@@ -1,9 +1,10 @@
-package com.jyh.kxt.base.util.validation;
+package com.jyh.kxt.base.utils.validator.validation;
 
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.library.util.avalidations.ValidationExecutor;
+import com.jyh.kxt.base.utils.validator.ValidationExecutor;
+
 
 /**
  * 项目名:Kxt

@@ -1,7 +1,6 @@
 package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,17 +9,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
-import com.jyh.kxt.base.util.validation.EmailValidation;
-import com.jyh.kxt.base.util.validation.PwdValidation;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
+import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
 import com.library.util.NetUtils;
-import com.library.util.avalidations.EditTextValidator;
-import com.library.util.avalidations.ValidationModel;
 import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -59,8 +57,8 @@ public class ForgetPwdActivity extends BaseActivity {
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(btnSend)
-                .add(new ValidationModel(edtEmail.getEdt(), null, new EmailValidation()))
-                .add(new ValidationModel(edtPwd.getEdt(), null, new PwdValidation()))
+                .add(new ValidationModel(edtEmail, new EmailValidation()))
+                .add(new ValidationModel(edtPwd,  new PwdValidation()))
                 .execute();
 
         String emailStr = getIntent().getStringExtra(EMAIL);

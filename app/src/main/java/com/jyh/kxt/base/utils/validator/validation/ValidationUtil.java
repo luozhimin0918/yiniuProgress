@@ -14,13 +14,13 @@
  *	limitations under the License.
  *
  */
-package com.library.util.avalidations.utils;
-
-import java.util.regex.Pattern;
+package com.jyh.kxt.base.utils.validator.validation;
 
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Patterns;
+
+import java.util.regex.Pattern;
 
 /**
  * 校验工具类

@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.library.util.avalidations;
+package com.jyh.kxt.base.utils.validator;
 
 
 import android.content.Context;
 
-import com.library.util.avalidations.utils.ValidationUtil;
-
-import java.util.regex.Pattern;
+import com.jyh.kxt.base.utils.validator.validation.ValidationUtil;
 
 /**
  * 校验执行者

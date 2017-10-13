@@ -91,6 +91,7 @@
         <attr name="functionEditLeftPadding" format="dimension|reference"/>
         <attr name="functionEditRightPadding" format="dimension|reference"/>
         <attr name="functionFocusLineColor" format="color|reference"/>
+        <attr name="functiobEditTextErrorColor" format="color|reference"/>
     </declare-styleable>
 
     <declare-styleable name="VerifyCode">

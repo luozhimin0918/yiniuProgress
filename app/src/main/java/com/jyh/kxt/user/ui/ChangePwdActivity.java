@@ -1,9 +1,6 @@
 package com.jyh.kxt.user.ui;
 
-import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,14 +12,13 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.util.validation.PwdValidation;
-import com.jyh.kxt.base.util.validation.UserNameValidation;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
+import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
+import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.PwdEditText;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.util.RegexValidateUtil;
-import com.library.util.avalidations.EditTextValidator;
-import com.library.util.avalidations.ValidationModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,12 +57,12 @@ public class ChangePwdActivity extends BaseActivity {
         pwdNew = getEditText(edtPwdNew);
         pwdRe = getEditText(edtPwdRe);
 
-        editTextValidator = new EditTextValidator(getContext())
-                .setButton(changeBtn)
-                .add(new ValidationModel(getEditText(edtPwdOld), null, new UserNameValidation()))
-                .add(new ValidationModel(getEditText(edtPwdNew), null, new PwdValidation()))
-                .add(new ValidationModel(getEditText(edtPwdRe), null, new PwdValidation()))
-                .execute();
+//        editTextValidator = new EditTextValidator(getContext())
+//                .setButton(changeBtn)
+//                .add(new ValidationModel(getEditText(edtPwdOld), null, new UserNameValidation()))
+//                .add(new ValidationModel(getEditText(edtPwdNew), null, new PwdValidation()))
+//                .add(new ValidationModel(getEditText(edtPwdRe), null, new PwdValidation()))
+//                .execute();
 
     }
 

@@ -1,12 +1,9 @@
-package com.jyh.kxt.base.util.validation;
+package com.jyh.kxt.base.utils.validator.validation;
 
 import android.content.Context;
 
+import com.jyh.kxt.base.utils.validator.ValidationExecutor;
 import com.library.util.RegexValidateUtil;
-import com.library.util.avalidations.ValidationExecutor;
-import com.library.widget.window.ToastView;
-
-import java.util.regex.Pattern;
 
 /**
  * Created by Mr'Dai on 2017/4/5.

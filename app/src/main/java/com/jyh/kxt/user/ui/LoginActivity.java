@@ -13,17 +13,17 @@ import android.widget.ScrollView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
-import com.jyh.kxt.base.util.validation.PhoneValidation;
-import com.jyh.kxt.base.util.validation.PwdValidation;
-import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
+import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
+import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.LoginPresenter;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
-import com.library.util.avalidations.EditTextValidator;
-import com.library.util.avalidations.ValidationModel;
 import com.library.widget.tablayout.NavigationTabLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,8 +72,8 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(dbLogin)
-                .add(new ValidationModel(edtName.getEdt(), new UserNameValidation()))
-                .add(new ValidationModel(edtPwd.getEdt(), new PwdValidation()))
+                .add(new ValidationModel(edtName, new UserNameValidation()))
+                .add(new ValidationModel(edtPwd, new PwdValidation()))
                 .execute();
 
         String[] tabs = new String[]{"密码登录", "短信登录"};
@@ -233,14 +233,14 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
         if (position == 0) {
             editTextValidator = new EditTextValidator(getContext())
                     .setButton(dbLogin)
-                    .add(new ValidationModel(edtName.getEdt(), new UserNameValidation()))
-                    .add(new ValidationModel(edtPwd.getEdt(), new PwdValidation()))
+                    .add(new ValidationModel(edtName, new UserNameValidation()))
+                    .add(new ValidationModel(edtPwd, new PwdValidation()))
                     .execute();
         } else {
             editTextValidator = new EditTextValidator(getContext())
                     .setButton(dbLogin)
-                    .add(new ValidationModel(edtName.getEdt(), new PhoneValidation()))
-                    .add(new ValidationModel(edtPwd.getEdt(), new PwdValidation()))
+                    .add(new ValidationModel(edtName, new PhoneValidation()))
+                    .add(new ValidationModel(edtPwd, new PwdValidation()))
                     .execute();
         }
     }

@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.library.util.avalidations;
+package com.jyh.kxt.base.utils.validator;
 
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.jyh.kxt.base.widget.FunctionEditText;
 
 /**
  * 校验模型
@@ -28,36 +30,20 @@ import android.widget.TextView;
  * @date 2014-11-21 下午9:38:40
  */
 public class ValidationModel {
-    private EditText editText;
-    private TextView tvError;
+    private FunctionEditText editText;
     private ValidationExecutor validationExecutor;
 
-    public ValidationModel(EditText editText, TextView tvError, ValidationExecutor validationExecutor) {
-        this.editText = editText;
-        this.tvError = tvError;
-        this.validationExecutor = validationExecutor;
-    }
-
-    public ValidationModel(EditText editText, ValidationExecutor validationExecutor) {
+    public ValidationModel(FunctionEditText editText, ValidationExecutor validationExecutor) {
         this.editText = editText;
         this.validationExecutor = validationExecutor;
     }
 
-    public EditText getEditText() {
+    public FunctionEditText getEditText() {
         return editText;
     }
 
-    public ValidationModel setEditText(EditText editText) {
+    public ValidationModel setEditText(FunctionEditText editText) {
         this.editText = editText;
-        return this;
-    }
-
-    public TextView getTvError() {
-        return tvError;
-    }
-
-    public ValidationModel setTvError(TextView tvError) {
-        this.tvError = tvError;
         return this;
     }
 
@@ -71,7 +57,7 @@ public class ValidationModel {
     }
 
     public boolean isTextEmpty() {
-        if (editText == null || TextUtils.isEmpty(editText.getText())) {
+        if (editText == null || TextUtils.isEmpty(editText.getEdtText())) {
             return true;
         }
         return false;

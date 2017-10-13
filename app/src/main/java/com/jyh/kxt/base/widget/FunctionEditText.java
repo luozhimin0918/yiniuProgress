@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.inputmethodservice.Keyboard;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -22,7 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.library.base.http.VarConstant;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 
 /**
@@ -63,6 +67,7 @@ public class FunctionEditText extends LinearLayout {
     private int edtHintColor;//提示文本颜色
     private int functionTextColor;//功能文本颜色
     private int functionFocusLineColor;//选中状态下边界线颜色
+    private int errorColor;//错误颜色
 
     private int functionTxtLineColor;//功能文字前分割线颜色
     private float edtTextSize;//输入文本字体大小
@@ -79,6 +84,9 @@ public class FunctionEditText extends LinearLayout {
     private String functionText;//功能文本
     private int imageSize;
     private ImageView ivClear;
+    private String errorInfo;
+
+    private boolean isError;//是否输入错误
 
     public FunctionEditText(Context context) {
         this(context, null);
@@ -155,6 +163,8 @@ public class FunctionEditText extends LinearLayout {
                 (context, R.color.line_color2));
         functionFocusLineColor = array.getColor(R.styleable.FunctionEditText_functionFocusLineColor, ContextCompat.getColor(context, R
                 .color.font_color8));
+        errorColor = array.getColor(R.styleable.FunctionEditText_functiobEditTextErrorColor, ContextCompat.getColor(context, R
+                .color.font_color11));
         edtTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextTextSize, 42);
         functionTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextFunctionTextSize, 36);
 
@@ -198,34 +208,6 @@ public class FunctionEditText extends LinearLayout {
         edt.setTextColor(edtTextColor);
         edt.setHintTextColor(edtHintColor);
         edt.setTextSize(TypedValue.COMPLEX_UNIT_PX, edtTextSize);
-        edt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s == null || s.length() == 0) {
-                    clearBtn.setVisibility(GONE);
-                    return;
-                }
-                if (clearShowWhenAll) {
-                    clearBtn.setVisibility(inputOver ? VISIBLE : GONE);
-                } else {
-                    if (s.length() >= 1) {
-                        clearBtn.setVisibility(VISIBLE);
-                    } else {
-                        clearBtn.setVisibility(GONE);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         edt.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -236,12 +218,30 @@ public class FunctionEditText extends LinearLayout {
                 }
             }
         });
+        edt.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    delText(edt.getText());
+                }
+                return false;
+            }
+        });
         LinearLayout.LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         params.weight = 1;
         edt.setLayoutParams(params);
         edt.setGravity(Gravity.CENTER_VERTICAL);
-        edt.setPadding(0,0,0,0);
+        edt.setPadding(0, 0, 0, 0);
         topLayout.addView(edt);
+    }
+
+    private void delText(Editable text) {
+        if (text.length() > 0) {
+            edt.requestFocus();
+            edt.setText(text.subSequence(0, text.length() - 1));
+            edt.setSelection(edt.getText().length());
+        }
     }
 
     /**
@@ -261,12 +261,7 @@ public class FunctionEditText extends LinearLayout {
         clearBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Editable text = edt.getText();
-                if (text.length() > 0) {
-                    edt.requestFocus();
-                    edt.setText(text.subSequence(0, text.length() - 1));
-                    edt.setSelection(edt.getText().length());
-                }
+                delText(edt.getText());
             }
         });
         clearBtn.setLongClickable(true);
@@ -279,12 +274,7 @@ public class FunctionEditText extends LinearLayout {
                 }
                 int size = text.length();
                 for (int i = 0; i < size; i++) {
-                    Editable text2 = edt.getText();
-                    if (text2.length() > 0) {
-                        edt.requestFocus();
-                        edt.setText(text2.subSequence(0, text2.length() - 1));
-                        edt.setSelection(edt.getText().length());
-                    }
+                    delText(edt.getText());
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -692,5 +682,49 @@ public class FunctionEditText extends LinearLayout {
                 break;
         }
         invalidate();
+    }
+
+    public void setErrorInfo(String errorInfo) {
+        this.errorInfo = errorInfo;
+        if (errorInfo != null && !errorInfo.trim().equals("")) {
+            isError = true;
+            edt.setText("");
+            edt.setHintTextColor(errorColor);
+            edt.setHint(errorInfo);
+        }
+    }
+
+    public class TextWatcher implements android.text.TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s == null || s.length() == 0) {
+                clearBtn.setVisibility(GONE);
+                return;
+            }
+
+            edt.setHintTextColor(edtHintColor);
+            edt.setHint(hintText);
+            isError = false;
+
+            if (clearShowWhenAll) {
+                clearBtn.setVisibility(inputOver ? VISIBLE : GONE);
+            } else {
+                if (s.length() >= 1) {
+                    clearBtn.setVisibility(VISIBLE);
+                } else {
+                    clearBtn.setVisibility(GONE);
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
     }
 }

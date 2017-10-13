@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.library.util.avalidations;
-
-import java.util.ArrayList;
+package com.jyh.kxt.base.utils.validator;
 
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import com.jyh.kxt.base.widget.FunctionEditText;
 import com.library.util.RegexValidateUtil;
-import com.library.widget.window.ToastView;
+
+import java.util.ArrayList;
 
 /**
  * EditText校验器
@@ -72,25 +72,27 @@ public class EditTextValidator {
 
     public EditTextValidator execute() {
         for (final ValidationModel validationModel : validationModels) {
-            if (validationModel.getEditText() == null) {
+            final FunctionEditText editText = validationModel.getEditText();
+            if (editText == null) {
                 return this;
             }
-            validationModel.getEditText().addTextChangedListener(new TextWatcher() {
+            EditText edt = editText.getEdt();
+            edt.addTextChangedListener(editText.new TextWatcher() {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    super.onTextChanged(s, start, before, count);
                     setEnabled();
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    super.beforeTextChanged(s, start, count, after);
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    TextView tvError = validationModel.getTvError();
-                    if (tvError != null)
-                        tvError.setText("");
+                    super.afterTextChanged(s);
                 }
             });
         }
@@ -122,17 +124,13 @@ public class EditTextValidator {
                 // 如果没有验证处理器，直接返回正确
                 return true;
             }
-            if (!validationModel.getValidationExecutor().doValidate(context, validationModel.getEditText().getText().toString())) {
+            if (!validationModel.getValidationExecutor().doValidate(context, validationModel.getEditText().getEdtText())) {
 
                 // 如果需要做单个EditText验证不通过标记，可以在这里实现
-                TextView tvError = validationModel.getTvError();
                 String errorInfo = validationModel.getValidationExecutor().errorInfo;
-                if (!RegexValidateUtil.isEmpty(errorInfo))
-                    if (tvError != null)
-                        tvError.setText(errorInfo);
-                    else {
-                        ToastView.makeText3(context, errorInfo);
-                    }
+                if (!RegexValidateUtil.isEmpty(errorInfo)) {
+                    validationModel.getEditText().setErrorInfo(errorInfo);
+                }
                 return false;// 只要有不通过的直接返回false，不要往下执行了
             }
         }
