@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -87,12 +88,14 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
     RelativeLayout rlAddress;
     @BindView(R.id.tv_work)
     TextView tvWork;
+    @BindView(R.id.tv_phone) TextView tvPhone;
+    @BindView(R.id.tv_email) TextView tvEmail;
+    @BindView(R.id.tv_pwd) TextView tvPwd;
     @BindView(R.id.rl_work)
     RelativeLayout rlWork;
-    @BindView(R.id.rl_changePwd)
-    RelativeLayout rlChangePwd;
     @BindView(R.id.fl_picker)
     public FrameLayout fl_picker;
+
 
     public static final String VIEW_NAME_IMG = "view_name_img";
     public static final String VIEW_NAME_TITLE = "view_name_title";
@@ -224,16 +227,16 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
         String sexInt;
         switch (gender) {
             case "保密":
-                sexInt="0";
+                sexInt = "0";
                 break;
             case "男":
-                sexInt="1";
+                sexInt = "1";
                 break;
             case "女":
-                sexInt="2";
+                sexInt = "2";
                 break;
             default:
-                sexInt="0";
+                sexInt = "0";
                 break;
         }
 
@@ -241,8 +244,7 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
     }
 
     @OnClick({R.id.iv_bar_break, R.id.iv_bar_function, R.id.rl_photo, R.id.rl_nickname, R.id.rl_gender, R.id.rl_birthday, R.id
-            .rl_address, R.id.rl_work, R
-            .id.rl_changePwd})
+            .rl_address, R.id.rl_work, R.id.rl_phone, R.id.rl_email, R.id.rl_pwd})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -294,10 +296,11 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 //修改工作
                 editUserInfoPresenter.showWork();
                 break;
-            case R.id.rl_changePwd:
-                //修改密码
-                Intent changPwdIntent = new Intent(this, ChangePwdActivity.class);
-                startActivity(changPwdIntent);
+            case R.id.rl_phone:
+                break;
+            case R.id.rl_email:
+                break;
+            case R.id.rl_pwd:
                 break;
         }
     }

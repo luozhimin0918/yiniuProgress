@@ -279,23 +279,15 @@
                             android:background="@color/line_color3"/>
                     </RelativeLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/editUserInfo_line_height"
-                        android:background="@color/line_color2"
-                        android:visibility="gone"
-                        />
-
                     <RelativeLayout
-                        android:id="@+id/rl_changePwd"
-                        style="@style/EditUserInfoItemStyle"
-                        android:visibility="gone">
+                        android:id="@+id/rl_phone"
+                        style="@style/EditUserInfoItemStyle">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="修改密码"
+                            android:text="手机号"
                             android:textColor="@color/font_color1"
                             android:textSize="@dimen/content_font_size2"/>
 
@@ -309,14 +301,106 @@
                             android:src="@mipmap/icon_comment_more"
                             />
 
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="去绑定"
+                            android:textColor="@color/font_color6"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
                     </RelativeLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/editUserInfo_line_height"
-                        android:background="@color/line_color2"
-                        android:visibility="gone"
-                        />
+                    <RelativeLayout
+                        android:id="@+id/rl_email"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="电子邮箱"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="1px"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_comment_more"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="去绑定"
+                            android:textColor="@color/font_color6"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_pwd"
+                        style="@style/EditUserInfoItemStyle">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="登录密码"
+                            android:textColor="@color/font_color1"
+                            android:textSize="@dimen/content_font_size2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/arrow_right_width"
+                            android:layout_height="@dimen/arrow_right_height"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="1px"
+                            android:layout_marginRight="@dimen/editUserInfo_item_marginLeft"
+                            android:src="@mipmap/icon_comment_more"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_pwd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/item_height"
+                            android:gravity="center"
+                            android:src="@mipmap/ic_launcher"
+                            android:text="修改密码"
+                            android:textColor="@color/font_color6"
+                            android:textSize="@dimen/content_font_size"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/line_color3"/>
+                    </RelativeLayout>
 
                 </LinearLayout>
             </ScrollView>

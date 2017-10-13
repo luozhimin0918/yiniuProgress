@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -14,19 +15,14 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,11 +66,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -98,9 +94,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @BindView(R.id.tv_bar_code) public TextView tvBarCode;
     @BindView(R.id.tv_bar_title) public TextView tvBarTitle;
 
-    @BindView(R.id.hsv_toolbar_portrair) View tbPortrair;
-    @BindView(R.id.hsv_toolbar_land) View tbLand;
-
     @BindView(R.id.market_head_parent) public FrameLayout marketHeadParentLayout;
     @BindView(R.id.market_chart_low) public TextView marketChartLow;
     @BindView(R.id.market_chart_zde) public TextView marketChartZde;
@@ -111,25 +104,18 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @BindView(R.id.market_chart_zuidi) public TextView marketChartZuidi;
     @BindView(R.id.market_chart_update_time) public TextView marketChartLastTime;
 
-    @BindView(R.id.market_chart_fenshi) public RelativeLayout rlFenShiView;
-
-
     @BindView(R.id.ll_nav) public LinearLayout marketFunctionNav;
 
     @BindView(R.id.market_chart_load) PageLoadLayout marketChartLoad;
-    @BindView(R.id.market_chart_day) RelativeLayout marketChartDay;
-    @BindView(R.id.market_chart_week) RelativeLayout marketChartWeek;
-    @BindView(R.id.market_chart_month) RelativeLayout marketChartMonth;
-    @BindView(R.id.market_chart_fenshi_land) RelativeLayout marketChartFenshiLand;
-    @BindView(R.id.market_chart_fen5_land) RelativeLayout marketChartFen5Land;
-    @BindView(R.id.market_chart_fen15_land) RelativeLayout marketChartFen15Land;
-    @BindView(R.id.market_chart_fen30_land) RelativeLayout marketChartFen30Land;
-    @BindView(R.id.market_chart_fen60_land) RelativeLayout marketChartFen60Land;
-    @BindView(R.id.market_chart_rik_land) RelativeLayout marketChartRikLand;
-    @BindView(R.id.market_chart_zhouk_land) RelativeLayout marketChartZhoukLand;
-    @BindView(R.id.market_chart_yue1_land) RelativeLayout marketChartYue1Land;
-    @BindView(R.id.market_chart_minute) RelativeLayout marketChartMinute;
-    @BindView(R.id.tv_chart_minute) TextView marketChartMinuteTv;
+
+    @BindView(R.id.market_chart_fenshi) public RelativeLayout rlFenShiView;
+    @BindView(R.id.market_chart_fen5) RelativeLayout marketChartFen5;
+    @BindView(R.id.market_chart_fen15) RelativeLayout marketChartFen15;
+    @BindView(R.id.market_chart_fen30) RelativeLayout marketChartFen30;
+    @BindView(R.id.market_chart_fen60) RelativeLayout marketChartFen60;
+    @BindView(R.id.market_chart_rik) RelativeLayout marketChartRik;
+    @BindView(R.id.market_chart_zhouk) RelativeLayout marketChartZhouk;
+    @BindView(R.id.market_chart_yue1) RelativeLayout marketChartYue1;
 
     /**
      * 分时图的Chart
@@ -160,8 +146,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     //    private ShareJson shareJson;
 
     public boolean portrait = true;
-    private PopupWindow popupUtil;
-    private RelativeLayout itemView;
 
     @OnClick({R.id.ll_market_detail_optional,
             R.id.ll_market_detail_share,
@@ -209,9 +193,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detail, StatusBarColor.NO_COLOR);
-
-        tbLand.setVisibility(View.GONE);
-        tbPortrair.setVisibility(View.VISIBLE);
 
         int alertTheme = ThemeUtil.getAlertTheme(getContext());
         switch (alertTheme) {
@@ -276,50 +257,66 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         });
     }
 
-    private void showMinuteSelView() {
-        if (popupUtil == null) {
-            popupUtil = new PopupWindow(this);
-            popupUtil.setHeight(SystemUtil.dp2px(this, 160));
-            popupUtil.setWidth(marketChartMinute.getWidth());
-            final ListView popupView = (ListView) LayoutInflater.from(this).inflate(R.layout.pop_list, null, false);
-            popupUtil.setContentView(popupView);
-            popupUtil.setOutsideTouchable(true);
+    @OnClick({R.id.market_chart_fenshi, R.id.market_chart_fen5,
+            R.id.market_chart_fen15,
+            R.id.market_chart_fen30, R.id.market_chart_fen60,
+            R.id.market_chart_rik, R.id.market_chart_zhouk,
+            R.id.market_chart_yue1})
+    public void onNavigationItemClick(View view) {
+        RelativeLayout itemView = (RelativeLayout) view;
 
-            final List<String> array = Arrays.asList(getResources().getStringArray(R.array.market_second));
-            popupView.setAdapter(new ArrayAdapter<>(this, R.layout.item_market_minute, R.id.tv_minute, array));
-            popupView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    marketChartMinuteTv.setText(array.get(position));
-                    switch (position) {
-                        case 0:
-                            clickNavigationPosition = 1;
-                            setHighLightView(itemView);
-                            break;
-                        case 1:
-                            clickNavigationPosition = 2;
-                            setHighLightView(itemView);
-                            break;
-                        case 2:
-                            clickNavigationPosition = 3;
-                            setHighLightView(itemView);
-                            break;
-                        case 3:
-                            clickNavigationPosition = 4;
-                            setHighLightView(itemView);
-                            break;
-
-                    }
-                    requestChartData(clickNavigationPosition);
-                    popupUtil.dismiss();
-                }
-            });
-
+        if (itemView == clickOldNavigationView) {
+            return;
+        } else {
+            mQueue.cancelAll(marketItemBean.getCode());
         }
-        popupUtil.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_market));
-        if (!popupUtil.isShowing())
-            popupUtil.showAsDropDown(marketChartMinute);
+
+        switch (view.getId()) {
+            case R.id.market_chart_fenshi:
+                clickNavigationPosition = 0;
+                break;
+            case R.id.market_chart_fen5:
+                clickNavigationPosition = 1;
+                break;
+            case R.id.market_chart_fen15:
+                clickNavigationPosition = 2;
+                break;
+            case R.id.market_chart_fen30:
+                clickNavigationPosition = 3;
+                break;
+            case R.id.market_chart_fen60:
+                clickNavigationPosition = 4;
+                break;
+            case R.id.market_chart_rik:
+                clickNavigationPosition = 5;
+                break;
+            case R.id.market_chart_zhouk:
+                clickNavigationPosition = 6;
+                break;
+            case R.id.market_chart_yue1:
+                clickNavigationPosition = 7;
+                break;
+        }
+
+        requestChartData(clickNavigationPosition);
+
+        TextView itemTextView = (TextView) itemView.findViewWithTag("text");
+        itemTextView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
+        addLineView(itemView);
+
+        if (clickOldNavigationView != null) {
+            try {
+                TextView clickOldNavigationTextView = (TextView) clickOldNavigationView.findViewWithTag("text");
+                clickOldNavigationTextView.setTextColor(ContextCompat.getColor(this, R.color.font_color2));
+
+                View lineView = clickOldNavigationView.findViewWithTag("lineView");
+                clickOldNavigationView.removeView(lineView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        clickOldNavigationView = itemView;
     }
 
     private void addLineView(View view) {
@@ -400,115 +397,6 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         } else {// 转全屏
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-    }
-
-    @OnClick({
-            R.id.market_chart_fenshi,
-            R.id.market_chart_fenshi_land,
-            R.id.market_chart_day,
-            R.id.market_chart_rik_land,
-            R.id.market_chart_week,
-            R.id.market_chart_zhouk_land,
-            R.id.market_chart_minute,
-            R.id.market_chart_month,
-            R.id.market_chart_yue1_land,
-            R.id.market_chart_fen5_land,
-            R.id.market_chart_fen15_land,
-            R.id.market_chart_fen30_land,
-            R.id.market_chart_fen60_land})
-    public void onNavigationItemClick(View view) {
-        itemView = (RelativeLayout) view;
-
-        if (itemView != marketChartMinute && itemView == clickOldNavigationView) {
-        } else {
-            mQueue.cancelAll(marketItemBean.getCode());
-            switch (view.getId()) {
-                case R.id.market_chart_fen5_land:
-                    clickNavigationPosition = 1;
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_fen15_land:
-                    clickNavigationPosition = 2;
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_fen30_land:
-                    clickNavigationPosition = 3;
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_fen60_land:
-                    clickNavigationPosition = 4;
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_fenshi:
-                case R.id.market_chart_fenshi_land:
-                    clickNavigationPosition = 0;
-                    if (popupUtil != null)
-                        popupUtil.dismiss();
-                    marketChartMinuteTv.setText("分钟");
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_day:
-                case R.id.market_chart_rik_land:
-                    clickNavigationPosition = 5;
-                    if (popupUtil != null)
-                        popupUtil.dismiss();
-                    marketChartMinuteTv.setText("分钟");
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_week:
-                case R.id.market_chart_zhouk_land:
-                    clickNavigationPosition = 6;
-                    if (popupUtil != null)
-                        popupUtil.dismiss();
-                    marketChartMinuteTv.setText("分钟");
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_month:
-                case R.id.market_chart_yue1_land:
-                    clickNavigationPosition = 7;
-                    if (popupUtil != null)
-                        popupUtil.dismiss();
-                    marketChartMinuteTv.setText("分钟");
-                    requestChartData(clickNavigationPosition);
-                    setHighLightView(itemView);
-                    break;
-                case R.id.market_chart_minute:
-                    showMinuteSelView();
-                    break;
-            }
-        }
-    }
-
-    /**
-     * 设置高亮显示
-     *
-     * @param itemView
-     */
-    private void setHighLightView(RelativeLayout itemView) {
-        TextView itemTextView = (TextView) itemView.findViewWithTag("text");
-        itemTextView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
-        addLineView(itemView);
-
-        if (clickOldNavigationView != null) {
-            try {
-                TextView clickOldNavigationTextView = (TextView) clickOldNavigationView.findViewWithTag("text");
-                clickOldNavigationTextView.setTextColor(ContextCompat.getColor(this, R.color.font_color2));
-
-                View lineView = clickOldNavigationView.findViewWithTag("lineView");
-                clickOldNavigationView.removeView(lineView);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        clickOldNavigationView = itemView;
     }
 
     private void addOrDeleteMarket() {
@@ -747,7 +635,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 colors[1] = 0xff0AB76C;
             }
 
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                 marketHeadLayout.setBackgroundDrawable(gradientDrawable);
             } else {
                 marketHeadLayout.setBackground(gradientDrawable);
@@ -964,90 +852,69 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //横屏
-            tbLand.setVisibility(View.VISIBLE);
-            tbPortrair.setVisibility(View.GONE);
-        } else {
-            //竖屏
-            tbLand.setVisibility(View.GONE);
-            tbPortrair.setVisibility(View.VISIBLE);
-        }
-
-        //保存选择状态
-        int id = clickOldNavigationView.getId();
-        switch (id) {
-            case R.id.market_chart_fen5_land:
-                marketChartMinuteTv.setText("5分");
-                setHighLightView(marketChartMinute);
-                break;
-            case R.id.market_chart_fen15_land:
-                marketChartMinuteTv.setText("15分");
-                setHighLightView(marketChartMinute);
-                break;
-            case R.id.market_chart_fen30_land:
-                marketChartMinuteTv.setText("30分");
-                setHighLightView(marketChartMinute);
-                break;
-            case R.id.market_chart_fen60_land:
-                marketChartMinuteTv.setText("60分");
-                setHighLightView(marketChartMinute);
-                break;
-            case R.id.market_chart_fenshi:
-                setHighLightView(marketChartFenshiLand);
-                break;
-            case R.id.market_chart_fenshi_land:
-                setHighLightView(rlFenShiView);
-                break;
-            case R.id.market_chart_day:
-                setHighLightView(marketChartRikLand);
-                break;
-            case R.id.market_chart_rik_land:
-                setHighLightView(marketChartDay);
-                break;
-            case R.id.market_chart_week:
-                setHighLightView(marketChartZhoukLand);
-                break;
-            case R.id.market_chart_zhouk_land:
-                setHighLightView(marketChartWeek);
-                break;
-            case R.id.market_chart_month:
-                setHighLightView(marketChartYue1Land);
-                break;
-            case R.id.market_chart_yue1_land:
-                setHighLightView(marketChartMonth);
-                break;
-            case R.id.market_chart_minute:
-                switch (clickNavigationPosition) {
-                    case 1:
-                        setHighLightView(marketChartFen5Land);
-                        break;
-                    case 2:
-                        setHighLightView(marketChartFen15Land);
-                        break;
-                    case 3:
-                        setHighLightView(marketChartFen30Land);
-                        break;
-                    case 4:
-                        setHighLightView(marketChartFen60Land);
-                        break;
-                }
-                break;
-        }
-
-
         marketDetailPresenter.onConfigurationChanged(newConfig);
+        resetSize(newConfig);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
-                    baseChartPresenter.getChartView().invalidate();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
+                baseChartPresenter.getChartView().invalidate();
             }
         }, 500);
+    }
+
+    /**
+     * 改变按钮大小使在横屏下撑满全屏
+     *
+     * @param newConfig
+     */
+    private void resetSize(Configuration newConfig) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //横屏
+            int width = SystemUtil.getScreenDisplay(this).widthPixels / 8;
+            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params6 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params7 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params8 = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
+            rlFenShiView.setLayoutParams(params1);
+            marketChartFen5.setLayoutParams(params2);
+            marketChartFen15.setLayoutParams(params3);
+            marketChartFen30.setLayoutParams(params4);
+            marketChartFen60.setLayoutParams(params5);
+            marketChartRik.setLayoutParams(params6);
+            marketChartZhouk.setLayoutParams(params7);
+            marketChartYue1.setLayoutParams(params8);
+        } else {
+            //竖屏
+            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params6 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params7 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            LinearLayout.LayoutParams params8 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+            rlFenShiView.setLayoutParams(params1);
+            marketChartFen5.setLayoutParams(params2);
+            marketChartFen15.setLayoutParams(params3);
+            marketChartFen30.setLayoutParams(params4);
+            marketChartFen60.setLayoutParams(params5);
+            marketChartRik.setLayoutParams(params6);
+            marketChartZhouk.setLayoutParams(params7);
+            marketChartYue1.setLayoutParams(params8);
+        }
     }
 
 
