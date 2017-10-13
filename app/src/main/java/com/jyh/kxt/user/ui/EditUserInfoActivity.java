@@ -297,8 +297,14 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 editUserInfoPresenter.showWork();
                 break;
             case R.id.rl_phone:
+                Intent phontIntent=new Intent(this,BindActivity.class);
+                phontIntent.putExtra(BindActivity.TYPE,BindActivity.TYPE_BIND_PHONE);
+                startActivity(phontIntent);
                 break;
             case R.id.rl_email:
+                Intent emailIntent=new Intent(this,BindActivity.class);
+                emailIntent.putExtra(BindActivity.TYPE,BindActivity.TYPE_CHANGE_EMAIL);
+                startActivity(emailIntent);
                 break;
             case R.id.rl_pwd:
                 break;

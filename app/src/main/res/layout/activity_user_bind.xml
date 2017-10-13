@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <TextView
+        android:id="@+id/tv_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/forget_margin1"
+        android:gravity="center"
+        android:paddingLeft="@dimen/forget_padding1"
+        android:text="请先验证身份"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/content_font_size"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_step1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_email"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            app:functionEditRightPadding="30dp"
+            app:functionEditTextHint="请输入注册的手机号或邮箱"
+            app:functionEditTextHintColor="@color/font_color9"
+            app:functionEditTextLineColor="@color/line_color3"
+            app:functionEditTextTextColor="@color/font_color5"
+            app:functionEditTextTextSize="@dimen/content_font_size"
+            app:functionEditTextType="DEFAULT"
+            />
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            app:functionEditRightPadding="30dp"
+            app:functionEditTextFunction="获取动态码"
+            app:functionEditTextFunctionColor="@color/font_color1"
+            app:functionEditTextHint="请输入动态密码"
+            app:functionEditTextHintColor="@color/font_color9"
+            app:functionEditTextLineColor="@color/line_color3"
+            app:functionEditTextTextColor="@color/font_color5"
+            app:functionEditTextTextSize="@dimen/content_font_size"
+            app:functionEditTextType="TEXT"
+            />
+
+    </LinearLayout>
+
+    <com.jyh.kxt.base.widget.FunctionEditText
+        android:id="@+id/edt_pwd2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        app:functionEditRightPadding="30dp"
+        app:functionEditTextHint="请输入注册的手机号或邮箱"
+        app:functionEditTextHintColor="@color/font_color9"
+        app:functionEditTextLineColor="@color/line_color3"
+        app:functionEditTextTextColor="@color/font_color5"
+        app:functionEditTextTextSize="@dimen/content_font_size"
+        app:functionEditTextType="DEFAULT"
+        android:visibility="gone"
+        />
+
+    <com.jyh.kxt.base.custom.DiscolorButton
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_btn_height"
+        android:layout_marginLeft="@dimen/forget_margin2"
+        android:layout_marginRight="@dimen/forget_margin2"
+        android:layout_marginTop="@dimen/login_marginTop"
+        android:gravity="center"
+        android:text="发送"
+        android:textSize="@dimen/content_font_size2"
+        app:clickBackground="@color/bg_click_color"
+        app:clickFontColor="@color/font_click_color"
+        app:cornerRadius="@dimen/btn_cornerRadius"
+        app:defaultBackground="@color/bg_enable_color"
+        app:defaultFontColor="@color/font_enable_color"
+        app:disabledBackground="@color/line_color3"
+        app:disabledFontColor="@color/font_disable_color"/>
+
+</LinearLayout>
