@@ -23,7 +23,7 @@ import com.jyh.kxt.index.adapter.CommentVideoAdapter;
 import com.jyh.kxt.index.json.PointJson;
 import com.jyh.kxt.index.ui.CommentListActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
@@ -79,7 +79,7 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
 
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
         JSONObject parameterJson = new JSONObject();

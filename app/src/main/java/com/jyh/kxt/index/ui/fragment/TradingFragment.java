@@ -25,7 +25,7 @@ import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
@@ -100,7 +100,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
                 UserJson userInfo = LoginUtils.getUserInfo(getContext());
                 if (userInfo == null) {
-                    getContext().startActivity(new Intent(getContext(), LoginOrRegisterActivity.class));
+                    getContext().startActivity(new Intent(getContext(), LoginActivity.class));
                     return;
                 }
                 if (userInfo.getWriter_id() == null) {

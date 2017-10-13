@@ -38,6 +38,11 @@ public class ValidationModel {
         this.validationExecutor = validationExecutor;
     }
 
+    public ValidationModel(EditText editText, ValidationExecutor validationExecutor) {
+        this.editText = editText;
+        this.validationExecutor = validationExecutor;
+    }
+
     public EditText getEditText() {
         return editText;
     }

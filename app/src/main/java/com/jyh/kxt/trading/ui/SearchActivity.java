@@ -25,7 +25,6 @@ import com.jyh.kxt.search.adapter.QuoteAdapter;
 import com.jyh.kxt.search.json.QuoteItemJson;
 import com.jyh.kxt.search.util.AutoCompleteUtils;
 import com.jyh.kxt.trading.presenter.SearchPresenter;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
 import com.library.base.http.VarConstant;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;

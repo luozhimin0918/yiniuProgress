@@ -31,7 +31,7 @@ import com.jyh.kxt.trading.adapter.AuthorAdapter;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.AuthorPresenter;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.LogUtil;
@@ -239,7 +239,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                 if (LoginUtils.isLogined(this)) {
                     presenter.attention(vLike.isSelected());
                 } else {
-                    startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
             case R.id.v_sxt:
@@ -252,7 +252,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                     intent.putExtra(IntentConstant.NAME, authorName);
                     startActivity(intent);
                 } else {
-                    startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
         }

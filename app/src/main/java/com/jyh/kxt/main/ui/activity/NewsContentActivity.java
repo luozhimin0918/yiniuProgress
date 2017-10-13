@@ -69,7 +69,7 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -244,7 +244,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 }
 
                 if (LoginUtils.getUserInfo(getContext()) == null) {
-                    Intent loginIntent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                     startActivity(loginIntent);
                     return;
                 }
@@ -558,7 +558,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     @Override
                     public void onClick(View v) {
                         if (LoginUtils.getUserInfo(getContext()) == null) {
-                            Intent loginIntent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                             startActivity(loginIntent);
                             return;
                         }

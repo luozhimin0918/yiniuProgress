@@ -33,7 +33,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -275,7 +275,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
                         onCommentClickListener.onClickView(ClickName.NONE_COMMENT);
                     }
                 } else {
-                    mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                    mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 }
             }
         });
@@ -311,7 +311,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
         boolean loginEd = LoginUtils.isLogined(mContext);
         if (!loginEd) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
 
         }

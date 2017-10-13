@@ -50,7 +50,7 @@ import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.index.json.SingleThreadJson;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.jyh.kxt.user.ui.json.VersionJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -653,7 +653,7 @@ public class MainPresenter extends BasePresenter {
                     .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         }
                     }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
                         @Override

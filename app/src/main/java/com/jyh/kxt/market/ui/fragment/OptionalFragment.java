@@ -21,7 +21,7 @@ import com.jyh.kxt.market.adapter.MarketMainItemAdapter;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.presenter.OptionalPresenter;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
@@ -40,7 +40,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.jyh.kxt.base.utils.MarketUtil.getMarketEditOption;
-import static com.library.bean.EventBusClass.EVENT_LOGOUT;
 import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 /**
@@ -117,7 +116,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
             case R.id.tv_synchronization:
                 UserJson userInfo = LoginUtils.getUserInfo(getContext());
                 if (userInfo == null) {
-                    Intent intent = new Intent(getContext(), LoginOrRegisterActivity.class);
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
                 } else {
                     requestSynchronization(userInfo);

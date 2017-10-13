@@ -15,7 +15,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.explore.json.AuthorJson;
 import com.jyh.kxt.explore.ui.fragment.AuthorFragment;
 import com.jyh.kxt.index.json.TypeDataJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -212,7 +212,7 @@ public class AuthorFragmentPresenter extends BasePresenter {
                     .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         }
                     }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
                         @Override

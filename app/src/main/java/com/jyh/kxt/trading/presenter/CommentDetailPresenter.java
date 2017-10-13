@@ -19,7 +19,7 @@ import com.jyh.kxt.trading.adapter.CommentDetailAdapter;
 import com.jyh.kxt.trading.json.CommentDetailBean;
 import com.jyh.kxt.trading.ui.CommentDetailActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -49,7 +49,7 @@ public class CommentDetailPresenter extends BasePresenter {
     public void requestListData() {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
 

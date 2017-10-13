@@ -22,7 +22,7 @@ import com.jyh.kxt.explore.adapter.NewsAdapter;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.main.json.SlideJson;
 import com.jyh.kxt.trading.presenter.ArticleItemPresenter;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
@@ -195,7 +195,7 @@ public class ArticleItemFragment extends BaseFragment implements AdapterView.OnI
         loginLayout.findViewById(R.id.tv_synchronization).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), LoginOrRegisterActivity.class), 100);
+                startActivityForResult(new Intent(getContext(), LoginActivity.class), 100);
             }
         });
         params.gravity = Gravity.BOTTOM;

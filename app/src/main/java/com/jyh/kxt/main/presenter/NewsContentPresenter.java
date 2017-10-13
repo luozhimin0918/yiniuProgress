@@ -2,9 +2,6 @@ package com.jyh.kxt.main.presenter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -32,7 +29,7 @@ import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.ui.activity.NewsContentActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -40,16 +37,9 @@ import com.library.bean.EventBusClass;
 import com.library.util.JsonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
-import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 
@@ -181,7 +171,7 @@ public class NewsContentPresenter extends BasePresenter {
                         .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                                mContext.startActivity(new Intent(mContext, LoginActivity.class));
                             }
                         }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
                             @Override

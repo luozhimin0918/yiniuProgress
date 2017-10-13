@@ -51,7 +51,7 @@ import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpCallBack;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -186,7 +186,7 @@ public class ArticleContentPresenter {
     public void setAttentionState(TextView tvGz, boolean isAttention) {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
 
@@ -388,7 +388,7 @@ public class ArticleContentPresenter {
     public void showReportWindow(final String oid, final List<String> reportList) {
         final UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
         if (functionPopupWindow != null) {
@@ -636,7 +636,7 @@ public class ArticleContentPresenter {
     public void share(ViewPointTradeBean viewPointTradeBean) {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
         if (userInfo.getWriter_id() == null) {

@@ -18,7 +18,7 @@ public class UserNameValidation extends ValidationExecutor {
     public boolean doValidate(Context context, String text) {
 
         if (RegexValidateUtil.isEmpty(text)) {
-            errorInfo = "用户名不能为空";
+            errorInfo = "账号不能为空";
             return false;
         }
 //
@@ -28,7 +28,7 @@ public class UserNameValidation extends ValidationExecutor {
 //            errorInfo = "用户名错误";
 //            return false;
 //        }
-        errorInfo=null;
+        errorInfo = null;
         return true;
     }
 }
