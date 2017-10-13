@@ -1,10 +1,8 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.SlideJson;
 import com.library.util.SystemUtil;
 
@@ -101,8 +98,6 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
         String o_class = slideJson.getO_class();
         String o_action = slideJson.getO_action();
         String o_id = slideJson.getO_id();
-        String href = slideJson.getHref();
-        JumpUtils.jump(context, o_class, o_action, o_id, href);
+        JumpUtils.jump(context, o_class, o_action, o_id, slideJson.getHref());
     }
-
 }

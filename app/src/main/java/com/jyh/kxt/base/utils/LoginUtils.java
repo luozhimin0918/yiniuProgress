@@ -30,6 +30,8 @@ public class LoginUtils {
     public static void login(Context context, UserJson userInfo) {
         SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, userInfo));
+
+//        setPushTag(context, userInfo);
     }
 
     /**
@@ -40,7 +42,28 @@ public class LoginUtils {
      */
     public static void changeUserInfo(Context context, UserJson userInfo) {
         SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
+
+//        setPushTag(context, userInfo);
     }
+
+//    private static void setPushTag(Context context, UserJson userInfo) {
+//        try {
+//            //登录之后绑定用户信息
+//            String pushUid = SPUtils.getString(context, SpConstant.PUSH_AGENT_TAG);
+//            if (TextUtils.isEmpty(pushUid) || !userInfo.getUid().equals(pushUid)) {
+//                SPUtils.save(context, SpConstant.PUSH_AGENT_TAG, userInfo.getUid());
+//
+//                PushAgent mPushAgent = PushAgent.getInstance(SampleApplicationContext.context);
+//                mPushAgent.addAlias(userInfo.getUid(), "uid", new UTrack.ICallBack() {
+//                    @Override
+//                    public void onMessage(boolean isSuccess, String message) {
+//                    }
+//                });
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * 退出账号

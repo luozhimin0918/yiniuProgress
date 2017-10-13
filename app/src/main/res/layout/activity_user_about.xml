@@ -124,4 +124,12 @@
             android:background="@color/line_color3"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/about_tv_hint_userinfo"
+        android:layout_width="match_parent"
+        android:padding="@dimen/itemPaddingLeft"
+        android:textColor="@color/font_color5"
+        android:visibility="gone"
+        android:textSize="@dimen/content_font_size2"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

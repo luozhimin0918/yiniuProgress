@@ -111,4 +111,6 @@ public class SpConstant {
      * 聊天预览信息
      */
     public static final String CHAT_PREVIEW = "chat_preview";
+
+    public static final String PUSH_AGENT_TAG = "push_agent_tag";
 }
