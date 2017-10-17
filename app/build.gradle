@@ -322,6 +322,10 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
+
+    compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
+    provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
+
     /**
      *  推送相关集成
      */
@@ -332,7 +336,5 @@ dependencies {
     // 此处以JCore 1.1.7 版本为例。
     //华为
     compile 'com.huawei.android.hms:push:2.5.2.300'
-    compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
-    provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
-    compile files('libs/MiPush_SDK_Client_3_4_5.jar')
-}
+
+   }

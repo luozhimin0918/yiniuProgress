@@ -28,7 +28,7 @@ import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
@@ -127,7 +127,7 @@ public class PublishPresenter extends BasePresenter {
             return;
         }
         if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
 

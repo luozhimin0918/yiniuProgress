@@ -1,6 +1,5 @@
 package com.jyh.kxt.trading.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,7 +26,6 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
@@ -35,7 +33,7 @@ import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.util.TradeHandlerUtil;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
@@ -201,7 +199,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                                mContext.startActivity(new Intent(mContext, LoginActivity.class));
                             }
                         });
                     } else {
@@ -214,7 +212,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         }
                     });
                 }

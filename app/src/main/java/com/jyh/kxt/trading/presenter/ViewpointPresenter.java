@@ -30,7 +30,7 @@ import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.jyh.kxt.trading.ui.fragment.ViewpointFragment;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
@@ -243,7 +243,7 @@ public class ViewpointPresenter extends BasePresenter {
                     .setNegativeButton("登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         }
                     }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
                         @Override

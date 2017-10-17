@@ -2,6 +2,7 @@ package com.jyh.kxt.main.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DefaultDatabaseErrorHandler;
 import android.support.v4.view.ViewPager;
 
 import com.alibaba.fastjson.JSON;
@@ -14,6 +15,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.main.json.AdJson2;
 import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.library.base.http.PreCacheHttpResponse;
 import com.library.util.JsonUtil;
@@ -31,6 +33,8 @@ import com.library.base.http.VolleyRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.internal.operators.OnSubscribeRange;
 
 /**
  * 项目名:Kxt
@@ -106,6 +110,8 @@ public class NewsPresenter extends BasePresenter {
                 List<MarketItemBean> quotes = null;
                 MainNewsContentJson news = null;
                 AdJson ad = null;
+                AdJson2 adSlide = null;
+                AdJson adBtn = null;
 
                 ArrayList<String> list = new ArrayList<>();
 
@@ -178,9 +184,27 @@ public class NewsPresenter extends BasePresenter {
                                 e.printStackTrace();
                             }
                             break;
+                        case VarConstant.NEWS_AD_SLIDE:
+                            try {
+                                adSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                list.add(VarConstant.NEWS_AD_SLIDE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case VarConstant.NEWS_AD_SHORTCUT:
+                            try {
+                                adBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
-                newsFragment.initView(newsNavs, slide, shortcut, quotes, ad, news, list);
+                newsFragment.initView(newsNavs, slide, shortcut, quotes, ad, adSlide, adBtn, news, list);
             }
 
             @Override
@@ -232,6 +256,8 @@ public class NewsPresenter extends BasePresenter {
                 List<MarketItemBean> quotes = null;
                 MainNewsContentJson news = null;
                 AdJson ad = null;
+                AdJson2 adSlide = null;
+                AdJson adBtn = null;
 
                 ArrayList<String> list = new ArrayList<>();
 
@@ -274,12 +300,15 @@ public class NewsPresenter extends BasePresenter {
                             break;
                         case VarConstant.NEWS_LIST:
                             try {
-                                JSONArray newsArray = (JSONArray) headerJson.getData();
-                                if (newsArray == null) break;
-                                news = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
+                                news = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                news = new MainNewsContentJson();
+                                MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
+                                news.setType("news");
+                                dataBean.setData(JSON.parseArray(JSON.toJSONString(headerJson.getData()), NewsJson.class));
+                                news.setData(dataBean);
                             }
+
                             break;
                         case VarConstant.NEWS_QUOTES:
                             try {
@@ -301,9 +330,25 @@ public class NewsPresenter extends BasePresenter {
                                 e.printStackTrace();
                             }
                             break;
+                        case VarConstant.NEWS_AD_SHORTCUT:
+                            try {
+                                adBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case VarConstant.NEWS_AD_SLIDE:
+                            try {
+                                adSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                list.add(VarConstant.NEWS_AD_SLIDE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
                     }
                 }
-                newsFragment.initView(newsNavs, slide, shortcut, quotes, ad, news, list);
+                newsFragment.initView(newsNavs, slide, shortcut, quotes, ad, adSlide, adBtn, news, list);
             }
 
             @Override

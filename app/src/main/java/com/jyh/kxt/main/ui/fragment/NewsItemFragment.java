@@ -71,7 +71,7 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
                 newsItemPresenter.clearBrowerHistory();
                 break;
             case EventBusClass.MARKET_OPTION_UPDATE:
-                if(isMain){
+                if (isMain) {
 //                    newsItemPresenter.addQuotes();
                 }
                 break;
@@ -107,11 +107,19 @@ public class NewsItemFragment extends BaseFragment implements PullToRefreshBase.
     @Override
     public void onResume() {
         super.onResume();
+        if (newsItemPresenter != null)
+            newsItemPresenter.onResume();
         try {
             newsItemPresenter.sendSocketParams();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        newsItemPresenter.onPause();
     }
 
     @Override

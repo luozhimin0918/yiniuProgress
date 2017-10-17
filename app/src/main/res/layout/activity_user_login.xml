@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sv_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme1"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/fl_bg"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@mipmap/icon_user_login_bg">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="50dp"
+                    android:src="@mipmap/icon_user_login_logo"/>
+
+                <ImageView
+                    android:id="@+id/iv_close"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="30dp"
+                    android:src="@mipmap/icon_user_login_close"/>
+
+                <com.library.widget.tablayout.NavigationTabLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tl="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/stl_navigation_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:paddingRight="@dimen/navigationBar2ImageWidth"
+                    tl:tl_indicator_color="@color/white"
+                    tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
+                    tl:tl_indicator_margin_bottom="@dimen/navigationBar2MarginBottom"
+
+                    tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
+                    tl:tl_mode_scrollable="MODE_FIXED"
+                    tl:tl_tab_padding="10dp"
+                    tl:tl_textSelectColor="@color/translucent_white"
+                    tl:tl_textUnselectColor="@color/white"
+                    tl:tl_textsize="@dimen/describe_font_size2"
+                    />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/lr_padding_horizontal"
+                android:paddingRight="@dimen/lr_padding_horizontal">
+
+                <com.jyh.kxt.base.widget.FunctionEditText
+                    android:id="@+id/edt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/lr_edt_height"
+                    android:layout_marginTop="@dimen/lr_content_marginTop"
+                    tl:functionEditTextHint="请输入账号"
+                    tl:functionEditTextHintColor="@color/font_color9"
+                    tl:functionEditTextLineColor="@color/line_color3"
+                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextTextSize="@dimen/content_font_size"
+                    tl:functionEditTextType="DEFAULT"/>
+
+                <com.jyh.kxt.base.widget.FunctionEditText
+                    android:id="@+id/edt_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/lr_edt_height"
+                    tl:functionEditTextFunction="忘记密码"
+                    tl:functionEditTextFunctionTextSize="@dimen/describe_font_size3"
+                    tl:functionEditTextHint="请输入密码"
+                    tl:functionEditTextHintColor="@color/font_color9"
+                    tl:functionEditTextLineColor="@color/line_color3"
+                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextTextSize="@dimen/content_font_size"
+                    tl:functionEditTextType="IMAGE_TEXT"/>
+
+                <com.jyh.kxt.base.widget.FunctionEditText
+                    android:id="@+id/edt_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/lr_edt_height"
+                    android:visibility="gone"
+                    tl:functionEditTextHint="请输入验证码"
+                    tl:functionEditTextHintColor="@color/font_color9"
+                    tl:functionEditTextLineColor="@color/line_color3"
+                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextTextSize="@dimen/content_font_size"
+                    tl:functionEditTextType="CHECK_CODE"/>
+
+                <com.jyh.kxt.base.custom.DiscolorButton
+                    android:id="@+id/db_login"
+                    style="@style/BtnStyle1"
+                    android:layout_marginTop="@dimen/login_marginTop"
+                    android:text="登录"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="新用户注册 >>>"
+                    android:textColor="@color/font_color1"
+                    android:textSize="@dimen/content_font_size"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/lr_content_marginTop">
+
+                    <ImageView
+                        android:id="@+id/iv_qq"
+                        android:layout_width="@dimen/lr_umengImgSize"
+                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="left"
+                        android:src="@mipmap/icon_user_login_qq"/>
+
+                    <ImageView
+                        android:id="@+id/iv_sina"
+                        android:layout_width="@dimen/lr_umengImgSize"
+                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/icon_user_login_sina"/>
+
+                    <ImageView
+                        android:id="@+id/iv_wx"
+                        android:layout_width="@dimen/lr_umengImgSize"
+                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_gravity="right"
+                        android:src="@mipmap/icon_user_login_wx"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/login_marginTop2"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="11dp"
+                        android:text="社交账户登录"
+                        android:textColor="@color/font_color8"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="更快更简单"
+                        android:textColor="@color/font_color3"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</ScrollView>

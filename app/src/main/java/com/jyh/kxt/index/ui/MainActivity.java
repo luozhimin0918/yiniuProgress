@@ -75,7 +75,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.CollectActivity;
 import com.jyh.kxt.user.ui.EditUserInfoActivity;
-import com.jyh.kxt.user.ui.LoginOrRegisterActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.base.http.HttpDeliveryListener;
 import com.library.base.http.VarConstant;
@@ -558,7 +558,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_login:
                 //登录
-                startActivity(new Intent(this, LoginOrRegisterActivity.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
             case R.id.ll_quit:
                 mainPresenter.showQuitDialog();
@@ -567,7 +567,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 //发布观点
                 UserJson pointUserJson = LoginUtils.getUserInfo(this);
                 if (pointUserJson == null) {
-                    Intent intent = new Intent(this, LoginOrRegisterActivity.class);
+                    Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     return;
                 }

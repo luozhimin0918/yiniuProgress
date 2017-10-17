@@ -520,26 +520,41 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         }
     }
 
+    /**
+     * 刷新时间
+     */
+    private long refreshTime;
+
     @Override
     public void onPullDownToRefresh(final PullToRefreshBase refreshView) {
         Log.i("kuaixun", "onPullDownToRefresh");
-        if (connection.isConnected()) {
-            connection.sendTextMessage(loginStr);
-        } else {
-            try {
-                connection.connect(server + "?token=" + token, null, connectionHandler, options,
-                        headers);
-            } catch (WebSocketException e) {
-                e.printStackTrace();
+        if (System.currentTimeMillis() > refreshTime + 10000) {
+            if (connection.isConnected()) {
+                connection.sendTextMessage(loginStr);
+            } else {
+                try {
+                    connection.connect(server + "?token=" + token, null, connectionHandler, options,
+                            headers);
+                } catch (WebSocketException e) {
+                    e.printStackTrace();
+                }
+                flashFragment.lvContent.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        flashFragment.lvContent.onRefreshComplete();
+                    }
+                }, 200);
             }
+            setAd();
+            refreshTime = System.currentTimeMillis();
+        } else {
             flashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     flashFragment.lvContent.onRefreshComplete();
                 }
-            }, 200);
+            }, 1000);
         }
-        setAd();
     }
 
     public void setAd() {

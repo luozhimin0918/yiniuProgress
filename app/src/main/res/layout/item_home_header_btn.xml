@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical"
-              android:padding="@dimen/index_btn_padding">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/index_btn_padding">
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="@dimen/index_btn_imgSize"
-        android:layout_height="@dimen/index_btn_imgSize"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/icon_test_flash"
+        app:layout_constraintDimensionRatio="95:64"
+        android:scaleType="fitXY"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/index_btn_marginTop"
         android:gravity="center"
+        android:text="hahaha"
         android:textColor="@color/font_color5"
-        android:textSize="@dimen/describe_font_size1"/>
-</LinearLayout>
+        android:textSize="@dimen/describe_font_size1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintTop_toBottomOf="@+id/iv"
+        app:layout_constraintVertical_bias="0.012"/>
+</android.support.constraint.ConstraintLayout>

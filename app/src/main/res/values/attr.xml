@@ -65,6 +65,40 @@
         <attr name="searchDrawablePadding" format="dimension|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="FunctionEditText">
+        <attr name="functionEditTextType" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="CHECK_CODE" value="1"/>
+            <enum name="TEXT" value="2"/>
+            <enum name="IMAGE" value="3"/>
+            <enum name="IMAGE_TEXT" value="4"/>
+        </attr>
+        <attr name="functionEditTextClearType" format="integer"/>
+        <attr name="functionEditTextLineColor" format="color|reference"/>
+        <attr name="functionEditTextTextColor" format="color|reference"/>
+        <attr name="functionEditTextHintColor" format="color|reference"/>
+        <attr name="functionEditTextFunctionColor" format="color|reference"/>
+        <attr name="functionEditTextFunctionTxtLineColor" format="color|reference"/>
+        <attr name="functionEditTextTextSize" format="dimension|reference"/>
+        <attr name="functionEditTextFunctionTextSize" format="dimension|reference"/>
+        <attr name="functionEditTextClearDrawable" format="reference"/>
+        <attr name="functionEditTextFunctionDrawable" format="reference"/>
+        <attr name="functionEditTextText" format="string|reference"/>
+        <attr name="functionEditTextHint" format="string|reference"/>
+        <attr name="functionEditTextFunction" format="string|reference"/>
+        <attr name="functionEditTextBackgroundColor" format="color|reference"/>
+        <attr name="functionEditTextShowTxtLine" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="VerifyCode">
+        <attr name="codeTextSize" format="dimension"/>
+        <attr name="codeBackground" format="color"/>
+        <attr name="codeLength" format="integer"/>
+        <attr name="isContainChar" format="boolean"/>
+        <attr name="pointNum" format="integer"/>
+        <attr name="linNum" format="integer"/>
+    </declare-styleable>
+
     <!--夜间模式-->
     <declare-styleable name="SkinnableView">
         <attr name="android:background"/>

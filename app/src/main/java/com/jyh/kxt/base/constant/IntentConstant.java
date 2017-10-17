@@ -36,6 +36,8 @@ public class IntentConstant {
     public static final String NEWS_SHORTCUTS = "shortcuts";//按钮
     public static final String NEWS_QUOTES = "quotes";//行情
     public static final String NEWS_ADS = "ads";//广告
+    public static final String NEWS_ADS_SLIDE = "ads_slide";//广告
+    public static final String NEWS_ADS_BTN = "ads_btn";//广告
     public static final String NEWS_NEWS = "news";//要闻列表
     public static final String NEWS_LIST = "list";//用于首页头部排序
 

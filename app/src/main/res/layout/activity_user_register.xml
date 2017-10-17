@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/action_bar1"/>
+
+    <com.jyh.kxt.base.widget.FunctionEditText
+        android:id="@+id/edt_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_edt_height"
+        android:layout_marginLeft="20dp"
+        tl:functionEditTextHint="请输入手机号"
+        tl:functionEditTextHintColor="@color/font_color9"
+        tl:functionEditTextLineColor="@color/line_color3"
+        tl:functionEditTextTextColor="@color/font_color5"
+        tl:functionEditTextTextSize="@dimen/content_font_size"
+        tl:functionEditTextType="DEFAULT"
+        />
+
+    <com.jyh.kxt.base.widget.FunctionEditText
+        android:id="@+id/edt_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lr_edt_height"
+        android:layout_marginLeft="20dp"
+        tl:functionEditTextFunction="获取动态密码"
+        tl:functionEditTextFunctionColor="@color/font_color1"
+        tl:functionEditTextFunctionTxtLineColor="@color/line_color3"
+        tl:functionEditTextHint="请输入动态密码"
+        tl:functionEditTextHintColor="@color/font_color9"
+        tl:functionEditTextLineColor="@color/line_color3"
+        tl:functionEditTextShowTxtLine="true"
+        tl:functionEditTextTextColor="@color/font_color5"
+        tl:functionEditTextTextSize="@dimen/content_font_size"
+        tl:functionEditTextType="TEXT"
+        />
+
+    <com.jyh.kxt.base.custom.DiscolorButton
+        android:id="@+id/db_register"
+        style="@style/BtnStyle1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="下一步"
+        />
+
+</LinearLayout>

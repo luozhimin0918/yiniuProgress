@@ -42,6 +42,8 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
 import com.jyh.kxt.base.widget.AdvertLayout;
+import com.jyh.kxt.base.widget.AdvertLayout2;
+import com.jyh.kxt.base.widget.AdvertLayout3;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -49,6 +51,7 @@ import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.adapter.BtnAdapter;
 import com.jyh.kxt.main.adapter.NewsAdapter;
 import com.jyh.kxt.main.json.AdJson;
+import com.jyh.kxt.main.json.AdJson2;
 import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -89,6 +92,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
 
     private List<SlideJson> slides;//幻灯片
     private AdJson ads;//广告
+    private AdJson2 adBlowSlide;
+    private AdJson adBlowBtn;
     private List<SlideJson> shortcuts;//按钮
     private List<MarketItemBean> quotes;//行情
     private ArrayList<String> list;
@@ -112,7 +117,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
     private AdTitleIconBean adIcon;
 
     private AdvertLayout advertLayout;
-
+    private AdvertLayout2 adBelowSlideView;
+    private AdvertLayout3 adBlowBtnView;
 
     public NewsItemPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -192,6 +198,8 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         shortcuts = arguments.getParcelableArrayList(IntentConstant.NEWS_SHORTCUTS);
         quotes = arguments.getParcelableArrayList(IntentConstant.NEWS_QUOTES);
         ads = arguments.getParcelable(IntentConstant.NEWS_ADS);
+        adBlowSlide = arguments.getParcelable(IntentConstant.NEWS_ADS_SLIDE);
+        adBlowBtn = arguments.getParcelable(IntentConstant.NEWS_ADS_BTN);
 
         MainNewsContentJson parcelableArrayList = arguments.getParcelable(IntentConstant.NEWS_NEWS);
         list = arguments.getStringArrayList(IntentConstant.NEWS_LIST);
@@ -243,33 +251,20 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                             case VarConstant.NEWS_QUOTES:
                                 addQuotes();
                                 break;
+                            case VarConstant.NEWS_AD_SLIDE:
+                                addADBelowSlide();
+                                break;
+                            case VarConstant.NEWS_AD_SHORTCUT:
+                                addAdBelowBtn();
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
                 if (homeHeadView != null) {
                     newsItemFragment.plvContent.getRefreshableView().removeHeaderView(homeHeadView);
                 }
-//                LinearLayout layout = new LinearLayout(mContext);
-//
-//                LayoutInflater inflater = LayoutInflater.from(mContext);
-//                View titleLayout = inflater.inflate(R.layout.view_title_blue1, null, false);
-//                tvTitle = (TextView) titleLayout.findViewById(R.id.tv_title);
-//                tvTitle.setText("财经要闻");
-//                TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tvTitle, R.mipmap.icon_video_line, 0, 0, 0);
-//
-//
-//                tvAd1 = (TextView) titleLayout.findViewById(R.id.tv_advert1);
-//                tvAd2 = (TextView) titleLayout.findViewById(R.id.tv_advert2);
-//                ivAd = (ImageView) titleLayout.findViewById(R.id.iv_ad);
-//
-//                Boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
-//
-//                int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-//                tvAd1.setMaxWidth(adTvMaxWidth);
-//                adTexts = data.getAd();
-//                adIcon = data.getIcon();
-//                AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, adTexts, adIcon);
-//                layout.addView(titleLayout);
                 advertLayout = new AdvertLayout(mContext);
                 advertLayout.setAdvertData("财经要闻", data.getAd(), data.getIcon());
 
@@ -543,6 +538,26 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         addLineView();
     }
 
+
+    private void addAdBelowBtn() {
+        adBlowBtnView = new AdvertLayout3(mContext);
+        adBlowBtnView.setAdvertData(adBlowBtn);
+        homeHeadView.addView(adBlowBtnView);
+        addLineView();
+    }
+
+    private void addADBelowSlide() {
+        if (adBlowSlide == null || adBlowSlide.getAd() == null || adBlowSlide.getAd().size() == 0) {
+            return;
+        }
+
+        adBelowSlideView = new AdvertLayout2(mContext);
+        adBelowSlideView.setAdvertData(adBlowSlide.getAd(), adBlowSlide.getIcon());
+        homeHeadView.addView(adBelowSlideView);
+        addLineView();
+    }
+
+
     /**
      * 添加分割线
      */
@@ -590,16 +605,15 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
-                                JSONArray newsArray = (JSONArray) headerJson.getData();
-                                if (newsArray == null) break;
+
                                 try {
-                                    data = JSON.parseObject(newsArray.toString(), MainNewsContentJson.class);
+                                    data = new MainNewsContentJson();
+                                    MainNewsContentJson.DataBean dataBean = JSONObject.parseObject(headerJson.getData().toString(),
+                                            MainNewsContentJson.DataBean.class);
+                                    data.setData(dataBean);
+                                    data.setType(VarConstant.NEWS_LIST);
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    data = new MainNewsContentJson();
-                                    MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
-                                    dataBean.setData(JSON.parseArray(newsArray.toString(), NewsJson.class));
-                                    data.setData(dataBean);
                                 }
                                 break;
                             case VarConstant.NEWS_QUOTES:
@@ -613,6 +627,16 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                             case VarConstant.NEWS_AD:
                                 ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
+                                break;
+                            case VarConstant.NEWS_AD_SLIDE:
+                                adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                list.add(VarConstant.NEWS_AD_SLIDE);
+                                break;
+                            case VarConstant.NEWS_AD_SHORTCUT:
+                                adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                break;
+                            default:
                                 break;
                         }
                     }
@@ -775,6 +799,16 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
                                 list.add(VarConstant.NEWS_AD);
                                 break;
+                            case VarConstant.NEWS_AD_SLIDE:
+                                adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                list.add(VarConstant.NEWS_AD_SLIDE);
+                                break;
+                            case VarConstant.NEWS_AD_SHORTCUT:
+                                adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     initMain(data);
@@ -888,8 +922,24 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
             if (advertLayout != null) {
                 advertLayout.onChangerTheme();
             }
+            if (adBelowSlideView != null)
+                adBelowSlideView.onChangerTheme();
+            if (adBlowBtnView != null)
+                adBlowBtnView.onChangerTheme();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void onResume() {
+        if (adBlowBtnView != null) {
+            adBlowBtnView.onResume();
+        }
+    }
+
+    public void onPause() {
+        if (adBlowBtnView != null) {
+            adBlowBtnView.onPause();
         }
     }
 }
