@@ -140,7 +140,9 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         org.json.JSONObject jsonObject = new org.json.JSONObject(str);
                         server = jsonObject.getString("server");
                         token = jsonObject.getString("token");
-                        connection.connect(server + "?token=" + token, null, connectionHandler, options,
+
+
+                        connection.connect(server + "?token=" + token , null, connectionHandler, options,
                                 headers);
 
                     } catch (Exception e) {
@@ -184,7 +186,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
         @Override
         public void onClose(int i, String s) {
-
+            Log.e("socket", "onClose: " + s);
         }
 
         @Override
@@ -442,14 +444,29 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                     break;
                 case VarConstant.SOCKET_FLASH_KUAIXUN:
                     Flash_KX flash_kx = JSON.parseObject(content, Flash_KX.class);
-                    builder.setContentTitle(flash_kx.getTitle());
-                    builder.setContentText(flash_kx.getTitle());
+
+
+                    String kxTitle = flash_kx.getTitle();
+                    if (kxTitle != null) {
+                        kxTitle = kxTitle.replace("<br />", "\n").replace("<br/>", "\n");
+                    }
+
+                    builder.setContentTitle(kxTitle);
+//                    builder.setContentText(kxTitle);
+
                     builder.setTicker(flash_kx.getTitle());
                     break;
                 case VarConstant.SOCKET_FLASH_KXTNEWS:
                     Flash_NEWS flash_news = JSON.parseObject(content, Flash_NEWS.class);
-                    builder.setContentTitle(flash_news.getTitle());
-                    builder.setContentText(flash_news.getDescription());
+
+                    String description = flash_news.getDescription();
+                    if (description != null) {
+                        description = description.replace("<br />", "\n").replace("<br/>", "\n");
+                    }
+
+                    builder.setContentTitle(description);
+//                    builder.setContentText(description);
+
                     builder.setTicker(flash_news.getTitle());
                     break;
             }
@@ -593,17 +610,18 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         connect();
     }
 
-    Handler handler = new Handler(new Handler.Callback() {
+    private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             if (connection == null) {
                 connection = new WebSocketConnection();
             }
-            Log.i("flashSocket", "" + connection.isConnected());
+
+            connection.sendTextMessage("");
             if (!connection.isConnected() && NetUtils.isNetworkAvailable(mContext)) {
                 connect();
             }
-            handler.sendEmptyMessageDelayed(1, 300000);
+            handler.sendEmptyMessageDelayed(1, 3 *  60 * 1000);
             return false;
         }
     });

@@ -1,5 +1,7 @@
 package com.jyh.kxt.base.utils;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
@@ -12,6 +14,7 @@ import com.jyh.kxt.base.impl.OnSocketTextMessage;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.util.NetUtils;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -41,6 +44,9 @@ public class MarketConnectUtil {
     private OnSocketTextMessage onSocketTextMessage;
     private WebSocketConnection mConnection = new WebSocketConnection();
 
+    private IBaseView iBaseView;
+    private JSONArray jsonArray;
+
     public void sendSocketParams(IBaseView iBaseView, JSONArray jsonArray, OnSocketTextMessage onSocketTextMessage) {
         try {
             if (jsonArray == null || jsonArray.size() == 0) {
@@ -50,7 +56,10 @@ public class MarketConnectUtil {
                 return;
             }
 
+            this.iBaseView = iBaseView;
+            this.jsonArray = jsonArray;
             this.onSocketTextMessage = onSocketTextMessage;
+
             if (!mConnection.isConnected()) {
                 requestConnectToken(iBaseView, jsonArray);
             } else {
@@ -66,9 +75,8 @@ public class MarketConnectUtil {
         }
     }
 
-    private long oldReceiveTime = 0L;
-
     private void requestConnectToken(IBaseView iBaseView, final JSONArray jsonParams) {
+
         VolleyRequest volleyRequest = new VolleyRequest(iBaseView.getContext(), iBaseView.getQueue());
         JSONObject jsonParam = volleyRequest.getJsonParam();
         jsonParam.put(IntentConstant.SOCKET_CLIENT, VarConstant.HTTP_CLIENT);
@@ -96,14 +104,14 @@ public class MarketConnectUtil {
                             jsonObject.put("cmd", "login");
                             jsonObject.put("codes", jsonParams);
                             mConnection.sendTextMessage(jsonObject.toString());
+
+                            handler.sendEmptyMessage(1);
                         }
 
                         @Override
                         public void onTextMessage(String payload) {
                             if (onSocketTextMessage != null && payload != null && !"".equals(payload)) {
-                                long currentTime = System.currentTimeMillis();
                                 onSocketTextMessage.onTextMessage(payload);
-                                oldReceiveTime = currentTime;
                             }
                         }
 
@@ -125,4 +133,20 @@ public class MarketConnectUtil {
             }
         });
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (mConnection == null) {
+                mConnection = new WebSocketConnection();
+            }
+
+            if (!mConnection.isConnected() && NetUtils.isNetworkAvailable(iBaseView.getContext())) {
+                sendSocketParams(iBaseView, jsonArray, onSocketTextMessage);
+            }
+
+            handler.sendEmptyMessageDelayed(1, 3 * 60 * 1000);
+            return false;
+        }
+    });
 }

@@ -3,9 +3,9 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
+        /*maven {
             url "https://jitpack.io"
-        }
+        }*/ maven { url "http://developer.huawei.com/repo/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
@@ -22,9 +22,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven {
+        /*maven {
             url "https://jitpack.io"
-        }
+        }  */
+        maven { url "http://developer.huawei.com/repo/" }
     }
 }
 

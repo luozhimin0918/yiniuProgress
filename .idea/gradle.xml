@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/MPChartLib" />
-            <option value="$PROJECT_DIR$/Pushlib" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/playerlibrary" />
             <option value="$PROJECT_DIR$/publiclibrary" />

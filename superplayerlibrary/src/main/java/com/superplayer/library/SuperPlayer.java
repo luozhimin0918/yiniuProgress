@@ -37,6 +37,8 @@ import com.superplayer.library.utils.SuperPlayerUtils;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
+import static com.superplayer.library.R.id.view_jky_player_center_control;
+
 /**
  * 类描述：视频播放控制类
  *
@@ -211,7 +213,7 @@ public class SuperPlayer extends RelativeLayout {
     private void doPauseResume() {
         if (status == STATUS_COMPLETED) {
             if (isShowCenterControl) {
-                $.id(R.id.view_jky_player_center_control).visible();
+                $.id(view_jky_player_center_control).visible();
             }
             videoView.seekTo(0);
             videoView.start();
@@ -228,7 +230,7 @@ public class SuperPlayer extends RelativeLayout {
      * 更新暂停状态的控件显示
      */
     private void updatePausePlay() {
-        $.id(R.id.view_jky_player_center_control).visibility(
+        $.id(view_jky_player_center_control).visibility(
                 isShowCenterControl ? View.VISIBLE : View.GONE);
         if (videoView.isPlaying()) {
             $.id(R.id.app_video_play).image(R.drawable.ic_pause);
@@ -258,7 +260,7 @@ public class SuperPlayer extends RelativeLayout {
                 showTopControl(true);
             }
             if (isShowCenterControl) {
-                $.id(R.id.view_jky_player_center_control).visible();
+                $.id(view_jky_player_center_control).visible();
             }
             showBottomControl(true);
             if (!fullScreenOnly) {
@@ -556,7 +558,7 @@ public class SuperPlayer extends RelativeLayout {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
             if (isShowCenterControl) {
-                $.id(R.id.view_jky_player_center_control).visible();
+                $.id(view_jky_player_center_control).visible();
             }
         } else if (newStatus == STATUS_ERROR) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
@@ -587,7 +589,7 @@ public class SuperPlayer extends RelativeLayout {
      * 隐藏全部的控件
      */
     private void hideAll() {
-        $.id(R.id.view_jky_player_center_control).gone();
+        $.id(view_jky_player_center_control).gone();
         $.id(R.id.app_video_loading).gone();
         $.id(R.id.view_jky_player_fullscreen).invisible();
         $.id(R.id.view_jky_player_tip_control).gone();
@@ -779,6 +781,8 @@ public class SuperPlayer extends RelativeLayout {
         $.id(R.id.view_jky_player_tip_text).text(statusText);
         $.id(R.id.view_jky_player_tv_continue).text(btnText);
         isPrepare = false;// 设置点击不能出现控制栏
+
+        $.id(R.id.view_jky_player_center_control).gone();
     }
 
     /**
@@ -811,6 +815,7 @@ public class SuperPlayer extends RelativeLayout {
                 && (NetUtils.getNetworkType(activity) == 2 || NetUtils
                 .getNetworkType(activity) == 4)) {// 手机网络的情况下
             $.id(R.id.view_jky_player_tip_control).visible();
+            $.id(R.id.view_jky_player_center_control).gone();
         } else {
             if (playerSupport) {
                 $.id(R.id.app_video_loading).visible();
@@ -1026,7 +1031,7 @@ public class SuperPlayer extends RelativeLayout {
         if (force || isShowing) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             showBottomControl(false);
-            $.id(R.id.view_jky_player_center_control).gone();
+            $.id(view_jky_player_center_control).gone();
             showTopControl(false);
             $.id(R.id.view_jky_player_fullscreen).invisible();
             isShowing = false;

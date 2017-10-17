@@ -2,6 +2,7 @@ package com.library.util;
 
 import android.text.format.DateFormat;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -316,4 +317,21 @@ public class DateUtils {
         return transformTime(currentTimeMillis, type);
     }
 
+
+    public static String getYMDWeek(String date) {
+
+        SimpleDateFormat dateLongTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String formatWeek = "";
+        try {
+            Date parseTime = dateLongTime.parse(date);
+
+            SimpleDateFormat dateFm = new SimpleDateFormat("MM月dd日 EEEE");
+            formatWeek = dateFm.format(parseTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatWeek;
+    }
 }

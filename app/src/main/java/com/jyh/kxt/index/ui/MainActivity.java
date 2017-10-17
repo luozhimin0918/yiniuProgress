@@ -15,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -28,6 +29,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.huawei.hms.api.ConnectionResult;
+import com.huawei.hms.api.HuaweiApiClient;
+import com.huawei.hms.support.api.client.PendingResult;
+import com.huawei.hms.support.api.client.ResultCallback;
+import com.huawei.hms.support.api.push.HuaweiPush;
+import com.huawei.hms.support.api.push.TokenResult;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseFragment;
@@ -39,6 +46,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.http.GlobalHttpRequest;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.util.emoje.DBUtils;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
@@ -74,11 +82,15 @@ import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
 import com.library.util.NetUtils;
+import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -88,6 +100,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import cn.magicwindow.MLinkAPIFactory;
 import cn.magicwindow.mlink.annotation.MLinkDefaultRouter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -148,6 +161,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     public int mActivityFrom = 0;//如果为0 则为默认进入  1 则表示内存回收重启,不显示广告弹窗  2 表示welcom界面已经加载完成数据
 
+    private HuaweiApiClient huaweiApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +188,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             startActivity(intent);
             return;
         }
-
 
         overridePendingTransition(R.anim.activity_anim3, R.anim.activity_out1);
         setContentView(R.layout.activity_main, StatusBarColor.NO_COLOR);
@@ -201,6 +215,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
 
         ChatSocketUtil.getInstance().sendSocketParams(this, null, this);
+
+        bindPushService();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Uri mLink = intent.getData();
+        if (mLink != null) {
+            MLinkAPIFactory.createAPI(this).router(mLink);
+        } else {
+            MLinkAPIFactory.createAPI(this).checkYYB();
+        }
     }
 
     /**
@@ -266,7 +294,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         rlUnSign = ButterKnife.findById(llHeaderLayout, R.id.rl_un_sign);
         rlUnTask = ButterKnife.findById(llHeaderLayout, R.id.rl_un_task);
         tvTaskHint = ButterKnife.findById(llHeaderLayout, R.id.tv_task_hint);
-
 
         loginPhoto.setOnClickListener(this);
         ivQQ.setOnClickListener(this);
@@ -780,6 +807,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         super.onDestroy();
         ChatSocketUtil.getInstance().unOnChatMessage(this);
 
+
+        if (huaweiApiClient != null) {
+            huaweiApiClient.disconnect();
+        }
+
         try {
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
@@ -926,17 +958,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         }
     }
 
-    @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Uri mLink = intent.getData();
-        if (mLink != null) {
-            MLinkAPIFactory.createAPI(this).router(mLink);
-        } else {
-            MLinkAPIFactory.createAPI(this).checkYYB();
-        }
-    }
-
 
     /**
      * 刷新左边的签到状态
@@ -965,4 +986,80 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             rlUnTask.setVisibility(View.VISIBLE);
         }
     }
+
+    /**
+     * 绑定推送服务
+     */
+    private void bindPushService() {
+        //推送绑定
+        String system = PhoneInfo.getSystem();
+        if (PhoneInfo.SYS_EMUI.equals(system)) {
+            /*
+             * 华为推送代码
+             */
+            //创建华为移动服务client实例用以使用华为push服务
+            //需要指定api为HuaweiPush.PUSH_API
+            //连接回调以及连接失败监听
+            huaweiApiClient = new HuaweiApiClient.Builder(SampleApplicationContext.context)
+                    .addApi(HuaweiPush.PUSH_API)
+                    .addConnectionCallbacks(new HuaweiApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected() {
+                            Log.e(TAG, "onConnected: 华为平台连接成功");
+
+                            PendingResult<TokenResult> tokenResult = HuaweiPush.HuaweiPushApi
+                                    .getToken(huaweiApiClient);
+
+                            tokenResult.setResultCallback(new ResultCallback<TokenResult>() {
+                                @Override
+                                public void onResult(TokenResult result) {
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int i) {
+                            Log.e(TAG, "onConnectionSuspended: 华为平台连接成功");
+                        }
+                    })
+                    .addOnConnectionFailedListener(new HuaweiApiClient.OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(ConnectionResult connectionResult) {
+                            Log.e(TAG, "onConnectionFailed: 华为平台连接失败");
+                        }
+                    })
+                    .build();
+            huaweiApiClient.connect();
+        } else if (PhoneInfo.SYS_MIUI.equals(system)) {
+
+        /*
+         * 小米推送
+         */
+            LoggerInterface newLogger = new LoggerInterface() {
+                @Override
+                public void setTag(String tag) {
+                    // ignore
+                }
+
+                @Override
+                public void log(String content, Throwable t) {
+                    Log.d(TAG, content, t);
+                }
+
+                @Override
+                public void log(String content) {
+                    Log.d(TAG, content);
+                }
+            };
+            Logger.setLogger(this, newLogger);
+            MiPushClient.registerPush(this, VarConstant.XIAOMI_APP_ID, VarConstant.XIAOMI_APP_KEY);
+        } else {
+            /*
+             * 推送相关代码
+             */
+            JPushInterface.setDebugMode(true);
+            JPushInterface.init(SampleApplicationContext.context);
+        }
+    }
+
 }

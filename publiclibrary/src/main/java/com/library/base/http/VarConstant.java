@@ -119,6 +119,11 @@ public class VarConstant {
     public static final String QQ_APPID = "101298812";
     public static final String QQ_APPKEY = "ddd0261bbb4375911faf75d5be3d2e34";
 
+
+    //小米推送的
+    public static final String XIAOMI_APP_ID = "2882303761517361499";
+    public static final String XIAOMI_APP_KEY = "5531736127499";
+
     /**
      * 列表最大数
      */

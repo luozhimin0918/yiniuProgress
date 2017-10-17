@@ -15,8 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.tinker.app.BaseBuildInfo;
-import com.jyh.kxt.base.tinker.app.BuildInfo;
 import com.jyh.kxt.base.utils.GlideCacheUtil;
 import com.jyh.kxt.index.json.PatchJson;
 import com.jyh.kxt.user.presenter.SettingPresenter;
@@ -24,8 +22,6 @@ import com.library.util.FileUtils;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.tencent.tinker.lib.tinker.Tinker;
-import com.tencent.tinker.loader.shareutil.ShareConstants;
-import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 import java.io.File;
 
@@ -173,53 +169,39 @@ public class SettingActivity extends BaseActivity {
                                             if (applicationInfo.metaData != null) {
                                                 String resultData = applicationInfo.metaData.getString
                                                         ("UMENG_CHANNEL");
-                                                if(resultData == null){
-                                                    resultData = "360";
+                                                if (resultData == null) {
+                                                    sb.append("来源渠道: 测试包 \n");
+                                                } else {
+                                                    if ("360".equals(resultData)) {
+                                                        sb.append("来源渠道: 360应用市场 \n");
+                                                    } else {
+                                                        sb.append("来源渠道: 普通应用市场 \n");
+                                                    }
                                                 }
-                                                sb.append("来源渠道:" + resultData+"\n");
                                             }
                                         }
                                     } catch (PackageManager.NameNotFoundException e) {
                                         e.printStackTrace();
                                     }
-
                                 }
-
                                 if (tinker.isTinkerLoaded()) {
 
-                                    sb.append(String.format("[patch is loaded] \n"));
-                                    sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
-                                    sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo
-                                            .BASE_TINKER_ID));
+                                    sb.append("[补丁应用内容:] \n");
 
-                                    sb.append(String.format("[buildConfig MESSSAGE] %s \n", BuildInfo.MESSAGE));
-                                    sb.append(String.format("[TINKER_ID] %s \n", tinker.getTinkerLoadResultIfPresent
-                                            ().getPackageConfigByName
-                                            (ShareConstants.TINKER_ID)));
-                                    sb.append(String.format("[packageConfig patchMessage] %s \n", tinker
-                                            .getTinkerLoadResultIfPresent().getPackageConfigByName("patchMessage")));
-                                    sb.append(String.format("[TINKER_ID Rom Space] %d k \n", tinker.getTinkerRomSpace
-                                            ()));
-                                } else {
-                                    sb.append(String.format("[patch is not loaded] \n"));
-                                    sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
-                                    sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo
-                                            .BASE_TINKER_ID));
+                                    String romSpace = "[占用 Rom Space] " + tinker.getTinkerRomSpace() + " k \n";
+                                    sb.append(romSpace);
 
-                                    sb.append(String.format("[buildConfig MESSSAGE] %s \n", BuildInfo.MESSAGE));
-                                    sb.append(String.format("[TINKER_ID] %s \n", ShareTinkerInternals
-                                            .getManifestTinkerID(getApplicationContext())));
-                                }
-                                sb.append(String.format("[BaseBuildInfo Message] %s \n", BaseBuildInfo.TEST_MESSAGE));
-
-                                try {
-                                    String patchInfo = SPUtils.getString(SettingActivity.this, SpConstant.PATCH_INFO);
-                                    if(patchInfo != null){
-                                        PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
-                                        sb.append(String.format("[补丁描述] %s \n", patchJson.getDescription()));
+                                    try {
+                                        String patchInfo = SPUtils.getString(SettingActivity.this, SpConstant.PATCH_INFO);
+                                        if (patchInfo != null) {
+                                            PatchJson patchJson = JSONObject.parseObject(patchInfo, PatchJson.class);
+                                            sb.append(String.format("[补丁描述] %s \n", patchJson.getDescription()));
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                } else {
+                                    sb.append(String.format("[暂无补丁] \n"));
                                 }
 
                                 tvIntroducePatch.setText(sb.toString());

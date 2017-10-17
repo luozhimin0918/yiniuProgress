@@ -198,10 +198,17 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                     if (discription == null) {
                         discription = "";
                     }
-                    String discReplace = discription.replace("<br />", "\n").replace("<br/>", "");
+                    if(title == null){
+                        title = "";
+                    }
                     UmengShareBean umengShareBean = new UmengShareBean();
-                    umengShareBean.setTitle(title);
+
+                    String discReplace = discription.replace("<br />", "\n").replace("<br/>", "");
                     umengShareBean.setDetail(discReplace);
+
+                    String titleReplace = title.replace("<br />", "\n").replace("<br/>", "");
+                    umengShareBean.setTitle(titleReplace);
+
                     umengShareBean.setImageUrl(image);
                     umengShareBean.setWebUrl(shareUrl);
 

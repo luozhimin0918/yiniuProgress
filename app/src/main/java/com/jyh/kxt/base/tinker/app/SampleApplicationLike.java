@@ -29,17 +29,12 @@ import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.index.service.PreLoadX5Service;
-import com.jyh.kxt.push.KXTPushIntentService;
 import com.tencent.tinker.anno.DefaultLifeCycle;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.app.ApplicationLifeCycle;
 import com.tencent.tinker.loader.app.DefaultApplicationLike;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.MsgConstant;
-import com.umeng.message.PushAgent;
-import com.umeng.message.common.UmLog;
 
 import cn.magicwindow.MWConfiguration;
 import cn.magicwindow.MagicWindowSDK;
@@ -68,10 +63,10 @@ import cn.magicwindow.MagicWindowSDK;
  */
 @SuppressWarnings("unused")
 @DefaultLifeCycle(application = "com.jyh.kxt.KXTApplication",
-                  flags = ShareConstants.TINKER_ENABLE_ALL,
-                  loadVerifyFlag = false)
+        flags = ShareConstants.TINKER_ENABLE_ALL,
+        loadVerifyFlag = false)
 public class SampleApplicationLike extends DefaultApplicationLike {
-    private static final String TAG = "Tinker.SampleApplicationLike";
+    private static final String TAG = "SampleApplicationLike";
 
     public SampleApplicationLike(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag,
                                  long applicationStartElapsedTime, long applicationStartMillisTime, Intent
@@ -116,10 +111,13 @@ public class SampleApplicationLike extends DefaultApplicationLike {
         initApplication();
     }
 
+
     private void initApplication() {
         UmengShareUtil.initUmeng(SampleApplicationContext.context);
         final Handler handler = new Handler();
-        PushAgent mPushAgent = PushAgent.getInstance(SampleApplicationContext.context);
+
+
+        /*PushAgent mPushAgent = PushAgent.getInstance(SampleApplicationContext.context);
 
         //sdk开启通知声音
         //mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE);
@@ -144,8 +142,10 @@ public class SampleApplicationLike extends DefaultApplicationLike {
 //        CrashHandler crashHandler = new CrashHandler();
 //        crashHandler.init(SampleApplicationContext.context);
 
-        mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);
-        //避免启动慢的问题
+        mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);*/
+
+
+        //避免WebView启动慢的问题
         Intent intent = new Intent(SampleApplicationContext.context, PreLoadX5Service.class);
         SampleApplicationContext.context.startService(intent);
 
@@ -162,5 +162,4 @@ public class SampleApplicationLike extends DefaultApplicationLike {
     public void registerActivityLifecycleCallbacks(Application.ActivityLifecycleCallbacks callback) {
         getApplication().registerActivityLifecycleCallbacks(callback);
     }
-
 }

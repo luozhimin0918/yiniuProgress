@@ -248,6 +248,8 @@ public class MainPresenter extends BasePresenter {
                         File patchFile = new File(saveFilePath + patchBean.getPatch_code() + ".patch");
                         if (!patchFile.exists()) {
                             newThreadDownPatch();
+                        }else{
+
                         }
                     }
                 }
@@ -347,7 +349,6 @@ public class MainPresenter extends BasePresenter {
                     } catch (Exception ex) {
 
                     }
-
                 }
             }
         }).start();

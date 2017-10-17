@@ -45,6 +45,7 @@ import com.jyh.kxt.main.json.flash.Flash_NEWS;
 import com.jyh.kxt.main.json.flash.Flash_RL;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.library.base.http.VarConstant;
+import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
@@ -1216,18 +1217,14 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
 
             if (!TextUtils.isEmpty(time)) {
-                String[] splitTime = time.split(" ");
-                String month = splitTime[0].split("-")[1];
-                String day = splitTime[0].split("-")[2];
+                String ymdWeek = DateUtils.getYMDWeek(time);
 
-                String MD = month + "月" + day + "日"; //显示用
-
-                if (!timeMap.containsKey(MD)) {
-                    timeMap.put(MD, i);
+                if (!timeMap.containsKey(ymdWeek)) {
+                    timeMap.put(ymdWeek, i);
                     if (i < size) {
-                        flashJsons.add(i, MD);
+                        flashJsons.add(i, ymdWeek);
                     } else {
-                        flashJsons.add(MD);
+                        flashJsons.add(ymdWeek);
                     }
                 }
             }
@@ -1262,12 +1259,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
             }
 
             if (!TextUtils.isEmpty(time)) {
-                String[] splitTime = time.split(" ");
-                String month = splitTime[0].split("-")[1];
-                String day = splitTime[0].split("-")[2];
 
-                String MD = month + "月" + day + "日"; //显示用
-
+                String MD = DateUtils.getYMDWeek(time);
                 if (!timeMap.containsKey(MD)) {
                     timeMap.put(MD, i);
                     if (i < size) {

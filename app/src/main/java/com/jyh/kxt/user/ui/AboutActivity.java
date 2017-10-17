@@ -17,9 +17,9 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.user.json.UserJson;
+import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
-import com.umeng.message.PushAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -118,12 +118,13 @@ public class AboutActivity extends BaseActivity {
         try {
             StringBuilder mHideBuffer = new StringBuilder();
 
-            String device_token = PushAgent.getInstance(this).getRegistrationId();
-            mHideBuffer.append("device_token:" + device_token + "\n");
+
+            String system = PhoneInfo.getSystem();
+            mHideBuffer.append(String.valueOf("当前系统:" + system + "\n"));
 
             UserJson userInfo = LoginUtils.getUserInfo(this);
             if (userInfo != null) {
-                mHideBuffer.append("uid:" + userInfo.getUid() + "\n");
+                mHideBuffer.append(String.valueOf("uid:" + userInfo.getUid() + "\n"));
             }
             tvHintUserInfo.setVisibility(View.VISIBLE);
             tvHintUserInfo.setText(mHideBuffer.toString());

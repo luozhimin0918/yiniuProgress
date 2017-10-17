@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /** 
  *  */
-public class KxItemKuaiXun implements Serializable {
+public class FlashItemBean implements Serializable {
 
 
 	/**

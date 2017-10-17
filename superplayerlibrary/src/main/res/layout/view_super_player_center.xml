@@ -132,10 +132,10 @@
         android:id="@+id/view_jky_player_tip_control"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#33000000"
+        android:background="#88000000"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/view_jky_player_tip_text"
@@ -145,7 +145,7 @@
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="您正在使用移动网络播放视频\n可能产生较高流量费用"
+            android:text="正在使用移动网络,播放将产生流量费"
             android:textColor="@android:color/white"/>
 
         <TextView
@@ -158,8 +158,9 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="5dp"
-            android:text="继续"
-            android:textColor="@android:color/white"/>
+            android:text="继续播放"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <!-- loading -->

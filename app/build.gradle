@@ -50,6 +50,12 @@ android {
         ndk {
             abiFilters "armeabi"
         }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "aedab46987f93739fa980c3d", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     dataBinding {
         enabled = true;
@@ -301,12 +307,8 @@ dependencies {
     debugCompile project(path: ':publiclibrary', configuration: 'debug')
     testCompile 'junit:junit:4.12'
     /*compile project(':playerlibrary')*/
-
-
     compile(name: 'androidpicturepicker', ext: 'aar')
-
     compile project(':superplayerlibrary')
-    compile project(':Pushlib')
     compile project(':MPChartLib')
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'org.greenrobot:greendao:3.2.0'
@@ -320,8 +322,17 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
-
-
+    /**
+     *  推送相关集成
+     */
+    //极光
+    compile 'cn.jiguang.sdk:jpush:3.0.9'
+    // 此处以JPush 3.0.9 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.7'
+    // 此处以JCore 1.1.7 版本为例。
+    //华为
+    compile 'com.huawei.android.hms:push:2.5.2.300'
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
+    compile files('libs/MiPush_SDK_Client_3_4_5.jar')
 }
