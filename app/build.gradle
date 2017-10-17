@@ -321,7 +321,6 @@ dependencies {
     compile 'com.trycatch.android:mysnackbar:1.2.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
 
-
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
 }

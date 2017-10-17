@@ -27,6 +27,7 @@ import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.AdJson;
+import com.jyh.kxt.main.json.AdJson2;
 import com.jyh.kxt.main.json.MainNewsContentJson;
 import com.jyh.kxt.main.json.NewsNavJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -107,7 +108,7 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
      */
     public void initView(List<NewsNavJson> newsNavs, List<SlideJson> slides, List<SlideJson> shortcuts,
                          List<MarketItemBean> quotes,
-                         AdJson ad, MainNewsContentJson news, ArrayList<String> list) {
+                         AdJson ad, AdJson2 adSlide, AdJson adBtn, MainNewsContentJson news, ArrayList<String> list) {
         if (newsNavs == null) return;
         int size = newsNavs.size();
         tabs = new String[size];
@@ -127,6 +128,8 @@ public class NewsFragment extends BaseFragment implements PageLoadLayout.OnAfres
                 args.putParcelableArrayList(IntentConstant.NEWS_QUOTES, (ArrayList<? extends Parcelable>) quotes);
                 args.putParcelable(IntentConstant.NEWS_ADS, ad);
                 args.putParcelable(IntentConstant.NEWS_NEWS, news);
+                args.putParcelable(IntentConstant.NEWS_ADS_BTN, adBtn);
+                args.putParcelable(IntentConstant.NEWS_ADS_SLIDE, adSlide);
                 args.putStringArrayList(IntentConstant.NEWS_LIST, list);
             }
             itemFragment.setArguments(args);

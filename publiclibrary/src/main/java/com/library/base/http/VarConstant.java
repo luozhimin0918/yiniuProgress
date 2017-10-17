@@ -133,6 +133,8 @@ public class VarConstant {
     public static final String NEWS_AD = "ad";//广告
     public static final String NEWS_QUOTES = "quotes";//行情
     public static final String NEWS_LIST = "news";//要闻
+    public static final String NEWS_AD_SLIDE = "below_slide_ad";//轮播图下面广告
+    public static final String NEWS_AD_SHORTCUT = "below_shortcut_ad";//按钮下面广告
 
     /**
      * 探索首页类型
