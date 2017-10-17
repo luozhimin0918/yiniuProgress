@@ -3,6 +3,7 @@ package com.jyh.kxt.base.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
 
 public class AdvertLayout3 extends FrameLayout {
 
-    @BindView(R.id.tv_ad) VerticalTextView tvAd;
+    @BindView(R.id.tv_ad) FrameLayout tvAd;
     @BindView(R.id.iv_ad) ImageView ivAd;
     @BindView(R.id.iv_ad2) ImageView ivAd2;
     @BindView(R.id.ll_ad) LinearLayout llAd;
@@ -75,82 +77,125 @@ public class AdvertLayout3 extends FrameLayout {
     }
 
     public void onResume() {
-        if (tvAd != null)
-            tvAd.startAutoScroll();
+        if (tvAd != null && tvAd.getChildAt(0) != null && tvAd.getChildAt(0) instanceof VerticalTextView)
+            ((VerticalTextView) tvAd.getChildAt(0)).startAutoScroll();
     }
 
     public void onPause() {
-        if (tvAd != null)
-            tvAd.stopAutoScroll();
+        if (tvAd != null && tvAd.getChildAt(0) != null && tvAd.getChildAt(0) instanceof VerticalTextView)
+            ((VerticalTextView) tvAd.getChildAt(0)).stopAutoScroll();
     }
 
     public void onChangerTheme() {
         Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
         advertRootTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
-
-        if (ad.getText_ad() != null && ad.getText_ad().size() > 0) {
-            final List<AdItemJson> text_ad = ad.getText_ad();
-            ArrayList<String> text_ads = new ArrayList<>();
-            for (AdItemJson adItemJson : text_ad) {
-                String title = adItemJson.getTitle();
-                if (title.length() > 25) {
-                    title = title.substring(0, 25);
-                }
-                text_ads.add(title);
-            }
-            tvAd.setTextList(text_ads);
-            tvAd.setText(16, 5, Color.RED);//设置属性,具体跟踪源码
-            tvAd.setTextStillTime(3000);//设置停留时长间隔
-            tvAd.setAnimTime(300);//设置进入和退出的时间间隔
-            // 对单条文字的点击监听
-            tvAd.setOnItemClickListener(new VerticalTextView.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    AdItemJson adItemJson = text_ad.get(position);
-                    JumpUtils.jump((BaseActivity) getContext(), adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
-                            adItemJson
-                                    .getHref());
-                }
-            });
-            tvAd.setOnScrollListener(new VerticalTextView.OnScrollListener() {
-                @Override
-                public void onScroll(int position) {
-                    AdItemJson adItemJson = text_ad.get(position);
-                    Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
-                    String colorString = isNight ? adItemJson.getNight_color() : adItemJson.getDay_color();
-                    if (colorString != null) {
-                        String font_size = adItemJson.getFont_size();
-                        float fontSize = 16;
-                        if (font_size != null) {
-                            try {
-                                fontSize = SystemUtil.px2dp(getContext(), Integer.parseInt(font_size.replace("px", "")));
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        int textColor = Color.parseColor(colorString);
-                        tvAd.setText(fontSize, 5, textColor);
-                        AdTitleIconBean icon = adItemJson.getIcon();
-                        Glide.with(getContext()).load(isNight ? icon.getNight_icon() : icon.getDay_icon()).placeholder(R.mipmap.icon_ad2)
-                                .into(ivAd);
+        tvAd.removeAllViews();
+        if (ad.getText_ad() != null) {
+            if (ad.getText_ad().size() > 1) {
+                final VerticalTextView verticalTextView = new VerticalTextView(getContext());
+                final List<AdItemJson> text_ad = ad.getText_ad();
+                ArrayList<String> text_ads = new ArrayList<>();
+                for (AdItemJson adItemJson : text_ad) {
+                    String title = adItemJson.getTitle();
+                    if (title.length() > 25) {
+                        title = title.substring(0, 25);
                     }
+                    text_ads.add(title);
                 }
-            });
-            AdTitleIconBean icon = ad.getText_ad().get(0).getIcon();
-            Glide.with(getContext()).load(isNight ? icon.getNight_icon() : icon.getDay_icon()).placeholder(R.mipmap.icon_ad2)
-                    .into(ivAd);
-            if (text_ads.size() > 1)
-                tvAd.startAutoScroll();
-            llAd.setVisibility(VISIBLE);
+                verticalTextView.setTextList(text_ads);
+                verticalTextView.setText(16, 5, Color.RED);//设置属性,具体跟踪源码
+                verticalTextView.setTextStillTime(3000);//设置停留时长间隔
+                verticalTextView.setAnimTime(300);//设置进入和退出的时间间隔
+                // 对单条文字的点击监听
+                verticalTextView.setOnItemClickListener(new VerticalTextView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        AdItemJson adItemJson = text_ad.get(position);
+                        JumpUtils.jump((BaseActivity) getContext(), adItemJson.getO_class(), adItemJson.getO_action(), adItemJson.getO_id(),
+                                adItemJson
+                                        .getHref());
+                    }
+                });
+                verticalTextView.setOnScrollListener(new VerticalTextView.OnScrollListener() {
+                    @Override
+                    public void onScroll(int position) {
+                        AdItemJson adItemJson = text_ad.get(position);
+                        Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
+                        String colorString = isNight ? adItemJson.getNight_color() : adItemJson.getDay_color();
+                        if (colorString != null) {
+                            String font_size = adItemJson.getFont_size();
+                            float fontSize = 16;
+                            if (font_size != null) {
+                                try {
+                                    fontSize = Integer.parseInt(font_size.replace("px", "")) / 2;
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            int textColor = Color.parseColor(colorString);
+                            TextView textView = (TextView) verticalTextView.getNextView();
+                            textView.setTextColor(textColor);
+                            textView.setText(adItemJson.getTitle());
+                            textView.setTextSize(fontSize);
+                            AdTitleIconBean icon = adItemJson.getIcon();
+                            Glide.with(getContext()).load(isNight ? icon.getNight_icon() : icon.getDay_icon()).placeholder(R.mipmap
+                                    .icon_ad2)
+                                    .into(ivAd);
+                        }
+                    }
+                });
+                AdTitleIconBean icon = ad.getText_ad().get(0).getIcon();
+                Glide.with(getContext()).load(isNight ? icon.getNight_icon() : icon.getDay_icon()).placeholder(R.mipmap.icon_ad2)
+                        .into(ivAd);
+                if (text_ads.size() > 1)
+                    verticalTextView.startAutoScroll();
+                tvAd.addView(verticalTextView);
+                llAd.setVisibility(VISIBLE);
+            } else if (ad.getText_ad().size() == 1) {
+                TextView textView = new TextView(getContext());
+                final AdItemJson adItemJson = ad.getText_ad().get(0);
+                String colorString = isNight ? adItemJson.getNight_color() : adItemJson.getDay_color();
+                if (colorString != null) {
+                    String font_size = adItemJson.getFont_size();
+                    float fontSize = 16;
+                    if (font_size != null) {
+                        try {
+                            fontSize = Integer.parseInt(font_size.replace("px", "")) / 2;
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    int textColor = Color.parseColor(colorString);
+                    textView.setText(adItemJson.getTitle());
+                    textView.setTextColor(textColor);
+                    textView.setTextSize(fontSize);
+                    textView.setSingleLine(true);
+                    textView.setEllipsize(TextUtils.TruncateAt.END);
+                    textView.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JumpUtils.jump((BaseActivity) getContext(), adItemJson.getO_class(), adItemJson.getO_action(), adItemJson
+                                            .getO_id(),
+                                    adItemJson
+                                            .getHref());
+                        }
+                    });
+                    AdTitleIconBean icon = adItemJson.getIcon();
+                    Glide.with(getContext()).load(isNight ? icon.getNight_icon() : icon.getDay_icon()).placeholder(R.mipmap
+                            .icon_ad2)
+                            .into(ivAd);
+                }
+                tvAd.addView(textView);
+                llAd.setVisibility(VISIBLE);
+            } else {
+                llAd.setVisibility(GONE);
+            }
         } else {
             llAd.setVisibility(GONE);
         }
 
         if (ad.getPic_ad() != null) {
             final AdItemJson pic_ad = ad.getPic_ad();
-//            int imageHeight = pic_ad.getImageHeight();
-//            ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, imageHeight);
-//            ivAd2.setLayoutParams(layoutParams);
             Glide.with(getContext()).load(pic_ad.getPicture()).into(ivAd2);
             ivAd2.setOnClickListener(new OnClickListener() {
                 @Override

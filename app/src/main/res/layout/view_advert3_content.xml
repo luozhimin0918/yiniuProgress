@@ -20,7 +20,7 @@
         android:paddingRight="15dp"
         >
 
-        <com.jyh.kxt.base.widget.VerticalTextView
+        <FrameLayout
             android:id="@+id/tv_ad"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

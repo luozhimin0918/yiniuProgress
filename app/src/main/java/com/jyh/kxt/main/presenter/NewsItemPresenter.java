@@ -589,19 +589,27 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                     for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
-                                JSONArray slideArray = (JSONArray) headerJson.getData();
-                                if (slideArray == null) break;
-                                slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
-                                if (slides.size() > 0) {
-                                    list.add(VarConstant.NEWS_SLIDE);
+                                try {
+                                    JSONArray slideArray = (JSONArray) headerJson.getData();
+                                    if (slideArray == null) break;
+                                    slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
+                                    if (slides.size() > 0) {
+                                        list.add(VarConstant.NEWS_SLIDE);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_SHORTCUT:
-                                JSONArray shortcutArray = (JSONArray) headerJson.getData();
-                                if (shortcutArray == null) break;
-                                shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
-                                if (shortcuts.size() > 0) {
-                                    list.add(VarConstant.NEWS_SHORTCUT);
+                                try {
+                                    JSONArray shortcutArray = (JSONArray) headerJson.getData();
+                                    if (shortcutArray == null) break;
+                                    shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
+                                    if (shortcuts.size() > 0) {
+                                        list.add(VarConstant.NEWS_SHORTCUT);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
@@ -617,24 +625,40 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_QUOTES:
-                                JSONArray quotesArray = (JSONArray) headerJson.getData();
-                                if (quotesArray == null) break;
-                                quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
-                                if (quotes.size() > 0) {
-                                    list.add(VarConstant.NEWS_QUOTES);
+                                try {
+                                    JSONArray quotesArray = (JSONArray) headerJson.getData();
+                                    if (quotesArray == null) break;
+                                    quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
+                                    if (quotes.size() > 0) {
+                                        list.add(VarConstant.NEWS_QUOTES);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_AD:
-                                ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
-                                list.add(VarConstant.NEWS_AD);
+                                try {
+                                    ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                    list.add(VarConstant.NEWS_AD);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case VarConstant.NEWS_AD_SLIDE:
-                                adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
-                                list.add(VarConstant.NEWS_AD_SLIDE);
+                                try {
+                                    adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                    list.add(VarConstant.NEWS_AD_SLIDE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case VarConstant.NEWS_AD_SHORTCUT:
-                                adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
-                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                try {
+                                    adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                    list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             default:
                                 break;
@@ -761,19 +785,27 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                     for (TypeDataJson headerJson : newsTypeDataJsons) {
                         switch (headerJson.getType()) {
                             case VarConstant.NEWS_SLIDE:
-                                JSONArray slideArray = (JSONArray) headerJson.getData();
-                                if (slideArray == null) break;
-                                slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
-                                if (slides.size() > 0) {
-                                    list.add(VarConstant.NEWS_SLIDE);
+                                try {
+                                    JSONArray slideArray = (JSONArray) headerJson.getData();
+                                    if (slideArray == null) break;
+                                    slides = JSON.parseArray(slideArray.toString(), SlideJson.class);
+                                    if (slides.size() > 0) {
+                                        list.add(VarConstant.NEWS_SLIDE);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_SHORTCUT:
-                                JSONArray shortcutArray = (JSONArray) headerJson.getData();
-                                if (shortcutArray == null) break;
-                                shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
-                                if (shortcuts.size() > 0) {
-                                    list.add(VarConstant.NEWS_SHORTCUT);
+                                try {
+                                    JSONArray shortcutArray = (JSONArray) headerJson.getData();
+                                    if (shortcutArray == null) break;
+                                    shortcuts = JSON.parseArray(shortcutArray.toString(), SlideJson.class);
+                                    if (shortcuts.size() > 0) {
+                                        list.add(VarConstant.NEWS_SHORTCUT);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
@@ -788,24 +820,40 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_QUOTES:
-                                JSONArray quotesArray = (JSONArray) headerJson.getData();
-                                if (quotesArray == null) break;
-                                quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
-                                if (quotes.size() > 0) {
-                                    list.add(VarConstant.NEWS_QUOTES);
+                                try {
+                                    JSONArray quotesArray = (JSONArray) headerJson.getData();
+                                    if (quotesArray == null) break;
+                                    quotes = JSON.parseArray(quotesArray.toString(), MarketItemBean.class);
+                                    if (quotes.size() > 0) {
+                                        list.add(VarConstant.NEWS_QUOTES);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case VarConstant.NEWS_AD:
-                                ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
-                                list.add(VarConstant.NEWS_AD);
+                                try {
+                                    ads = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                    list.add(VarConstant.NEWS_AD);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case VarConstant.NEWS_AD_SLIDE:
-                                adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
-                                list.add(VarConstant.NEWS_AD_SLIDE);
+                                try {
+                                    adBlowSlide = JSONObject.parseObject(headerJson.getData().toString(), AdJson2.class);
+                                    list.add(VarConstant.NEWS_AD_SLIDE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case VarConstant.NEWS_AD_SHORTCUT:
-                                adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
-                                list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                try {
+                                    adBlowBtn = JSONObject.parseObject(headerJson.getData().toString(), AdJson.class);
+                                    list.add(VarConstant.NEWS_AD_SHORTCUT);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             default:
                                 break;

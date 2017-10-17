@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -84,8 +85,8 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
                     case FLAG_START_AUTO_SCROLL:
                         if (textList.size() > 0) {
                             currentId++;
-                            setText(textList.get(currentId % textList.size()));
                             if (onScrollListener != null) onScrollListener.onScroll(currentId % textList.size());
+                            setText(textList.get(currentId % textList.size()));
                         }
                         handler.sendEmptyMessageDelayed(FLAG_START_AUTO_SCROLL, time);
                         break;
@@ -112,26 +113,31 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
      * 开始滚动
      */
     public void startAutoScroll() {
-        handler.removeMessages(FLAG_START_AUTO_SCROLL);
-        handler.sendEmptyMessage(FLAG_START_AUTO_SCROLL);
+        if (handler != null) {
+            handler.removeMessages(FLAG_START_AUTO_SCROLL);
+            if (textList.size() > 1)
+                handler.sendEmptyMessage(FLAG_START_AUTO_SCROLL);
+        }
     }
 
     /**
      * 停止滚动
      */
     public void stopAutoScroll() {
-        handler.sendEmptyMessage(FLAG_STOP_AUTO_SCROLL);
+        if (handler != null)
+            handler.sendEmptyMessage(FLAG_STOP_AUTO_SCROLL);
     }
 
     @Override
     public View makeView() {
         TextView t = new TextView(mContext);
         t.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+        t.setSingleLine(true);
         t.setMaxLines(1);
+        t.setEllipsize(TextUtils.TruncateAt.END);
         t.setPadding(mPadding, mPadding, mPadding, mPadding);
         t.setTextColor(textColor);
         t.setTextSize(mTextSize);
-
         t.setClickable(true);
         t.setOnClickListener(new OnClickListener() {
             @Override
