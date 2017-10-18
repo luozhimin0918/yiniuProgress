@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -139,6 +141,8 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
         t.setTextColor(textColor);
         t.setTextSize(mTextSize);
         t.setClickable(true);
+        FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        t.setLayoutParams(params);
         t.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
