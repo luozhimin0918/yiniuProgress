@@ -759,7 +759,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 } else {
                     finalKxHolder.ivMore.setVisibility(View.VISIBLE);
                     finalKxHolder.tvMore.setVisibility(View.VISIBLE);
-//                    finalKxHolder.tvContent.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
+//                    finalKxHolder.extendContent.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
                 }
             }
         });

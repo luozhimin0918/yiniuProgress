@@ -3,6 +3,7 @@ package com.jyh.kxt.index.ui.fragment;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,6 +38,8 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.ToastSnack;
+import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
@@ -46,13 +48,11 @@ import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.presenter.DatumPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.LibActivity;
 import com.library.bean.EventBusClass;
 import com.library.util.ObserverCall;
 import com.library.util.SystemUtil;
-import com.jyh.kxt.base.widget.pickerview.OptionsPickerView;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
 import com.library.widget.window.ToastView;
@@ -68,7 +68,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -297,6 +296,42 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     private Uri calenderEventURL;
     private Uri calenderReminderURL;
 
+
+    public void deleteAlarm(CalendarFinanceBean calendarFinanceBean, OnRequestPermissions onRequestPermissions) {
+        calenderURL = CalendarContract.Calendars.CONTENT_URI/*"content://com.android.calendar/calendars"*/;
+        calenderEventURL = CalendarContract.Events.CONTENT_URI/* "content://com.android.calendar/events"*/;
+        calenderReminderURL = CalendarContract.Reminders.CONTENT_URI/*"content://com.android.calendar/reminders"*/;
+
+        int updateEventId = -1;
+        //首先查询是替换还是增加
+        Cursor existCursor = getActivity().getContentResolver().query(calenderEventURL, null, null, null, null);
+        if (existCursor != null) {
+            while (existCursor.moveToNext()) {
+                try {
+                    String eventTitle = existCursor.getString(existCursor.getColumnIndex(CalendarContract.Events
+                            .TITLE));
+                    if (calendarFinanceBean.getTitle().equals(eventTitle)) {
+                        updateEventId = existCursor.getInt(existCursor.getColumnIndex("_id"));
+                    }
+                } catch (Exception e) {
+                }
+            }
+            existCursor.close();
+        }
+
+        if (updateEventId != -1) {
+            Uri deleteUri = ContentUris.withAppendedId(calenderEventURL, updateEventId);
+            int rows = getContext().getContentResolver().delete(deleteUri, null, null);
+            if (rows == -1) {
+                ToastSnack.show(getContext(), stlNavigationBar, "日历提醒删除失败");
+                onRequestPermissions.doFailSomething();
+                return;
+            }
+        }
+        onRequestPermissions.doSomething();
+        AlarmPresenter.getInstance().deleteAlarmItem(getContext(), calendarFinanceBean.getCode());
+    }
+
     public void obtainAlarmPermissionsSuccess(long baseTime,
                                               CalendarFinanceBean calendarFinanceBean,
                                               OnRequestPermissions onRequestPermissions) {
@@ -312,8 +347,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         if (existCursor != null) {
             while (existCursor.moveToNext()) {
                 try {
-                    String eventTitle = existCursor.getString(existCursor.getColumnIndex(CalendarContract.Events
-                            .TITLE));
+                    String eventTitle = existCursor.getString(existCursor.getColumnIndex(CalendarContract.Events.TITLE));
                     if (calendarFinanceBean.getTitle().equals(eventTitle)) {
                         updateEventId = existCursor.getInt(existCursor.getColumnIndex("_id"));
                     }

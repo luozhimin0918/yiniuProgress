@@ -25,7 +25,7 @@ public class PhoneInfo {
     private static final String KEY_EMUI_CONFIG_HW_SYS_VERSION = "ro.confg.hw_systemversion";
 
     public static String getSystem() {
-        String SYS = "";
+        String SYS = "Android";
         try {
             Properties prop = new Properties();
             prop.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));

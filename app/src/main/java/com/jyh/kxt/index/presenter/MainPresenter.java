@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.presenter;
 
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -248,7 +249,7 @@ public class MainPresenter extends BasePresenter {
                         File patchFile = new File(saveFilePath + patchBean.getPatch_code() + ".patch");
                         if (!patchFile.exists()) {
                             newThreadDownPatch();
-                        }else{
+                        } else {
 
                         }
                     }
@@ -695,6 +696,36 @@ public class MainPresenter extends BasePresenter {
 
     private void checkComparisonVersion(final VersionJson versionJson) {
         int currentVersionCode = SystemUtil.getVersionCode(mContext);
+
+        int favorableVersionCode = SPUtils.getInteger(mContext, SpConstant.TIP_FAVORABLE);
+
+        if (favorableVersionCode != versionJson.getVersionCode()) {
+            if (versionJson.getVersionCode() <= currentVersionCode && versionJson.is_tip() == 1) {
+
+                SPUtils.save(mContext, SpConstant.TIP_FAVORABLE, versionJson.getVersionCode());
+                new AlertDialog.Builder(mContext)
+                        .setMessage(versionJson.getEvaluation_tip())
+                        .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Uri uri = Uri.parse("market://details?id=com.jyh.kxt");
+                                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                try {
+                                    mContext.startActivity(goToMarket);
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+                return;
+            }
+        }
         if (versionJson.getVersionCode() <= currentVersionCode) {
             return;
         }

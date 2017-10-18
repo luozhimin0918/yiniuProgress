@@ -21,6 +21,7 @@ import com.jyh.kxt.main.ui.activity.FlashActivity;
 import com.jyh.kxt.push.json.CjInfo;
 import com.jyh.kxt.push.json.KxItemCJRL;
 import com.jyh.kxt.push.json.PushBean;
+import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 
@@ -45,7 +46,10 @@ public class JPushReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context mContext, Intent intent) {
         try {
-
+            String system = PhoneInfo.getSystem();
+            if (PhoneInfo.SYS_EMUI.equals(system) || PhoneInfo.SYS_MIUI.equals(system)) {
+                return;
+            }
             Bundle bundle = intent.getExtras();
 
             if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
@@ -53,7 +57,7 @@ public class JPushReceiver extends BroadcastReceiver {
             } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
 
                 //接受到推送下来的自定义消息
-                String myNotifyMessage = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+                String myNotifyMessage = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
                 if (myNotifyMessage == null) {
                     return;
@@ -162,7 +166,7 @@ public class JPushReceiver extends BroadcastReceiver {
 
         Boolean pushSound = SPUtils.getBooleanTrue(mContext, SpConstant.SETTING_SOUND);
 
-        KxItemCJRL kxItemCJRL = JSON.parseObject(pushBean.content, KxItemCJRL.class);
+        KxItemCJRL kxItemCJRL = JSON.parseObject(pushBean.extendContent, KxItemCJRL.class);
         if (kxItemCJRL == null) {
             return;
         }

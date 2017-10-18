@@ -79,10 +79,12 @@
             android:id="@+id/tv_zanCount"
             android:text="1554"
             style="@style/VideoItemStyle"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:layout_toLeftOf="@id/tv_commentCount"
-            android:drawableLeft="@mipmap/icon_video_comment"/>
+            android:drawableLeft="@mipmap/icon_video_list_zan"
+            android:layout_toLeftOf="@id/tv_commentCount" />
     </RelativeLayout>
 
     <View

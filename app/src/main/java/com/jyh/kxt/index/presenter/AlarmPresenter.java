@@ -79,4 +79,33 @@ public class AlarmPresenter {
 
         SPUtils.save(mContext, SpConstant.CALENDAR_ALARM_LIST, JSON.toJSONString(alarmList));
     }
+
+    public void deleteAlarmItem(Context mContext, String code) {
+        AlarmJson oldAlarmJson = getAlarmItem(code);
+        if (oldAlarmJson != null) {
+            alarmHashMap.remove(code);
+        } else {
+            String calendarAlarm = SPUtils.getString(mContext, SpConstant.CALENDAR_ALARM_LIST);
+
+            List<AlarmJson> alarmList;
+            if (!"".equals(calendarAlarm)) {
+                alarmList = JsonUtil.parseArray(calendarAlarm, AlarmJson.class);
+            } else {
+                alarmList = new ArrayList<>();
+            }
+
+            int delPosition = -1;
+            for (int i = 0; i < alarmList.size(); i++) {
+                AlarmJson itemAlarmJson = alarmList.get(i);
+
+                if (itemAlarmJson.getCode().equals(code)) {
+                    delPosition = i;
+                }
+            }
+            if (delPosition != -1) {
+                alarmList.remove(delPosition);
+            }
+            SPUtils.save(mContext, SpConstant.CALENDAR_ALARM_LIST, JSON.toJSONString(alarmList));
+        }
+    }
 }

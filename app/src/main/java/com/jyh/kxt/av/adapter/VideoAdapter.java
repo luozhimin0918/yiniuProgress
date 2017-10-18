@@ -131,13 +131,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
 
         if (itemViewType == 0) {
-            setTheme(holder);
+            boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
+            video.setGood(good);
 
             boolean collect = CollectUtils.isCollect(mContext, VarConstant.COLLECT_TYPE_VIDEO, video);
             video.setCollect(collect);
 
-            boolean good = NativeStore.isThumbSucceed(mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId());
-            video.setGood(good);
+            setTheme(holder, video);
+
 
             Glide.with(mContext)
                     .load(HttpConstant.IMG_URL + video.getPicture())
@@ -146,7 +147,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                     .placeholder(R.mipmap.icon_def_video)
                     .into(holder.iv);
             holder.tvTitle.setText(video.getTitle());
+
             holder.tvZanCount.setText(video.getNum_good());
+            holder.tvZanCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickFavour(video, video, VideoAdapter.this);
+                }
+            });
 
             try {
                 holder.tvTime.setText(DateUtils.transformTime(Long.parseLong(video.getCreate_time()) * 1000, DateUtils
@@ -202,10 +210,6 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                     functionList.add(collectShare);
                     collectShare.isSelectedView = video.isCollect();
 
-                    //赞
-                    ShareItemJson favourShare = new ShareItemJson(R.drawable.sel_share_ding, "赞");
-                    functionList.add(favourShare);
-                    favourShare.isSelectedView = video.isGood();
 
                     functionList.add(new ShareItemJson(UmengShareUtil.FUN_CLOSE_POP, R.mipmap.icon_share_close, "取消"));
 
@@ -221,9 +225,9 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                                 case R.drawable.sel_share_collect:
                                     clickCollect(video, mShareItemJson, recyclerAdapter);
                                     break;
-                                case R.drawable.sel_share_ding:
-                                    clickFavour(video, mShareItemJson, recyclerAdapter);
-                                    break;
+//                                case R.drawable.sel_share_ding:
+//                                    clickFavour(video, mShareItemJson, recyclerAdapter);
+//                                    break;
                             }
                         }
                     });
@@ -266,16 +270,27 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
      * 点赞
      */
 
-    private void clickFavour(final VideoListJson video, final ShareItemJson mShareItemJson, final RecyclerView.Adapter recyclerAdapter) {
-        if (mShareItemJson.isSelectedView) {
+    private void clickFavour(final VideoListJson video,
+                             final VideoListJson mShareItemJson,
+                             final VideoAdapter recyclerAdapter) {
+        if (mShareItemJson.isGood()) {
             ToastView.makeText3(VideoAdapter.this.mContext, "已点赞");
         } else {
             NativeStore.addThumbID(VideoAdapter.this.mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId(), null,
                     new ObserverData<Boolean>() {
                         @Override
                         public void callback(Boolean aBoolean) {
-                            mShareItemJson.isSelectedView = true;
+                            mShareItemJson.setIsGood(true);
                             video.setIsGood(true);
+
+                            int numGood;
+                            try {
+                                numGood = Integer.parseInt(video.getNum_good()) + 1;
+                            } catch (NumberFormatException e) {
+                                numGood = 0;
+                            }
+                            video.setNum_good(String.valueOf(numGood));
+
                             recyclerAdapter.notifyDataSetChanged();
                         }
 
@@ -339,7 +354,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         }
     }
 
-    private void setTheme(ViewHolder holder) {
+    private void setTheme(ViewHolder holder, VideoListJson video) {
         holder.ivPlay.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_video_play_big));
         holder.tvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.font_color10));
         holder.tvTime.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
@@ -357,9 +372,13 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.tvZanCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvZanCount.setPadding(0, paddingVal, 0, paddingVal);
-        TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
-                .icon_video_list_zan, 0, 0, 0);
-
+        if (video.isGood()) {
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
+                    .icon_video_list_zan1, 0, 0, 0);
+        } else {
+            TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
+                    .icon_video_list_zan, 0, 0, 0);
+        }
 
         holder.tvPlayCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);

@@ -767,7 +767,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public void checkAlarmPermissions(long baseTime,
                                       CalendarFinanceBean calendarFinanceBean,
                                       OnRequestPermissions onRequestPermissions) {
-
         this.baseTime = baseTime;
         this.calendarFinanceBean = calendarFinanceBean;
         this.onRequestPermissions = onRequestPermissions;
@@ -784,6 +783,31 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         } else {
             if (datumFragment != null) {
                 datumFragment.obtainAlarmPermissionsSuccess(baseTime, calendarFinanceBean, onRequestPermissions);
+            }
+        }
+    }
+
+    /**
+     * 删除日历
+     *
+     * @param calendarFinanceBean
+     */
+    public void deleteAlarm(CalendarFinanceBean calendarFinanceBean,
+                            OnRequestPermissions onRequestPermissions) {
+        this.calendarFinanceBean = calendarFinanceBean;
+
+        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR);
+        int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED
+                || readPermission != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_CALENDAR}, 1000);
+        } else {
+            if (datumFragment != null) {
+                datumFragment.deleteAlarm(calendarFinanceBean,onRequestPermissions);
             }
         }
     }
@@ -1013,8 +1037,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             tokenResult.setResultCallback(new ResultCallback<TokenResult>() {
                                 @Override
                                 public void onResult(TokenResult result) {
+
                                 }
                             });
+
+
                         }
 
                         @Override

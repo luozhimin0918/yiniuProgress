@@ -219,25 +219,6 @@ public class WelcomePresenter extends BasePresenter {
         }
     }
 
-    public void requestMainData() {
-//        VolleyRequest request = new VolleyRequest(mContext, mQueue);
-//        JSONObject jsonParam = request.getJsonParam();
-//        request.setTag("mainRequest");
-//        request.doGet(HttpConstant.INDEX_MAIN, jsonParam, new HttpListener<List<TypeDataJson>>() {
-//            @Override
-//            protected void onResponse(List<TypeDataJson> mTypeDataList) {
-//                PreloadIndex.getInstance().setTypeDataList(mTypeDataList);
-//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_REQUEST_MAIN_INIT, mTypeDataList));
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_REQUEST_MAIN_INIT, null));
-//            }
-//        });
-    }
-
     public void requestMemberInfo() {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo == null) {

@@ -1,8 +1,10 @@
 package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -418,11 +420,20 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 drawingShapeColor(2, effectType, "影响较小", llExponent);
             }
 
+            tvAlarm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
         } catch (NumberFormatException e) {
             radianDrawable.setStroke(R.color.font_color8);
 
             Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.icon_alarm);
             tvAlarm.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
+            final int alarmUnColor = ContextCompat.getColor(mContext, R.color.font_color6);
+            tvAlarm.setTextColor(alarmUnColor);
             tvAlarm.setText("定时");
 
             if (mCalendarType instanceof CalendarFinanceBean) {
@@ -434,7 +445,9 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                     Date baseDate = new Date(Long.parseLong(alarmItem.getTime()));
                     String formatDate = simpleDateFormat.format(baseDate);
 
+                    int alarmOkColor = ContextCompat.getColor(mContext, R.color.font_color8);
                     tvAlarm.setText(formatDate);
+                    tvAlarm.setTextColor(alarmOkColor);
                 }
             }
 
@@ -452,74 +465,113 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
             tvAlarm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {//设置时间
-                    parentFragment.showTimingWindow(mCalendarType, new ObserverCall<Integer>() {
-                        @Override
-                        public void onComplete(Integer time) {
-                            try {
-                                long baseTime = 0L;
+                    CharSequence text = tvAlarm.getText();
+                    if (!"定时".equals(text)) {
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("日历提醒")
+                                .setMessage("是否要移除这个日历提醒?")
+                                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, int which) {
+                                        MainActivity mainActivity = (MainActivity) mContext;
+                                        CalendarFinanceBean calendarFinanceBean = null;
+
+                                        if (mCalendarType instanceof CalendarFinanceBean) {
+                                            calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+                                        }
+                                        mainActivity.deleteAlarm(calendarFinanceBean,
+                                                new OnRequestPermissions() {
+                                                    @Override
+                                                    public void doSomething() {
+                                                        int alarmColor = ContextCompat.getColor(mContext, R.color.font_color6);
+                                                        tvAlarm.setText("定时");
+                                                        tvAlarm.setTextColor(alarmColor);
+
+                                                    }
+
+                                                    @Override
+                                                    public void doFailSomething() {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                    }
+                                })
+                                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).show();
+                    } else {
+                        parentFragment.showTimingWindow(mCalendarType, new ObserverCall<Integer>() {
+                            @Override
+                            public void onComplete(Integer time) {
+                                try {
+                                    long baseTime = 0L;
 
 
-                                CalendarFinanceBean calendarFinanceBean = null;
+                                    CalendarFinanceBean calendarFinanceBean = null;
 
-                                if (mCalendarType instanceof CalendarFinanceBean) {
-                                    calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
-                                    String financeTime = calendarFinanceBean.getTime();
+                                    if (mCalendarType instanceof CalendarFinanceBean) {
+                                        calendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+                                        String financeTime = calendarFinanceBean.getTime();
 
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                    Date parseDate = simpleDateFormat.parse(financeTime);
-                                    baseTime = parseDate.getTime();
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                        Date parseDate = simpleDateFormat.parse(financeTime);
+                                        baseTime = parseDate.getTime();
+                                    }
+
+                                    int oneMinute = 60 * 1000;
+                                    switch (time) {
+                                        case 0:
+                                            baseTime -= 5 * oneMinute;
+                                            break;
+                                        case 1:
+                                            baseTime -= 10 * oneMinute;
+                                            break;
+                                        case 2:
+                                            baseTime -= 15 * oneMinute;
+                                            break;
+                                        case 3:
+                                            baseTime -= 30 * oneMinute;
+                                            break;
+                                        case 4:
+                                            baseTime -= 60 * oneMinute;
+                                            break;
+                                    }
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                                    Date baseDate = new Date(baseTime);
+                                    final String formatDate = simpleDateFormat.format(baseDate);
+
+                                    MainActivity mainActivity = (MainActivity) mContext;
+                                    mainActivity.checkAlarmPermissions(baseTime,
+                                            calendarFinanceBean,
+                                            new OnRequestPermissions() {
+                                                /**
+                                                 * 调用成功
+                                                 */
+                                                @Override
+                                                public void doSomething() {
+                                                    int alarmColor = ContextCompat.getColor(mContext, R.color.font_color8);
+                                                    tvAlarm.setText(formatDate);
+                                                    tvAlarm.setTextColor(alarmColor);
+                                                }
+
+                                                /**
+                                                 * 权限失败
+                                                 */
+                                                @Override
+                                                public void doFailSomething() {
+
+                                                }
+                                            });
+
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
                                 }
-
-                                int oneMinute = 60 * 1000;
-                                switch (time) {
-                                    case 0:
-                                        baseTime -= 5 * oneMinute;
-                                        break;
-                                    case 1:
-                                        baseTime -= 10 * oneMinute;
-                                        break;
-                                    case 2:
-                                        baseTime -= 15 * oneMinute;
-                                        break;
-                                    case 3:
-                                        baseTime -= 30 * oneMinute;
-                                        break;
-                                    case 4:
-                                        baseTime -= 60 * oneMinute;
-                                        break;
-                                }
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                                Date baseDate = new Date(baseTime);
-                                final String formatDate = simpleDateFormat.format(baseDate);
-
-                                MainActivity mainActivity = (MainActivity) mContext;
-                                mainActivity.checkAlarmPermissions(baseTime,
-                                        calendarFinanceBean,
-                                        new OnRequestPermissions() {
-                                            /**
-                                             * 调用成功
-                                             */
-                                            @Override
-                                            public void doSomething() {
-                                                int alarmColor = ContextCompat.getColor(mContext, R.color.font_color8);
-                                                tvAlarm.setText(formatDate);
-                                                tvAlarm.setTextColor(alarmColor);
-                                            }
-
-                                            /**
-                                             * 权限失败
-                                             */
-                                            @Override
-                                            public void doFailSomething() {
-
-                                            }
-                                        });
-
-                            } catch (ParseException e1) {
-                                e1.printStackTrace();
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             });
         }

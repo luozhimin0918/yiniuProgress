@@ -10,10 +10,10 @@ package com.jyh.kxt.push.json;
 public class PushBean {
     public String id;
     public String title;
-    public String tvContent;
+    public String content;
     public String code;
     public String icon;
 
     public String url;
-    public String content;
+    public String extendContent;
 }
