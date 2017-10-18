@@ -21,6 +21,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,7 +71,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -108,6 +108,8 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
 
     @BindView(R.id.market_chart_load) PageLoadLayout marketChartLoad;
 
+    @BindView(R.id.hsv_toolbar) HorizontalScrollView hsvToolBar;
+    @BindView(R.id.ll_toolbar) LinearLayout llToolBar;
     @BindView(R.id.market_chart_fenshi) public RelativeLayout rlFenShiView;
     @BindView(R.id.market_chart_fen5) RelativeLayout marketChartFen5;
     @BindView(R.id.market_chart_fen15) RelativeLayout marketChartFen15;
@@ -146,6 +148,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     //    private ShareJson shareJson;
 
     public boolean portrait = true;
+    private int screenWidth;
 
     @OnClick({R.id.ll_market_detail_optional,
             R.id.ll_market_detail_share,
@@ -203,6 +206,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
                 currentThemeSource = 0;
                 break;
         }
+        screenWidth = SystemUtil.getScreenDisplay(getContext()).widthPixels;
         marketSocketBean = new MarketSocketBean();
         requestInitDetail();
     }
@@ -300,6 +304,8 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
 
         requestChartData(clickNavigationPosition);
 
+        scrollCenter();
+
         TextView itemTextView = (TextView) itemView.findViewWithTag("text");
         itemTextView.setTextColor(ContextCompat.getColor(this, R.color.blue1));
         addLineView(itemView);
@@ -317,6 +323,25 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
         }
 
         clickOldNavigationView = itemView;
+    }
+
+    /**
+     * 滚动到屏幕中间
+     */
+    private void scrollCenter() {
+        int childCount = llToolBar.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = llToolBar.getChildAt(i);
+            //设置选中状态
+            child.setSelected(i == clickNavigationPosition);
+        }
+        View curTabView = llToolBar.getChildAt(clickNavigationPosition);
+        //获取x的值
+        int left = curTabView.getLeft();
+        int width = curTabView.getMeasuredWidth();
+        int toX = left + width / 2 - screenWidth / 2;
+        //滚动
+        hsvToolBar.smoothScrollTo(toX, 0);
     }
 
     private void addLineView(View view) {
