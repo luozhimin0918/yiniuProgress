@@ -57,8 +57,12 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
     public void onBindViewHolder(BtnViewHolder holder, int position) {
         final SlideJson slideJson = slideJsons.get(position);
         holder.textView.setText(slideJson.getName());
-        Glide.with(context).load(HttpConstant.IMG_URL + slideJson.getPicture()).error(R.mipmap.icon_def_btn).placeholder(R.mipmap
-                .icon_def_btn).into(holder.imageView);
+
+        Glide.with(context)
+                .load(slideJson.getPicture())
+                .error(R.mipmap.icon_def_btn)
+                .placeholder(R.mipmap.icon_def_btn)
+                .into(holder.imageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -38,7 +38,7 @@ public class PointJson extends CommentBean {
     private String point_name;
     private String point_picture;
     private int root_id;
-    private int time;
+    private long time;
     private String title;
 
     public String getO_action() {
@@ -97,11 +97,11 @@ public class PointJson extends CommentBean {
         this.root_id = root_id;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

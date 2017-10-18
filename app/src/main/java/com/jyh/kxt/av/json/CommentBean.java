@@ -41,6 +41,8 @@ public class CommentBean {
      * 接口返回数据
      */
     private String content;
+
+    private long time;
     private long create_time;
     private int id;
     private boolean is_good;
@@ -151,6 +153,14 @@ public class CommentBean {
 
     public void setParent_content(String parent_content) {
         this.parent_content = parent_content;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public long getParent_create_time() {

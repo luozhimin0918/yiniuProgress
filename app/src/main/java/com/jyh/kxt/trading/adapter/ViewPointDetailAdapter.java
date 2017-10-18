@@ -83,7 +83,7 @@ public class ViewPointDetailAdapter extends BaseListAdapter<CommentDetailBean> {
         /**
          * 创建时间
          */
-        long createTime = commentDetailBean.getCreate_time() * 1000;//PHP的时间
+        long createTime = commentDetailBean.getTime() * 1000;//PHP的时间
         String simpleTime = (String) DateFormat.format("MM-dd HH:mm", createTime);
         mViewHolder.tvTime.setText(simpleTime);
 

@@ -76,7 +76,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
 
         commentPresenter = new CommentPresenter(this);//初始化评论相关
         commentPresenter.setOnCommentPublishListener(this);
-        commentPresenter.setOnlyAllowSmallEmoJe(true);
+        commentPresenter.setOnlyAllowSmallEmoJe(false);
 
         try {
             EventBus.getDefault().register(this);

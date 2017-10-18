@@ -75,10 +75,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Start">
             <intent-filter>
-                <data
-                    android:host="com.kxt.push"
-                    android:path="/notify_push"
-                    android:scheme="kxtapp"/>
+                <data  android:scheme="kxtapp"/>
 
                 <action android:name="android.intent.action.VIEW"/>
 

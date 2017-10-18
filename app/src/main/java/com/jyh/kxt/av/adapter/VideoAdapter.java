@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
@@ -251,7 +252,15 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 }
             });
         } else if (itemViewType == 1) {
-            Glide.with(mContext).load(video.getPicture()).into(holderAd.ivAdvertView);
+            Glide.with(mContext)
+                    .load(video.getPicture())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(holderAd.ivAdvertView);
+            Glide.with(mContext)
+                    .load(video.getPicture())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(holderAd.ivAdvertView);
+
             holderAd.ivAdvertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
