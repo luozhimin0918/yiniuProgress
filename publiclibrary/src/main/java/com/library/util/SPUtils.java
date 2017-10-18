@@ -11,6 +11,7 @@ public class SPUtils {
 
     private static SharedPreferences sp;
     private static String NAME = "spsave";
+    public static String DZ_NAME = "dianzan";
 
     /**
      * 保存数据
