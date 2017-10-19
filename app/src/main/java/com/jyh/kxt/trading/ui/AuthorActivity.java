@@ -273,7 +273,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         tvFans.setText("粉丝 " + numFansInt);
         tvArticle.setText("文章 " + (article_num == null ? 0 : article_num));
         tvViewpoint.setText("观点 " + (point_num == null ? 0 : point_num));
-        tvInfo.setText(authorDetailsJson.getIntroduce());
+        tvInfo.setText("简介: "+authorDetailsJson.getIntroduce());
 
         //关注
         String is_follow = authorDetailsJson.getIs_follow();

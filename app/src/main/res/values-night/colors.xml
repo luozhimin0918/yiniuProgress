@@ -79,6 +79,8 @@
 
     <color name="font_color_url">#136AA4</color>
 
+    <color name="blog_title">#115e91</color>
+
     <color name="tabSelColor">#909090</color>
     <color name="tabUnSelColor">#666666</color>
 
