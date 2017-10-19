@@ -2,28 +2,22 @@ package com.jyh.kxt.base.widget;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.CommentBean;
-import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.utils.NativeStore;
-import com.jyh.kxt.trading.util.TradeHandlerUtil;
-import com.library.base.http.VarConstant;
-import com.library.util.SystemUtil;
 
 /**
  * Created by Mr'Dai on 2017/5/4.
  * 同意管理点赞动画
  */
 public class ThumbView3 extends RelativeLayout {
+
+    private TextView giveView;
 
     public ThumbView3(Context context) {
         this(context, null);
@@ -35,21 +29,49 @@ public class ThumbView3 extends RelativeLayout {
 
     public ThumbView3(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
+        setClipChildren(false);
     }
 
-    private void initView() {
-    }
-
-    /**
-     * 请求点赞
-     */
-    private void requestClickThumb() {
-
+    private void initGiveView() {
+        giveView = new TextView(getContext());
+        giveView.setText("+1");
+        giveView.setTextSize(12);
+        giveView.setTextColor(ContextCompat.getColor(getContext(), R.color.red2));
+        giveView.setVisibility(View.GONE);
+        LayoutParams mGiveParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mGiveParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(giveView, mGiveParams);
     }
 
     @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+
+        initGiveView();
+    }
+
+    public void startGiveAnimation() {
+        giveView.setVisibility(View.VISIBLE);
+
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.glive_anim);
+        giveView.startAnimation(animation);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                giveView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }

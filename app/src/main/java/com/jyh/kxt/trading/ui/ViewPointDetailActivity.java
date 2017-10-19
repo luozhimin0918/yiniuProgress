@@ -23,6 +23,7 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.trading.json.ShareDictBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
@@ -58,6 +59,7 @@ public class ViewPointDetailActivity extends BaseActivity implements CommentPres
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_comment) public TextView tvShowComment;
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
+    @BindView(R.id.thumb_view_zan) public ThumbView3 mThumbView3;
 
 
     public CommentPresenter commentPresenter;

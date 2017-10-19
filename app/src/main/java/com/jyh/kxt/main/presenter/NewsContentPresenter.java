@@ -440,6 +440,7 @@ public class NewsContentPresenter extends BasePresenter {
             }
             if (newsContentActivity.isGood) {
             } else {
+                newsContentActivity.mThumbView3.startGiveAnimation();
                 String goodType/* = VarConstant.GOOD_TYPE_NEWS*/ = null; //文章点赞
                 switch (type) {
                     case VarConstant.OCLASS_BLOG:

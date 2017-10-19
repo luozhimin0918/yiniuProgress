@@ -48,6 +48,7 @@ import com.library.base.LibActivity;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.RegexValidateUtil;
+import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -225,13 +226,6 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
 
         homeHeadView.addView(btnRecyclerView);
 
-        Space mSpace = new Space(mContext);
-        int lineHeight = (int) mContext.getResources().getDimension(R.dimen.line_height);
-        AbsListView.LayoutParams mSpaceParams = new AbsListView.LayoutParams(
-                AbsListView.LayoutParams.MATCH_PARENT,
-                lineHeight);
-        mSpace.setLayoutParams(mSpaceParams);
-        homeHeadView.addView(mSpace);
 
         addLineView();
     }

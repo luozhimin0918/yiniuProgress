@@ -1132,10 +1132,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         request.doPost(HttpConstant.VERSION_IMEI, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String mString) {
+                Log.e(TAG, "onResponse: " );
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "onErrorResponse: " );
                 super.onErrorResponse(error);
             }
         });

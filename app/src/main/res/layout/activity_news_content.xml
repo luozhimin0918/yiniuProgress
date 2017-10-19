@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:padding="16dp"
-            android:src="@mipmap/icon_nav_break"/>
+            android:src="@mipmap/icon_nav_break" />
 
         <com.jyh.kxt.base.custom.RoundImageView
             android:id="@+id/news_author_image"
@@ -27,9 +26,9 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:visibility="gone"
             android:layout_toRightOf="@+id/iv_break"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/news_author_nick"
@@ -39,22 +38,21 @@
             android:layout_toLeftOf="@+id/news_author_like"
             android:layout_toRightOf="@+id/news_author_image"
             android:ellipsize="end"
-            android:visibility="gone"
-            android:textColor="@color/blog_title"
             android:maxLines="1"
-            android:text="简单的OMG简单的OMG"/>
+            android:text="简单的OMG简单的OMG"
+            android:textColor="@color/blog_title"
+            android:visibility="gone" />
 
         <com.jyh.kxt.base.widget.SelectedImageView
             android:id="@+id/news_author_like"
             android:layout_width="@dimen/newsAuthorAttentionWidth"
             android:layout_height="@dimen/newsAuthorAttentionHeight"
-            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/news_author_chat"
             android:background="@drawable/sel_news_attention"
             android:button="@null"
-            />
+            android:visibility="gone" />
 
 
         <TextView
@@ -78,7 +76,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="right"
             android:padding="16dp"
-            android:src="@mipmap/icon_point_menu"/>
+            android:src="@mipmap/icon_point_menu" />
 
         <TextView
             android:id="@+id/tv_bar_title"
@@ -88,23 +86,22 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:visibility="gone"
             android:textColor="@color/actionBar_textColor1"
-            android:textSize="@dimen/content_font_size2"/>
+            android:textSize="@dimen/content_font_size2"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View
         android:id="@+id/news_author_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/line_color7"/>
+        android:background="@color/line_color7" />
 
     <com.library.widget.PageLoadLayout
         android:id="@+id/pll_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
         <com.library.widget.handmark.PullToRefreshListView
             android:id="@+id/rv_message"
@@ -112,7 +109,7 @@
             android:layout_height="match_parent"
             android:background="@color/theme1"
             android:overScrollMode="never"
-            app:ptrShowIndicator="false"/>
+            app:ptrShowIndicator="false" />
 
 
     </com.library.widget.PageLoadLayout>
@@ -120,16 +117,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/line_color7"
-        />
+        android:background="@color/line_color7" />
 
     <LinearLayout
         android:id="@+id/ll_nav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoNavHeight"
         android:background="@color/theme1"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_comment"
@@ -144,28 +139,27 @@
             android:paddingLeft="10dp"
             android:text="发表伟大言论..."
             android:textColor="@color/font_color3"
-            android:textSize="@dimen/describe_font_size3"/>
+            android:textSize="@dimen/describe_font_size3" />
 
 
         <RelativeLayout
             android:id="@+id/rl_comment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/iv_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@mipmap/icon_nav_commend"/>
+                android:src="@mipmap/icon_nav_commend" />
 
             <View
                 android:id="@+id/view_zw"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
 
             <TextView
                 android:id="@+id/tv_commentCount"
@@ -182,35 +176,41 @@
                 android:minWidth="18dp"
                 android:textColor="@color/white"
                 android:textSize="7sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
 
         <ImageView
             android:id="@+id/iv_collect"
             style="@style/Audio_RB_Style"
-            android:src="@drawable/sel_nav_collect"/>
+            android:src="@drawable/sel_nav_collect" />
 
 
         <RelativeLayout
             android:id="@+id/rl_dian_zan"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/iv_ding"
+
+            <com.jyh.kxt.base.widget.ThumbView3
+                android:id="@+id/thumb_view_zan"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="center"
-                android:src="@drawable/sel_nav_like"/>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_ding"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/sel_nav_like" />
+            </com.jyh.kxt.base.widget.ThumbView3>
 
             <View
                 android:id="@+id/view_zw1"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
 
             <TextView
                 android:id="@+id/tv_ding_Count"
@@ -227,7 +227,7 @@
                 android:minWidth="18dp"
                 android:textColor="@color/white"
                 android:textSize="7sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
 

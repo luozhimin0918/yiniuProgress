@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_content_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,8 +13,8 @@
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"
         android:layout_width="30dp"
-        android:src="@mipmap/icon_user_def_photo"
-        android:layout_height="30dp"/>
+        android:layout_height="30dp"
+        android:src="@mipmap/icon_user_def_photo" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -32,14 +31,14 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/font_color62"
-            android:textSize="@dimen/describe_font_size3"/>
+            android:textSize="@dimen/describe_font_size3" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/font_color9"
-            android:textSize="@dimen/min_font_size"/>
+            android:textSize="@dimen/min_font_size" />
     </LinearLayout>
 
 
@@ -50,7 +49,7 @@
         android:layout_alignParentRight="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:src="@mipmap/icon_viewpoint_jt"/>
+        android:src="@mipmap/icon_viewpoint_jt" />
 
     <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
         android:id="@+id/viewpoint_title"
@@ -65,7 +64,7 @@
         android:padding="5dp"
         android:textColor="@color/font_color5"
         android:textSize="@dimen/describe_font_size4"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 
     <com.jyh.kxt.base.custom.MeasureGridView
@@ -83,22 +82,22 @@
     <RelativeLayout
         android:id="@+id/viewpoint_transmit_layout"
         android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        android:background="@drawable/view_point_transmit_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/viewpoint_picture_layout"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="8dp"
+        android:background="@drawable/view_point_transmit_content"
+        android:padding="10dp"
+        android:visibility="gone">
 
         <com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView
             android:id="@+id/viewpoint_transmit_text"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="3"
             android:textColor="@color/font_color64"
-            android:textSize="@dimen/describe_font_size3"
-            android:layout_height="wrap_content"/>
+            android:textSize="@dimen/describe_font_size3" />
 
     </RelativeLayout>
 
@@ -111,7 +110,7 @@
         android:layout_marginLeft="-18dp"
         android:layout_marginRight="-18dp"
         android:layout_marginTop="10dp"
-        android:background="@color/line_color6"/>
+        android:background="@color/line_color6" />
 
     <View
         android:id="@+id/viewpoint_space"
@@ -120,7 +119,7 @@
         android:layout_below="@+id/viewpoint_function_zan"
         android:layout_marginLeft="-18dp"
         android:layout_marginRight="-18dp"
-        android:background="@color/line_color6"/>
+        android:background="@color/line_color6" />
 
     <LinearLayout
         android:id="@+id/viewpoint_function_zan"
@@ -131,8 +130,8 @@
         android:layout_below="@+id/viewpoint_line"
         android:gravity="center_vertical">
 
-        <LinearLayout
-            android:id="@+id/view_point_zan_layout"
+        <com.jyh.kxt.base.widget.ThumbView3
+            android:id="@+id/thumb_view_zan"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -142,19 +141,20 @@
                 android:id="@+id/view_point_zan_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:drawableLeft="@mipmap/icon_point_zan1"
                 android:drawablePadding="8dp"
-                android:gravity="center"
                 android:text="0"
                 android:textColor="@color/font_color9"
-                android:textSize="@dimen/describe_font_size3"/>
-        </LinearLayout>
+                android:textSize="@dimen/describe_font_size3" />
+
+        </com.jyh.kxt.base.widget.ThumbView3>
 
         <View
             android:id="@+id/view_line1"
             android:layout_width="1px"
             android:layout_height="15dp"
-            android:background="@color/line_color6"/>
+            android:background="@color/line_color6" />
 
         <LinearLayout
             android:id="@+id/view_point_pl_layout"
@@ -172,14 +172,14 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/font_color9"
-                android:textSize="@dimen/describe_font_size3"/>
+                android:textSize="@dimen/describe_font_size3" />
         </LinearLayout>
 
         <View
             android:id="@+id/view_line2"
             android:layout_width="1px"
             android:layout_height="15dp"
-            android:background="@color/line_color6"/>
+            android:background="@color/line_color6" />
 
         <LinearLayout
             android:id="@+id/view_point_fx_layout"
@@ -192,11 +192,11 @@
                 android:id="@+id/view_point_fx_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/icon_point_fx"
                 android:drawablePadding="8dp"
                 android:gravity="center"
+                android:src="@mipmap/icon_point_fx"
                 android:textColor="@color/font_color9"
-                android:textSize="@dimen/describe_font_size3"/>
+                android:textSize="@dimen/describe_font_size3" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

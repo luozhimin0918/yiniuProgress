@@ -467,6 +467,8 @@ public class VideoDetailPresenter extends BasePresenter {
         if (videoDetailBean != null) {
             if (isAttention) {
             } else {
+                videoDetailActivity.mThumbView.startGiveAnimation();
+
                 NativeStore.addThumbID(mContext, VarConstant.GOOD_TYPE_VIDEO, videoDetailBean.getId(), new
                         ObserverData() {
                             @Override

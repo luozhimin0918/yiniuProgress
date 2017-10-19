@@ -3,6 +3,7 @@ package com.jyh.kxt.main.presenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.Space;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -381,6 +382,16 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
         recyclerView.setLayoutParams(params);
 
         homeHeadView.addView(recyclerView);
+
+        Space mSpaceView = new Space(mContext);
+        int lineHeight = (int) mContext.getResources().getDimension(R.dimen.line_height);
+        AbsListView.LayoutParams mSpaceParams = new AbsListView.LayoutParams(
+                AbsListView.LayoutParams.MATCH_PARENT,
+                lineHeight);
+        mSpaceView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.red2));
+
+        mSpaceView.setLayoutParams(mSpaceParams);
+        homeHeadView.addView(mSpaceView);
 
         addLineView();
     }

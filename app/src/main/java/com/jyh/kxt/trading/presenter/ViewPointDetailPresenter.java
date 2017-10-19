@@ -231,7 +231,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
                 mViewPointTradeBean.forward);
 
         if (mViewPointTradeBean.isFavour) {
-            mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
+            mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_nav_like_sel);
         } else {
             mViewPointDetailActivity.ivZanView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -239,7 +239,8 @@ public class ViewPointDetailPresenter extends BasePresenter {
                     boolean isSaveSuccess = TradeHandlerUtil.getInstance().saveState(mContext, mViewPointTradeBean, 1, true);
 
                     if (isSaveSuccess) {
-                        mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_comment_like);
+                        mViewPointDetailActivity.mThumbView3.startGiveAnimation();
+                        mViewPointDetailActivity.ivZanView.setImageResource(R.mipmap.icon_nav_like_sel);
                         mViewPointTradeBean.num_good += 1;
                         mViewPointDetailActivity.tvZanCount.setText(String.valueOf(mViewPointTradeBean.num_good));
 

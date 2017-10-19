@@ -1,5 +1,6 @@
 package com.jyh.kxt.trading.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
@@ -199,7 +202,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
                             }
                         });
                     } else {
@@ -212,7 +215,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
                         }
                     });
                 }
@@ -262,9 +265,10 @@ public class ViewpointAdapter extends BaseAdapter implements
         @BindView(R.id.viewpoint_transmit_layout) RelativeLayout rlTransmitLayout;
         @BindView(R.id.viewpoint_transmit_text) EmoticonSimpleTextView tvTransmitView;
 
-        @BindView(R.id.view_point_zan_tv) TextView tvZanView;
+        @BindView(R.id.thumb_view_zan)   ThumbView3 mThumbView3;
         @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
         @BindView(R.id.view_point_fx_tv) ImageView tvShareView;
+        @BindView(R.id.view_point_zan_tv) TextView tvZanView;
 
         @BindView(R.id.viewpoint_space) View viewSpace;
 
@@ -302,13 +306,14 @@ public class ViewpointAdapter extends BaseAdapter implements
             tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
+        @OnClick({R.id.thumb_view_zan, R.id.view_point_pl_layout, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
-                case R.id.view_point_zan_layout:
+                case R.id.thumb_view_zan:
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
+                        mThumbView3.startGiveAnimation();
                         boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 1, true);
                         if (isSaveSuccess) {
                             viewPointTradeBean.isFavour = true;

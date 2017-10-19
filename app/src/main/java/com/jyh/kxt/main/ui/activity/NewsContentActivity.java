@@ -60,6 +60,7 @@ import com.jyh.kxt.base.widget.AdvertImageLayout;
 import com.jyh.kxt.base.widget.SelectLineView;
 import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.index.ui.WebActivity;
@@ -109,6 +110,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.pll_content) public PageLoadLayout pllContent;
     @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
     @BindView(R.id.iv_ding) public ImageView ivGood;
+
+    @BindView(R.id.thumb_view_zan) public ThumbView3 mThumbView3;
     @BindView(R.id.iv_collect) public ImageView ivCollect;
     @BindView(R.id.tv_commentCount) TextView tvCommentCount;
     @BindView(R.id.tv_ding_Count) public TextView tvDianCount;

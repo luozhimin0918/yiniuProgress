@@ -19,6 +19,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.presenter.CommentPresenter;
 import com.jyh.kxt.base.utils.UmengShareUI;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.push.PushUtil;
 import com.library.manager.ActivityManager;
@@ -48,6 +49,7 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.tv_commentCount) public TextView tvCommentCount;
     @BindView(R.id.tv_zanCount) public TextView tvZanCount;
     @BindView(R.id.ll_nav) public LinearLayout llNav;
+    @BindView(R.id.thumb_view_zan) public ThumbView3 mThumbView;
 
     private VideoDetailPresenter videoDetailPresenter;
     public CommentPresenter commentPresenter;

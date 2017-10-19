@@ -38,6 +38,7 @@ import com.jyh.kxt.base.utils.OnPopupFunListener;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.library.base.http.VarConstant;
 import com.library.util.DateUtils;
@@ -117,6 +118,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                     holder.tvCommentCount = (TextView) convertView.findViewById(R.id.tv_commentCount);
                     holder.tvPlayCount = (TextView) convertView.findViewById(R.id.tv_playCount);
                     holder.tvZanCount = (TextView) convertView.findViewById(R.id.tv_zanCount);
+                    holder.thumbViewZan = (ThumbView3) convertView.findViewById(R.id.thumb_view_zan);
                     holder.ivPlay = (ImageView) convertView.findViewById(R.id.iv_playBtn);
                     holder.vLine = convertView.findViewById(R.id.v_line);
                     convertView.setTag(holder);
@@ -159,10 +161,10 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
             holder.tvTitle.setText(video.getTitle());
 
             holder.tvZanCount.setText(video.getNum_good());
-            holder.tvZanCount.setOnClickListener(new View.OnClickListener() {
+            holder.thumbViewZan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clickFavour(video, video, VideoAdapter.this);
+                    clickFavour(v, video, video, VideoAdapter.this);
                 }
             });
 
@@ -235,9 +237,6 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                                 case R.drawable.sel_share_collect:
                                     clickCollect(video, mShareItemJson, recyclerAdapter);
                                     break;
-//                                case R.drawable.sel_share_ding:
-//                                    clickFavour(video, mShareItemJson, recyclerAdapter);
-//                                    break;
                             }
                         }
                     });
@@ -276,7 +275,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                             int bitmapHeight = resource.getHeight();
 
                             DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
-                            double ratioSize = (double) screenDisplay.widthPixels / (double)bitmapWidth;
+                            double ratioSize = (double) screenDisplay.widthPixels / (double) bitmapWidth;
 
                             int imageHeightParams = (int) (ratioSize * bitmapHeight);
 
@@ -286,7 +285,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
 
                             finalHolderAd.ivAdvertView.setLayoutParams(imageLayoutParams);
                         }
-                    }) ;
+                    });
 
 
             Glide.with(mContext)
@@ -318,12 +317,16 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
      * 点赞
      */
 
-    private void clickFavour(final VideoListJson video,
+    private void clickFavour(View v, final VideoListJson video,
                              final VideoListJson mShareItemJson,
                              final VideoAdapter recyclerAdapter) {
+
         if (mShareItemJson.isGood()) {
             ToastView.makeText3(VideoAdapter.this.mContext, "已点赞");
         } else {
+            ThumbView3 thumbView3 = (ThumbView3) v;
+            thumbView3.startGiveAnimation();
+
             NativeStore.addThumbID(VideoAdapter.this.mContext, VarConstant.GOOD_TYPE_VIDEO, video.getId(), null,
                     new ObserverData<Boolean>() {
                         @Override
@@ -426,6 +429,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         isGoodLocal = isGoodLocal == null ? false : isGoodLocal;
 
         if (video.isGood() || isGoodLocal) {
+            video.setGood(true);
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
                     .icon_video_list_zan1, 0, 0, 0);
         } else {
@@ -469,6 +473,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     class ViewHolder {
         public ImageView iv, ivPlay;
         public TextView tvTitle, tvTime, tvPlayCount, tvCommentCount, tvZanCount;
+        public ThumbView3 thumbViewZan;
         public ImageView ivMore;
         public View vLine;
     }
