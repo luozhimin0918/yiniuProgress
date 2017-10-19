@@ -202,7 +202,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                         viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                                mContext.startActivity(new Intent(mContext, LoginActivity.class));
                             }
                         });
                     } else {
@@ -215,7 +215,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.startActivity(new Intent(mContext, LoginOrRegisterActivity.class));
+                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         }
                     });
                 }
