@@ -90,6 +90,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     private int statusHeight;
 
     public AuthorAdapter adapter;
+    private int numFansInt;
 
 
     @Override
@@ -261,9 +262,15 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     private void setHeadView(AuthorDetailsJson authorDetailsJson) {
         tvName.setText(authorDetailsJson.getName());
         String num_fans = authorDetailsJson.getNum_fans();
+        numFansInt=0;
+        try {
+            numFansInt=Integer.parseInt(num_fans);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         String article_num = authorDetailsJson.getArticle_num();
         String point_num = authorDetailsJson.getPoint_num();
-        tvFans.setText("粉丝 " + (num_fans == null ? 0 : num_fans));
+        tvFans.setText("粉丝 " + numFansInt);
         tvArticle.setText("文章 " + (article_num == null ? 0 : article_num));
         tvViewpoint.setText("观点 " + (point_num == null ? 0 : point_num));
         tvInfo.setText(authorDetailsJson.getIntroduce());
@@ -427,6 +434,14 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
                         adapter.removeViewpoint(viewpoint.o_id);
                     }
                 }
+                break;
+            case EventBusClass.EVENT_ATTENTION_AUTHOR_DEL:
+                numFansInt--;
+                tvFans.setText("粉丝 " +numFansInt);
+                break;
+            case EventBusClass.EVENT_ATTENTION_AUTHOR_ADD:
+                numFansInt++;
+                tvFans.setText("粉丝 " +numFansInt);
                 break;
         }
     }
