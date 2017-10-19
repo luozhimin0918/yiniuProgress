@@ -118,10 +118,13 @@ public class AboutActivity extends BaseActivity {
         try {
             StringBuilder mHideBuffer = new StringBuilder();
 
-
             String system = PhoneInfo.getSystem();
             mHideBuffer.append(String.valueOf("当前系统:" + system + "\n"));
 
+            if(PhoneInfo.SYS_EMUI.equals(system)){
+                String token = SPUtils.getString(this, SpConstant.HUAWEI_TOKEN);
+                mHideBuffer.append(String.valueOf("华为推送Token:" + token + "\n"));
+            }
             UserJson userInfo = LoginUtils.getUserInfo(this);
             if (userInfo != null) {
                 mHideBuffer.append(String.valueOf("uid:" + userInfo.getUid() + "\n"));

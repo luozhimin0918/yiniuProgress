@@ -85,7 +85,7 @@
     <dimen name="index_btn_padding">10dp</dimen>
 
     <dimen name="index_quotes_height">150dp</dimen>
-    <dimen name="index_btn_height">160dp</dimen>
+    <dimen name="index_btn_height">180dp</dimen>
 
     <dimen name="indicator_margin">10dp</dimen>
     <dimen name="bar_height">35dp</dimen>

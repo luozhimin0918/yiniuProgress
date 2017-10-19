@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.Space;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -223,6 +224,14 @@ public class ExploreFragment extends BaseFragment implements PullToRefreshListVi
         btnRecyclerView.setAdapter(btnAdapter = new BtnAdapter(shortcuts, mContext));
 
         homeHeadView.addView(btnRecyclerView);
+
+        Space mSpace = new Space(mContext);
+        int lineHeight = (int) mContext.getResources().getDimension(R.dimen.line_height);
+        AbsListView.LayoutParams mSpaceParams = new AbsListView.LayoutParams(
+                AbsListView.LayoutParams.MATCH_PARENT,
+                lineHeight);
+        mSpace.setLayoutParams(mSpaceParams);
+        homeHeadView.addView(mSpace);
 
         addLineView();
     }

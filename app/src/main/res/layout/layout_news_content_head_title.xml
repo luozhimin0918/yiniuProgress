@@ -54,12 +54,14 @@
                 android:layout_toRightOf="@id/iv_photo"
                 android:drawablePadding="5dp"
                 android:text="新闻"
+                android:visibility="gone"
                 android:textColor="@color/font_color6"
                 android:textSize="@dimen/describe_font_size1"/>
 
             <View
                 android:layout_width="1px"
                 android:layout_height="14dp"
+                android:visibility="gone"
                 android:layout_below="@id/tv_name"
                 android:layout_toRightOf="@id/tv_type"
                 android:background="@color/line_color3"/>
@@ -69,7 +71,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_name"
-                android:layout_marginLeft="@dimen/newsContentMargin"
                 android:layout_toRightOf="@id/tv_type"
                 android:text="2017年5月12日 11:49:38"
                 android:textColor="@color/font_color6"
@@ -136,7 +137,7 @@
                 android:drawableLeft="@mipmap/icon_new_bq"
                 android:drawablePadding="8dp"
                 android:text="贵金属"
-                android:textColor="@color/font_color8"
+                android:textColor="@color/font_color2"
                 android:textSize="@dimen/describe_font_size1"
                 />
         </RelativeLayout>

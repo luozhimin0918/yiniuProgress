@@ -504,8 +504,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             tvNewsLabel.setText(newsContentJson.getTypeName());
 
             long createTime = Long.parseLong(newsContentJson.getCreate_time()) * 1000;
-            tvTime.setText(DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
-            tvNewsTime.setText(" | " + DateFormat.format("yyyy-MM-dd HH:mm:ss", createTime));
+            tvTime.setText(DateFormat.format("MM-dd HH:mm", createTime));
+            tvNewsTime.setText(" | " + DateFormat.format("yyyy-MM-dd HH:mm", createTime));
 
             rlExistAuthor.setOnClickListener(this);
             Glide.with(NewsContentActivity.this)

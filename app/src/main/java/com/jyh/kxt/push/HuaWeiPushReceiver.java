@@ -4,10 +4,13 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huawei.hms.support.api.push.PushReceiver;
+import com.jyh.kxt.base.constant.SpConstant;
+import com.library.util.SPUtils;
 
 /**
  * 应用需要创建一个子类继承com.huawei.hms.support.api.push.PushReceiver，
@@ -36,6 +39,10 @@ public class HuaWeiPushReceiver extends PushReceiver {
         intent.putExtra("type", 1);
         intent.putExtra("token", token);
         context.sendBroadcast(intent);
+
+        if (!TextUtils.isEmpty(token)) {
+            SPUtils.save(context, SpConstant.HUAWEI_TOKEN, token);
+        }
     }
 
     @Override

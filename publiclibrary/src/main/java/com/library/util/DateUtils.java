@@ -326,7 +326,7 @@ public class DateUtils {
         try {
             Date parseTime = dateLongTime.parse(date);
 
-            SimpleDateFormat dateFm = new SimpleDateFormat("MM月dd日 EEEE");
+            SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd EEEE");
             formatWeek = dateFm.format(parseTime);
 
         } catch (ParseException e) {

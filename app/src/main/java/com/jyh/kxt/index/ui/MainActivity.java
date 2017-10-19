@@ -1,9 +1,13 @@
 package com.jyh.kxt.index.ui;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.http.LoggingEventHandler;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +29,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -61,12 +67,14 @@ import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
 import com.jyh.kxt.index.ui.fragment.HomeFragment;
 import com.jyh.kxt.index.ui.fragment.MarketFragment;
 import com.jyh.kxt.index.ui.fragment.TradingFragment;
+import com.jyh.kxt.push.HuaWeiPushReceiver;
 import com.jyh.kxt.score.ui.MyCoin2Activity;
 import com.jyh.kxt.search.ui.SearchIndexActivity;
 import com.jyh.kxt.trading.ui.AuthorActivity;
@@ -78,7 +86,9 @@ import com.jyh.kxt.user.ui.EditUserInfoActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.jyh.kxt.user.ui.SettingActivity;
 import com.library.base.http.HttpDeliveryListener;
+import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.manager.ActivityManager;
 import com.library.util.NetUtils;
@@ -111,14 +121,22 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 @MLinkDefaultRouter
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener, OnChatMessage {
 
-    @BindView(R.id.ll_content) LinearLayout llContent;
-    @BindView(R.id.drawer_layout) public DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
-    @BindView(R.id.rb_home) public RadioButton rbHome;
-    @BindView(R.id.rb_audio_visual) public RadioButton rbAudioVisual;
-    @BindView(R.id.rb_market) public RadioButton rbMarket;
-    @BindView(R.id.rb_datum) public RadioButton rbDatum;
-    @BindView(R.id.rb_probe) public RadioButton rbProbe;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.drawer_layout)
+    public DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.rb_home)
+    public RadioButton rbHome;
+    @BindView(R.id.rb_audio_visual)
+    public RadioButton rbAudioVisual;
+    @BindView(R.id.rb_market)
+    public RadioButton rbMarket;
+    @BindView(R.id.rb_datum)
+    public RadioButton rbDatum;
+    @BindView(R.id.rb_probe)
+    public RadioButton rbProbe;
 
     public MainPresenter mainPresenter;
 
@@ -161,6 +179,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     public int mActivityFrom = 0;//如果为0 则为默认进入  1 则表示内存回收重启,不显示广告弹窗  2 表示welcom界面已经加载完成数据
 
+    private BroadcastReceiver huaWeiToKentReceiver;
     private HuaweiApiClient huaweiApiClient;
 
     @Override
@@ -807,7 +826,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             Manifest.permission.READ_CALENDAR}, 1000);
         } else {
             if (datumFragment != null) {
-                datumFragment.deleteAlarm(calendarFinanceBean,onRequestPermissions);
+                datumFragment.deleteAlarm(calendarFinanceBean, onRequestPermissions);
             }
         }
     }
@@ -834,6 +853,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         if (huaweiApiClient != null) {
             huaweiApiClient.disconnect();
+        }
+        if (huaWeiToKentReceiver != null) {
+            unregisterReceiver(huaWeiToKentReceiver);
         }
 
         try {
@@ -1057,6 +1079,19 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     })
                     .build();
             huaweiApiClient.connect();
+
+            huaWeiToKentReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String token = intent.getStringExtra("token");
+                    requestHuaWeiToken(token);
+                }
+            };
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(HuaWeiPushReceiver.ACTION_UPDATEUI);
+
+            registerReceiver(huaWeiToKentReceiver, filter);
         } else if (PhoneInfo.SYS_MIUI.equals(system)) {
 
         /*
@@ -1087,6 +1122,23 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             JPushInterface.setDebugMode(true);
             JPushInterface.init(SampleApplicationContext.context);
         }
+    }
+    private void requestHuaWeiToken(String token){
+
+        VolleyRequest request = new VolleyRequest(MainActivity.this, mQueue);
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put("imei", token);
+
+        request.doPost(HttpConstant.VERSION_IMEI, jsonParam, new HttpListener<String>() {
+            @Override
+            protected void onResponse(String mString) {
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+            }
+        });
     }
 
 }

@@ -77,7 +77,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="right"
             android:padding="16dp"
-            android:src="@mipmap/icon_nav_more"/>
+            android:src="@mipmap/icon_point_menu"/>
 
         <TextView
             android:id="@+id/tv_bar_title"

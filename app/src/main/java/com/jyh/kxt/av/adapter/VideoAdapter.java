@@ -2,9 +2,12 @@ package com.jyh.kxt.av.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,10 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
@@ -42,6 +49,7 @@ import com.trycatch.mysnackbar.TSnackbar;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,13 +65,14 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     private Context mContext;
     private List<VideoListJson> list;
     private LayoutInflater mInflater;
+    private HashMap<String, Bitmap> advertBitmap;
 
     public VideoAdapter(Context context, List<VideoListJson> list) {
         super(list);
         this.mContext = context;
         this.list = list;
         mInflater = LayoutInflater.from(mContext);
-
+        advertBitmap = new HashMap<>();
         try {
             String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);
@@ -252,15 +261,45 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                 }
             });
         } else if (itemViewType == 1) {
-            Glide.with(mContext)
-                    .load(video.getPicture())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(holderAd.ivAdvertView);
-            Glide.with(mContext)
-                    .load(video.getPicture())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(holderAd.ivAdvertView);
 
+            //使用图片
+            final ViewHolderAd finalHolderAd = holderAd;
+            Glide.with(mContext)
+                    .load(video.getPicture())
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource,
+                                                    GlideAnimation<? super Bitmap> glideAnimation) {
+
+                            int bitmapWidth = resource.getWidth();
+                            int bitmapHeight = resource.getHeight();
+
+                            DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(mContext);
+                            double ratioSize = (double) screenDisplay.widthPixels / (double)bitmapWidth;
+
+                            int imageHeightParams = (int) (ratioSize * bitmapHeight);
+
+                            ViewGroup.LayoutParams imageLayoutParams = finalHolderAd.ivAdvertView.getLayoutParams();
+                            imageLayoutParams.width = screenDisplay.widthPixels;
+                            imageLayoutParams.height = imageHeightParams;
+
+                            finalHolderAd.ivAdvertView.setLayoutParams(imageLayoutParams);
+                        }
+                    }) ;
+
+
+            Glide.with(mContext)
+                    .load(video.getPicture())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(holderAd.ivAdvertView)
+                    .getSize(new SizeReadyCallback() {
+                        @Override
+                        public void onSizeReady(int width, int height) {
+                            Log.d("onSizeReady", "onSizeReady: ");
+                        }
+                    });
+            // FIXME: 2017/10/18 点赞闪烁问题
             holderAd.ivAdvertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
