@@ -82,6 +82,8 @@
 
     <color name="font_color_url">#1C9CF2</color>
 
+    <color name="blog_title">#1C9CF2</color>
+
     <color name="tabSelColor">#000000</color>
     <color name="tabUnSelColor">#66000000</color>
 

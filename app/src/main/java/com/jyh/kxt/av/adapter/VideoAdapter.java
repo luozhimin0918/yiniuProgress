@@ -338,7 +338,7 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                                 numGood = 0;
                             }
                             video.setNum_good(String.valueOf(numGood));
-
+                            SPUtils.save2(mContext, SPUtils.DZ_NAME, video.getId(), true);
                             recyclerAdapter.notifyDataSetChanged();
                         }
 
@@ -420,7 +420,12 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
         holder.tvZanCount.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
         paddingVal = SystemUtil.dp2px(mContext, 6);
         holder.tvZanCount.setPadding(0, paddingVal, 0, paddingVal);
-        if (video.isGood()) {
+
+        //点赞本地状态
+        Boolean isGoodLocal = SPUtils.getBoolean2(mContext, SPUtils.DZ_NAME, video.getId());
+        isGoodLocal = isGoodLocal == null ? false : isGoodLocal;
+
+        if (video.isGood() || isGoodLocal) {
             TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(holder.tvZanCount, R.mipmap
                     .icon_video_list_zan1, 0, 0, 0);
         } else {
