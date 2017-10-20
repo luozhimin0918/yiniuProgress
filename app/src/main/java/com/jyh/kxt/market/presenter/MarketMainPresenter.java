@@ -487,9 +487,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
     public void switchItemContent() {
         marketItemFragment.switchItemType = marketItemFragment.switchItemType == 0 ? 1 : 0;
-        marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
+        marketItemFragment.tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌");
         if (tvTargetNav != null) {
-            tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌额");
+            tvTargetNav.setText(marketItemFragment.switchItemType == 0 ? "涨跌幅" : "涨跌");
         }
 
         for (MarketItemBean marketItemBean : marketMainItemAdapter.dataList) {

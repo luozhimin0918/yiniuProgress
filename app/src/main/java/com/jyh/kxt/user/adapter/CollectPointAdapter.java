@@ -24,6 +24,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
 import com.jyh.kxt.trading.presenter.ArticleContentPresenter;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
@@ -229,6 +230,8 @@ public class CollectPointAdapter extends BaseAdapter {
         @BindView(R.id.iv_del) ImageView ivDel;
         @BindView(R.id.fl_del) FrameLayout flDel;
 
+        @BindView(R.id.thumb_view_zan)  ThumbView3 mThumbView3;
+
         private ViewPointTradeBean viewPointTradeBean;
 
         public void setItemViewColor(View convertView) {
@@ -258,15 +261,16 @@ public class CollectPointAdapter extends BaseAdapter {
             tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout, R.id.view_point_fx_layout})
+        @OnClick({R.id.thumb_view_zan, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
-                case R.id.view_point_zan_layout:
+                case R.id.thumb_view_zan:
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
                         boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 1, true);
                         if (isSaveSuccess) {
+                            mThumbView3.startGiveAnimation();
                             viewPointTradeBean.isFavour = true;
                             articleContentPresenter.initTradeHandler(tvZanView, true);
 

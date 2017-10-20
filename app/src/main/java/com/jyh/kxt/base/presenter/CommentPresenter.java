@@ -172,7 +172,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
             TextView ivVideoName = (TextView) moreVideoView.findViewById(R.id.iv_video_name);
 
             Glide.with(mContext).load(imageUrl).error(R.mipmap.icon_def_news).placeholder(R.mipmap.icon_def_news)
-                    .override(100, 100).into(ivVideoCover);
+                    .override(200, 200).into(ivVideoCover);
 
             ivVideoName.setText(videoDetailVideoBean.getTitle());
 
@@ -209,7 +209,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
             Glide.with(mContext).load(HttpConstant.IMG_URL + imageUrl).error(R.mipmap.icon_def_news).placeholder(R
                     .mipmap.icon_def_news)
-                    .override(100, 100).into
+                    .override(200, 200).into
                     (ivVideoCover);
             ivVideoName.setText(mArticleJson.getTitle());
 

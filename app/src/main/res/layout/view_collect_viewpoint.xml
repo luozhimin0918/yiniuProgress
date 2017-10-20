@@ -154,8 +154,8 @@
             android:layout_below="@+id/viewpoint_line"
             android:gravity="center_vertical">
 
-            <LinearLayout
-                android:id="@+id/view_point_zan_layout"
+            <com.jyh.kxt.base.widget.ThumbView3
+                android:id="@+id/thumb_view_zan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -171,7 +171,7 @@
                     android:text="0"
                     android:textColor="@color/font_color9"
                     android:textSize="@dimen/describe_font_size3"/>
-            </LinearLayout>
+            </com.jyh.kxt.base.widget.ThumbView3>
 
             <View
                 android:id="@+id/view_line1"

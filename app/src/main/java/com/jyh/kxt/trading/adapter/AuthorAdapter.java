@@ -31,6 +31,7 @@ import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.SimplePopupWindow;
+import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.main.json.NewsJson;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -483,6 +484,8 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
         @BindView(R.id.view_line1) View viewLine2;
         @BindView(R.id.view_line2) View viewLine3;
 
+        @BindView(R.id.thumb_view_zan)  ThumbView3 mThumbView3;
+
 
         private ViewPointTradeBean viewPointTradeBean;
 
@@ -513,15 +516,17 @@ public class AuthorAdapter extends BaseAdapter implements PinnedSectionListView.
             tvShareView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.icon_point_fx));
         }
 
-        @OnClick({R.id.view_point_zan_layout, R.id.view_point_fx_layout})
+        @OnClick({R.id.thumb_view_zan, R.id.view_point_fx_layout})
         public void itemNavFunction(View view) {
             switch (view.getId()) {
-                case R.id.view_point_zan_layout:
+                case R.id.thumb_view_zan:
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
                         boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 1, true);
                         if (isSaveSuccess) {
+                            mThumbView3.startGiveAnimation();
+
                             viewPointTradeBean.isFavour = true;
                             articleContentPresenter.initTradeHandler(tvZanView, true);
 

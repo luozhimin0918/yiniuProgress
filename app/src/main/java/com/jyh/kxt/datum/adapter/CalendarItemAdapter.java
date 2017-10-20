@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -315,13 +316,17 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
 
     class ViewBaseHolder {
-        @BindView(R.id.iv_guoqi) ImageView ivGuoqi;
-        @BindView(R.id.v_line) View vLine;
+        @BindView(R.id.iv_guoqi)
+        ImageView ivGuoqi;
+        @BindView(R.id.v_line)
+        View vLine;
     }
 
     class ViewHolder0 {
-        @BindView(R.id.ll_title_content) LinearLayout llContent;
-        @BindView(R.id.al_advert_layout) AdvertLayout alLayout;
+        @BindView(R.id.ll_title_content)
+        LinearLayout llContent;
+        @BindView(R.id.al_advert_layout)
+        AdvertLayout alLayout;
 
         public ViewHolder0(View view) {
             ButterKnife.bind(this, view);
@@ -329,14 +334,21 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
     class ViewHolder1 extends ViewBaseHolder {
-        @BindView(R.id.ll_star) StarView llStar;
-        @BindView(R.id.ll_left_gq) LinearLayout llLeftGq;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.tv_describe) TextView tvDescribe;
-        @BindView(R.id.tv_time) TextView tvTime;
+        @BindView(R.id.ll_star)
+        StarView llStar;
+        @BindView(R.id.ll_left_gq)
+        LinearLayout llLeftGq;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_describe)
+        TextView tvDescribe;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
 
-        @BindView(R.id.ll_exponent) LinearLayout llExponent;//公布值,
-        @BindView(R.id.tv_alarm) TextView tvAlarm;//点击闹钟
+        @BindView(R.id.ll_exponent)
+        LinearLayout llExponent;//公布值,
+        @BindView(R.id.tv_alarm)
+        TextView tvAlarm;//点击闹钟
 
         public ViewHolder1(View view) {
             ButterKnife.bind(this, view);
@@ -344,11 +356,16 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
     class ViewHolder2 extends ViewBaseHolder {
-        @BindView(R.id.ll_star) StarView llStar;
-        @BindView(R.id.ll_left_gq) LinearLayout llLeftGq;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.rl_content) RelativeLayout rlContent;
+        @BindView(R.id.ll_star)
+        StarView llStar;
+        @BindView(R.id.ll_left_gq)
+        LinearLayout llLeftGq;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.rl_content)
+        RelativeLayout rlContent;
 
         public ViewHolder2(View view) {
             ButterKnife.bind(this, view);
@@ -356,10 +373,14 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
     class ViewHolder3 extends ViewBaseHolder {
-        @BindView(R.id.ll_left_gq) LinearLayout llLeftGq;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.rl_content) RelativeLayout rlContent;
+        @BindView(R.id.ll_left_gq)
+        LinearLayout llLeftGq;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.rl_content)
+        RelativeLayout rlContent;
 
         public ViewHolder3(View view) {
             ButterKnife.bind(this, view);
@@ -367,8 +388,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
     class ViewHolder4 {
-        @BindView(R.id.iv_error) ImageView ivError;
-        @BindView(R.id.tv_describe) TextView tvDescribe;
+        @BindView(R.id.iv_error)
+        ImageView ivError;
+        @BindView(R.id.tv_describe)
+        TextView tvDescribe;
 
         public ViewHolder4(View view) {
             ButterKnife.bind(this, view);
@@ -461,6 +484,27 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
             textView.setBackground(effectDrawable);
 
             llExponent.addView(textView);
+
+
+            //比对时间是否过期
+            if (mCalendarType instanceof CalendarFinanceBean) {
+                try {
+                    CalendarFinanceBean mCalendarFinanceBean = (CalendarFinanceBean) mCalendarType;
+                    String calendarTime = mCalendarFinanceBean.getTime();
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    Date parseDate = simpleDateFormat.parse(calendarTime);
+                    long parseTime = parseDate.getTime();
+
+                    if (System.currentTimeMillis() < parseTime  ) {
+                        tvAlarm.setVisibility(View.VISIBLE);
+                    } else {
+                        tvAlarm.setVisibility(View.GONE);
+                    }
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
 
             tvAlarm.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -60,8 +60,8 @@ public class BtnAdapter extends RecyclerView.Adapter<BtnAdapter.BtnViewHolder> {
 
         Glide.with(context)
                 .load(slideJson.getPicture())
-//                .error(R.mipmap.icon_def_btn)
-//                .placeholder(R.mipmap.icon_def_btn)
+                .error(R.mipmap.icon_nav_btn_pre)
+                .placeholder(R.mipmap.icon_nav_btn_pre)
                 .into(holder.imageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -59,8 +60,12 @@ public class JPushReceiver extends BroadcastReceiver {
                 //接受到推送下来的自定义消息
                 String myNotifyMessage = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
-                if (myNotifyMessage == null) {
-                    return;
+                if (TextUtils.isEmpty(myNotifyMessage)) {
+                    String myExtraMessage = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+                    if (TextUtils.isEmpty(myExtraMessage)) {
+                        return;
+                    }
+                    myNotifyMessage = myExtraMessage;
                 }
                 Boolean pushStatus = SPUtils.getBooleanTrue(mContext, SpConstant.SETTING_PUSH);
                 PushBean pushBean = JSONObject.parseObject(myNotifyMessage, PushBean.class);
@@ -127,6 +132,8 @@ public class JPushReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext);
         builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher));
+
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setWhen(System.currentTimeMillis());
         // 响铃
@@ -180,6 +187,7 @@ public class JPushReceiver extends BroadcastReceiver {
         }
         notification.setContentTitle(kxItemCJRL.getState() + " " + kxItemCJRL.getTitle());
         notification.setSmallIcon(R.mipmap.ic_launcher);
+        notification.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher));
         notification.setWhen(System.currentTimeMillis());
         // 振动
         notification.setDefaults(Notification.DEFAULT_VIBRATE);

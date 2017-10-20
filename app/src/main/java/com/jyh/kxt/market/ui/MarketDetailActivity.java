@@ -592,7 +592,7 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
 
 
         marketSocketBean.price = jsonObject.getString("p");   //最新价  3.5951
-        Double change = jsonObject.getDouble("d");  //涨跌额  0.0238
+        Double change = jsonObject.getDouble("d");  //涨跌  0.0238
         marketSocketBean.range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
 
         marketSocketBean.zuoshou = jsonObject.getString("lc");  //昨收

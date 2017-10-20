@@ -53,7 +53,7 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     private MarketOtherPresenter marketOtherPresenter;//其他行情P
 
     /**
-     * 切换Item 类型  0 涨跌幅   1 涨跌额
+     * 切换Item 类型  0 涨跌幅   1 涨跌
      */
     public int switchItemType = 0;
     public HashMap<String, MarketItemBean> marketMap = new HashMap<>();

@@ -313,9 +313,9 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (viewPointTradeBean.isFavour) {
                         ToastView.makeText(mContext, "您已经赞过了");
                     } else {
-                        mThumbView3.startGiveAnimation();
                         boolean isSaveSuccess = mTradeHandlerUtil.saveState(mContext, viewPointTradeBean, 1, true);
                         if (isSaveSuccess) {
+                            mThumbView3.startGiveAnimation();
                             viewPointTradeBean.isFavour = true;
                             articleContentPresenter.initTradeHandler(tvZanView, true);
 

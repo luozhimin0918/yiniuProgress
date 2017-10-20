@@ -52,6 +52,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -71,7 +73,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
         .OnRefreshListener2,
         PageLoadLayout.OnAfreshLoadListener {
 
-    @BindObject FlashFragment flashFragment;
+    @BindObject
+    FlashFragment flashFragment;
 
     private WebSocketConnection connection;
     public FastInfoAdapter adapter;
@@ -142,7 +145,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                         token = jsonObject.getString("token");
 
 
-                        connection.connect(server + "?token=" + token , null, connectionHandler, options,
+                        connection.connect(server + "?token=" + token, null, connectionHandler, options,
                                 headers);
 
                     } catch (Exception e) {
@@ -359,6 +362,8 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
      *
      * @param newFlash
      */
+    private List<Integer> notifyId = new ArrayList<>();
+
     private void topNotice(FlashJson newFlash) {
         if (SystemUtil.isRunningForeground(mContext)) {
             // 1 得到通知管理器
@@ -475,13 +480,20 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
             build.flags |= Notification.FLAG_AUTO_CANCEL;
             // 4发送通知
-            final int id = new Random().nextInt(1000);
+            int id = new Random().nextInt(1000);
+            notifyId.add(id);
+
             nm.notify(id, build);
             flashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        nm.cancel(id);
+                        for (int i = 0; i < notifyId.size(); i++) {
+                            Integer notifyItemId = notifyId.get(i);
+                            nm.cancel(notifyItemId);
+
+                            notifyId.remove(notifyItemId);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -547,6 +559,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             }
             setAd();
             refreshTime = System.currentTimeMillis();
+            Log.i("flash", "refresh");
         } else {
             flashFragment.lvContent.postDelayed(new Runnable() {
                 @Override
@@ -554,6 +567,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
                     flashFragment.lvContent.onRefreshComplete();
                 }
             }, 1000);
+            Log.i("flash", "norefresh");
         }
     }
 
@@ -636,7 +650,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
             if (!connection.isConnected() && NetUtils.isNetworkAvailable(mContext)) {
                 connect();
             }
-            handler.sendEmptyMessageDelayed(1, 3 *  60 * 1000);
+            handler.sendEmptyMessageDelayed(1, 3 * 60 * 1000);
             return false;
         }
     });

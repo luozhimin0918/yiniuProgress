@@ -59,7 +59,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
 
     private OptionalPresenter optionalPresenter;
     /**
-     * 切换Item 类型  0 涨跌幅   1 涨跌额
+     * 切换Item 类型  0 涨跌幅   1 涨跌
      */
     public int switchItemType = 0;
     public HashMap<String, MarketItemBean> marketMap = new HashMap<>();
@@ -106,7 +106,7 @@ public class OptionalFragment extends BaseFragment implements OnSocketTextMessag
         switch (view.getId()) {
             case R.id.rl_target_nav:
                 switchItemType = switchItemType == 0 ? 1 : 0;
-                tvTargetNav.setText(switchItemType == 0 ? "涨跌幅" : "涨跌额");
+                tvTargetNav.setText(switchItemType == 0 ? "涨跌幅" : "涨跌");
 
                 for (MarketItemBean marketItemBean : marketItemList) {
                     marketItemBean.setSwitchTarget(switchItemType == 0 ?

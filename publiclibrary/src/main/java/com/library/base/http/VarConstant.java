@@ -16,7 +16,7 @@ public class VarConstant {
      */
     public static final String HTTP_CLIENT = "android";
     public static final String HTTP_VERSION = "version";
-    public static final String HTTP_VERSION_VALUE = "6.1.5";
+    public static final String HTTP_VERSION_VALUE = "6.1.7";
     public static final String HTTP_SYSTEM = "system";
     public static final String HTTP_SYSTEM_VALUE = "android";
     public static final String HTTP_CODE = "code";

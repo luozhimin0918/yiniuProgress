@@ -47,8 +47,23 @@ public class MarketUtil {
         } else {
             fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
         }
-
         tvLabel.setTextColor(fontColor);
+
+        //如果为0的情况下 变灰色
+        try {
+            String itemRange = range;
+            if (!"--".equals(itemRange)) {//涨跌幅
+                itemRange = itemRange.replace("%", "").replace("-", "").replace("+", "");
+                double itemDouRange = Double.parseDouble(itemRange);
+                if (itemDouRange == 0) {
+                    int zeroFontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.unaltered_color);
+                    tvLabel.setTextColor(zeroFontColor);
+//                    tvLabel.setText("0.00");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -106,6 +121,21 @@ public class MarketUtil {
                 double aborPrice = Double.valueOf(marketItemBean.getAborPrice());
                 double lastPrice = Double.valueOf(marketItemBean.getPrice());
 
+                //如果为0的情况下 变灰色
+                try {
+                    String itemRange = marketItemBean.getRange();
+                    if (!"--".equals(itemRange)) {//涨跌幅
+                        itemRange = itemRange.replace("%", "").replace("-", "").replace("+", "");
+                        double itemDouRange = Double.parseDouble(itemRange);
+                        if (itemDouRange == 0) {
+                            int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.unaltered_color);
+                            tvLabel.setTextColor(fontColor);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 //大于等于上一次 涨
                 if (lastPrice > aborPrice) {
                     int fontColor = ContextCompat.getColor(tvLabel.getContext(), R.color.rise_color);
@@ -151,7 +181,7 @@ public class MarketUtil {
         JSONObject jsonObject = JSONObject.parseObject(text);
         String code = jsonObject.getString("c");
         String price = jsonObject.getString("p");   //最新价  3.5951
-        String change = jsonObject.getString("d");  //涨跌额  0.0238
+        String change = jsonObject.getString("d");  //涨跌  0.0238
         String range = jsonObject.getString("df");  //涨跌幅 "0.6664239912636867%",
 
         final MarketItemBean marketItemBean = marketMap.get(code);
@@ -178,6 +208,15 @@ public class MarketUtil {
         boolean isIncludePercentage = defStr.contains("%");
 
         String clearSpecialChars = defStr.replace("-", "").replace("%", "");
+
+        try {
+            double zeroChars = Double.parseDouble(clearSpecialChars);
+            if(zeroChars == 0){
+                return "0";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         BigDecimal bigDecimal = new BigDecimal(clearSpecialChars);
         String after = bigDecimal.setScale(places, BigDecimal.ROUND_HALF_UP).toString();

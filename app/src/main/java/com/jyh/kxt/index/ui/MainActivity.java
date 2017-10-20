@@ -1115,6 +1115,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             };
             Logger.setLogger(this, newLogger);
             MiPushClient.registerPush(this, VarConstant.XIAOMI_APP_ID, VarConstant.XIAOMI_APP_KEY);
+
         } else {
             /*
              * 推送相关代码

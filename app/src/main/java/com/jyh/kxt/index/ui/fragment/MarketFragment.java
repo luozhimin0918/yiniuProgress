@@ -40,11 +40,15 @@ import butterknife.OnClick;
  */
 public class MarketFragment extends BaseFragment implements OnTabSelectListener {
 
-    @BindView(R.id.iv_left_icon) RoundImageView ivLeftIcon;
-    @BindView(R.id.tv_right_icon1) TextView tvRightIcon1;
-    @BindView(R.id.bar_red_dot) TextView tvRedDot;
+    @BindView(R.id.iv_left_icon)
+    RoundImageView ivLeftIcon;
+    @BindView(R.id.tv_right_icon1)
+    TextView tvRightIcon1;
+    @BindView(R.id.bar_red_dot)
+    TextView tvRedDot;
 
-    @BindView(R.id.stl_navigation_bar) SegmentTabLayout stlNavigationBar;
+    @BindView(R.id.stl_navigation_bar)
+    SegmentTabLayout stlNavigationBar;
 
     public BaseFragment marketVPFragment, optionalFragment;
     private BaseFragment lastFragment;
@@ -242,7 +246,11 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         super.onResume();
         try {
             if (isResumed()) {
-                ((MarketVPFragment) marketVPFragment).sendSocketParams();
+                if (position == 0) {
+                    ((MarketVPFragment) marketVPFragment).sendSocketParams();
+                }else if(position == 1){
+                    ((OptionalFragment) optionalFragment).sendSocketParams();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

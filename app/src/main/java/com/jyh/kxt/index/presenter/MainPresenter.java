@@ -82,7 +82,8 @@ import rx.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenter {
 
-    @BindObject MainActivity mMainActivity;
+    @BindObject
+    MainActivity mMainActivity;
     private AlertDialog logoutDialog;
 
     public MainPresenter(IBaseView iBaseView) {
@@ -701,28 +702,32 @@ public class MainPresenter extends BasePresenter {
 
         if (favorableVersionCode != versionJson.getVersionCode()) {
             if (versionJson.getVersionCode() <= currentVersionCode && versionJson.is_tip() == 1) {
-
-                SPUtils.save(mContext, SpConstant.TIP_FAVORABLE, versionJson.getVersionCode());
-                new AlertDialog.Builder(mContext)
-                        .setMessage(versionJson.getEvaluation_tip())
-                        .setNegativeButton("是", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Uri uri = Uri.parse("market://details?id=com.jyh.kxt");
-                                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                                try {
-                                    mContext.startActivity(goToMarket);
-                                } catch (ActivityNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        })
-                        .setPositiveButton("否", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        }).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(mContext)
+                                .setMessage(versionJson.getEvaluation_tip())
+                                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SPUtils.save(mContext, SpConstant.TIP_FAVORABLE, versionJson.getVersionCode());
+                                        Uri uri = Uri.parse("market://details?id=com.jyh.kxt");
+                                        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                        try {
+                                            mContext.startActivity(goToMarket);
+                                        } catch (ActivityNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                })
+                                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SPUtils.save(mContext, SpConstant.TIP_FAVORABLE, versionJson.getVersionCode());
+                                    }
+                                }).show();
+                    }
+                }, 4000);
                 return;
             }
         }

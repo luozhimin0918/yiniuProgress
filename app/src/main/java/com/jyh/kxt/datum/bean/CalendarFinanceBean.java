@@ -45,12 +45,12 @@ public class CalendarFinanceBean  extends CalendarType{
         return importance;
     }
 
-    public void setImportance(String importance) {
-        this.importance = importance;
-    }
-
     public String getTime() {
         return time;
+    }
+
+    public void setImportance(String importance) {
+        this.importance = importance;
     }
 
     public void setTime(String time) {
