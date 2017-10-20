@@ -37,7 +37,7 @@ import static org.greenrobot.eventbus.ThreadMode.MAIN;
  * Created by Mr'Dai on 2017/4/25.
  * 行情 -行情 -item
  */
-public class MarketItemFragment extends BaseFragment implements AbsListView.OnScrollListener {
+public class MarketItemFragment extends BaseFragment implements AbsListView.OnScrollListener, PageLoadLayout.OnAfreshLoadListener {
 
     @BindView(R.id.pll_content) public PageLoadLayout pageLoadLayout;
     @BindView(R.id.ptrlv_content) public PullToRefreshListView ptrlvContent;
@@ -65,6 +65,7 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     protected void onInitialize(Bundle savedInstanceState) {
 
         setContentView(R.layout.fragment_market_item);
+        pageLoadLayout.setOnAfreshLoadListener(this);
     }
 
     @Override
@@ -217,6 +218,23 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
         }
         if (ptrlvContent != null) {
             ptrlvContent.onChangeTheme();
+        }
+    }
+
+    @Override
+    public void OnAfreshLoad() {
+        pageLoadLayout.loadWait();
+        try {
+            if ("zhuYe".equals(navBean.getCode())) { //主页的P
+                isZhuYePage = true;
+                marketMainPresenter.generateMainHeaderView();
+                rlListNav.setVisibility(View.GONE);
+            } else {
+                isZhuYePage = false;
+                marketOtherPresenter.generateNetWorkAdapter();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

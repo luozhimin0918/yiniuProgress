@@ -131,6 +131,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     public void OnAfreshLoad() {
+        pllContent.loadWait();
         marketVPPresenter.requestMarketNavData();
     }
 

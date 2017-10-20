@@ -120,9 +120,11 @@ public class AdvertLayout2 extends FrameLayout {
                 }
             });
 
-            if (textColor != null) {
+            try {
                 int fontColor = Color.parseColor(textColor);
                 tvContent.setTextColor(fontColor);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             if (adTitleItemBean.getPosition() == 1) {
                 flAdvertContent1.removeAllViews();

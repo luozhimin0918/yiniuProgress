@@ -132,9 +132,13 @@ public class AdvertLayout3 extends FrameLayout {
                                     e.printStackTrace();
                                 }
                             }
-                            int textColor = Color.parseColor(colorString);
                             TextView textView = (TextView) verticalTextView.getNextView();
-                            textView.setTextColor(textColor);
+                            try {
+                                int textColor = Color.parseColor(colorString);
+                                textView.setTextColor(textColor);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             textView.setText(adItemJson.getTitle());
                             textView.setTextSize(fontSize);
                             AdTitleIconBean icon = adItemJson.getIcon();
@@ -165,9 +169,13 @@ public class AdvertLayout3 extends FrameLayout {
                             e.printStackTrace();
                         }
                     }
-                    int textColor = Color.parseColor(colorString);
+                    try {
+                        int textColor = Color.parseColor(colorString);
+                        textView.setTextColor(textColor);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     textView.setText(adItemJson.getTitle());
-                    textView.setTextColor(textColor);
                     textView.setTextSize(fontSize);
                     textView.setSingleLine(true);
                     textView.setEllipsize(TextUtils.TruncateAt.END);
