@@ -96,6 +96,7 @@ import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
+import com.tencent.connect.UserInfo;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -1116,15 +1117,27 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             Logger.setLogger(this, newLogger);
             MiPushClient.registerPush(this, VarConstant.XIAOMI_APP_ID, VarConstant.XIAOMI_APP_KEY);
 
+            //设置小米的推送Uid
+            UserJson userInfo = LoginUtils.getUserInfo(this);
+            if (userInfo != null) {
+                MiPushClient.setAlias(this, userInfo.getUid(), null);
+            }
+
         } else {
             /*
              * 推送相关代码
              */
             JPushInterface.setDebugMode(true);
             JPushInterface.init(SampleApplicationContext.context);
+
+            UserJson userInfo = LoginUtils.getUserInfo(this);
+            if (userInfo != null) {
+                JPushInterface.setAlias(this, 1, userInfo.getUid());
+            }
         }
     }
-    private void requestHuaWeiToken(String token){
+
+    private void requestHuaWeiToken(String token) {
 
         VolleyRequest request = new VolleyRequest(MainActivity.this, mQueue);
         JSONObject jsonParam = request.getJsonParam();
@@ -1133,12 +1146,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         request.doPost(HttpConstant.VERSION_IMEI, jsonParam, new HttpListener<String>() {
             @Override
             protected void onResponse(String mString) {
-                Log.e(TAG, "onResponse: " );
+                Log.e(TAG, "onResponse: ");
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "onErrorResponse: " );
+                Log.e(TAG, "onErrorResponse: ");
                 super.onErrorResponse(error);
             }
         });

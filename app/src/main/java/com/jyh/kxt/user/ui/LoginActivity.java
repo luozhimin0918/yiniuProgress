@@ -77,11 +77,12 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
 
         String[] tabs = new String[]{"密码登录", "短信登录"};
 
+        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
+        stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
+
         stlNavigationBar.setData(tabs);
         stlNavigationBar.setCurrentTab(0);
 
-        DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(this);
-        stlNavigationBar.setTabWidth(SystemUtil.px2dp(this, screenDisplay.widthPixels / 2));
         stlNavigationBar.setOnTabSelectListener(this);
 
         edtPwd.setFunctionClickListener(new View.OnClickListener() {
