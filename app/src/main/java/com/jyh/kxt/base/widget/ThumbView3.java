@@ -74,4 +74,12 @@ public class ThumbView3 extends RelativeLayout {
             }
         });
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (giveView != null) {
+            giveView.setVisibility(View.GONE);
+        }
+    }
 }
