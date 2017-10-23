@@ -298,7 +298,6 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
                             Log.d("onSizeReady", "onSizeReady: ");
                         }
                     });
-            // FIXME: 2017/10/18 点赞闪烁问题
             holderAd.ivAdvertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -1037,16 +1037,28 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     /**
      * 绑定推送服务
      */
+    // FixKxt: 提出人:Mr'Dai  ->  描述: 强制只开启一个推送管道
     private void bindPushService() {
         //推送绑定
         String system = PhoneInfo.getSystem();
         if (PhoneInfo.SYS_EMUI.equals(system)) {
+
+            try {
+                //杀死极光推送进程
+                JPushInterface.onKillProcess(this);
+                //关闭小米推送
+                MiPushClient.disablePush(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             /*
              * 华为推送代码
              */
             //创建华为移动服务client实例用以使用华为push服务
             //需要指定api为HuaweiPush.PUSH_API
             //连接回调以及连接失败监听
+
             huaweiApiClient = new HuaweiApiClient.Builder(SampleApplicationContext.context)
                     .addApi(HuaweiPush.PUSH_API)
                     .addConnectionCallbacks(new HuaweiApiClient.ConnectionCallbacks() {
@@ -1095,9 +1107,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             registerReceiver(huaWeiToKentReceiver, filter);
         } else if (PhoneInfo.SYS_MIUI.equals(system)) {
 
-        /*
-         * 小米推送
-         */
+            try {
+                //杀死极光推送进程
+                JPushInterface.onKillProcess(this);
+                //关闭小米推送
+                if (huaweiApiClient != null) {
+                    huaweiApiClient.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            /*
+             * 小米推送
+             */
             LoggerInterface newLogger = new LoggerInterface() {
                 @Override
                 public void setTag(String tag) {
@@ -1124,6 +1147,17 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             }
 
         } else {
+            try {
+                //杀死极光推送进程
+                MiPushClient.disablePush(this);
+                //关闭小米推送
+                if (huaweiApiClient != null) {
+                    huaweiApiClient.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             /*
              * 推送相关代码
              */
