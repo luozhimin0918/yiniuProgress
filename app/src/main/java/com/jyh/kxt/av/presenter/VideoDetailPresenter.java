@@ -326,6 +326,11 @@ public class VideoDetailPresenter extends BasePresenter {
                 if (popupWindow instanceof PopupUtil) {
                     ((PopupUtil) popupWindow).addLock(false);
                 }
+                //滚动到评论位置
+//                int headerViewsCount = videoDetailActivity.rvMessage.getRefreshableView().getHeaderViewsCount();
+//                videoDetailActivity.rvMessage.getRefreshableView().smoothScrollToPosition(headerViewsCount);
+                int mHeaderView = headView.getHeight();
+                videoDetailActivity.rvMessage.getRefreshableView().smoothScrollBy(mHeaderView,100);
             }
 
             @Override
