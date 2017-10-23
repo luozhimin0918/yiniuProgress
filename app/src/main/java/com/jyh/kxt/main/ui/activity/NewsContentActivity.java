@@ -928,6 +928,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     if (popupWindow instanceof PopupUtil) {
                         ((PopupUtil) popupWindow).addLock(false);
                     }
+
+                    int headerViewsCount = ptrLvMessage.getRefreshableView().getHeaderViewsCount();
+                    ptrLvMessage.getRefreshableView().smoothScrollToPosition(headerViewsCount);
                 }
 
                 @Override
