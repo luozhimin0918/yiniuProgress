@@ -348,9 +348,9 @@ public class EmoticonSimpleTextView extends TextView {
                     if (action == MotionEvent.ACTION_UP) {
                         link[0].onClick(widget);
                     } else if (action == MotionEvent.ACTION_DOWN) {
-                        Selection.setSelection(buffer,
-                                buffer.getSpanStart(link[0]),
-                                buffer.getSpanEnd(link[0]));
+//                        Selection.setSelection(buffer,
+//                                buffer.getSpanStart(link[0]),
+//                                buffer.getSpanEnd(link[0]));
                     }
 
                     if (widget instanceof EmoticonSimpleTextView) {
@@ -363,7 +363,7 @@ public class EmoticonSimpleTextView extends TextView {
                     return false;
                 }
             }
-            return Touch.onTouchEvent(widget, buffer, event);
+            return /*Touch.onTouchEvent(widget, buffer, event)*/true;
         }
     }
 

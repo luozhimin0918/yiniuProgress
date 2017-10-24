@@ -39,7 +39,8 @@ import java.util.List;
  */
 
 public class CommentListPresenter extends BasePresenter implements CommentPresenter.OnCommentPublishListener {
-    @BindObject CommentListActivity commentListActivity;
+    @BindObject
+    CommentListActivity commentListActivity;
     private CommentPresenter commentPresenter;
 
     private int navPosition;
@@ -159,6 +160,7 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
     }
 
     public void showReplyMessageView(View v, CommentBean commentBean, int commentWho) {
+        commentPresenter.setAdjustEmoJeView(false);
         commentPresenter.showReplyMessageView(v, commentBean, commentWho);
     }
 

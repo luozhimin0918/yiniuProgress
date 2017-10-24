@@ -105,16 +105,22 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         this.mBaseActivity = mBaseActivity;
     }
 
-    @BindView(R.id.tv_comment_count_title) public TextView tvCommentCountTitle;
-    @BindView(R.id.tv_reply_message) TextView tvReplyMessage;
-    @BindView(R.id.tv_recommend_label) TextView tvRecommendLabel;
-    @BindView(R.id.ll_more_video) LinearLayout llMoreVideo;
-    @BindView(R.id.rl_recommend_layout) RelativeLayout rlRecommendLayout;
+    @BindView(R.id.tv_comment_count_title)
+    public TextView tvCommentCountTitle;
+    @BindView(R.id.tv_reply_message)
+    TextView tvReplyMessage;
+    @BindView(R.id.tv_recommend_label)
+    TextView tvRecommendLabel;
+    @BindView(R.id.ll_more_video)
+    LinearLayout llMoreVideo;
+    @BindView(R.id.rl_recommend_layout)
+    RelativeLayout rlRecommendLayout;
 
     private LinearLayout headView;
     private PopupUtil replyMessagePopup;
     private ReplyMessagePresenter replyMessagePresenter;
     private boolean isOnlyAllowSmallEmoJe = false;
+    private boolean isAdjustEmoJeView = true;
 
     public void bindListView(PullToRefreshListView listView) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
@@ -341,6 +347,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         replyMessagePresenter.setCommentWho(commentWho);
         replyMessagePresenter.isShowEmoJiView = false;
 
+        replyMessagePresenter.setAdjustEmoJeView(isAdjustEmoJeView);
         replyMessagePresenter.setOnlyAllowSmallEmoJe(isOnlyAllowSmallEmoJe);
         replyMessagePresenter.setContentEditHint(hintContent);
         hintContent = "来发表您的伟大评论吧";
@@ -361,6 +368,10 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
                 replyMessagePresenter.goneEmoJeView();
             }
         });
+    }
+
+    public void setAdjustEmoJeView(boolean adjustEmoJeView) {
+        this.isAdjustEmoJeView = adjustEmoJeView;
     }
 
     @Override

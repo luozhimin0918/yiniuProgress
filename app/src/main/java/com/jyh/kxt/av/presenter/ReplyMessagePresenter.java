@@ -179,6 +179,9 @@ public class ReplyMessagePresenter extends BasePresenter {
         }
     }
 
+    public void setAdjustEmoJeView(boolean adjustEmoJeView) {
+        isAdjustEmoJeView = adjustEmoJeView;
+    }
 
     public void setCommentBean(CommentBean commentBean) {
         this.commentBean = commentBean;
