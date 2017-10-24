@@ -253,4 +253,12 @@ public class VarConstant {
     public static final String SEARCH_TYPE_MAIN = "main";//首页
     public static final String SEARCH_TYPE_COLUMNIST = "writer";
 
+    /**
+     * 功能输入框类型
+     */
+    public static final int TYPE_FEDT_DEFALUT=0;//文本-删除按钮
+    public static final int TYPE_FEDT_CODE=1;//文本-删除按钮-验证码
+    public static final int TYPE_FEDT_TEXT=2;//文本-删除按钮-文本
+    public static final int TYPE_FEDT_IMAGE=3;//文本-删除按钮-图片
+    public static final int TYPE_FEDT_IMAGE_TEXT=4;//文本-删除按钮-图片-文本
 }

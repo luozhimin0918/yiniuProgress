@@ -19,6 +19,7 @@ import com.jyh.kxt.base.util.validation.UserNameValidation;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.LoginPresenter;
+import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.util.SystemUtil;
 import com.library.util.avalidations.EditTextValidator;
@@ -111,6 +112,8 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(presenter!=null)
+            presenter.onDestory();
         try {
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
@@ -138,9 +141,9 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
         }
 
         if (position == 0) {
-            edtPwd.setType(4);
+            edtPwd.setType(VarConstant.TYPE_FEDT_IMAGE_TEXT);
         } else {
-            edtPwd.setType(2);
+            edtPwd.setType(VarConstant.TYPE_FEDT_TEXT);
         }
         changeValidation();
         edtPwd.reflash();

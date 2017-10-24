@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
+import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
 
 /**
@@ -51,7 +52,7 @@ public class FunctionEditText extends LinearLayout {
      * TEXT,文本-删除按钮-文本
      * IMAGE文本-删除按钮-图片
      */
-    private int type = 0;
+    private int type = VarConstant.TYPE_FEDT_DEFALUT;
     private boolean clearShowWhenAll = false;//是否输入完才显示删除(false 只要有输入就显示删除按钮)
     private boolean inputOver = false;
     private boolean showTxtLine = false;
@@ -61,9 +62,12 @@ public class FunctionEditText extends LinearLayout {
     private int edtTextColor;//输入文本颜色
     private int edtHintColor;//提示文本颜色
     private int functionTextColor;//功能文本颜色
+    private int functionFocusLineColor;//选中状态下边界线颜色
 
     private int functionTxtLineColor;//功能文字前分割线颜色
     private float edtTextSize;//输入文本字体大小
+    private int leftPadding;//左边距
+    private int rightPadding;//右边距
 
     private float functionTextSize;//功能文本字体大小
     private Drawable clearDrawble;//删除图片
@@ -73,7 +77,6 @@ public class FunctionEditText extends LinearLayout {
     private String hintText;//提示文本
 
     private String functionText;//功能文本
-    private int width, height;
     private int imageSize;
     private ImageView ivClear;
 
@@ -91,37 +94,36 @@ public class FunctionEditText extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        initAttrs(context, attrs);
 
         setOrientation(LinearLayout.VERTICAL);
         topLayout = new LinearLayout(context);
         topLayout.setOrientation(HORIZONTAL);
         topLayout.setGravity(Gravity.CENTER_VERTICAL);
-        topLayout.setPadding(20, 0, 20, 0);
+        topLayout.setPadding(leftPadding, 0, rightPadding, 0);
         LinearLayout.LayoutParams topParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
         topParams.weight = 1;
-
-        initAttrs(context, attrs);
 
         initEditText(context);
         initClearBtn(context);
 
         switch (type) {
-            case 0:
+            case VarConstant.TYPE_FEDT_DEFALUT:
                 //文本-删除按钮
                 break;
-            case 1:
+            case VarConstant.TYPE_FEDT_CODE:
                 //文本-删除按钮-验证码
                 initCheckCodeView(context);
                 break;
-            case 2:
+            case VarConstant.TYPE_FEDT_TEXT:
                 //文本-删除按钮-文本
                 initFunctionTextView(context);
                 break;
-            case 3:
+            case VarConstant.TYPE_FEDT_IMAGE:
                 //文本-删除按钮-图片
                 initFunctionImage(context);
                 break;
-            case 4:
+            case VarConstant.TYPE_FEDT_IMAGE_TEXT:
                 //文本-删除按钮-图片-文本
                 initFunctionImage(context);
                 initFunctionTextView(context);
@@ -151,6 +153,8 @@ public class FunctionEditText extends LinearLayout {
                 .color.font_color8));
         functionTxtLineColor = array.getColor(R.styleable.FunctionEditText_functionEditTextFunctionTxtLineColor, ContextCompat.getColor
                 (context, R.color.line_color2));
+        functionFocusLineColor = array.getColor(R.styleable.FunctionEditText_functionFocusLineColor, ContextCompat.getColor(context, R
+                .color.font_color8));
         edtTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextTextSize, 42);
         functionTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextFunctionTextSize, 36);
 
@@ -169,6 +173,9 @@ public class FunctionEditText extends LinearLayout {
         functionText = array.getString(R.styleable.FunctionEditText_functionEditTextFunction);
 
         showTxtLine = array.getBoolean(R.styleable.FunctionEditText_functionEditTextShowTxtLine, false);
+
+        leftPadding = (int) array.getDimension(R.styleable.FunctionEditText_functionEditLeftPadding, 20);
+        rightPadding = (int) array.getDimension(R.styleable.FunctionEditText_functionEditRightPadding, 20);
 
         imageSize = SystemUtil.dp2px(context, 16);
 
@@ -217,6 +224,16 @@ public class FunctionEditText extends LinearLayout {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+        edt.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    bottomLine.setBackgroundColor(functionFocusLineColor);
+                } else {
+                    bottomLine.setBackgroundColor(lineColor);
+                }
             }
         });
         LinearLayout.LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -342,10 +359,16 @@ public class FunctionEditText extends LinearLayout {
         LinearLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.leftMargin = 20;
         functionTxtBtn.addView(tvFunction, params);
-        functionTxtBtn.setOnClickListener(onClickListener);
         topLayout.addView(functionTxtBtn, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
                 .MATCH_PARENT));
         functionTxtLine.setVisibility(showTxtLine ? VISIBLE : GONE);
+        functionTxtBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickListener != null)
+                    onClickListener.onClick(v);
+            }
+        });
     }
 
     /**
@@ -378,6 +401,13 @@ public class FunctionEditText extends LinearLayout {
 
     public void setFunctionClickListener(OnClickListener clickListener) {
         this.onClickListener = clickListener;
+    }
+
+    public void setPadding(int left, int right) {
+        if (topLayout != null) {
+            topLayout.setPadding(left, 0, right, 0);
+            invalidate();
+        }
     }
 
     public EditText getEdt() {
@@ -428,7 +458,8 @@ public class FunctionEditText extends LinearLayout {
     }
 
     public String getEdtText() {
-        return edtText;
+        if (edt != null) return edtText = edt.getText().toString();
+        return "";
     }
 
     public void setEdtText(String edtText) {
@@ -437,6 +468,7 @@ public class FunctionEditText extends LinearLayout {
     }
 
     public String getHintText() {
+        if (edt != null) return hintText = edt.getHint().toString();
         return hintText;
     }
 
@@ -446,6 +478,7 @@ public class FunctionEditText extends LinearLayout {
     }
 
     public String getFunctionText() {
+        if (functionText == null) functionText = "";
         return functionText;
     }
 
@@ -635,22 +668,22 @@ public class FunctionEditText extends LinearLayout {
             checkCodeView = null;
         }
         switch (type) {
-            case 0:
+            case VarConstant.TYPE_FEDT_DEFALUT:
                 //文本-删除按钮
                 break;
-            case 1:
+            case VarConstant.TYPE_FEDT_CODE:
                 //文本-删除按钮-验证码
                 initCheckCodeView(getContext());
                 break;
-            case 2:
+            case VarConstant.TYPE_FEDT_TEXT:
                 //文本-删除按钮-文本
                 initFunctionTextView(getContext());
                 break;
-            case 3:
+            case VarConstant.TYPE_FEDT_IMAGE:
                 //文本-删除按钮-图片
                 initFunctionImage(getContext());
                 break;
-            case 4:
+            case VarConstant.TYPE_FEDT_IMAGE_TEXT:
                 //文本-删除按钮-图片-文本
                 initFunctionImage(getContext());
                 initFunctionTextView(getContext());

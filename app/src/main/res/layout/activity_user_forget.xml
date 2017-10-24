@@ -3,63 +3,56 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/line_color2"
+              android:background="@color/theme1"
               android:orientation="vertical"
     >
 
     <include layout="@layout/action_bar1"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/forget_margin1"
-        android:paddingLeft="@dimen/forget_padding1"
-        android:text="系统将发送邮件至："
-        android:textColor="@color/font_color5"
-        android:textSize="@dimen/title_font_size"
-        />
-
-    <FrameLayout
+        android:id="@+id/tv_warning"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/forget_edtHeight"
-        android:layout_marginTop="@dimen/forget_margin3">
-
-        <EditText
-            android:id="@+id/edt_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:hint="输入邮箱"
-            android:paddingLeft="@dimen/forget_padding1"
-            android:singleLine="true"
-            android:textColor="@color/font_color5"
-            android:textColorHint="@color/font_color9"
-            android:textSize="@dimen/content_font_size2"
-            />
-
-        <ImageView
-            android:id="@+id/iv_clear"
-            android:layout_width="@dimen/forget_imgSize"
-            android:layout_height="@dimen/forget_imgSize"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="@dimen/forget_margin3"
-            android:src="@mipmap/icon_edt_clear"/>
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/tv_error"
-        style="@style/errorTvStyle"
-        android:layout_marginTop="9dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/forget_margin1"
+        android:gravity="center"
         android:paddingLeft="@dimen/forget_padding1"
+        android:text="请先验证身份"
+        android:textColor="@color/font_color9"
+        android:textSize="@dimen/content_font_size"
         />
 
-    <!--<Button
-        android:id="@+id/btn_send"
-        android:text="发送"
-        android:gravity="center"
-        style="@style/BtnStyle2"
-        />-->
+    <com.jyh.kxt.base.widget.FunctionEditText
+        android:id="@+id/edt_email"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        app:functionEditRightPadding="30dp"
+        app:functionEditTextHint="请输入注册的手机号或邮箱"
+        app:functionEditTextHintColor="@color/font_color9"
+        app:functionEditTextLineColor="@color/line_color3"
+        app:functionEditTextTextColor="@color/font_color5"
+        app:functionEditTextTextSize="@dimen/content_font_size"
+        app:functionEditTextType="DEFAULT"
+        />
+
+    <com.jyh.kxt.base.widget.FunctionEditText
+        android:id="@+id/edt_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        app:functionEditRightPadding="30dp"
+        app:functionEditTextFunction="获取动态码"
+        app:functionEditTextFunctionColor="@color/font_color1"
+        app:functionEditTextHint="请输入动态密码"
+        app:functionEditTextHintColor="@color/font_color9"
+        app:functionEditTextLineColor="@color/line_color3"
+        app:functionEditTextTextColor="@color/font_color5"
+        app:functionEditTextTextSize="@dimen/content_font_size"
+        app:functionEditTextType="TEXT"
+        />
 
     <com.jyh.kxt.base.custom.DiscolorButton
         android:id="@+id/btn_send"

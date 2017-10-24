@@ -2,6 +2,7 @@ package com.jyh.kxt.index.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class ErrorActivity extends BaseActivity {
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
     @BindView(R.id.tv_error_message) TextView tvErrorMessage;
 
+    private String errorMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,7 @@ public class ErrorActivity extends BaseActivity {
         ivBarBreak.setVisibility(View.INVISIBLE);
         tvBarTitle.setText("找不到页面");
 
-        String errorMessage = getIntent().getStringExtra(ERROR_MSG);
+        errorMessage = getIntent().getStringExtra(ERROR_MSG);
         tvErrorMessage.setText(errorMessage);
     }
 
@@ -42,6 +44,7 @@ public class ErrorActivity extends BaseActivity {
                 errorImageClickCount++;
                 if (errorImageClickCount >= 5) {
                     tvErrorMessage.setVisibility(View.VISIBLE);
+                    Log.e(TAG, "错误: "+ errorMessage);
                 }
                 break;
             case R.id.error_restart:

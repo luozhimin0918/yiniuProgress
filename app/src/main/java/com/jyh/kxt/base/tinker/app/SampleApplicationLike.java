@@ -27,6 +27,7 @@ import android.support.multidex.MultiDex;
 import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
+import com.jyh.kxt.base.utils.CrashHandler;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.tencent.tinker.anno.DefaultLifeCycle;
@@ -138,12 +139,10 @@ public class SampleApplicationLike extends DefaultApplicationLike {
                 UmLog.i(TAG, "register failed: " + s + " " + s1);
             }
         });
-
-//        CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(SampleApplicationContext.context);
-
         mPushAgent.setPushIntentServiceClass(KXTPushIntentService.class);*/
 
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(SampleApplicationContext.context);
 
         //避免WebView启动慢的问题
         Intent intent = new Intent(SampleApplicationContext.context, PreLoadX5Service.class);
