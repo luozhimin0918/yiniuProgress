@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -148,8 +149,6 @@ public class EmoticonTextView extends TextView {
             }
         } catch (Exception e) {
         }
-
-
         setText(currentSpannable);
         return isFindMatcher;
     }

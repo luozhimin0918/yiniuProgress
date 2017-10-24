@@ -229,9 +229,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         clickSwitchFragment(R.id.rb_home);
 
-        //初始化操作
-        EmoticonsUtils.loadEmoticonToDB(this);
-        DBUtils.toSDWriteFile(this, DBManager.dbName);
+//        DBUtils.toSDWriteFile(this, DBManager.dbName);
 
 
         ChatSocketUtil.getInstance().sendSocketParams(this, null, this);

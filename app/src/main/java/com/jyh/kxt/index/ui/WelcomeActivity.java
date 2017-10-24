@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.http.GlobalHttpRequest;
+import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
 import com.jyh.kxt.push.PushJsonHandle;
@@ -35,6 +36,8 @@ public class WelcomeActivity extends BaseActivity {
         new WebView(this);
         super.onCreate(savedInstanceState);
 
+        //初始化操作
+        EmoticonsUtils.loadEmoticonToDB(this);
 
         /*
          * 针对华为推送
