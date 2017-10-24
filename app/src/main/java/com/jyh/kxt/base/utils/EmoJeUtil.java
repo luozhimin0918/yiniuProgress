@@ -32,7 +32,10 @@ public class EmoJeUtil {
         return emoJeList;
     }
 
-    public EmojeBean getEmoJeBean(String emoJeName) {
+    public EmojeBean getEmoJeBean(Context mContext,String emoJeName) {
+        if(emoJeList == null || emoJeList.size() == 0){
+            emoJeList =  loadAllEmoJe(mContext);
+        }
         for (EmojeBean emojeBean : emoJeList) {
             if (emojeBean.getName().equals(emoJeName)) {
                 return emojeBean;
