@@ -187,7 +187,7 @@ public class EmoticonSimpleTextView extends TextView {
                 }
 
 
-                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(emoJeName);
+                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(getContext(), emoJeName);
                 if (emoJeBean != null) { //是否本地存在这个EmoJe表情
                     /**
                      * 配置EmoJe基本信息
@@ -273,7 +273,7 @@ public class EmoticonSimpleTextView extends TextView {
                             TextGifDrawable gifDrawable = new TextGifDrawable(gifFile);
                             gifDrawable.setTextView(EmoticonSimpleTextView.this);
 
-                            gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
+                            gifDrawable.setBounds(0, 0, gifDrawable.getMinimumWidth(), gifDrawable.getMinimumHeight());
 
                             ImageSpan mEmoJeImageSpan = new ImageSpan(gifDrawable, ImageSpan.ALIGN_BASELINE);
                             currentSpannable.setSpan(

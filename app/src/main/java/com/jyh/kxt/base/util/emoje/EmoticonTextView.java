@@ -12,7 +12,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -114,7 +113,7 @@ public class EmoticonTextView extends TextView {
                 String emoJeUrl = splitGroup[1];
 
 
-                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(emoJeName);
+                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(getContext(), emoJeName);
                 if (emoJeBean != null) { //是否本地存在这个EmoJe表情
                     /**
                      * 配置EmoJe基本信息
@@ -200,7 +199,8 @@ public class EmoticonTextView extends TextView {
                             TextGifDrawable gifDrawable = new TextGifDrawable(gifFile);
                             gifDrawable.setTextView(EmoticonTextView.this);
 
-                            gifDrawable.setBounds(0, 0, emoJeSize2, emoJeSize2);
+                            gifDrawable.setBounds(0, 0, gifDrawable.getMinimumWidth(), gifDrawable.getMinimumHeight());
+
                             ImageSpan mEmoJeImageSpan = new ImageSpan(gifDrawable, ImageSpan.ALIGN_BASELINE);
                             currentSpannable.setSpan(
                                     mEmoJeImageSpan,
