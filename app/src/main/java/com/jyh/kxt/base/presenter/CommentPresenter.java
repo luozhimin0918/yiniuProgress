@@ -347,8 +347,9 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-//        replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+        if(!isAdjustEmoJeView){//如果不自动调解大小 则软键盘顶起输入框
+            replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
         InputMethodManager imm = (InputMethodManager) mBaseActivity.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 
