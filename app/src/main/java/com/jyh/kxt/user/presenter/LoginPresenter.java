@@ -247,4 +247,9 @@ public class LoginPresenter extends BasePresenter {
             return false;
         }
     });
+
+    public void onDestory(){
+        handler.removeCallbacksAndMessages(null);
+        handler=null;
+    }
 }

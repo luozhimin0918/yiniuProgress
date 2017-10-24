@@ -88,6 +88,9 @@
         <attr name="functionEditTextFunction" format="string|reference"/>
         <attr name="functionEditTextBackgroundColor" format="color|reference"/>
         <attr name="functionEditTextShowTxtLine" format="boolean"/>
+        <attr name="functionEditLeftPadding" format="dimension|reference"/>
+        <attr name="functionEditRightPadding" format="dimension|reference"/>
+        <attr name="functionFocusLineColor" format="color|reference"/>
     </declare-styleable>
 
     <declare-styleable name="VerifyCode">

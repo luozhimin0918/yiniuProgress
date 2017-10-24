@@ -34,8 +34,53 @@ public class ForgetPwdPresenter extends BasePresenter {
     private VolleyRequest request;
     private TSnackbar snackBar;
 
+    private int step=1;//步骤
+    private JSONObject stepOneJson,stepTwoJson;
+
     public ForgetPwdPresenter(IBaseView iBaseView) {
         super(iBaseView);
+        init();
+    }
+
+    private void init() {
+        stepOneJson=new JSONObject();
+        stepTwoJson=new JSONObject();
+        stepOneJson.put("warning","请先验证身份");
+        stepTwoJson.put("warning","设置6-16位字符，请至少使用字母、数字和符号两种以上组合");
+        stepOneJson.put("edt1hint","请输入注册的手机号或邮箱");
+        stepTwoJson.put("edt1hint","请输入新密码");
+        stepOneJson.put("edt2hint","请输入动态密码");
+        stepTwoJson.put("edt2hint","确认密码");
+        stepOneJson.put("edt1Type",VarConstant.TYPE_FEDT_DEFALUT);
+        stepTwoJson.put("edt1Type",VarConstant.TYPE_FEDT_IMAGE);
+        stepOneJson.put("edt2Type",VarConstant.TYPE_FEDT_TEXT);
+        stepTwoJson.put("edt2Type",VarConstant.TYPE_FEDT_IMAGE);
+    }
+
+    /**
+     * 保存输入数据
+     * @param step 步骤
+     * @param edt1String 输入框1文本
+     * @param edt2String 输入框2文本
+     * @param functionString 输入框2功能文本
+     * @param edt1Open 输入框1密码是否隐蔽
+     * @param edt2Open 输入框2密码是否隐蔽
+     */
+    public void saveData(int step,String edt1String,String edt2String,String functionString,int functionColor,boolean edt1Open,boolean edt2Open){
+        this.step=step;
+        if(step==1){
+            stepOneJson.put("edt1Text",edt1String);
+            stepOneJson.put("edt2Text",edt2String);
+            stepOneJson.put("function",functionString);
+            stepOneJson.put("functionColor",functionColor);
+            stepOneJson.put("edt1open",edt1Open);
+            stepOneJson.put("edt2open",edt2Open);
+        }else{
+            stepTwoJson.put("edt1Text",edt1String);
+            stepTwoJson.put("edt2Text",edt2String);
+            stepTwoJson.put("edt1open",edt1Open);
+            stepTwoJson.put("edt2open",edt2Open);
+        }
     }
 
     public void sendInfo(String email) {
@@ -79,5 +124,13 @@ public class ForgetPwdPresenter extends BasePresenter {
             }
         });
         forgetPwdActivity.dismissWaitDialog();
+    }
+
+    public JSONObject getStepOneJson() {
+        return stepOneJson;
+    }
+
+    public JSONObject getStepTwoJson() {
+        return stepTwoJson;
     }
 }
