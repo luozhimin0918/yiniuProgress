@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jyh.kxt.user.ui.AlterPassActivity">
+
+    <include layout="@layout/action_bar1" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="修改密码提示语" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/alter_pass_old"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lr_edt_height"
+            tl:functionEditTextHint="请输入旧密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color3"
+            tl:functionEditTextTextColor="@color/font_color5"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT" />
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/alter_pass_new1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lr_edt_height"
+            tl:functionEditTextHint="新密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color3"
+            tl:functionEditTextTextColor="@color/font_color5"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT" />
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/alter_pass_new2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lr_edt_height"
+            tl:functionEditTextHint="确定密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color3"
+            tl:functionEditTextTextColor="@color/font_color5"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

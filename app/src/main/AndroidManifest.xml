@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.jyh.kxt">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.jyh.kxt">
 
     <!--极光推送-->
     <permission
@@ -603,6 +603,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".user.ui.AlterPassActivity"></activity>
     </application>
 
 </manifest>
