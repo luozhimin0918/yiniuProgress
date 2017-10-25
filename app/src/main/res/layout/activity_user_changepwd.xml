@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tl="http://schemas.android.com/tools"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/theme1"
@@ -17,27 +16,35 @@
         android:paddingLeft="20dp"
         >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/forget_margin1"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/font_color6"
+            android:text="设置6-16位字符，请至少使用字母，数字和符号两种以上组合"
+            android:layout_marginBottom="15dp"/>
 
         <com.jyh.kxt.base.widget.FunctionEditText
             android:id="@+id/edt_pwd_old"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            app:functionEditRightPadding="27dp"
+            tl:functionEditRightPadding="27dp"
             tl:functionEditTextFunctionColor="@color/font_color1"
             tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
-            tl:functionEditTextFunctionTxtLineColor="@color/line_color9"
+            tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
             tl:functionEditTextHint="旧密码"
             tl:functionEditTextHintColor="@color/font_color9"
             tl:functionEditTextLineColor="@color/line_color6"
             tl:functionEditTextTextColor="@color/font_color64"
             tl:functionEditTextTextSize="@dimen/content_font_size"
-            tl:functionEditTextType="DEFAULT"/>
+            tl:functionEditTextType="IMAGE"/>
 
         <com.jyh.kxt.base.widget.FunctionEditText
             android:id="@+id/edt_pwd_new"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            app:functionEditRightPadding="27dp"
+            tl:functionEditRightPadding="27dp"
             tl:functionEditTextFunctionColor="@color/font_color1"
             tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
             tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
@@ -46,13 +53,13 @@
             tl:functionEditTextLineColor="@color/line_color6"
             tl:functionEditTextTextColor="@color/font_color64"
             tl:functionEditTextTextSize="@dimen/content_font_size"
-            tl:functionEditTextType="DEFAULT"/>
+            tl:functionEditTextType="IMAGE"/>
 
         <com.jyh.kxt.base.widget.FunctionEditText
             android:id="@+id/edt_pwd_new_two"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            app:functionEditRightPadding="27dp"
+            tl:functionEditRightPadding="27dp"
             tl:functionEditTextFunctionColor="@color/font_color1"
             tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
             tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
@@ -61,7 +68,7 @@
             tl:functionEditTextLineColor="@color/line_color6"
             tl:functionEditTextTextColor="@color/font_color64"
             tl:functionEditTextTextSize="@dimen/content_font_size"
-            tl:functionEditTextType="DEFAULT"/>
+            tl:functionEditTextType="IMAGE"/>
 
         <Button
             android:id="@+id/btn_sure"

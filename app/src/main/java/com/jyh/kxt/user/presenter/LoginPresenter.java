@@ -19,6 +19,7 @@ import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
 import com.library.util.SystemUtil;
@@ -102,9 +103,9 @@ public class LoginPresenter extends BasePresenter {
         request.setTag(getClass().getName());
 
         JSONObject jsonObject=request.getJsonParam();
-        jsonObject.put("","");
-        jsonObject.put("","");
-        jsonObject.put("","");
+        jsonObject.put(VarConstant.HTTP_USERNAME,activity.edtName.getEdtText());
+        jsonObject.put(VarConstant.HTTP_PWD,activity.edtPwd.getEdtText());
+        jsonObject.put(VarConstant.HTTP_TYPE,position==0?"password":"message");
 
         request.doPost(HttpConstant.USER_LOGIN2, jsonObject, new HttpListener<UserJson>() {
             @Override
@@ -230,8 +231,20 @@ public class LoginPresenter extends BasePresenter {
             message.arg1 = 60;
             message.what = 1;
             handler.sendMessage(message);
-        } else {
+            VolleyRequest request = new VolleyRequest(activity, mQueue);
+            request.setTag(getClass().getName());
+            JSONObject jsonObject=request.getJsonParam();
+            request.doGet(HttpConstant.SHARE_WEB, jsonObject, new HttpListener<Object>() {
+                @Override
+                protected void onResponse(Object o) {
 
+                }
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                }
+            });
         }
     }
 

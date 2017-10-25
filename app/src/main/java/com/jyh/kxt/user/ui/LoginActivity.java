@@ -46,8 +46,8 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
     @BindView(R.id.iv_close) ImageView ivClose;
     @BindView(R.id.stl_navigation_bar) NavigationTabLayout stlNavigationBar;
     @BindView(R.id.fl_bg) FrameLayout flBg;
-    @BindView(R.id.edt_name) FunctionEditText edtName;
-    @BindView(R.id.edt_pwd) FunctionEditText edtPwd;
+    @BindView(R.id.edt_name)public FunctionEditText edtName;
+    @BindView(R.id.edt_pwd)public FunctionEditText edtPwd;
     @BindView(R.id.edt_code) FunctionEditText edtCode;
     @BindView(R.id.db_login) DiscolorButton dbLogin;
 
@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(presenter!=null)
+        if (presenter != null)
             presenter.onDestory();
         try {
             EventBus.getDefault().unregister(this);
@@ -148,6 +148,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
         changeValidation();
         edtPwd.reflash();
         presenter.setData(position, edtName, edtPwd, edtCode);
+        edtName.requestFocus();//切换之后焦点重置
     }
 
     @OnClick({R.id.db_login, R.id.iv_qq, R.id.iv_sina, R.id.iv_wx, R.id.iv_close, R.id.tv_register})

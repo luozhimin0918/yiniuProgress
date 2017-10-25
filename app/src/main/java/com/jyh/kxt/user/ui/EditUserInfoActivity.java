@@ -307,6 +307,8 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 startActivity(emailIntent);
                 break;
             case R.id.rl_pwd:
+                Intent intent=new Intent(new Intent(this,ChangePwdActivity.class));
+                startActivity(intent);
                 break;
         }
     }

@@ -16,8 +16,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/forget_margin1"
         android:gravity="center"
-        android:paddingLeft="@dimen/forget_padding1"
         android:text="请先验证身份"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:textColor="@color/font_color6"
         android:textSize="@dimen/content_font_size"
         />

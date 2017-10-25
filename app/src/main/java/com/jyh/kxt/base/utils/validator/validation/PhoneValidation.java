@@ -23,7 +23,7 @@ public class PhoneValidation extends ValidationExecutor {
             return false;
         }
 
-        String regex = "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$";
+        String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[0-9])|(18[0,5-9]))\\d{8}$";
         boolean result = Pattern.compile(regex).matcher(phone).find();
         if (!result) {
             errorInfo = "手机号码不合法";

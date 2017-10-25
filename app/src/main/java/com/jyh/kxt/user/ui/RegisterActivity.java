@@ -11,6 +11,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.custom.DiscolorButton;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
+import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
+import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
+import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.RegisterPresenter;
 
@@ -33,6 +40,7 @@ public class RegisterActivity extends BaseActivity {
 
     private RegisterPresenter presenter;
     private int step = 0;
+    private EditTextValidator editTextValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,13 @@ public class RegisterActivity extends BaseActivity {
         presenter = new RegisterPresenter(this);
 
         tvBarTitle.setText("账号注册");
+
+        editTextValidator = new EditTextValidator(this)
+                .add(new ValidationModel(edtPhone, new PhoneValidation()))
+                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                .setButton(dbRegister)
+                .execute();
+
         edtPwd.setFunctionClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,15 +72,17 @@ public class RegisterActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
-                    onBackPressed();
+                onBackPressed();
                 break;
             case R.id.db_register:
-                if (step == 0) {
-                    //进行下一步设置密码
-                    step = 1;
-                    initStepTwo();
-                } else {
-                    // TODO: 2017/10/13  完成注册
+                if (editTextValidator.validate()) {
+                    if (step == 0) {
+                        //进行下一步设置密码
+                        step = 1;
+                        initStepTwo();
+                    } else {
+                        // TODO: 2017/10/13  完成注册
+                    }
                 }
                 break;
         }
@@ -138,6 +155,13 @@ public class RegisterActivity extends BaseActivity {
         edtPwd.setEdtText("");
         edtPwd.setHintText("设置密码(6-16位字母、数字和符号)");
         dbRegister.setText("完成注册");
+
+        editTextValidator = new EditTextValidator(this)
+                .add(new ValidationModel(edtPhone, new UserNameValidation()))
+                .add(new ValidationModel(edtPwd, new PwdValidation()))
+                .setButton(dbRegister)
+                .execute();
+
     }
 
     /**

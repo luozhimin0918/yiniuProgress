@@ -338,6 +338,7 @@ public class FunctionEditText extends LinearLayout {
         functionTxtLine = new View(context);
         LinearLayout.LayoutParams lineParams = new LayoutParams(SystemUtil.dp2px(context, 1), 35);
         lineParams.gravity=Gravity.CENTER_VERTICAL;
+        lineParams.leftMargin=10;
         functionTxtLine.setBackgroundColor(functionTxtLineColor);
         functionTxtLine.setLayoutParams(lineParams);
         functionTxtBtn.addView(functionTxtLine);

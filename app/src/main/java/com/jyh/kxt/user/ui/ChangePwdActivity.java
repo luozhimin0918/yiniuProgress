@@ -60,7 +60,7 @@ public class ChangePwdActivity extends BaseActivity {
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(changeBtn)
-                .add(new ValidationModel(edtPwdOld, new UserNameValidation()))
+                .add(new ValidationModel(edtPwdOld, new PwdValidation()))
                 .add(new ValidationModel(edtPwdNew, new PwdValidation()))
                 .add(new ValidationModel(edtPwdRe, new PwdValidation()))
                 .execute();
