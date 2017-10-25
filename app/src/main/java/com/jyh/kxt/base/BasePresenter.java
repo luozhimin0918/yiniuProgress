@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 public class BasePresenter {
     protected IBaseView iBaseView;
     public RequestQueue mQueue;
-    protected Context mContext;
+    public Context mContext;
 
     public BasePresenter(IBaseView iBaseView) {
         this.iBaseView = iBaseView;

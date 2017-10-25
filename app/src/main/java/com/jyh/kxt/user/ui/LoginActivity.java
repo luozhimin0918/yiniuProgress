@@ -12,7 +12,9 @@ import android.widget.ScrollView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.DiscolorButton;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
@@ -46,8 +48,8 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
     @BindView(R.id.iv_close) ImageView ivClose;
     @BindView(R.id.stl_navigation_bar) NavigationTabLayout stlNavigationBar;
     @BindView(R.id.fl_bg) FrameLayout flBg;
-    @BindView(R.id.edt_name)public FunctionEditText edtName;
-    @BindView(R.id.edt_pwd)public FunctionEditText edtPwd;
+    @BindView(R.id.edt_name) public FunctionEditText edtName;
+    @BindView(R.id.edt_pwd) public FunctionEditText edtPwd;
     @BindView(R.id.edt_code) FunctionEditText edtCode;
     @BindView(R.id.db_login) DiscolorButton dbLogin;
 
@@ -95,7 +97,18 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                     startActivity(intent);
                 } else {
                     //请求动态密码
-                    presenter.requestPwd();
+                    LoginUtils.requestCode(presenter, VarConstant.CODE_GENERAL, true, edtName.getEdtText(), presenter
+                            .getClass().getName(), new ObserverData() {
+                        @Override
+                        public void callback(Object o) {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
                 }
             }
         });

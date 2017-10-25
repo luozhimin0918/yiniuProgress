@@ -8,6 +8,19 @@
 
     <include layout="@layout/action_bar1"/>
 
+    <TextView
+        android:id="@+id/tv_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/forget_margin1"
+        android:textSize="@dimen/content_font_size"
+        android:textColor="@color/font_color6"
+        android:text="设置6-16个字符，请至少使用字母，数字和符号两种以上组合"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:visibility="gone"/>
+
     <com.jyh.kxt.base.widget.FunctionEditText
         android:id="@+id/edt_phone"
         android:layout_width="match_parent"

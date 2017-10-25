@@ -46,7 +46,7 @@ public class ForgetPwdPresenter extends BasePresenter {
         stepOneJson=new JSONObject();
         stepTwoJson=new JSONObject();
         stepOneJson.put("warning","请先验证身份");
-        stepTwoJson.put("warning","设置6-16位字符，请至少使用字母、数字和符号两种以上组合");
+        stepTwoJson.put("warning","设置6-16个字符，请至少使用字母、数字和符号两种以上组合");
         stepOneJson.put("edt1hint","请输入注册的手机号或邮箱");
         stepTwoJson.put("edt1hint","请输入新密码");
         stepOneJson.put("edt2hint","请输入动态密码");

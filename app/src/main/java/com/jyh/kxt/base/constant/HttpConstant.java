@@ -156,6 +156,9 @@ public class HttpConstant {
     public static final String USER_FAVOR_WRITER = BASE_URL + "member/favor_writer";//我的关注 作者
     public static final String USER_FAVOR_BLOGARTICLE = BASE_URL + "member/favor_blogArticle";//我的关注 文章
 
+    public static final String USER_CODE_REQUEST=BASE_URL+"user/get_code";//请求验证码
+    public static final String USER_CODE_VERIFY=BASE_URL+"user/verify_code";//验证验证码
+
     /**
      * 收藏
      */

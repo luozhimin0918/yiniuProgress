@@ -22,7 +22,7 @@
             android:layout_marginTop="@dimen/forget_margin1"
             android:textSize="@dimen/content_font_size"
             android:textColor="@color/font_color6"
-            android:text="设置6-16位字符，请至少使用字母，数字和符号两种以上组合"
+            android:text="设置6-16个字符，请至少使用字母，数字和符号两种以上组合"
             android:layout_marginBottom="15dp"/>
 
         <com.jyh.kxt.base.widget.FunctionEditText

@@ -5,8 +5,16 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
+import com.jyh.kxt.base.BasePresenter;
+import com.jyh.kxt.base.IBaseView;
+import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.user.json.UserJson;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
 
@@ -104,6 +112,59 @@ public class LoginUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static void requestCode(BasePresenter context, String type, boolean isPhone, String user, String tag , final ObserverData observerData){
+        VolleyRequest volleyRequest=new VolleyRequest(context.mContext,context.mQueue);
+        volleyRequest.setTag(tag);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+
+        if(isPhone){
+            jsonParam.put("phone",user);
+        }else{
+            jsonParam.put("email",user);
+        }
+        jsonParam.put("type",type);
+
+        volleyRequest.doPost(HttpConstant.USER_CODE_REQUEST, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(o);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
+    }
+
+    public static void verifyCode(BasePresenter context, String type, boolean isPhone, String user, String code, String tag, final ObserverData observerData){
+        VolleyRequest volleyRequest=new VolleyRequest(context.mContext,context.mQueue);
+        volleyRequest.setTag(tag);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+
+        if(isPhone){
+            jsonParam.put("phone",user);
+        }else{
+            jsonParam.put("email",user);
+        }
+        jsonParam.put("type",type);
+        jsonParam.put("code",code);
+
+        volleyRequest.doPost(HttpConstant.USER_CODE_VERIFY, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(o);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
     }
 
 }

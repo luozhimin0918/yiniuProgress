@@ -12,6 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
@@ -99,41 +100,59 @@ public class LoginPresenter extends BasePresenter {
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
 
-        VolleyRequest request = new VolleyRequest(activity, mQueue);
-        request.setTag(getClass().getName());
+        if (position == 0) {
+            VolleyRequest request = new VolleyRequest(activity, mQueue);
+            request.setTag(getClass().getName());
 
-        JSONObject jsonObject=request.getJsonParam();
-        jsonObject.put(VarConstant.HTTP_USERNAME,activity.edtName.getEdtText());
-        jsonObject.put(VarConstant.HTTP_PWD,activity.edtPwd.getEdtText());
-        jsonObject.put(VarConstant.HTTP_TYPE,position==0?"password":"message");
+            JSONObject jsonObject = request.getJsonParam();
+            jsonObject.put(VarConstant.HTTP_USERNAME, activity.edtName.getEdtText());
+            jsonObject.put(VarConstant.HTTP_PWD, activity.edtPwd.getEdtText());
+            jsonObject.put(VarConstant.HTTP_TYPE, position == 0 ? "password" : "message");
 
-        request.doPost(HttpConstant.USER_LOGIN2, jsonObject, new HttpListener<UserJson>() {
-            @Override
-            protected void onResponse(UserJson user) {
-                errorNumAccount = 0;
-                errorNumPhone = 0;
-                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                LoginUtils.login(activity, user);
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (error == null ? "" :
-                        error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-
-                if (position == 0) {
-                    errorNumAccount++;
-                } else {
-                    errorNumPhone++;
+            request.doPost(HttpConstant.USER_LOGIN2, jsonObject, new HttpListener<UserJson>() {
+                @Override
+                protected void onResponse(UserJson user) {
+                    errorNumAccount = 0;
+                    errorNumPhone = 0;
+                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                    LoginUtils.login(activity, user);
                 }
-                activity.showVerifyView(errorNumAccount, errorNumPhone);
-            }
-        });
+
+                @Override
+                protected void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (error == null ? "" :
+                            error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
+                            .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+
+                    if (position == 0) {
+                        errorNumAccount++;
+                    } else {
+                        errorNumPhone++;
+                    }
+                    activity.showVerifyView(errorNumAccount, errorNumPhone);
+                }
+            });
+        } else {
+            LoginUtils.verifyCode(this, VarConstant.CODE_GENERAL, true, activity.edtName.getEdtText(), activity.edtPwd.getEdtText(),
+                    getClass().getName(), new ObserverData() {
+
+
+                @Override
+                public void callback(Object o) {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        }
+
     }
 
     private JSONObject accountSave = new JSONObject();
@@ -165,7 +184,7 @@ public class LoginPresenter extends BasePresenter {
             phoneSave.put("pwd_hint", edtPwd.getEdt().getHint());
             phoneSave.put("code", edtCode.getEdt().getText());
             phoneSave.put("code_hint", edtCode.getEdt().getHint());
-            phoneSave.put("pwd_status",true);
+            phoneSave.put("pwd_status", true);
             phoneSave.put("pwd_function_txt", edtPwd.getFunctionText());
             phoneSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
         }
@@ -233,7 +252,7 @@ public class LoginPresenter extends BasePresenter {
             handler.sendMessage(message);
             VolleyRequest request = new VolleyRequest(activity, mQueue);
             request.setTag(getClass().getName());
-            JSONObject jsonObject=request.getJsonParam();
+            JSONObject jsonObject = request.getJsonParam();
             request.doGet(HttpConstant.SHARE_WEB, jsonObject, new HttpListener<Object>() {
                 @Override
                 protected void onResponse(Object o) {
@@ -273,8 +292,8 @@ public class LoginPresenter extends BasePresenter {
         }
     });
 
-    public void onDestory(){
+    public void onDestory() {
         handler.removeCallbacksAndMessages(null);
-        handler=null;
+        handler = null;
     }
 }

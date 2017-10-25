@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.DiscolorButton;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
@@ -20,6 +22,8 @@ import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.RegisterPresenter;
+import com.library.base.http.VarConstant;
+import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +38,7 @@ import butterknife.OnClick;
 public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
+    @BindView(R.id.tv_warning) TextView tvWarning;
     @BindView(R.id.edt_phone) public FunctionEditText edtPhone;
     @BindView(R.id.edt_pwd) public FunctionEditText edtPwd;
     @BindView(R.id.db_register) public DiscolorButton dbRegister;
@@ -62,7 +67,19 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(View v) {
                 if (step == 0) {
                     //请求动态密码
-                    presenter.requestPwd();
+                    LoginUtils.requestCode(presenter, VarConstant.CODE_REGISTER, true, edtPhone.getEdtText(), presenter.getClass()
+                            .getName(), new ObserverData() {
+
+                        @Override
+                        public void callback(Object o) {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
                 }
             }
         });
@@ -78,10 +95,24 @@ public class RegisterActivity extends BaseActivity {
                 if (editTextValidator.validate()) {
                     if (step == 0) {
                         //进行下一步设置密码
-                        step = 1;
-                        initStepTwo();
+                        LoginUtils.verifyCode(presenter, VarConstant.CODE_REGISTER, true, edtPhone.getEdtText(), edtPwd.getEdtText(),
+                                presenter.getClass().getName(), new ObserverData() {
+
+                                    @Override
+                                    public void callback(Object o) {
+                                        step = 1;
+                                        initStepTwo();
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        ToastView.makeText3(getContext(), e == null ? "验证失败，请重试" : e.getMessage());
+                                    }
+                                });
+
                     } else {
                         // TODO: 2017/10/13  完成注册
+                        presenter.register();
                     }
                 }
                 break;
@@ -132,6 +163,7 @@ public class RegisterActivity extends BaseActivity {
      */
     private void restoreStepOne() {
         step = 0;
+        tvWarning.setVisibility(View.GONE);
         JSONObject stepOneJson = presenter.getStepOneJson();
         edtPhone.setEdtText(stepOneJson.getString("phone"));
         edtPhone.setHintText(stepOneJson.getString("phone_hint"));
@@ -148,12 +180,13 @@ public class RegisterActivity extends BaseActivity {
      */
     private void initStepTwo() {
         presenter.saveStepOne();//保存当前状态
+        tvWarning.setVisibility(View.VISIBLE);
         edtPwd.setType(3);
         edtPwd.reflash();
         edtPhone.setEdtText("");
         edtPhone.setHintText("设置昵称");
         edtPwd.setEdtText("");
-        edtPwd.setHintText("设置密码(6-16位字母、数字和符号)");
+        edtPwd.setHintText("设置密码");
         dbRegister.setText("完成注册");
 
         editTextValidator = new EditTextValidator(this)

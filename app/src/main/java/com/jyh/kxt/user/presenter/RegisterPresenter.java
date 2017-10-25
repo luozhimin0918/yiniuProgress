@@ -6,11 +6,18 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.RegisterActivity;
+import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
+import com.library.base.http.VolleyRequest;
+import com.library.widget.window.ToastView;
 
 /**
  * 项目名:KxtProfessional
@@ -79,4 +86,27 @@ public class RegisterPresenter extends BasePresenter {
             return false;
         }
     });
+
+    public void register() {
+        VolleyRequest request=new VolleyRequest(mContext,mQueue);
+        request.setTag(getClass().getName());
+        JSONObject jsonParam = request.getJsonParam();
+
+        jsonParam.put(VarConstant.HTTP_PHONE, stepOneJson.getString("phone"));
+        jsonParam.put(VarConstant.HTTP_USERNAME,activity.edtPhone.getEdtText());
+        jsonParam.put(VarConstant.HTTP_PWD,activity.edtPwd.getEdtText());
+
+        request.doPost(HttpConstant.USER_REGISTER, jsonParam, new HttpListener<UserJson>() {
+            @Override
+            protected void onResponse(UserJson o) {
+
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                ToastView.makeText3(mContext,error==null?"注册失败，请重试":error.getMessage());
+            }
+        });
+    }
 }

@@ -30,6 +30,7 @@ public class VarConstant {
     public static final String HTTP_USERNAME = "username";
     public static final String HTTP_PWD = "password";
     public static final String HTTP_EMAIL = "email";
+    public static final String HTTP_PHONE = "phone";
     public static final String HTTP_SEX = "sex";
     public static final String HTTP_AVATAR = "avatar";
     public static final String HTTP_PROVINCE = "province";
@@ -256,9 +257,18 @@ public class VarConstant {
     /**
      * 功能输入框类型
      */
-    public static final int TYPE_FEDT_DEFALUT=0;//文本-删除按钮
-    public static final int TYPE_FEDT_CODE=1;//文本-删除按钮-验证码
-    public static final int TYPE_FEDT_TEXT=2;//文本-删除按钮-文本
-    public static final int TYPE_FEDT_IMAGE=3;//文本-删除按钮-图片
-    public static final int TYPE_FEDT_IMAGE_TEXT=4;//文本-删除按钮-图片-文本
+    public static final int TYPE_FEDT_DEFALUT = 0;//文本-删除按钮
+    public static final int TYPE_FEDT_CODE = 1;//文本-删除按钮-验证码
+    public static final int TYPE_FEDT_TEXT = 2;//文本-删除按钮-文本
+    public static final int TYPE_FEDT_IMAGE = 3;//文本-删除按钮-图片
+    public static final int TYPE_FEDT_IMAGE_TEXT = 4;//文本-删除按钮-图片-文本
+
+    /**
+     * 验证码类型
+     * register/bind/verify/general
+     */
+    public static final String CODE_REGISTER = "register";//注册
+    public static final String CODE_BIND = "bind";//绑定
+    public static final String CODE_VERIFY = "verify";//换绑
+    public static final String CODE_GENERAL = "general";//登录
 }
