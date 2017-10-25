@@ -48,7 +48,7 @@ public class EmoticonReplaceTextView extends TextView {
                     continue;
                 }
 
-                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(emoJeName);
+                EmojeBean emoJeBean = EmoJeUtil.getInstance().getEmoJeBean(getContext(),emoJeName);
                 if (emoJeBean != null) { //是否本地存在这个EmoJe表情
                     int matcherStart = matcher.start() - matcherContentLength;
                     int matcherEnd = matcher.end() - matcherContentLength;

@@ -1,6 +1,7 @@
 package com.jyh.kxt.index.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.net.http.LoggingEventHandler;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +38,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.huawei.hms.api.ConnectionResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.api.HuaweiApiClient;
 import com.huawei.hms.support.api.client.PendingResult;
 import com.huawei.hms.support.api.client.ResultCallback;
@@ -115,6 +118,8 @@ import cn.jpush.android.api.JPushInterface;
 import cn.magicwindow.MLinkAPIFactory;
 import cn.magicwindow.mlink.annotation.MLinkDefaultRouter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static com.huawei.hms.activity.BridgeActivity.EXTRA_RESULT;
 
 /**
  * 主界面
@@ -741,6 +746,30 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         if (currentFragment != null) {
             currentFragment.onActivityResult(requestCode, resultCode, data);
         }
+
+
+        if (requestCode == REQUEST_HMS_RESOLVE_ERROR) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                int result = data.getIntExtra(EXTRA_RESULT, 0);
+
+                if (result == ConnectionResult.SUCCESS) {
+                    Log.i(TAG, "错误成功解决");
+                    if (!huaweiApiClient.isConnecting() && !huaweiApiClient.isConnected()) {
+                        huaweiApiClient.connect();
+                    }
+                } else if (result == ConnectionResult.CANCELED) {
+                    Log.i(TAG, "解决错误过程被用户取消");
+                } else if (result == ConnectionResult.INTERNAL_ERROR) {
+                    Log.i(TAG, "发生内部错误，重试可以解决");
+                    //开发者可以在此处重试连接华为移动服务等操作，导致失败的原因可能是网络原因等
+                } else {
+                    Log.i(TAG, "未知返回码");
+                }
+            } else {
+                Log.i(TAG, "调用解决方案发生错误");
+            }
+        }
     }
 
     private long baseTime;
@@ -1036,6 +1065,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
      * 绑定推送服务
      */
     // FixKxt: 提出人:Mr'Dai  ->  描述: 强制只开启一个推送管道
+
+    private static final int REQUEST_HMS_RESOLVE_ERROR = 1000;
+
     private void bindPushService() {
         //推送绑定
         String system = PhoneInfo.getSystem();
@@ -1070,7 +1102,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                             tokenResult.setResultCallback(new ResultCallback<TokenResult>() {
                                 @Override
                                 public void onResult(TokenResult result) {
-
+                                    Log.e(TAG, "onResult: " + result);
                                 }
                             });
 
@@ -1079,13 +1111,29 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
                         @Override
                         public void onConnectionSuspended(int i) {
-                            Log.e(TAG, "onConnectionSuspended: 华为平台连接成功");
+                            Log.i(TAG, "HuaweiApiClient 连接断开");
                         }
                     })
                     .addOnConnectionFailedListener(new HuaweiApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
                             Log.e(TAG, "onConnectionFailed: 华为平台连接失败");
+
+                            if (HuaweiApiAvailability.getInstance().isUserResolvableError(connectionResult.getErrorCode())) {
+                                final int errorCode = connectionResult.getErrorCode();
+                                new Handler(getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 此方法必须在主线程调用, xxxxxx.this 为当前界面的activity
+                                        HuaweiApiAvailability.getInstance().resolveError(MainActivity.this,
+                                                errorCode,
+                                                REQUEST_HMS_RESOLVE_ERROR);
+                                    }
+                                });
+                            } else {
+                                //其他错误码请参见开发指南或者API文档
+                            }
+
                         }
                     })
                     .build();
