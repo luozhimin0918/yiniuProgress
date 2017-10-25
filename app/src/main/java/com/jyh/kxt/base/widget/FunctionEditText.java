@@ -1,6 +1,7 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -40,7 +41,7 @@ public class FunctionEditText extends LinearLayout {
 
     private LinearLayout topLayout;//顶部布局(主体)
     private View bottomLine;//底线
-    private EditText edt;//输入框
+    public EditText edt;//输入框
     private LinearLayout clearBtn;//删除按钮
     private LinearLayout functionImgBtn;//功能按钮
     private LinearLayout functionTxtBtn;//功能按钮
@@ -689,8 +690,8 @@ public class FunctionEditText extends LinearLayout {
         if (errorInfo != null && !errorInfo.trim().equals("")) {
             isError = true;
             edt.setText("");
-            edt.setHintTextColor(errorColor);
             edt.setHint(errorInfo);
+            edt.setHintTextColor(errorColor);
         }
     }
 
@@ -706,9 +707,6 @@ public class FunctionEditText extends LinearLayout {
                 clearBtn.setVisibility(GONE);
                 return;
             }
-
-            edt.setHintTextColor(edtHintColor);
-            edt.setHint(hintText);
             isError = false;
 
             if (clearShowWhenAll) {
@@ -723,8 +721,11 @@ public class FunctionEditText extends LinearLayout {
         }
 
         @Override
-        public void afterTextChanged(Editable s) {
-
+        public void afterTextChanged(Editable editable) {
+            if (editable.toString().length() <= 0) {//check if length is equal to zero
+                edt.setHintTextColor(edtHintColor);
+                edt.setHint(hintText);
+            }
         }
     }
 }

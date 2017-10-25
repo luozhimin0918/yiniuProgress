@@ -91,8 +91,8 @@ public class EditTextValidator {
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
-                    super.afterTextChanged(s);
+                public void afterTextChanged(Editable editable) {
+                    super.afterTextChanged(editable);
                 }
             });
         }
