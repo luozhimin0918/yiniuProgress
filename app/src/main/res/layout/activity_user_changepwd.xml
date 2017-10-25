@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tl="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/line_color2"
+              android:background="@color/theme1"
               android:orientation="vertical"
     >
 
     <include layout="@layout/action_bar1"/>
 
-    <com.jyh.kxt.base.widget.PwdEditText
-        android:id="@+id/edt_pwd_old"
-        style="@style/PWDEditTextSize"
-        android:layout_marginTop="@dimen/forget_margin3"
-        app:hint="请输入旧密码"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        >
 
-    <com.jyh.kxt.base.widget.PwdEditText
-        android:id="@+id/edt_pwd_new"
-        style="@style/PWDEditTextSize"
-        android:layout_marginTop="@dimen/forget_margin4"
-        app:hint="请输入新密码"/>
 
-    <com.jyh.kxt.base.widget.PwdEditText
-        android:id="@+id/edt_pwd_re"
-        style="@style/PWDEditTextSize"
-        android:layout_marginTop="@dimen/forget_margin4"
-        app:hint="确认新密码"/>
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd_old"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:functionEditRightPadding="27dp"
+            tl:functionEditTextFunctionColor="@color/font_color1"
+            tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+            tl:functionEditTextFunctionTxtLineColor="@color/line_color9"
+            tl:functionEditTextHint="旧密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color6"
+            tl:functionEditTextTextColor="@color/font_color64"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT"/>
 
-    <Button
-        android:id="@+id/btn_sure"
-        style="@style/BtnStyle2"
-        android:text="确定"/>
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd_new"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:functionEditRightPadding="27dp"
+            tl:functionEditTextFunctionColor="@color/font_color1"
+            tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+            tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
+            tl:functionEditTextHint="新密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color6"
+            tl:functionEditTextTextColor="@color/font_color64"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT"/>
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd_new_two"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:functionEditRightPadding="27dp"
+            tl:functionEditTextFunctionColor="@color/font_color1"
+            tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+            tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
+            tl:functionEditTextHint="确认密码"
+            tl:functionEditTextHintColor="@color/font_color9"
+            tl:functionEditTextLineColor="@color/line_color6"
+            tl:functionEditTextTextColor="@color/font_color64"
+            tl:functionEditTextTextSize="@dimen/content_font_size"
+            tl:functionEditTextType="DEFAULT"/>
+
+        <Button
+            android:id="@+id/btn_sure"
+            style="@style/BtnStyle2"
+            android:text="确定"/>
+    </LinearLayout>
+
 </LinearLayout>

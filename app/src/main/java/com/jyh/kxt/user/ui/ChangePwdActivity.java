@@ -16,6 +16,7 @@ import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
+import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.base.widget.PwdEditText;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
@@ -37,9 +38,9 @@ public class ChangePwdActivity extends BaseActivity {
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
-    @BindView(R.id.edt_pwd_old) PwdEditText edtPwdOld;
-    @BindView(R.id.edt_pwd_new) PwdEditText edtPwdNew;
-    @BindView(R.id.edt_pwd_re) PwdEditText edtPwdRe;
+    @BindView(R.id.edt_pwd_old) FunctionEditText edtPwdOld;
+    @BindView(R.id.edt_pwd_new) FunctionEditText edtPwdNew;
+    @BindView(R.id.edt_pwd_new_two) FunctionEditText edtPwdRe;
     @BindView(R.id.btn_sure) Button changeBtn;
 
     private EditText pwdOld, pwdNew, pwdRe;
@@ -57,12 +58,12 @@ public class ChangePwdActivity extends BaseActivity {
         pwdNew = getEditText(edtPwdNew);
         pwdRe = getEditText(edtPwdRe);
 
-//        editTextValidator = new EditTextValidator(getContext())
-//                .setButton(changeBtn)
-//                .add(new ValidationModel(getEditText(edtPwdOld), null, new UserNameValidation()))
-//                .add(new ValidationModel(getEditText(edtPwdNew), null, new PwdValidation()))
-//                .add(new ValidationModel(getEditText(edtPwdRe), null, new PwdValidation()))
-//                .execute();
+        editTextValidator = new EditTextValidator(getContext())
+                .setButton(changeBtn)
+                .add(new ValidationModel(edtPwdOld, new UserNameValidation()))
+                .add(new ValidationModel(edtPwdNew, new PwdValidation()))
+                .add(new ValidationModel(edtPwdRe, new PwdValidation()))
+                .execute();
 
     }
 
@@ -106,8 +107,8 @@ public class ChangePwdActivity extends BaseActivity {
         return map;
     }
 
-    private EditText getEditText(PwdEditText edt) {
-        return edt.getEditText();
+    private EditText getEditText(FunctionEditText edt) {
+        return edt.getEdt();
     }
 
     @Override

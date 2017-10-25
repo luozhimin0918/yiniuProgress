@@ -7,15 +7,21 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.FunctionEditText;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginActivity;
+import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -94,33 +100,39 @@ public class LoginPresenter extends BasePresenter {
 
         VolleyRequest request = new VolleyRequest(activity, mQueue);
         request.setTag(getClass().getName());
-//        request.doPost(HttpConstant.USER_LOGIN2, getMap(), new HttpListener<UserJson>() {
-//            @Override
-//            protected void onResponse(UserJson user) {
-//                errorNumAccount = 0;
-//                errorNumPhone = 0;
-//                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
-//                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-//                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-//                LoginUtils.login(activity, user);
-//            }
-//
-//            @Override
-//            protected void onErrorResponse(VolleyError error) {
-//                super.onErrorResponse(error);
-//                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (error == null ? "" :
-//                        error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
-//                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-//                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-//
-//                if (position == 0) {
-//                    errorNumAccount++;
-//                } else {
-//                    errorNumPhone++;
-//                }
-//                activity.showVerifyView(errorNumAccount, errorNumPhone);
-//            }
-//        });
+
+        JSONObject jsonObject=request.getJsonParam();
+        jsonObject.put("","");
+        jsonObject.put("","");
+        jsonObject.put("","");
+
+        request.doPost(HttpConstant.USER_LOGIN2, jsonObject, new HttpListener<UserJson>() {
+            @Override
+            protected void onResponse(UserJson user) {
+                errorNumAccount = 0;
+                errorNumPhone = 0;
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                LoginUtils.login(activity, user);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (error == null ? "" :
+                        error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+
+                if (position == 0) {
+                    errorNumAccount++;
+                } else {
+                    errorNumPhone++;
+                }
+                activity.showVerifyView(errorNumAccount, errorNumPhone);
+            }
+        });
     }
 
     private JSONObject accountSave = new JSONObject();
@@ -152,7 +164,7 @@ public class LoginPresenter extends BasePresenter {
             phoneSave.put("pwd_hint", edtPwd.getEdt().getHint());
             phoneSave.put("code", edtCode.getEdt().getText());
             phoneSave.put("code_hint", edtCode.getEdt().getHint());
-            phoneSave.put("pwd_status", edtPwd.isShowPwd());
+            phoneSave.put("pwd_status",true);
             phoneSave.put("pwd_function_txt", edtPwd.getFunctionText());
             phoneSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
         }
@@ -187,7 +199,7 @@ public class LoginPresenter extends BasePresenter {
             edtCode.setHintText(phoneSave.getString("code_hint"));
             edtPwd.setHintText(phoneSave.getString("pwd_hint"));
             edtPwd.setShowTxtLine(true);
-            edtPwd.setShowPwd(phoneSave.getBoolean("pwd_status") == null ? false : phoneSave.getBoolean("pwd_status"));
+            edtPwd.setShowPwd(true);
             edtPwd.setFunctionText(phoneSave.getString("pwd_function_txt"));
             edtPwd.setFunctionTextColor(phoneSave.getInteger("pwd_function_txt_color") == null ? 0 : phoneSave.getInteger
                     ("pwd_function_txt_color"));

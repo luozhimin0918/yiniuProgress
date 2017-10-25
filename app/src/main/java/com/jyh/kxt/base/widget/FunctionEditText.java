@@ -155,19 +155,19 @@ public class FunctionEditText extends LinearLayout {
         lineColor = array.getColor(R.styleable.FunctionEditText_functionEditTextLineColor, ContextCompat.getColor(context, R.color
                 .line_color));
         edtTextColor = array.getColor(R.styleable.FunctionEditText_functionEditTextTextColor, ContextCompat.getColor(context, R.color
-                .font_color1));
+                .font_color64));
         edtHintColor = array.getColor(R.styleable.FunctionEditText_functionEditTextHintColor, ContextCompat.getColor(context, R.color
-                .font_color2));
+                .font_color9));
         functionTextColor = array.getColor(R.styleable.FunctionEditText_functionEditTextFunctionColor, ContextCompat.getColor(context, R
                 .color.font_color8));
         functionTxtLineColor = array.getColor(R.styleable.FunctionEditText_functionEditTextFunctionTxtLineColor, ContextCompat.getColor
-                (context, R.color.line_color2));
+                (context, R.color.font_color9));
         functionFocusLineColor = array.getColor(R.styleable.FunctionEditText_functionFocusLineColor, ContextCompat.getColor(context, R
                 .color.font_color8));
         errorColor = array.getColor(R.styleable.FunctionEditText_functiobEditTextErrorColor, ContextCompat.getColor(context, R
                 .color.font_color11));
-        edtTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextTextSize, 42);
-        functionTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextFunctionTextSize, 36);
+        edtTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextTextSize, 32);
+        functionTextSize = array.getDimension(R.styleable.FunctionEditText_functionEditTextFunctionTextSize, 26);
 
         clearDrawble = array.getDrawable(R.styleable.FunctionEditText_functionEditTextClearDrawable);
         functionDrawble = array.getDrawable(R.styleable.FunctionEditText_functionEditTextFunctionDrawable);
@@ -205,6 +205,7 @@ public class FunctionEditText extends LinearLayout {
 
         edt.setText(edtText);
         edt.setHint(hintText);
+        edt.setSingleLine();
 
         edt.setTextColor(edtTextColor);
         edt.setHintTextColor(edtHintColor);
@@ -335,10 +336,8 @@ public class FunctionEditText extends LinearLayout {
         functionTxtBtn = new LinearLayout(context);
         functionTxtBtn.setOrientation(HORIZONTAL);
         functionTxtLine = new View(context);
-        LinearLayout.LayoutParams lineParams = new LayoutParams(SystemUtil.dp2px(context, 1), ViewGroup.LayoutParams.MATCH_PARENT);
-        lineParams.leftMargin = 20;
-        lineParams.bottomMargin = 10;
-        lineParams.topMargin = 10;
+        LinearLayout.LayoutParams lineParams = new LayoutParams(SystemUtil.dp2px(context, 1), 35);
+        lineParams.gravity=Gravity.CENTER_VERTICAL;
         functionTxtLine.setBackgroundColor(functionTxtLineColor);
         functionTxtLine.setLayoutParams(lineParams);
         functionTxtBtn.addView(functionTxtLine);
