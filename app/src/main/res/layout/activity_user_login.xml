@@ -49,6 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
                     android:paddingRight="@dimen/navigationBar2ImageWidth"
                     tl:tl_indicator_color="@color/white"
                     tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
@@ -59,7 +60,7 @@
                     tl:tl_tab_padding="10dp"
                     tl:tl_textSelectColor="@color/translucent_white"
                     tl:tl_textUnselectColor="@color/white"
-                    tl:tl_textsize="@dimen/describe_font_size2"
+                    tl:tl_textsize="@dimen/content_font_size2"
                     />
 
             </FrameLayout>
@@ -75,24 +76,30 @@
                     android:id="@+id/edt_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/lr_edt_height"
-                    android:layout_marginTop="@dimen/lr_content_marginTop"
+                    android:layout_marginTop="40dp"
                     tl:functionEditTextHint="请输入账号"
                     tl:functionEditTextHintColor="@color/font_color9"
-                    tl:functionEditTextLineColor="@color/line_color3"
-                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextLineColor="@color/line_color6"
+                    tl:functionEditTextTextColor="@color/font_color64"
                     tl:functionEditTextTextSize="@dimen/content_font_size"
+                    tl:functionEditTextFunctionColor="@color/font_color1"
+                    tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+                    tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
                     tl:functionEditTextType="DEFAULT"/>
 
                 <com.jyh.kxt.base.widget.FunctionEditText
                     android:id="@+id/edt_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/lr_edt_height"
+                    android:layout_marginTop="20dp"
                     tl:functionEditTextFunction="忘记密码"
-                    tl:functionEditTextFunctionTextSize="@dimen/describe_font_size3"
+                    tl:functionEditTextFunctionColor="@color/font_color1"
+                    tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+                    tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
                     tl:functionEditTextHint="请输入密码"
                     tl:functionEditTextHintColor="@color/font_color9"
-                    tl:functionEditTextLineColor="@color/line_color3"
-                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextLineColor="@color/line_color6"
+                    tl:functionEditTextTextColor="@color/font_color64"
                     tl:functionEditTextTextSize="@dimen/content_font_size"
                     tl:functionEditTextType="IMAGE_TEXT"/>
 
@@ -100,18 +107,22 @@
                     android:id="@+id/edt_code"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/lr_edt_height"
+                    android:layout_marginTop="20dp"
                     android:visibility="gone"
+                    tl:functionEditTextFunctionColor="@color/font_color1"
+                    tl:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+                    tl:functionEditTextFunctionTxtLineColor="@color/font_color9"
                     tl:functionEditTextHint="请输入验证码"
                     tl:functionEditTextHintColor="@color/font_color9"
-                    tl:functionEditTextLineColor="@color/line_color3"
-                    tl:functionEditTextTextColor="@color/font_color5"
+                    tl:functionEditTextLineColor="@color/line_color6"
+                    tl:functionEditTextTextColor="@color/font_color64"
                     tl:functionEditTextTextSize="@dimen/content_font_size"
                     tl:functionEditTextType="CHECK_CODE"/>
 
                 <com.jyh.kxt.base.custom.DiscolorButton
                     android:id="@+id/db_login"
                     style="@style/BtnStyle1"
-                    android:layout_marginTop="@dimen/login_marginTop"
+                    android:layout_marginTop="27dp"
                     android:text="登录"
                     />
 
@@ -120,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:text="新用户注册 >>>"
                     android:textColor="@color/font_color1"
                     android:textSize="@dimen/content_font_size"/>
