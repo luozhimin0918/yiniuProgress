@@ -155,6 +155,22 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 break;
         }
 
+        if (userInfo.getIs_set_email()) {
+            tvEmail.setText("修改邮箱");
+        } else {
+            tvEmail.setText("去绑定");
+        }
+        if (userInfo.getIs_set_phone()) {
+            tvPhone.setText("修改手机号");
+        } else {
+            tvPhone.setText("去绑定");
+        }
+        if (userInfo.getIs_set_password()) {
+            tvPwd.setText("修改密码");
+        } else {
+            tvPwd.setText("去设置");
+        }
+
         int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
         Glide.with(getContext())
                 .load(userInfo.getPicture())
@@ -297,17 +313,30 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 editUserInfoPresenter.showWork();
                 break;
             case R.id.rl_phone:
-                Intent phontIntent=new Intent(this,BindActivity.class);
-                phontIntent.putExtra(BindActivity.TYPE,BindActivity.TYPE_BIND_PHONE);
+                Intent phontIntent = new Intent(this, BindActivity.class);
+                if (LoginUtils.getUserInfo(this).getIs_set_phone()) {
+                    phontIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_PHONE);
+                } else {
+                    phontIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                }
                 startActivity(phontIntent);
                 break;
             case R.id.rl_email:
-                Intent emailIntent=new Intent(this,BindActivity.class);
-                emailIntent.putExtra(BindActivity.TYPE,BindActivity.TYPE_CHANGE_EMAIL);
+                Intent emailIntent = new Intent(this, BindActivity.class);
+                if (LoginUtils.getUserInfo(this).getIs_set_email()) {
+                    emailIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_EMAIL);
+                } else {
+                    emailIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_EMAIL);
+                }
                 startActivity(emailIntent);
                 break;
             case R.id.rl_pwd:
-                Intent intent=new Intent(new Intent(this,ChangePwdActivity.class));
+                Intent intent = new Intent(new Intent(this, ChangePwdActivity.class));
+                if (LoginUtils.getUserInfo(this).getIs_set_password()) {
+                    intent.putExtra(ChangePwdActivity.TYPE,ChangePwdActivity.TYPE_CHANGE);
+                } else {
+                    intent.putExtra(ChangePwdActivity.TYPE,ChangePwdActivity.TYPE_SET);
+                }
                 startActivity(intent);
                 break;
         }

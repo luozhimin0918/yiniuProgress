@@ -111,7 +111,6 @@ public class RegisterActivity extends BaseActivity {
                                 });
 
                     } else {
-                        // TODO: 2017/10/13  完成注册
                         presenter.register();
                     }
                 }
@@ -188,6 +187,7 @@ public class RegisterActivity extends BaseActivity {
         edtPwd.setEdtText("");
         edtPwd.setHintText("设置密码");
         dbRegister.setText("完成注册");
+        edtPhone.requestFocus();
 
         editTextValidator = new EditTextValidator(this)
                 .add(new ValidationModel(edtPhone, new UserNameValidation()))

@@ -12,6 +12,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.RegisterActivity;
 import com.library.base.http.HttpListener;
@@ -31,7 +32,7 @@ public class RegisterPresenter extends BasePresenter {
     @BindObject RegisterActivity activity;
 
     private JSONObject stepOneJson = new JSONObject();
-    private boolean canRequestPwd=true;//是否可以请求
+    private boolean canRequestPwd = true;//是否可以请求
 
     public RegisterPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -88,24 +89,25 @@ public class RegisterPresenter extends BasePresenter {
     });
 
     public void register() {
-        VolleyRequest request=new VolleyRequest(mContext,mQueue);
+        VolleyRequest request = new VolleyRequest(mContext, mQueue);
         request.setTag(getClass().getName());
         JSONObject jsonParam = request.getJsonParam();
 
         jsonParam.put(VarConstant.HTTP_PHONE, stepOneJson.getString("phone"));
-        jsonParam.put(VarConstant.HTTP_USERNAME,activity.edtPhone.getEdtText());
-        jsonParam.put(VarConstant.HTTP_PWD,activity.edtPwd.getEdtText());
+        jsonParam.put(VarConstant.HTTP_USERNAME, activity.edtPhone.getEdtText());
+        jsonParam.put(VarConstant.HTTP_PWD, activity.edtPwd.getEdtText());
 
         request.doPost(HttpConstant.USER_REGISTER, jsonParam, new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson o) {
-
+                LoginUtils.login(mContext, o);
+                activity.finish();
             }
 
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
-                ToastView.makeText3(mContext,error==null?"注册失败，请重试":error.getMessage());
+                ToastView.makeText3(mContext, error == null ? "注册失败，请重试" : error.getMessage());
             }
         });
     }

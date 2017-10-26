@@ -35,6 +35,11 @@ import butterknife.OnClick;
  */
 
 public class ChangePwdActivity extends BaseActivity {
+
+    public static final String TYPE = "type";
+    public static final int TYPE_SET = 1;//设置密码
+    public static final int TYPE_CHANGE = 2;//修改密码
+
     @BindView(R.id.iv_bar_break) ImageView ivBarBreak;
     @BindView(R.id.tv_bar_title) TextView tvBarTitle;
     @BindView(R.id.iv_bar_function) TextView ivBarFunction;
@@ -47,6 +52,8 @@ public class ChangePwdActivity extends BaseActivity {
     private VolleyRequest request;
     private EditTextValidator editTextValidator;
 
+    private int type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +64,8 @@ public class ChangePwdActivity extends BaseActivity {
         pwdOld = getEditText(edtPwdOld);
         pwdNew = getEditText(edtPwdNew);
         pwdRe = getEditText(edtPwdRe);
+
+        type=getIntent().getIntExtra(TYPE,TYPE_SET);
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(changeBtn)
