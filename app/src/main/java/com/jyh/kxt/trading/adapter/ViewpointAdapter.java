@@ -618,6 +618,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                     if (intentObj.commentState == 1) {
                         viewPointTradeBean.num_comment += 1;
                     }
+                    break;
                 }
             }
         }

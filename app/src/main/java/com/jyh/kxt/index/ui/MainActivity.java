@@ -1072,16 +1072,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         //推送绑定
         String system = PhoneInfo.getSystem();
         if (PhoneInfo.SYS_EMUI.equals(system)) {
-
-            try {
-                //杀死极光推送进程
-                JPushInterface.onKillProcess(this);
-                //关闭小米推送
-                MiPushClient.disablePush(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             /*
              * 华为推送代码
              */
@@ -1105,8 +1095,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                                     Log.e(TAG, "onResult: " + result);
                                 }
                             });
-
-
                         }
 
                         @Override
@@ -1119,7 +1107,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         public void onConnectionFailed(ConnectionResult connectionResult) {
                             Log.e(TAG, "onConnectionFailed: 华为平台连接失败");
 
-                            if (HuaweiApiAvailability.getInstance().isUserResolvableError(connectionResult.getErrorCode())) {
+                            // FixKxt: 提出人:Mr'Dai->是否提示推送渠道升级?
+                            /*if (HuaweiApiAvailability.getInstance().isUserResolvableError(connectionResult.getErrorCode())) {
                                 final int errorCode = connectionResult.getErrorCode();
                                 new Handler(getMainLooper()).post(new Runnable() {
                                     @Override
@@ -1132,7 +1121,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                                 });
                             } else {
                                 //其他错误码请参见开发指南或者API文档
-                            }
+                            }*/
 
                         }
                     })
@@ -1151,22 +1140,16 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             filter.addAction(HuaWeiPushReceiver.ACTION_UPDATEUI);
 
             registerReceiver(huaWeiToKentReceiver, filter);
-        } else if (PhoneInfo.SYS_MIUI.equals(system)) {
+
 
             try {
-                //杀死极光推送进程
                 JPushInterface.onKillProcess(this);
-                //关闭小米推送
-                if (huaweiApiClient != null) {
-                    huaweiApiClient.disconnect();
-                }
+                MiPushClient.disablePush(this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            /*
-             * 小米推送
-             */
+        } else if (PhoneInfo.SYS_MIUI.equals(system)) {
             LoggerInterface newLogger = new LoggerInterface() {
                 @Override
                 public void setTag(String tag) {
@@ -1192,11 +1175,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 MiPushClient.setAlias(this, userInfo.getUid(), null);
             }
 
-        } else {
             try {
-                //杀死极光推送进程
-                MiPushClient.disablePush(this);
-                //关闭小米推送
+                JPushInterface.onKillProcess(this);
                 if (huaweiApiClient != null) {
                     huaweiApiClient.disconnect();
                 }
@@ -1204,6 +1184,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 e.printStackTrace();
             }
 
+        } else {
             /*
              * 推送相关代码
              */
@@ -1214,6 +1195,16 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             if (userInfo != null) {
                 JPushInterface.setAlias(this, 1, userInfo.getUid());
             }
+
+            try {
+                MiPushClient.disablePush(this);
+                if (huaweiApiClient != null) {
+                    huaweiApiClient.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

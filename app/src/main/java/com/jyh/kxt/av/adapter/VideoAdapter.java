@@ -66,14 +66,12 @@ public class VideoAdapter extends BaseListAdapter<VideoListJson> {
     private Context mContext;
     private List<VideoListJson> list;
     private LayoutInflater mInflater;
-    private HashMap<String, Bitmap> advertBitmap;
 
     public VideoAdapter(Context context, List<VideoListJson> list) {
         super(list);
         this.mContext = context;
         this.list = list;
         mInflater = LayoutInflater.from(mContext);
-        advertBitmap = new HashMap<>();
         try {
             String config = SPUtils.getString(context, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson mainInitJson = JSON.parseObject(config, MainInitJson.class);

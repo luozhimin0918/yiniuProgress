@@ -48,6 +48,9 @@ public class EventBusClass {
     public static final int EVENT_COIN_SIGN = 27;//签到状态
     public static final int EVENT_COIN_TASK = 28;//任务完成状态
 
+    public static final int EVENT_VIDEO_ZAN = 29;
+    public static final int EVENT_VIEW_POINT_ZAN = 30;
+
 
     public EventBusClass(int fromCode, Object intentObj) {
         this.fromCode = fromCode;

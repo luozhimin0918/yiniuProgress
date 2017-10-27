@@ -27,6 +27,7 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
+import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
@@ -60,7 +61,8 @@ import butterknife.ButterKnife;
  */
 
 public class VideoDetailPresenter extends BasePresenter {
-    @BindObject public VideoDetailActivity videoDetailActivity;
+    @BindObject
+    public VideoDetailActivity videoDetailActivity;
 
     private LinearLayout headView;
     private CommentAdapter commentAdapter;
@@ -330,7 +332,7 @@ public class VideoDetailPresenter extends BasePresenter {
 //                int headerViewsCount = videoDetailActivity.rvMessage.getRefreshableView().getHeaderViewsCount();
 //                videoDetailActivity.rvMessage.getRefreshableView().smoothScrollToPosition(headerViewsCount);
                 int mHeaderView = headView.getHeight();
-                videoDetailActivity.rvMessage.getRefreshableView().smoothScrollBy(mHeaderView,100);
+                videoDetailActivity.rvMessage.getRefreshableView().smoothScrollBy(mHeaderView, 100);
             }
 
             @Override
@@ -491,6 +493,9 @@ public class VideoDetailPresenter extends BasePresenter {
                                 }
                                 videoDetailActivity.tvZanCount.setVisibility(View.VISIBLE);
                                 videoDetailActivity.tvZanCount.setText(addDianZanCount);
+
+                                EventBusClass eventBusClass = new EventBusClass(EventBusClass.EVENT_VIDEO_ZAN, videoDetailBean.getId());
+                                EventBus.getDefault().post(eventBusClass);
                             }
 
                             @Override

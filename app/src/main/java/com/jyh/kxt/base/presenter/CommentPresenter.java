@@ -2,9 +2,12 @@ package com.jyh.kxt.base.presenter;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +34,12 @@ import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.trading.ui.PublishActivity;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.BindActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.util.LogUtil;
 import com.library.util.SystemUtil;
@@ -319,8 +326,14 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         if (!loginEd) {
             mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
-
         }
+
+        boolean toBindPhoneInfo = LoginUtils.isToBindPhoneInfo(mContext);
+        if(toBindPhoneInfo){
+            return;
+        }
+
+
         if (replyMessagePopup == null) {
 
             replyMessagePopup = new PopupUtil((Activity) mContext);
@@ -354,7 +367,7 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
         replyMessagePopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         replyMessagePopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-        if(!isAdjustEmoJeView){//如果不自动调解大小 则软键盘顶起输入框
+        if (!isAdjustEmoJeView) {//如果不自动调解大小 则软键盘顶起输入框
             replyMessagePopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         }
         InputMethodManager imm = (InputMethodManager) mBaseActivity.getSystemService(Service.INPUT_METHOD_SERVICE);

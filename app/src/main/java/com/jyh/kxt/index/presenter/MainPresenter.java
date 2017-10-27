@@ -705,7 +705,7 @@ public class MainPresenter extends BasePresenter {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialog.Builder(mContext)
+                        new AlertDialog.Builder(mContext,ThemeUtil.getAlertTheme(mContext))
                                 .setMessage(versionJson.getEvaluation_tip())
                                 .setNegativeButton("是", new DialogInterface.OnClickListener() {
                                     @Override
@@ -727,7 +727,7 @@ public class MainPresenter extends BasePresenter {
                                     }
                                 }).show();
                     }
-                }, 4000);
+                }, 8000);
                 return;
             }
         }

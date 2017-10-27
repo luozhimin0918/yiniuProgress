@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.adapter.VideoAdapter;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.presenter.VideoItemPresenter;
 import com.jyh.kxt.base.BaseFragment;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.library.bean.EventBusClass;
+import com.library.util.SPUtils;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
@@ -18,6 +20,8 @@ import com.library.widget.handmark.PullToRefreshListView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -28,8 +32,10 @@ import butterknife.BindView;
 public class VideoItemFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener, PullToRefreshListView
         .OnRefreshListener2 {
 
-    @BindView(R.id.plv_content) public PullToRefreshListView plvContent;
-    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
+    @BindView(R.id.plv_content)
+    public PullToRefreshListView plvContent;
+    @BindView(R.id.pl_rootView)
+    public PageLoadLayout plRootView;
 
     private String name;
     private VideoItemPresenter videoItemPresenter;
@@ -61,6 +67,26 @@ public class VideoItemFragment extends BaseFragment implements PageLoadLayout.On
             VideoAdapter videoAdapter = videoItemPresenter.videoAdapter;
             if (videoAdapter != null) {
                 videoAdapter.notifyDataSetChanged();
+            }
+        } else if (eventBus.fromCode == EventBusClass.EVENT_VIDEO_ZAN) {
+            String videoId = (String) eventBus.intentObj;
+
+            VideoAdapter videoAdapter = videoItemPresenter.videoAdapter;
+            List<VideoListJson> videoList = videoAdapter.getData();
+            for (VideoListJson videoListJson : videoList) {
+                if (videoId.equals(videoListJson.getId())) {
+                    videoListJson.setIsGood(true);
+                    int numGood;
+                    try {
+                        numGood = Integer.parseInt(videoListJson.getNum_good()) + 1;
+                    } catch (NumberFormatException e) {
+                        numGood = 0;
+                    }
+                    videoListJson.setNum_good(String.valueOf(numGood));
+                    SPUtils.save2(getContext(), SPUtils.DZ_NAME, videoListJson.getId(), true);
+                    videoAdapter.notifyDataSetChanged();
+                    return;
+                }
             }
         }
     }

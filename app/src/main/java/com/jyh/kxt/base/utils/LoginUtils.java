@@ -2,6 +2,9 @@ package com.jyh.kxt.base.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -12,7 +15,10 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.BindActivity;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
@@ -114,17 +120,17 @@ public class LoginUtils {
         }
     }
 
-    public static void requestCode(BasePresenter context, String type, boolean isPhone, String user, String tag , final ObserverData observerData){
-        VolleyRequest volleyRequest=new VolleyRequest(context.mContext,context.mQueue);
+    public static void requestCode(BasePresenter context, String type, boolean isPhone, String user, String tag, final ObserverData observerData) {
+        VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
         volleyRequest.setTag(tag);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        if(isPhone){
-            jsonParam.put("phone",user);
-        }else{
-            jsonParam.put("email",user);
+        if (isPhone) {
+            jsonParam.put("phone", user);
+        } else {
+            jsonParam.put("email", user);
         }
-        jsonParam.put("type",type);
+        jsonParam.put("type", type);
 
         volleyRequest.doPost(HttpConstant.USER_CODE_REQUEST, jsonParam, new HttpListener<Object>() {
             @Override
@@ -140,18 +146,18 @@ public class LoginUtils {
         });
     }
 
-    public static void verifyCode(BasePresenter context, String type, boolean isPhone, String user, String code, String tag, final ObserverData observerData){
-        VolleyRequest volleyRequest=new VolleyRequest(context.mContext,context.mQueue);
+    public static void verifyCode(BasePresenter context, String type, boolean isPhone, String user, String code, String tag, final ObserverData observerData) {
+        VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
         volleyRequest.setTag(tag);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        if(isPhone){
-            jsonParam.put("phone",user);
-        }else{
-            jsonParam.put("email",user);
+        if (isPhone) {
+            jsonParam.put("phone", user);
+        } else {
+            jsonParam.put("email", user);
         }
-        jsonParam.put("type",type);
-        jsonParam.put("code",code);
+        jsonParam.put("type", type);
+        jsonParam.put("code", code);
 
         volleyRequest.doPost(HttpConstant.USER_CODE_VERIFY, jsonParam, new HttpListener<Object>() {
             @Override
@@ -165,6 +171,40 @@ public class LoginUtils {
                 observerData.onError(error);
             }
         });
+    }
+
+    public static boolean isToBindPhoneInfo(final Context mContext) {
+        // FixKxt: 提出人:Mr'Dai-> 判断手机号码是否已经绑定过了
+        UserJson userInfo = getUserInfo(mContext);
+        if (userInfo == null) {
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+            return true;
+        }
+        if (userInfo.getIs_set_phone() == null ||
+                !userInfo.getIs_set_phone()) {
+
+            new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
+                    .setPositiveButton("取消",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                    .setNegativeButton("绑定手机",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent bindIntent = new Intent(mContext, BindActivity.class);
+                                    bindIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                                    mContext.startActivity(bindIntent);
+                                }
+                            })
+                    .setTitle("提示")
+                    .setMessage("根据网络安全法对互联网实名制的要求,请您尽快完成手机号验证")
+                    .show();
+            return true;
+        }
+        return false;
     }
 
 }
