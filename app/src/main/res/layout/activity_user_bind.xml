@@ -15,6 +15,7 @@
         android:layout_marginTop="@dimen/forget_margin1"
         android:gravity="center"
         android:paddingLeft="@dimen/forget_padding1"
+        android:paddingRight="@dimen/forget_padding1"
         android:text="请先验证身份"
         android:textColor="@color/font_color9"
         android:textSize="@dimen/content_font_size"
@@ -24,7 +25,8 @@
         android:id="@+id/ll_step1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <com.jyh.kxt.base.widget.FunctionEditText
             android:id="@+id/edt_email"
@@ -50,9 +52,12 @@
             app:functionEditRightPadding="30dp"
             app:functionEditTextFunction="获取动态码"
             app:functionEditTextFunctionColor="@color/font_color1"
+            app:functionEditTextFunctionTextSize="@dimen/describe_font_size2"
+            app:functionEditTextFunctionTxtLineColor="@color/font_color9"
             app:functionEditTextHint="请输入动态密码"
             app:functionEditTextHintColor="@color/font_color9"
             app:functionEditTextLineColor="@color/line_color3"
+            app:functionEditTextShowTxtLine="true"
             app:functionEditTextTextColor="@color/font_color5"
             app:functionEditTextTextSize="@dimen/content_font_size"
             app:functionEditTextType="TEXT"
@@ -60,21 +65,43 @@
 
     </LinearLayout>
 
-    <com.jyh.kxt.base.widget.FunctionEditText
-        android:id="@+id/edt_pwd2"
+    <LinearLayout
+        android:id="@+id/ll_setPwd"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="25dp"
-        app:functionEditRightPadding="30dp"
-        app:functionEditTextHint="请输入注册的手机号或邮箱"
-        app:functionEditTextHintColor="@color/font_color9"
-        app:functionEditTextLineColor="@color/line_color3"
-        app:functionEditTextTextColor="@color/font_color5"
-        app:functionEditTextTextSize="@dimen/content_font_size"
-        app:functionEditTextType="DEFAULT"
-        android:visibility="gone"
-        />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd1"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="20dp"
+            app:functionEditRightPadding="30dp"
+            app:functionEditTextHint="输入密码"
+            app:functionEditTextHintColor="@color/font_color9"
+            app:functionEditTextLineColor="@color/line_color6"
+            app:functionEditTextTextColor="@color/font_color64"
+            app:functionEditTextTextSize="@dimen/content_font_size"
+            app:functionEditTextType="IMAGE"
+            />
+
+        <com.jyh.kxt.base.widget.FunctionEditText
+            android:id="@+id/edt_pwd2"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="20dp"
+            app:functionEditRightPadding="30dp"
+            app:functionEditTextHint="确认密码"
+            app:functionEditTextHintColor="@color/font_color9"
+            app:functionEditTextLineColor="@color/line_color6"
+            app:functionEditTextTextColor="@color/font_color64"
+            app:functionEditTextTextSize="@dimen/content_font_size"
+            app:functionEditTextType="IMAGE"
+            />
+
+    </LinearLayout>
 
     <com.jyh.kxt.base.custom.DiscolorButton
         android:id="@+id/btn_send"

@@ -1,6 +1,7 @@
 package com.jyh.kxt.user.json;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.library.util.RegexValidateUtil;
 
 /**
  * 项目名:Kxt
@@ -38,9 +39,9 @@ public class UserJson {
     private int is_unread_msg;
 
     private String login_type;//qq/sina/wx/password/message//登录方式
-    private Boolean is_set_password;//是否设置密码
-    private Boolean is_set_phone;//是否绑定手机
-    private Boolean is_set_email;//是否绑定邮箱
+    private String is_set_password;//是否设置密码
+    private String is_set_phone;//是否绑定手机
+    private String is_set_email;//是否绑定邮箱
     private String phone;   //已绑定的手机号，未绑定时无该参数或者值为空
 
     public UserJson() {
@@ -174,35 +175,47 @@ public class UserJson {
         this.login_type = login_type;
     }
 
-    public Boolean getIs_set_password() {
-        return is_set_password==null?false:is_set_password;
-    }
-
-    public void setIs_set_password(Boolean is_set_password) {
-        this.is_set_password = is_set_password;
-    }
-
-    public Boolean getIs_set_phone() {
-        return is_set_phone==null?false:is_set_phone;
-    }
-
-    public void setIs_set_phone(Boolean is_set_phone) {
-        this.is_set_phone = is_set_phone;
-    }
-
-    public Boolean getIs_set_email() {
-        return is_set_email==null?false:is_set_email;
-    }
-
-    public void setIs_set_email(Boolean is_set_email) {
-        this.is_set_email = is_set_email;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getIs_set_password() {
+        return is_set_password;
+    }
+
+    public void setIs_set_password(String is_set_password) {
+        this.is_set_password = is_set_password;
+    }
+
+    public String getIs_set_phone() {
+        return is_set_phone;
+    }
+
+    public void setIs_set_phone(String is_set_phone) {
+        this.is_set_phone = is_set_phone;
+    }
+
+    public String getIs_set_email() {
+        return is_set_email;
+    }
+
+    public void setIs_set_email(String is_set_email) {
+        this.is_set_email = is_set_email;
+    }
+
+    public boolean isSetEmail() {
+        return !RegexValidateUtil.isEmpty(is_set_email) && "1".equals(is_set_email);
+    }
+
+    public boolean isSetPwd() {
+        return !RegexValidateUtil.isEmpty(is_set_password) && "1".equals(is_set_password);
+    }
+
+    public boolean isSetPhone() {
+        return !RegexValidateUtil.isEmpty(is_set_phone) && "1".equals(is_set_phone);
     }
 }

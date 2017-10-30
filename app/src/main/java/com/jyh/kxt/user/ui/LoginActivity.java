@@ -97,18 +97,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                     startActivity(intent);
                 } else {
                     //请求动态密码
-                    LoginUtils.requestCode(presenter, VarConstant.CODE_GENERAL, true, edtName.getEdtText(), presenter
-                            .getClass().getName(), new ObserverData() {
-                        @Override
-                        public void callback(Object o) {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
+                    presenter.requestPwd();
                 }
             }
         });
@@ -118,7 +107,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
     public void onEvent(EventBusClass eventBus) {
         if (eventBus.fromCode == EventBusClass.EVENT_LOGIN) {
             setResult(Activity.RESULT_OK);
-            onBackPressed();
+            finish();
         }
     }
 

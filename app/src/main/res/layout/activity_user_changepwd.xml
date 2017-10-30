@@ -70,10 +70,23 @@
             tl:functionEditTextTextSize="@dimen/content_font_size"
             tl:functionEditTextType="IMAGE"/>
 
-        <Button
+        <com.jyh.kxt.base.custom.DiscolorButton
             android:id="@+id/btn_sure"
-            style="@style/BtnStyle2"
-            android:text="确定"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lr_btn_height"
+            android:layout_marginLeft="54dp"
+            android:layout_marginRight="54dp"
+            android:layout_marginTop="27dp"
+            android:gravity="center"
+            android:text="确定"
+            android:textSize="@dimen/content_font_size2"
+            tl:clickBackground="@color/bg_click_color"
+            tl:clickFontColor="@color/font_click_color"
+            tl:cornerRadius="@dimen/btn_cornerRadius"
+            tl:defaultBackground="@color/bg_enable_color"
+            tl:defaultFontColor="@color/font_enable_color"
+            tl:disabledBackground="@color/line_color3"
+            tl:disabledFontColor="@color/font_disable_color"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -100,59 +100,34 @@ public class LoginPresenter extends BasePresenter {
         snackBar.addIconProgressLoading(0, true, false);
         snackBar.show();
 
-        if (position == 0) {
-            VolleyRequest request = new VolleyRequest(activity, mQueue);
-            request.setTag(getClass().getName());
+        LoginUtils.requestLogin(this, activity.edtName.getEdtText(), activity.edtPwd.getEdtText(), position == 0 ? VarConstant
+                .LOGIN_TYPE_DEFAULT : VarConstant.LOGIN_TYPE_CODE, getClass().getName(), new ObserverData<UserJson>() {
 
-            JSONObject jsonObject = request.getJsonParam();
-            jsonObject.put(VarConstant.HTTP_USERNAME, activity.edtName.getEdtText());
-            jsonObject.put(VarConstant.HTTP_PWD, activity.edtPwd.getEdtText());
-            jsonObject.put(VarConstant.HTTP_TYPE, position == 0 ? "password" : "message");
+            @Override
+            public void callback(UserJson userJson) {
+                errorNumAccount = 0;
+                errorNumPhone = 0;
+                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                LoginUtils.login(activity, userJson);
+            }
 
-            request.doPost(HttpConstant.USER_LOGIN2, jsonObject, new HttpListener<UserJson>() {
-                @Override
-                protected void onResponse(UserJson user) {
-                    errorNumAccount = 0;
-                    errorNumPhone = 0;
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-                    LoginUtils.login(activity, user);
+            @Override
+            public void onError(Exception e) {
+                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (e == null ? "" :
+                        e.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
+                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
+                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+
+                if (position == 0) {
+                    errorNumAccount++;
+                } else {
+                    errorNumPhone++;
                 }
-
-                @Override
-                protected void onErrorResponse(VolleyError error) {
-                    super.onErrorResponse(error);
-                    snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (error == null ? "" :
-                            error.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
-                            .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                    .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
-
-                    if (position == 0) {
-                        errorNumAccount++;
-                    } else {
-                        errorNumPhone++;
-                    }
-                    activity.showVerifyView(errorNumAccount, errorNumPhone);
-                }
-            });
-        } else {
-            LoginUtils.verifyCode(this, VarConstant.CODE_GENERAL, true, activity.edtName.getEdtText(), activity.edtPwd.getEdtText(),
-                    getClass().getName(), new ObserverData() {
-
-
-                @Override
-                public void callback(Object o) {
-
-                }
-
-                @Override
-                public void onError(Exception e) {
-
-                }
-            });
-        }
-
+                activity.showVerifyView(errorNumAccount, errorNumPhone);
+            }
+        });
     }
 
     private JSONObject accountSave = new JSONObject();
@@ -250,20 +225,18 @@ public class LoginPresenter extends BasePresenter {
             message.arg1 = 60;
             message.what = 1;
             handler.sendMessage(message);
-            VolleyRequest request = new VolleyRequest(activity, mQueue);
-            request.setTag(getClass().getName());
-            JSONObject jsonObject = request.getJsonParam();
-            request.doGet(HttpConstant.SHARE_WEB, jsonObject, new HttpListener<Object>() {
-                @Override
-                protected void onResponse(Object o) {
+            LoginUtils.requestCode(this, VarConstant.CODE_GENERAL,activity.edtName.getEdtText(), getClass().getName(), new
+                    ObserverData() {
+                        @Override
+                        public void callback(Object o) {
 
-                }
+                        }
 
-                @Override
-                protected void onErrorResponse(VolleyError error) {
-                    super.onErrorResponse(error);
-                }
-            });
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
         }
     }
 

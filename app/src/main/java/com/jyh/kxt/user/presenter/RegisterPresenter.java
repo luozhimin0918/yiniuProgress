@@ -1,5 +1,6 @@
 package com.jyh.kxt.user.presenter;
 
+import android.app.usage.UsageEvents;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -11,6 +12,7 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
@@ -18,7 +20,10 @@ import com.jyh.kxt.user.ui.RegisterActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 项目名:KxtProfessional
@@ -58,6 +63,20 @@ public class RegisterPresenter extends BasePresenter {
             message.arg1 = 60;
             message.what = 1;
             handler.sendMessage(message);
+            LoginUtils.requestCode(this, VarConstant.CODE_REGISTER, activity.edtPhone.getEdtText(), this.getClass()
+                    .getName(), new ObserverData() {
+
+                @Override
+                public void callback(Object o) {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+
         } else {
 
         }
@@ -102,6 +121,7 @@ public class RegisterPresenter extends BasePresenter {
             protected void onResponse(UserJson o) {
                 LoginUtils.login(mContext, o);
                 activity.finish();
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN,o));
             }
 
             @Override

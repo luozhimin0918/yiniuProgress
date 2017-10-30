@@ -156,8 +156,11 @@ public class HttpConstant {
     public static final String USER_FAVOR_WRITER = BASE_URL + "member/favor_writer";//我的关注 作者
     public static final String USER_FAVOR_BLOGARTICLE = BASE_URL + "member/favor_blogArticle";//我的关注 文章
 
-    public static final String USER_CODE_REQUEST=BASE_URL+"user/get_code";//请求验证码
-    public static final String USER_CODE_VERIFY=BASE_URL+"user/verify_code";//验证验证码
+    public static final String USER_CODE_REQUEST = BASE_URL + "user/get_code";//请求验证码
+    public static final String USER_CODE_VERIFY = BASE_URL + "user/verify_code";//验证验证码
+    public static final String USER_SET_PASSWORD = BASE_URL + "user/set_password";//设置密码，修改密码，忘记密码
+    public static final String USER_SET_BIND_WITH_PWD = BASE_URL + "user/bind_with_password";//绑定并设置密码(无密码绑定最后一步)
+    public static final String USER_BIND_PHONE_EMAIL = BASE_URL + "user/bind_phone_email";//有密码时 手机或邮箱绑定
 
     /**
      * 收藏

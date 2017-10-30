@@ -10,18 +10,21 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
-import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.bean.LoginBean;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.BindActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
+import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,12 +123,22 @@ public class LoginUtils {
         }
     }
 
-    public static void requestCode(BasePresenter context, String type, boolean isPhone, String user, String tag, final ObserverData observerData) {
+    /**
+     * 请求验证码
+     *
+     * @param context
+     * @param type
+     * @param user
+     * @param tag
+     * @param observerData
+     */
+    public static void requestCode(BasePresenter context, String type, String user, String tag, final ObserverData
+            observerData) {
         VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
         volleyRequest.setTag(tag);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        if (isPhone) {
+        if (RegexValidateUtil.checkCellphone(user)) {
             jsonParam.put("phone", user);
         } else {
             jsonParam.put("email", user);
@@ -146,12 +159,23 @@ public class LoginUtils {
         });
     }
 
-    public static void verifyCode(BasePresenter context, String type, boolean isPhone, String user, String code, String tag, final ObserverData observerData) {
+    /**
+     * 验证验证码
+     *
+     * @param context
+     * @param type
+     * @param user
+     * @param code
+     * @param tag
+     * @param observerData
+     */
+    public static void verifyCode(BasePresenter context, String type, String user, String code, String tag, final
+    ObserverData observerData) {
         VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
         volleyRequest.setTag(tag);
         JSONObject jsonParam = volleyRequest.getJsonParam();
 
-        if (isPhone) {
+        if (RegexValidateUtil.checkCellphone(user)) {
             jsonParam.put("phone", user);
         } else {
             jsonParam.put("email", user);
@@ -173,6 +197,187 @@ public class LoginUtils {
         });
     }
 
+    /**
+     * 有密码时 手机或邮箱绑定
+     *
+     * @param context
+     * @param user
+     * @param code
+     * @param tag
+     * @param observerData
+     */
+    public static void bindPwd(BasePresenter context, String user, String code, String tag, final
+    ObserverData observerData) {
+        VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
+        volleyRequest.setTag(tag);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+
+        if (RegexValidateUtil.checkCellphone(user)) {
+            jsonParam.put("phone", user);
+        } else {
+            jsonParam.put("email", user);
+        }
+        jsonParam.put("type", "bind");
+        jsonParam.put("code", code);
+        jsonParam.put("uid", getUserInfo(context.mContext).getUid());
+
+        volleyRequest.doPost(HttpConstant.USER_BIND_PHONE_EMAIL, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(o);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
+    }
+
+    /**
+     * 绑定并设置密码(无密码绑定最后一步)
+     *
+     * @param presenter
+     * @param user
+     * @param pwd
+     * @param tag
+     * @param observerData
+     */
+    public static void bindNoPwd(BasePresenter presenter, String user, String pwd, String tag, final ObserverData observerData) {
+        VolleyRequest request = new VolleyRequest(presenter.mContext, presenter.mQueue);
+        request.setTag(presenter.getClass().getName());
+        JSONObject jsonParam = request.getJsonParam();
+
+        jsonParam.put(VarConstant.HTTP_UID, getUserInfo(presenter.mContext).getUid());
+        jsonParam.put(VarConstant.HTTP_PWD, pwd);
+        if (RegexValidateUtil.checkCellphone(user)) {
+            jsonParam.put(VarConstant.HTTP_PHONE, user);
+        } else {
+            jsonParam.put(VarConstant.HTTP_EMAIL, user);
+        }
+
+        request.doPost(HttpConstant.USER_SET_BIND_WITH_PWD, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(o);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
+    }
+
+
+    /**
+     * 设置、修改、忘记密码
+     *
+     * @param presenter
+     * @param user
+     * @param oldPwd
+     * @param newPwd
+     * @param tag
+     * @param observerData
+     */
+    public static void changePwd(BasePresenter presenter, String user,String oldPwd, String newPwd, String
+            tag, final
+                                 ObserverData observerData) {
+        VolleyRequest volleyRequest = new VolleyRequest(presenter.mContext, presenter.mQueue);
+        volleyRequest.setTag(tag);
+        JSONObject jsonParam = volleyRequest.getJsonParam();
+
+        if (!RegexValidateUtil.isEmpty(user)) {
+            if (RegexValidateUtil.checkCellphone(user)) {
+                jsonParam.put(VarConstant.HTTP_PHONE, user);
+            } else {
+                jsonParam.put(VarConstant.HTTP_EMAIL, user);
+            }
+        }
+
+        UserJson userInfo = getUserInfo(presenter.mContext);
+        if (userInfo != null) {
+            jsonParam.put(VarConstant.HTTP_UID, userInfo.getUid());
+        }
+        jsonParam.put(VarConstant.HTTP_PWD_NEW, newPwd);
+        jsonParam.put(VarConstant.HTTP_PWD_OLD, oldPwd);
+        volleyRequest.doPost(HttpConstant.USER_SET_PASSWORD, jsonParam, new HttpListener<Object>() {
+            @Override
+            protected void onResponse(Object o) {
+                observerData.callback(o);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
+    }
+
+    /**
+     * 登录
+     */
+    public static void requestLogin(final BasePresenter presenter, String user, String pwd, String type, String tag,
+                                    final ObserverData<UserJson> observerData) {
+        VolleyRequest request = new VolleyRequest(presenter.mContext, presenter.mQueue);
+        request.setTag(tag);
+        JSONObject jsonParam = request.getJsonParam();
+        jsonParam.put(VarConstant.HTTP_TYPE, type);
+        if (type.equals(VarConstant.LOGIN_TYPE_DEFAULT)) {
+            jsonParam.put(VarConstant.HTTP_USERNAME, user);
+            jsonParam.put(VarConstant.HTTP_PWD, pwd);
+        } else {
+            jsonParam.put(VarConstant.HTTP_PHONE, user);
+            jsonParam.put(VarConstant.HTTP_CODE, pwd);
+        }
+
+        request.doPost(HttpConstant.USER_LOGIN2, jsonParam, new HttpListener<UserJson>() {
+            @Override
+            protected void onResponse(UserJson userJson) {
+                observerData.callback(userJson);
+            }
+
+            @Override
+            protected void onErrorResponse(VolleyError error) {
+                super.onErrorResponse(error);
+                observerData.onError(error);
+            }
+        });
+    }
+
+//    /**
+//     * 三方登录
+//     */
+//    public static void requestLogin2(final BaseActivity presenter, LoginBean loginBean, final ObserverData<UserJson> observerData) {
+//        VolleyRequest request = new VolleyRequest(presenter, presenter.getQueue());
+//        JSONObject jsonParam = request.getJsonParam();
+//        jsonParam.put(VarConstant.HTTP_USERNAME, loginBean.getUsername());
+//        jsonParam.put(VarConstant.HTTP_TYPE, loginBean.getType());
+//        jsonParam.put(VarConstant.HTTP_CITY, loginBean.getCity());
+//        jsonParam.put(VarConstant.HTTP_AVATAR, loginBean.getAvatar());
+//        jsonParam.put(VarConstant.HTTP_PROVINCE, loginBean.getProvince());
+//        jsonParam.put(VarConstant.HTTP_SEX, loginBean.getSex());
+//        jsonParam.put(VarConstant.HTTP_ACCESS_TOKEN2, loginBean.getAccess_token2());
+//        jsonParam.put(VarConstant.HTTP_OPENID, loginBean.getOpenid());
+//        jsonParam.put(VarConstant.HTTP_UNIONID, loginBean.getUnionid());
+//        request.doPost(HttpConstant.USER_LOGIN2, jsonParam, new HttpListener<UserJson>() {
+//            @Override
+//            protected void onResponse(UserJson userJson) {
+//                login(presenter, userJson);
+//                observerData.callback(userJson);
+//            }
+//
+//            @Override
+//            protected void onErrorResponse(VolleyError error) {
+//                super.onErrorResponse(error);
+//                observerData.onError(error);
+//            }
+//        });
+//    }
+
     public static boolean isToBindPhoneInfo(final Context mContext) {
         // FixKxt: 提出人:Mr'Dai-> 判断手机号码是否已经绑定过了
         UserJson userInfo = getUserInfo(mContext);
@@ -180,8 +385,7 @@ public class LoginUtils {
             mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return true;
         }
-        if (userInfo.getIs_set_phone() == null ||
-                !userInfo.getIs_set_phone()) {
+        if (!userInfo.isSetPhone()) {
 
             new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
                     .setPositiveButton("取消",

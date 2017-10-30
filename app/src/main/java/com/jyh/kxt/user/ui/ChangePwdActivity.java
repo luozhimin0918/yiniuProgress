@@ -12,12 +12,15 @@ import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.custom.DiscolorButton;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.base.widget.PwdEditText;
+import com.jyh.kxt.user.presenter.ChangePwdPresenter;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 
@@ -46,11 +49,10 @@ public class ChangePwdActivity extends BaseActivity {
     @BindView(R.id.edt_pwd_old) FunctionEditText edtPwdOld;
     @BindView(R.id.edt_pwd_new) FunctionEditText edtPwdNew;
     @BindView(R.id.edt_pwd_new_two) FunctionEditText edtPwdRe;
-    @BindView(R.id.btn_sure) Button changeBtn;
+    @BindView(R.id.btn_sure) DiscolorButton changeBtn;
 
-    private EditText pwdOld, pwdNew, pwdRe;
-    private VolleyRequest request;
     private EditTextValidator editTextValidator;
+    private ChangePwdPresenter presenter;
 
     private int type;
 
@@ -61,18 +63,27 @@ public class ChangePwdActivity extends BaseActivity {
 
         tvBarTitle.setText("修改密码");
 
-        pwdOld = getEditText(edtPwdOld);
-        pwdNew = getEditText(edtPwdNew);
-        pwdRe = getEditText(edtPwdRe);
+        type = getIntent().getIntExtra(TYPE, TYPE_SET);
+        presenter = new ChangePwdPresenter(this);
+        presenter.setType(type);
 
-        type=getIntent().getIntExtra(TYPE,TYPE_SET);
-
-        editTextValidator = new EditTextValidator(getContext())
-                .setButton(changeBtn)
-                .add(new ValidationModel(edtPwdOld, new PwdValidation()))
-                .add(new ValidationModel(edtPwdNew, new PwdValidation()))
-                .add(new ValidationModel(edtPwdRe, new PwdValidation()))
-                .execute();
+        if (type == TYPE_SET) {
+            tvBarTitle.setText("设置密码");
+            editTextValidator = new EditTextValidator(this)
+                    .setButton(changeBtn)
+                    .add(new ValidationModel(edtPwdOld, new PwdValidation()))
+                    .add(new ValidationModel(edtPwdNew, new PwdValidation()))
+                    .execute();
+            edtPwdNew.setVisibility(View.GONE);
+        } else {
+            tvBarTitle.setText("修改密码");
+            editTextValidator = new EditTextValidator(getContext())
+                    .setButton(changeBtn)
+                    .add(new ValidationModel(edtPwdOld, new PwdValidation()))
+                    .add(new ValidationModel(edtPwdNew, new PwdValidation()))
+                    .add(new ValidationModel(edtPwdRe, new PwdValidation()))
+                    .execute();
+        }
 
     }
 
@@ -83,46 +94,20 @@ public class ChangePwdActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.btn_sure:
-                if (editTextValidator.validate())
-                    changePwd(pwdOld.getText().toString(), pwdNew.getText().toString(), pwdRe.getText().toString());
+                if (editTextValidator.validate()) {
+                    presenter.pwd(edtPwdOld.getEdtText(), edtPwdNew.getEdtText(), edtPwdRe.getEdtText());
+                }
                 break;
         }
-    }
-
-    private void changePwd(String oldPwd, String newPwd, String rePwd) {
-
-        if (request == null) {
-            request = new VolleyRequest(this, getQueue());
-            request.setTag(getClass().getName());
-        }
-        showWaitDialog(null);
-        request.doPost(HttpConstant.USER_CHANEPWD, getMap(), new HttpListener<Object>() {
-            @Override
-            protected void onResponse(Object o) {
-                dismissWaitDialog();
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                super.onErrorResponse(error);
-                dismissWaitDialog();
-            }
-        });
-    }
-
-    private Map<String, String> getMap() {
-        Map<String, String> map = new HashMap<>();
-        JSONObject jsonParam = request.getJsonParam();
-        return map;
-    }
-
-    private EditText getEditText(FunctionEditText edt) {
-        return edt.getEdt();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         getQueue().cancelAll(getClass().getName());
+    }
+
+    public void showError(String info) {
+        edtPwdRe.setErrorInfo(info);
     }
 }

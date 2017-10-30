@@ -34,17 +34,21 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
 import com.library.base.http.VarConstant;
+import com.library.bean.EventBusClass;
 import com.library.util.CommonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.PageLoadLayout;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -117,6 +121,12 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
 
         editUserInfoPresenter = new EditUserInfoPresenter(this);
 
+        try {
+            EventBus.getDefault().register(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (getIntent().getStringExtra("folderName") == null) {
             photoFolderAddress = CommonUtil.getSDPath() + File.separator + "test_photo";
         } else {
@@ -155,17 +165,17 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 break;
         }
 
-        if (userInfo.getIs_set_email()) {
+        if (userInfo.isSetEmail()) {
             tvEmail.setText("修改邮箱");
         } else {
             tvEmail.setText("去绑定");
         }
-        if (userInfo.getIs_set_phone()) {
+        if (userInfo.isSetPhone()) {
             tvPhone.setText("修改手机号");
         } else {
             tvPhone.setText("去绑定");
         }
-        if (userInfo.getIs_set_password()) {
+        if (userInfo.isSetPwd()) {
             tvPwd.setText("修改密码");
         } else {
             tvPwd.setText("去设置");
@@ -314,7 +324,7 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 break;
             case R.id.rl_phone:
                 Intent phontIntent = new Intent(this, BindActivity.class);
-                if (LoginUtils.getUserInfo(this).getIs_set_phone()) {
+                if (LoginUtils.getUserInfo(this).isSetPhone()) {
                     phontIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_PHONE);
                 } else {
                     phontIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
@@ -323,7 +333,7 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 break;
             case R.id.rl_email:
                 Intent emailIntent = new Intent(this, BindActivity.class);
-                if (LoginUtils.getUserInfo(this).getIs_set_email()) {
+                if (LoginUtils.getUserInfo(this).isSetEmail()) {
                     emailIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_EMAIL);
                 } else {
                     emailIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_EMAIL);
@@ -331,13 +341,24 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 startActivity(emailIntent);
                 break;
             case R.id.rl_pwd:
-                Intent intent = new Intent(new Intent(this, ChangePwdActivity.class));
-                if (LoginUtils.getUserInfo(this).getIs_set_password()) {
-                    intent.putExtra(ChangePwdActivity.TYPE,ChangePwdActivity.TYPE_CHANGE);
+                UserJson userInfo = LoginUtils.getUserInfo(this);
+                if (userInfo.isSetPhone()) {
+                    Intent intent = new Intent(new Intent(this, ChangePwdActivity.class));
+                    if (userInfo.isSetPwd()) {
+                        intent.putExtra(ChangePwdActivity.TYPE, ChangePwdActivity.TYPE_CHANGE);
+                    } else {
+                        intent.putExtra(ChangePwdActivity.TYPE, ChangePwdActivity.TYPE_SET);
+                    }
+                    startActivity(intent);
                 } else {
-                    intent.putExtra(ChangePwdActivity.TYPE,ChangePwdActivity.TYPE_SET);
+                    Intent phontIntent2 = new Intent(this, BindActivity.class);
+                    if (LoginUtils.getUserInfo(this).isSetPhone()) {
+                        phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                    } else {
+                        phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_PHONE);
+                    }
+                    startActivity(phontIntent2);
                 }
-                startActivity(intent);
                 break;
         }
     }
@@ -449,10 +470,22 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
         editUserInfoPresenter.postBitmap(lastByte);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusClass eventBusClass) {
+        if (eventBusClass.fromCode == EventBusClass.EVENT_LOGIN_UPDATE) {
+            initView();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         getQueue().cancelAll(editUserInfoPresenter.getClass().getName());
+        try {
+            EventBus.getDefault().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

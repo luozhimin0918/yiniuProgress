@@ -67,19 +67,7 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(View v) {
                 if (step == 0) {
                     //请求动态密码
-                    LoginUtils.requestCode(presenter, VarConstant.CODE_REGISTER, true, edtPhone.getEdtText(), presenter.getClass()
-                            .getName(), new ObserverData() {
-
-                        @Override
-                        public void callback(Object o) {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
+                    presenter.requestPwd();
                 }
             }
         });
@@ -95,7 +83,7 @@ public class RegisterActivity extends BaseActivity {
                 if (editTextValidator.validate()) {
                     if (step == 0) {
                         //进行下一步设置密码
-                        LoginUtils.verifyCode(presenter, VarConstant.CODE_REGISTER, true, edtPhone.getEdtText(), edtPwd.getEdtText(),
+                        LoginUtils.verifyCode(presenter, VarConstant.CODE_REGISTER,edtPhone.getEdtText(), edtPwd.getEdtText(),
                                 presenter.getClass().getName(), new ObserverData() {
 
                                     @Override

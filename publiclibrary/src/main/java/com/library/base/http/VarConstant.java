@@ -16,7 +16,7 @@ public class VarConstant {
      */
     public static final String HTTP_CLIENT = "android";
     public static final String HTTP_VERSION = "version";
-    public static final String HTTP_VERSION_VALUE = "6.1.7";
+    public static final String HTTP_VERSION_VALUE = "6.1.8";
     public static final String HTTP_SYSTEM = "system";
     public static final String HTTP_SYSTEM_VALUE = "android";
     public static final String HTTP_CODE = "code";
@@ -29,6 +29,8 @@ public class VarConstant {
 
     public static final String HTTP_USERNAME = "username";
     public static final String HTTP_PWD = "password";
+    public static final String HTTP_PWD_NEW = "new_password";
+    public static final String HTTP_PWD_OLD = "old_password";
     public static final String HTTP_EMAIL = "email";
     public static final String HTTP_PHONE = "phone";
     public static final String HTTP_SEX = "sex";
@@ -271,4 +273,14 @@ public class VarConstant {
     public static final String CODE_BIND = "bind";//绑定
     public static final String CODE_VERIFY = "verify";//换绑
     public static final String CODE_GENERAL = "general";//登录
+
+    /**
+     * 登录模式
+     * qq/sina/wx/password/message
+     */
+    public static final String LOGIN_TYPE_DEFAULT="password";//账号密码登录
+    public static final String LOGIN_TYPE_QQ="qq";//QQ登录
+    public static final String LOGIN_TYPE_SINA="sina";//微博登录
+    public static final String LOGIN_TYPE_WX="wx";//微信登录
+    public static final String LOGIN_TYPE_CODE="message";//短信验证码登录
 }
