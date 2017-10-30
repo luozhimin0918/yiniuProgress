@@ -21,10 +21,6 @@ public class PwdDynamicValidation extends ValidationExecutor {
             errorInfo = "动态码不能为空";
             return false;
         }
-        if (pwd.length()!=6) {
-            errorInfo = "请输入6位动态码";
-            return false;
-        }
 
         errorInfo=null;
         return true;

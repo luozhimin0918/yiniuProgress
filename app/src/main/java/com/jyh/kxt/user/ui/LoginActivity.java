@@ -19,6 +19,7 @@ import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
@@ -151,14 +152,19 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
         edtPwd.reflash();
         presenter.setData(position, edtName, edtPwd, edtCode);
         edtName.requestFocus();//切换之后焦点重置
+        isShowCode = edtCode.getVisibility() == View.VISIBLE;
     }
 
     @OnClick({R.id.db_login, R.id.iv_qq, R.id.iv_sina, R.id.iv_wx, R.id.iv_close, R.id.tv_register})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.db_login:
-                if (editTextValidator.validate() && ((isShowCode && edtCode.isEqualsIgnoreCase(edtCode.getEdtText())) || !isShowCode)) {
-                    presenter.login(dbLogin, position);
+                if (editTextValidator.validate()) {
+                    if (isShowCode && (edtCode == null || !edtCode.isEqualsIgnoreCase(edtCode.getEdtText()))) {
+                        edtCode.setErrorInfo("验证码填写错误");
+                    } else {
+                        presenter.login(dbLogin, position);
+                    }
                 }
                 break;
             case R.id.iv_qq:
@@ -234,17 +240,35 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
      */
     private void changeValidation() {
         if (position == 0) {
-            editTextValidator = new EditTextValidator(getContext())
-                    .setButton(dbLogin)
-                    .add(new ValidationModel(edtName, new UserNameValidation()))
-                    .add(new ValidationModel(edtPwd, new PwdValidation()))
-                    .execute();
+            if (isShowCode) {
+                editTextValidator = new EditTextValidator(getContext())
+                        .setButton(dbLogin)
+                        .add(new ValidationModel(edtName, new UserNameValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdValidation()))
+                        .add(new ValidationModel(edtCode, new PwdDynamicValidation()))
+                        .execute();
+            } else {
+                editTextValidator = new EditTextValidator(getContext())
+                        .setButton(dbLogin)
+                        .add(new ValidationModel(edtName, new UserNameValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdValidation()))
+                        .execute();
+            }
         } else {
-            editTextValidator = new EditTextValidator(getContext())
-                    .setButton(dbLogin)
-                    .add(new ValidationModel(edtName, new PhoneValidation()))
-                    .add(new ValidationModel(edtPwd, new PwdValidation()))
-                    .execute();
+            if (isShowCode) {
+                editTextValidator = new EditTextValidator(getContext())
+                        .setButton(dbLogin)
+                        .add(new ValidationModel(edtName, new PhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .add(new ValidationModel(edtCode,new PwdDynamicValidation()))
+                        .execute();
+            } else {
+                editTextValidator = new EditTextValidator(getContext())
+                        .setButton(dbLogin)
+                        .add(new ValidationModel(edtName, new PhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
+            }
         }
     }
 }

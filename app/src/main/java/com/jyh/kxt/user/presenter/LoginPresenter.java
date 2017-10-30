@@ -152,6 +152,7 @@ public class LoginPresenter extends BasePresenter {
             accountSave.put("pwd_status", edtPwd.isShowPwd());
             accountSave.put("pwd_function_txt", edtPwd.getFunctionText());
             accountSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
+            accountSave.put("code_status",edtCode.getVisibility());
         } else {
             phoneSave.put("name", edtName.getEdt().getText());
             phoneSave.put("name_hint", edtName.getEdt().getHint());
@@ -162,6 +163,7 @@ public class LoginPresenter extends BasePresenter {
             phoneSave.put("pwd_status", true);
             phoneSave.put("pwd_function_txt", edtPwd.getFunctionText());
             phoneSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
+            phoneSave.put("code_status",edtCode.getVisibility());
         }
     }
 
@@ -186,6 +188,7 @@ public class LoginPresenter extends BasePresenter {
             edtPwd.setFunctionTextColor(accountSave.getInteger("pwd_function_txt_color") == null ? 0 : accountSave.getInteger
                     ("pwd_function_txt_color"));
             edtPwd.setShowTxtLine(accountSave.getBoolean("showline") == null ? false : accountSave.getBoolean("showline"));
+            edtCode.setVisibility(accountSave.getInteger("code_status") == View.VISIBLE ? View.VISIBLE : View.GONE);
         } else {
             edtName.setEdtText(phoneSave.getString("name"));
             edtCode.setEdtText(phoneSave.getString("code"));
@@ -199,6 +202,7 @@ public class LoginPresenter extends BasePresenter {
             edtPwd.setFunctionTextColor(phoneSave.getInteger("pwd_function_txt_color") == null ? 0 : phoneSave.getInteger
                     ("pwd_function_txt_color"));
             edtPwd.setShowTxtLine(phoneSave.getBoolean("showline") == null ? false : phoneSave.getBoolean("showline"));
+            edtCode.setVisibility(phoneSave.getInteger("code_status") == View.VISIBLE ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -212,6 +216,7 @@ public class LoginPresenter extends BasePresenter {
         phoneSave.put("showline", true);
         phoneSave.put("pwd_function_txt", "获取动态码");
         phoneSave.put("pwd_function_txt_color", ContextCompat.getColor(mContext, R.color.font_color1));
+        phoneSave.put("code_status",View.GONE);
     }
 
     private boolean canRequestPwd = true;//是否可以请求

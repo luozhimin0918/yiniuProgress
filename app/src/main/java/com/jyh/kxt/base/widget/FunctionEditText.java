@@ -1,18 +1,12 @@
 package com.jyh.kxt.base.widget;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.inputmethodservice.Keyboard;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -25,9 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jyh.kxt.R;
-import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.library.base.http.VarConstant;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 
 /**
@@ -220,16 +212,16 @@ public class FunctionEditText extends LinearLayout {
                 }
             }
         });
-        edt.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    delText(edt.getText());
-                }
-                return false;
-            }
-        });
+//        edt.setOnKeyListener(new OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+//                    delText(edt.getText());
+//                }
+//                return false;
+//            }
+//        });
         LinearLayout.LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         params.weight = 1;
         edt.setLayoutParams(params);
