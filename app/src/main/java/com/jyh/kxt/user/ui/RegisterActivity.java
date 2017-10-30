@@ -94,7 +94,7 @@ public class RegisterActivity extends BaseActivity {
 
                                     @Override
                                     public void onError(Exception e) {
-                                        ToastView.makeText3(getContext(), e == null ? "验证失败，请重试" : e.getMessage());
+                                        ToastView.makeText(getContext(), e == null ? "验证失败，请重试" : e.getMessage());
                                     }
                                 });
 

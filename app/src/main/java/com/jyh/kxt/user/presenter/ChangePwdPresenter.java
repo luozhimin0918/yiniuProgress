@@ -6,6 +6,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.ui.ChangePwdActivity;
+import com.library.widget.window.ToastView;
 
 /**
  * 项目名:KxtProfessional
@@ -32,12 +33,12 @@ public class ChangePwdPresenter extends BasePresenter {
                 LoginUtils.changePwd(this, null, null, oldPwd, getClass().getName(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
-
+                        ToastView.makeText(mContext, "设置成功");
                     }
 
                     @Override
                     public void onError(Exception e) {
-
+                        ToastView.makeText(mContext, e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                     }
                 });
             else
@@ -48,12 +49,12 @@ public class ChangePwdPresenter extends BasePresenter {
                 LoginUtils.changePwd(this, null, oldPwd, newPwd, getClass().getName(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
-
+                        ToastView.makeText(mContext, "修改成功");
                     }
 
                     @Override
                     public void onError(Exception e) {
-
+                        ToastView.makeText(mContext, e == null || e.getMessage() == null ? "修改失败" : e.getMessage());
                     }
                 });
             else {
