@@ -15,7 +15,9 @@ import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.EmailOrPhoneValidation;
 import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
@@ -62,8 +64,8 @@ public class ForgetPwdActivity extends BaseActivity {
 
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(btnSend)
-                .add(new ValidationModel(edtEmail, new EmailValidation()))
-                .add(new ValidationModel(edtPwd, new PwdValidation()))
+                .add(new ValidationModel(edtEmail, new EmailOrPhoneValidation()))
+                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
                 .execute();
 
         String emailStr = getIntent().getStringExtra(EMAIL);
@@ -88,6 +90,11 @@ public class ForgetPwdActivity extends BaseActivity {
                             .getFunctionText(), edtPwd.getFunctionTextColor(), edtEmail.isShowPwd(), edtPwd.isShowPwd());
                     step = 1;
                     restoreView();
+                    editTextValidator = new EditTextValidator(getContext())
+                            .setButton(btnSend)
+                            .add(new ValidationModel(edtEmail, new EmailOrPhoneValidation()))
+                            .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                            .execute();
                 } else {
                     onBackPressed();
                 }
@@ -103,11 +110,16 @@ public class ForgetPwdActivity extends BaseActivity {
                                                     .getFunctionText(), edtPwd.getFunctionTextColor(), true, true);
                                     step = 2;
                                     restoreView();
+                                    editTextValidator = new EditTextValidator(getContext())
+                                            .setButton(btnSend)
+                                            .add(new ValidationModel(edtEmail, new PwdValidation()))
+                                            .add(new ValidationModel(edtPwd, new PwdValidation()))
+                                            .execute();
                                 }
 
                                 @Override
                                 public void onError(Exception e) {
-                                    ToastView.makeText3(getContext(), "验证失败");
+                                    ToastView.makeText(getContext(), "验证失败");
                                 }
                             });
                 } else {
@@ -115,22 +127,25 @@ public class ForgetPwdActivity extends BaseActivity {
                         if (editTextValidator.validate()) {
                             showWaitDialog(null);
 //                            forgetPwdPresenter.sendInfo(edtEmail.getEdt().getText().toString());
-                            LoginUtils.changePwd(forgetPwdPresenter, edtEmail.getEdtText(), "",edtPwd.getEdtText(),
+                            LoginUtils.changePwd(forgetPwdPresenter, forgetPwdPresenter.getStepOneJson().getString("edt1Text"), "",
+                                    edtPwd.getEdtText(),
                                     forgetPwdPresenter.getClass().getName(), new ObserverData() {
 
-                                @Override
-                                public void callback(Object o) {
-                                    dismissWaitDialog();
-                                }
+                                        @Override
+                                        public void callback(Object o) {
+                                            ToastView.makeText(getContext(), "设置成功");
+                                            dismissWaitDialog();
+                                        }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    dismissWaitDialog();
-                                }
-                            });
+                                        @Override
+                                        public void onError(Exception e) {
+                                            ToastView.makeText(getContext(), "设置失败");
+                                            dismissWaitDialog();
+                                        }
+                                    });
                         }
                     } else
-                        ToastView.makeText3(this, "暂无网络,请稍后再试");
+                        ToastView.makeText(this, "暂无网络,请稍后再试");
                 }
                 break;
         }
@@ -157,7 +172,6 @@ public class ForgetPwdActivity extends BaseActivity {
 
         edtEmail.setShowPwd(data.getBoolean("edt1open") == null ? false : data.getBoolean("edt1open"));
         edtPwd.setShowPwd(data.getBoolean("edt2open") == null ? false : data.getBoolean("edt2open"));
-
         edtEmail.requestFocus();
 
     }

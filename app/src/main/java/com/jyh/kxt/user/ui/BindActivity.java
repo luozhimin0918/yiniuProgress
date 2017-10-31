@@ -142,13 +142,13 @@ public class BindActivity extends BaseActivity {
                                 userJson.setIs_set_password("1");
                                 LoginUtils.changeUserInfo(getContext(), userJson);
                                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                ToastView.makeText3(getContext(), "密码设置成功");
+                                ToastView.makeText(getContext(), "设置成功");
                                 finish();
                             }
 
                             @Override
                             public void onError(Exception e) {
-                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "密码设置失败" : e.getMessage());
+                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                             }
                         });
                     }
@@ -170,7 +170,7 @@ public class BindActivity extends BaseActivity {
 
                             @Override
                             public void onError(Exception e) {
-                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
+                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
                             }
                         });
                     } else if (step == 2) {
@@ -188,7 +188,7 @@ public class BindActivity extends BaseActivity {
                                     }
                                     LoginUtils.changeUserInfo(getContext(), userJson);
                                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                    ToastView.makeText3(getContext(), "绑定成功");
+                                    ToastView.makeText(getContext(), "绑定成功");
                                     finish();
                                 } else {
                                     step = 3;
@@ -201,7 +201,7 @@ public class BindActivity extends BaseActivity {
 
                             @Override
                             public void onError(Exception e) {
-                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
+                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
                             }
                         });
                     } else {
@@ -212,13 +212,13 @@ public class BindActivity extends BaseActivity {
                                 userJson.setIs_set_password("1");
                                 LoginUtils.changeUserInfo(getContext(), userJson);
                                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                ToastView.makeText3(getContext(), "密码设置成功");
+                                ToastView.makeText(getContext(), "设置成功");
                                 finish();
                             }
 
                             @Override
                             public void onError(Exception e) {
-                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "密码设置失败" : e.getMessage());
+                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                             }
                         });
                     }

@@ -43,7 +43,6 @@ public class LoginPresenter extends BasePresenter {
     public static final String TYPE_PHONE = "2";//短信登录
 
     @BindObject LoginActivity activity;
-    private TSnackbar snackBar;
 
     private int errorNumAccount;//账号密码登录错误次数
     private int errorNumPhone;//手机短信登录错误次数
@@ -95,10 +94,6 @@ public class LoginPresenter extends BasePresenter {
      * @param position 0 账号密码登录  1 手机短信登录
      */
     public void login(View view, final int position) {
-        snackBar = TSnackbar.make(view, "登录中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-        snackBar.setPromptThemBackground(Prompt.SUCCESS);
-        snackBar.addIconProgressLoading(0, true, false);
-        snackBar.show();
 
         LoginUtils.requestLogin(this, activity.edtName.getEdtText(), activity.edtPwd.getEdtText(), position == 0 ? VarConstant
                 .LOGIN_TYPE_DEFAULT : VarConstant.LOGIN_TYPE_CODE, getClass().getName(), new ObserverData<UserJson>() {
@@ -107,18 +102,13 @@ public class LoginPresenter extends BasePresenter {
             public void callback(UserJson userJson) {
                 errorNumAccount = 0;
                 errorNumPhone = 0;
-                snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                ToastView.makeText(mContext,"登录成功");
                 LoginUtils.login(activity, userJson);
             }
 
             @Override
             public void onError(Exception e) {
-                snackBar.setPromptThemBackground(Prompt.ERROR).setText(NetUtils.isNetworkAvailable(activity) ? (e == null ? "" :
-                        e.getMessage()) : "暂无网络,请稍后再试").setDuration(TSnackbar.LENGTH_LONG)
-                        .setMinHeight(SystemUtil.getStatuBarHeight(activity), activity.getResources()
-                                .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                ToastView.makeText(mContext,"登录失败");
 
                 if (position == 0) {
                     errorNumAccount++;

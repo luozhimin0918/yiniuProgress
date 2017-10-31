@@ -120,8 +120,9 @@ public class RegisterPresenter extends BasePresenter {
             @Override
             protected void onResponse(UserJson o) {
                 LoginUtils.login(mContext, o);
+                ToastView.makeText(mContext, "注册成功");
                 activity.finish();
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN,o));
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, o));
             }
 
             @Override
