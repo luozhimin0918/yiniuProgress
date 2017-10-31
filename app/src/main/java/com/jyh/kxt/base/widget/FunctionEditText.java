@@ -319,8 +319,8 @@ public class FunctionEditText extends LinearLayout {
                 edt.setSelection(edt.getText().length());
             }
         });
-        topLayout.addView(functionImgBtn, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
-                .MATCH_PARENT));
+//        topLayout.addView(functionImgBtn, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams
+//                .MATCH_PARENT));
     }
 
     /**

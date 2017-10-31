@@ -126,21 +126,20 @@ public class ForgetPwdActivity extends BaseActivity {
                     if (NetUtils.isNetworkAvailable(this)) {
                         if (editTextValidator.validate()) {
                             showWaitDialog(null);
-//                            forgetPwdPresenter.sendInfo(edtEmail.getEdt().getText().toString());
                             LoginUtils.changePwd(forgetPwdPresenter, forgetPwdPresenter.getStepOneJson().getString("edt1Text"), "",
                                     edtPwd.getEdtText(),
                                     forgetPwdPresenter.getClass().getName(), new ObserverData() {
 
                                         @Override
                                         public void callback(Object o) {
-                                            ToastView.makeText(getContext(), "设置成功");
                                             dismissWaitDialog();
+                                            ToastView.makeText(getContext(), "设置成功");
                                         }
 
                                         @Override
                                         public void onError(Exception e) {
-                                            ToastView.makeText(getContext(), "设置失败");
                                             dismissWaitDialog();
+                                            ToastView.makeText(getContext(), "设置失败");
                                         }
                                     });
                         }

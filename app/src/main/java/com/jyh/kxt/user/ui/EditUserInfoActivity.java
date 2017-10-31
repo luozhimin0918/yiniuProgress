@@ -353,9 +353,9 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                 } else {
                     Intent phontIntent2 = new Intent(this, BindActivity.class);
                     if (LoginUtils.getUserInfo(this).isSetPhone()) {
-                        phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
-                    } else {
                         phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_PHONE);
+                    } else {
+                        phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
                     }
                     startActivity(phontIntent2);
                 }

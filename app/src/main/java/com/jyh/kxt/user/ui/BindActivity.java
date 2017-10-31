@@ -1,6 +1,7 @@
 package com.jyh.kxt.user.ui;
 
 import android.content.DialogInterface;
+import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,13 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.utils.validator.EditTextValidator;
+import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.EmailOrPhoneValidation;
+import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
+import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.BindPresenter;
@@ -57,6 +65,7 @@ public class BindActivity extends BaseActivity {
     private int type;
     private int step = 1;//步骤
     private AlertDialog errorDialog;
+    private EditTextValidator editTextValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +79,36 @@ public class BindActivity extends BaseActivity {
         switch (type) {
             case TYPE_BIND_PHONE:
                 tvTitle.setText("手机号绑定");
+                editTextValidator = new EditTextValidator(this)
+                        .setButton(btnSend)
+                        .add(new ValidationModel(edtEmail, new PhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
                 break;
             case TYPE_BIND_EMAIL:
                 tvTitle.setText("邮箱绑定");
+                editTextValidator = new EditTextValidator(this)
+                        .setButton(btnSend)
+                        .add(new ValidationModel(edtEmail, new EmailValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
                 break;
             case TYPE_CHANGE_PHONE:
             case TYPE_CHANGE_EMAIL:
                 tvTitle.setText("身份效验");
+                editTextValidator = new EditTextValidator(this)
+                        .setButton(btnSend)
+                        .add(new ValidationModel(edtEmail, new EmailOrPhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
                 break;
             default:
                 tvTitle.setText("手机号绑定");
+                editTextValidator = new EditTextValidator(this)
+                        .setButton(btnSend)
+                        .add(new ValidationModel(edtEmail, new PhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
                 break;
         }
         bindPresenter = new BindPresenter(this);
@@ -100,127 +129,164 @@ public class BindActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.btn_send:
-                final boolean isSetPwd = LoginUtils.getUserInfo(this).isSetPwd();
-                if (type == TYPE_BIND_PHONE || type == TYPE_BIND_EMAIL) {
-                    if (step == 1) {
-                        bindPresenter.step2(isSetPwd, edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                if (isSetPwd) {
-                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                    if (type == BindActivity.TYPE_BIND_PHONE) {
-                                        userJson.setPhone(edtEmail.getEdtText());
-                                        userJson.setIs_set_phone("1");
+                if (editTextValidator.validate()) {
+                    final boolean isSetPwd = LoginUtils.getUserInfo(this).isSetPwd();
+                    showWaitDialog(null);
+                    if (type == TYPE_BIND_PHONE || type == TYPE_BIND_EMAIL) {
+                        if (step == 1) {
+                            bindPresenter.step2(isSetPwd, edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
+                                @Override
+                                public void callback(Object o) {
+                                    dismissWaitDialog();
+                                    if (isSetPwd) {
+                                        UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                        if (type == BindActivity.TYPE_BIND_PHONE) {
+                                            userJson.setPhone(edtEmail.getEdtText());
+                                            userJson.setIs_set_phone("1");
+                                        } else {
+                                            userJson.setEmail(edtEmail.getEdtText());
+                                            userJson.setIs_set_email("1");
+                                        }
+                                        LoginUtils.changeUserInfo(getContext(), userJson);
+                                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+                                        ToastView.makeText3(getContext(), "绑定成功");
+                                        finish();
                                     } else {
-                                        userJson.setEmail(edtEmail.getEdtText());
-                                        userJson.setIs_set_email("1");
+                                        //设置密码
+                                        step = 2;
+                                        tvTitle.setText("设置密码");
+                                        llStep1.setVisibility(View.GONE);
+                                        llStep2.setVisibility(View.VISIBLE);
+                                        tvWarning.setText("设置6-16个字符，请至少使用字母，数字和符号两种以上组合");
+                                        editTextValidator = new EditTextValidator(getContext())
+                                                .setButton(btnSend)
+                                                .add(new ValidationModel(edtPwd1, new PwdValidation()))
+                                                .add(new ValidationModel(edtPwd2, new PwdValidation()))
+                                                .execute();
                                     }
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    dismissWaitDialog();
+                                    ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
+                                }
+                            });
+                        } else {
+
+                            bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                                @Override
+                                public void callback(Object o) {
+                                    dismissWaitDialog();
+                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                    userJson.setIs_set_password("1");
                                     LoginUtils.changeUserInfo(getContext(), userJson);
                                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                    ToastView.makeText3(getContext(), "绑定成功");
+                                    ToastView.makeText(getContext(), "设置成功");
                                     finish();
-                                } else {
-                                    //设置密码
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    dismissWaitDialog();
+                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
+                                }
+                            });
+                        }
+                    } else {
+                        if (step == 1) {
+                            bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(), edtPwd
+                                    .getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd.getFunctionTextColor());
+                            bindPresenter.step1(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                                @Override
+                                public void callback(Object o) {
+                                    bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
+                                            edtPwd.getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd
+                                                    .getFunctionTextColor());
                                     step = 2;
-                                    tvTitle.setText("设置密码");
-                                    llStep1.setVisibility(View.GONE);
-                                    llStep2.setVisibility(View.VISIBLE);
-                                    tvWarning.setText("设置6-16个字符，请至少使用字母，数字和符号两种以上组合");
-                                }
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
-                            }
-                        });
-                    } else {
-                        bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                userJson.setIs_set_password("1");
-                                LoginUtils.changeUserInfo(getContext(), userJson);
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                ToastView.makeText(getContext(), "设置成功");
-                                finish();
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
-                            }
-                        });
-                    }
-                } else {
-                    if (step == 1) {
-                        bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(), edtPwd
-                                .getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd.getFunctionTextColor());
-                        bindPresenter.step1(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
-                                        edtPwd.getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd
-                                                .getFunctionTextColor());
-                                step = 2;
-                                tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
-                                restoreView();
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
-                            }
-                        });
-                    } else if (step == 2) {
-                        bindPresenter.step2(isSetPwd, edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                if (isSetPwd) {
-                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                    if (type == BindActivity.TYPE_CHANGE_PHONE) {
-                                        userJson.setPhone(edtEmail.getEdtText());
-                                        userJson.setIs_set_phone("1");
-                                    } else {
-                                        userJson.setEmail(edtEmail.getEdtText());
-                                        userJson.setIs_set_email("1");
+                                    dismissWaitDialog();
+                                    tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
+                                    restoreView();
+                                    if(type==TYPE_CHANGE_PHONE){
+                                        editTextValidator = new EditTextValidator(getContext())
+                                                .setButton(btnSend)
+                                                .add(new ValidationModel(edtEmail, new PhoneValidation()))
+                                                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                                .execute();
+                                    }else{
+                                        editTextValidator = new EditTextValidator(getContext())
+                                                .setButton(btnSend)
+                                                .add(new ValidationModel(edtEmail, new EmailValidation()))
+                                                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                                .execute();
                                     }
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    dismissWaitDialog();
+                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
+                                }
+                            });
+                        } else if (step == 2) {
+                            bindPresenter.step2(isSetPwd, edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
+                                @Override
+                                public void callback(Object o) {
+                                    dismissWaitDialog();
+                                    if (isSetPwd) {
+                                        UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                        if (type == BindActivity.TYPE_CHANGE_PHONE) {
+                                            userJson.setPhone(edtEmail.getEdtText());
+                                            userJson.setIs_set_phone("1");
+                                        } else {
+                                            userJson.setEmail(edtEmail.getEdtText());
+                                            userJson.setIs_set_email("1");
+                                        }
+                                        LoginUtils.changeUserInfo(getContext(), userJson);
+                                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+                                        ToastView.makeText(getContext(), "绑定成功");
+                                        finish();
+                                    } else {
+                                        step = 3;
+                                        tvTitle.setText("设置密码");
+                                        llStep1.setVisibility(View.GONE);
+                                        llStep2.setVisibility(View.VISIBLE);
+                                        tvWarning.setText("设置6-16个字符，请至少使用字母，数字和符号两种以上组合");
+                                        editTextValidator = new EditTextValidator(getContext())
+                                                .setButton(btnSend)
+                                                .add(new ValidationModel(edtPwd1, new PwdValidation()))
+                                                .add(new ValidationModel(edtPwd2, new PwdValidation()))
+                                                .execute();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    dismissWaitDialog();
+                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
+                                }
+                            });
+                        } else {
+                            bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                                @Override
+                                public void callback(Object o) {
+                                    dismissWaitDialog();
+                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                    userJson.setIs_set_password("1");
                                     LoginUtils.changeUserInfo(getContext(), userJson);
                                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                    ToastView.makeText(getContext(), "绑定成功");
+                                    ToastView.makeText(getContext(), "设置成功");
                                     finish();
-                                } else {
-                                    step = 3;
-                                    tvTitle.setText("设置密码");
-                                    llStep1.setVisibility(View.GONE);
-                                    llStep2.setVisibility(View.VISIBLE);
-                                    tvWarning.setText("设置6-16个字符，请至少使用字母，数字和符号两种以上组合");
                                 }
-                            }
 
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "绑定失败" : e.getMessage());
-                            }
-                        });
-                    } else {
-                        bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
-                            @Override
-                            public void callback(Object o) {
-                                UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                userJson.setIs_set_password("1");
-                                LoginUtils.changeUserInfo(getContext(), userJson);
-                                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                ToastView.makeText(getContext(), "设置成功");
-                                finish();
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onError(Exception e) {
+                                    dismissWaitDialog();
+                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
+                                }
+                            });
+                        }
                     }
                 }
                 break;
@@ -266,6 +332,11 @@ public class BindActivity extends BaseActivity {
                 tvTitle.setText("身份校验");
                 step = 1;
                 restoreView();
+                editTextValidator = new EditTextValidator(this)
+                        .setButton(btnSend)
+                        .add(new ValidationModel(edtEmail, new EmailOrPhoneValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                        .execute();
             } else {
                 showErrorView();
             }
@@ -333,6 +404,22 @@ public class BindActivity extends BaseActivity {
                                 llStep2.setVisibility(View.GONE);
                                 tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
                             }
+
+                            if (type == TYPE_CHANGE_PHONE || type == TYPE_BIND_PHONE) {
+                                editTextValidator = new EditTextValidator(getContext())
+                                        .setButton(btnSend)
+                                        .add(new ValidationModel(edtEmail, new PhoneValidation()))
+                                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                        .execute();
+                            } else {
+                                editTextValidator = new EditTextValidator(getContext())
+                                        .setButton(btnSend)
+                                        .add(new ValidationModel(edtEmail, new EmailValidation()))
+                                        .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                        .execute();
+                            }
+
+
                         }
                     }).setPositiveButton("设置密码", new DialogInterface.OnClickListener() {
                         @Override

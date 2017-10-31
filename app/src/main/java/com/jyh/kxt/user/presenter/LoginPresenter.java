@@ -95,6 +95,7 @@ public class LoginPresenter extends BasePresenter {
      */
     public void login(View view, final int position) {
 
+        activity.showWaitDialog("登录中");
         LoginUtils.requestLogin(this, activity.edtName.getEdtText(), activity.edtPwd.getEdtText(), position == 0 ? VarConstant
                 .LOGIN_TYPE_DEFAULT : VarConstant.LOGIN_TYPE_CODE, getClass().getName(), new ObserverData<UserJson>() {
 
@@ -102,13 +103,15 @@ public class LoginPresenter extends BasePresenter {
             public void callback(UserJson userJson) {
                 errorNumAccount = 0;
                 errorNumPhone = 0;
-                ToastView.makeText(mContext,"登录成功");
+                activity.dismissWaitDialog();
+                ToastView.makeText(mContext, "登录成功");
                 LoginUtils.login(activity, userJson);
             }
 
             @Override
             public void onError(Exception e) {
-                ToastView.makeText(mContext,"登录失败");
+                activity.dismissWaitDialog();
+                ToastView.makeText(mContext, e == null || e.getMessage() == null ? "登录失败" : e.getMessage());
 
                 if (position == 0) {
                     errorNumAccount++;
@@ -142,7 +145,7 @@ public class LoginPresenter extends BasePresenter {
             accountSave.put("pwd_status", edtPwd.isShowPwd());
             accountSave.put("pwd_function_txt", edtPwd.getFunctionText());
             accountSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
-            accountSave.put("code_status",edtCode.getVisibility());
+            accountSave.put("code_status", edtCode.getVisibility());
         } else {
             phoneSave.put("name", edtName.getEdt().getText());
             phoneSave.put("name_hint", edtName.getEdt().getHint());
@@ -153,7 +156,7 @@ public class LoginPresenter extends BasePresenter {
             phoneSave.put("pwd_status", true);
             phoneSave.put("pwd_function_txt", edtPwd.getFunctionText());
             phoneSave.put("pwd_function_txt_color", edtPwd.getFunctionTextColor());
-            phoneSave.put("code_status",edtCode.getVisibility());
+            phoneSave.put("code_status", edtCode.getVisibility());
         }
     }
 
@@ -206,7 +209,7 @@ public class LoginPresenter extends BasePresenter {
         phoneSave.put("showline", true);
         phoneSave.put("pwd_function_txt", "获取动态码");
         phoneSave.put("pwd_function_txt_color", ContextCompat.getColor(mContext, R.color.font_color1));
-        phoneSave.put("code_status",View.GONE);
+        phoneSave.put("code_status", View.GONE);
     }
 
     private boolean canRequestPwd = true;//是否可以请求
@@ -220,7 +223,7 @@ public class LoginPresenter extends BasePresenter {
             message.arg1 = 60;
             message.what = 1;
             handler.sendMessage(message);
-            LoginUtils.requestCode(this, VarConstant.CODE_GENERAL,activity.edtName.getEdtText(), getClass().getName(), new
+            LoginUtils.requestCode(this, VarConstant.CODE_GENERAL, activity.edtName.getEdtText(), getClass().getName(), new
                     ObserverData() {
                         @Override
                         public void callback(Object o) {

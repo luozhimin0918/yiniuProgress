@@ -1,6 +1,5 @@
 package com.jyh.kxt.user.presenter;
 
-import android.app.usage.UsageEvents;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -116,10 +115,12 @@ public class RegisterPresenter extends BasePresenter {
         jsonParam.put(VarConstant.HTTP_USERNAME, activity.edtPhone.getEdtText());
         jsonParam.put(VarConstant.HTTP_PWD, activity.edtPwd.getEdtText());
 
+        activity.showWaitDialog("注册中");
         request.doPost(HttpConstant.USER_REGISTER, jsonParam, new HttpListener<UserJson>() {
             @Override
             protected void onResponse(UserJson o) {
                 LoginUtils.login(mContext, o);
+                activity.dismissWaitDialog();
                 ToastView.makeText(mContext, "注册成功");
                 activity.finish();
                 EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN, o));
@@ -128,6 +129,7 @@ public class RegisterPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                activity.dismissWaitDialog();
                 ToastView.makeText3(mContext, error == null ? "注册失败，请重试" : error.getMessage());
             }
         });

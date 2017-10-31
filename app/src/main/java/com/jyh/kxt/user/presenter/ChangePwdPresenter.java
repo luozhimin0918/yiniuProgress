@@ -29,35 +29,41 @@ public class ChangePwdPresenter extends BasePresenter {
 
     public void pwd(String oldPwd, String newPwd, String rePwd) {
         if (type == ChangePwdActivity.TYPE_SET) {
-            if (oldPwd.equals(rePwd))
+            if (oldPwd.equals(rePwd)) {
+                activity.showWaitDialog(null);
                 LoginUtils.changePwd(this, null, null, oldPwd, getClass().getName(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
+                        activity.dismissWaitDialog();
                         ToastView.makeText(mContext, "设置成功");
                     }
 
                     @Override
                     public void onError(Exception e) {
+                        activity.dismissWaitDialog();
                         ToastView.makeText(mContext, e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                     }
                 });
-            else
+            } else
                 activity.showError("密码不一致");
         } else {
 
-            if (newPwd.equals(rePwd))
+            if (newPwd.equals(rePwd)) {
+                activity.showWaitDialog(null);
                 LoginUtils.changePwd(this, null, oldPwd, newPwd, getClass().getName(), new ObserverData() {
                     @Override
                     public void callback(Object o) {
+                        activity.dismissWaitDialog();
                         ToastView.makeText(mContext, "修改成功");
                     }
 
                     @Override
                     public void onError(Exception e) {
+                        activity.dismissWaitDialog();
                         ToastView.makeText(mContext, e == null || e.getMessage() == null ? "修改失败" : e.getMessage());
                     }
                 });
-            else {
+            }else {
                 activity.showError("密码不一致");
             }
         }

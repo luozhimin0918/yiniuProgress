@@ -58,8 +58,8 @@
                     tl:tl_indicator_width="@dimen/navigationBar2IndicatorWidth"
                     tl:tl_mode_scrollable="MODE_FIXED"
                     tl:tl_tab_padding="10dp"
-                    tl:tl_textSelectColor="@color/translucent_white"
-                    tl:tl_textUnselectColor="@color/white"
+                    tl:tl_textSelectColor="@color/white"
+                    tl:tl_textUnselectColor="@color/translucent_white"
                     tl:tl_textsize="@dimen/content_font_size2"
                     />
 
