@@ -258,7 +258,8 @@ public class FunctionEditText extends LinearLayout {
         clearBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                delText(edt.getText());
+//                delText(edt.getText());
+                edt.setText("");
             }
         });
         clearBtn.setLongClickable(true);

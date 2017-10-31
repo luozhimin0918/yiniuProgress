@@ -23,23 +23,23 @@
             <FrameLayout
                 android:id="@+id/fl_bg"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="170dp"
                 android:background="@mipmap/icon_user_login_bg">
 
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="40dp"
                     android:src="@mipmap/icon_user_login_logo"/>
 
                 <ImageView
                     android:id="@+id/iv_close"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="right"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="25dp"
                     android:src="@mipmap/icon_user_login_close"/>
 
                 <com.library.widget.tablayout.NavigationTabLayout
@@ -47,11 +47,11 @@
                     xmlns:tl="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/stl_navigation_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
                     android:paddingRight="@dimen/navigationBar2ImageWidth"
                     tl:tl_indicator_color="@color/white"
+                    android:layout_marginBottom="10dp"
                     tl:tl_indicator_corner_radius="@dimen/navigationBar2Radius"
                     tl:tl_indicator_margin_bottom="0dp"
 
@@ -69,8 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/lr_padding_horizontal"
-                android:paddingRight="@dimen/lr_padding_horizontal">
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp">
 
                 <com.jyh.kxt.base.widget.FunctionEditText
                     android:id="@+id/edt_name"
@@ -121,7 +121,7 @@
 
                 <com.jyh.kxt.base.custom.DiscolorButton
                     android:id="@+id/db_login"
-                    style="@style/BtnStyle1"
+                    style="@style/BtnStyle3"
                     android:layout_marginTop="27dp"
                     android:text="登录"
                     />
@@ -132,36 +132,38 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="20dp"
-                    android:text="新用户注册 >>>"
-                    android:textColor="@color/font_color1"
-                    android:textSize="@dimen/content_font_size"/>
+                    android:text="新用户注册 >"
+                    android:textColor="@color/font_color64"
+                    android:textSize="@dimen/describe_font_size3"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/lr_content_marginTop"
+                    android:layout_marginTop="105dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:layout_marginBottom="35dp">
 
                     <ImageView
                         android:id="@+id/iv_qq"
-                        android:layout_width="@dimen/lr_umengImgSize"
-                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="left"
                         android:src="@mipmap/icon_user_login_qq"/>
 
                     <ImageView
                         android:id="@+id/iv_sina"
-                        android:layout_width="@dimen/lr_umengImgSize"
-                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:src="@mipmap/icon_user_login_sina"/>
 
                     <ImageView
                         android:id="@+id/iv_wx"
-                        android:layout_width="@dimen/lr_umengImgSize"
-                        android:layout_height="@dimen/lr_umengImgSize"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_gravity="right"
                         android:src="@mipmap/icon_user_login_wx"/>
                 </RelativeLayout>

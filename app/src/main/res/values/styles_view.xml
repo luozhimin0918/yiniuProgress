@@ -52,6 +52,22 @@
         <item name="android:textColor">@color/font_color3</item>
     </style>
 
+    <style name="BtnStyle3">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/lr_btn_height</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/content_font_size2</item>
+        <item name="cornerRadius">@dimen/btn_cornerRadius</item>
+
+        <item name="clickBackground">@color/bg_click_color</item>
+        <item name="clickFontColor">@color/font_click_color</item>
+
+        <item name="disabledBackground">@color/bg_click_color</item>
+        <item name="disabledFontColor">@color/font_disable_color</item>
+
+        <item name="defaultBackground">@color/bg_enable_color</item>
+        <item name="defaultFontColor">@color/font_enable_color</item>
+    </style>
     <style name="errorTvStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/lr_error_height</item>
