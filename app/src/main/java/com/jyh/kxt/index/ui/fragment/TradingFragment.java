@@ -110,8 +110,10 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
                     startActivity(rzIntent);
                     return;
                 }
-
-//                startActivityForResult(new Intent(getContext(), com.jyh.kxt.trading.ui.SearchActivity.class), 200);
+                boolean toBindPhoneInfo = LoginUtils.isToBindPhoneInfo(getContext());
+                if (toBindPhoneInfo) {
+                    return;
+                }
                 Intent publishIntent = new Intent(getContext(), PublishActivity.class);
                 startActivity(publishIntent);
                 break;
@@ -254,7 +256,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
             } else {
                 Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                         .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
-                if (user.getIs_unread_msg() == 1|| user.getIs_unread_reply() == 1) {
+                if (user.getIs_unread_msg() == 1 || user.getIs_unread_reply() == 1) {
                     tvRedDot.setVisibility(View.VISIBLE);
                 } else {
                     tvRedDot.setVisibility(View.GONE);
