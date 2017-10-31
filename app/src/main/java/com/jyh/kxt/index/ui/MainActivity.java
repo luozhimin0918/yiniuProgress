@@ -593,6 +593,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     startActivity(intent);
                     return;
                 }
+                boolean toBindPhoneInfo = LoginUtils.isToBindPhoneInfo(this);
+                if(toBindPhoneInfo){
+                    return;
+                }
 
                 Intent publishIntent = new Intent(this, PublishActivity.class);
                 startActivity(publishIntent);
