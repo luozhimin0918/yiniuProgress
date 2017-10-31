@@ -9,7 +9,13 @@ import android.widget.TextView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.presenter.CommentListPresenter;
+import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.BindActivity;
+import com.library.bean.EventBusClass;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,7 +54,7 @@ public class CommentListActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_bar_break, R.id.comment_list_my_comment, R.id.comment_list_reply_me,
-                     comm_list_rb1, comm_list_rb2, comm_list_rb3})
+            comm_list_rb1, comm_list_rb2, comm_list_rb3})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.iv_bar_break:
@@ -81,5 +87,14 @@ public class CommentListActivity extends BaseActivity {
 
         commentListReplyMe.setTextColor(ContextCompat.getColor(this, navPosition == 1 ? R.color.blue1 : R.color.font_color64));
         commListReplyLine.setVisibility(navPosition == 1 ? View.VISIBLE : View.GONE);
+
+        if (navPosition == 1) {
+            UserJson userJson = LoginUtils.getUserInfo(this);
+            if (userJson != null) {
+                userJson.setIs_unread_reply(0);
+                LoginUtils.changeUserInfo(getContext(), userJson);
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+            }
+        }
     }
 }

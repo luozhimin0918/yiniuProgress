@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.net.http.LoggingEventHandler;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -38,7 +36,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.huawei.hms.api.ConnectionResult;
-import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.api.HuaweiApiClient;
 import com.huawei.hms.support.api.client.PendingResult;
 import com.huawei.hms.support.api.client.ResultCallback;
@@ -52,12 +49,9 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
-import com.jyh.kxt.base.dao.DBManager;
 import com.jyh.kxt.base.http.GlobalHttpRequest;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
-import com.jyh.kxt.base.util.emoje.DBUtils;
-import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.DoubleClickUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
@@ -70,7 +64,6 @@ import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
-import com.jyh.kxt.index.json.TypeDataJson;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
@@ -99,7 +92,6 @@ import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
-import com.tencent.connect.UserInfo;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -127,8 +119,7 @@ import static com.huawei.hms.activity.BridgeActivity.EXTRA_RESULT;
 @MLinkDefaultRouter
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener, OnChatMessage {
 
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
+    @BindView(R.id.ll_content)   LinearLayout llContent;
     @BindView(R.id.drawer_layout)
     public DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -155,8 +146,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     public TradingFragment exploreFragment;
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
-    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting, tvAbout, tvMine, tvPoint, tvLetter, tvSign,
-            tvRedDot;
+    TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting,
+            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot,tvCommentRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
@@ -310,6 +301,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         tvSign = ButterKnife.findById(llHeaderLayout, R.id.tv_sign);
 
         tvRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_red_dot);
+        tvCommentRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_comment_red_dot);
 
 
         //签到未签到状态
@@ -669,6 +661,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 tvRedDot.setVisibility(View.GONE);
             }
 
+            if (userJson.getIs_unread_reply() == 1) {
+                tvCommentRedDot.setVisibility(View.VISIBLE);
+            } else {
+                tvCommentRedDot.setVisibility(View.GONE);
+            }
 
             loginView.setVisibility(View.VISIBLE);
             unLoginView.setVisibility(View.GONE);
@@ -724,6 +721,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             });
         } else {
             tvRedDot.setVisibility(View.GONE);
+            tvCommentRedDot.setVisibility(View.GONE);
             loginView.setVisibility(View.GONE);
             unLoginView.setVisibility(View.VISIBLE);
             quitBtn.setVisibility(View.GONE);
@@ -1107,7 +1105,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         public void onConnectionFailed(ConnectionResult connectionResult) {
                             Log.e(TAG, "onConnectionFailed: 华为平台连接失败");
 
-                            // FixKxt: 提出人:Mr'Dai->是否提示推送渠道升级?
                             /*if (HuaweiApiAvailability.getInstance().isUserResolvableError(connectionResult.getErrorCode())) {
                                 final int errorCode = connectionResult.getErrorCode();
                                 new Handler(getMainLooper()).post(new Runnable() {

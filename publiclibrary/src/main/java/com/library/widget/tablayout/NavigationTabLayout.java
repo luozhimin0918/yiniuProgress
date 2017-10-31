@@ -80,7 +80,7 @@ public class NavigationTabLayout extends LinearLayout {
     private float mIndicatorMarginRight;
     private float mIndicatorMarginBottom;
     private int mIndicatorGravity;
-    private boolean mIndicatorWidthEqualTitle ;
+    private boolean mIndicatorWidthEqualTitle;
 
     /**
      * underline
@@ -243,15 +243,19 @@ public class NavigationTabLayout extends LinearLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
-        ArrayList<View> touchViewList = getTouchables();
-        for (int i = 0; i < touchViewList.size(); i++) {
-            View itemView = touchViewList.get(i);
-            if (isPinnedViewTouched(itemView, ev.getX(), ev.getY())) {
-                updateContainerPosition(itemView);
-                break;
-            }
-        }
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_UP:
 
+                ArrayList<View> touchViewList = getTouchables();
+                for (int i = 0; i < touchViewList.size(); i++) {
+                    View itemView = touchViewList.get(i);
+                    if (isPinnedViewTouched(itemView, ev.getX(), ev.getY())) {
+                        updateContainerPosition(itemView);
+                        break;
+                    }
+                }
+                break;
+        }
         return super.dispatchTouchEvent(ev);
     }
 

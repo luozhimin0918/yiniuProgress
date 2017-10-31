@@ -219,6 +219,7 @@
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:visibility="visible"
                     android:paddingLeft="@dimen/drawer_imgPadding">
 
                     <ImageView
@@ -246,6 +247,7 @@
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:visibility="visible"
                     android:paddingLeft="@dimen/drawer_imgPadding">
 
                     <ImageView
@@ -270,6 +272,7 @@
                     android:id="@+id/ll_letter"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
+                    android:visibility="visible"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/drawer_imgPadding">
@@ -459,6 +462,16 @@
                         android:text="我的评论"
                         android:textColor="@color/font_color5"
                         android:textSize="@dimen/content_font_size2"/>
+
+                    <TextView
+                        android:id="@+id/head_comment_red_dot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/bg_oval_red"
+                        android:textSize="@dimen/min_min_font_size"
+                        android:visibility="gone"
+                        />
                 </LinearLayout>
 
                 <LinearLayout

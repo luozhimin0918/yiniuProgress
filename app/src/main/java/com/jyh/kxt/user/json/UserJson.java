@@ -37,6 +37,7 @@ public class UserJson {
     private String writer_avatar;
 
     private int is_unread_msg;
+    private int is_unread_reply;
 
     private String login_type;//qq/sina/wx/password/message//登录方式
     private String is_set_password;//是否设置密码
@@ -165,6 +166,14 @@ public class UserJson {
 
     public void setIs_unread_msg(int is_unread_msg) {
         this.is_unread_msg = is_unread_msg;
+    }
+
+    public int getIs_unread_reply() {
+        return is_unread_reply;
+    }
+
+    public void setIs_unread_reply(int is_unread_reply) {
+        this.is_unread_reply = is_unread_reply;
     }
 
     public String getLogin_type() {

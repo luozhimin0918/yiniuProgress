@@ -45,6 +45,7 @@ import com.library.bean.EventBusClass;
 import com.library.util.JsonUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
+import com.library.widget.window.ToastView;
 import com.superplayer.library.SuperPlayer;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -338,6 +339,10 @@ public class VideoDetailPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (error != null && error.getMessage() != null) {
+                    String errorMessage = error.getMessage();
+                    ToastView.makeText2(mContext, errorMessage);
+                }
                 if (popupWindow instanceof PopupUtil) {
                     ((PopupUtil) popupWindow).addLock(false);
                 }

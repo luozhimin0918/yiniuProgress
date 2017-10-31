@@ -2,6 +2,7 @@ package com.jyh.kxt.base.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -249,7 +250,9 @@ public class FunctionEditText extends LinearLayout {
         clearBtn.setGravity(Gravity.CENTER);
         ivClear = new ImageView(context);
         LayoutParams params = new LayoutParams(imageSize, imageSize);
-        params.leftMargin = 20;
+        params.leftMargin = 15;
+        params.rightMargin  = 7;
+
         clearBtn.addView(ivClear, params);
         Editable text = edt.getText();
         clearBtn.setOnClickListener(new OnClickListener() {
@@ -297,7 +300,8 @@ public class FunctionEditText extends LinearLayout {
         ivFunction.setBackground(functionDrawble);
         functionImgBtn.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(44, 26);
-        layoutParams.leftMargin = 20;
+        layoutParams.leftMargin = 7;
+        layoutParams.rightMargin = 15;
         functionImgBtn.addView(ivFunction, layoutParams);
         edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         ivFunction.setSelected(showPwd);
@@ -329,8 +333,8 @@ public class FunctionEditText extends LinearLayout {
         functionTxtBtn.setOrientation(HORIZONTAL);
         functionTxtLine = new View(context);
         LinearLayout.LayoutParams lineParams = new LayoutParams(SystemUtil.dp2px(context, 1), 35);
-        lineParams.gravity=Gravity.CENTER_VERTICAL;
-        lineParams.leftMargin=10;
+        lineParams.gravity = Gravity.CENTER_VERTICAL;
+        lineParams.leftMargin = 10;
         functionTxtLine.setBackgroundColor(functionTxtLineColor);
         functionTxtLine.setLayoutParams(lineParams);
         functionTxtBtn.addView(functionTxtLine);

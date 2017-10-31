@@ -53,6 +53,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.SaveImage;
+import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
@@ -936,6 +937,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 @Override
                 protected void onErrorResponse(VolleyError error) {
                     super.onErrorResponse(error);
+                    if (error != null && error.getMessage() != null) {
+                        String errorMessage = error.getMessage();
+                        ToastView.makeText2(getContext(),errorMessage);
+                    }
                     if (popupWindow instanceof PopupUtil) {
                         ((PopupUtil) popupWindow).addLock(false);
                     }

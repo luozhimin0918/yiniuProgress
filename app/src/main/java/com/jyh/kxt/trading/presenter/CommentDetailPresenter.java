@@ -24,6 +24,7 @@ import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -138,6 +139,10 @@ public class CommentDetailPresenter extends BasePresenter {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (error != null && error.getMessage() != null) {
+                    String errorMessage = error.getMessage();
+                    ToastView.makeText2(mContext, errorMessage);
+                }
                 if (popupWindow instanceof PopupUtil) {
                     ((PopupUtil) popupWindow).addLock(false);
                 }

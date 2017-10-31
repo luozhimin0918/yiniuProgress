@@ -21,6 +21,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SystemUtil;
+import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -115,6 +116,10 @@ public class MyCommentPresenter extends BasePresenter implements CommentPresente
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                if (error != null && error.getMessage() != null) {
+                    String errorMessage = error.getMessage();
+                    ToastView.makeText2(mContext, errorMessage);
+                }
                 if (popupWindow instanceof PopupUtil) {
                     ((PopupUtil) popupWindow).addLock(false);
                 }
