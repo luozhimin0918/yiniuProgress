@@ -5,8 +5,12 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.ChangePwdActivity;
+import com.library.bean.EventBusClass;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 项目名:KxtProfessional
@@ -36,6 +40,10 @@ public class ChangePwdPresenter extends BasePresenter {
                     public void callback(Object o) {
                         activity.dismissWaitDialog();
                         ToastView.makeText(mContext, "设置成功");
+                        UserJson userJson = LoginUtils.getUserInfo(mContext);
+                        userJson.setIs_set_password("1");
+                        LoginUtils.changeUserInfo(mContext, userJson);
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
                     }
 
                     @Override
@@ -63,7 +71,7 @@ public class ChangePwdPresenter extends BasePresenter {
                         ToastView.makeText(mContext, e == null || e.getMessage() == null ? "修改失败" : e.getMessage());
                     }
                 });
-            }else {
+            } else {
                 activity.showError("密码不一致");
             }
         }

@@ -26,8 +26,10 @@ import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.LoginPresenter;
 import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
 import com.library.widget.tablayout.NavigationTabLayout;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -98,7 +100,14 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                     startActivity(intent);
                 } else {
                     //请求动态密码
-                    presenter.requestPwd();
+                    if (RegexValidateUtil.isEmpty(edtName.getEdtText())) {
+                        ToastView.makeText(getContext(), "手机号不能为空");
+                        return;
+                    }
+                    if (RegexValidateUtil.checkCellphone(edtName.getEdtText()))
+                        presenter.requestPwd();
+                    else
+                        ToastView.makeText(getContext(), "手机号不合法");
                 }
             }
         });
@@ -260,7 +269,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                         .setButton(dbLogin)
                         .add(new ValidationModel(edtName, new PhoneValidation()))
                         .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
-                        .add(new ValidationModel(edtCode,new PwdDynamicValidation()))
+                        .add(new ValidationModel(edtCode, new PwdDynamicValidation()))
                         .execute();
             } else {
                 editTextValidator = new EditTextValidator(getContext())

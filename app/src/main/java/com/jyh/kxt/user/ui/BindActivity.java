@@ -27,6 +27,7 @@ import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.BindPresenter;
 import com.library.bean.EventBusClass;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -117,7 +118,15 @@ public class BindActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //请求动态密码
-                bindPresenter.requestCode(step);
+                if (RegexValidateUtil.isEmpty(edtEmail.getEdtText())) {
+                    ToastView.makeText(getContext(), "手机号或邮箱不能为空");
+                    return;
+                }
+                if (RegexValidateUtil.checkCellphone(edtEmail.getEdtText()) || RegexValidateUtil.checkEmail(edtEmail.getEdtText())) {
+                    bindPresenter.requestCode(step);
+                } else
+                    ToastView.makeText(getContext(), "手机号或邮箱不合法");
+
             }
         });
     }
@@ -207,13 +216,13 @@ public class BindActivity extends BaseActivity {
                                     dismissWaitDialog();
                                     tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
                                     restoreView();
-                                    if(type==TYPE_CHANGE_PHONE){
+                                    if (type == TYPE_CHANGE_PHONE) {
                                         editTextValidator = new EditTextValidator(getContext())
                                                 .setButton(btnSend)
                                                 .add(new ValidationModel(edtEmail, new PhoneValidation()))
                                                 .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
                                                 .execute();
-                                    }else{
+                                    } else {
                                         editTextValidator = new EditTextValidator(getContext())
                                                 .setButton(btnSend)
                                                 .add(new ValidationModel(edtEmail, new EmailValidation()))

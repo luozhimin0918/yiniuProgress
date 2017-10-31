@@ -23,6 +23,7 @@ import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.RegisterPresenter;
 import com.library.base.http.VarConstant;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
@@ -67,7 +68,14 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(View v) {
                 if (step == 0) {
                     //请求动态密码
-                    presenter.requestPwd();
+                    if (RegexValidateUtil.isEmpty(edtPhone.getEdtText())) {
+                        ToastView.makeText(getContext(), "手机号不能为空");
+                        return;
+                    }
+                    if (RegexValidateUtil.checkCellphone(edtPhone.getEdtText())) {
+                        presenter.requestPwd();
+                    } else
+                        ToastView.makeText(getContext(), "手机号不合法");
                 }
             }
         });
@@ -83,7 +91,7 @@ public class RegisterActivity extends BaseActivity {
                 if (editTextValidator.validate()) {
                     if (step == 0) {
                         //进行下一步设置密码
-                        LoginUtils.verifyCode(presenter, VarConstant.CODE_REGISTER,edtPhone.getEdtText(), edtPwd.getEdtText(),
+                        LoginUtils.verifyCode(presenter, VarConstant.CODE_REGISTER, edtPhone.getEdtText(), edtPwd.getEdtText(),
                                 presenter.getClass().getName(), new ObserverData() {
 
                                     @Override

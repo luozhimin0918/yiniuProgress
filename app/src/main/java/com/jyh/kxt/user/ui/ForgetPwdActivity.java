@@ -23,6 +23,7 @@ import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
 import com.library.base.http.VarConstant;
 import com.library.util.NetUtils;
+import com.library.util.RegexValidateUtil;
 import com.library.widget.window.ToastView;
 
 import butterknife.BindView;
@@ -75,7 +76,14 @@ public class ForgetPwdActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //请求动态密码
-                forgetPwdPresenter.requestPwd();
+                if (RegexValidateUtil.isEmpty(edtEmail.getEdtText())) {
+                    ToastView.makeText(getContext(), "手机号或邮箱不能为空");
+                    return;
+                }
+                if (RegexValidateUtil.checkCellphone(edtEmail.getEdtText()) || RegexValidateUtil.checkEmail(edtEmail.getEdtText()))
+                    forgetPwdPresenter.requestPwd();
+                else
+                    ToastView.makeText(getContext(), "手机号或邮箱不合法");
             }
         });
 
@@ -100,52 +108,53 @@ public class ForgetPwdActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_send:
-                if (step == 1) {
-                    LoginUtils.verifyCode(forgetPwdPresenter, VarConstant.CODE_VERIFY, edtEmail.getEdtText(), edtPwd.getEdtText(),
-                            forgetPwdPresenter.getClass().getName(), new ObserverData() {
-                                @Override
-                                public void callback(Object o) {
-                                    forgetPwdPresenter.saveData(step, edtEmail.getEdtText().toString(), edtPwd.getEdtText().toString(),
-                                            edtPwd
-                                                    .getFunctionText(), edtPwd.getFunctionTextColor(), true, true);
-                                    step = 2;
-                                    restoreView();
-                                    editTextValidator = new EditTextValidator(getContext())
-                                            .setButton(btnSend)
-                                            .add(new ValidationModel(edtEmail, new PwdValidation()))
-                                            .add(new ValidationModel(edtPwd, new PwdValidation()))
-                                            .execute();
-                                }
+                if (editTextValidator.validate())
+                    if (step == 1) {
+                        LoginUtils.verifyCode(forgetPwdPresenter, VarConstant.CODE_VERIFY, edtEmail.getEdtText(), edtPwd.getEdtText(),
+                                forgetPwdPresenter.getClass().getName(), new ObserverData() {
+                                    @Override
+                                    public void callback(Object o) {
+                                        forgetPwdPresenter.saveData(step, edtEmail.getEdtText().toString(), edtPwd.getEdtText().toString(),
+                                                edtPwd
+                                                        .getFunctionText(), edtPwd.getFunctionTextColor(), true, true);
+                                        step = 2;
+                                        restoreView();
+                                        editTextValidator = new EditTextValidator(getContext())
+                                                .setButton(btnSend)
+                                                .add(new ValidationModel(edtEmail, new PwdValidation()))
+                                                .add(new ValidationModel(edtPwd, new PwdValidation()))
+                                                .execute();
+                                    }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    ToastView.makeText(getContext(), "验证失败");
-                                }
-                            });
-                } else {
-                    if (NetUtils.isNetworkAvailable(this)) {
-                        if (editTextValidator.validate()) {
-                            showWaitDialog(null);
-                            LoginUtils.changePwd(forgetPwdPresenter, forgetPwdPresenter.getStepOneJson().getString("edt1Text"), "",
-                                    edtPwd.getEdtText(),
-                                    forgetPwdPresenter.getClass().getName(), new ObserverData() {
+                                    @Override
+                                    public void onError(Exception e) {
+                                        ToastView.makeText(getContext(), "验证失败");
+                                    }
+                                });
+                    } else {
+                        if (NetUtils.isNetworkAvailable(this)) {
+                            if (editTextValidator.validate()) {
+                                showWaitDialog(null);
+                                LoginUtils.changePwd(forgetPwdPresenter, forgetPwdPresenter.getStepOneJson().getString("edt1Text"), "",
+                                        edtPwd.getEdtText(),
+                                        forgetPwdPresenter.getClass().getName(), new ObserverData() {
 
-                                        @Override
-                                        public void callback(Object o) {
-                                            dismissWaitDialog();
-                                            ToastView.makeText(getContext(), "设置成功");
-                                        }
+                                            @Override
+                                            public void callback(Object o) {
+                                                dismissWaitDialog();
+                                                ToastView.makeText(getContext(), "设置成功");
+                                            }
 
-                                        @Override
-                                        public void onError(Exception e) {
-                                            dismissWaitDialog();
-                                            ToastView.makeText(getContext(), "设置失败");
-                                        }
-                                    });
-                        }
-                    } else
-                        ToastView.makeText(this, "暂无网络,请稍后再试");
-                }
+                                            @Override
+                                            public void onError(Exception e) {
+                                                dismissWaitDialog();
+                                                ToastView.makeText(getContext(), "设置失败");
+                                            }
+                                        });
+                            }
+                        } else
+                            ToastView.makeText(this, "暂无网络,请稍后再试");
+                    }
                 break;
         }
     }
