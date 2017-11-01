@@ -21,11 +21,13 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.BindActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
+import com.library.base.http.PreCacheHttpResponse;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -132,7 +134,7 @@ public class LoginUtils {
      * @param tag
      * @param observerData
      */
-    public static void requestCode(BasePresenter context, String type, String user, String tag, final ObserverData
+    public static void requestCode(final BasePresenter context, String type, String user, String tag, final ObserverData
             observerData) {
         VolleyRequest volleyRequest = new VolleyRequest(context.mContext, context.mQueue);
         volleyRequest.setTag(tag);
@@ -154,6 +156,7 @@ public class LoginUtils {
             @Override
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
+                ToastView.makeText(context.mContext, error == null || error.getMessage() == null ? "验证码获取失败" : error.getMessage());
                 observerData.onError(error);
             }
         });
@@ -282,7 +285,7 @@ public class LoginUtils {
      * @param tag
      * @param observerData
      */
-    public static void changePwd(BasePresenter presenter, String user,String oldPwd, String newPwd, String
+    public static void changePwd(BasePresenter presenter, String user, String oldPwd, String newPwd, String
             tag, final
                                  ObserverData observerData) {
         VolleyRequest volleyRequest = new VolleyRequest(presenter.mContext, presenter.mQueue);
