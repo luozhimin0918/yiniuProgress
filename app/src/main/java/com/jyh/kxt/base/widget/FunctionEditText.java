@@ -144,7 +144,7 @@ public class FunctionEditText extends LinearLayout {
         bottomLine = new View(context);
         bottomLine.setBackgroundColor(lineColor);
         addView(topLayout, topParams);
-        addView(bottomLine, LayoutParams.MATCH_PARENT, SystemUtil.dp2px(context, 1));
+        addView(bottomLine, LayoutParams.MATCH_PARENT, SystemUtil.dp2px(context, 1.5f));
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -312,7 +312,7 @@ public class FunctionEditText extends LinearLayout {
         layoutParams.leftMargin = 7;
         layoutParams.rightMargin = 15;
         functionImgBtn.addView(ivFunction, layoutParams);
-        edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         ivFunction.setSelected(showPwd);
         functionImgBtn.setOnClickListener(new OnClickListener() {
             @Override
@@ -320,10 +320,10 @@ public class FunctionEditText extends LinearLayout {
                 ivFunction.setSelected(!showPwd);
                 if (showPwd) {
                     showPwd = false;
-                    edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                    edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
                 } else {
                     showPwd = true;
-                    edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_NORMAL);
+                    edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER );
                 }
                 edt.setSelection(edt.getText().length());
             }
@@ -538,9 +538,9 @@ public class FunctionEditText extends LinearLayout {
     public void setShowPwd(boolean showPwd) {
         this.showPwd = showPwd;
         if (showPwd) {
-            edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_NORMAL);
+            edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_NORMAL);
         } else {
-            edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+            edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         }
         ivFunction.setSelected(showPwd);
         edt.setSelection(edt.getText().length());
