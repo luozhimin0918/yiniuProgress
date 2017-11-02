@@ -46,11 +46,15 @@
 
     <!-- 验证按钮颜色 -->
     <color name="bg_disable_color">#f7f7f7</color>
-    <color name="font_disable_color">#B9C4CC</color>
     <color name="bg_enable_color">#1C9CF2</color>
+    <color name="font_disable_color">#B9C4CC</color>
     <color name="font_enable_color">#ffffff</color>
     <color name="bg_click_color">#991C9CF2</color>
     <color name="font_click_color">#ffffff</color>
+
+
+    <color name="font_disable_color1">#aaffffff</color>
+    <color name="font_enable_color1">#ffffff</color>
 
     <color name="font_color1">#333333</color>
     <color name="font_color2">#666666</color>

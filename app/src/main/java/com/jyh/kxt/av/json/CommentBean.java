@@ -196,6 +196,9 @@ public class CommentBean {
     }
 
     public String getParent_member_nickname() {
+        if(parent_member_nickname == null){
+            parent_member_nickname = "";
+        }
         return parent_member_nickname;
     }
 

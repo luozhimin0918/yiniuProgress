@@ -7,6 +7,10 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
+import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,6 +26,8 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
+
+import java.util.regex.Pattern;
 
 /**
  * 项目名:KxtProfessional
@@ -229,6 +235,8 @@ public class FunctionEditText extends LinearLayout {
         edt.setGravity(Gravity.CENTER_VERTICAL);
         edt.setPadding(0, 0, 0, 0);
         topLayout.addView(edt);
+
+        updateInputType();
     }
 
     private void delText(Editable text) {
@@ -251,7 +259,7 @@ public class FunctionEditText extends LinearLayout {
         ivClear = new ImageView(context);
         LayoutParams params = new LayoutParams(imageSize, imageSize);
         params.leftMargin = 15;
-        params.rightMargin  = 7;
+        params.rightMargin = 7;
 
         clearBtn.addView(ivClear, params);
         Editable text = edt.getText();
@@ -463,7 +471,9 @@ public class FunctionEditText extends LinearLayout {
     public void setHintText(String hintText) {
         this.hintText = hintText;
         edt.setHint(hintText);
+        updateInputType();
     }
+
 
     public String getFunctionText() {
         if (functionText == null) functionText = "";
@@ -723,6 +733,36 @@ public class FunctionEditText extends LinearLayout {
                 edt.setHintTextColor(edtHintColor);
                 edt.setHint(hintText);
             }
+        }
+    }
+
+    private void updateInputType() {
+        //如果包涵有手机号码 并且没有邮箱
+        if (hintText != null && hintText.length() > 0) {
+            //字符过滤功能
+            NumberKeyListener myKeyListener = new NumberKeyListener() {
+
+                int phonePosition = hintText.indexOf("手机");
+                int emaliPosition = hintText.indexOf("邮箱");
+
+                public int getInputType() {
+                    if (phonePosition != -1 && emaliPosition != -1) {
+                        return InputType.TYPE_CLASS_PHONE;
+                    } else if (phonePosition != -1) {
+                        return InputType.TYPE_CLASS_PHONE;
+                    } else if (emaliPosition != -1) {
+                        return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+                    } else {
+                        return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+                    }
+                }
+
+                protected char[] getAcceptedChars() {
+                    //指定你所接受的字符
+                    return ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@.").toCharArray();
+                }
+            };
+            edt.setKeyListener(myKeyListener);
         }
     }
 }
