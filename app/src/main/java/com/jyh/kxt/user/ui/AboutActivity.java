@@ -50,7 +50,7 @@ public class AboutActivity extends BaseActivity {
         ivBarBreak.setImageResource(R.mipmap.ico_break);
         tvBarTitle.setText("关于我们");
         ivBarFunction.setVisibility(View.INVISIBLE);
-        System.out.println("测试提交");
+
         try {
             String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
             config = JSON.parseObject(configStr, MainInitJson.class);
