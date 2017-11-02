@@ -44,6 +44,7 @@ public class ChangePwdPresenter extends BasePresenter {
                         userJson.setIs_set_password("1");
                         LoginUtils.changeUserInfo(mContext, userJson);
                         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+                        activity.finish();
                     }
 
                     @Override
@@ -63,6 +64,7 @@ public class ChangePwdPresenter extends BasePresenter {
                     public void callback(Object o) {
                         activity.dismissWaitDialog();
                         ToastView.makeText(mContext, "修改成功");
+                        activity.finish();
                     }
 
                     @Override

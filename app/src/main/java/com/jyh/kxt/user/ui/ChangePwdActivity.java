@@ -69,14 +69,16 @@ public class ChangePwdActivity extends BaseActivity {
 
         if (type == TYPE_SET) {
             tvBarTitle.setText("设置密码");
+            edtPwdOld.setHintText("输入密码");
             editTextValidator = new EditTextValidator(this)
                     .setButton(changeBtn)
                     .add(new ValidationModel(edtPwdOld, new PwdValidation()))
-                    .add(new ValidationModel(edtPwdNew, new PwdValidation()))
+                    .add(new ValidationModel(edtPwdRe, new PwdValidation()))
                     .execute();
             edtPwdNew.setVisibility(View.GONE);
         } else {
             tvBarTitle.setText("修改密码");
+            edtPwdOld.setHintText("旧密码");
             editTextValidator = new EditTextValidator(getContext())
                     .setButton(changeBtn)
                     .add(new ValidationModel(edtPwdOld, new PwdValidation()))
