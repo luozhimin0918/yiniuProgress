@@ -11,12 +11,12 @@
     </style>
 
     <style name="Theme.Start" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/icon_lauch</item>
+        <item name="android:background">@mipmap/icon_lauch</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
 
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
     </style>
 
     <style name="TranslucentBgTheme" parent="AppTheme">

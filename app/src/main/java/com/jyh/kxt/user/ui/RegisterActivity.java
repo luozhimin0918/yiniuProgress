@@ -75,7 +75,7 @@ public class RegisterActivity extends BaseActivity {
                     if (RegexValidateUtil.checkCellphone(edtPhone.getEdtText())) {
                         presenter.requestPwd();
                     } else
-                        ToastView.makeText(getContext(), "手机号不合法");
+                        ToastView.makeText3(getContext(), "手机号不合法");
                 }
             }
         });
