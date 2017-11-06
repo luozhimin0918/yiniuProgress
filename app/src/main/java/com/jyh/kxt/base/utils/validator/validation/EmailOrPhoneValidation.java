@@ -34,7 +34,7 @@ public class EmailOrPhoneValidation extends ValidationExecutor {
         }
 
         errorInfo = null;
-        return result;
+        return result|result2;
     }
 
 }

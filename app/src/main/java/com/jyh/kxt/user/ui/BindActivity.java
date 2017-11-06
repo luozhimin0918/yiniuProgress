@@ -206,7 +206,7 @@ public class BindActivity extends BaseActivity {
                         if (step == 1) {
                             bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(), edtPwd
                                     .getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd.getFunctionTextColor());
-                            bindPresenter.step1(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                            bindPresenter.step1(edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
                                 @Override
                                 public void callback(Object o) {
                                     bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
