@@ -119,7 +119,7 @@ import static com.huawei.hms.activity.BridgeActivity.EXTRA_RESULT;
 @MLinkDefaultRouter
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener, OnChatMessage {
 
-    @BindView(R.id.ll_content)   LinearLayout llContent;
+    @BindView(R.id.ll_content) LinearLayout llContent;
     @BindView(R.id.drawer_layout)
     public DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
     TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting,
-            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot,tvCommentRedDot;
+            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot, tvCommentRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
@@ -594,7 +594,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     return;
                 }
                 boolean toBindPhoneInfo = LoginUtils.isToBindPhoneInfo(this);
-                if(toBindPhoneInfo){
+                if (toBindPhoneInfo) {
                     return;
                 }
 
@@ -1080,7 +1080,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             //创建华为移动服务client实例用以使用华为push服务
             //需要指定api为HuaweiPush.PUSH_API
             //连接回调以及连接失败监听
-
             huaweiApiClient = new HuaweiApiClient.Builder(SampleApplicationContext.context)
                     .addApi(HuaweiPush.PUSH_API)
                     .addConnectionCallbacks(new HuaweiApiClient.ConnectionCallbacks() {
@@ -1088,6 +1087,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         public void onConnected() {
                             Log.e(TAG, "onConnected: 华为平台连接成功");
 
+                            SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"华为");
                             PendingResult<TokenResult> tokenResult = HuaweiPush.HuaweiPushApi
                                     .getToken(huaweiApiClient);
 
@@ -1108,22 +1108,9 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
                             Log.e(TAG, "onConnectionFailed: 华为平台连接失败");
-
-                            /*if (HuaweiApiAvailability.getInstance().isUserResolvableError(connectionResult.getErrorCode())) {
-                                final int errorCode = connectionResult.getErrorCode();
-                                new Handler(getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // 此方法必须在主线程调用, xxxxxx.this 为当前界面的activity
-                                        HuaweiApiAvailability.getInstance().resolveError(MainActivity.this,
-                                                errorCode,
-                                                REQUEST_HMS_RESOLVE_ERROR);
-                                    }
-                                });
-                            } else {
-                                //其他错误码请参见开发指南或者API文档
-                            }*/
-
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                                bindJPushService();
+                            }
                         }
                     })
                     .build();
@@ -1141,7 +1128,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             filter.addAction(HuaWeiPushReceiver.ACTION_UPDATEUI);
 
             registerReceiver(huaWeiToKentReceiver, filter);
-
 
             try {
                 JPushInterface.onKillProcess(this);
@@ -1175,7 +1161,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             if (userInfo != null) {
                 MiPushClient.setAlias(this, userInfo.getUid(), null);
             }
-
+            SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"小米");
             try {
                 JPushInterface.onKillProcess(this);
                 if (huaweiApiClient != null) {
@@ -1186,26 +1172,30 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             }
 
         } else {
-            /*
-             * 推送相关代码
-             */
-            JPushInterface.setDebugMode(true);
-            JPushInterface.init(SampleApplicationContext.context);
+            bindJPushService();
+        }
+    }
 
-            UserJson userInfo = LoginUtils.getUserInfo(this);
-            if (userInfo != null) {
-                JPushInterface.setAlias(this, 1, userInfo.getUid());
+    private void bindJPushService() {
+        /*
+        * 推送相关代码
+        */
+        SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"极光");
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(SampleApplicationContext.context);
+
+        UserJson userInfo = LoginUtils.getUserInfo(this);
+        if (userInfo != null) {
+            JPushInterface.setAlias(this, 1, userInfo.getUid());
+        }
+
+        try {
+            MiPushClient.disablePush(this);
+            if (huaweiApiClient != null) {
+                huaweiApiClient.disconnect();
             }
-
-            try {
-                MiPushClient.disablePush(this);
-                if (huaweiApiClient != null) {
-                    huaweiApiClient.disconnect();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

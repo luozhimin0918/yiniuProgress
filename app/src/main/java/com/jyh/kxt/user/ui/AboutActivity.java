@@ -3,6 +3,7 @@ package com.jyh.kxt.user.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -121,10 +122,16 @@ public class AboutActivity extends BaseActivity {
             String system = PhoneInfo.getSystem();
             mHideBuffer.append(String.valueOf("当前系统:" + system + "\n"));
 
-            if(PhoneInfo.SYS_EMUI.equals(system)){
+            if (PhoneInfo.SYS_EMUI.equals(system)) {
                 String token = SPUtils.getString(this, SpConstant.HUAWEI_TOKEN);
-                mHideBuffer.append(String.valueOf("华为推送Token:" + token + "\n"));
+                mHideBuffer.append(String.valueOf("华为IMEI:" + token + "\n"));
             }
+
+            String mPushPlatform = SPUtils.getString(AboutActivity.this, SpConstant.PUSH_FROM_PLATFORM);
+            if(!TextUtils.isEmpty(mPushPlatform)){
+                mHideBuffer.append(String.valueOf("推送平台:" + mPushPlatform + "\n"));
+            }
+
             UserJson userInfo = LoginUtils.getUserInfo(this);
             if (userInfo != null) {
                 mHideBuffer.append(String.valueOf("uid:" + userInfo.getUid() + "\n"));

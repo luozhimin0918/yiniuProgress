@@ -115,4 +115,5 @@ public class SpConstant {
     public static final String PUSH_AGENT_TAG = "push_agent_tag";
     public static final String TIP_FAVORABLE = "tip_favorable";
     public static final String HUAWEI_TOKEN= "huawei_token";
+    public static final String PUSH_FROM_PLATFORM = "push_from_platform";
 }

@@ -2,19 +2,15 @@ package com.jyh.kxt.base.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
 import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -26,8 +22,6 @@ import android.widget.TextView;
 import com.jyh.kxt.R;
 import com.library.base.http.VarConstant;
 import com.library.util.SystemUtil;
-
-import java.util.regex.Pattern;
 
 /**
  * 项目名:KxtProfessional
@@ -312,7 +306,7 @@ public class FunctionEditText extends LinearLayout {
         layoutParams.leftMargin = 7;
         layoutParams.rightMargin = 15;
         functionImgBtn.addView(ivFunction, layoutParams);
-        edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         ivFunction.setSelected(showPwd);
         functionImgBtn.setOnClickListener(new OnClickListener() {
             @Override
@@ -320,10 +314,10 @@ public class FunctionEditText extends LinearLayout {
                 ivFunction.setSelected(!showPwd);
                 if (showPwd) {
                     showPwd = false;
-                    edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                    edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
                 } else {
                     showPwd = true;
-                    edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER );
+                    edt.setInputType(EditorInfo.TYPE_CLASS_TEXT);
                 }
                 edt.setSelection(edt.getText().length());
             }
@@ -538,9 +532,9 @@ public class FunctionEditText extends LinearLayout {
     public void setShowPwd(boolean showPwd) {
         this.showPwd = showPwd;
         if (showPwd) {
-            edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_NORMAL);
+            edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_NORMAL);
         } else {
-            edt.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+            edt.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         }
         ivFunction.setSelected(showPwd);
         edt.setSelection(edt.getText().length());
@@ -739,6 +733,10 @@ public class FunctionEditText extends LinearLayout {
     private void updateInputType() {
         //如果包涵有手机号码 并且没有邮箱
         if (hintText != null && hintText.length() > 0) {
+            if (hintText.contains("昵称")) {
+                //有昵称的情况下不参与过滤
+                return;
+            }
             //字符过滤功能
             NumberKeyListener myKeyListener = new NumberKeyListener() {
 
@@ -747,13 +745,11 @@ public class FunctionEditText extends LinearLayout {
 
                 public int getInputType() {
                     if (phonePosition != -1 && emaliPosition != -1) {
-                        return InputType.TYPE_CLASS_PHONE;
+                        return InputType.TYPE_CLASS_TEXT;
                     } else if (phonePosition != -1) {
                         return InputType.TYPE_CLASS_PHONE;
-                    } else if (emaliPosition != -1) {
-                        return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
-                    } else {
-                        return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+                    }  else {
+                        return InputType.TYPE_CLASS_TEXT;
                     }
                 }
 
