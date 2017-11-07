@@ -5,11 +5,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
+import com.jyh.kxt.av.json.VideoListJson;
+import com.jyh.kxt.base.json.AdTitleIconBean;
+import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.library.util.RegexValidateUtil;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +37,37 @@ public class NewsJson implements Parcelable {
     private String o_id;
     private String create_time;
     private boolean isSel;
+
+    @Transient
+    private String list;
+    @Transient
+    private String cate_name;
+    @Transient
+    private NewsItemAd ads;
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getCate_name() {
+        return cate_name;
+    }
+
+    public void setCate_name(String cate_name) {
+        this.cate_name = cate_name;
+    }
+
+    public NewsItemAd getAds() {
+        return ads;
+    }
+
+    public void setAds(NewsItemAd ads) {
+        this.ads = ads;
+    }
 
     public boolean isSel() {
         return isSel;
@@ -179,6 +215,14 @@ public class NewsJson implements Parcelable {
         }
     }
 
+    public boolean getIsSel() {
+        return this.isSel;
+    }
+
+    public void setIsSel(boolean isSel) {
+        this.isSel = isSel;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -195,16 +239,12 @@ public class NewsJson implements Parcelable {
         dest.writeString(this.o_action);
         dest.writeString(this.o_class);
         dest.writeString(this.o_id);
+        dest.writeString(this.create_time);
         dest.writeByte(this.isSel ? (byte) 1 : (byte) 0);
+        dest.writeString(this.list);
+        dest.writeString(this.cate_name);
+        dest.writeParcelable(this.ads, flags);
         dest.writeInt(this.dataType);
-    }
-
-    public boolean getIsSel() {
-        return this.isSel;
-    }
-
-    public void setIsSel(boolean isSel) {
-        this.isSel = isSel;
     }
 
     protected NewsJson(Parcel in) {
@@ -217,11 +257,15 @@ public class NewsJson implements Parcelable {
         this.o_action = in.readString();
         this.o_class = in.readString();
         this.o_id = in.readString();
+        this.create_time = in.readString();
         this.isSel = in.readByte() != 0;
+        this.list = in.readString();
+        this.cate_name = in.readString();
+        this.ads = in.readParcelable(NewsItemAd.class.getClassLoader());
         this.dataType = in.readInt();
     }
 
-    public static final Parcelable.Creator<NewsJson> CREATOR = new Parcelable.Creator<NewsJson>() {
+    public static final Creator<NewsJson> CREATOR = new Creator<NewsJson>() {
         @Override
         public NewsJson createFromParcel(Parcel source) {
             return new NewsJson(source);

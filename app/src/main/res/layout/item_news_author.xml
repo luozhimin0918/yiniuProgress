@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="@dimen/explore_header_item4_width"
+              android:layout_height="@dimen/explore_header_item4_height"
+              android:background="@drawable/bg_ring"
+              android:gravity="center"
+              android:orientation="vertical"
+    >
+
+    <com.jyh.kxt.base.custom.RoundImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="@dimen/explore_header_item4_imgSize"
+        android:layout_height="@dimen/explore_header_item4_imgSize"
+        android:src="@mipmap/icon_user_def_photo"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="@dimen/explore_header_item4_marginTop"
+        android:text="顶级文案"
+        android:textColor="@color/font_color5"
+        android:textSize="@dimen/describe_font_size3"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:ellipsize="none"
+        android:maxLines="2"
+        android:text="哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈"/>
+
+</LinearLayout>
