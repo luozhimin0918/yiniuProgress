@@ -31,4 +31,6 @@
     <string name="ma5">● MA5 %.2f</string>
     <string name="ma10">● MA10 %.2f</string>
     <string name="ma30">● MA30 %.2f</string>
+    <string name="title_activity_guide">GuideActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

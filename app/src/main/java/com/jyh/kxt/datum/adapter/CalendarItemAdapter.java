@@ -183,6 +183,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                  */
                 try {
                     String time = mCalendarFinanceBean.getTime().split(" ")[1];
+                    String[] splitTime = time.split(":");
+                    if(splitTime.length > 1){
+                        time = splitTime[0]+":"+splitTime[1];
+                    }
                     viewHolder1.tvTime.setText(time);
                 } catch (Exception e) {
                     viewHolder1.tvTime.setText("");
@@ -269,6 +273,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                  */
                 try {
                     String time = mCalendarHolidayBean.getTime().split(" ")[1];
+                    String[] splitTime = time.split(":");
+                    if(splitTime.length > 1){
+                        time = splitTime[0]+":"+splitTime[1];
+                    }
                     viewHolder3.tvTime.setText(time);
                 } catch (Exception e) {
                     viewHolder3.tvTime.setText("");

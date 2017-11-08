@@ -155,7 +155,6 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
     @Override
     protected void onResume() {
         super.onResume();
-        commentPresenter.onResume();
         if (spVideo != null) {
             spVideo.onResume();
         }

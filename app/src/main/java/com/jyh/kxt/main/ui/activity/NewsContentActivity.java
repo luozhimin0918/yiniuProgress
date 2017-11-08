@@ -156,7 +156,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     private String memberId;
     private String authorName;
-    private boolean isScrollToComment = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,14 +205,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
+
+                ptrLvMessage.getRefreshableView().setSelection(2);
+                break;
             case R.id.tv_comment:
                 //回复
-                if (isScrollToComment) {
-                    ptrLvMessage.getRefreshableView().setSelection(2);
-                } else {
-                    commentPresenter.showReplyMessageView(view);
-                }
-                isScrollToComment = false;
+                ptrLvMessage.getRefreshableView().setSelection(2);
+                commentPresenter.showReplyMessageView(view);
                 break;
             case R.id.iv_collect:
                 //收藏
@@ -1139,8 +1137,5 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @Override
     protected void onResume() {
         super.onResume();
-        if (commentPresenter != null) {
-            commentPresenter.onResume();
-        }
     }
 }

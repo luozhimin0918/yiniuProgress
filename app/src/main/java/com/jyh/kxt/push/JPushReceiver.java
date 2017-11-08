@@ -49,7 +49,14 @@ public class JPushReceiver extends BroadcastReceiver {
         try {
             String system = PhoneInfo.getSystem();
             if (PhoneInfo.SYS_EMUI.equals(system) || PhoneInfo.SYS_MIUI.equals(system)) {
-                return;
+                try {
+                    String mPlatform = SPUtils.getString(mContext, SpConstant.PUSH_FROM_PLATFORM);
+                    if(!"极光".equals(mPlatform)){
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             Bundle bundle = intent.getExtras();
 

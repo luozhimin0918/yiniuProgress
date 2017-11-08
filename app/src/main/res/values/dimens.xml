@@ -396,5 +396,7 @@
     <dimen name="publish_pictures_size">100dp</dimen>
     <!--分享的高度-->
     <dimen name="share_height">100dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 
 </resources>

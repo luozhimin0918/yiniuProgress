@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.jyh.kxt">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.jyh.kxt">
 
-    <!--极光推送-->
+    <!-- 极光推送 -->
     <permission
         android:name="com.jyh.kxt.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature"/>
+
     <uses-permission android:name="com.jyh.kxt.permission.JPUSH_MESSAGE"/>
 
-    <!--小米推送-->
+    <!-- 小米推送 -->
     <permission
         android:name="com.jyh.kxt.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature"/>
 
     <uses-permission android:name="com.jyh.kxt.permission.MIPUSH_RECEIVE"/>
-
-
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
-
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
@@ -26,7 +24,6 @@
     <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -87,12 +84,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".index.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-
         </activity>
         <activity
             android:name=".index.ui.WebActivity"
@@ -176,7 +171,6 @@
         <activity
             android:name=".main.ui.activity.FlashActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".explore.ui.AuthorListActivity"
             android:screenOrientation="portrait"/>
@@ -278,10 +272,10 @@
             android:screenOrientation="portrait"/>
 
         <!-- umeng推送 -->
-        <!--<service android:name=".push.KXTPushIntentService"/>-->
+        <!-- <service android:name=".push.KXTPushIntentService"/> -->
 
 
-        <!--小米推送-->
+        <!-- 小米推送 -->
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
@@ -292,7 +286,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:process=":pushservice"/>
-        <!--注：此service必须在3.0.1版本以后（包括3.0.1版本）加入-->
+        <!-- 注：此service必须在3.0.1版本以后（包括3.0.1版本）加入 -->
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
@@ -300,12 +294,13 @@
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true"/>
-        <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入-->
+        <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
         <receiver
             android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
@@ -320,7 +315,8 @@
         <receiver
             android:name=".push.XiaoMiReceiver"
             android:exported="true">
-            <!--这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名-->
+
+            <!-- 这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名 -->
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
             </intent-filter>
@@ -332,15 +328,15 @@
             </intent-filter>
         </receiver>
 
-
-        <!--华为推送-->
-        <!-- value的值“appid”用实际申请的应用ID替换，来源于开发者联盟网站应用的服务详情。-->
+        <!-- 华为推送 -->
+        <!-- value的值“appid”用实际申请的应用ID替换，来源于开发者联盟网站应用的服务详情。 -->
         <provider
             android:name="com.huawei.hms.update.provider.UpdateProvider"
             android:authorities="com.jyh.kxt.hms.update.provider"
             android:exported="false"
             android:grantUriPermissions="true">
         </provider>
+
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="10310654">
@@ -348,12 +344,14 @@
 
         <receiver android:name="com.huawei.hms.support.api.push.PushEventReceiver">
             <intent-filter>
+
                 <!-- 接收通道发来的通知栏消息，兼容老版本PUSH -->
                 <action android:name="com.huawei.intent.action.PUSH"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".push.HuaWeiPushReceiver">
             <intent-filter>
+
                 <!-- 必须,用于接收TOKEN -->
                 <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
                 <!-- 必须，用于接收消息 -->
@@ -383,12 +381,11 @@
             </intent-filter>
         </service>
 
-        <!-- since 3.0.9 Required SDK 核心功能-->
+        <!-- since 3.0.9 Required SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.jyh.kxt.DataProvider"
-            android:exported="true"
-            />
+            android:exported="true"/>
 
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
@@ -398,16 +395,18 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService"/>
+
                 <category android:name="com.jyh.kxt"/>
             </intent-filter>
         </service>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
+
                 <category android:name="com.jyh.kxt"/>
             </intent-filter>
             <intent-filter>
@@ -423,7 +422,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -436,7 +435,7 @@
                 <category android:name="com.jyh.kxt"/>
             </intent-filter>
         </activity>
-        <!-- SDK核心功能-->
+        <!-- SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -448,45 +447,48 @@
             </intent-filter>
         </activity>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
             android:exported="false">
         </service>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver"/>
 
         <!-- Required since 3.0.7 -->
         <!-- 新的tag/alias接口结果返回需要开发者配置一个自定的广播 -->
         <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
 
-        <!-- User defined. 用户自定义的广播接收器-->
+
+        <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
             android:name=".push.JPushReceiver"
             android:enabled="true">
             <intent-filter>
-                <!--Required 用户注册SDK的intent-->
+
+                <!-- Required 用户注册SDK的intent -->
                 <action android:name="cn.jpush.android.intent.REGISTRATION"/>
-                <!--Required 用户接收SDK消息的intent-->
+                <!-- Required 用户接收SDK消息的intent -->
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/>
-                <!--Required 用户接收SDK通知栏信息的intent-->
+                <!-- Required 用户接收SDK通知栏信息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/>
-                <!--Required 用户打开自定义通知栏的intent-->
+                <!-- Required 用户打开自定义通知栏的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <action android:name="cn.jpush.android.intent.CONNECTION"/>
+
                 <category android:name="com.jyh.kxt"/>
             </intent-filter>
         </receiver>
 
         <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。 -->
         <!-- 例如: -->
         <!-- 发到 Google Play 的APK可以设置为 google-play; -->
         <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-        <!-- 目前这个渠道统计功能的报表还未开放。-->
+        <!-- 目前这个渠道统计功能的报表还未开放。 -->
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="developer-default"/>
@@ -501,6 +503,7 @@
         <!-- ***************************极光推送*************************** -->
         <!-- ***************************极光推送*************************** -->
         <!-- ***************************极光推送*************************** -->
+
 
         <!-- umeng分享 -->
         <activity
@@ -559,18 +562,14 @@
             android:name="UMENG_APPKEY"
             android:value="537c3e0456240b761700cd92">
         </meta-data>
-
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
             android:value="9c522d551a83fbc3f6b9e5addcda8c24">
         </meta-data>
-
-
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="2">
         </meta-data>
-
         <meta-data
             android:name="com.jyh.kxt.base.utils.MyGlideModule"
             android:value="GlideModule"/>
@@ -602,7 +601,12 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".user.ui.AlterPassActivity"></activity>
+        <activity android:name=".user.ui.AlterPassActivity"/>
+        <activity
+            android:name=".index.ui.GuideActivity"
+            android:label="@string/title_activity_guide"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

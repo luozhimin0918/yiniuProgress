@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,9 @@ public class WelcomeActivity extends BaseActivity {
         new WebView(this);
         super.onCreate(savedInstanceState);
 
+//        startActivity(new Intent(this,GuideActivity.class));
+//        this.finish();
+
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
 
@@ -67,8 +71,6 @@ public class WelcomeActivity extends BaseActivity {
 
         Log.i("welcome", getIntent().toString());
         JumpUtils.MwJump(getIntent(), this);
-
-
     }
 
     @OnClick({R.id.tv_advert_time})

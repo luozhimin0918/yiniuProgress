@@ -114,8 +114,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
     @BindView(R.id.tv_comment_count_title)
     public TextView tvCommentCountTitle;
-    @BindView(R.id.tv_reply_message)
-    TextView tvReplyMessage;
     @BindView(R.id.tv_recommend_label)
     TextView tvRecommendLabel;
     @BindView(R.id.ll_more_video)
@@ -136,13 +134,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         ButterKnife.bind(this, headView);
 
         listView.getRefreshableView().addHeaderView(headView);
-        tvReplyMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showReplyMessageView(tvReplyMessage);
-            }
-        });
-        replyMessageView();
     }
 
     public void bindListView(LinearLayout listHeadView) {
@@ -152,14 +143,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         ButterKnife.bind(this, headView);
 
         listHeadView.addView(headView);
-
-        tvReplyMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showReplyMessageView(tvReplyMessage);
-            }
-        });
-        replyMessageView();
     }
 
 
@@ -404,17 +387,6 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
         }
     }
 
-    private void replyMessageView() {
-        if (tvReplyMessage != null) {
-            boolean loginEd = LoginUtils.isLogined(mContext);
-            if (loginEd) {
-                tvReplyMessage.setText("发表你的看法...");
-            } else {
-                tvReplyMessage.setText("一秒登录,发表你的看法...");
-            }
-        }
-    }
-
     public void setRecommendLabel(int recommendType) {
         switch (recommendType) {
             case 0:
@@ -428,9 +400,5 @@ public class CommentPresenter extends BasePresenter implements SoftKeyBoardListe
 
     public void setOnlyAllowSmallEmoJe(boolean isOnlyAllowSmallEmoJe) {
         this.isOnlyAllowSmallEmoJe = isOnlyAllowSmallEmoJe;
-    }
-
-    public void onResume() {
-        replyMessageView();
     }
 }
