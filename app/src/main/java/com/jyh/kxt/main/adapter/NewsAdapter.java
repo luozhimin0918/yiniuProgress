@@ -16,20 +16,15 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
-import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.json.VideoDetailVideoBean;
-import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseListAdapter;
-import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
-import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.json.AuthorBean;
 import com.jyh.kxt.main.json.NewsJson;
@@ -158,7 +153,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 public void onClick(View v) {
                     if("video".equals(type)){
                         ((MainActivity)mContext).rbAudioVisual.performClick();
-                    }else if("blog".equals(type)){
+                    }else if("blog_writer".equals(type)){
                         Intent intent=new Intent(mContext, AuthorListActivity.class);
                         mContext.startActivity(intent);
                     }
@@ -179,7 +174,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                         mContext.startActivity(intent);
                     }
                 });
-            }else if("blog".equals(type)){
+            }else if("blog_writer".equals(type)){
                 final List<AuthorBean> list = JSON.parseArray(news.getList(), AuthorBean.class);
                 AuthorAdapter adapter=new AuthorAdapter(mContext, list);
                 adapter.setClickListener(new OnItemClickListener() {
@@ -213,7 +208,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     @Override
     public int getItemViewType(int position) {
         String type = dataList.get(position).getType();
-        return "video".equals(type) || "blog".equals(type) ? TYPE_NEW : TYPE_DEF;
+        return "video".equals(type) || "blog_writer".equals(type) ? TYPE_NEW : TYPE_DEF;
     }
 
     /**
