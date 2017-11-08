@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingBottom="5dp"
-              android:paddingTop="5dp"
-              android:background="@color/line_color2">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/line_color2"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@color/theme1"
         android:orientation="horizontal">
+
         <com.jyh.kxt.base.widget.AdvertLayout
             android:id="@+id/al_ad"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:drawablePadding="3dp"
             android:drawableRight="@mipmap/icon_msg_sys_enter"
             android:gravity="center_vertical"
-            android:textSize="@dimen/describe_font_size2"
-            android:textColor="@color/font_color7"
             android:text="更多"
-            android:layout_marginRight="5dp"/>
+            android:paddingLeft="5dp"
+            android:textColor="@color/font_color7"
+            android:textSize="@dimen/describe_font_size2"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        android:background="@color/theme1"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/theme1"/>
 </LinearLayout>

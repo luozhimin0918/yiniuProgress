@@ -1,6 +1,7 @@
 package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +19,22 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoDetailBean;
 import com.jyh.kxt.av.json.VideoDetailVideoBean;
 import com.jyh.kxt.av.json.VideoListJson;
+import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseListAdapter;
+import com.jyh.kxt.base.annotation.BindObject;
+import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
+import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.main.json.AuthorBean;
 import com.jyh.kxt.main.json.NewsJson;
+import com.jyh.kxt.trading.ui.AuthorActivity;
+import com.jyh.kxt.trading.ui.AuthorListActivity;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 
@@ -69,7 +78,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         ViewHolder holder = null;
         ViewHolder2 holder2=null;
-        int itemViewType = getItemViewType(position);
+        final int itemViewType = getItemViewType(position);
         if (convertView == null) {
             if (itemViewType == TYPE_DEF) {
                 holder = new ViewHolder();
@@ -143,24 +152,57 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
         } else {
             holder2.alAd.setAdvertData(news.getCate_name(),news.getAds().getAd(),news.getAds().getIcon());
+            final String type = news.getType();
             holder2.tvMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if("video".equals(type)){
+                        ((MainActivity)mContext).rbAudioVisual.performClick();
+                    }else if("blog".equals(type)){
+                        Intent intent=new Intent(mContext, AuthorListActivity.class);
+                        mContext.startActivity(intent);
+                    }
                 }
             });
             LinearLayoutManager manager=new LinearLayoutManager(mContext);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
             holder2.rvContent.setLayoutManager(manager);
-            RecyclerView.Adapter adapter=null;
-            if("video".equals(news.getType())){
-                adapter=new VideoAdapter(mContext, JSON.parseArray(news.getList(), VideoDetailVideoBean.class));
-            }else{
-                adapter=new AuthorAdapter(mContext,JSON.parseArray(news.getList(), AuthorBean.class));
+            if("video".equals(type)){
+                final List<VideoDetailVideoBean> list = JSON.parseArray(news.getList(), VideoDetailVideoBean.class);
+                VideoAdapter adapter=new VideoAdapter(mContext, list);
+                        holder2.rvContent.setAdapter(adapter);
+                adapter.setClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, View view) {
+                        Intent intent=new Intent(mContext, VideoDetailActivity.class);
+                        intent.putExtra(IntentConstant.O_ID,list.get(position).getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+            }else if("blog".equals(type)){
+                final List<AuthorBean> list = JSON.parseArray(news.getList(), AuthorBean.class);
+                AuthorAdapter adapter=new AuthorAdapter(mContext, list);
+                adapter.setClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, View view) {
+                        Intent intent=new Intent(mContext, AuthorActivity.class);
+                        intent.putExtra(IntentConstant.O_ID, list.get(position).getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+                holder2.rvContent.setAdapter(adapter);
             }
-            holder2.rvContent.setAdapter(adapter);
+
+            setTheme2(holder2);
         }
         return convertView;
+    }
+
+    private void setTheme2(ViewHolder2 holder) {
+        holder.llRootView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color2));
+        holder.llContent.setBackgroundColor(ContextCompat.getColor(mContext,R.color.theme1));
+        holder.tvMore.setTextColor(ContextCompat.getColor(mContext,R.color.font_color7));
+        holder.rvContent.setBackgroundColor(ContextCompat.getColor(mContext,R.color.theme1));
     }
 
     @Override
@@ -268,6 +310,8 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     }
 
     class ViewHolder2 {
+        @BindView(R.id.ll_rootView) LinearLayout llRootView;
+        @BindView(R.id.ll_content) LinearLayout llContent;
         @BindView(R.id.al_ad) AdvertLayout alAd;
         @BindView(R.id.tv_more) TextView tvMore;
         @BindView(R.id.rv_content) RecyclerView rvContent;

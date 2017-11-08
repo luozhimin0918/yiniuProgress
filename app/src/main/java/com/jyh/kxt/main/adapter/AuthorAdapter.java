@@ -2,6 +2,7 @@ package com.jyh.kxt.main.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.jyh.kxt.R;
+import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.main.json.AuthorBean;
 
@@ -30,6 +32,7 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
 
     private Context mContext;
     private List<AuthorBean> list;
+    private OnItemClickListener clickListener;
 
     public AuthorAdapter(Context mContext, List<AuthorBean> list) {
         this.mContext = mContext;
@@ -43,7 +46,7 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         AuthorBean bean = list.get(position);
         Glide.with(mContext).load(bean.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo).placeholder(R.mipmap.icon_user_def_photo)
                 .into(new ImageViewTarget<Bitmap>(holder.ivPhoto) {
@@ -54,7 +57,22 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
         });
         holder.tvName.setText(bean.getTitle());
         holder.tvContent.setText(bean.getIntroduce());
+        setTheme(holder);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(clickListener!=null)
+                    clickListener.onItemClick(position,holder.itemView);
+            }
+        });
+
+    }
+
+    private void setTheme(ViewHolder holder) {
+        holder.itemView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.bg_ring));
+        holder.tvName.setTextColor(ContextCompat.getColor(mContext,R.color.font_color5));
+        holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.font_color3));
     }
 
     @Override
@@ -71,5 +89,9 @@ public class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ViewHolder
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void setClickListener(OnItemClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 }
