@@ -475,6 +475,32 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_fk"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/drawer_item_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/drawer_imgPadding"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/drawer_item_imageSize"
+                        android:layout_height="@dimen/drawer_item_imageSize"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/drawer_item_imgPadding"
+                        android:layout_marginRight="@dimen/drawer_item_imgPadding"
+                        android:src="@mipmap/icon_drawer_fk"/>
+
+                    <TextView
+                        android:id="@+id/tv_fk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/drawer_item_height"
+                        android:gravity="center"
+                        android:text="意见反馈"
+                        android:textColor="@color/font_color5"
+                        android:textSize="@dimen/content_font_size2"/>
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/ll_share"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drawer_item_height"
