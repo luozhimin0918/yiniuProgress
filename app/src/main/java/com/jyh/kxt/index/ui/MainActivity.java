@@ -29,6 +29,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -64,6 +65,7 @@ import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.presenter.MainPresenter;
 import com.jyh.kxt.index.ui.fragment.AvFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
@@ -157,7 +159,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
-            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn, coinBtn;
+            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn, coinBtn, fkBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
@@ -281,6 +283,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         letterBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_letter);
         pointBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_postPoint);
         coinBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_coin);
+        fkBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_fk);
 
         tvPoint = (TextView) llHeaderLayout.findViewById(R.id.tv_postPoint);
         tvCollect = ButterKnife.findById(llHeaderLayout, R.id.tv_collect);
@@ -332,6 +335,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         letterBtn.setOnClickListener(this);
         rlSign.setOnClickListener(this);
         coinBtn.setOnClickListener(this);
+        fkBtn.setOnClickListener(this);
 
         //用户登录信息
         changeUserStatus(LoginUtils.getUserInfo(this));
@@ -619,6 +623,21 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             case R.id.ll_coin:
                 //我的金币
                 startActivity(new Intent(this, MyCoin2Activity.class));
+                break;
+            case R.id.ll_fk:
+                //意见反馈
+                String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
+                MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
+                Intent feedbackIntent = new Intent(this, WebActivity.class);
+                feedbackIntent.putExtra(IntentConstant.NAME, "意见反馈");
+                String feedBackUrl;
+                if (config == null || RegexValidateUtil.isEmpty(config.getUrl_feedback()))
+                    feedBackUrl = HttpConstant
+                            .FEEDBACK_URL;
+                else
+                    feedBackUrl = config.getUrl_feedback();
+                feedbackIntent.putExtra(IntentConstant.WEBURL, feedBackUrl);
+                startActivity(feedbackIntent);
                 break;
         }
     }
@@ -1087,7 +1106,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                         public void onConnected() {
                             Log.e(TAG, "onConnected: 华为平台连接成功");
 
-                            SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"华为");
+                            SPUtils.save(MainActivity.this, SpConstant.PUSH_FROM_PLATFORM, "华为");
                             PendingResult<TokenResult> tokenResult = HuaweiPush.HuaweiPushApi
                                     .getToken(huaweiApiClient);
 
@@ -1161,7 +1180,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             if (userInfo != null) {
                 MiPushClient.setAlias(this, userInfo.getUid(), null);
             }
-            SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"小米");
+            SPUtils.save(MainActivity.this, SpConstant.PUSH_FROM_PLATFORM, "小米");
             try {
                 JPushInterface.onKillProcess(this);
                 if (huaweiApiClient != null) {
@@ -1180,7 +1199,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         /*
         * 推送相关代码
         */
-        SPUtils.save(MainActivity.this,SpConstant.PUSH_FROM_PLATFORM,"极光");
+        SPUtils.save(MainActivity.this, SpConstant.PUSH_FROM_PLATFORM, "极光");
         JPushInterface.setDebugMode(true);
         JPushInterface.init(SampleApplicationContext.context);
 
