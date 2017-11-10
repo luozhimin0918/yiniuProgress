@@ -10,7 +10,7 @@
     android:id="@+id/rl_content_item"
     android:background="@color/theme1"
     android:paddingRight="18dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/tv_read_title"
@@ -116,8 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_primary_read_title"
             android:gravity="center_vertical"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp"
+            android:paddingTop="10dp"
             android:textColor="@color/font_color5"
             android:textSize="@dimen/describe_font_size4"/>
 

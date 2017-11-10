@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/actionbar_height">
+        android:layout_height="45dp">
 
         <ImageView
             android:id="@+id/iv_bar_break"
@@ -86,7 +86,7 @@
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="@dimen/actionbar_height"
+        android:layout_height="37dp"
         android:layout_below="@+id/action_bar"
         android:layout_marginTop="1dp"
         android:gravity="center"

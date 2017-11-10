@@ -454,7 +454,8 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         title = rl.getState() + rl.getTitle();
         tvRlTitle.setText(title);
 
-        Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState()))).into
+        Glide.with(this).load(String.format(HttpConstant.FLAG_URL, PingYinUtil.getFirstSpell(rl.getState())))
+                .error(R.mipmap.icon_def_btn).into
                 (ivRlFlag);
 
         advertImageLayout.addAdvertViews(ads);

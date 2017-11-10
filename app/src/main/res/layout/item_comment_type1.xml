@@ -10,7 +10,7 @@
     android:background="@color/theme1"
     android:paddingTop="18dp"
     android:paddingRight="18dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="5dp">
 
     <com.jyh.kxt.base.custom.RoundImageView
         android:id="@+id/riv_user_avatar"

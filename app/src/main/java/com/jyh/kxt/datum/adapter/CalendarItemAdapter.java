@@ -211,6 +211,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 Glide
                         .with(mContext)
                         .load(stateUrl)
+                        .placeholder(R.mipmap.icon_def_btn)
                         .centerCrop()
                         .into(viewHolder1.ivGuoqi);
                 /**
@@ -252,6 +253,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 Glide
                         .with(mContext)
                         .load(stateUrl2)
+                        .placeholder(R.mipmap.icon_def_btn)
                         .centerCrop()
                         .into(viewHolder2.ivGuoqi);
 
@@ -289,6 +291,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 Glide
                         .with(mContext)
                         .load(stateUrl3)
+                        .placeholder(R.mipmap.icon_def_btn)
                         .centerCrop()
                         .into(viewHolder3.ivGuoqi);
 

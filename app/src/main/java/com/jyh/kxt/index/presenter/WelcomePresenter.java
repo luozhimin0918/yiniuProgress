@@ -21,6 +21,7 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.index.json.TypeDataJson;
+import com.jyh.kxt.index.ui.CommentListActivity;
 import com.jyh.kxt.index.ui.MainActivity;
 import com.jyh.kxt.index.ui.WelcomeActivity;
 import com.jyh.kxt.user.json.UserJson;

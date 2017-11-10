@@ -8,6 +8,12 @@ import android.text.style.ImageSpan;
 
 public class MyImageSpan extends ImageSpan {
 
+    public static enum AlignPosition {
+        ALIGN_BOTTOM, ALIGN_CENTER, ALIGN_TOP
+    }
+
+    private AlignPosition mAlignPosition = AlignPosition.ALIGN_TOP;
+
     public MyImageSpan(Drawable d) {
         super(d);
     }
@@ -16,6 +22,10 @@ public class MyImageSpan extends ImageSpan {
         super(d, verticalAlignment);
     }
 
+    public MyImageSpan(Drawable d, AlignPosition mAlignPosition) {
+        super(d);
+        this.mAlignPosition = mAlignPosition;
+    }
 
     public int getSize(Paint paint, CharSequence text, int start, int end,
                        Paint.FontMetricsInt fm) {
@@ -46,9 +56,18 @@ public class MyImageSpan extends ImageSpan {
                      int y,
                      int bottom,
                      Paint paint) {
+
         Drawable b = getDrawable();
         canvas.save();
-        canvas.translate(x, top);
+
+        if (mAlignPosition == AlignPosition.ALIGN_CENTER) {
+            Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
+            int transY = (y + fontMetricsInt.descent + y + fontMetricsInt.ascent) / 2 - b.getBounds().bottom / 2;
+            canvas.translate(x, transY);
+
+        }else if (mAlignPosition == AlignPosition.ALIGN_TOP){
+            canvas.translate(x, top);
+        }
         b.draw(canvas);
         canvas.restore();
     }

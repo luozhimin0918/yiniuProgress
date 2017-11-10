@@ -154,6 +154,7 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                     case 1:
                         mViewHolder2.tvPrimaryReadTitle.setVisibility(View.VISIBLE);
                         setReadTitle(mViewHolder2.tvPrimaryReadTitle, commentBean);
+
                         mViewHolder2.tvPrimaryThumb.setVisibility(View.GONE);
                         mViewHolder2.tvPrimaryMessage.setVisibility(View.GONE);
                         mViewHolder2.tvPrimaryTime.setVisibility(View.GONE);
@@ -161,6 +162,9 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                     case 2:
                         mViewHolder2.tvPrimaryReadTitle.setVisibility(View.VISIBLE);
                         setReadTitle(mViewHolder2.tvPrimaryReadTitle, commentBean);
+
+                        mViewHolder2.tvPrimaryThumb.setVisibility(View.GONE);
+                        mViewHolder2.tvPrimaryMessage.setVisibility(View.GONE);
                         mViewHolder2.tvPrimaryTime.setVisibility(View.GONE);
                         break;
                 }
@@ -303,9 +307,11 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
 
                     switch (commentBean.getType()) {
                         case VarConstant.ARTICLE:
+                        case VarConstant.OCLASS_NEWS:
                             intent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_NEWS);
                             break;
                         case VarConstant.BLOG_ARTICLE:
+                        case VarConstant.OCLASS_BLOG:
                             intent.putExtra(IntentConstant.TYPE, VarConstant.OCLASS_BLOG);
                             break;
                     }

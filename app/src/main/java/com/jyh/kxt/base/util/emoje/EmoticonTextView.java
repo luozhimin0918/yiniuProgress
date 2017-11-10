@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 public class EmoticonTextView extends TextView {
 
     private int emoJeSize = SystemUtil.dp2px(getContext(), 60);
-    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 25);
+    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 23);
 
 
     public EmoticonTextView(Context context) {
@@ -80,12 +80,15 @@ public class EmoticonTextView extends TextView {
                                 int firstImgHeight = SystemUtil.dp2px(getContext(), 20);
                                 bitmapDrawable.setBounds(0, 0, firstImgHeight, firstImgHeight);
 
-                                MyImageSpan mEmoJeImageSpan = new MyImageSpan(bitmapDrawable);
+                                MyImageSpan mEmoJeImageSpan = new MyImageSpan(bitmapDrawable,
+                                        MyImageSpan.AlignPosition.ALIGN_CENTER);
+
                                 currentSpannable.setSpan(
                                         mEmoJeImageSpan,
                                         0, //这里因为没有加上中括号
                                         1,
                                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                                 setText(currentSpannable);
                             }
                         });
