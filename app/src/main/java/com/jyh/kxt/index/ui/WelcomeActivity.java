@@ -1,6 +1,5 @@
 package com.jyh.kxt.index.ui;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,13 +38,14 @@ public class WelcomeActivity extends BaseActivity {
 
 //        startActivity(new Intent(this,GuideActivity.class));
 //        this.finish();
+//        return;
 
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
 
-        /*
-         * 针对华为推送
-         */
+
+        //针对华为推送
+
         Uri mPushUrl = getIntent().getData();
         if (mPushUrl != null) {
             if ("kxtapp".equals(mPushUrl.getScheme()) && "com.kxt.push".equals(mPushUrl.getAuthority())) {

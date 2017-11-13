@@ -271,6 +271,13 @@
             android:name=".score.ui.MyCoin2Activity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".user.ui.AlterPassActivity"/>
+
+        <activity
+            android:name=".index.ui.GuideActivity"
+            android:label="@string/title_activity_guide"
+            android:theme="@style/AppTheme"/>
+
         <!-- umeng推送 -->
         <!-- <service android:name=".push.KXTPushIntentService"/> -->
 
@@ -601,12 +608,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".user.ui.AlterPassActivity"/>
-        <activity
-            android:name=".index.ui.GuideActivity"
-            android:label="@string/title_activity_guide"
-            android:theme="@style/AppTheme">
-        </activity>
     </application>
 
 </manifest>
