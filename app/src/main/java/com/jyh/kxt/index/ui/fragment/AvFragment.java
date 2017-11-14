@@ -160,6 +160,9 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
             } else {
                 tvRedDot.setVisibility(View.GONE);
             }
+        }  //存在新的活动
+        if(LoginUtils.isUnReadAction(getContext())){
+            tvRedDot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -188,7 +191,10 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
             case EventBusClass.EVENT_LOGIN_UPDATE:
-                UserJson userJson = (UserJson) eventBus.intentObj;
+                UserJson userJson = null;
+                if (eventBus.intentObj != null) {
+                    userJson = (UserJson) eventBus.intentObj;
+                }
                 changeUserImg(userJson);
                 break;
             case EventBusClass.EVENT_LOGOUT:

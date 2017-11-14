@@ -9,12 +9,17 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.explore.ui.MoreActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
+import com.library.bean.EventBusClass;
 import com.library.util.EncryptionUtils;
+import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +59,7 @@ public class MorePresenter extends BasePresenter {
                     moreActivity.plRootView.loadEmptyData();
                     return;
                 }
+
                 if (o.size() > VarConstant.LIST_MAX_SIZE) {
                     isMore = true;
                     moreActivity.init(new ArrayList(o.subList(0, VarConstant.LIST_MAX_SIZE)));
@@ -62,6 +68,13 @@ public class MorePresenter extends BasePresenter {
                     isMore = false;
                     moreActivity.init(o);
                 }
+
+                //保存当前最新一条ID
+                String mNewestId = moreActivity.moreAdapter.getNewestId();
+                SPUtils.save(mContext, SpConstant.MORE_NEWEST_ID, mNewestId);
+
+
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, null));
             }
 
             @Override

@@ -154,11 +154,14 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         } else {
             Glide.with(getContext()).load(user.getPicture()).asBitmap().error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap.icon_user_def_photo).into(ivLeftIcon);
-            if (user.getIs_unread_msg() == 1|| user.getIs_unread_reply() == 1) {
+            if (user.getIs_unread_msg() == 1 || user.getIs_unread_reply() == 1) {
                 tvRedDot.setVisibility(View.VISIBLE);
             } else {
                 tvRedDot.setVisibility(View.GONE);
             }
+        }  //存在新的活动
+        if (LoginUtils.isUnReadAction(getContext())) {
+            tvRedDot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -196,7 +199,10 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
             case EventBusClass.EVENT_LOGIN_UPDATE:
-                UserJson userJson = (UserJson) eventBus.intentObj;
+                UserJson userJson = null;
+                if (eventBus.intentObj != null) {
+                    userJson = (UserJson) eventBus.intentObj;
+                }
                 changeUserImg(userJson);
                 break;
             case EventBusClass.EVENT_LOGOUT:
@@ -248,7 +254,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
             if (isResumed()) {
                 if (position == 0) {
                     ((MarketVPFragment) marketVPFragment).sendSocketParams();
-                }else if(position == 1){
+                } else if (position == 1) {
                     ((OptionalFragment) optionalFragment).sendSocketParams();
                 }
             }

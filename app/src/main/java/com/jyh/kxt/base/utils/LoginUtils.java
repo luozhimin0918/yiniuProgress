@@ -17,6 +17,7 @@ import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.utils.bean.LoginBean;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.BindActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
@@ -381,37 +382,60 @@ public class LoginUtils {
 //        });
 //    }
 
+    /**
+     * 默认允许进行评论等操作
+     *
+     * @param mContext
+     * @return
+     */
     public static boolean isToBindPhoneInfo(final Context mContext) {
-        // FixKxt: 提出人:Mr'Dai-> 判断手机号码是否已经绑定过了
-        UserJson userInfo = getUserInfo(mContext);
-        if (userInfo == null) {
-            mContext.startActivity(new Intent(mContext, LoginActivity.class));
-            return true;
-        }
-        if (!userInfo.isSetPhone()) {
+        try {
+            UserJson userInfo = getUserInfo(mContext);
+            if (userInfo == null) {
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                return true;
+            }
 
-            new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
-                    .setPositiveButton("取消",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                    .setNegativeButton("绑定手机",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent bindIntent = new Intent(mContext, BindActivity.class);
-                                    bindIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
-                                    mContext.startActivity(bindIntent);
-                                }
-                            })
-                    .setTitle("提示")
-                    .setMessage("根据网络安全法对互联网实名制的要求,请您尽快完成手机号验证")
-                    .show();
-            return true;
+            String configStr = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
+            MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
+            if (config.getIs_bind() == 0) {
+                return true;
+            } else {
+                if (!userInfo.isSetPhone()) {
+                    new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
+                            .setPositiveButton("取消",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                            .setNegativeButton("绑定手机",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent bindIntent = new Intent(mContext, BindActivity.class);
+                                            bindIntent.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                                            mContext.startActivity(bindIntent);
+                                        }
+                                    })
+                            .setTitle("提示")
+                            .setMessage("根据网络安全法对互联网实名制的要求,请您尽快完成手机号验证")
+                            .show();
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
+    public static boolean isUnReadAction(Context mContext) {
+        String mHtMoreNewestId = SPUtils.getString(mContext, SpConstant.HT_MORE_NEWEST_ID);
+        String mMoreNewestId = SPUtils.getString(mContext, SpConstant.MORE_NEWEST_ID);
+        if(mHtMoreNewestId.equals(mMoreNewestId)){
+            return false;
+        }
+        return true;
+    }
 }

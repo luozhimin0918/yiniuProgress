@@ -128,7 +128,7 @@ public class ForgetPwdActivity extends BaseActivity {
 
                                     @Override
                                     public void onError(Exception e) {
-                                        ToastView.makeText(getContext(), "验证失败");
+                                        ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
                                     }
                                 });
                     } else {
@@ -148,7 +148,7 @@ public class ForgetPwdActivity extends BaseActivity {
                                             @Override
                                             public void onError(Exception e) {
                                                 dismissWaitDialog();
-                                                ToastView.makeText(getContext(), "设置失败");
+                                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                                             }
                                         });
                             }

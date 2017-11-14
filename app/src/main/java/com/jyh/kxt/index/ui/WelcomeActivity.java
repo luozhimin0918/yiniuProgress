@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,16 +37,10 @@ public class WelcomeActivity extends BaseActivity {
         new WebView(this);
         super.onCreate(savedInstanceState);
 
-//        startActivity(new Intent(this,GuideActivity.class));
-//        this.finish();
-//        return;
-
         //初始化操作
         EmoticonsUtils.loadEmoticonToDB(this);
 
-
         //针对华为推送
-
         Uri mPushUrl = getIntent().getData();
         if (mPushUrl != null) {
             if ("kxtapp".equals(mPushUrl.getScheme()) && "com.kxt.push".equals(mPushUrl.getAuthority())) {
@@ -55,8 +50,6 @@ public class WelcomeActivity extends BaseActivity {
                 return;
             }
         }
-
-        //华为推送 - 通知栏打开的时候
         setContentView(R.layout.activity_welcome, StatusBarColor.NO_COLOR);
 
         welcomePresenter = new WelcomePresenter(this);
@@ -71,6 +64,9 @@ public class WelcomeActivity extends BaseActivity {
 
         Log.i("welcome", getIntent().toString());
         JumpUtils.MwJump(getIntent(), this);
+
+//        startActivity(new Intent(this,GuideActivity.class));
+//        this.finish();
     }
 
     @OnClick({R.id.tv_advert_time})

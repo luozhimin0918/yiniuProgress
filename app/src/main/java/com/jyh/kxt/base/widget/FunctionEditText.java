@@ -735,30 +735,26 @@ public class FunctionEditText extends LinearLayout {
         if (hintText != null && hintText.length() > 0) {
             if (hintText.contains("昵称")) {
                 //有昵称的情况下不参与过滤
-                return;
+                edt.setInputType(InputType.TYPE_CLASS_TEXT);
             }
             //字符过滤功能
-            NumberKeyListener myKeyListener = new NumberKeyListener() {
+            else {
+                NumberKeyListener myKeyListener = new NumberKeyListener() {
 
-                int phonePosition = hintText.indexOf("手机");
-                int emaliPosition = hintText.indexOf("邮箱");
+                    int phonePosition = hintText.indexOf("手机");
+                    int emaliPosition = hintText.indexOf("邮箱");
 
-                public int getInputType() {
-                    if (phonePosition != -1 && emaliPosition != -1) {
-                        return InputType.TYPE_CLASS_TEXT;
-                    } else if (phonePosition != -1) {
-                        return InputType.TYPE_CLASS_PHONE;
-                    }  else {
+                    public int getInputType() {
                         return InputType.TYPE_CLASS_TEXT;
                     }
-                }
 
-                protected char[] getAcceptedChars() {
-                    //指定你所接受的字符
-                    return ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@.").toCharArray();
-                }
-            };
-            edt.setKeyListener(myKeyListener);
+                    protected char[] getAcceptedChars() {
+                        //指定你所接受的字符
+                        return ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@.").toCharArray();
+                    }
+                };
+                edt.setKeyListener(myKeyListener);
+            }
         }
     }
 }

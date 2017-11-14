@@ -50,7 +50,7 @@ public class RollDotView extends View {
 
 
     public void setCircleSize(int circleSize) {
-        this.circleSize = circleSize;
+        this.circleSize =  SystemUtil.dp2px(getContext(), circleSize) ;
     }
 
     public void setCircleCount(int circleCount) {

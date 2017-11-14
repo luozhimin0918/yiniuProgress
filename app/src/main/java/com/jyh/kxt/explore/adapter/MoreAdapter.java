@@ -116,6 +116,16 @@ public class MoreAdapter extends BaseListAdapter {
         return "";
     }
 
+    public String getNewestId() {
+        switch (type) {
+            case VarConstant.EXPLORE_ACTIVITY:
+                return JSON.parseObject(dataList.get(0).toString(), ActivityJson.class).getId();
+            case VarConstant.EXPLORE_TOPIC:
+                return JSON.parseObject(dataList.get(0).toString(), TopicJson.class).getId();
+        }
+        return "";
+    }
+
     public List getData() {
         return dataList;
     }

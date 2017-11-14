@@ -116,4 +116,7 @@ public class SpConstant {
     public static final String TIP_FAVORABLE = "tip_favorable";
     public static final String HUAWEI_TOKEN= "huawei_token";
     public static final String PUSH_FROM_PLATFORM = "push_from_platform";
+
+    public static final String MORE_NEWEST_ID = "more_newest_id";
+    public static final String HT_MORE_NEWEST_ID = "ht_more_newest_id";
 }

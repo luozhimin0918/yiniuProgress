@@ -46,6 +46,8 @@ public class MainInitJson {
     private TextAdBean index_top_ad;
 
     private LoadAdBean load_ad;
+    private int is_activity;
+    private int is_bind;
     private String quotes_chart_url;
     private String url_contact;
     private String url_feedback;
@@ -69,6 +71,22 @@ public class MainInitJson {
 
     public void setUrl_quotes_share(String url_quotes_share) {
         this.url_quotes_share = url_quotes_share;
+    }
+
+    public int getIs_activity() {
+        return is_activity;
+    }
+
+    public void setIs_activity(int is_activity) {
+        this.is_activity = is_activity;
+    }
+
+    public int getIs_bind() {
+        return is_bind;
+    }
+
+    public void setIs_bind(int is_bind) {
+        this.is_bind = is_bind;
     }
 
     public String getIcon() {

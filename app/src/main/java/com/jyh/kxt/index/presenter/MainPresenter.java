@@ -372,6 +372,9 @@ public class MainPresenter extends BasePresenter {
                 mMainActivity.homeFragment.notifyNavLayout();
             }
 
+            //保存
+            String mHtMoreNewestId = String.valueOf(mainInitJson.getIs_activity());
+            SPUtils.save(mContext,SpConstant.HT_MORE_NEWEST_ID, mHtMoreNewestId);
 
             String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
             final MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
@@ -407,12 +410,6 @@ public class MainPresenter extends BasePresenter {
         AlertDialog.Builder advertBuilderDialog = new AlertDialog.Builder(mContext, R.style.dialog3);
         mAlertDialog = advertBuilderDialog.create();
         mAlertDialog.setView(contentView);
-
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
-        animation.setDuration(1000);
-        animation.setInterpolator(new AnticipateOvershootInterpolator());
-        contentView.startAnimation(animation);
-
 
         View advertContent = contentView.findViewById(R.id.arl_content);
 
@@ -592,6 +589,11 @@ public class MainPresenter extends BasePresenter {
         if (indexAd.getShowTime() > 0 && isHelpClose) {
             adCloseHandler.sendEmptyMessageDelayed(1, indexAd.getShowTime());
         }
+
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
+        animation.setDuration(1000);
+        animation.setInterpolator(new AnticipateOvershootInterpolator());
+        contentView.startAnimation(animation);
     }
 
 

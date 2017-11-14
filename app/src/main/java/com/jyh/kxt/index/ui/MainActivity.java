@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
     TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting,
-            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot, tvCommentRedDot;
+            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot, tvCommentRedDot,tvActionRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
@@ -305,6 +305,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
         tvRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_red_dot);
         tvCommentRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_comment_red_dot);
+        tvActionRedDot = ButterKnife.findById(llHeaderLayout, R.id.head_action_red_dot);
 
 
         //签到未签到状态
@@ -647,7 +648,10 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_LOGIN:
             case EventBusClass.EVENT_LOGIN_UPDATE:
-                UserJson userJson = (UserJson) eventBus.intentObj;
+                UserJson userJson = null;
+                if (eventBus.intentObj != null) {
+                    userJson = (UserJson) eventBus.intentObj;
+                }
                 changeUserStatus(userJson);
                 break;
             case EventBusClass.EVENT_LOGOUT:
@@ -675,6 +679,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private void changeUserStatus(UserJson userJson) {
 
         int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
+
+        if(LoginUtils.isUnReadAction(this)){
+            tvActionRedDot.setVisibility(View.VISIBLE);
+        }else{
+            tvActionRedDot.setVisibility(View.GONE);
+        }
 
         if (userJson != null) {
 

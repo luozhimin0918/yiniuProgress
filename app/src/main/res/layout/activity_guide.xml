@@ -16,4 +16,14 @@
 
     </android.support.v4.view.ViewPager>
 
+
+    <com.jyh.kxt.base.custom.RollDotView
+        android:id="@+id/rdv_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="35dp"/>
+
 </RelativeLayout>
