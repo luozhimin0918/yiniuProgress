@@ -107,10 +107,6 @@ public class MarketItemFragment extends BaseFragment implements AbsListView.OnSc
     public void onMarketEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.MARKET_OPTION_UPDATE:
-                if (isZhuYePage) {
-                    List<MarketItemBean> marketList = (List<MarketItemBean>) eventBus.intentObj;
-                    marketMainPresenter.eventBusUpdate(marketList);
-                }
                 break;
         }
     }

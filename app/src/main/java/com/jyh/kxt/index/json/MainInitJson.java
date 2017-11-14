@@ -288,6 +288,10 @@ public class MainInitJson {
 
 
         public String getHref() {
+            return href;
+        }
+
+        public String getJointHref() {
             String connector = "?";
             if (href.contains("?"))
                 connector = "&";
@@ -295,6 +299,9 @@ public class MainInitJson {
                     + "&" + VarConstant.HTTP_SYSTEM + "=" + VarConstant.HTTP_SYSTEM_VALUE;
             return href;
         }
+
+
+
 
         public void setHref(String href) {
             this.href = href;

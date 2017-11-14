@@ -83,12 +83,16 @@ public class WebActivity extends BaseActivity {
                 @Override
                 public void onReceivedTitle(WebView webView, String pageTitle) {
                     super.onReceivedTitle(webView, pageTitle);
-                    if (!RegexValidateUtil.isEmpty(pageTitle)) {
-                        tvBarTitle.setText(pageTitle);
-                        if (initialLoadTitle) {
-                            initialLoadTitle = false;
-                            title = pageTitle;
+                    try {
+                        if (!RegexValidateUtil.isEmpty(pageTitle)) {
+                            tvBarTitle.setText(pageTitle);
+                            if (initialLoadTitle) {
+                                initialLoadTitle = false;
+                                title = pageTitle;
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });

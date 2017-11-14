@@ -127,8 +127,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         init(context, null);
     }
 
-    public PullToRefreshBase(Context context, AttributeSet attrs,Mode mode, int defStyleAttr) {
-        super(context,attrs,defStyleAttr);
+    public PullToRefreshBase(Context context, AttributeSet attrs, Mode mode, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         mMode = mode;
         init(context, null);
     }
@@ -426,7 +426,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     }
 
     @Override
-    public   void setMode(Mode mode) {
+    public void setMode(Mode mode) {
         if (mode != mMode) {
             if (DEBUG) {
                 Log.d(LOG_TAG, "Setting mode to: " + mode);
@@ -483,7 +483,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     }
 
 
-    public void doubleRefreshing(){
+    public void doubleRefreshing() {
         mCurrentMode = Mode.PULL_FROM_START;
         setRefreshing(true);
     }
@@ -1088,11 +1088,17 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         if (null != mOnRefreshListener) {
             mOnRefreshListener.onRefresh(this);
         } else if (null != mOnRefreshListener2) {
-            if (mCurrentMode == Mode.PULL_FROM_START) {
-                mOnRefreshListener2.onPullDownToRefresh(this);
-            } else if (mCurrentMode == Mode.PULL_FROM_END) {
-                mOnRefreshListener2.onPullUpToRefresh(this);
-            }
+
+            getRefreshableView().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mCurrentMode == Mode.PULL_FROM_START) {
+                        mOnRefreshListener2.onPullDownToRefresh(PullToRefreshBase.this);
+                    } else if (mCurrentMode == Mode.PULL_FROM_END) {
+                        mOnRefreshListener2.onPullUpToRefresh(PullToRefreshBase.this);
+                    }
+                }
+            }, 200);
         }
     }
 

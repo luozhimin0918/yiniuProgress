@@ -433,7 +433,8 @@ public class LoginUtils {
     public static boolean isUnReadAction(Context mContext) {
         String mHtMoreNewestId = SPUtils.getString(mContext, SpConstant.HT_MORE_NEWEST_ID);
         String mMoreNewestId = SPUtils.getString(mContext, SpConstant.MORE_NEWEST_ID);
-        if(mHtMoreNewestId.equals(mMoreNewestId)){
+
+        if (mHtMoreNewestId.equals(mMoreNewestId) || "0".equals(mHtMoreNewestId)) {
             return false;
         }
         return true;

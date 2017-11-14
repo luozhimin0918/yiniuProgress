@@ -70,9 +70,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     public JSONArray marketCodeList = new JSONArray();
     private MarketMainItemAdapter marketMainItemAdapter;
 
-    private String adIconDay, adIconNight;
-    private String ad1TvColorDay = "#1384ED", ad1TvColorNight = "#1384ED", ad2TvColorDay = "#1384ED", ad2TvColorNight = "#1384ED";
-
     /**
      * 首页的 角标
      */
@@ -82,11 +79,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private RollDotViewPager recommendView;
     //    private MarketMainBean marketBean;
     private ArrayList<SkinnableTextView> mAdTextViewList;
-    private TextView tvAd1;
-    private TextView tvAd2;
-    private ImageView ivAd;
-    private List<AdTitleItemBean> ads;
-    private AdTitleIconBean adIcon;
 
     private AdvertLayout advertLayout;
 
@@ -94,18 +86,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         super(iBaseView);
     }
 
-    public void eventBusUpdate(List<MarketItemBean> marketList) {
-
-        LinearLayout hqLayoutView = (LinearLayout) mainHeaderView.findViewWithTag("hqLayoutView");
-        if (hqLayoutView != null) {
-            hqLayoutView.removeAllViews();
-        }
-
-        MarketMainBean marketMainBean = new MarketMainBean();
-        marketMainBean.setData(marketList);
-
-        createFavorView(marketMainBean, hqLayoutView);
-    }
 
     /**
      * 生成首页的View
@@ -140,12 +120,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
                             }
                             break;
                         case "favor":
-                            try {
-                                createFavorView(JSON.parseObject(JSON.toJSONString(marketBean), MarketMainBean.class));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                createFavorView(null);//创建这个视图
-                            }
                             break;
                         case "hot":
                             try {
@@ -303,98 +277,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         createPaddingView(6);
     }
 
-    private void createFavorView(MarketMainBean marketBean) {
-        try {
-            Boolean isInit = SPUtils.getBoolean(mContext, SpConstant.INIT_MARKET_MY_OPTION);
-            if (isInit) {
-                List<MarketItemBean> data = marketBean.getData();
-                data.clear();
-                data.addAll(MarketUtil.getMarketEditOption(mContext));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        createFavorView(marketBean, null);
-    }
-
-    private void createFavorView(MarketMainBean marketBean, LinearLayout hqLayoutView) {
-        if (hqLayoutView == null) {
-            hqLayoutView = new LinearLayout(mContext);
-            hqLayoutView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
-                    .LayoutParams.WRAP_CONTENT));
-            hqLayoutView.setTag("hqLayoutView");
-            hqLayoutView.setOrientation(LinearLayout.VERTICAL);
-            mainHeaderView.addView(hqLayoutView);
-        }
-
-        if (marketBean == null || marketBean.getData() == null || marketBean.getData().size() == 0) {
-            return;
-        }
-//        this.marketBean = marketBean;
-
-        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue, null);
-        TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
-        tvTitle.setText("我的自选");
-
-        hqLayoutView.addView(titleBlue);
-
-        titleBlue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MarketVPFragment marketVPFragment = (MarketVPFragment) marketItemFragment.getParentFragment();
-                MarketFragment marketFragment = (MarketFragment) marketVPFragment.getParentFragment();
-                marketFragment.onTabSelect(1);
-            }
-        });
-
-        HorizontalScrollView horizontalScrollView = new HorizontalScrollView(mContext);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        horizontalScrollView.setHorizontalScrollBarEnabled(false);
-
-        hqLayoutView.addView(horizontalScrollView, lp);
-
-        LinearLayout hqLayout = new LinearLayout(mContext);
-        ViewGroup.LayoutParams hqParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        hqLayout.setLayoutParams(hqParams);
-
-        LayoutInflater mInflate = LayoutInflater.from(mContext);
-
-        for (final MarketItemBean marketItemBean : marketBean.getData()) {
-            marketCodeList.add(marketItemBean.getCode());
-            marketItemFragment.marketMap1.put(marketItemBean.getCode(), marketItemBean);
-
-            marketItemBean.setChange(marketItemFragment.replacePositive(marketItemBean.getChange()));
-            marketItemBean.setRange(marketItemFragment.replacePositive(marketItemBean.getRange()));
-
-            ItemMarketRecommend2Binding dataBinding = DataBindingUtil.inflate(mInflate,
-                    R.layout.item_market_recommend2,
-                    hqLayout,
-                    false);
-
-            int nameFontColor = ContextCompat.getColor(mContext, R.color.font_color5);
-            dataBinding.setNameFontColor(nameFontColor);
-
-            dataBinding.setBean(marketItemBean);
-            View v = dataBinding.getRoot();
-            hqLayout.addView(v);
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, MarketDetailActivity.class);
-                    intent.putExtra(IntentConstant.MARKET, marketItemBean);
-                    mContext.startActivity(intent);
-                }
-            });
-        }
-        MarketUtil.saveMarketEditOption(mContext, marketBean.getData(), 0);
-        horizontalScrollView.addView(hqLayout);
-    }
 
     private void createHotView(MarketHotBean marketBean) {
         if (marketBean == null) {
@@ -404,25 +286,6 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
         createPaddingView(6);
 
         MarketHotBean.DataBean data = marketBean.getData();
-
-//        View titleBlue = LayoutInflater.from(mContext).inflate(R.layout.view_title_blue1, null);
-//        TextView tvTitle = (TextView) titleBlue.findViewById(R.id.tv_title);
-//        tvAd1 = (TextView) titleBlue.findViewById(R.id.tv_advert1);
-//        tvAd2 = (TextView) titleBlue.findViewById(R.id.tv_advert2);
-//        ivAd = (ImageView) titleBlue.findViewById(R.id.iv_ad);
-//
-//        int adTvMaxWidth = SystemUtil.getScreenDisplay(mContext).widthPixels / 3;
-//        tvAd1.setMaxWidth(adTvMaxWidth);
-//
-//
-//        ads = data.getAd();
-//        adIcon = data.getIcon();
-//        AdUtils.setAd(mContext, tvAd1, tvAd2, ivAd, ads, adIcon);
-////
-//        tvTitle.setText("热门行情");
-//
-//        Drawable alarmDrawable = ContextCompat.getDrawable(mContext, R.mipmap.iocn_blue_sx);
-//        tvTitle.setCompoundDrawablesWithIntrinsicBounds(alarmDrawable, null, null, null);
         advertLayout = new AdvertLayout(mContext);
         advertLayout.setAdvertData("热门行情", data.getAd(), data.getIcon());
 

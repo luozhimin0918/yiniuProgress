@@ -17,6 +17,7 @@ import com.library.util.StatusBarCompat;
 import com.library.util.SystemUtil;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by DaiYao on 2016/5/15 0015.
@@ -45,6 +46,7 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
 
     protected StatusBarColor statusBarColor;
     protected RequestQueue mQueue;
+    protected Unbinder mUnbinder;
 
     /**
      * onCreate init Layout and init Function Parameter
@@ -74,7 +76,7 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
 
         mQueue = RequestQueueUtil.newRequestQueue(this);
         this.statusBarColor = statusBarColor;
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         StatusBarCompat.compat(this, statusBarColor.color);
     }
 
@@ -87,7 +89,7 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
         this.statusBarColor = statusBarColor;
         DataBindingUtil.setContentView(this, layoutResID);
         StatusBarCompat.compat(this, statusBarColor.color);
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
     }
 
     RequestQueue.RequestFilter mRequestFilter = new RequestQueue.RequestFilter() {
@@ -106,6 +108,9 @@ public abstract class LibActivity extends AppCompatActivity implements LayoutInf
         ActivityManager.getInstance().popOneActivity(this);
         try {
             SystemUtil.closeSoftInputWindow(this);
+            if (mUnbinder != null) {
+                mUnbinder.unbind();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

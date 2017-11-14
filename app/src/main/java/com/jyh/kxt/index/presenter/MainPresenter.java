@@ -374,7 +374,7 @@ public class MainPresenter extends BasePresenter {
 
             //保存
             String mHtMoreNewestId = String.valueOf(mainInitJson.getIs_activity());
-            SPUtils.save(mContext,SpConstant.HT_MORE_NEWEST_ID, mHtMoreNewestId);
+            SPUtils.save(mContext, SpConstant.HT_MORE_NEWEST_ID, mHtMoreNewestId);
 
             String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
             final MainInitJson.LoadAdBean loadAd = mainInitJson.getLoad_ad();
@@ -401,16 +401,15 @@ public class MainPresenter extends BasePresenter {
 
     private AlertDialog mAlertDialog;
 
-    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd,boolean isHelpClose) {
+    public void showPopAdvertisement(final MainInitJson.IndexAdBean indexAd, boolean isHelpClose) {
         if (indexAd == null) {
             return;
         }
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
+        final View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_index_ad, null);
 
         AlertDialog.Builder advertBuilderDialog = new AlertDialog.Builder(mContext, R.style.dialog3);
         mAlertDialog = advertBuilderDialog.create();
         mAlertDialog.setView(contentView);
-
         View advertContent = contentView.findViewById(R.id.arl_content);
 
         //协定350为后台参考比例  例如50则为7分之1
@@ -457,9 +456,6 @@ public class MainPresenter extends BasePresenter {
             topView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (indexAd.getHref() == null || indexAd.getHref().trim().length() == 0) {
-                        return;
-                    }
                     JumpUtils.jump(mMainActivity, indexAd, indexAd.getHref());
                     mAlertDialog.dismiss();
                 }
@@ -496,7 +492,7 @@ public class MainPresenter extends BasePresenter {
                     }
 
                     Intent intent3 = new Intent(Intent.ACTION_VIEW);
-                    intent3.setData(Uri.parse(indexAd.getHref()));
+                    intent3.setData(Uri.parse(indexAd.getJointHref()));
                     mContext.startActivity(intent3);
                     mAlertDialog.dismiss();
                 }
@@ -537,7 +533,7 @@ public class MainPresenter extends BasePresenter {
 
             wvContent.addJavascriptInterface(new getShareInfoInterface(), "shareInfoInterface");
 
-            wvContent.loadUrl(indexAd.getHref());
+            wvContent.loadUrl(indexAd.getJointHref());
             wvContent.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -586,14 +582,14 @@ public class MainPresenter extends BasePresenter {
 
         mAlertDialog.show();
 
-        if (indexAd.getShowTime() > 0 && isHelpClose) {
-            adCloseHandler.sendEmptyMessageDelayed(1, indexAd.getShowTime());
-        }
-
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
-        animation.setDuration(1000);
+        animation.setDuration(500);
         animation.setInterpolator(new AnticipateOvershootInterpolator());
         contentView.startAnimation(animation);
+
+        if (indexAd.getShowTime() > 0 && isHelpClose) {
+            adCloseHandler.sendEmptyMessageDelayed(1, indexAd.getShowTime() * 1000);
+        }
     }
 
 
@@ -601,12 +597,14 @@ public class MainPresenter extends BasePresenter {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            try {
-                if (mAlertDialog != null) {
-                    mAlertDialog.dismiss();
+            if (msg.what == 1) {
+                try {
+                    if (mAlertDialog != null) {
+                        mAlertDialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     };
@@ -707,7 +705,7 @@ public class MainPresenter extends BasePresenter {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new AlertDialog.Builder(mContext,ThemeUtil.getAlertTheme(mContext))
+                        new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
                                 .setMessage(versionJson.getEvaluation_tip())
                                 .setNegativeButton("是", new DialogInterface.OnClickListener() {
                                     @Override
