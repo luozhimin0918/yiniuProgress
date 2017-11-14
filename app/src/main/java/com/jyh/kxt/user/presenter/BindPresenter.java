@@ -68,7 +68,7 @@ public class BindPresenter extends BasePresenter {
                 break;
             case BindActivity.TYPE_CHANGE_PHONE:
                 step1Json.put("warning", "如需换绑请先完成身份验证");
-                step1Json.put("hint1", "请输入手机号或邮箱");
+                step1Json.put("hint1", "请输入已绑定的手机号或邮箱");
                 step1Json.put("hint2", "请输入动态密码");
                 step1Json.put("functionColor", ContextCompat.getColor(mContext, R.color.font_color1));
                 step1Json.put("function", "获取动态码");
@@ -86,7 +86,7 @@ public class BindPresenter extends BasePresenter {
                 break;
             case BindActivity.TYPE_CHANGE_EMAIL:
                 step1Json.put("warning", "如需换绑请先完成身份验证");
-                step1Json.put("hint1", "请输入手机号或邮箱");
+                step1Json.put("hint1", "请输入已绑定的手机号或邮箱");
                 step1Json.put("hint2", "请输入动态密码");
                 step1Json.put("functionColor", ContextCompat.getColor(mContext, R.color.font_color1));
                 step1Json.put("function", "获取动态码");

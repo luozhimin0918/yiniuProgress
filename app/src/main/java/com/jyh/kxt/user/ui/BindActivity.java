@@ -206,38 +206,47 @@ public class BindActivity extends BaseActivity {
                         if (step == 1) {
                             bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(), edtPwd
                                     .getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd.getFunctionTextColor());
-                            bindPresenter.step1(edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
-                                @Override
-                                public void callback(Object o) {
-                                    bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
-                                            edtPwd.getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd
-                                                    .getFunctionTextColor());
-                                    step = 2;
-                                    dismissWaitDialog();
-                                    tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
-                                    restoreView();
-                                    if (type == TYPE_CHANGE_PHONE) {
-                                        editTextValidator = new EditTextValidator(getContext())
-                                                .setButton(btnSend)
-                                                .add(new ValidationModel(edtEmail, new PhoneValidation()))
-                                                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
-                                                .execute();
-                                    } else {
-                                        editTextValidator = new EditTextValidator(getContext())
-                                                .setButton(btnSend)
-                                                .add(new ValidationModel(edtEmail, new EmailValidation()))
-                                                .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
-                                                .execute();
+
+                            UserJson userJson=LoginUtils.getUserInfo(getContext());
+                            String phone = userJson.getPhone();
+                            String email=userJson.getEmail();
+                            if((phone!=null&&phone.trim().equals(edtEmail.getEdtText().trim()))||(email!=null&&email.trim().equals(edtEmail.getEdtText().trim()))){
+                                bindPresenter.step1(edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
+                                    @Override
+                                    public void callback(Object o) {
+                                        bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
+                                                edtPwd.getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd
+                                                        .getFunctionTextColor());
+                                        step = 2;
+                                        dismissWaitDialog();
+                                        tvTitle.setText(type == TYPE_CHANGE_PHONE ? "绑定手机号" : "绑定邮箱");
+                                        restoreView();
+                                        if (type == TYPE_CHANGE_PHONE) {
+                                            editTextValidator = new EditTextValidator(getContext())
+                                                    .setButton(btnSend)
+                                                    .add(new ValidationModel(edtEmail, new PhoneValidation()))
+                                                    .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                                    .execute();
+                                        } else {
+                                            editTextValidator = new EditTextValidator(getContext())
+                                                    .setButton(btnSend)
+                                                    .add(new ValidationModel(edtEmail, new EmailValidation()))
+                                                    .add(new ValidationModel(edtPwd, new PwdDynamicValidation()))
+                                                    .execute();
+                                        }
+
                                     }
 
-                                }
+                                    @Override
+                                    public void onError(Exception e) {
+                                        dismissWaitDialog();
+                                        ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
+                                    }
+                                });
+                            }else{
+                                ToastView.makeText(getContext(),"手机号或邮箱不一致,请重新输入");
+                            }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    dismissWaitDialog();
-                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
-                                }
-                            });
                         } else if (step == 2) {
                             bindPresenter.step2(isSetPwd, edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
                                 @Override
