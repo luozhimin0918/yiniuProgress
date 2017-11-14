@@ -496,10 +496,10 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
     private String initCalendarAccount() {
         TimeZone timeZone = TimeZone.getDefault();
         ContentValues value = new ContentValues();
-        value.put(CalendarContract.Calendars.NAME, "快讯通");
-        value.put(CalendarContract.Calendars.ACCOUNT_NAME, "快讯通");
+        value.put(CalendarContract.Calendars.NAME, "壹牛");
+        value.put(CalendarContract.Calendars.ACCOUNT_NAME, "壹牛");
         value.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
-        value.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, "快讯通");
+        value.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, "壹牛");
         value.put(CalendarContract.Calendars.VISIBLE, 1);
         value.put(CalendarContract.Calendars.CALENDAR_COLOR, -9206951);
         value.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
@@ -511,7 +511,7 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
         Uri calendarUri = CalendarContract.Calendars.CONTENT_URI;
         calendarUri = calendarUri.buildUpon()
                 .appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, "快讯通")
+                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, "壹牛")
                 .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                 .build();
 

@@ -23,7 +23,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginTop="25dp"
         android:paddingLeft="@dimen/newsContentPadding3"
-        android:text="文章来源:快讯通财经"
+        android:text="文章来源:壹牛财经"
         android:textSize="@dimen/describe_font_size3"
         />
 

@@ -51,7 +51,7 @@ public class ShareActivity extends BaseActivity {
         }
 
         umengShareBean = new UmengShareBean();
-        umengShareBean.setTitle("快讯通财经");
+        umengShareBean.setTitle("壹牛财经");
         umengShareBean.setDetail("财经快讯速递专家");
         umengShareBean.setWebUrl(HttpConstant.OFFICIAL);
         umengShareBean.setFromSource(SHARE_INVITE);
@@ -70,7 +70,7 @@ public class ShareActivity extends BaseActivity {
                     umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN_CIRCLE, umengShareBean);
                     break;
                 case R.id.rl_sina:
-                    umengShareBean.setDetail("财经快讯速递专家 " + HttpConstant.OFFICIAL + " @快讯通财经");
+                    umengShareBean.setDetail("财经快讯速递专家 " + HttpConstant.OFFICIAL + " @壹牛财经");
                     umengShareUtil.shareContent2(SHARE_MEDIA.SINA, umengShareBean);
                     break;
                 case R.id.rl_qq:

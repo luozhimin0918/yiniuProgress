@@ -45,7 +45,6 @@ public class RollDotView extends View {
 
         circleSize = SystemUtil.dp2px(getContext(), 2.5f);
         circlePadding = SystemUtil.dp2px(getContext(), 2.5f);
-
     }
 
 
@@ -53,6 +52,9 @@ public class RollDotView extends View {
         this.circleSize =  SystemUtil.dp2px(getContext(), circleSize) ;
     }
 
+    public void setCirclePadding(int circlePadding) {
+        this.circlePadding =  SystemUtil.dp2px(getContext(), circlePadding) ;
+    }
     public void setCircleCount(int circleCount) {
         this.circleCount = circleCount;
     }

@@ -399,7 +399,7 @@ public class LoginUtils {
             String configStr = SPUtils.getString(mContext, SpConstant.INIT_LOAD_APP_CONFIG);
             MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
             if (config.getIs_bind() == 0) {
-                return true;
+                return false;
             } else {
                 if (!userInfo.isSetPhone()) {
                     new AlertDialog.Builder(mContext, ThemeUtil.getAlertTheme(mContext))
@@ -427,7 +427,7 @@ public class LoginUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public static boolean isUnReadAction(Context mContext) {

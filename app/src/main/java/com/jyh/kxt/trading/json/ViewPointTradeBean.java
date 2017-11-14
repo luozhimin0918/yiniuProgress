@@ -20,7 +20,7 @@ import java.util.List;
  * title=文字&href=&o_class=&o_action=&o_id=  >&#
  * num_good:200,
  * num_commit:200,
- * author_name:快讯通,
+ * author_name:壹牛,
  * author_id:108108,
  * author_img:头像url
  * time:159039321,

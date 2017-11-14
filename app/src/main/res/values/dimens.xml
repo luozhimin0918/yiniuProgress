@@ -324,7 +324,7 @@
     <!-- 声明条款 -->
     <dimen name="statementPaddingHorizontal">43dp</dimen>
     <dimen name="statementPaddingBottom">20dp</dimen>
-    <dimen name="statementImageSize">235dp</dimen>
+    <dimen name="statementImageSize">150dp</dimen>
     <!-- 意见反馈 -->
     <dimen name="feedbackImageWidth">200dp</dimen>
     <dimen name="feedbackImageHeight">200dp</dimen>

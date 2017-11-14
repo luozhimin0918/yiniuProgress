@@ -196,6 +196,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         PushUtil.pushToMainActivity(this);
     }
 
+    private boolean isScrollToComment = true;
+
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
             .news_author_chat, R.id.tv_comment})
     public void onClick(View view) {
@@ -205,8 +207,31 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
+                //WebView 的总长度
+               /* int mCommentTop = commentPresenter.tvCommentCountTitle.getTop();
 
-                ptrLvMessage.getRefreshableView().setSelection(2);
+                int scrollToPosition;
+                if (isCommentPosition) {
+                    scrollToPosition = mOldWebViewScrollPosition;
+                    isCommentPosition = false;
+                } else {
+                    View mWebView = ptrLvMessage.getRefreshableView().getChildAt(0);
+                    if (mWebView != null) {
+                        mOldWebViewScrollPosition = mWebView.getTop();
+                    }
+                    scrollToPosition = mCommentTop;
+                    isCommentPosition = true;
+                }
+
+                ptrLvMessage.getRefreshableView().scrollListBy(scrollToPosition, 800);*/
+
+                if (isScrollToComment) {
+                    ptrLvMessage.getRefreshableView().setSelection(2);
+                    isScrollToComment = false;
+                }else{
+                    ptrLvMessage.getRefreshableView().setSelection(0);
+                    isScrollToComment = true;
+                }
                 break;
             case R.id.tv_comment:
                 //回复
@@ -937,7 +962,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     super.onErrorResponse(error);
                     if (error != null && error.getMessage() != null) {
                         String errorMessage = error.getMessage();
-                        ToastView.makeText2(getContext(),errorMessage);
+                        ToastView.makeText2(getContext(), errorMessage);
                     }
                     if (popupWindow instanceof PopupUtil) {
                         ((PopupUtil) popupWindow).addLock(false);

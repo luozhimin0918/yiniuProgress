@@ -54,6 +54,7 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
 
         mRollDotView.setCircleCount(mViewList.size());
         mRollDotView.setCircleSize(3);
+        mRollDotView.setCirclePadding(5);
 
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mViewList);
         mViewPager.setAdapter(mViewPagerAdapter);

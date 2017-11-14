@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">快讯通财经</string>
+    <string name="app_name">壹牛财经</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -20,7 +20,7 @@
     <string name="error_search_null">对不起,没有找到相关搜索结果</string>
     <string name="tokenError">token获取失败</string>
     <string name="statement2">上海快讯网络科技有限公司</string>
-    <string name="statement1">快讯通财经专注于金融行业信息服务，力求为广大投资提供更快更精准的数据与快讯，本站信息来自各合作方，提供使用者参考，不构成任何交易建议，基于本站数据进行交易导致的损失本站概不负责。</string>
+    <string name="statement1">壹牛财经专注于金融行业信息服务，力求为广大投资提供更快更精准的数据与快讯，本站信息来自各合作方，提供使用者参考，不构成任何交易建议，基于本站数据进行交易导致的损失本站概不负责。</string>
 
     <string name="toast_error_load">数据加载错误,请稍后再试</string>
     <string name="toast_error_net">网络异常,请检查网络</string>

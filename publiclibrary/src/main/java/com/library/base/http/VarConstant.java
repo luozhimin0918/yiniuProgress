@@ -109,14 +109,14 @@ public class VarConstant {
      */
 //    public static final String WX_APPID = "wx93dccc483df30be4";
 //    public static final String WX_APPSECRET = "0828a1e0f1dd2791050113a9adb715a4";
-    public static final String WX_APPID = "wxf6f6e8a2f5f3af5e";
-    public static final String WX_APPSECRET = "3545273eea982cc0a424dcf6845e9200";
+    public static final String WX_APPID = "wx37608242deae4d16";
+    public static final String WX_APPSECRET = "5db85e9b42c6117e546a3c86a4bcd873";
 
     //    public static final String SINA_APPKEY = "3864596803";
 //    public static final String SINA_APPSECRET = "cff54ddbc22d70c65f4dd548611e524a";
 //    public static final String SINA_CALLBACK = "http://sns.whalecloud.com";
-    public static final String SINA_APPKEY = "2798094812";
-    public static final String SINA_APPSECRET = "2f1ad2df099135ecc384bd4bf8d2a0c8";
+    public static final String SINA_APPKEY = "1071715548";
+    public static final String SINA_APPSECRET = "2b82d9ae297285309882fbb435e7a6e9";
     public static final String SINA_CALLBACK = "https://api.weibo.com/oauth2/default.html";
 
     public static final String QQ_APPID = "101298812";
