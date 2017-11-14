@@ -2,13 +2,14 @@ package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,11 +24,16 @@ import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
+import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
+import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.StarView;
+import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
+import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
 import com.jyh.kxt.datum.bean.CalendarImportantBean;
@@ -39,7 +45,10 @@ import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
+import com.jyh.kxt.index.ui.WebActivity;
 import com.library.util.ObserverCall;
+import com.library.util.RegexValidateUtil;
+import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.util.ViewCompatUtil;
 import com.library.widget.listview.PinnedSectionListView;
@@ -89,6 +98,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         ViewHolder2 viewHolder2 = null;
         ViewHolder3 viewHolder3 = null;
         ViewHolder4 viewHolder4 = null;
+        AdViewHolder viewHolderAd = null;
 
         int itemType = getItemViewType(position);
         if (view == null) {
@@ -120,6 +130,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                     viewHolder4 = new ViewHolder4(view);
                     view.setTag(viewHolder4);
                     break;
+                case 6:
+                    view = layoutInflater.inflate(R.layout.item_calendar_content_ad, null);
+                    viewHolderAd = new AdViewHolder(view);
+                    view.setTag(viewHolderAd);
                 default:
                     break;
             }
@@ -141,6 +155,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 case 4:
                     viewHolder4 = (ViewHolder4) view.getTag();
                     break;
+                case 6:
+                    viewHolderAd = (AdViewHolder) view.getTag();
             }
         }
 
@@ -184,8 +200,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 try {
                     String time = mCalendarFinanceBean.getTime().split(" ")[1];
                     String[] splitTime = time.split(":");
-                    if(splitTime.length > 1){
-                        time = splitTime[0]+":"+splitTime[1];
+                    if (splitTime.length > 1) {
+                        time = splitTime[0] + ":" + splitTime[1];
                     }
                     viewHolder1.tvTime.setText(time);
                 } catch (Exception e) {
@@ -276,8 +292,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 try {
                     String time = mCalendarHolidayBean.getTime().split(" ")[1];
                     String[] splitTime = time.split(":");
-                    if(splitTime.length > 1){
-                        time = splitTime[0]+":"+splitTime[1];
+                    if (splitTime.length > 1) {
+                        time = splitTime[0] + ":" + splitTime[1];
                     }
                     viewHolder3.tvTime.setText(time);
                 } catch (Exception e) {
@@ -301,6 +317,86 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 CalendarNotBean mCalendarNotBean = (CalendarNotBean) mCalendarType;
                 viewHolder4.tvDescribe.setText(mCalendarNotBean.getDescribe());
                 viewHolder4.tvDescribe.setTextColor(ContextCompat.getColor(mContext, R.color.font_color3));
+                break;
+            case 6:
+                AdJson ads = (AdJson) mCalendarType;
+
+                View paddingTagView2 = viewHolderAd.rootView.findViewWithTag("paddingView");
+                if (paddingTagView2 != null) {
+                    viewHolderAd.rootView.removeView(paddingTagView2);
+                }
+
+                View mPaddingView = new View(mContext);
+                mPaddingView.setTag("paddingView");
+                mPaddingView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color2));
+
+                int paddingHeight = SystemUtil.dp2px(mContext, 10);
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        paddingHeight);
+                mPaddingView.setLayoutParams(lp);
+                viewHolderAd.rootView.addView(mPaddingView, 0);
+
+
+                try {
+                    final AdItemJson mPicAd = ads.getPic_ad();
+                    if (mPicAd != null) {
+                        viewHolderAd.ivAd.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
+
+                        String picture = mPicAd.getPicture();
+                        if (RegexValidateUtil.isEmpty(picture)) {
+                            viewHolderAd.ivAd.setVisibility(View.GONE);
+                        } else {
+                            viewHolderAd.ivAd.setVisibility(View.VISIBLE);
+                        }
+                        Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
+                                .placeholder(R.mipmap.icon_def_news).into(viewHolderAd.ivAd);
+
+                        viewHolderAd.rootView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(mContext, WebActivity.class);
+                                intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
+                                intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
+                                intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    List<AdItemJson> mTextAd = ads.getText_ad();
+                    if (mTextAd != null && mTextAd.size() != 0) {
+                        LayoutInflater mInflater = LayoutInflater.from(mContext);
+
+                        for (final AdItemJson adItemJson : mTextAd) {
+                            View adLayoutView = mInflater.inflate(R.layout.item_news_ad, parent, false);
+
+                            SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                                    .tv_news_ad_title);
+                            mAdTextView.setText(" • " + adItemJson.getTitle());
+                            mAdTextView.setTextColor(Color.parseColor(SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT)?adItemJson.getNight_color():adItemJson.getDay_color()));
+                            SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
+                                    .tv_news_ad_trait);
+
+                            viewHolderAd.llAd.addView(adLayoutView);
+
+                            adLayoutView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(mContext, WebActivity.class);
+                                    intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
+                                    intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
+                                    mContext.startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
         return view;
@@ -409,6 +505,16 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
         }
     }
 
+    class AdViewHolder {
+
+        @BindView(R.id.ll_rootView) LinearLayout rootView;
+        @BindView(R.id.iv_ad) ImageView ivAd;
+        @BindView(R.id.ll_ad) LinearLayout llAd;
+
+        public AdViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
 
     private void setAlarmState(final CalendarType mCalendarType,
                                String reality,
@@ -507,7 +613,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                     Date parseDate = simpleDateFormat.parse(calendarTime);
                     long parseTime = parseDate.getTime();
 
-                    if (System.currentTimeMillis() < parseTime  ) {
+                    if (System.currentTimeMillis() < parseTime) {
                         tvAlarm.setVisibility(View.VISIBLE);
                     } else {
                         tvAlarm.setVisibility(View.GONE);
@@ -761,6 +867,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 return 4;
             case AD_TITLE:
                 return 5;
+            case AD:
+                return 6;
             default:
                 return 0;
         }
@@ -768,7 +876,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
     @Override
     public int getViewTypeCount() {
-        return 6;
+        return 7;
     }
 
 }

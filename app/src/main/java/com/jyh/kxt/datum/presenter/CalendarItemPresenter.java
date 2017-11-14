@@ -9,6 +9,7 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
+import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.datum.bean.CalendarBean;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
@@ -132,6 +133,11 @@ public class CalendarItemPresenter extends BasePresenter {
                 } else if ("holiday".equals(type)) { //假期数据
                     List<String> objectList = JSON.parseArray(calendarItemBean.getData(), String.class);
                     generateHolidayListData(objectList, status);
+                }else if("ads".equals(type)){
+
+
+                    AdJson adJson = JSON.parseObject(calendarItemBean.getData(), AdJson.class);
+                    genrateAds(adJson);
                 }
             }
 
@@ -145,6 +151,12 @@ public class CalendarItemPresenter extends BasePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void genrateAds(AdJson adJson) {
+        if(adJson==null) return;
+        adJson.setAdapterType(CalendarFragment.AdapterType.AD);
+        calendarTypeList.add(adJson);
     }
 
 

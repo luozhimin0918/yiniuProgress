@@ -58,4 +58,15 @@
         android:layout_marginTop="6dp"
         android:layout_height="@dimen/line_height"
         android:background="@color/line_color2"/>
+
+    <include
+        android:id="@+id/ll_ad_root"
+        layout="@layout/news_header_ad"/>
+
+    <View
+        android:id="@+id/v_line2"
+        android:layout_width="match_parent"
+        android:layout_marginTop="6dp"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/line_color2"/>
 </LinearLayout>

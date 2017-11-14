@@ -1,5 +1,7 @@
 package com.jyh.kxt.trading.json;
 
+import com.jyh.kxt.datum.bean.AdJson;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,15 @@ import java.util.List;
 public class ViewPointBean {
     private List<ViewPointHotBean> hot;
     private List<ViewPointTradeBean> trade;
+    private AdJson ads;
+
+    public AdJson getAds() {
+        return ads;
+    }
+
+    public void setAds(AdJson ads) {
+        this.ads = ads;
+    }
 
     public List<ViewPointHotBean> getHot() {
         return hot;
