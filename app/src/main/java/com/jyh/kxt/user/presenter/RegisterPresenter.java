@@ -130,7 +130,7 @@ public class RegisterPresenter extends BasePresenter {
             protected void onErrorResponse(VolleyError error) {
                 super.onErrorResponse(error);
                 activity.dismissWaitDialog();
-                ToastView.makeText3(mContext, error == null ? "注册失败，请重试" : error.getMessage());
+                ToastView.makeText(mContext, error == null ? "注册失败，请重试" : error.getMessage());
             }
         });
     }

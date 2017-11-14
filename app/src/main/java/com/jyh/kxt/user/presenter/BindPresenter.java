@@ -6,20 +6,14 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.user.ui.BindActivity;
-import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
-import com.library.base.http.VolleyRequest;
-import com.library.util.RegexValidateUtil;
-import com.library.widget.window.ToastView;
 
 
 /**

@@ -7,26 +7,19 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengLoginTool;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginActivity;
-import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
-import com.library.base.http.VolleyRequest;
 import com.library.util.NetUtils;
-import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
-import com.trycatch.mysnackbar.Prompt;
-import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 

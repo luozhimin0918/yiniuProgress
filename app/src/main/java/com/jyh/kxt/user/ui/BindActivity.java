@@ -119,13 +119,13 @@ public class BindActivity extends BaseActivity {
             public void onClick(View v) {
                 //请求动态密码
                 if (RegexValidateUtil.isEmpty(edtEmail.getEdtText())) {
-                    ToastView.makeText(getContext(), "手机号或邮箱不能为空");
+                    ToastView.makeText3(getContext(), "手机号或邮箱不能为空");
                     return;
                 }
                 if (RegexValidateUtil.checkCellphone(edtEmail.getEdtText()) || RegexValidateUtil.checkEmail(edtEmail.getEdtText())) {
                     bindPresenter.requestCode(step);
                 } else
-                    ToastView.makeText(getContext(), "手机号或邮箱不合法");
+                    ToastView.makeText3(getContext(), "手机号或邮箱不合法");
 
             }
         });
@@ -240,11 +240,11 @@ public class BindActivity extends BaseActivity {
                                     @Override
                                     public void onError(Exception e) {
                                         dismissWaitDialog();
-                                        ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
+                                        ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
                                     }
                                 });
                             }else{
-                                ToastView.makeText(getContext(),"手机号或邮箱不一致,请重新输入");
+                                ToastView.makeText3(getContext(),"手机号或邮箱不一致,请重新输入");
                             }
 
                         } else if (step == 2) {

@@ -14,15 +14,12 @@ import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.user.ui.AboutActivity;
 import com.jyh.kxt.user.ui.ForgetPwdActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.EncryptionUtils;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.library.widget.window.ToastView;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 

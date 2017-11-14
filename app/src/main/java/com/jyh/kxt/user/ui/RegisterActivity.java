@@ -15,7 +15,6 @@ import com.jyh.kxt.base.custom.DiscolorButton;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
-import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
 import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
@@ -69,7 +68,7 @@ public class RegisterActivity extends BaseActivity {
                 if (step == 0) {
                     //请求动态密码
                     if (RegexValidateUtil.isEmpty(edtPhone.getEdtText())) {
-                        ToastView.makeText(getContext(), "手机号不能为空");
+                        ToastView.makeText3(getContext(), "手机号不能为空");
                         return;
                     }
                     if (RegexValidateUtil.checkCellphone(edtPhone.getEdtText())) {

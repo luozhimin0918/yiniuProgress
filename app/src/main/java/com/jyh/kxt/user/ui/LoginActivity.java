@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                 } else {
                     //请求动态密码
                     if (RegexValidateUtil.isEmpty(edtName.getEdtText())) {
-                        ToastView.makeText(getContext(), "手机号不能为空");
+                        ToastView.makeText3(getContext(), "手机号不能为空");
                         return;
                     }
                     if (RegexValidateUtil.checkCellphone(edtName.getEdtText()))

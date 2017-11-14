@@ -2,7 +2,6 @@ package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.EmailOrPhoneValidation;
-import com.jyh.kxt.base.utils.validator.validation.EmailValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
@@ -77,13 +75,13 @@ public class ForgetPwdActivity extends BaseActivity {
             public void onClick(View v) {
                 //请求动态密码
                 if (RegexValidateUtil.isEmpty(edtEmail.getEdtText())) {
-                    ToastView.makeText(getContext(), "手机号或邮箱不能为空");
+                    ToastView.makeText3(getContext(), "手机号或邮箱不能为空");
                     return;
                 }
                 if (RegexValidateUtil.checkCellphone(edtEmail.getEdtText()) || RegexValidateUtil.checkEmail(edtEmail.getEdtText()))
                     forgetPwdPresenter.requestPwd();
                 else
-                    ToastView.makeText(getContext(), "手机号或邮箱不合法");
+                    ToastView.makeText3(getContext(), "手机号或邮箱不合法");
             }
         });
 
@@ -148,12 +146,12 @@ public class ForgetPwdActivity extends BaseActivity {
                                             @Override
                                             public void onError(Exception e) {
                                                 dismissWaitDialog();
-                                                ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
+                                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
                                             }
                                         });
                             }
                         } else
-                            ToastView.makeText(this, "暂无网络,请稍后再试");
+                            ToastView.makeText3(this, "暂无网络,请稍后再试");
                     }
                 break;
         }
