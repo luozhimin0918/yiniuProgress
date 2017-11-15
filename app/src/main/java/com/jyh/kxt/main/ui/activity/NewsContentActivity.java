@@ -225,8 +225,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
 
                     int mScrollY = mCurrentPosition - mWebScrollPosition;
-                    ptrLvMessage.getRefreshableView().smoothScrollBy(-mScrollY, 500);
-                    Log.e(TAG, "mCurrentPosition "+ mCurrentPosition +"    mWebScrollPosition "+mWebScrollPosition );
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 500);
                 }
 
                 break;
@@ -280,13 +279,31 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     private int getListViewScrollPosition() {
-        try {
+       /* try {
             int top = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
             return Math.abs(top);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }*/
+
+        int myTop = 0;
+        myTop = 0;
+        int firstVisiblePosition = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
+        for (int i = 0; i <= firstVisiblePosition; i++) {
+            try {
+                View childAt = ptrLvMessage.getRefreshableView().getChildAt(i);
+                myTop += childAt.getHeight();
+            } catch (Exception e) {
+            }
         }
+        try {
+            View childAt = ptrLvMessage.getRefreshableView().getChildAt(firstVisiblePosition);
+            myTop += childAt.getTop();
+        } catch (Exception e) {
+        }
+        Log.e(TAG, "getListViewScrollPosition: " + myTop);
+        return myTop;
     }
 
     private void initShareLayout() {

@@ -10,7 +10,9 @@ import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
+import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.explore.ui.MoreActivity;
+import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -74,7 +76,8 @@ public class MorePresenter extends BasePresenter {
                 SPUtils.save(mContext, SpConstant.MORE_NEWEST_ID, mNewestId);
 
 
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, null));
+                UserJson userInfo = LoginUtils.getUserInfo(mContext);
+                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
             }
 
             @Override

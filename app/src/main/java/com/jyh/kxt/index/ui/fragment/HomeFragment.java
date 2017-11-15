@@ -192,6 +192,8 @@ public class HomeFragment extends BaseFragment implements OnTabSelectListener, V
             }  //存在新的活动
             if(LoginUtils.isUnReadAction(getContext())){
                 tvRedDot.setVisibility(View.VISIBLE);
+            }else{
+                tvRedDot.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             e.printStackTrace();

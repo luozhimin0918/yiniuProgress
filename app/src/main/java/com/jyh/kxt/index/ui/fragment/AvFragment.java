@@ -163,6 +163,8 @@ public class AvFragment extends BaseFragment implements OnTabSelectListener, Vie
         }  //存在新的活动
         if(LoginUtils.isUnReadAction(getContext())){
             tvRedDot.setVisibility(View.VISIBLE);
+        }else{
+            tvRedDot.setVisibility(View.GONE);
         }
     }
 
