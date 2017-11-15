@@ -131,6 +131,8 @@ public class BindActivity extends BaseActivity {
         });
     }
 
+    private String userTemp="";
+
     @OnClick({R.id.iv_bar_break, R.id.btn_send})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -163,6 +165,7 @@ public class BindActivity extends BaseActivity {
                                     } else {
                                         //设置密码
                                         step = 2;
+                                        userTemp=edtEmail.getEdtText();
                                         tvTitle.setText("设置密码");
                                         llStep1.setVisibility(View.GONE);
                                         llStep2.setVisibility(View.VISIBLE);
@@ -189,6 +192,13 @@ public class BindActivity extends BaseActivity {
                                     dismissWaitDialog();
                                     UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
                                     userJson.setIs_set_password("1");
+                                    if (type == BindActivity.TYPE_BIND_PHONE) {
+                                        userJson.setPhone(userTemp);
+                                        userJson.setIs_set_phone("1");
+                                    } else {
+                                        userJson.setEmail(userTemp);
+                                        userJson.setIs_set_email("1");
+                                    }
                                     LoginUtils.changeUserInfo(getContext(), userJson);
                                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
                                     ToastView.makeText(getContext(), "设置成功");
@@ -244,6 +254,7 @@ public class BindActivity extends BaseActivity {
                                     }
                                 });
                             }else{
+                                dismissWaitDialog();
                                 ToastView.makeText3(getContext(),"手机号或邮箱不一致,请重新输入");
                             }
 
@@ -267,6 +278,7 @@ public class BindActivity extends BaseActivity {
                                         finish();
                                     } else {
                                         step = 3;
+                                        userTemp=edtEmail.getEdtText();
                                         tvTitle.setText("设置密码");
                                         llStep1.setVisibility(View.GONE);
                                         llStep2.setVisibility(View.VISIBLE);
@@ -292,6 +304,15 @@ public class BindActivity extends BaseActivity {
                                     dismissWaitDialog();
                                     UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
                                     userJson.setIs_set_password("1");
+
+                                    if (type == BindActivity.TYPE_CHANGE_PHONE) {
+                                        userJson.setPhone(userTemp);
+                                        userJson.setIs_set_phone("1");
+                                    } else {
+                                        userJson.setEmail(userTemp);
+                                        userJson.setIs_set_email("1");
+                                    }
+
                                     LoginUtils.changeUserInfo(getContext(), userJson);
                                     EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
                                     ToastView.makeText(getContext(), "设置成功");
@@ -450,5 +471,16 @@ public class BindActivity extends BaseActivity {
             errorDialog.dismiss();
         }
         errorDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if(bindPresenter!=null)
+            bindPresenter.onDestroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

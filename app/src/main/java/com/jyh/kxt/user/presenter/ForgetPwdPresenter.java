@@ -184,4 +184,11 @@ public class ForgetPwdPresenter extends BasePresenter {
             return false;
         }
     });
+
+    public void onDestroy(){
+
+        handler.removeCallbacksAndMessages(null);
+        handler=null;
+
+    }
 }

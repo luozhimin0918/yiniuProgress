@@ -257,4 +257,9 @@ public class BindPresenter extends BasePresenter {
         }
 
     }
+
+    public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        handler=null;
+    }
 }

@@ -134,4 +134,9 @@ public class RegisterPresenter extends BasePresenter {
             }
         });
     }
+
+    public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        handler=null;
+    }
 }
