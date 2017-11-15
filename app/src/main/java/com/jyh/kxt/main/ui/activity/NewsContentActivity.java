@@ -224,7 +224,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
 
                     int mScrollY = mCommentPosition - mWebScrollPosition;
-                    ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 500);
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 1000);
                 }
 
                 break;
@@ -280,14 +280,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private int getListViewScrollPosition() {
         try {
             View childAt0 = ptrLvMessage.getRefreshableView().getChildAt(0);
-            View childAt1 = ptrLvMessage.getRefreshableView().getChildAt(1);
-
-            int top = Math.abs(childAt0.getTop());
-
-            if (childAt1 != null) {
-                top += Math.abs(childAt1.getTop());
-            }
-            return Math.abs(top);
+            return Math.abs(childAt0.getTop());
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
