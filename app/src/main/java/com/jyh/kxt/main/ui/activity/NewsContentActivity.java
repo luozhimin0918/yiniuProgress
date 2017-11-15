@@ -221,10 +221,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                     mWebScrollPosition = getListViewScrollPosition();
                     ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
                 } else {
-                    int mCurrentPosition = getListViewScrollPosition();
                     ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
 
-                    int mScrollY = mCurrentPosition - mWebScrollPosition;
+                    int mScrollY = mCommentPosition - mWebScrollPosition;
                     ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 500);
                 }
 
@@ -279,31 +278,20 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     private int getListViewScrollPosition() {
-       /* try {
-            int top = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
+        try {
+            View childAt0 = ptrLvMessage.getRefreshableView().getChildAt(0);
+            View childAt1 = ptrLvMessage.getRefreshableView().getChildAt(1);
+
+            int top = Math.abs(childAt0.getTop());
+
+            if (childAt1 != null) {
+                top += Math.abs(childAt1.getTop());
+            }
             return Math.abs(top);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        }*/
-
-        int myTop = 0;
-        myTop = 0;
-        int firstVisiblePosition = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
-        for (int i = 0; i <= firstVisiblePosition; i++) {
-            try {
-                View childAt = ptrLvMessage.getRefreshableView().getChildAt(i);
-                myTop += childAt.getHeight();
-            } catch (Exception e) {
-            }
         }
-        try {
-            View childAt = ptrLvMessage.getRefreshableView().getChildAt(firstVisiblePosition);
-            myTop += childAt.getTop();
-        } catch (Exception e) {
-        }
-        Log.e(TAG, "getListViewScrollPosition: " + myTop);
-        return myTop;
     }
 
     private void initShareLayout() {
