@@ -63,6 +63,7 @@ public class AdvertLayout extends FrameLayout {
 
 
     public void setAdvertData(String title, List<AdTitleItemBean> adTitleItemList, AdTitleIconBean adTitleIconBean) {
+
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         advertRootTitle = mInflater.inflate(R.layout.view_advert_title, this, false);
         ButterKnife.bind(this, advertRootTitle);
@@ -99,7 +100,12 @@ public class AdvertLayout extends FrameLayout {
             return;
         }
         //对右上角图片进行处理
-        String iconUrl = isNight ? adTitleIconBean.getNight_icon() : adTitleIconBean.getDay_icon();
+        String iconUrl = null;
+        try {
+            iconUrl = isNight ? adTitleIconBean.getNight_icon() : adTitleIconBean.getDay_icon();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Glide.with(getContext()).load(iconUrl).into(ivAdvertIcon);
 
         //处理文本

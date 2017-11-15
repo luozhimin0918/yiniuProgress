@@ -77,7 +77,7 @@ public class AdvertLayout2 extends FrameLayout {
     }
 
     public void onChangerTheme() {
-        LayoutInflater inflater=LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
 
         advertRootTitle.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme1));
@@ -90,20 +90,22 @@ public class AdvertLayout2 extends FrameLayout {
 
         //处理文本
         for (final AdTitleItemBean adTitleItemBean : adTitleItemList) {
-            View view=inflater.inflate(R.layout.layout_ad_item,null);
+            View view = inflater.inflate(R.layout.layout_ad_item, null);
             String textColor;
             //对右上角图片进行处理
-            String iconUrl;
+            String iconUrl = null;
             if (isNight) {
                 textColor = adTitleItemBean.getNight_color();
-                iconUrl=adTitleIconBean.getNight_icon();
+                if (adTitleIconBean != null)
+                    iconUrl = adTitleIconBean.getNight_icon();
             } else {
                 textColor = adTitleItemBean.getDay_color();
-                iconUrl=adTitleIconBean.getDay_icon();
+                if (adTitleIconBean != null)
+                    iconUrl = adTitleIconBean.getDay_icon();
             }
 
             TextView tvContent = (TextView) view.findViewById(R.id.tv_ad);
-            ImageView imageView= (ImageView) view.findViewById(R.id.iv_ad);
+            ImageView imageView = (ImageView) view.findViewById(R.id.iv_ad);
             Glide.with(getContext()).load(iconUrl).placeholder(R.mipmap.icon_ad2).error(R.mipmap.icon_ad2).into(imageView);
             //设置颜色
             tvContent.setText(adTitleItemBean.getTitle());

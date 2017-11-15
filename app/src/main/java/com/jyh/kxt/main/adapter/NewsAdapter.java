@@ -22,6 +22,8 @@ import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
+import com.jyh.kxt.base.json.AdTitleIconBean;
+import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
@@ -72,7 +74,7 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = null;
-        ViewHolder2 holder2=null;
+        ViewHolder2 holder2 = null;
         final int itemViewType = getItemViewType(position);
         if (convertView == null) {
             if (itemViewType == TYPE_DEF) {
@@ -86,14 +88,14 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 convertView.setTag(holder);
             } else {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_news2, parent, false);
-                holder2=new ViewHolder2(convertView);
+                holder2 = new ViewHolder2(convertView);
                 convertView.setTag(holder2);
             }
         } else {
             if (itemViewType == TYPE_DEF) {
                 holder = (ViewHolder) convertView.getTag();
             } else {
-                holder2= (ViewHolder2) convertView.getTag();
+                holder2 = (ViewHolder2) convertView.getTag();
             }
         }
         final NewsJson news = dataList.get(position);
@@ -146,41 +148,47 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             }
 
         } else {
-            holder2.alAd.setAdvertData(news.getCate_name(),news.getAds().getAd(),news.getAds().getIcon());
+            List<AdTitleItemBean> ad = null;
+            AdTitleIconBean icon = null;
+            if (news.getAds() != null) {
+                ad=news.getAds().getAd();
+                icon=news.getAds().getIcon();
+            }
+            holder2.alAd.setAdvertData(news.getCate_name(), ad, icon);
             final String type = news.getType();
             holder2.tvMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if("video".equals(type)){
-                        ((MainActivity)mContext).rbAudioVisual.performClick();
-                    }else if("blog_writer".equals(type)){
-                        Intent intent=new Intent(mContext, AuthorListActivity.class);
+                    if ("video".equals(type)) {
+                        ((MainActivity) mContext).rbAudioVisual.performClick();
+                    } else if ("blog_writer".equals(type)) {
+                        Intent intent = new Intent(mContext, AuthorListActivity.class);
                         mContext.startActivity(intent);
                     }
                 }
             });
-            LinearLayoutManager manager=new LinearLayoutManager(mContext);
+            LinearLayoutManager manager = new LinearLayoutManager(mContext);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
             holder2.rvContent.setLayoutManager(manager);
-            if("video".equals(type)){
+            if ("video".equals(type)) {
                 final List<VideoDetailVideoBean> list = JSON.parseArray(news.getList(), VideoDetailVideoBean.class);
-                VideoAdapter adapter=new VideoAdapter(mContext, list);
-                        holder2.rvContent.setAdapter(adapter);
+                VideoAdapter adapter = new VideoAdapter(mContext, list);
+                holder2.rvContent.setAdapter(adapter);
                 adapter.setClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(int position, View view) {
-                        Intent intent=new Intent(mContext, VideoDetailActivity.class);
-                        intent.putExtra(IntentConstant.O_ID,list.get(position).getId());
+                        Intent intent = new Intent(mContext, VideoDetailActivity.class);
+                        intent.putExtra(IntentConstant.O_ID, list.get(position).getId());
                         mContext.startActivity(intent);
                     }
                 });
-            }else if("blog_writer".equals(type)){
+            } else if ("blog_writer".equals(type)) {
                 final List<AuthorBean> list = JSON.parseArray(news.getList(), AuthorBean.class);
-                AuthorAdapter adapter=new AuthorAdapter(mContext, list);
+                AuthorAdapter adapter = new AuthorAdapter(mContext, list);
                 adapter.setClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(int position, View view) {
-                        Intent intent=new Intent(mContext, AuthorActivity.class);
+                        Intent intent = new Intent(mContext, AuthorActivity.class);
                         intent.putExtra(IntentConstant.O_ID, list.get(position).getId());
                         mContext.startActivity(intent);
                     }
@@ -190,14 +198,15 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
 
             setTheme2(holder2);
         }
+
         return convertView;
     }
 
     private void setTheme2(ViewHolder2 holder) {
-        holder.llRootView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.line_color2));
-        holder.llContent.setBackgroundColor(ContextCompat.getColor(mContext,R.color.theme1));
-        holder.tvMore.setTextColor(ContextCompat.getColor(mContext,R.color.font_color7));
-        holder.rvContent.setBackgroundColor(ContextCompat.getColor(mContext,R.color.theme1));
+        holder.llRootView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.line_color2));
+        holder.llContent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
+        holder.tvMore.setTextColor(ContextCompat.getColor(mContext, R.color.font_color7));
+        holder.rvContent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.theme1));
     }
 
     @Override
