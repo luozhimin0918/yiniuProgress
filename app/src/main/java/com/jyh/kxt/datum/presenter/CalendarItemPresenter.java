@@ -134,8 +134,6 @@ public class CalendarItemPresenter extends BasePresenter {
                     List<String> objectList = JSON.parseArray(calendarItemBean.getData(), String.class);
                     generateHolidayListData(objectList, status);
                 }else if("ads".equals(type)){
-
-
                     AdJson adJson = JSON.parseObject(calendarItemBean.getData(), AdJson.class);
                     genrateAds(adJson);
                 }

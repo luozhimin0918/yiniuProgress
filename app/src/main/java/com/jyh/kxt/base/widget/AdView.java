@@ -66,6 +66,7 @@ public class AdView extends LinearLayout {
     }
 
     public void setAd(final AdItemJson mPicAd, List<AdItemJson> mTextAd) {
+        removeAllViews();
         textAds = mTextAd;
         LinearLayout adRoot = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, this, false);
         ButterKnife.bind(this, adRoot);
