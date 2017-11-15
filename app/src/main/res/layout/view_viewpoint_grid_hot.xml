@@ -59,9 +59,10 @@
         android:layout_height="@dimen/line_height"
         android:background="@color/line_color2"/>
 
-    <include
-        android:id="@+id/ll_ad_root"
-        layout="@layout/news_header_ad"/>
+    <com.jyh.kxt.base.widget.AdView
+        android:id="@+id/av_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <View
         android:id="@+id/v_line2"

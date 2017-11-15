@@ -33,6 +33,7 @@ import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.base.utils.MarketConnectUtil;
 import com.jyh.kxt.base.utils.MarketUtil;
+import com.jyh.kxt.base.widget.AdView;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.databinding.ItemMarketRecommend2Binding;
@@ -78,9 +79,9 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     private ArrayList<MarketGridAdapter> marketGridAdapters = new ArrayList<>();
     private RollDotViewPager recommendView;
     //    private MarketMainBean marketBean;
-    private ArrayList<SkinnableTextView> mAdTextViewList;
 
     private AdvertLayout advertLayout;
+    private AdView adView;
 
     public MarketMainPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -165,76 +166,11 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
     }
 
     private void createAdView(AdJson ads) {
+        if(ads==null) return;
         createPaddingView(1);
-        LinearLayout adView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.news_header_ad, null);
-        ImageView iv_ad = (ImageView) adView.findViewById(R.id.iv_ad);
-
-        try {
-            final AdItemJson mPicAd = ads.getPic_ad();
-            if (mPicAd != null) {
-                iv_ad.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
-
-                String picture = mPicAd.getPicture();
-                if (RegexValidateUtil.isEmpty(picture)) {
-                    iv_ad.setVisibility(View.GONE);
-                } else {
-                    iv_ad.setVisibility(View.VISIBLE);
-                }
-                Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                        .placeholder(R.mipmap.icon_def_news).into(iv_ad);
-
-                mainHeaderView.addView(adView);
-
-                adView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, WebActivity.class);
-                        intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
-                        intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
-                        intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
-                        mContext.startActivity(intent);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            mAdTextViewList = new ArrayList<>();
-            List<AdItemJson> mTextAd = ads.getText_ad();
-            if (mTextAd == null || mTextAd.size() == 0) {
-                return;
-            }
-            LayoutInflater mInflater = LayoutInflater.from(mContext);
-
-            for (final AdItemJson adItemJson : mTextAd) {
-                View adLayoutView = mInflater.inflate(R.layout.item_news_ad, mainHeaderView, false);
-
-                SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                        .tv_news_ad_title);
-                mAdTextView.setText(" • " + adItemJson.getTitle());
-                SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                        .tv_news_ad_trait);
-
-                mainHeaderView.addView(adLayoutView);
-
-                mAdTextViewList.add(mAdTextView);
-                mAdTextViewList.add(mAdTraitView);
-
-                adLayoutView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, WebActivity.class);
-                        intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
-                        intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
-                        mContext.startActivity(intent);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        adView = new AdView(mContext);
+        adView.setAd(ads.getPic_ad(),ads.getText_ad());
+        mainHeaderView.addView(adView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         createPaddingView(1);
 
     }
@@ -368,11 +304,7 @@ public class MarketMainPresenter extends BasePresenter implements OnSocketTextMe
 
         boolean isNight = SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT);
         try {
-            if (mAdTextViewList != null) {
-                for (SkinnableTextView skinnableTextView : mAdTextViewList) {
-                    skinnableTextView.setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
-                }
-            }
+            if(adView!=null) adView.onChangeTheme();
             //重新设置热门行情主题色
             if (marketMainItemAdapter != null) {
                 marketMainItemAdapter.notifyDataSetChanged();

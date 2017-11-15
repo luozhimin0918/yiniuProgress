@@ -30,6 +30,7 @@ import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.utils.PingYinUtil;
+import com.jyh.kxt.base.widget.AdView;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.StarView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
@@ -320,7 +321,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 break;
             case 6:
                 AdJson ads = (AdJson) mCalendarType;
-
+                if(ads==null) break;
                 View paddingTagView2 = viewHolderAd.rootView.findViewWithTag("paddingView");
                 if (paddingTagView2 != null) {
                     viewHolderAd.rootView.removeView(paddingTagView2);
@@ -337,66 +338,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 mPaddingView.setLayoutParams(lp);
                 viewHolderAd.rootView.addView(mPaddingView, 0);
 
+                viewHolderAd.adView.setAd(ads.getPic_ad(),ads.getText_ad());
 
-                try {
-                    final AdItemJson mPicAd = ads.getPic_ad();
-                    if (mPicAd != null) {
-                        viewHolderAd.ivAd.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
-
-                        String picture = mPicAd.getPicture();
-                        if (RegexValidateUtil.isEmpty(picture)) {
-                            viewHolderAd.ivAd.setVisibility(View.GONE);
-                        } else {
-                            viewHolderAd.ivAd.setVisibility(View.VISIBLE);
-                        }
-                        Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                                .placeholder(R.mipmap.icon_def_news).into(viewHolderAd.ivAd);
-
-                        viewHolderAd.rootView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(mContext, WebActivity.class);
-                                intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
-                                intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
-                                intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
-                                mContext.startActivity(intent);
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    List<AdItemJson> mTextAd = ads.getText_ad();
-                    if (mTextAd != null && mTextAd.size() != 0) {
-                        LayoutInflater mInflater = LayoutInflater.from(mContext);
-
-                        for (final AdItemJson adItemJson : mTextAd) {
-                            View adLayoutView = mInflater.inflate(R.layout.item_news_ad, parent, false);
-
-                            SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                                    .tv_news_ad_title);
-                            mAdTextView.setText(" • " + adItemJson.getTitle());
-                            mAdTextView.setTextColor(Color.parseColor(SPUtils.getBoolean(mContext, SpConstant.SETTING_DAY_NIGHT)?adItemJson.getNight_color():adItemJson.getDay_color()));
-                            SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                                    .tv_news_ad_trait);
-
-                            viewHolderAd.llAd.addView(adLayoutView);
-
-                            adLayoutView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(mContext, WebActivity.class);
-                                    intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
-                                    intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
-                                    mContext.startActivity(intent);
-                                }
-                            });
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 break;
         }
         return view;
@@ -507,9 +450,8 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
     class AdViewHolder {
 
+        @BindView(R.id.av_ad) AdView adView;
         @BindView(R.id.ll_rootView) LinearLayout rootView;
-        @BindView(R.id.iv_ad) ImageView ivAd;
-        @BindView(R.id.ll_ad) LinearLayout llAd;
 
         public AdViewHolder(View view) {
             ButterKnife.bind(this, view);

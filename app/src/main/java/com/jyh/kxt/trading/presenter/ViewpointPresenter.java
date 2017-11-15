@@ -30,6 +30,7 @@ import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
 import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.AdView;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.index.ui.AttentionActivity;
@@ -70,13 +71,7 @@ public class ViewpointPresenter extends BasePresenter {
     public RollDotViewPager rollDotViewPager;
     public ViewpointAdapter viewpointAdapter;
     public View vLine,vLine2;
-    private ImageView ivAd;
-    private LinearLayout llAd;
-    private AdJson ads;
-
-    private List<SkinnableTextView> adTvs=new ArrayList<>();
-    private List<SkinnableTextView> adTvs2=new ArrayList<>();
-
+    private AdView avAd;
 
     public ViewpointPresenter(IBaseView iBaseView) {
         super(iBaseView);
@@ -189,77 +184,12 @@ public class ViewpointPresenter extends BasePresenter {
                     vLine = mGridHotViewLayout.findViewById(R.id.v_line);
                     //广告
                     vLine2=mGridHotViewLayout.findViewById(R.id.v_line2);
-                    ViewGroup adRoot= (ViewGroup) mGridHotViewLayout.findViewById(R.id.ll_ad_root);
-                    ivAd= (ImageView) adRoot.findViewById(R.id.iv_ad);
-                    llAd= (LinearLayout) adRoot.findViewById(R.id.ll_ad);
-                    if(viewPointBean.getAds()!=null){
-                        ads=viewPointBean.getAds();
-                        try {
-                            final AdItemJson mPicAd = ads.getPic_ad();
-                            if (mPicAd != null) {
-                                ivAd.getLayoutParams().height = SystemUtil.dp2px(mContext, ads.getPic_ad().getImageHeight());
-
-                                String picture = mPicAd.getPicture();
-                                if (RegexValidateUtil.isEmpty(picture)) {
-                                    ivAd.setVisibility(View.GONE);
-                                } else {
-                                    ivAd.setVisibility(View.VISIBLE);
-                                }
-                                Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                                        .placeholder(R.mipmap.icon_def_news).into(ivAd);
-
-                                adRoot.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(mContext, WebActivity.class);
-                                        intent.putExtra(IntentConstant.NAME, mPicAd.getTitle());
-                                        intent.putExtra(IntentConstant.WEBURL, mPicAd.getHref());
-                                        intent.putExtra(IntentConstant.AUTOOBTAINTITLE, true);
-                                        mContext.startActivity(intent);
-                                    }
-                                });
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            List<AdItemJson> mTextAd = ads.getText_ad();
-                            if (mTextAd != null && mTextAd.size() != 0) {
-                                LayoutInflater mInflater = LayoutInflater.from(mContext);
-                                adTvs.clear();
-                                adTvs2.clear();
-                                for (final AdItemJson adItemJson : mTextAd) {
-                                    View adLayoutView = mInflater.inflate(R.layout.item_news_ad, adRoot, false);
-
-                                    SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                                            .tv_news_ad_title);
-                                    mAdTextView.setText(" • " + adItemJson.getTitle());
-
-                                    mAdTextView.setTextColor(Color.parseColor(isNight?adItemJson.getNight_color():adItemJson.getDay_color()));
-
-                                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                                            .tv_news_ad_trait);
-
-                                    adLayoutView.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(mContext, WebActivity.class);
-                                            intent.putExtra(IntentConstant.NAME, adItemJson.getTitle());
-                                            intent.putExtra(IntentConstant.WEBURL, adItemJson.getHref());
-                                            mContext.startActivity(intent);
-                                        }
-                                    });
-                                    adTvs.add(mAdTextView);
-                                    adTvs2.add(mAdTraitView);
-                                    llAd.addView(adLayoutView);
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
+                    avAd= (AdView) mGridHotViewLayout.findViewById(R.id.av_ad);
+                    AdJson ads = viewPointBean.getAds();
+                    if(ads !=null){
+                        avAd.setAd(ads.getPic_ad(),ads.getText_ad());
                     }else{
-                        adRoot.setVisibility(View.GONE);
+                        avAd.setVisibility(View.GONE);
                         vLine2.setVisibility(View.GONE);
                     }
 
@@ -339,16 +269,7 @@ public class ViewpointPresenter extends BasePresenter {
         View viewPointHotTitle = mGridHotViewLayout.findViewById(R.id.viewpoint_hot_title);
         viewPointHotTitle.setBackgroundColor(ContextCompat.getColor(mContext, R.color.slidingTabLayout_bgColor));
 
-        if(ads!=null&&ads.getText_ad()!=null){
-
-            List<AdItemJson> text_ad = ads.getText_ad();
-            int size = text_ad.size();
-            for (int i = 0; i < size; i++) {
-                adTvs.get(i).setTextColor(Color.parseColor(isNight?text_ad.get(i).getNight_color():text_ad.get(i).getDay_color()));
-                adTvs2.get(i).setTextColor(ContextCompat.getColor(mContext,R.color.font_color6));
-            }
-
-        }
+        avAd.onChangeTheme();
 
     }
 
