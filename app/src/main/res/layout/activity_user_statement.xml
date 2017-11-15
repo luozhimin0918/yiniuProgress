@@ -16,6 +16,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/statementPaddingHorizontal"
         android:paddingRight="@dimen/statementPaddingHorizontal"
+        android:layout_marginTop="25dp"
         >
 
         <ImageView
@@ -26,6 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:lineSpacingMultiplier="1.1"
             android:text="@string/statement1"
             android:textColor="@color/font_color60"

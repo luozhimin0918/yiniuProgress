@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -196,7 +197,13 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         PushUtil.pushToMainActivity(this);
     }
 
-    private boolean isScrollToComment = true;
+/*    private boolean isScrollToComment = true;*/
+
+    private int mCommentScrollPosition = 0;//评论区的位置
+    private int mReadScrollPosition = 0;//阅读的位置
+
+    private boolean isScrollToComment = true;//是否跳转到评论
+
 
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
             .news_author_chat, R.id.tv_comment})
@@ -208,34 +215,44 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.rl_comment:
                 //WebView 的总长度
-               /* int mCommentTop = commentPresenter.tvCommentCountTitle.getTop();
-
-                int scrollToPosition;
-                if (isCommentPosition) {
-                    scrollToPosition = mOldWebViewScrollPosition;
-                    isCommentPosition = false;
-                } else {
-                    View mWebView = ptrLvMessage.getRefreshableView().getChildAt(0);
-                    if (mWebView != null) {
-                        mOldWebViewScrollPosition = mWebView.getTop();
-                    }
-                    scrollToPosition = mCommentTop;
-                    isCommentPosition = true;
+                if (mCommentScrollPosition == 0) {
+                    mCommentScrollPosition = commentPresenter.tvCommentCountTitle.getTop();
                 }
 
-                ptrLvMessage.getRefreshableView().scrollListBy(scrollToPosition, 800);*/
+                int mScrollPosition = getListViewScrollPosition();
 
                 if (isScrollToComment) {
+
+                    int mScrollTotalPosition = mCommentScrollPosition - mScrollPosition;
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(mScrollTotalPosition, mScrollTotalPosition / 8);
+                    isScrollToComment = false;
+
+                    //滚动到评论区域的时候保存最后一次阅读位置
+                    if (mScrollPosition < mCommentScrollPosition) {
+                        mReadScrollPosition = mScrollPosition;
+                    }
+
+                    Log.e(TAG, "滚动到评论: 当前距离顶部:" + mScrollPosition + "   滚动距离:" + mScrollTotalPosition + "   评论所在位置：" + mCommentScrollPosition);
+                } else {
+                    int mScrollTotalPosition = mReadScrollPosition - mScrollPosition;
+
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(mScrollTotalPosition,  mScrollTotalPosition / 8);
+                    isScrollToComment = true;
+
+
+                    Log.e(TAG, "滚动到上次阅读: 当前距离顶部:" + mScrollPosition + "   滚动距离:" + mScrollTotalPosition + "   上次停留位置：" + mReadScrollPosition);
+                }
+                //ptrLvMessage.getRefreshableView().scrollListBy(scrollToPosition, 800);
+
+               /* if (isScrollToComment) {
                     ptrLvMessage.getRefreshableView().setSelection(2);
                     isScrollToComment = false;
                 }else{
                     ptrLvMessage.getRefreshableView().setSelection(0);
                     isScrollToComment = true;
-                }
+                }*/
                 break;
             case R.id.tv_comment:
-                //回复
-                ptrLvMessage.getRefreshableView().setSelection(2);
                 commentPresenter.showReplyMessageView(view);
                 break;
             case R.id.iv_collect:
@@ -284,6 +301,15 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         }
     }
 
+    private int getListViewScrollPosition() {
+        try {
+            int top = webViewAndHead.headView.getTop();
+            return Math.abs(top);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
     private void initShareLayout() {
         UmengShareBean umengShareBean = new UmengShareBean();
