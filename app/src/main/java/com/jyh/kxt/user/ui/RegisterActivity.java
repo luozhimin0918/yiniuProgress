@@ -208,4 +208,10 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(presenter!=null) presenter.onDestroy();
+    }
 }

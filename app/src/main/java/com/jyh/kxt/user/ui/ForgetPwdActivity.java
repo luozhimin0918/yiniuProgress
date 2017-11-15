@@ -185,6 +185,8 @@ public class ForgetPwdActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(forgetPwdPresenter!=null)
+            forgetPwdPresenter.onDestroy();
         getQueue().cancelAll(forgetPwdPresenter.getClass().getName());
     }
 
