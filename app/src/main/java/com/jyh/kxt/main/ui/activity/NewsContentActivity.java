@@ -197,13 +197,9 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         PushUtil.pushToMainActivity(this);
     }
 
-/*    private boolean isScrollToComment = true;*/
+    private int mWebScrollPosition = 0;
 
-    private int mCommentScrollPosition = 0;//评论区的位置
-    private int mReadScrollPosition = 0;//阅读的位置
-
-    private boolean isScrollToComment = true;//是否跳转到评论
-
+    private int mCommentPosition;
 
     @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
             .news_author_chat, R.id.tv_comment})
@@ -214,43 +210,25 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
-                //WebView 的总长度
-                if (mCommentScrollPosition == 0) {
-                    mCommentScrollPosition = commentPresenter.tvCommentCountTitle.getTop();
+                //获取评论所在位置
+                if (mCommentPosition == 0) {
+                    mCommentPosition = commentPresenter.tvCommentCountTitle.getTop();
                 }
 
-                int mScrollPosition = getListViewScrollPosition();
+                int firstVisiblePosition = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
 
-                if (isScrollToComment) {
-
-                    int mScrollTotalPosition = mCommentScrollPosition - mScrollPosition;
-                    ptrLvMessage.getRefreshableView().smoothScrollBy(mScrollTotalPosition, mScrollTotalPosition / 8);
-                    isScrollToComment = false;
-
-                    //滚动到评论区域的时候保存最后一次阅读位置
-                    if (mScrollPosition < mCommentScrollPosition) {
-                        mReadScrollPosition = mScrollPosition;
-                    }
-
-                    Log.e(TAG, "滚动到评论: 当前距离顶部:" + mScrollPosition + "   滚动距离:" + mScrollTotalPosition + "   评论所在位置：" + mCommentScrollPosition);
+                if (firstVisiblePosition < 2) {
+                    mWebScrollPosition = getListViewScrollPosition();
+                    ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
                 } else {
-                    int mScrollTotalPosition = mReadScrollPosition - mScrollPosition;
+                    int mCurrentPosition = getListViewScrollPosition();
+                    ptrLvMessage.getRefreshableView().setSelectionFromTop(2, 0);
 
-                    ptrLvMessage.getRefreshableView().smoothScrollBy(mScrollTotalPosition,  mScrollTotalPosition / 8);
-                    isScrollToComment = true;
-
-
-                    Log.e(TAG, "滚动到上次阅读: 当前距离顶部:" + mScrollPosition + "   滚动距离:" + mScrollTotalPosition + "   上次停留位置：" + mReadScrollPosition);
+                    int mScrollY = mCurrentPosition - mWebScrollPosition;
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(-mScrollY, 500);
+                    Log.e(TAG, "mCurrentPosition "+ mCurrentPosition +"    mWebScrollPosition "+mWebScrollPosition );
                 }
-                //ptrLvMessage.getRefreshableView().scrollListBy(scrollToPosition, 800);
 
-               /* if (isScrollToComment) {
-                    ptrLvMessage.getRefreshableView().setSelection(2);
-                    isScrollToComment = false;
-                }else{
-                    ptrLvMessage.getRefreshableView().setSelection(0);
-                    isScrollToComment = true;
-                }*/
                 break;
             case R.id.tv_comment:
                 commentPresenter.showReplyMessageView(view);
@@ -303,7 +281,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     private int getListViewScrollPosition() {
         try {
-            int top = webViewAndHead.headView.getTop();
+            int top = ptrLvMessage.getRefreshableView().getFirstVisiblePosition();
             return Math.abs(top);
         } catch (Exception e) {
             e.printStackTrace();

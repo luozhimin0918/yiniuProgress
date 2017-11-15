@@ -19,8 +19,8 @@
     <string name="error_collect_null">你还没有任何收藏</string>
     <string name="error_search_null">对不起,没有找到相关搜索结果</string>
     <string name="tokenError">token获取失败</string>
-    <string name="statement2">上海快讯网络科技有限公司</string>
-    <string name="statement1">壹牛财经专注于金融行业信息服务，力求为广大投资提供更快更精准的数据与快讯，本站信息来自各合作方，提供使用者参考，不构成任何交易建议，基于本站数据进行交易导致的损失本站概不负责。</string>
+    <string name="statement2">上海壹牛快讯网络科技有限公司</string>
+    <string name="statement1">一牛财经，国际顶级域名的财经新闻网站，专注于财经领域信息服务，力求为广大投资者提供最快速、最精准、最全面的数据与快讯。本站信息来自于合作方，提供使用者参考，不构成任何交易建议，基于本站数据进行交易导致的损失本站概不负责。本应用所有活动由一牛财经主办，与Apple Inc无关。</string>
 
     <string name="toast_error_load">数据加载错误,请稍后再试</string>
     <string name="toast_error_net">网络异常,请检查网络</string>

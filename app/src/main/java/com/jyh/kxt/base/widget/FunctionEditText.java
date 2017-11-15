@@ -733,7 +733,7 @@ public class FunctionEditText extends LinearLayout {
     private void updateInputType() {
         //如果包涵有手机号码 并且没有邮箱
         if (hintText != null && hintText.length() > 0) {
-            if (hintText.contains("昵称") || hintText.contains("帐号")) {
+            if (hintText.contains("昵称") || hintText.contains("账号")) {
                 //有昵称的情况下不参与过滤
                 edt.setInputType(InputType.TYPE_CLASS_TEXT);
             }
