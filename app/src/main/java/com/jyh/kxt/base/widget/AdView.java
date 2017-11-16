@@ -16,8 +16,8 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.json.AdItemJson;
+import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
-import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
@@ -44,7 +44,7 @@ public class AdView extends LinearLayout {
     private Context mContext;
 
     private List<SkinnableTextView> adTvs = new ArrayList<>();
-    private List<SkinnableTextView> adTvs2 = new ArrayList<>();
+    private List<ImageView> adIvs = new ArrayList<>();
     private List<AdItemJson> textAds;
 
     public AdView(Context context) {
@@ -103,17 +103,15 @@ public class AdView extends LinearLayout {
             if (mTextAd != null && mTextAd.size() != 0) {
                 LayoutInflater mInflater = LayoutInflater.from(mContext);
                 adTvs.clear();
-                adTvs2.clear();
+                adIvs.clear();
                 for (final AdItemJson adItemJson : mTextAd) {
                     View adLayoutView = mInflater.inflate(R.layout.item_news_ad, adRoot, false);
 
                     SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
                             .tv_news_ad_title);
-                    mAdTextView.setText(" ● " + adItemJson.getTitle());
-
-
-                    SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
-                            .tv_news_ad_trait);
+                    mAdTextView.setText(" • " + adItemJson.getTitle());
+                    ImageView ivAd = (ImageView) adLayoutView.findViewById(R.id
+                            .iv_advert_icon);
                     adLayoutView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -124,7 +122,7 @@ public class AdView extends LinearLayout {
                         }
                     });
                     adTvs.add(mAdTextView);
-                    adTvs2.add(mAdTraitView);
+                    adIvs.add(ivAd);
                     llAd.addView(adLayoutView);
                 }
                 onChangeTheme();
@@ -142,7 +140,10 @@ public class AdView extends LinearLayout {
             for (int i = 0; i < size; i++) {
                 AdItemJson adItemJson = textAds.get(i);
                 adTvs.get(i).setTextColor(Color.parseColor(isNight ? adItemJson.getNight_color() : adItemJson.getDay_color()));
-                adTvs2.get(i).setTextColor(ContextCompat.getColor(mContext, R.color.font_color5));
+                AdTitleIconBean icon = adItemJson.getIcon();
+                if(icon !=null){
+                    Glide.with(mContext).load(isNight? icon.getNight_icon():icon.getDay_icon()).into(adIvs.get(i));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

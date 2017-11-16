@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:orientation="vertical">
+    android:layout_height="30dp">
 
     <com.jyh.kxt.base.widget.night.heple.SkinnableTextView
         android:id="@+id/tv_news_ad_title"
@@ -13,19 +12,13 @@
         android:paddingLeft="5dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:layout_toLeftOf="@+id/tv_news_ad_trait"
+        android:layout_toLeftOf="@+id/iv_advert_icon"
         android:textColor="@color/font_color5"/>
 
-    <com.jyh.kxt.base.widget.night.heple.SkinnableTextView
-        android:id="@+id/tv_news_ad_trait"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/iv_advert_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
-        android:gravity="center_vertical"
-        android:textSize="@dimen/describe_font_size1"
-        android:paddingLeft="5dp"
-        android:text="广告"
-        android:textColor="@color/font_color6"/>
+        android:layout_alignParentTop="true" />
 </RelativeLayout>
