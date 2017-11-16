@@ -35,6 +35,10 @@ public class HttpConstant {
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";
     public static final String BASE_URL = "http://test.kxtadi.kuaixun56.com/";
 
+    //    public static final String BASE_URL = "https://ynadi.kuaixun56.com/";
+//    public static final String BASE_URL = "http://pre-ynadi.kuaixun56.com/";
+//    public static final String BASE_URL = "http://test.ynadi.kuaixun56.com/";
+
     public static final String IMG_URL = "";
     public static final String FLAG_URL = "http://res.kxt.com/static/home/images/flag/circle/%s.png";
 
