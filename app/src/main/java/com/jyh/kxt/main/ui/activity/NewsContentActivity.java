@@ -220,18 +220,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 int autoScrollPosition;
                 if (ptrLvMessage.getRefreshableView().getAdapter().getCount() > 3) {
                     autoScrollPosition = 2;
-                }else{
+                } else {
                     autoScrollPosition = 1;
                 }
 
                 if (firstVisiblePosition < autoScrollPosition) {
                     mWebScrollPosition = getListViewScrollPosition();
-                    ptrLvMessage.getRefreshableView().setSelectionFromTop(autoScrollPosition, 0);
+                    ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
                 } else {
-                    ptrLvMessage.getRefreshableView().setSelectionFromTop(autoScrollPosition, 0);
+                    ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
 
                     int mScrollY = mCommentPosition - mWebScrollPosition;
-                    ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 1000);
+                    ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 800);
                 }
 
                 break;

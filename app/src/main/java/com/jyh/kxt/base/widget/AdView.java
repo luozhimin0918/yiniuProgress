@@ -109,7 +109,7 @@ public class AdView extends LinearLayout {
 
                     SkinnableTextView mAdTextView = (SkinnableTextView) adLayoutView.findViewById(R.id
                             .tv_news_ad_title);
-                    mAdTextView.setText(" • " + adItemJson.getTitle());
+                    mAdTextView.setText(" ● " + adItemJson.getTitle());
 
 
                     SkinnableTextView mAdTraitView = (SkinnableTextView) adLayoutView.findViewById(R.id
