@@ -92,7 +92,7 @@
 //                            notification.sendUmengPush(
 //                                    KXTPushIntentService.this,
 //                                    msg.icon,
-//                                    "壹牛财经【快讯】",
+//                                    "一牛财经【快讯】",
 //                                    itemKuaiXun.getTitle(),
 //                                    push_sound,
 //                                    randow.nextInt(100000), kxunInfo);
@@ -129,7 +129,7 @@
 //                            notification.sendUmengPush(
 //                                    KXTPushIntentService.this,
 //                                    msg.icon,
-//                                    "壹牛财经【要闻】",
+//                                    "一牛财经【要闻】",
 //                                    object.getString("title"),
 //                                    push_sound,
 //                                    randow.nextInt(100000), news);
@@ -150,7 +150,7 @@
 //                            notification.sendUmengPush(
 //                                    KXTPushIntentService.this,
 //                                    msg.icon,
-//                                    "壹牛财经【视听】",
+//                                    "一牛财经【视听】",
 //                                    object.getString("title"),
 //                                    push_sound,
 //                                    randow.nextInt(1000000), video);

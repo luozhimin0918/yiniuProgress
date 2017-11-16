@@ -230,7 +230,6 @@ public class NewsPresenter extends BasePresenter {
                 listHttpListener.onPreCacheResponse(typeDataList);
             } catch (Exception e) {
                 e.printStackTrace();
-                request.doGet(HttpConstant.INDEX_MAIN, listHttpListener);
             }
         } else {
             request.doGet(HttpConstant.INDEX_MAIN, listHttpListener);
