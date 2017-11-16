@@ -78,6 +78,7 @@ public class VarConstant {
     public static final String OCLASS_DATING = "dating";//大厅
     public static final String OCLASS_ARTICLE = "article";//文章
     public static final String OCLASS_BLOG = "blog";//博客
+    public static final String OCLASS_BLOG_WRITE = "blog_writer";//专栏作者
     public static final String OCLASS_ACTIVITY = "activity";//活动
     public static final String OCLASS_TOPIC = "topic";//专题
     public static final String OCLASS_VIEWPOINT = "viewpoint";//交易
@@ -85,6 +86,7 @@ public class VarConstant {
     public static final String OCLASS_TRADE = "trade";
 
     public static final String OACTION_LIST = "list";//列表
+    public static final String OACTION_PROFILE = "profile";//列表
     public static final String OACTION_INDEX = "index";//首页
     public static final String OACTION_ETF = "etf";//ETF
     public static final String OACTION_DETAIL = "detail";//详情

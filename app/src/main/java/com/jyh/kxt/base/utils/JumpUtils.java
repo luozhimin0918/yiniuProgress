@@ -23,6 +23,7 @@ import com.jyh.kxt.main.ui.fragment.NewsFragment;
 import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
+import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
@@ -110,6 +111,9 @@ public class JumpUtils {
                     case VarConstant.OCLASS_TRADE:
                         jumpTrade(context, o_action, o_id);
                         break;
+                    case VarConstant.OCLASS_BLOG_WRITE:
+                        jumpBlogWrite(context, o_action, o_id);
+                        break;
                 }
             } else {
                 //网页跳转
@@ -125,6 +129,17 @@ public class JumpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void jumpBlogWrite(BaseActivity context, String o_action, String o_id) {
+        switch (o_action) {
+            case VarConstant.OACTION_PROFILE:
+            case VarConstant.OACTION_DETAIL:
+                Intent intent = new Intent(context, AuthorActivity.class);
+                intent.putExtra(IntentConstant.O_ID, o_id);
+                context.startActivity(intent);
+                break;
         }
     }
 
@@ -761,7 +776,7 @@ public class JumpUtils {
                 if (rbDatumChecked) {
                     mainActivity.exploreFragment.onTabSelect(1);
                     ArticleFragment articleFragment = mainActivity.exploreFragment.articleFragment;
-                    if (articleFragment != null&&articleFragment.stlNavigationBar!=null)
+                    if (articleFragment != null && articleFragment.stlNavigationBar != null)
                         articleFragment.stlNavigationBar.setCurrentTab(0);
                 } else {
                     rbTrading.performClick();
@@ -772,7 +787,7 @@ public class JumpUtils {
                             try {
                                 mainActivityCopy.exploreFragment.onTabSelect(1);
                                 ArticleFragment articleFragment = mainActivityCopy.exploreFragment.articleFragment;
-                                if (articleFragment != null&&articleFragment.stlNavigationBar!=null)
+                                if (articleFragment != null && articleFragment.stlNavigationBar != null)
                                     articleFragment.stlNavigationBar.setCurrentTab(0);
                             } catch (Exception e) {
                                 e.printStackTrace();

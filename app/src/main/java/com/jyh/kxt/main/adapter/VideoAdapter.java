@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoDetailVideoBean;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 
 import java.util.List;
@@ -29,10 +30,10 @@ import butterknife.ButterKnife;
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<VideoDetailVideoBean> list;
+    private List<VideoListJson> list;
     private OnItemClickListener clickListener;
 
-    public VideoAdapter(Context mContext, List<VideoDetailVideoBean> list) {
+    public VideoAdapter(Context mContext, List<VideoListJson> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -45,7 +46,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        VideoDetailVideoBean bean = list.get(position);
+        VideoListJson bean = list.get(position);
         holder.ivVideoName.setText(bean.getTitle());
         Glide.with(mContext).load(bean.getPicture()).error(R.mipmap.icon_def_video).placeholder(R.mipmap.icon_def_video).into(holder
                 .ivVideoCover);

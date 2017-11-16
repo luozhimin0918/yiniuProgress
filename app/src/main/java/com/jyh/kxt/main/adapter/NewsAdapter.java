@@ -17,7 +17,9 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.av.json.VideoDetailVideoBean;
+import com.jyh.kxt.av.json.VideoListJson;
 import com.jyh.kxt.av.ui.VideoDetailActivity;
+import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.annotation.OnItemClickListener;
 import com.jyh.kxt.base.constant.HttpConstant;
@@ -25,6 +27,7 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.AdTitleIconBean;
 import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.jyh.kxt.base.utils.BrowerHistoryUtils;
+import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.ui.MainActivity;
@@ -151,8 +154,8 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             List<AdTitleItemBean> ad = null;
             AdTitleIconBean icon = null;
             if (news.getAds() != null) {
-                ad=news.getAds().getAd();
-                icon=news.getAds().getIcon();
+                ad = news.getAds().getAd();
+                icon = news.getAds().getIcon();
             }
             holder2.alAd.setAdvertData(news.getCate_name(), ad, icon);
             final String type = news.getType();
@@ -171,15 +174,14 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
             holder2.rvContent.setLayoutManager(manager);
             if ("video".equals(type)) {
-                final List<VideoDetailVideoBean> list = JSON.parseArray(news.getList(), VideoDetailVideoBean.class);
+                final List<VideoListJson> list = JSON.parseArray(news.getList(), VideoListJson.class);
                 VideoAdapter adapter = new VideoAdapter(mContext, list);
                 holder2.rvContent.setAdapter(adapter);
                 adapter.setClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(int position, View view) {
-                        Intent intent = new Intent(mContext, VideoDetailActivity.class);
-                        intent.putExtra(IntentConstant.O_ID, list.get(position).getId());
-                        mContext.startActivity(intent);
+                        VideoListJson bean = list.get(position);
+                        JumpUtils.jump((BaseActivity) mContext, bean.getO_class(), bean.getO_action(), bean.getO_id(), bean.getHref());
                     }
                 });
             } else if ("blog_writer".equals(type)) {
@@ -188,9 +190,8 @@ public class NewsAdapter extends BaseListAdapter<NewsJson> {
                 adapter.setClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(int position, View view) {
-                        Intent intent = new Intent(mContext, AuthorActivity.class);
-                        intent.putExtra(IntentConstant.O_ID, list.get(position).getId());
-                        mContext.startActivity(intent);
+                        AuthorBean bean = list.get(position);
+                        JumpUtils.jump((BaseActivity) mContext, bean.getO_class(), bean.getO_action(), bean.getO_id(), bean.getHref());
                     }
                 });
                 holder2.rvContent.setAdapter(adapter);
