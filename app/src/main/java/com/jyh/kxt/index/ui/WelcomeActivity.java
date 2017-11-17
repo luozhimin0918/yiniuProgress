@@ -1,5 +1,6 @@
 package com.jyh.kxt.index.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.http.GlobalHttpRequest;
 import com.jyh.kxt.base.util.emoje.EmoticonsUtils;
 import com.jyh.kxt.base.utils.JumpUtils;
+import com.jyh.kxt.base.utils.StoredData;
 import com.jyh.kxt.index.presenter.WelcomePresenter;
 import com.jyh.kxt.push.PushJsonHandle;
 
@@ -27,6 +29,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @BindView(R.id.iv_welcome) public ImageView ivWelcome;
     @BindView(R.id.tv_advert_time) public TextView tvAdvertTime;
+    @BindView(R.id.iv_icon) public View bottomBar;
 
     private WelcomePresenter welcomePresenter;
 
@@ -52,10 +55,17 @@ public class WelcomeActivity extends BaseActivity {
         setContentView(R.layout.activity_welcome, StatusBarColor.NO_COLOR);
 
         welcomePresenter = new WelcomePresenter(this);
-        welcomePresenter.checkIsShowAdvert();
         welcomePresenter.requestMemberInfo();
         welcomePresenter.requestPreNews();
         GlobalHttpRequest.getInstance().getSignInfo(this, null);
+
+        int launchMode = StoredData.getLaunchMode();
+        if (launchMode == StoredData.LMODE_NEW_INSTALL){
+            startActivity(new Intent(this, GuideActivity.class));
+            this.finish();
+            return;
+        }
+        welcomePresenter.checkIsShowAdvert();
 
         welcomePresenter.initSharedPreferences();
 
@@ -63,9 +73,6 @@ public class WelcomeActivity extends BaseActivity {
 
         Log.i("welcome", getIntent().toString());
         JumpUtils.MwJump(getIntent(), this);
-
-//        startActivity(new Intent(this,GuideActivity.class));
-//        this.finish();
     }
 
     @OnClick({R.id.tv_advert_time})

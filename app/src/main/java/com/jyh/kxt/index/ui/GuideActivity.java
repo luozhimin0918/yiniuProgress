@@ -34,6 +34,30 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
         View view2 = lf.inflate(R.layout.item_guide_img, null);
         View view3 = lf.inflate(R.layout.item_guide_img, null);
         View viewEnd = lf.inflate(R.layout.item_guide_img_finish, null);
+        view1.findViewById(R.id.btn_jump).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                GuideActivity.this.finish();
+            }
+        });
+        view2.findViewById(R.id.btn_jump).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                GuideActivity.this.finish();
+            }
+        });
+        view3.findViewById(R.id.btn_jump).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                GuideActivity.this.finish();
+            }
+        });
         viewEnd.findViewById(R.id.btn_guide_finish).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -70,10 +94,10 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
      */
     private void handleFillPicture(ArrayList<View> mViewList) {
         ArrayList<Integer> mPictureImg = new ArrayList<>();
-        mPictureImg.add(R.mipmap.icon_lauch);
-        mPictureImg.add(R.mipmap.icon_lauch);
-        mPictureImg.add(R.mipmap.icon_lauch);
-        mPictureImg.add(R.mipmap.icon_lauch);
+        mPictureImg.add(R.mipmap.item_guide_img01);
+        mPictureImg.add(R.mipmap.item_guide_img02);
+        mPictureImg.add(R.mipmap.item_guide_img03);
+        mPictureImg.add(R.mipmap.item_guide_img04);
 
         for (int i = 0; i < mViewList.size(); i++) {
             View mItemView = mViewList.get(i);

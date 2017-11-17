@@ -276,6 +276,7 @@
         <activity
             android:name=".index.ui.GuideActivity"
             android:label="@string/title_activity_guide"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 
         <!-- umeng推送 -->

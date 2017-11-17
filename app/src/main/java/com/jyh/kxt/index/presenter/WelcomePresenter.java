@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
@@ -28,6 +29,7 @@ import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 
 import java.util.List;
 
@@ -62,14 +64,20 @@ public class WelcomePresenter extends BasePresenter {
                 MainInitJson initConfig = JSONObject.parseObject(indexConfig, MainInitJson.class);
                 final MainInitJson.LoadAdBean loadAd = initConfig.getLoad_ad();
                 if (loadAd != null) {
+                    int bottomBarHeight=loadAd.getBottom_screen_size();
                     String adImageUrl = SPUtils.getString(mContext, SpConstant.AD_IMAGE_URL);
-
                     if (loadAd.getPicture() != null &&
                             !"".equals(adImageUrl) &&
                             adImageUrl.equals(loadAd.getPicture())) {
 
                         welcomeActivity.ivWelcome.setVisibility(View.VISIBLE);
+                        if(bottomBarHeight>0){
 
+                            ViewGroup.LayoutParams layoutParams = welcomeActivity.bottomBar.getLayoutParams();
+                            layoutParams.height= SystemUtil.dp2px(mContext,bottomBarHeight);
+                            welcomeActivity.bottomBar.setLayoutParams(layoutParams);
+
+                        }
 //                        Glide.with(welcomeActivity)
 //                                .load(adImageUrl)
 //                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)

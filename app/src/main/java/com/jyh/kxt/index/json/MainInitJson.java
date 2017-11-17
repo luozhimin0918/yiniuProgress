@@ -380,6 +380,7 @@ public class MainInitJson {
         private int showTime;
         private String title;
         private String type;
+        private int bottom_screen_size;
 
         public String getHref() {
             return href;
@@ -419,6 +420,14 @@ public class MainInitJson {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public int getBottom_screen_size() {
+            return bottom_screen_size;
+        }
+
+        public void setBottom_screen_size(int bottom_screen_size) {
+            this.bottom_screen_size = bottom_screen_size;
         }
     }
 

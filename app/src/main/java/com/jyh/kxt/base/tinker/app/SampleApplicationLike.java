@@ -28,6 +28,7 @@ import com.jyh.kxt.base.tinker.Log.MyLogImp;
 import com.jyh.kxt.base.tinker.util.SampleApplicationContext;
 import com.jyh.kxt.base.tinker.util.TinkerManager;
 import com.jyh.kxt.base.utils.CrashHandler;
+import com.jyh.kxt.base.utils.StoredData;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.index.service.PreLoadX5Service;
 import com.tencent.tinker.anno.DefaultLifeCycle;
@@ -159,6 +160,8 @@ public class SampleApplicationLike extends DefaultApplicationLike {
                 .setWebViewBroadcastOpen(true)
                 .setMLinkOpen();
         MagicWindowSDK.initSDK(config);
+
+        StoredData.getThis().markOpenApp(SampleApplicationContext.context);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

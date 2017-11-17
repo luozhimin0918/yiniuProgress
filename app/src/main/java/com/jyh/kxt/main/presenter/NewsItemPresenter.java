@@ -560,15 +560,25 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 }
                                 break;
                             case VarConstant.NEWS_LIST:
+//
+//                                try {
+//                                    data = new MainNewsContentJson();
+//                                    MainNewsContentJson.DataBean dataBean = JSONObject.parseObject(headerJson.getData().toString(),
+//                                            MainNewsContentJson.DataBean.class);
+//                                    data.setData(dataBean);
+//                                    data.setType(VarConstant.NEWS_LIST);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
 
                                 try {
-                                    data = new MainNewsContentJson();
-                                    MainNewsContentJson.DataBean dataBean = JSONObject.parseObject(headerJson.getData().toString(),
-                                            MainNewsContentJson.DataBean.class);
-                                    data.setData(dataBean);
-                                    data.setType(VarConstant.NEWS_LIST);
+                                    data = JSON.parseObject(JSON.toJSONString(headerJson), MainNewsContentJson.class);
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    data = new MainNewsContentJson();
+                                    MainNewsContentJson.DataBean dataBean = new MainNewsContentJson.DataBean();
+                                    dataBean.setData(JSON.parseArray(JSON.toJSONString(headerJson.getData()), NewsJson.class));
+                                    data.setType("news");
+                                    data.setData(dataBean);
                                 }
                                 break;
                             case VarConstant.NEWS_QUOTES:
@@ -785,6 +795,7 @@ public class NewsItemPresenter extends BasePresenter implements OnSocketTextMess
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+
                                 break;
                             case VarConstant.NEWS_AD_SLIDE:
                                 try {
