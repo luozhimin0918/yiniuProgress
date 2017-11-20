@@ -93,6 +93,7 @@ import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
+import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -229,6 +230,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 //        DBUtils.toSDWriteFile(this, DBManager.dbName);
 
         bindPushService();
+        //听云
+        NBSAppAgent
+                .setLicenseKey("a8877453b6b6433fbfce6009c01dcecc")
+                .withLocationServiceEnabled(true)
+                .start(this.getApplicationContext());
     }
 
     @Override
@@ -675,6 +681,12 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private void changeUserStatus(UserJson userJson) {
 
         int imgSize = (int) getResources().getDimension(R.dimen.drawer_head_login_avatarSize);
+
+
+        String mHtMoreNewestId = SPUtils.getString(this, SpConstant.HT_MORE_NEWEST_ID);
+        if("0".equals(mHtMoreNewestId)){
+            activityBtn.setVisibility(View.GONE);
+        }
 
         if(LoginUtils.isUnReadAction(this)){
             tvActionRedDot.setVisibility(View.VISIBLE);

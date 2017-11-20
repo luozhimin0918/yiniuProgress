@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'android-apt'
 apply plugin: 'org.greenrobot.greendao'
-
+apply plugin: 'newlens'
 //def gitSha() {
 //    try {
 //        String gitRev = 'git rev-parse --short HEAD'.execute(null, project.rootDir).text.trim()
@@ -163,7 +162,7 @@ if (buildWithTinker()) {
             applyResourceMapping = getApplyResourceMappingPath()
             tinkerId = getTinkerIdValue()
             keepDexApply = false
-            isProtectedApp = true
+            isProtectedApp = false
             supportHotplugComponent = false
         }
         dex {
@@ -342,8 +341,8 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-    compile 'org.apache.httpcomponents:httpcore:4.4.1'
-    compile 'org.apache.httpcomponents:httpclient:4.5'
+//    compile 'org.apache.httpcomponents:httpcore:4.4.1'
+//    compile 'org.apache.httpcomponents:httpclient:4.5'
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
@@ -355,4 +354,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 //    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    //听云
+    compile "com.networkbench.newlens.agent.android:nbs.newlens.agent:2.7.0"
 }

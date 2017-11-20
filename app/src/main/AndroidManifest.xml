@@ -38,7 +38,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
-
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <!-- 魔窗权限 -->
     <!-- 判断程序是否在前台运行,必须 -->
     <uses-permission android:name="android.permission.GET_TASKS"/>

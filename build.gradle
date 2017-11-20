@@ -5,6 +5,7 @@ buildscript {
         mavenLocal()
         google()
         jcenter()
+        mavenCentral()
         /*maven {
             url "https://jitpack.io"
         }*/ maven { url "http://developer.huawei.com/repo/" }
@@ -20,11 +21,12 @@ buildscript {
 //        }
 
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
-//        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
-
-
         classpath "com.tencent.tinker:tinker-patch-gradle-plugin:${TINKER_VERSION}"
+
+        //听云
+        classpath 'com.networkbench.newlens.agent.android:agent-gradle-plugin:2.7.0'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -35,6 +37,7 @@ allprojects {
         mavenLocal()
         google()
         jcenter()
+        mavenCentral()
         /*maven {
             url "https://jitpack.io"
         }  */
@@ -43,7 +46,7 @@ allprojects {
 }
 
 def is_gradle_3() {
-    return hasProperty('GRADLE_3') && GRADLE_3.equalsIgnoreCase('TRUE')
+    return  GRADLE_3.equalsIgnoreCase('TRUE')
 }
 
 
@@ -60,7 +63,7 @@ task clean(type: Delete) {
  * 发布须知!!!!!!!!!!!!!!!!!!!!!!!!
  */
 ext {
-    bakApkName = 'app-release-0714-16-59-44'
+    bakApkName = 'app-release-1120-11-14-39'
     patchMessage = '暂无提示'
 
     versionName = '6.2.0'

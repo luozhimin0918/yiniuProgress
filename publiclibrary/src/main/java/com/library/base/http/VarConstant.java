@@ -164,7 +164,7 @@ public class VarConstant {
     public static final String EXPLORE_ARTICLE_LIST_TYPE_ALL = "all";
     public static final String EXPLORE_ARTICLE_LIST_TYPE_FOLLOW = "follow";
 
-    public static final String SOCKET_DOMAIN = "http://appandroid.kxt.com";
+    public static final String SOCKET_DOMAIN = "http://appandroid.yn.com";
 
     public static final String SOCKET_KEY = "android12345";
     public static final String SOCKET_CMD_HISTORY = "history";
