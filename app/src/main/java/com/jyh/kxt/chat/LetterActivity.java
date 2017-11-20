@@ -25,7 +25,6 @@ import com.jyh.kxt.chat.json.ChatRoomJson;
 import com.jyh.kxt.chat.json.LetterJson;
 import com.jyh.kxt.chat.json.LetterListJson;
 import com.jyh.kxt.chat.presenter.LetterPresenter;
-import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.bean.EventBusClass;
@@ -128,7 +127,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         EventBus.getDefault().register(this);
 
 
-        ChatSocketUtil.getInstance().sendSocketParams(this, "", this);
     }
 
     private void initView() {
@@ -325,8 +323,6 @@ public class LetterActivity extends BaseActivity implements PageLoadLayout.OnAfr
         super.onDestroy();
 
         try {
-            ChatSocketUtil.getInstance().unOnChatMessage(this);
-
             UserJson userInfo = LoginUtils.getUserInfo(this);
             if (userInfo != null && adapter != null && adapter.dataList != null) {
                 int unreadMessageCount = 0;

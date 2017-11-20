@@ -54,53 +54,6 @@
             android:text="举报"
             android:textColor="@color/font_color2"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_color3"/>
-
-        <TextView
-            android:id="@+id/point_function_top"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@color/theme1"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:text="置顶"
-            android:textColor="@color/font_color2"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_color3"/>
-
-        <TextView
-            android:id="@+id/point_function_share"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@color/theme1"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:text="转发"
-            android:textColor="@color/font_color2"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_color3"/>
-
-        <TextView
-            android:id="@+id/point_function_del"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@color/theme1"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:text="删除"
-            android:textColor="@color/font_color2"/>
 
         <View
             android:layout_width="match_parent"

@@ -61,7 +61,6 @@ import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.chat.LetterActivity;
 import com.jyh.kxt.chat.json.ChatRoomJson;
-import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.explore.ui.MoreActivity;
@@ -228,9 +227,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         clickSwitchFragment(R.id.rb_home);
 
 //        DBUtils.toSDWriteFile(this, DBManager.dbName);
-
-
-        ChatSocketUtil.getInstance().sendSocketParams(this, null, this);
 
         bindPushService();
     }
@@ -892,24 +888,11 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
     @Override
     public void onChatMessage(ChatRoomJson chatRoomJson) {
-        if (ChatSocketUtil.getInstance().isChatRoomIn()) {
-            return;
-        }
-
-        UserJson userInfo = LoginUtils.getUserInfo(this);
-        if (userInfo != null) {
-            userInfo.setIs_unread_msg(1);
-            LoginUtils.changeUserInfo(this, userInfo);//重新保存
-            EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userInfo));
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ChatSocketUtil.getInstance().unOnChatMessage(this);
-
-
         if (huaweiApiClient != null) {
             huaweiApiClient.disconnect();
         }

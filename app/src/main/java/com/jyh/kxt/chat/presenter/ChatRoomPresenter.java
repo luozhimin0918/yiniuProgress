@@ -27,7 +27,6 @@ import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.chat.adapter.ChatRoomAdapter;
 import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.json.ChatRoomJson;
-import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.jyh.kxt.chat.util.OnChatMessage;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
@@ -134,9 +133,6 @@ public class ChatRoomPresenter extends BasePresenter {
         chatRoomActivity.tvRoomReminder.setText("正在获取历史数据...");
 
         requestPullMoreData();
-
-        ChatSocketUtil.getInstance().sendSocketParams(mContext, chatRoomActivity.otherUid, onSocketTextMessage);
-
 
         String chatPreviewDraft = SPUtils.getString(mContext, SpConstant.CHAT_PREVIEW);
         if (!TextUtils.isEmpty(chatPreviewDraft)) {
@@ -500,7 +496,6 @@ public class ChatRoomPresenter extends BasePresenter {
 
 
     public void onDestroy() {
-        ChatSocketUtil.getInstance().unOnChatMessage(onSocketTextMessage);
     }
 
     /**

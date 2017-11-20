@@ -67,8 +67,7 @@ public class TradingFragment extends BaseFragment implements OnTabSelectListener
 
         ivRightIcon1.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_search));
         ivRightIcon2.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_postpoint));
-
-        ivRightIcon2.setVisibility(View.VISIBLE);
+        ivRightIcon2.setVisibility(View.GONE);
 
         String[] mTitles = getResources().getStringArray(R.array.nav_trading);
         stlNavigationBar.setTabData(mTitles);

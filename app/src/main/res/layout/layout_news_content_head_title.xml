@@ -81,22 +81,9 @@
                 android:layout_width="@dimen/newsAuthorAttentionWidth"
                 android:layout_height="@dimen/newsAuthorAttentionHeight"
                 android:layout_marginRight="8dp"
-                android:layout_toLeftOf="@+id/head_author_chat"
+                android:layout_alignParentRight="true"
                 android:background="@drawable/sel_news_attention"
                 android:button="@null"
-                />
-
-            <TextView
-                android:id="@+id/head_author_chat"
-                android:layout_width="@dimen/newsAuthorAttentionWidth"
-                android:layout_height="@dimen/newsAuthorAttentionHeight"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/shape_chat_bg"
-                android:gravity="center"
-                android:text="私信Ta"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:visibility="visible"
                 />
         </RelativeLayout>
 

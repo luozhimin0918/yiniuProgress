@@ -468,9 +468,6 @@ public class ArticleContentPresenter {
 
             TextView tvSc;
             TextView tvGz;
-            TextView tvTop;
-            TextView tvShare;
-            TextView tvDel;
 
             View.OnClickListener functionListener = new View.OnClickListener() {
                 @Override
@@ -509,21 +506,7 @@ public class ArticleContentPresenter {
                         case R.id.point_function_qx:
                             functionPopupWindow.dismiss();
                             break;
-                        case R.id.point_function_top:
-                            //置顶
-                            setTop(viewPointTradeBean);
-                            functionPopupWindow.dismiss();
-                            break;
-                        case R.id.point_function_share:
-                            //转发
-                            share(viewPointTradeBean);
-                            functionPopupWindow.dismiss();
-                            break;
-                        case R.id.point_function_del:
-                            //删除
-                            del(viewPointTradeBean);
-                            functionPopupWindow.dismiss();
-                            break;
+
                     }
                 }
             };
@@ -540,44 +523,21 @@ public class ArticleContentPresenter {
                 tvGz = (TextView) popupView.findViewById(R.id.point_function_gz);
                 tvGz.setOnClickListener(functionListener);
 
-                tvTop = (TextView) popupView.findViewById(R.id.point_function_top);
-                tvTop.setOnClickListener(functionListener);
-                if ("1".equals(viewPointTradeBean.is_top)) {
-                    tvTop.setText("取消置顶");
-                } else {
-                    tvTop.setText("置顶");
-                }
-
-                tvDel = (TextView) popupView.findViewById(R.id.point_function_del);
-                tvDel.setOnClickListener(functionListener);
-
-                tvShare = (TextView) popupView.findViewById(R.id.point_function_share);
-                tvShare.setOnClickListener(functionListener);
-
-
                 TextView tvJb = (TextView) popupView.findViewById(R.id.point_function_jb);
                 tvJb.setOnClickListener(functionListener);
                 popupView.findViewById(R.id.point_function_qx).setOnClickListener(functionListener);
 
                 requestGetGzState(tvGz, viewPointTradeBean.author_id);
 
-                tvShare.setVisibility(View.GONE);
-                tvTop.setVisibility(View.GONE);
-                tvDel.setVisibility(View.GONE);
-
                 UserJson userInfo = LoginUtils.getUserInfo(mContext);
                 if (userInfo != null) {
                     //是专栏作者
                     if (userInfo.getWriter_id() != null) {
-                        tvShare.setVisibility(View.VISIBLE);
                         //是我的本人观点
                         if (userInfo.getWriter_id().equals(viewPointTradeBean.author_id)) {
 
                             tvGz.setVisibility(View.GONE);
                             tvJb.setVisibility(View.GONE);
-
-                            tvTop.setVisibility(View.VISIBLE);
-                            tvDel.setVisibility(View.VISIBLE);
                         }
                     }
                 } else {

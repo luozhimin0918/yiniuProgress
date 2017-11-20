@@ -24,7 +24,6 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.explore.json.AuthorDetailsJson;
 import com.jyh.kxt.explore.json.AuthorNewsJson;
 import com.jyh.kxt.trading.adapter.AuthorAdapter;
@@ -64,7 +63,6 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     private PinnedSectionListView refreshableView;
     @BindView(R.id.iv_break) ImageView ivBreak;
     @BindView(R.id.v_like) View vLike;
-    @BindView(R.id.v_sxt) View vSxt;
     @BindView(R.id.rl_head_title_bar) RelativeLayout rlHeadTitleBar;
     @BindView(R.id.iv_photo) RoundImageView ivPhoto;
     @BindView(R.id.tv_name) TextView tvName;
@@ -157,10 +155,8 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
         UserJson userInfo = LoginUtils.getUserInfo(this);
         if (userInfo != null && userInfo.getWriter_id() != null && userInfo.getWriter_id().equals(authorId)) {
             vLike.setVisibility(View.GONE);
-            vSxt.setVisibility(View.GONE);
         } else {
             vLike.setVisibility(View.VISIBLE);
-            vSxt.setVisibility(View.VISIBLE);
         }
 
         presenter = new AuthorPresenter(this, authorId);
@@ -229,7 +225,7 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
     }
 
 
-    @OnClick({R.id.iv_break, R.id.v_like, R.id.error_break, R.id.v_sxt})
+    @OnClick({R.id.iv_break, R.id.v_like, R.id.error_break })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -239,19 +235,6 @@ public class AuthorActivity extends BaseActivity implements AdapterView.OnItemCl
             case R.id.v_like:
                 if (LoginUtils.isLogined(this)) {
                     presenter.attention(vLike.isSelected());
-                } else {
-                    startActivity(new Intent(this, LoginActivity.class));
-                }
-                break;
-            case R.id.v_sxt:
-                if (LoginUtils.isLogined(this)) {
-                    // : 2017/8/30
-                    Intent intent = new Intent(this, ChatRoomActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    intent.putExtra(IntentConstant.U_ID, memberId);
-                    intent.putExtra(IntentConstant.NAME, authorName);
-                    startActivity(intent);
                 } else {
                     startActivity(new Intent(this, LoginActivity.class));
                 }

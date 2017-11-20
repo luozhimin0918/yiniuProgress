@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,7 +53,6 @@ import com.jyh.kxt.base.utils.JumpUtils;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.SaveImage;
-import com.jyh.kxt.base.utils.ToastSnack;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectLocalUtils;
@@ -64,7 +62,6 @@ import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -72,7 +69,6 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -121,7 +117,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     @BindView(R.id.news_author_image) RoundImageView newsAuthorImage;
     @BindView(R.id.news_author_nick) TextView newsAuthorNick;
     @BindView(R.id.news_author_like) SelectedImageView newsAuthorLike;
-    @BindView(R.id.news_author_chat) TextView newsAuthorChat;
     @BindView(R.id.news_author_line) View newsAuthorLine;
     @BindView(R.id.tv_bar_title) TextView newsTitleBar;
 
@@ -201,8 +196,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private int mCommentPosition;
     private boolean isCommentNotScroll = true;
 
-    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id
-            .news_author_chat, R.id.tv_comment})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like  , R.id.tv_comment})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -273,23 +267,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 break;
             case R.id.news_author_like:
 
-                break;
-            case R.id.news_author_chat:
-                if (memberId == null) {
-                    ToastView.makeText3(getContext(), "数据错误");
-                    return;
-                }
-
-                if (LoginUtils.getUserInfo(getContext()) == null) {
-                    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(loginIntent);
-                    return;
-                }
-
-                Intent intent = new Intent(this, ChatRoomActivity.class);
-                intent.putExtra(IntentConstant.U_ID, memberId);
-                intent.putExtra(IntentConstant.NAME, authorName);
-                startActivity(intent);
                 break;
         }
     }
@@ -499,7 +476,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         @BindView(R.id.tv_type) TextView tvType;
         @BindView(R.id.tv_time) TextView tvTime;
         @BindView(R.id.iv_like) SelectedImageView cbLike;
-        @BindView(R.id.head_author_chat) TextView tvHeadAuthorChat;
 
         @BindView(R.id.news_head_line) View viewLine;
 
@@ -599,29 +575,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             if (isAllowAttention) {
                 cbLike.setVisibility(View.VISIBLE);
-                tvHeadAuthorChat.setVisibility(View.VISIBLE);
-                tvHeadAuthorChat.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (LoginUtils.getUserInfo(getContext()) == null) {
-                            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-                            startActivity(loginIntent);
-                            return;
-                        }
-                        if (memberId == null) {
-                            ToastView.makeText3(getContext(), "数据错误");
-                            return;
-                        }
-                        Intent intent = new Intent(NewsContentActivity.this, ChatRoomActivity.class);
-                        intent.putExtra(IntentConstant.U_ID, memberId);
-                        intent.putExtra(IntentConstant.NAME, authorName);
-                        startActivity(intent);
-                    }
-                });
-
             } else {
                 cbLike.setVisibility(View.GONE);
-                tvHeadAuthorChat.setVisibility(View.GONE);
             }
 
             boolean isFollow = "1".equals(newsContentJson.getIs_follow());
@@ -680,8 +635,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
                                     if (isAllowAttention) {
                                         newsAuthorLike.setVisibility(View.VISIBLE);
-                                        newsAuthorChat.setVisibility(View.VISIBLE);
-
                                         newsAuthorLike.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -697,7 +650,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                     newsAuthorImage.setVisibility(View.GONE);
                                     newsAuthorNick.setVisibility(View.GONE);
                                     newsAuthorLike.setVisibility(View.GONE);
-                                    newsAuthorChat.setVisibility(View.GONE);
                                 }
                             }
                         } catch (Exception e) {

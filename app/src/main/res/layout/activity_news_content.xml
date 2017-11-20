@@ -49,25 +49,11 @@
             android:layout_height="@dimen/newsAuthorAttentionHeight"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/news_author_chat"
             android:background="@drawable/sel_news_attention"
             android:button="@null"
+            android:layout_toLeftOf="@+id/iv_share"
             android:visibility="gone" />
 
-
-        <TextView
-            android:id="@+id/news_author_chat"
-            android:layout_width="@dimen/newsAuthorAttentionWidth"
-            android:layout_height="@dimen/newsAuthorAttentionHeight"
-            android:visibility="gone"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            android:text="私信Ta"
-            android:layout_toLeftOf="@+id/iv_share"
-            android:background="@drawable/shape_chat_bg"
-            />
 
         <ImageView
             android:id="@+id/iv_share"

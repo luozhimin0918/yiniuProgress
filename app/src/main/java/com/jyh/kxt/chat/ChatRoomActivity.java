@@ -22,7 +22,6 @@ import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.util.emoje.EmoticonsEditText;
 import com.jyh.kxt.chat.json.ChatPreviewJson;
 import com.jyh.kxt.chat.presenter.ChatRoomPresenter;
-import com.jyh.kxt.chat.util.ChatSocketUtil;
 import com.library.bean.EventBusClass;
 import com.library.util.SPUtils;
 
@@ -83,7 +82,6 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
 
         tvBarTitle.setText(otherName);
         ivBarFunction.setImageResource(R.mipmap.icon_msg_usercenter);
-        ChatSocketUtil.getInstance().setChatRoomIn(true);
         EventBus.getDefault().register(this);
     }
 
@@ -184,7 +182,6 @@ public class ChatRoomActivity extends BaseActivity implements SoftKeyBoardListen
             chatRoomPresenter.onDestroy();
         }
         super.onDestroy();
-        ChatSocketUtil.getInstance().setChatRoomIn(false);
         EventBus.getDefault().unregister(this);
     }
 }
