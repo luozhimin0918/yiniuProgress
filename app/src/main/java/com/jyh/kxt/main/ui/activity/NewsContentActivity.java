@@ -196,7 +196,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     private int mCommentPosition;
     private boolean isCommentNotScroll = true;
 
-    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like  , R.id.tv_comment})
+    @OnClick({R.id.iv_break, R.id.rl_comment, R.id.iv_collect, R.id.rl_dian_zan, R.id.iv_share, R.id.news_author_like, R.id.tv_comment})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_break:
@@ -1048,7 +1048,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         @JavascriptInterface
         public void imgClick(final String imgPath) {
-            if (imgPath != null && (imgPath.contains("/Uploads/Editor") || imgPath.contains("/uploads/editor"))) {
+            if (imgPath != null && (imgPath.contains("/Uploads/Editor") || imgPath.contains("/uploads/editor") || imgPath.contains
+                    ("/uploads/Editor") || imgPath.contains("/Uploads/editor"))) {
                 imgStr = imgPath;
                 runOnUiThread(new Runnable() {
                     @Override
