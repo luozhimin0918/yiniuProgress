@@ -1,10 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-
-
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '26.0.2'
     // resourcePrefix 'mpcht'
     defaultConfig {
         minSdkVersion 8
@@ -31,19 +29,17 @@ android {
         abortOnError false
     }
 }
-
-repositories {
-    maven {
-        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
-    }
-}
-
-dependencies {
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile 'com.android.support:support-v4:19.+'
-    provided 'io.realm:realm-android:0.87.5' // "optional" dependency to realm-database API
-}
-
+//repositories {
+//    maven {
+//        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+//    }
+//}
+//
+//dependencies {
+//    //compile fileTree(dir: 'libs', include: ['*.jar'])
+//    //compile 'com.android.support:support-v4:19.+'
+//    implementation files('libs/realm-android-0.87.5.jar')
+//}
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
     def task = project.tasks.create "jar${name.capitalize()}", Jar
@@ -51,24 +47,25 @@ android.libraryVariants.all { variant ->
     task.from variant.javaCompile.destinationDir
     artifacts.add('archives', task);
 }
-
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
-
 task javadoc(type: Javadoc) {
-    failOnError  false
+    failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
-
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
-
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+dependencies {
+    implementation files('libs/realm-android-0.87.5.jar')
+    annotationProcessor files('libs/realm-android-0.87.5.jar')
 }
