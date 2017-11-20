@@ -93,7 +93,6 @@ import com.library.util.PhoneInfo;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.widget.window.ToastView;
-import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -121,7 +120,8 @@ import static com.huawei.hms.activity.BridgeActivity.EXTRA_RESULT;
 @MLinkDefaultRouter
 public class MainActivity extends BaseActivity implements DrawerLayout.DrawerListener, View.OnClickListener, OnChatMessage {
 
-    @BindView(R.id.ll_content) LinearLayout llContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
     @BindView(R.id.drawer_layout)
     public DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     //侧边栏控件
     public RelativeLayout llHeaderLayout;
     TextView tvCollect, tvFocus, tvHistory, tvPl, tvActivity, tvShare, tvQuit, tvSetting,
-            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot, tvCommentRedDot,tvActionRedDot;
+            tvAbout, tvMine, tvPoint, tvLetter, tvSign, tvRedDot, tvCommentRedDot, tvActionRedDot;
     RelativeLayout rlSign;
     ImageView ivSign, ivSignEnter;
 
@@ -230,11 +230,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 //        DBUtils.toSDWriteFile(this, DBManager.dbName);
 
         bindPushService();
-        //听云
-        NBSAppAgent
-                .setLicenseKey("a8877453b6b6433fbfce6009c01dcecc")
-                .withLocationServiceEnabled(true)
-                .start(this.getApplicationContext());
     }
 
     @Override
@@ -629,16 +624,20 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 break;
             case R.id.ll_fk:
                 //意见反馈
-                String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
-                MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
+                String feedBackUrl = null;
+                try {
+                    String configStr = SPUtils.getString(this, SpConstant.INIT_LOAD_APP_CONFIG);
+                    MainInitJson config = JSON.parseObject(configStr, MainInitJson.class);
+
+                    if (config == null || RegexValidateUtil.isEmpty(config.getUrl_feedback()))
+                        feedBackUrl = HttpConstant.FEEDBACK_URL;
+                    else
+                        feedBackUrl = config.getUrl_feedback();
+                } catch (Exception e) {
+                    feedBackUrl = HttpConstant.FEEDBACK_URL;
+                }
                 Intent feedbackIntent = new Intent(this, WebActivity.class);
                 feedbackIntent.putExtra(IntentConstant.NAME, "意见反馈");
-                String feedBackUrl;
-                if (config == null || RegexValidateUtil.isEmpty(config.getUrl_feedback()))
-                    feedBackUrl = HttpConstant
-                            .FEEDBACK_URL;
-                else
-                    feedBackUrl = config.getUrl_feedback();
                 feedbackIntent.putExtra(IntentConstant.WEBURL, feedBackUrl);
                 startActivity(feedbackIntent);
                 break;
@@ -684,13 +683,13 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
 
         String mHtMoreNewestId = SPUtils.getString(this, SpConstant.HT_MORE_NEWEST_ID);
-        if("0".equals(mHtMoreNewestId)){
+        if ("0".equals(mHtMoreNewestId)) {
             activityBtn.setVisibility(View.GONE);
         }
 
-        if(LoginUtils.isUnReadAction(this)){
+        if (LoginUtils.isUnReadAction(this)) {
             tvActionRedDot.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             tvActionRedDot.setVisibility(View.GONE);
         }
 

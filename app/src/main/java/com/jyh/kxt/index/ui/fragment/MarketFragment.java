@@ -27,6 +27,7 @@ import com.library.base.http.VarConstant;
 import com.library.bean.EventBusClass;
 import com.library.widget.tablayout.SegmentTabLayout;
 import com.library.widget.tablayout.listener.OnTabSelectListener;
+import com.library.widget.window.ToastView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -117,8 +118,16 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
                 break;
             case R.id.tv_right_icon1:
                 if (position == 1) {//如果是行情 - 编辑
-                    Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
-                    startActivity(marketEditIntent);
+                    try {
+                        if (((OptionalFragment) optionalFragment).marketItemList.size() > 0) {
+                            Intent marketEditIntent = new Intent(MarketFragment.this.getContext(), MarketEditActivity.class);
+                            startActivity(marketEditIntent);
+                        }else{
+                            ToastView.makeText3(getContext(), "暂无自选数据");
+                        }
+                    } catch (Exception e) {
+                        ToastView.makeText3(getContext(), "暂无自选数据");
+                    }
                 } else {
                     Intent intent = new Intent(getContext(), SearchActivity.class);
                     intent.putExtra(SearchActivity.TYPE, VarConstant.SEARCH_TYPE_QUOTE);
@@ -162,7 +171,7 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
         }  //存在新的活动
         if (LoginUtils.isUnReadAction(getContext())) {
             tvRedDot.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             tvRedDot.setVisibility(View.GONE);
         }
     }

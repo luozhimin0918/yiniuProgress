@@ -186,6 +186,7 @@ public class CommentListPresenter extends BasePresenter implements CommentPresen
                             SystemUtil.getStatuBarHeight(mContext),
                             mContext.getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
                     .show();
+            ((PopupUtil) popupWindow).addLock(false);
             return;
         }
 

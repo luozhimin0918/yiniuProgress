@@ -7,7 +7,6 @@ import android.widget.RadioButton;
 
 import com.jyh.kxt.av.ui.VideoDetailActivity;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.json.JumpJson;
 import com.jyh.kxt.datum.ui.DatumHistoryActivity;
@@ -24,10 +23,8 @@ import com.jyh.kxt.market.bean.MarketItemBean;
 import com.jyh.kxt.market.ui.MarketDetailActivity;
 import com.jyh.kxt.market.ui.fragment.MarketVPFragment;
 import com.jyh.kxt.trading.ui.AuthorActivity;
-import com.jyh.kxt.trading.ui.PublishActivity;
 import com.jyh.kxt.trading.ui.ViewPointDetailActivity;
 import com.jyh.kxt.trading.ui.fragment.ArticleFragment;
-import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.VarConstant;
 import com.library.manager.ActivityManager;
 import com.library.util.DateUtils;

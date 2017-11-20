@@ -31,7 +31,7 @@
             android:checked="true"
             android:drawableTop="@drawable/sel_index_home"
             android:onClick="clickSwitchFragment"
-            android:text="主页"/>
+            android:text="首页"/>
 
         <RadioButton
             android:id="@+id/rb_audio_visual"

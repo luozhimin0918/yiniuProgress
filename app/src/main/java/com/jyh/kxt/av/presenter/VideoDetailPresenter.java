@@ -27,7 +27,6 @@ import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.annotation.ObserverData;
-import com.jyh.kxt.base.bean.SignInfoJson;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.json.UmengShareBean;
 import com.jyh.kxt.base.util.PopupUtil;
@@ -36,7 +35,6 @@ import com.jyh.kxt.base.utils.NativeStore;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.UmengShareUtil;
 import com.jyh.kxt.base.utils.collect.CollectUtils;
-import com.jyh.kxt.base.widget.AdvertImageLayout;
 import com.jyh.kxt.user.json.UserJson;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
@@ -283,7 +281,7 @@ public class VideoDetailPresenter extends BasePresenter {
                     TSnackbar.LENGTH_LONG,
                     TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
                     .setPromptThemBackground(Prompt.WARNING).show();
-
+            ((PopupUtil) popupWindow).addLock(false);
             return;
         }
 

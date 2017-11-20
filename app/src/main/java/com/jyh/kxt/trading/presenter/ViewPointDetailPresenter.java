@@ -346,6 +346,7 @@ public class ViewPointDetailPresenter extends BasePresenter {
                     TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
                     .setPromptThemBackground(Prompt.WARNING).show();
 
+            ((PopupUtil) popupWindow).addLock(false);
             return;
         }
 

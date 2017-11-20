@@ -877,6 +877,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         .setPromptThemBackground(Prompt.WARNING)
                         .setMinHeight(SystemUtil.getStatuBarHeight(getContext()), getResources()
                                 .getDimensionPixelOffset(R.dimen.actionbar_height)).show();
+                ((PopupUtil) popupWindow).addLock(false);
                 return;
             }
 

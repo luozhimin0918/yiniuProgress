@@ -89,7 +89,7 @@ public class CommentDetailPresenter extends BasePresenter {
                     TSnackbar.LENGTH_LONG,
                     TSnackbar.APPEAR_FROM_TOP_TO_DOWN)
                     .setPromptThemBackground(Prompt.WARNING).show();
-
+            ((PopupUtil) popupWindow).addLock(false);
             return;
         }
 

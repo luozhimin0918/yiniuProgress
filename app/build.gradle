@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'newlens'
 //def gitSha() {
 //    try {
 //        String gitRev = 'git rev-parse --short HEAD'.execute(null, project.rootDir).text.trim()
@@ -305,17 +304,13 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-//    releaseCompile project(path: ':publiclibrary', configuration: 'release')
-//    debugCompile project(path: ':publiclibrary', configuration: 'debug')
-
-
+    //    releaseCompile project(path: ':publiclibrary', configuration: 'release')
+    //    debugCompile project(path: ':publiclibrary', configuration: 'debug')
     compile project(':publiclibrary')
-
     /*compile project(':playerlibrary')*/
     compile(name: 'androidpicturepicker', ext: 'aar')
     compile project(':superplayerlibrary')
     compile project(':MPChartLib')
-
     if (is_gradle_3()) {
         implementation("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") {
             changing = true
@@ -328,9 +323,8 @@ dependencies {
         compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
         provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
     }
-
     /**
-     *  推送相关集成
+     *   推送相关集成
      */
     //极光
     // 此处以JPush 3.0.9 版本为例。
@@ -341,8 +335,8 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
-//    compile 'org.apache.httpcomponents:httpcore:4.4.1'
-//    compile 'org.apache.httpcomponents:httpclient:4.5'
+    //    compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    //    compile 'org.apache.httpcomponents:httpclient:4.5'
     compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.trycatch.android:mysnackbar:1.2.2'
@@ -352,9 +346,6 @@ dependencies {
     compile 'cn.jiguang.sdk:jcore:1.1.7'
     compile 'com.huawei.android.hms:push:2.5.2.300'
     testCompile 'junit:junit:4.12'
-//    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    //    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-
-    //听云
-    compile "com.networkbench.newlens.agent.android:nbs.newlens.agent:2.7.0"
 }

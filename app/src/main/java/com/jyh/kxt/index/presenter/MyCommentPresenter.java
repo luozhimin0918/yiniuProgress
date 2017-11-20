@@ -69,6 +69,7 @@ public class MyCommentPresenter extends BasePresenter implements CommentPresente
                             SystemUtil.getStatuBarHeight(mContext),
                             mContext.getResources().getDimensionPixelOffset(R.dimen.actionbar_height))
                     .show();
+            ((PopupUtil) popupWindow).addLock(false);
             return;
         }
 
