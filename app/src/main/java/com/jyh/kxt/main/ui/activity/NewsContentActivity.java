@@ -298,6 +298,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         customLayout.setBackgroundColor(color);
 
         selectView = (SelectLineView) customLayout.findViewById(R.id.sv_fontSize);
+        String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
+
+        selectView.changeViewStatus(Integer.parseInt(RegexValidateUtil.isEmpty(fontSizeStr)?"1":fontSizeStr));
+
         tvTheme = (TextView) customLayout.findViewById(R.id.tv_theme);
         llTheme = (LinearLayout) customLayout.findViewById(R.id.ll_theme);
         ivTheme = (ImageView) customLayout.findViewById(R.id.iv_theme);
@@ -413,6 +417,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
         if (RegexValidateUtil.isEmpty(fontSizeStr)) {
             font = fontM;
+            fontSizeStr="1";
         }
         switch (fontSizeStr) {
             case "0":

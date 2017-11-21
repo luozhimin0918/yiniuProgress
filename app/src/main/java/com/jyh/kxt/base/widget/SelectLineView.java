@@ -184,29 +184,33 @@ public class SelectLineView extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
-    private void changeViewStatus(int position) {
-        switch (position) {
-            case 0:
-                pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
-                pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
-                pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
-                line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
-                line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
-                break;
-            case 1:
-                pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
-                pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
-                pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
-                line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
-                line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
-                break;
-            case 2:
-                pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
-                pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
-                pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
-                line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
-                line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
-                break;
+    public void changeViewStatus(int position) {
+        try {
+            switch (position) {
+                case 0:
+                    pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
+                    pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
+                    pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
+                    line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
+                    line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
+                    break;
+                case 1:
+                    pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
+                    pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
+                    pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_def));
+                    line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
+                    line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color4));
+                    break;
+                case 2:
+                    pointOne.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
+                    pointTwo.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_sel));
+                    pointThree.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.icon_point_checked));
+                    line1.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
+                    line2.setBackgroundColor(ContextCompat.getColor(context, R.color.line_color5));
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
