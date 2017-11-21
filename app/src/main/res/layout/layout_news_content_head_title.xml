@@ -32,8 +32,7 @@
                 android:layout_width="@dimen/newsAuthorPhotoSize"
                 android:layout_height="@dimen/newsAuthorPhotoSize"
                 android:layout_marginRight="@dimen/newsContentMargin"
-                android:scaleType="fitXY"
-                android:src="@mipmap/icon_user_def_photo"/>
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/tv_name"

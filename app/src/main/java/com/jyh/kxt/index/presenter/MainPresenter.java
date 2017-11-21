@@ -727,7 +727,7 @@ public class MainPresenter extends BasePresenter {
                                     }
                                 }).show();
                     }
-                }, 8000);
+                },   60 * 1000 );
                 return;
             }
         }

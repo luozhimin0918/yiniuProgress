@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -469,9 +470,11 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
      * @param bitmapByte
      */
     public void setBitmapAndByte(Bitmap bitmap, byte[] bitmapByte) {
-        lastBmp = bitmap;
         lastByte = bitmapByte;
-        ivPhoto.setImageBitmap(bitmap);
+
+        lastBmp = BitmapFactory.decodeByteArray(bitmapByte,0,bitmapByte.length);
+
+        ivPhoto.setImageBitmap(lastBmp);
         //提交图片
         editUserInfoPresenter.postBitmap(lastByte);
     }

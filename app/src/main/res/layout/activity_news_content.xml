@@ -27,7 +27,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:layout_toRightOf="@+id/iv_break"
-            android:src="@mipmap/ic_launcher"
             android:visibility="gone" />
 
         <TextView
