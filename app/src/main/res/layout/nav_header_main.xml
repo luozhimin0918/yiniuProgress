@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/drawer_head_unlogin_tvMarginRight"
-                    android:text="登录/邮箱账号注册"
+                    android:text="登录/注册"
                     android:textColor="@color/font_color12"
                     android:textSize="@dimen/describe_font_size4"/>
 
