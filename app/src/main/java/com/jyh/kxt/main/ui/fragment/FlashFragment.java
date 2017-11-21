@@ -2,7 +2,6 @@ package com.jyh.kxt.main.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
@@ -45,6 +44,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -61,10 +61,14 @@ import butterknife.BindView;
 
 public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfreshLoadListener {
 
-    @BindView(R.id.lv_content) public FastInfoPullPinnedListView lvContent;
-    @BindView(R.id.pl_rootView) public PageLoadLayout plRootView;
-    @BindView(R.id.fab_top) public ImageView fabTop;
-    @BindView(R.id.iv_ad) public ImageView ivAd;
+    @BindView(R.id.lv_content)
+    public FastInfoPullPinnedListView lvContent;
+    @BindView(R.id.pl_rootView)
+    public PageLoadLayout plRootView;
+    @BindView(R.id.fab_top)
+    public ImageView fabTop;
+    @BindView(R.id.iv_ad)
+    public ImageView ivAd;
 
     /**
      * 快讯筛选
@@ -235,7 +239,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     if (flashAd.getShow() == 1) {
                         try {
                             MainActivity mainActivity = (MainActivity) ActivityManager.getInstance().getSingleActivity(MainActivity.class);
-                            mainActivity.mainPresenter.showPopAdvertisement(flashAd,true);
+                            mainActivity.mainPresenter.showPopAdvertisement(flashAd, true);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -248,7 +252,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                         public void onClick(View v) {
                             try {
                                 MainActivity mainActivity = (MainActivity) getActivity();
-                                mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad(),false);
+                                mainActivity.mainPresenter.showPopAdvertisement(mainInitJson.getFlash_ad(), false);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -278,7 +282,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         TextView tvSure = (TextView) view.findViewById(R.id.tv_sure);
         final OptionLayout olContent = (OptionLayout) view.findViewById(R.id.ol_content);
 
-        olContent.setMinSelectCount(1);
+        olContent.setMinSelectCount(0);
         olContent.setMaxSelectCount(3);
         olContent.setSelectMode(OptionLayout.SelectMode.CheckMode);
 
@@ -287,12 +291,19 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         final SwitchCompat scSound = (SwitchCompat) view.findViewById(R.id.sc_sound);
 
         Set<String> set = SPUtils.getStringSet(getContext(), SpConstant.FLASH_FILTRATE);
+        boolean containsMeiYuan = set.contains("美元");
+        if(containsMeiYuan){
+            set.remove("美元");
+            set.add("外汇");
+        }
+
         scHigh.setChecked(onlyShowHigh = SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH));
         scTop.setChecked(flashTop = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_TOP));
         scSound.setChecked(flashSound = SPUtils.getBooleanTrue(getContext(), SpConstant.FLASH_FILTRATE_SOUND));
         if (set.size() == 0 || set.size() == 3) {
             set.clear();
-            set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
+            List<String> collection =  Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver));
+            set.addAll(collection);
             olContent.setSelectItemIndex(set);
         } else {
             olContent.setSelectItemIndex(set);
@@ -322,7 +333,10 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             @Override
             public void onClick(View v) {
                 Set<String> set = new HashSet<>();
-                set.addAll(Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver)));
+
+                List<String> convertSet = convertFilterSet();
+                set.addAll(convertSet);
+
                 olContent.setSelectItemIndex(set);
                 scHigh.setChecked(false);
             }
@@ -331,7 +345,12 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, olContent.getSelectedMap());
+                HashSet<String> selectedMap = olContent.getSelectedMap();
+                if(selectedMap.contains("外汇")){
+                    selectedMap.remove("外汇");
+                    selectedMap.add("美元");
+                }
+                SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, selectedMap);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
@@ -363,6 +382,24 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
             }
         });
 
+    }
+
+    /**
+     * 转换筛选的外汇
+     */
+    private List<String> convertFilterSet() {
+        List<String> convertList = new ArrayList<>();
+
+        List<String> collection = Arrays.asList(getContext().getResources().getStringArray(R.array.flash_silver));
+        for (int i = 0; i < collection.size(); i++) {
+            String itemHint = collection.get(i);
+            if ("外汇".equals(itemHint)) {
+                convertList.add("美元");
+            } else {
+                convertList.add(itemHint);
+            }
+        }
+        return convertList;
     }
 
     @Override

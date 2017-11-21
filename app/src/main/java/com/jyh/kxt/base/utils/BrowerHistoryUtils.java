@@ -35,6 +35,10 @@ public class BrowerHistoryUtils {
      */
     public static void save(Context context, NewsJson news) {
         try {
+            long mCurrentTimeLong = System.currentTimeMillis() / 1000;
+            String mCurrentTimeValue = String.valueOf(mCurrentTimeLong);
+            news.setCreate_time(mCurrentTimeValue);
+
             news.setDataType(VarConstant.DB_TYPE_BROWER);
             DBManager instance = DBManager.getInstance(context);
             List<NewsJson> newsJsons = instance.getDaoSessionRead().getNewsJsonDao().queryRaw("WHERE O_ID=? AND DATA_TYPE=?", new

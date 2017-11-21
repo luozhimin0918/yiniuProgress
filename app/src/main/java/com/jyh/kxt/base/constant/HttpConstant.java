@@ -30,6 +30,7 @@ public class HttpConstant {
     }
 
     public static final String OFFICIAL = "http://www.yn.com";//官网
+    public static final String APP_DOWNLOAD = "http://appapi.yn.com/app/share.html";//推荐给好友下载
 
     //    public static final String BASE_URL = "https://kxtadi.kuaixun56.com/";
 //    public static final String BASE_URL = "http://pre-kxtadi.kuaixun56.com/";

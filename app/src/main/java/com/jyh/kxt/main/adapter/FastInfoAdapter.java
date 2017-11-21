@@ -591,7 +591,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                             (leftHolder
                                     .ivFlash);
 
-                    Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
 
                     String time3 = "00:00";
                     try {
@@ -1079,6 +1078,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
                 for (int i = 0; i < effect0Split.length; i++) {
                     String splitTrim = effect0Split[i].trim();
+                    if("外汇".equals(splitTrim)){
+                        splitTrim = "美元";
+                    }
                     if (set.size() == 0 ||
                             set.contains("全部") ||
                             set.contains(splitTrim)) {

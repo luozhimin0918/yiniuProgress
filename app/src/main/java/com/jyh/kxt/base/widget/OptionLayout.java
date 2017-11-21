@@ -299,6 +299,26 @@ public class OptionLayout extends FrameLayout implements View.OnClickListener {
     }
 
     /**
+     * 需要将外汇转换成美元的
+     * @return
+     */
+    public HashSet<String> getMYSelectedMap() {
+        HashSet<String> checkBoxVal = new HashSet<>();
+        int childCount = getChildCount();
+        for (int index = 0; index < childCount; index++) {
+            CheckBox myCheckBox = (CheckBox) getChildAt(index);
+            if (myCheckBox.isChecked()) {
+                String mWaiHui = myCheckBox.getText().toString();
+                if("外汇".equals(mWaiHui)){
+                    checkBoxVal.add("美元");
+                }else{
+                    checkBoxVal.add(mWaiHui);
+                }
+            }
+        }
+        return checkBoxVal;
+    }
+    /**
      * 是否可点击重选
      *
      * @param disabledClick

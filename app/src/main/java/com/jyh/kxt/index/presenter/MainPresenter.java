@@ -583,7 +583,7 @@ public class MainPresenter extends BasePresenter {
         mAlertDialog.show();
 
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.pop_window1_in);
-        animation.setDuration(1500);
+        animation.setDuration(100);
         animation.setInterpolator(new AnticipateOvershootInterpolator());
         contentView.startAnimation(animation);
 

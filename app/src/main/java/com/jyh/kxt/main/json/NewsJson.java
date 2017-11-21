@@ -5,16 +5,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
-import com.jyh.kxt.av.json.VideoListJson;
-import com.jyh.kxt.base.json.AdTitleIconBean;
-import com.jyh.kxt.base.json.AdTitleItemBean;
 import com.library.util.RegexValidateUtil;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Transient;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,6 +31,9 @@ public class NewsJson implements Parcelable {
     private String o_action;
     private String o_class;
     private String o_id;
+    /**
+     * 没有使用到这个Create_Time 用它记录作为存储到本地的时间
+     */
     private String create_time;
     private boolean isSel;
 

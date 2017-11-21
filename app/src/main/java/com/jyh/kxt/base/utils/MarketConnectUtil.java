@@ -110,8 +110,12 @@ public class MarketConnectUtil {
 
                         @Override
                         public void onTextMessage(String payload) {
-                            if (onSocketTextMessage != null && payload != null && !"".equals(payload)) {
-                                onSocketTextMessage.onTextMessage(payload);
+                            try {
+                                if (onSocketTextMessage != null && payload != null && !"".equals(payload)) {
+                                    onSocketTextMessage.onTextMessage(payload);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
 

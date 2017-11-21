@@ -43,6 +43,7 @@ public class ViewPointDetailAdapter extends BaseListAdapter<CommentDetailBean> {
         this.mContext = mContext;
 
         mInflater = LayoutInflater.from(mContext);
+
     }
 
     @Override

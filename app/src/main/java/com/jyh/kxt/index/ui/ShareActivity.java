@@ -53,7 +53,7 @@ public class ShareActivity extends BaseActivity {
         umengShareBean = new UmengShareBean();
         umengShareBean.setTitle("一牛财经");
         umengShareBean.setDetail("财经快讯速递专家");
-        umengShareBean.setWebUrl(HttpConstant.OFFICIAL);
+        umengShareBean.setWebUrl(HttpConstant.APP_DOWNLOAD);
         umengShareBean.setFromSource(SHARE_INVITE);
 
         if (umengShareUtil == null) {

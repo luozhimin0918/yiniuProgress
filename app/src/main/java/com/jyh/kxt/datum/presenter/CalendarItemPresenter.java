@@ -229,7 +229,7 @@ public class CalendarItemPresenter extends BasePresenter {
             CalendarImportantBean mCalendarImportantBean = JSONObject.parseObject(objData, CalendarImportantBean.class);
             boolean isMeetConditions = /*parentFragment.isImportantMeetConditions(mCalendarImportantBean)*/true;
             if (status == 0) {
-                hashSetCity.add(mCalendarImportantBean.getState());
+//                hashSetCity.add(mCalendarImportantBean.getState());
             }
 
             if (isMeetConditions) {

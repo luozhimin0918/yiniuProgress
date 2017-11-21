@@ -169,8 +169,10 @@ public class TradeHandlerUtil {
             /**
              * 发起网络请求
              */
-            if (type == 1 || type == 3) {  //发起网络请求
+            if (type == 1) {
                 requestFavour(mContext, viewPointTradeBean.o_id);
+            } else if (type == 3) {
+                requestFavour2(mContext, viewPointTradeBean.o_id);
             } else if (type == 2) {
                 if (userInfo != null) {
                     requestCollect(mContext, userInfo, viewPointTradeBean, bool);
@@ -178,7 +180,7 @@ public class TradeHandlerUtil {
                     ViewPointTradeBeanDao viewPointTradeBeanDao = mDBManager.getDaoSessionWrit().getViewPointTradeBeanDao();
                     viewPointTradeBeanDao.insertOrReplace(viewPointTradeBean);
                 }
-                ToastView.makeText3(mContext,bool ? "收藏成功" : "取消成功");
+                ToastView.makeText3(mContext, bool ? "收藏成功" : "取消成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,6 +243,22 @@ public class TradeHandlerUtil {
             return markBean.getCollectState() == 1;
         }
     }
+
+    private MarkBeanDao markBeanDao;
+
+    public boolean getPointThumbState(Context mContext, String id) {
+        if (markBeanDao == null) {
+            DBManager mDBManager = DBManager.getInstance(mContext);
+            markBeanDao = mDBManager.getDaoSessionWrit().getMarkBeanDao();
+        }
+        MarkBean markBean = markBeanDao.queryBuilder().where(MarkBeanDao.Properties.OId.eq(id)).unique();
+        if (markBean == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     /**
      * 收藏

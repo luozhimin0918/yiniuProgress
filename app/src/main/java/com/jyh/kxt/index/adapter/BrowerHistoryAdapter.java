@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,12 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.main.json.NewsJson;
-import com.jyh.kxt.main.json.flash.FlashJson;
 import com.jyh.kxt.main.widget.FastInfoPinnedListView;
 import com.library.util.DateUtils;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SystemUtil;
-import com.library.widget.datetimepicker.DateTimeUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,7 +232,7 @@ public class BrowerHistoryAdapter extends BaseListAdapter implements FastInfoPin
     private String getTime(NewsJson flashJson) {
         String time;
         try {
-            time = DateUtils.transformTime(Long.parseLong(flashJson.getDatetime()) * 1000, DateUtils.TYPE_MD);
+            time = DateUtils.transformTime(Long.parseLong(flashJson.getCreate_time()) * 1000, DateUtils.TYPE_MD);
         } catch (Exception e) {
             time = "01-01";
         }

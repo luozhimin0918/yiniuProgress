@@ -8,13 +8,11 @@ import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.DiscolorTextView;
 import com.jyh.kxt.base.widget.OptionLayout;
 import com.jyh.kxt.datum.ui.fragment.CalendarFragment;
 import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.ui.fragment.DatumFragment;
-import com.library.util.SPUtils;
 import com.library.widget.datetimepicker.fourmob.datetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
@@ -113,7 +111,7 @@ public class DatumPresenter extends BasePresenter implements DatePickerDialog.On
             public void onClick(View v) {
                 datumFragment.getCalendarFragment().stateSet = olState.getSelectedMap();
                 datumFragment.getCalendarFragment().importanceSet = olImportance.getSelectedMap();
-                datumFragment.getCalendarFragment().judgeSet = olJudge.getSelectedMap();
+                datumFragment.getCalendarFragment().judgeSet = olJudge.getMYSelectedMap();
 //                SPUtils.save(mContext, SpConstant.DATUM_STATE, olState.getSelectedMap());
 //                SPUtils.save(mContext, SpConstant.DATUM_IMPORTANCE, olImportance.getSelectedMap());
 //                SPUtils.save(mContext, SpConstant.DATUM_JUDGE, olJudge.getSelectedMap());

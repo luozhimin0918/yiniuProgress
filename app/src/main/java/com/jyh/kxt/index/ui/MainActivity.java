@@ -19,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -721,20 +723,23 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 pointBtn.setVisibility(View.GONE);
             }
 
-            String pictureStr = userJson.getPicture();
-            Glide.with(getContext())
-                    .load(pictureStr)
-                    .asBitmap()
-                    .override(imgSize, imgSize)
+            DrawableTypeRequest mLoadPicture;
 
+            String pictureStr = userJson.getPicture();
+            if (!TextUtils.isEmpty(pictureStr)) {
+                mLoadPicture = Glide.with(getContext()).load(pictureStr);
+            } else {
+                mLoadPicture = Glide.with(getContext()).load(R.mipmap.icon_user_def_photo);
+            }
+
+            mLoadPicture.asBitmap()
+                    .override(imgSize, imgSize)
                     .error(R.mipmap.icon_user_def_photo)
                     .placeholder(R.mipmap.icon_user_def_photo)
 
                     .into(loginPhoto);
 
-            Glide.with(getContext())
-                    .load(pictureStr)
-                    .crossFade(1000)
+            mLoadPicture.crossFade(1000)
                     .bitmapTransform(new BlurTransformation(getContext(), 15, 4)) // “23”：设置模糊度(在0.0到25.0之间)，默认”25";
                     // "4":图片缩放比例,默认“1”。
                     .into(new SimpleTarget<GlideDrawable>() {

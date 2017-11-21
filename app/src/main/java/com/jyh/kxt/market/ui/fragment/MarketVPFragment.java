@@ -78,7 +78,7 @@ public class MarketVPFragment extends BaseFragment implements ViewPager.OnPageCh
         int fragmentSize = marketNavList.size() + 1;
 
         MarketNavBean mMarketNavBean = new MarketNavBean();
-        mMarketNavBean.setName("主页");
+        mMarketNavBean.setName("主要");
         mMarketNavBean.setCode("zhuYe");
         marketNavList.add(0, mMarketNavBean);
 
