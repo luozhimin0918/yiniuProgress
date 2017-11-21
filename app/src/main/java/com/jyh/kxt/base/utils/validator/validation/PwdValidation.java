@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.jyh.kxt.base.utils.validator.ValidationExecutor;
 
+import java.util.regex.Pattern;
+
 
 /**
  * 项目名:Kxt
@@ -25,8 +27,16 @@ public class PwdValidation extends ValidationExecutor {
             errorInfo = "请输入6 - 18位密码";
             return false;
         }
+        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)(?![`~!@#$%^&*()+=|{}_':;',\\\\\\\\[\\\\\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？])" +
+                "([0-9A-Za-z]|[`~!@#$%^&*()+=|{}_':;',\\\\\\\\[\\\\\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]){6,20}$";
+
+        boolean result = Pattern.compile(regex).matcher(pwd).find();
+        if (!result) {
+            errorInfo = "密码至少使用字母数字和符号两种以上组合";
+            return false;
+        }
 
         errorInfo=null;
-        return true;
+        return result;
     }
 }
