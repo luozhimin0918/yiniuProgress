@@ -535,6 +535,10 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             tvNewsTime.setText(" | " + DateFormat.format("yyyy-MM-dd HH:mm", createTime));
 
             rlExistAuthor.setOnClickListener(this);
+
+            newsAuthorImage.setImageResource(R.mipmap.ic_launcher);
+            ivPhoto.setImageResource(R.mipmap.icon_user_def_photo);
+
             Glide.with(NewsContentActivity.this)
                     .load(newsContentJson.getAuthor_image())
                     .asBitmap()

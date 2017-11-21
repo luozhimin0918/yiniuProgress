@@ -1,12 +1,10 @@
 package com.jyh.kxt.user.presenter;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
@@ -345,8 +343,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
                             City_AreaList.add("");
                         } else {
 
-                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++)
-                            {//该城市对应地区所有数据
+                            for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
                                 String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
 
                                 City_AreaList.add(AreaName);//添加该城市所有地区数据
@@ -641,7 +638,7 @@ public class EditUserInfoPresenter extends BasePresenter implements View.OnClick
     @Override
     public void onPhotoComplete(Bitmap bitmap) {
         ByteArrayOutputStream mOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, mOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, mOutputStream);
         byte[] bitmapByte = mOutputStream.toByteArray();
         activity.setBitmapAndByte(bitmap, bitmapByte);
     }

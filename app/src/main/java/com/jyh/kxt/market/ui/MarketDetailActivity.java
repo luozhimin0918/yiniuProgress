@@ -877,15 +877,23 @@ public class MarketDetailActivity extends BaseActivity implements OnSocketTextMe
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        marketDetailPresenter.onConfigurationChanged(newConfig);
-        resetSize(newConfig);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
-                baseChartPresenter.getChartView().invalidate();
-            }
-        }, 500);
+        try {
+            marketDetailPresenter.onConfigurationChanged(newConfig);
+            resetSize(newConfig);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        BaseChartPresenter baseChartPresenter = basePresenterMap.get(clickNavigationPosition);
+                        baseChartPresenter.getChartView().invalidate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, 500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

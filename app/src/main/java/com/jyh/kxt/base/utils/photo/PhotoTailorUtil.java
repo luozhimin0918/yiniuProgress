@@ -1,6 +1,5 @@
 package com.jyh.kxt.base.utils.photo;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -108,6 +106,10 @@ public class PhotoTailorUtil {
             return;
         }
 
+        //删除之前的缓存文件
+        if (cameraTempFile.exists()) {
+            cameraTempFile.delete();
+        }
         if (Build.VERSION.SDK_INT < 23) {//6.0以下调用的拍照方法
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri22);
@@ -123,11 +125,17 @@ public class PhotoTailorUtil {
 
 
     public void selectFromPhotos() {
+        //删除之前的缓存文件
+        if (cameraTempFile.exists()) {
+            cameraTempFile.delete();
+        }
+
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mActivity.startActivityForResult(intent, requestSelectCode);
     }
 
     private void transformToBitmap() {
+
         try {
             Uri uri;
             if (Build.VERSION.SDK_INT < 23) {
@@ -193,4 +201,6 @@ public class PhotoTailorUtil {
 
         return wait;
     }
+
+
 }

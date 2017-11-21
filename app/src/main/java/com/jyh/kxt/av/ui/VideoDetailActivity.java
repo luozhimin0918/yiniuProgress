@@ -162,10 +162,10 @@ public class VideoDetailActivity extends BaseActivity implements CommentPresente
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (spVideo != null) {
             spVideo.onDestroy();
         }
+        super.onDestroy();
 
         System.gc();
         Runtime.getRuntime().gc();

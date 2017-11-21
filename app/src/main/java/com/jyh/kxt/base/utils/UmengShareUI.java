@@ -242,21 +242,25 @@ public class UmengShareUI {
             int themeBgColor = ContextCompat.getColor(mActivity, R.color.theme1);
             mShareLayout.setBackgroundColor(themeBgColor);
 
-            if (rvPlatform != null) {
-                rvPlatform.setBackgroundColor(themeBgColor);
-                platformAdapter.notifyDataSetChanged();
-            }
-
-            if (rvFunction != null) {
-                rvFunction.setBackgroundColor(themeBgColor);
-                functionAdapter.notifyDataSetChanged();
+            if (spaceLineView != null) {
+                spaceLineView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.line_color2));
             }
 
             if (customView != null) {
                 customView.setBackgroundColor(themeBgColor);
             }
-            if (spaceLineView != null) {
-                spaceLineView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.line_color2));
+            if (rvPlatform != null) {
+                rvPlatform.setBackgroundColor(themeBgColor);
+                if (platformAdapter != null) {
+                    platformAdapter.notifyDataSetChanged();
+                }
+            }
+
+            if (rvFunction != null) {
+                rvFunction.setBackgroundColor(themeBgColor);
+                if (functionAdapter != null) {
+                    functionAdapter.notifyDataSetChanged();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
