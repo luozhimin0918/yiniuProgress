@@ -171,7 +171,13 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
             tvEmail.setText("去绑定");
         }
         if (userInfo.isSetPhone()) {
-            tvPhone.setText(userInfo.getPhone());
+            String phone = userInfo.getPhone();
+            try {
+                tvPhone.setText(phone.substring(0,3)+"****"+phone.substring(7));
+            } catch (Exception e) {
+                e.printStackTrace();
+                tvPhone.setText("***********");
+            }
         } else {
             tvPhone.setText("去绑定");
         }
