@@ -120,7 +120,7 @@ public class SearchPresenter extends BasePresenter {
                     return;
                 }
             }
-            searchHistory += "," + searchKey;
+            searchHistory =searchKey+","+ searchHistory;
         }
         SPUtils.save(mContext, SpConstant.SEARCH_HISTORY, searchHistory);
         searchActivity.addHistory(searchKey);

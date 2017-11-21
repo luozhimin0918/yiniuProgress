@@ -1,5 +1,7 @@
 package com.jyh.kxt.search.presenter;
 
+import android.app.Activity;
+
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
@@ -17,6 +19,7 @@ import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
+import com.library.util.SystemUtil;
 import com.library.widget.window.ToastView;
 
 import java.util.ArrayList;
@@ -84,18 +87,20 @@ public class SearchIndexPresenter extends BasePresenter {
         } else {
             ToastView.makeText3(mContext, "搜索内容不能为空");
         }
+        SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
 
     public void saveSearchHistory(String searchKey) {
         String str = SPUtils.getString(mContext, SpConstant.SEARCH_HISTORY_ALL);
         if (str.contains(searchKey)) return;
-        StringBuffer history = new StringBuffer(str);
-        if (history.length() > 0) {
-            history.append(",").append(searchKey);
-        } else {
-            history.append(searchKey);
-        }
-        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_ALL, history.toString());
+//        StringBuffer history = new StringBuffer(str);
+//        if (history.length() > 0) {
+//            history.append(",").append(searchKey);
+//        } else {
+//            history.append(searchKey);
+//        }
+        str=searchKey+","+str;
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_ALL, str);
         init();
     }
 

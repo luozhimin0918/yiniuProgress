@@ -158,13 +158,14 @@ public class SearchPresenter extends BasePresenter {
         if (searchType == null) return;
         String str = SPUtils.getString(mContext, searchType);
         if (str.contains(key)) return;
-        StringBuffer history = new StringBuffer(str);
-        if (history.length() > 0) {
-            history.append(",").append(key);
-        } else {
-            history.append(key);
-        }
-        SPUtils.save(mContext, searchType, history.toString());
+//        StringBuffer history = new StringBuffer(str);
+//        if (history.length() > 0) {
+//            history.append(",").append(key);
+//        } else {
+//            history.append(key);
+//        }
+        str=key+","+str;
+        SPUtils.save(mContext, searchType, str);
     }
 
     public void refresh() {

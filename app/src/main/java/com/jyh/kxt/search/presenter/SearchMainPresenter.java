@@ -1,5 +1,7 @@
 package com.jyh.kxt.search.presenter;
 
+import android.app.Activity;
+
 import com.android.volley.VolleyError;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
@@ -10,6 +12,7 @@ import com.jyh.kxt.search.ui.SearchMainActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
+import com.library.util.SystemUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,5 +55,6 @@ public class SearchMainPresenter extends BasePresenter {
 
     public void search(String key) {
         EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_SEARCH,key));
+        SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
 }

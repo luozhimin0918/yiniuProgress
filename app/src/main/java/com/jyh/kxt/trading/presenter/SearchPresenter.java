@@ -81,14 +81,14 @@ public class SearchPresenter extends BasePresenter {
         SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
 
-    public void saveSearchHistory(List<QuoteItemJson> items) {
-        Set<String> historySet = new HashSet<>(SPUtils.getStringSet(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET));
-        if (items == null) return;
-        for (QuoteItemJson item : items) {
-            historySet.add(JSON.toJSONString(item));
-        }
-        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, historySet);
-    }
+//    public void saveSearchHistory(List<QuoteItemJson> items) {
+//        Set<String> historySet = new HashSet<>(SPUtils.getStringSet(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET));
+//        if (items == null) return;
+//        for (QuoteItemJson item : items) {
+//            historySet.add(JSON.toJSONString(item));
+//        }
+//        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, historySet);
+//    }
 
     public void refresh() {
         lastId = "";
@@ -193,6 +193,11 @@ public class SearchPresenter extends BasePresenter {
         Set<String> historySet = new HashSet<>(SPUtils.getStringSet(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET));
         if (quote == null) return;
         historySet.add(JSON.toJSONString(quote));
-        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, historySet);
+
+        Set<String> set=new HashSet<>();
+        set.add(JSON.toJSONString(quote));
+        set.addAll(historySet);
+
+        SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, set);
     }
 }
