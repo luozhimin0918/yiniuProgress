@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,8 +81,8 @@ public class AdView extends LinearLayout {
                 } else {
                     ivAd.setVisibility(View.VISIBLE);
                 }
-                Glide.with(mContext).load(picture).error(R.mipmap.icon_def_news)
-                        .placeholder(R.mipmap.icon_def_news).into(ivAd);
+                Glide.with(mContext).load(picture).error(R.mipmap.icon_ad_max_img)
+                        .placeholder(R.mipmap.icon_ad_max_img).into(ivAd);
 
                 adRoot.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -215,7 +215,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
                     if (mFlashContentJson != null && !TextUtils.isEmpty(mFlashContentJson.getShare_sina_title())) {
                         umengShareBean.setSinaTitle(mFlashContentJson.getShare_sina_title());
                     } else {
-                        umengShareBean.setSinaTitle(title + shareUrl + " @一牛财经");
+                        umengShareBean.setSinaTitle(title + shareUrl + " @一牛财经官微");
                     }
 
                     umengShareBean.setFromSource(UmengShareUtil.SHARE_KX);

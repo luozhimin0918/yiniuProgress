@@ -31,13 +31,18 @@ import butterknife.ButterKnife;
 
 public class AdvertLayout extends FrameLayout {
 
-    @BindView(R.id.tv_advert_title) TextView tvAdvertTitle;
-    @BindView(R.id.iv_advert_icon) ImageView ivAdvertIcon;
+    @BindView(R.id.tv_advert_title)
+    TextView tvAdvertTitle;
+    @BindView(R.id.iv_advert_icon)
+    ImageView ivAdvertIcon;
 
-    @BindView(R.id.fl_advert_content1) FrameLayout flAdvertContent1;
-    @BindView(R.id.fl_advert_content2) FrameLayout flAdvertContent2;
+    @BindView(R.id.fl_advert_content1)
+    FrameLayout flAdvertContent1;
+    @BindView(R.id.fl_advert_content2)
+    FrameLayout flAdvertContent2;
 
-    @BindView(R.id.ll_advert_content) LinearLayout llAdvertContent;
+    @BindView(R.id.ll_advert_content)
+    LinearLayout llAdvertContent;
 
     private View advertRootTitle;
     private AdTitleIconBean adTitleIconBean;
@@ -87,6 +92,8 @@ public class AdvertLayout extends FrameLayout {
         onChangerTheme();
     }
 
+    private long oldClickTime = 0;
+
     public void onChangerTheme() {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         Boolean isNight = SPUtils.getBoolean(getContext(), SpConstant.SETTING_DAY_NIGHT);
@@ -125,12 +132,17 @@ public class AdvertLayout extends FrameLayout {
             tvContent.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = getContext();
-                    JumpUtils.jump((BaseActivity) context,
-                            adTitleItemBean.getO_class(),
-                            adTitleItemBean.getO_action(),
-                            adTitleItemBean.getO_id(),
-                            adTitleItemBean.getHref());
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - 1000 > oldClickTime) {
+                        oldClickTime  = currentTime;
+
+                        Context context = getContext();
+                        JumpUtils.jump((BaseActivity) context,
+                                adTitleItemBean.getO_class(),
+                                adTitleItemBean.getO_action(),
+                                adTitleItemBean.getO_id(),
+                                adTitleItemBean.getHref());
+                    }
                 }
             });
 

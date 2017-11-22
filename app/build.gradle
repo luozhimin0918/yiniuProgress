@@ -161,7 +161,7 @@ if (buildWithTinker()) {
             applyResourceMapping = getApplyResourceMappingPath()
             tinkerId = getTinkerIdValue()
             keepDexApply = false
-            isProtectedApp = false
+            isProtectedApp = true
             supportHotplugComponent = false
         }
         dex {

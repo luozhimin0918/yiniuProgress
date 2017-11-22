@@ -730,6 +730,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                 mLoadPicture = Glide.with(getContext()).load(pictureStr);
             } else {
                 mLoadPicture = Glide.with(getContext()).load(R.mipmap.icon_user_def_photo);
+                loginView.setBackgroundResource(R.mipmap.icon_user_def_photo);
             }
 
             mLoadPicture.asBitmap()

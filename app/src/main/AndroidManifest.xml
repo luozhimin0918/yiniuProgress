@@ -49,11 +49,11 @@
     <application
         android:name=".KXTApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_fk_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup,android:icon">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.kxt.fileprovider"

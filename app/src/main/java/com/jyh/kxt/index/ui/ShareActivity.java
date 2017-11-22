@@ -70,7 +70,7 @@ public class ShareActivity extends BaseActivity {
                     umengShareUtil.shareContent1(SHARE_MEDIA.WEIXIN_CIRCLE, umengShareBean);
                     break;
                 case R.id.rl_sina:
-                    umengShareBean.setDetail("财经快讯速递专家 " + HttpConstant.OFFICIAL + " @一牛财经");
+                    umengShareBean.setDetail("财经快讯速递专家 " + HttpConstant.OFFICIAL + " @一牛财经官微");
                     umengShareUtil.shareContent2(SHARE_MEDIA.SINA, umengShareBean);
                     break;
                 case R.id.rl_qq:

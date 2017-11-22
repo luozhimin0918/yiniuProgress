@@ -173,9 +173,9 @@ public class SettingActivity extends BaseActivity {
                                                     sb.append("来源渠道: 测试包 \n");
                                                 } else {
                                                     if ("360".equals(resultData)) {
-                                                        sb.append("来源渠道: 360应用市场 \n");
+                                                        sb.append(resultData+" 来源渠道: 360应用市场 \n");
                                                     } else {
-                                                        sb.append("来源渠道: 普通应用市场 \n");
+                                                        sb.append(resultData+" 来源渠道: 普通应用市场 \n");
                                                     }
                                                 }
                                             }

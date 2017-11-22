@@ -2,8 +2,6 @@ package com.jyh.kxt.datum.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -24,16 +22,12 @@ import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseListAdapter;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.IntentConstant;
-import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RadianDrawable;
 import com.jyh.kxt.base.impl.OnRequestPermissions;
-import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.utils.PingYinUtil;
 import com.jyh.kxt.base.widget.AdView;
 import com.jyh.kxt.base.widget.AdvertLayout;
 import com.jyh.kxt.base.widget.StarView;
-import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.datum.bean.CalendarFinanceBean;
 import com.jyh.kxt.datum.bean.CalendarHolidayBean;
@@ -46,10 +40,7 @@ import com.jyh.kxt.datum.ui.fragment.CalendarItemFragment;
 import com.jyh.kxt.index.json.AlarmJson;
 import com.jyh.kxt.index.presenter.AlarmPresenter;
 import com.jyh.kxt.index.ui.MainActivity;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.library.util.ObserverCall;
-import com.library.util.RegexValidateUtil;
-import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.util.ViewCompatUtil;
 import com.library.widget.listview.PinnedSectionListView;
@@ -321,7 +312,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 break;
             case 6:
                 AdJson ads = (AdJson) mCalendarType;
-                if(ads==null) break;
+                if (ads == null) break;
                 View paddingTagView2 = viewHolderAd.rootView.findViewWithTag("paddingView");
                 if (paddingTagView2 != null) {
                     viewHolderAd.rootView.removeView(paddingTagView2);
@@ -338,7 +329,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
                 mPaddingView.setLayoutParams(lp);
                 viewHolderAd.rootView.addView(mPaddingView, 0);
 
-                viewHolderAd.adView.setAd(ads.getPic_ad(),ads.getText_ad());
+                viewHolderAd.adView.setAd(ads.getPic_ad(), ads.getText_ad());
 
                 break;
         }
@@ -357,6 +348,7 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
     }
 
     public void dispatchTouchEvent(View view, MotionEvent ev) {
+        //如果小于5.0才分发点击
         View advertLayout = view.findViewById(R.id.al_advert_layout);
         if (advertLayout instanceof AdvertLayout) {
             AdvertLayout myAdvertLayout = (AdvertLayout) advertLayout;
@@ -450,8 +442,10 @@ public class CalendarItemAdapter extends BaseListAdapter<CalendarType> implement
 
     class AdViewHolder {
 
-        @BindView(R.id.av_ad) AdView adView;
-        @BindView(R.id.ll_rootView) LinearLayout rootView;
+        @BindView(R.id.av_ad)
+        AdView adView;
+        @BindView(R.id.ll_rootView)
+        LinearLayout rootView;
 
         public AdViewHolder(View view) {
             ButterKnife.bind(this, view);
