@@ -131,7 +131,7 @@ public class BindActivity extends BaseActivity {
         });
     }
 
-    private String userTemp="";
+    private String userTemp = "";
 
     @OnClick({R.id.iv_bar_break, R.id.btn_send})
     public void onClick(View view) {
@@ -165,7 +165,7 @@ public class BindActivity extends BaseActivity {
                                     } else {
                                         //设置密码
                                         step = 2;
-                                        userTemp=edtEmail.getEdtText();
+                                        userTemp = edtEmail.getEdtText();
                                         tvTitle.setText("设置密码");
                                         llStep1.setVisibility(View.GONE);
                                         llStep2.setVisibility(View.VISIBLE);
@@ -185,46 +185,52 @@ public class BindActivity extends BaseActivity {
                                 }
                             });
                         } else {
-
-                            bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
-                                @Override
-                                public void callback(Object o) {
-                                    dismissWaitDialog();
-                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                    userJson.setIs_set_password("1");
-                                    if (type == BindActivity.TYPE_BIND_PHONE) {
-                                        userJson.setPhone(userTemp);
-                                        userJson.setIs_set_phone("1");
-                                    } else {
-                                        userJson.setEmail(userTemp);
-                                        userJson.setIs_set_email("1");
+                            if (edtEmail.getEdtText().equals(edtPwd2.getEdtText())) {
+                                bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                                    @Override
+                                    public void callback(Object o) {
+                                        dismissWaitDialog();
+                                        UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                        userJson.setIs_set_password("1");
+                                        if (type == BindActivity.TYPE_BIND_PHONE) {
+                                            userJson.setPhone(userTemp);
+                                            userJson.setIs_set_phone("1");
+                                        } else {
+                                            userJson.setEmail(userTemp);
+                                            userJson.setIs_set_email("1");
+                                        }
+                                        LoginUtils.changeUserInfo(getContext(), userJson);
+                                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+                                        ToastView.makeText(getContext(), "设置成功");
+                                        finish();
                                     }
-                                    LoginUtils.changeUserInfo(getContext(), userJson);
-                                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                    ToastView.makeText(getContext(), "设置成功");
-                                    finish();
-                                }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    dismissWaitDialog();
-                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
-                                }
-                            });
+                                    @Override
+                                    public void onError(Exception e) {
+                                        dismissWaitDialog();
+                                        ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
+                                    }
+                                });
+                            } else {
+                                edtPwd2.setErrorInfo("密码不一致");
+                                dismissWaitDialog();
+                            }
                         }
                     } else {
                         if (step == 1) {
                             bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(), edtPwd
                                     .getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd.getFunctionTextColor());
 
-                            UserJson userJson=LoginUtils.getUserInfo(getContext());
+                            UserJson userJson = LoginUtils.getUserInfo(getContext());
                             String phone = userJson.getPhone();
-                            String email=userJson.getEmail();
-                            if((phone!=null&&phone.trim().equals(edtEmail.getEdtText().trim()))||(email!=null&&email.trim().equals(edtEmail.getEdtText().trim()))){
+                            String email = userJson.getEmail();
+                            if ((phone != null && phone.trim().equals(edtEmail.getEdtText().trim())) || (email != null && email.trim()
+                                    .equals(edtEmail.getEdtText().trim()))) {
                                 bindPresenter.step1(edtEmail.getEdtText(), edtPwd.getEdtText(), new ObserverData() {
                                     @Override
                                     public void callback(Object o) {
-                                        bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd.getEdtText(),
+                                        bindPresenter.saveData(step, tvWarning.getText().toString(), edtEmail.getEdtText(), edtPwd
+                                                        .getEdtText(),
                                                 edtPwd.getFunctionText(), btnSend.getText().toString(), edtPwd.getType(), edtPwd
                                                         .getFunctionTextColor());
                                         step = 2;
@@ -253,9 +259,9 @@ public class BindActivity extends BaseActivity {
                                         ToastView.makeText3(getContext(), e == null || e.getMessage() == null ? "验证失败" : e.getMessage());
                                     }
                                 });
-                            }else{
+                            } else {
                                 dismissWaitDialog();
-                                ToastView.makeText3(getContext(),"手机号或邮箱不一致,请重新输入");
+                                ToastView.makeText3(getContext(), "手机号或邮箱不一致,请重新输入");
                             }
 
                         } else if (step == 2) {
@@ -278,7 +284,7 @@ public class BindActivity extends BaseActivity {
                                         finish();
                                     } else {
                                         step = 3;
-                                        userTemp=edtEmail.getEdtText();
+                                        userTemp = edtEmail.getEdtText();
                                         tvTitle.setText("设置密码");
                                         llStep1.setVisibility(View.GONE);
                                         llStep2.setVisibility(View.VISIBLE);
@@ -298,33 +304,38 @@ public class BindActivity extends BaseActivity {
                                 }
                             });
                         } else {
-                            bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
-                                @Override
-                                public void callback(Object o) {
-                                    dismissWaitDialog();
-                                    UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
-                                    userJson.setIs_set_password("1");
+                            if (edtEmail.getEdtText().equals(edtPwd2.getEdtText())) {
+                                bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
+                                    @Override
+                                    public void callback(Object o) {
+                                        dismissWaitDialog();
+                                        UserJson userJson = LoginUtils.getUserInfo(BindActivity.this);
+                                        userJson.setIs_set_password("1");
 
-                                    if (type == BindActivity.TYPE_CHANGE_PHONE) {
-                                        userJson.setPhone(userTemp);
-                                        userJson.setIs_set_phone("1");
-                                    } else {
-                                        userJson.setEmail(userTemp);
-                                        userJson.setIs_set_email("1");
+                                        if (type == BindActivity.TYPE_CHANGE_PHONE) {
+                                            userJson.setPhone(userTemp);
+                                            userJson.setIs_set_phone("1");
+                                        } else {
+                                            userJson.setEmail(userTemp);
+                                            userJson.setIs_set_email("1");
+                                        }
+
+                                        LoginUtils.changeUserInfo(getContext(), userJson);
+                                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
+                                        ToastView.makeText(getContext(), "设置成功");
+                                        finish();
                                     }
 
-                                    LoginUtils.changeUserInfo(getContext(), userJson);
-                                    EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_LOGIN_UPDATE, userJson));
-                                    ToastView.makeText(getContext(), "设置成功");
-                                    finish();
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    dismissWaitDialog();
-                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
-                                }
-                            });
+                                    @Override
+                                    public void onError(Exception e) {
+                                        dismissWaitDialog();
+                                        ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
+                                    }
+                                });
+                            } else {
+                                edtPwd2.setErrorInfo("密码不一致");
+                                dismissWaitDialog();
+                            }
                         }
                     }
                 }
@@ -477,8 +488,8 @@ public class BindActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if(bindPresenter!=null)
-            bindPresenter.onDestroy();
+            if (bindPresenter != null)
+                bindPresenter.onDestroy();
         } catch (Exception e) {
             e.printStackTrace();
         }
