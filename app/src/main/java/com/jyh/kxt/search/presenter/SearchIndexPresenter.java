@@ -89,17 +89,15 @@ public class SearchIndexPresenter extends BasePresenter {
         }
         SystemUtil.closeSoftInputWindow((Activity) mContext);
     }
-
     public void saveSearchHistory(String searchKey) {
         String str = SPUtils.getString(mContext, SpConstant.SEARCH_HISTORY_ALL);
-        if (str.contains(searchKey)) return;
-//        StringBuffer history = new StringBuffer(str);
-//        if (history.length() > 0) {
-//            history.append(",").append(searchKey);
-//        } else {
-//            history.append(searchKey);
-//        }
-        str=searchKey+","+str;
+        String[] split = str.split(",");
+        for (String s : split) {
+            if (s.equals(searchKey)) {
+                str=str.replace(searchKey+",","");
+            }
+        }
+        str =searchKey+","+ str;
         SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_ALL, str);
         init();
     }

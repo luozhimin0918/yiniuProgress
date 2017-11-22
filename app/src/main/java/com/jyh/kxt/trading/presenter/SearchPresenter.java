@@ -192,10 +192,10 @@ public class SearchPresenter extends BasePresenter {
     public void addHistory(QuoteItemJson quote) {
         Set<String> historySet = new HashSet<>(SPUtils.getStringSet(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET));
         if (quote == null) return;
-        historySet.add(JSON.toJSONString(quote));
-
+        String key = JSON.toJSONString(quote);
+        if(historySet.contains(key)) historySet.remove(key);
         Set<String> set=new HashSet<>();
-        set.add(JSON.toJSONString(quote));
+        set.add(key);
         set.addAll(historySet);
 
         SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_POINT_MARKET, set);

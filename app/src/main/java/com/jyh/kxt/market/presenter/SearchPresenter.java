@@ -69,14 +69,13 @@ public class SearchPresenter extends BasePresenter {
      */
     private void saveSearchHistory(String key) {
         String str = SPUtils.getString(mContext, SpConstant.SEARCH_HISTORY_MARKET);
-        if (str.contains(key)) return;
-//        StringBuffer history = new StringBuffer(str);
-//        if (history.length() > 0) {
-//            history.append(",").append(key);
-//        } else {
-//            history.append(key);
-//        }
-        str=key+","+str;
+        String[] split = str.split(",");
+        for (String s : split) {
+            if (s.equals(key)) {
+                str=str.replace(key+",","");
+            }
+        }
+        str =key+","+ str;
         SPUtils.save(mContext, SpConstant.SEARCH_HISTORY_MARKET, str);
     }
 

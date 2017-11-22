@@ -117,7 +117,7 @@ public class SearchPresenter extends BasePresenter {
             String[] split = searchHistory.split(",");
             for (String s : split) {
                 if (s.equals(searchKey)) {
-                    return;
+                    searchHistory=searchHistory.replace(searchKey+",","");
                 }
             }
             searchHistory =searchKey+","+ searchHistory;
