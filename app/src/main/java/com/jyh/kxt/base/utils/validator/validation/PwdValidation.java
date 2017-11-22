@@ -24,7 +24,7 @@ public class PwdValidation extends ValidationExecutor {
             return false;
         }
         if (pwd.length() < 6 || pwd.length() > 18) {
-            errorInfo = "请输入6 - 18位密码";
+            errorInfo = "请输入6 - 16位密码";
             return false;
         }
         String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)(?![`~!@#$%^&*()+=|{}_':;',\\\\\\\\[\\\\\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？])" +
