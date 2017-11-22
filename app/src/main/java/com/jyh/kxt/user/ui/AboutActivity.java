@@ -120,7 +120,7 @@ public class AboutActivity extends BaseActivity {
             StringBuilder mHideBuffer = new StringBuilder();
 
             String system = PhoneInfo.getSystem();
-            mHideBuffer.append(String.valueOf("当前系统:" + system + "\n"));
+            mHideBuffer.append(String.valueOf("当前系统（补丁）:" + system + "\n"));
 
             if (PhoneInfo.SYS_EMUI.equals(system)) {
                 String token = SPUtils.getString(this, SpConstant.HUAWEI_TOKEN);

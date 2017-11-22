@@ -139,9 +139,9 @@ public class MarketFragment extends BaseFragment implements OnTabSelectListener 
 
     private void replaceFragment(BaseFragment toFragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        if (!toFragment.isAdded()) {
-            transaction.setCustomAnimations(R.anim.fragment_anim2, R.anim.fragment_anim1);
-        }
+//        if (!toFragment.isAdded()) {
+//            transaction.setCustomAnimations(R.anim.fragment_anim2, R.anim.fragment_anim1);
+//        }
 
         if (lastFragment != null) {
             transaction.hide(lastFragment);
