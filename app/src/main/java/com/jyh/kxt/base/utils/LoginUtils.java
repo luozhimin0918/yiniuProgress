@@ -10,19 +10,16 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.jyh.kxt.base.BaseActivity;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.constant.SpConstant;
-import com.jyh.kxt.base.utils.bean.LoginBean;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.index.json.MainInitJson;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.BindActivity;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
-import com.library.base.http.PreCacheHttpResponse;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
 import com.library.bean.EventBusClass;
@@ -61,7 +58,11 @@ public class LoginUtils {
      * @param userInfo
      */
     public static void changeUserInfo(Context context, UserJson userInfo) {
-        SPUtils.save(context, SpConstant.USERINFO, JSON.toJSONString(userInfo));
+        String value = JSON.toJSONString(userInfo);
+        if("null".equals(value) || TextUtils.isEmpty(value)){
+            value  = "";
+        }
+        SPUtils.save(context, SpConstant.USERINFO, value);
 
 //        setPushTag(context, userInfo);
     }
@@ -104,7 +105,7 @@ public class LoginUtils {
      */
     public static boolean isLogined(Context context) {
         String userInfo = SPUtils.getString(context, SpConstant.USERINFO);
-        if (TextUtils.isEmpty(userInfo)) {
+        if ("null".equals(userInfo) || TextUtils.isEmpty(userInfo)) {
             return false;
         } else {
             return true;

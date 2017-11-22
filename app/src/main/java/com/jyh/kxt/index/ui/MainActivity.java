@@ -744,8 +744,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
                     // "4":图片缩放比例,默认“1”。
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable>
-                                glideAnimation) {
+                        public void onResourceReady(GlideDrawable resource,
+                                                    GlideAnimation<? super GlideDrawable> glideAnimation) {
                             loginView.setBackground(resource);
                         }
                     });

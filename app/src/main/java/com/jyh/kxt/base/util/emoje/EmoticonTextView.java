@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 public class EmoticonTextView extends TextView {
 
     private int emoJeSize = SystemUtil.dp2px(getContext(), 60);
-    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 23);
+    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 20);
 
 
     public EmoticonTextView(Context context) {

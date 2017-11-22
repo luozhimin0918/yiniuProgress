@@ -53,7 +53,7 @@ import rx.schedulers.Schedulers;
 public class EmoticonSimpleTextView extends TextView {
 
     private int emoJeSize = SystemUtil.dp2px(getContext(), 60);
-    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 25);
+    private int emoJeSize2 = SystemUtil.dp2px(getContext(), 20);
 
     private boolean linkHit;
     private boolean dontConsumeNonUrlClicks = true;

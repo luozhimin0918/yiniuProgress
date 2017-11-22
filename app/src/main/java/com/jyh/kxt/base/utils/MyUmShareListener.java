@@ -46,7 +46,7 @@ public class MyUmShareListener implements UMShareListener {
         if (popupWindow != null) {
             popupWindow.dismiss();
         }
-        postAddCoins();
+//        postAddCoins();
     }
 
     @Override

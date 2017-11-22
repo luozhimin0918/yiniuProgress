@@ -204,38 +204,42 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 PushUtil.pushToMainActivity(this);
                 break;
             case R.id.rl_comment:
-                //获取评论所在位置
-                if (mCommentPosition == 0) {
-                    mCommentPosition = commentPresenter.tvCommentCountTitle.getTop();
-                }
-
-                int lastVisiblePosition = ptrLvMessage.getRefreshableView().getLastVisiblePosition();
-
-                int autoScrollPosition;
-                //adapter getCount 数量为3 或者以下的情况 不存在评论数据
-                if (ptrLvMessage.getRefreshableView().getAdapter().getCount() > 3) {
-                    autoScrollPosition = 2;
-
-                    if (lastVisiblePosition < 2) {
-                        mWebScrollPosition = getListViewScrollPosition();
-                        ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
-                    } else {
-                        ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
-
-                        int mScrollY = mCommentPosition - mWebScrollPosition;
-                        ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 800);
+                try {
+                    //获取评论所在位置
+                    if (mCommentPosition == 0) {
+                        mCommentPosition = commentPresenter.tvCommentCountTitle.getTop();
                     }
 
-                } else {
-                    if (isCommentNotScroll) {
-                        mWebScrollPosition = getListViewScrollPosition();
-                        ptrLvMessage.getRefreshableView().smoothScrollBy(Math.abs(mCommentPosition), 800);
-                        isCommentNotScroll = false;
+                    int lastVisiblePosition = ptrLvMessage.getRefreshableView().getLastVisiblePosition();
+
+                    int autoScrollPosition;
+                    //adapter getCount 数量为3 或者以下的情况 不存在评论数据
+                    if (ptrLvMessage.getRefreshableView().getAdapter().getCount() > 3) {
+                        autoScrollPosition = 2;
+
+                        if (lastVisiblePosition < 2) {
+                            mWebScrollPosition = getListViewScrollPosition();
+                            ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
+                        } else {
+                            ptrLvMessage.getRefreshableView().setSelection(autoScrollPosition);
+
+                            int mScrollY = mCommentPosition - mWebScrollPosition;
+                            ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 800);
+                        }
+
                     } else {
-                        int mScrollY = mCommentPosition - mWebScrollPosition;
-                        ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 800);
-                        isCommentNotScroll = true;
+                        if (isCommentNotScroll) {
+                            mWebScrollPosition = getListViewScrollPosition();
+                            ptrLvMessage.getRefreshableView().smoothScrollBy(Math.abs(mCommentPosition), 800);
+                            isCommentNotScroll = false;
+                        } else {
+                            int mScrollY = mCommentPosition - mWebScrollPosition;
+                            ptrLvMessage.getRefreshableView().smoothScrollBy(-Math.abs(mScrollY), 800);
+                            isCommentNotScroll = true;
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 break;

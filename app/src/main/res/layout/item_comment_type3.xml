@@ -81,10 +81,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_je_sao"
-        android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
         android:text="回复 岁月警号 你说的太对了 攒一个"
         android:textColor="@color/font_color64"
-
         android:textSize="@dimen/describe_font_size4"/>
 
     <LinearLayout

@@ -399,4 +399,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
+    <!--适配1440-->
+    <dimen name="video_item_height">200dp</dimen>
 </resources>

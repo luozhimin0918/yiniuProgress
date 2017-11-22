@@ -2,6 +2,7 @@ package com.jyh.kxt.user.ui;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -32,6 +34,7 @@ import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.PopupUtil;
 import com.jyh.kxt.base.util.SoftKeyBoardListener;
 import com.jyh.kxt.base.utils.LoginUtils;
+import com.jyh.kxt.base.widget.night.ThemeUtil;
 import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.EditUserInfoPresenter;
 import com.library.base.http.VarConstant;
@@ -358,13 +361,33 @@ public class EditUserInfoActivity extends BaseActivity implements SoftKeyBoardLi
                     }
                     startActivity(intent);
                 } else {
-                    Intent phontIntent2 = new Intent(this, BindActivity.class);
                     if (LoginUtils.getUserInfo(this).isSetPhone()) {
+                        Intent phontIntent2 = new Intent(this, BindActivity.class);
                         phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_CHANGE_PHONE);
+                        startActivity(phontIntent2);
                     } else {
-                        phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                        new AlertDialog.Builder(EditUserInfoActivity.this,
+                                ThemeUtil.getAlertTheme(EditUserInfoActivity.this))
+
+                                .setPositiveButton("是",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent phontIntent2 = new Intent(EditUserInfoActivity.this, BindActivity.class);
+                                                phontIntent2.putExtra(BindActivity.TYPE, BindActivity.TYPE_BIND_PHONE);
+                                                startActivity(phontIntent2);
+                                            }
+                                        })
+                                .setNegativeButton("否",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                            }
+                                        })
+                                .setTitle("提示")
+                                .setMessage("为了保证您的账号安全，请先绑定手机号。")
+                                .show();
                     }
-                    startActivity(phontIntent2);
                 }
                 break;
         }

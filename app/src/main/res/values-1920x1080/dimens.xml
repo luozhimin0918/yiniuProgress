@@ -1,0 +1,7 @@
+<resources>
+    <!--适配1440-->
+    <dimen name="video_item_height">230dp</dimen>
+
+    <dimen name="index_slide">207dp</dimen>
+    <dimen name="av_video_height">235dp</dimen>
+</resources>
