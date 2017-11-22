@@ -18,6 +18,7 @@ import com.jyh.kxt.base.utils.validator.validation.EmailOrPhoneValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
+import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.presenter.ForgetPwdPresenter;
 import com.library.base.http.VarConstant;
 import com.library.util.NetUtils;
@@ -132,23 +133,49 @@ public class ForgetPwdActivity extends BaseActivity {
                     } else {
                         if (NetUtils.isNetworkAvailable(this)) {
                             if (editTextValidator.validate()) {
-                                showWaitDialog(null);
-                                LoginUtils.changePwd(forgetPwdPresenter, forgetPwdPresenter.getStepOneJson().getString("edt1Text"), "",
-                                        edtPwd.getEdtText(),
-                                        forgetPwdPresenter.getClass().getName(), new ObserverData() {
+                                if (edtEmail.getEdtText().equals(edtPwd.getEdtText())) {
 
-                                            @Override
-                                            public void callback(Object o) {
-                                                dismissWaitDialog();
-                                                ToastView.makeText(getContext(), "设置成功");
-                                            }
+                                    showWaitDialog(null);
+                                    final String user = forgetPwdPresenter.getStepOneJson().getString("edt1Text");
+                                    final String pwd = edtPwd.getEdtText();
+                                    LoginUtils.changePwd(forgetPwdPresenter, user, "",
+                                            pwd,
+                                            forgetPwdPresenter.getClass().getName(), new ObserverData() {
 
-                                            @Override
-                                            public void onError(Exception e) {
-                                                dismissWaitDialog();
-                                                ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e.getMessage());
-                                            }
-                                        });
+                                                @Override
+                                                public void callback(Object o) {
+                                                    LoginUtils.requestLogin(forgetPwdPresenter, user, pwd, VarConstant
+                                                            .LOGIN_TYPE_DEFAULT, forgetPwdPresenter.getClass().getName(), new
+                                                            ObserverData<UserJson>() {
+
+                                                        @Override
+                                                        public void callback(UserJson userJson) {
+                                                            dismissWaitDialog();
+                                                            ToastView.makeText(getContext(), "登录成功");
+                                                            LoginUtils.login(getContext(), userJson);
+                                                            finish();
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Exception e) {
+                                                            ToastView.makeText(getContext(), "密码设置成功,自动登录失败 " + e == null || e.getMessage
+                                                                    () == null ? "" : e.getMessage());
+                                                            finish();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onError(Exception e) {
+                                                    dismissWaitDialog();
+                                                    ToastView.makeText(getContext(), e == null || e.getMessage() == null ? "设置失败" : e
+                                                            .getMessage());
+                                                }
+                                            });
+
+                                } else {
+                                    edtPwd.setErrorInfo("密码不一致");
+                                }
                             }
                         } else
                             ToastView.makeText3(this, "暂无网络,请稍后再试");
@@ -185,7 +212,7 @@ public class ForgetPwdActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(forgetPwdPresenter!=null)
+        if (forgetPwdPresenter != null)
             forgetPwdPresenter.onDestroy();
         getQueue().cancelAll(forgetPwdPresenter.getClass().getName());
     }
