@@ -23,7 +23,7 @@ public class PwdValidation extends ValidationExecutor {
             errorInfo = "密码不能为空";
             return false;
         }
-        if (pwd.length() < 6 || pwd.length() > 18) {
+        if (pwd.length() < 6 || pwd.length() > 16) {
             errorInfo = "请输入6 - 16位密码";
             return false;
         }
