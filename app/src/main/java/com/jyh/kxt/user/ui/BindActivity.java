@@ -185,7 +185,7 @@ public class BindActivity extends BaseActivity {
                                 }
                             });
                         } else {
-                            if (edtEmail.getEdtText().equals(edtPwd2.getEdtText())) {
+                            if (edtPwd1.getEdtText().equals(edtPwd2.getEdtText())) {
                                 bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
                                     @Override
                                     public void callback(Object o) {
@@ -304,7 +304,7 @@ public class BindActivity extends BaseActivity {
                                 }
                             });
                         } else {
-                            if (edtEmail.getEdtText().equals(edtPwd2.getEdtText())) {
+                            if (edtPwd1.getEdtText().equals(edtPwd2.getEdtText())) {
                                 bindPresenter.step3(edtEmail.getEdtText(), edtPwd2.getEdtText(), new ObserverData() {
                                     @Override
                                     public void callback(Object o) {
