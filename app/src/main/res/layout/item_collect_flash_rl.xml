@@ -82,7 +82,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textSize="@dimen/describe_font_size3"
-                    android:text="@string/date_describe"
+                    android:text="@string/date_describe1"
                     android:textColor="@color/font_color3"/>
 
                 <RelativeLayout

@@ -619,6 +619,7 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
     /**
      * 筛选
+     *
      * @param isFilterHeight
      */
     public void filtrate(boolean isFilterHeight) {

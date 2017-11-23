@@ -11,9 +11,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="date_describe">前值:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;&#160;&#160;预测:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;&#160;&#160;公布:<xliff:g id="yyy">%s</xliff:g></string>
+    <string name="date_describe1">前值:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;&#160;&#160;预测:<xliff:g id="yyy">%s</xliff:g>&#160;&#160;&#160;&#160;实际:<xliff:g id="yyy">%s</xliff:g></string>
+
     <string name="date_describe_Before">前值:<xliff:g id="yyy">%s</xliff:g></string>
     <string name="date_describe_Forecast">预测:<xliff:g id="yyy">%s</xliff:g></string>
     <string name="date_describe_Reality">公布:<xliff:g id="yyy">%s</xliff:g></string>
+    <string name="date_describe_Reality1">实际:<xliff:g id="yyy">%s</xliff:g></string>
 
     <string name="no_data">无更多数据</string>
     <string name="error_collect_null">你还没有任何收藏</string>

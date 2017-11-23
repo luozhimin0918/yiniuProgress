@@ -483,7 +483,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 rlHolder.tvTime.setText(time2);
 
                 rlHolder.tvTitle.setText(getString(rl.getTitle()));
-                rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe, rl.getBefore(), rl.getForecast(), rl
+                rlHolder.tvContent.setText(context.getResources().getString(R.string.date_describe1, rl.getBefore(), rl.getForecast(), rl
                         .getReality()));
                 rlHolder.tvMore.setVisibility(View.GONE);
                 rlHolder.ivMore.setVisibility(View.GONE);
@@ -493,7 +493,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                 /**
                  * 前值 后值 等
                  */
-                String describe = context.getResources().getString(R.string.date_describe,
+                String describe = context.getResources().getString(R.string.date_describe1,
                         rl.getBefore(),
                         rl.getForecast(),
                         rl.getReality());
@@ -846,7 +846,7 @@ public class CollectFlashAdapter extends BaseAdapter implements FastInfoPinnedLi
                         case VarConstant.SOCKET_FLASH_CJRL:
                             Flash_RL rl = JSON.parseObject(flash.getContent().toString(), Flash_RL.class);
                             title = rl.getTitle();
-                            discription = context.getResources().getString(R.string.date_describe,
+                            discription = context.getResources().getString(R.string.date_describe1,
                                     rl.getBefore(),
                                     rl.getForecast(),
                                     rl.getReality());

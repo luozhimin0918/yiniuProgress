@@ -88,7 +88,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private List flashJsons;
     private Context context;
 
-    private List<FlashJson> baseFlashArrayList = new ArrayList<>();
+    private List<Object> baseFlashArrayList = new ArrayList<>();
 
     public FastInfoAdapter(List<FlashJson> flashJsons, final Context context) {
 
@@ -124,7 +124,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         config.animationStyle = R.style.PopupWindow_Style1;
 
-        inspiritDateInfo(this.flashJsons);
         justLookImportant();
     }
 
@@ -133,16 +132,23 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      */
     private void filterNullData() {
         if (flashJsons != null) {
-            Iterator<FlashJson> iterator = flashJsons.iterator();
+            Iterator<Object> iterator = flashJsons.iterator();
             while (iterator.hasNext()) {
-                FlashJson next = iterator.next();
-                if (next == null || next.getContent() == null) {
-                    iterator.remove();
+                try {
+                    Object next = iterator.next();
+                    if (next instanceof FlashJson) {
+                        FlashJson mConvertFlash = (FlashJson) next;
+                        if (next == null || mConvertFlash.getContent() == null) {
+                            iterator.remove();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
             for (Object flash : flashJsons) {
-                if(flash instanceof  FlashJson){
+                if (flash instanceof FlashJson) {
                     FlashJson mConvertFlash = (FlashJson) flash;
                     if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
                         mConvertFlash.setColloct(true);
@@ -154,6 +160,9 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
     }
 
+    /**
+     * 过滤重要数据
+     */
     public void justLookImportant() {
         try {
             this.flashJsons.clear();
@@ -162,26 +171,66 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
             for (int i = 0; i < baseFlashArrayList.size(); i++) {
 
-                FlashJson flashJson = baseFlashArrayList.get(i);
+                Object mFlashObj = baseFlashArrayList.get(i);
+                if (mFlashObj != null) {
+                    if (mFlashObj instanceof FlashJson) {
+                        FlashJson flashJson = (FlashJson) mFlashObj;
+                        boolean mIsCalendarData = VarConstant.SOCKET_FLASH_CJRL.equals(flashJson.getCode());
+                        if (mIsCalendarData) {//类型是财经日历
+                            if (onlyShowHigh) { //开启只看重要
+                                String content = flashJson.getContent();
+                                Flash_RL mFlashRl = JSON.parseObject(content, Flash_RL.class);
 
-                boolean mIsCalendarData = VarConstant.SOCKET_FLASH_CJRL.equals(flashJson.getCode());
-                if (mIsCalendarData) {//类型是财经日历
-                    if (onlyShowHigh) { //开启只看重要
-                        String content = flashJson.getContent();
-                        Flash_RL mFlashRl = JSON.parseObject(content, Flash_RL.class);
-
-                        if (!VarConstant.IMPORTANCE_HIGH.equals(mFlashRl.getImportance())) {
-                            Log.e("符合", "justLookImportant: ");
-                            continue;
+                                if (!VarConstant.IMPORTANCE_HIGH.equals(mFlashRl.getImportance())) {
+                                    Log.e("符合", "justLookImportant: ");
+                                    continue;
+                                }
+                            }
                         }
                     }
                 }
+                this.flashJsons.add(mFlashObj);
+            }
+            inspiritDateInfo(this.flashJsons);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-                this.flashJsons.add(flashJson);
+    /**
+     * 过滤重要数据
+     */
+    public List justLookImportant(List<FlashJson> objList) {
+        List mNewLookList = new ArrayList();
+        try {
+            boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
+
+            for (int i = 0; i < objList.size(); i++) {
+                Object mFlashObj = objList.get(i);
+                if (mFlashObj != null) {
+                    if (mFlashObj instanceof FlashJson) {
+                        FlashJson flashJson = (FlashJson) mFlashObj;
+                        boolean mIsCalendarData = VarConstant.SOCKET_FLASH_CJRL.equals(flashJson.getCode());
+                        if (mIsCalendarData) {//类型是财经日历
+                            if (onlyShowHigh) { //开启只看重要
+                                String content = flashJson.getContent();
+                                Flash_RL mFlashRl = JSON.parseObject(content, Flash_RL.class);
+
+                                if (!VarConstant.IMPORTANCE_HIGH.equals(mFlashRl.getImportance())) {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+                mNewLookList.add(mFlashObj);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        objList.clear();
+        objList.addAll(mNewLookList);
+        return objList;
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -207,11 +256,12 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         this.flashJsons.clear();
         this.flashJsons.addAll(flashJsons);
-        inspiritDateInfo(this.flashJsons);
+
+        baseFlashArrayList.clear();
+        baseFlashArrayList.addAll(this.flashJsons);
 
         justLookImportant();
 
-        baseFlashArrayList.addAll(flashJsons);
         notifyDataSetChanged();
     }
 
@@ -229,10 +279,11 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         }
 
         this.flashJsons.add(1, flashJson);
+        this.baseFlashArrayList.add(1, flashJson);
         notifyDataSetChanged();
     }
 
-    public void addData(List<FlashJson> flashJsons) {
+    public void addData(final List<FlashJson> flashJsons) {
 
         if (flashJsons == null) return;
 
@@ -252,14 +303,42 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 flash.setColloct(false);
             }
         }
-
         inspiritDateInfo2(flashJsons);
-        this.flashJsons.addAll(flashJsons);
-        baseFlashArrayList.addAll(flashJsons);
+        FastInfoAdapter.this.flashJsons.addAll(flashJsons);
 
-        justLookImportant();
+        justLookImportant(FastInfoAdapter.this.flashJsons);
+
+        FastInfoAdapter.this.baseFlashArrayList.addAll(flashJsons);
+
+//        inspiritDateInfo2(FastInfoAdapter.this.flashJsons);
 
         notifyDataSetChanged();
+
+       /* Observable<SingleThreadJson> observable = Observable.create(new Observable
+                .OnSubscribe<SingleThreadJson>() {
+            @Override
+            public void call(Subscriber<? super SingleThreadJson> subscriber) {
+
+
+                subscriber.onCompleted();
+            }
+        });
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SingleThreadJson>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(SingleThreadJson jsonStr) {
+                    }
+                });*/
     }
 
     /**
@@ -587,7 +666,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     rlHolder.tvContentForecast.setText(context.getResources().getString(R.string
                             .date_describe_Forecast, rl.getForecast()));
                     rlHolder.tvContentReality.setText(context.getResources().getString(R.string
-                            .date_describe_Reality, rl.getReality()));
+                            .date_describe_Reality1, rl.getReality()));
                     rlHolder.tvMore.setVisibility(View.GONE);
                     rlHolder.ivMore.setVisibility(View.GONE);
 
@@ -596,7 +675,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                     /**
                      * 前值 后值 等
                      */
-                    String describe = context.getResources().getString(R.string.date_describe_Reality, rl.getReality());
+                    String describe = context.getResources().getString(R.string.date_describe_Reality1, rl.getReality());
 
                     final String reality = rl.getReality();
                     setDescribeForegroundColor(rlHolder.tvContentReality, describe, reality);
@@ -913,7 +992,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                         case VarConstant.SOCKET_FLASH_CJRL:
                             Flash_RL rl = JSON.parseObject(flash.getContent().toString(), Flash_RL.class);
                             title = rl.getTitle();
-                            discription = context.getResources().getString(R.string.date_describe,
+                            discription = context.getResources().getString(R.string.date_describe1,
                                     rl.getBefore(),
                                     rl.getForecast(),
                                     rl.getReality());
@@ -1295,35 +1374,38 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         int size = flashJsons.size();
         for (int i = 0; i < size; i++) {
-            FlashJson flashJson = (FlashJson) flashJsons.get(i);
-            Object content = flashJson.getContent();
-            String code = flashJson.getCode();
-            if (content == null) return;
-            String time = "";
-            switch (code) {
-                case VarConstant.SOCKET_FLASH_CJRL:
-                    //日历
-                    time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KUAIXUN:
-                    //快讯
-                    time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
-                    break;
-                case VarConstant.SOCKET_FLASH_KXTNEWS:
-                    //图文
-                    time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
-                    break;
-            }
+            Object mConvertFlash = flashJsons.get(i);
+            if (mConvertFlash instanceof FlashJson) {
+                FlashJson flashJson = (FlashJson) mConvertFlash;
+                Object content = flashJson.getContent();
+                String code = flashJson.getCode();
+                if (content == null) return;
+                String time = "";
+                switch (code) {
+                    case VarConstant.SOCKET_FLASH_CJRL:
+                        //日历
+                        time = JSON.parseObject(content.toString(), Flash_RL.class).getTime();
+                        break;
+                    case VarConstant.SOCKET_FLASH_KUAIXUN:
+                        //快讯
+                        time = JSON.parseObject(content.toString(), Flash_KX.class).getTime();
+                        break;
+                    case VarConstant.SOCKET_FLASH_KXTNEWS:
+                        //图文
+                        time = JSON.parseObject(content.toString(), Flash_NEWS.class).getTime();
+                        break;
+                }
 
-            if (!TextUtils.isEmpty(time)) {
+                if (!TextUtils.isEmpty(time)) {
 
-                String MD = DateUtils.getYMDWeek(time);
-                if (!timeMap.containsKey(MD)) {
-                    timeMap.put(MD, i);
-                    if (i < size) {
-                        flashJsons.add(i, MD);
-                    } else {
-                        flashJsons.add(MD);
+                    String MD = DateUtils.getYMDWeek(time);
+                    if (!timeMap.containsKey(MD)) {
+                        timeMap.put(MD, i);
+                        if (i < size) {
+                            flashJsons.add(i, MD);
+                        } else {
+                            flashJsons.add(MD);
+                        }
                     }
                 }
             }
@@ -1396,13 +1478,13 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     /**
      * 筛选
+     *
      * @param isFilterHeight
      */
     public void filtrate(boolean isFilterHeight) {
-        if(isFilterHeight){
+        if (isFilterHeight) {
             justLookImportant();
             filterNullData();
-            inspiritDateInfo(flashJsons);
         }
         notifyDataSetChanged();
     }

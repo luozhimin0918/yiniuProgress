@@ -81,7 +81,7 @@
             android:maxLines="1"
             android:gravity="right"
             android:textSize="@dimen/describe_font_size3"
-            android:text="@string/date_describe_Reality"
+            android:text="@string/date_describe_Reality1"
             android:textColor="@color/font_color3"/>
     </LinearLayout>
 

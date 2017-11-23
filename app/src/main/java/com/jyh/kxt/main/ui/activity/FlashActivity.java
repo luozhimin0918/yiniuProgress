@@ -447,7 +447,7 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
         layoutRL.setVisibility(View.VISIBLE);
 
         Flash_RL rl = JSON.parseObject(content, Flash_RL.class);
-        discription = getResources().getString(R.string.date_describe,
+        discription = getResources().getString(R.string.date_describe1,
                 rl.getBefore(),
                 rl.getForecast(),
                 rl.getReality());
@@ -471,12 +471,12 @@ public class FlashActivity extends BaseActivity implements PageLoadLayout.OnAfre
 
         tvContentBefore.setText(this.getResources().getString(R.string.date_describe_Before, rl.getBefore()));
         tvContentForecast.setText(this.getResources().getString(R.string.date_describe_Forecast, rl.getForecast()));
-        tvContentReality.setText(this.getResources().getString(R.string.date_describe_Reality, rl.getReality()));
+        tvContentReality.setText(this.getResources().getString(R.string.date_describe_Reality1, rl.getReality()));
 
         /**
          * 前值 后值 等
          */
-        String describe = this.getResources().getString(R.string.date_describe_Reality, rl.getReality());
+        String describe = this.getResources().getString(R.string.date_describe_Reality1, rl.getReality());
 
 
         String reality = rl.getReality();
