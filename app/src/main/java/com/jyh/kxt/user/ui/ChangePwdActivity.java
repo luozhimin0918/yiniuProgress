@@ -2,30 +2,18 @@ package com.jyh.kxt.user.ui;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.constant.HttpConstant;
 import com.jyh.kxt.base.custom.DiscolorButton;
-import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
+import com.jyh.kxt.base.utils.validator.validation.PwdOldValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
-import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
-import com.jyh.kxt.base.widget.PwdEditText;
 import com.jyh.kxt.user.presenter.ChangePwdPresenter;
-import com.library.base.http.HttpListener;
-import com.library.base.http.VolleyRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -81,7 +69,7 @@ public class ChangePwdActivity extends BaseActivity {
             edtPwdOld.setHintText("旧密码");
             editTextValidator = new EditTextValidator(getContext())
                     .setButton(changeBtn)
-                    .add(new ValidationModel(edtPwdOld, new PwdValidation()))
+                    .add(new ValidationModel(edtPwdOld, new PwdOldValidation()))
                     .add(new ValidationModel(edtPwdNew, new PwdValidation()))
                     .add(new ValidationModel(edtPwdRe, new PwdValidation()))
                     .execute();

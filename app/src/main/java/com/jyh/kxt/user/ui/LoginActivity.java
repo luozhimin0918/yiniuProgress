@@ -12,15 +12,13 @@ import android.widget.ScrollView;
 
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BaseActivity;
-import com.jyh.kxt.base.annotation.ObserverData;
 import com.jyh.kxt.base.custom.DiscolorButton;
-import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.utils.UmengShareUI;
 import com.jyh.kxt.base.utils.validator.EditTextValidator;
 import com.jyh.kxt.base.utils.validator.ValidationModel;
 import com.jyh.kxt.base.utils.validator.validation.PhoneValidation;
 import com.jyh.kxt.base.utils.validator.validation.PwdDynamicValidation;
-import com.jyh.kxt.base.utils.validator.validation.PwdValidation;
+import com.jyh.kxt.base.utils.validator.validation.PwdOldValidation;
 import com.jyh.kxt.base.utils.validator.validation.UserNameValidation;
 import com.jyh.kxt.base.widget.FunctionEditText;
 import com.jyh.kxt.user.presenter.LoginPresenter;
@@ -78,7 +76,7 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
         editTextValidator = new EditTextValidator(getContext())
                 .setButton(dbLogin)
                 .add(new ValidationModel(edtName, new UserNameValidation()))
-                .add(new ValidationModel(edtPwd, new PwdValidation()))
+                .add(new ValidationModel(edtPwd, new PwdOldValidation()))
                 .execute();
 
         String[] tabs = new String[]{"密码登录", "短信登录"};
@@ -253,14 +251,14 @@ public class LoginActivity extends BaseActivity implements NavigationTabLayout.O
                 editTextValidator = new EditTextValidator(getContext())
                         .setButton(dbLogin)
                         .add(new ValidationModel(edtName, new UserNameValidation()))
-                        .add(new ValidationModel(edtPwd, new PwdValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdOldValidation()))
                         .add(new ValidationModel(edtCode, new PwdDynamicValidation()))
                         .execute();
             } else {
                 editTextValidator = new EditTextValidator(getContext())
                         .setButton(dbLogin)
                         .add(new ValidationModel(edtName, new UserNameValidation()))
-                        .add(new ValidationModel(edtPwd, new PwdValidation()))
+                        .add(new ValidationModel(edtPwd, new PwdOldValidation()))
                         .execute();
             }
         } else {
