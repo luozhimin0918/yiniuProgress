@@ -10,6 +10,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,30 +88,21 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     private List flashJsons;
     private Context context;
 
+    private List<FlashJson> baseFlashArrayList = new ArrayList<>();
+
     public FastInfoAdapter(List<FlashJson> flashJsons, final Context context) {
 
         if (flashJsons != null) {
-            Iterator<FlashJson> iterator = flashJsons.iterator();
-            while (iterator.hasNext()) {
-                FlashJson next = iterator.next();
-                if (next == null || next.getContent() == null) {
-                    iterator.remove();
-                }
-            }
-
-            for (FlashJson flash : flashJsons) {
-                if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
-                    flash.setColloct(true);
-                } else {
-                    flash.setColloct(false);
-                }
-            }
+            baseFlashArrayList.addAll(flashJsons);
         }
+
+        filterNullData();
 
         this.flashJsons = flashJsons;
         this.context = context;
         DisplayMetrics screenDisplay = SystemUtil.getScreenDisplay(context);
         imgMaxHeight = screenDisplay.heightPixels / 3;
+
 
         popupUtil = new PopupUtil((Activity) context);
         View inflate = popupUtil.createPopupView(R.layout.pop_img);
@@ -133,7 +125,63 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         config.animationStyle = R.style.PopupWindow_Style1;
 
         inspiritDateInfo(this.flashJsons);
+        justLookImportant();
+    }
 
+    /**
+     * 过滤非空数据和添加收藏状态
+     */
+    private void filterNullData() {
+        if (flashJsons != null) {
+            Iterator<FlashJson> iterator = flashJsons.iterator();
+            while (iterator.hasNext()) {
+                FlashJson next = iterator.next();
+                if (next == null || next.getContent() == null) {
+                    iterator.remove();
+                }
+            }
+
+            for (Object flash : flashJsons) {
+                if(flash instanceof  FlashJson){
+                    FlashJson mConvertFlash = (FlashJson) flash;
+                    if (CollectUtils.isCollect(context, VarConstant.COLLECT_TYPE_FLASH, flash)) {
+                        mConvertFlash.setColloct(true);
+                    } else {
+                        mConvertFlash.setColloct(false);
+                    }
+                }
+            }
+        }
+    }
+
+    public void justLookImportant() {
+        try {
+            this.flashJsons.clear();
+
+            boolean onlyShowHigh = SPUtils.getBoolean(context, SpConstant.FLASH_FILTRATE_HIGH);
+
+            for (int i = 0; i < baseFlashArrayList.size(); i++) {
+
+                FlashJson flashJson = baseFlashArrayList.get(i);
+
+                boolean mIsCalendarData = VarConstant.SOCKET_FLASH_CJRL.equals(flashJson.getCode());
+                if (mIsCalendarData) {//类型是财经日历
+                    if (onlyShowHigh) { //开启只看重要
+                        String content = flashJson.getContent();
+                        Flash_RL mFlashRl = JSON.parseObject(content, Flash_RL.class);
+
+                        if (!VarConstant.IMPORTANCE_HIGH.equals(mFlashRl.getImportance())) {
+                            Log.e("符合", "justLookImportant: ");
+                            continue;
+                        }
+                    }
+                }
+
+                this.flashJsons.add(flashJson);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Map<String, Integer> timeMap = new HashMap<>();
@@ -160,6 +208,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         this.flashJsons.clear();
         this.flashJsons.addAll(flashJsons);
         inspiritDateInfo(this.flashJsons);
+
+        justLookImportant();
+
+        baseFlashArrayList.addAll(flashJsons);
         notifyDataSetChanged();
     }
 
@@ -203,6 +255,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
         inspiritDateInfo2(flashJsons);
         this.flashJsons.addAll(flashJsons);
+        baseFlashArrayList.addAll(flashJsons);
+
+        justLookImportant();
+
         notifyDataSetChanged();
     }
 
@@ -1078,7 +1134,7 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
                 Set<String> set = SPUtils.getStringSet(context, SpConstant.FLASH_FILTRATE);
                 for (int i = 0; i < effect0Split.length; i++) {
                     String splitTrim = effect0Split[i].trim();
-                    if("外汇".equals(splitTrim)){
+                    if ("外汇".equals(splitTrim)) {
                         splitTrim = "美元";
                     }
                     if (set.size() == 0 ||
@@ -1197,7 +1253,6 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         size = flashJsons.size();
 
         for (int i = 0; i < size; i++) {
-            Object obj = flashJsons.get(i);
             FlashJson flashJson = (FlashJson) flashJsons.get(i);
             Object content = flashJson.getContent();
             String code = flashJson.getCode();
@@ -1341,8 +1396,14 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
 
     /**
      * 筛选
+     * @param isFilterHeight
      */
-    public void filtrate() {
+    public void filtrate(boolean isFilterHeight) {
+        if(isFilterHeight){
+            justLookImportant();
+            filterNullData();
+            inspiritDateInfo(flashJsons);
+        }
         notifyDataSetChanged();
     }
 
@@ -1350,7 +1411,8 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * 时间
      */
     class TimeViewHolder {
-        @BindView(R.id.tv_time_day) TextView tvTime;
+        @BindView(R.id.tv_time_day)
+        TextView tvTime;
 
         TimeViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -1362,8 +1424,10 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      */
     class KXViewHolder extends BaseViewHolder {
 
-        @BindView(R.id.iv_flash) ImageView imageView;
-        @BindView(R.id.ll_content) LinearLayout llContent;
+        @BindView(R.id.iv_flash)
+        ImageView imageView;
+        @BindView(R.id.ll_content)
+        LinearLayout llContent;
 
         public KXViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -1386,20 +1450,34 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
      * 日历
      */
     class RLViewHolder {
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.tv_describe_Before) TextView tvContentBefore;
-        @BindView(R.id.tv_describe_Forecast) TextView tvContentForecast;
-        @BindView(R.id.tv_describe_Reality) TextView tvContentReality;
-        @BindView(R.id.tv_more) TextView tvMore;
-        @BindView(R.id.iv_more) ImageView ivMore;
-        @BindView(R.id.iv_share) ImageView ivShare;
-        @BindView(R.id.iv_collect) ImageView ivCollect;
-        @BindView(R.id.v_line) View vLine;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.ll_exponent) LinearLayout llExponent;
-        @BindView(R.id.ll_star) StarView star;
-        @BindView(R.id.iv_guoqi) ImageView ivFlag;
-        @BindView(R.id.ll_more) LinearLayout llMore;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.tv_describe_Before)
+        TextView tvContentBefore;
+        @BindView(R.id.tv_describe_Forecast)
+        TextView tvContentForecast;
+        @BindView(R.id.tv_describe_Reality)
+        TextView tvContentReality;
+        @BindView(R.id.tv_more)
+        TextView tvMore;
+        @BindView(R.id.iv_more)
+        ImageView ivMore;
+        @BindView(R.id.iv_share)
+        ImageView ivShare;
+        @BindView(R.id.iv_collect)
+        ImageView ivCollect;
+        @BindView(R.id.v_line)
+        View vLine;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.ll_exponent)
+        LinearLayout llExponent;
+        @BindView(R.id.ll_star)
+        StarView star;
+        @BindView(R.id.iv_guoqi)
+        ImageView ivFlag;
+        @BindView(R.id.ll_more)
+        LinearLayout llMore;
 
         public RLViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -1407,14 +1485,22 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
     }
 
     class BaseViewHolder {
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.tv_content) TextView tvContent;
-        @BindView(R.id.tv_more) TextView tvMore;
-        @BindView(R.id.iv_more) ImageView ivMore;
-        @BindView(R.id.iv_share) ImageView ivShare;
-        @BindView(R.id.iv_collect) ImageView ivCollect;
-        @BindView(R.id.v_line) View vLine;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.tv_content)
+        TextView tvContent;
+        @BindView(R.id.tv_more)
+        TextView tvMore;
+        @BindView(R.id.iv_more)
+        ImageView ivMore;
+        @BindView(R.id.iv_share)
+        ImageView ivShare;
+        @BindView(R.id.iv_collect)
+        ImageView ivCollect;
+        @BindView(R.id.v_line)
+        View vLine;
 
-        @BindView(R.id.ll_more) LinearLayout llMore;
+        @BindView(R.id.ll_more)
+        LinearLayout llMore;
     }
 }

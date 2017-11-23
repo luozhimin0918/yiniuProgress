@@ -52,8 +52,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -621,9 +619,10 @@ public class FlashPresenter extends BasePresenter implements FastInfoPinnedListV
 
     /**
      * 筛选
+     * @param isFilterHeight
      */
-    public void filtrate() {
-        adapter.filtrate();
+    public void filtrate(boolean isFilterHeight) {
+        adapter.filtrate(isFilterHeight);
     }
 
     /**

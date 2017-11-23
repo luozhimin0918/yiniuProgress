@@ -2,39 +2,31 @@ package com.jyh.kxt.trading.presenter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.jyh.kxt.R;
 import com.jyh.kxt.base.BasePresenter;
 import com.jyh.kxt.base.IBaseView;
 import com.jyh.kxt.base.annotation.BindObject;
 import com.jyh.kxt.base.constant.HttpConstant;
-import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.constant.SpConstant;
 import com.jyh.kxt.base.custom.RollDotViewPager;
 import com.jyh.kxt.base.custom.RollViewPager;
-import com.jyh.kxt.base.json.AdItemJson;
 import com.jyh.kxt.base.utils.LoginUtils;
 import com.jyh.kxt.base.widget.AdView;
-import com.jyh.kxt.base.widget.night.heple.SkinnableTextView;
 import com.jyh.kxt.datum.bean.AdJson;
 import com.jyh.kxt.index.ui.AttentionActivity;
-import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.trading.adapter.HotHeadAdapter;
 import com.jyh.kxt.trading.adapter.ViewpointAdapter;
 import com.jyh.kxt.trading.json.ViewPointBean;
@@ -45,12 +37,10 @@ import com.jyh.kxt.user.json.UserJson;
 import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VolleyRequest;
-import com.library.util.RegexValidateUtil;
 import com.library.util.SPUtils;
 import com.library.util.SystemUtil;
 import com.library.widget.handmark.PullToRefreshBase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

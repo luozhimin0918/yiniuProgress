@@ -219,7 +219,7 @@
                     android:layout_height="@dimen/drawer_item_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:paddingLeft="@dimen/drawer_imgPadding">
 
                     <ImageView

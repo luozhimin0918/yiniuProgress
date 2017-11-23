@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
     private ImageView ivQQ, ivSina, ivWx;
     private FrameLayout searchEdt;
     private LinearLayout collectBtn, focusBtn, historyBtn, plBtn, activityBtn, shareBtn, settingBtn, aboutBtn,
-            themeBtn, loginBtn, quitBtn, mineBtn, pointBtn, letterBtn, coinBtn, fkBtn;
+            themeBtn, loginBtn, quitBtn, mineBtn,  letterBtn, coinBtn, fkBtn;
     private TextView tvTheme;
     private long oldClickNavigationTime;
 
@@ -280,7 +280,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         quitBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_quit);
         mineBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_mine);
         letterBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_letter);
-        pointBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_postPoint);
         coinBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_coin);
         fkBtn = (LinearLayout) llHeaderLayout.findViewById(R.id.ll_fk);
 
@@ -331,7 +330,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
         searchEdt.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
         mineBtn.setOnClickListener(this);
-        pointBtn.setOnClickListener(this);
         letterBtn.setOnClickListener(this);
         rlSign.setOnClickListener(this);
         coinBtn.setOnClickListener(this);
@@ -717,10 +715,8 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
 
             if (!RegexValidateUtil.isEmpty(userJson.getWriter_id()) && !RegexValidateUtil.isEmpty(userJson.getWriter_name())) {
                 mineBtn.setVisibility(View.VISIBLE);
-                pointBtn.setVisibility(View.VISIBLE);
             } else {
                 mineBtn.setVisibility(View.GONE);
-                pointBtn.setVisibility(View.GONE);
             }
 
             DrawableTypeRequest mLoadPicture;
@@ -773,7 +769,6 @@ public class MainActivity extends BaseActivity implements DrawerLayout.DrawerLis
             quitBtn.setVisibility(View.GONE);
 //            letterBtn.setVisibility(View.GONE);
             mineBtn.setVisibility(View.GONE);
-            pointBtn.setVisibility(View.GONE);
 //            coinBtn.setVisibility(View.GONE);
 
             loginPhoto.setImageResource(R.mipmap.icon_user_def_photo);

@@ -163,7 +163,7 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
     public void onEvent(EventBusClass eventBus) {
         switch (eventBus.fromCode) {
             case EventBusClass.EVENT_FLASH_FILTRATE:
-                flashPresenter.filtrate();
+//                flashPresenter.filtrate();
                 break;
             case EventBusClass.EVENT_COLLECT_FLASH:
                 FlashJson flash = (FlashJson) eventBus.intentObj;
@@ -351,12 +351,16 @@ public class FlashFragment extends BaseFragment implements PageLoadLayout.OnAfre
                     selectedMap.add("美元");
                 }
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE, selectedMap);
+
+                //如果只看高进行了改变
+                boolean mOldOnlyShowHigh = SPUtils.getBoolean(getContext(), SpConstant.FLASH_FILTRATE_HIGH);
+
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_HIGH, onlyShowHigh);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_TOP, flashTop);
                 SPUtils.save(getContext(), SpConstant.FLASH_FILTRATE_SOUND, flashSound);
-                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
+//                EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_FLASH_FILTRATE, null));
 
-                flashPresenter.filtrate();
+                flashPresenter.filtrate(mOldOnlyShowHigh != onlyShowHigh);
 
                 filtratePopup.dismiss();
             }

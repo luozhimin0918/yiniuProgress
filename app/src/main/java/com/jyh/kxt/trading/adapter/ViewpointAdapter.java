@@ -1,6 +1,5 @@
 package com.jyh.kxt.trading.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,7 +26,6 @@ import com.jyh.kxt.base.constant.IntentConstant;
 import com.jyh.kxt.base.custom.RoundImageView;
 import com.jyh.kxt.base.util.emoje.EmoticonSimpleTextView;
 import com.jyh.kxt.base.utils.LoginUtils;
-import com.jyh.kxt.base.widget.SimplePopupWindow;
 import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.trading.json.ViewPointBean;
 import com.jyh.kxt.trading.json.ViewPointTradeBean;
@@ -196,15 +194,18 @@ public class ViewpointAdapter extends BaseAdapter implements
                     boolean loginEd = LoginUtils.isLogined(mContext);
                     if (!loginEd) {
                         viewHolder2.tvNoDataText.setText("登录同步关注");
-                        viewHolder2.tvNoDataText.setBackgroundResource(R.drawable.bg_point_login);
+//                        viewHolder2.tvNoDataText.setBackgroundResource(R.drawable.bg_point_login);
                         int padding = SystemUtil.dp2px(mContext, 3);
                         viewHolder2.tvNoDataText.setPadding(padding, padding, padding, padding);
-                        viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
+
+                        View.OnClickListener onStartLogin = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                             }
-                        });
+                        };
+                        viewHolder2.ivNoDataImage.setOnClickListener(onStartLogin);
+                        viewHolder2.tvNoDataText.setOnClickListener(onStartLogin);
                     } else {
                         viewHolder2.tvNoDataText.setText("暂无关注");
                         viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
@@ -215,7 +216,9 @@ public class ViewpointAdapter extends BaseAdapter implements
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                            if (!LoginUtils.isLogined(mContext)) {
+                                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                            }
                         }
                     });
                 }
@@ -244,8 +247,10 @@ public class ViewpointAdapter extends BaseAdapter implements
     }
 
     class ViewHolder0 {
-        @BindView(R.id.ntl_title_view) NavigationTabLayout navigationTabLayout;
-        @BindView(R.id.v_line) View line;
+        @BindView(R.id.ntl_title_view)
+        NavigationTabLayout navigationTabLayout;
+        @BindView(R.id.v_line)
+        View line;
 
         ViewHolder0(View contentView) {
             ButterKnife.bind(this, contentView);
@@ -253,28 +258,46 @@ public class ViewpointAdapter extends BaseAdapter implements
     }
 
     class ViewHolder1 {
-        @BindView(R.id.riv_user_avatar) RoundImageView rivUserAvatar;
-        @BindView(R.id.tv_nick_name) TextView tvNickName;
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.viewpoint_function_share) ImageView mFunctionView;
-        @BindView(R.id.viewpoint_title) EmoticonSimpleTextView tvContent;
-        @BindView(R.id.viewpoint_picture_layout) GridView gridPictureLayout;
-        @BindView(R.id.viewpoint_function_zan) LinearLayout viewpointFunctionZan;
-        @BindView(R.id.rl_content_item) RelativeLayout rlContentItem;
+        @BindView(R.id.riv_user_avatar)
+        RoundImageView rivUserAvatar;
+        @BindView(R.id.tv_nick_name)
+        TextView tvNickName;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.viewpoint_function_share)
+        ImageView mFunctionView;
+        @BindView(R.id.viewpoint_title)
+        EmoticonSimpleTextView tvContent;
+        @BindView(R.id.viewpoint_picture_layout)
+        GridView gridPictureLayout;
+        @BindView(R.id.viewpoint_function_zan)
+        LinearLayout viewpointFunctionZan;
+        @BindView(R.id.rl_content_item)
+        RelativeLayout rlContentItem;
 
-        @BindView(R.id.viewpoint_transmit_layout) RelativeLayout rlTransmitLayout;
-        @BindView(R.id.viewpoint_transmit_text) EmoticonSimpleTextView tvTransmitView;
+        @BindView(R.id.viewpoint_transmit_layout)
+        RelativeLayout rlTransmitLayout;
+        @BindView(R.id.viewpoint_transmit_text)
+        EmoticonSimpleTextView tvTransmitView;
 
-        @BindView(R.id.thumb_view_zan)   ThumbView3 mThumbView3;
-        @BindView(R.id.view_point_pl_tv) TextView tvPinLunView;
-        @BindView(R.id.view_point_fx_tv) ImageView tvShareView;
-        @BindView(R.id.view_point_zan_tv) TextView tvZanView;
+        @BindView(R.id.thumb_view_zan)
+        ThumbView3 mThumbView3;
+        @BindView(R.id.view_point_pl_tv)
+        TextView tvPinLunView;
+        @BindView(R.id.view_point_fx_tv)
+        ImageView tvShareView;
+        @BindView(R.id.view_point_zan_tv)
+        TextView tvZanView;
 
-        @BindView(R.id.viewpoint_space) View viewSpace;
+        @BindView(R.id.viewpoint_space)
+        View viewSpace;
 
-        @BindView(R.id.viewpoint_line) View viewLine1;
-        @BindView(R.id.view_line1) View viewLine2;
-        @BindView(R.id.view_line2) View viewLine3;
+        @BindView(R.id.viewpoint_line)
+        View viewLine1;
+        @BindView(R.id.view_line1)
+        View viewLine2;
+        @BindView(R.id.view_line2)
+        View viewLine3;
 
 
         private ViewPointTradeBean viewPointTradeBean;
@@ -381,8 +404,10 @@ public class ViewpointAdapter extends BaseAdapter implements
     }
 
     class ViewHolder2 {
-        @BindView(R.id.nodata_img) ImageView ivNoDataImage;
-        @BindView(R.id.nodata_text) TextView tvNoDataText;
+        @BindView(R.id.nodata_img)
+        ImageView ivNoDataImage;
+        @BindView(R.id.nodata_text)
+        TextView tvNoDataText;
 
         ViewHolder2(View contentView) {
             ButterKnife.bind(this, contentView);
