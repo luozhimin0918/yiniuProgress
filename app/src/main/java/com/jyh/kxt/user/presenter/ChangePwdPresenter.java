@@ -33,7 +33,7 @@ public class ChangePwdPresenter extends BasePresenter {
 
     public void pwd(String oldPwd, String newPwd, String rePwd) {
         if (type == ChangePwdActivity.TYPE_SET) {
-            if (newPwd.equals(rePwd)) {
+            if (oldPwd.equals(rePwd)) {
                 activity.showWaitDialog(null);
                 LoginUtils.changePwd(this, null, null, oldPwd, getClass().getName(), new ObserverData() {
                     @Override
