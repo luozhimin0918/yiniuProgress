@@ -228,7 +228,7 @@ public class ArticleContentPresenter {
     /**
      * 请求关注状态
      */
-    public void requestAttentionState(String authorId, final boolean bool, final HttpCallBack httpCallBack) {
+    public void requestAttentionState(final String authorId, final boolean bool, final HttpCallBack httpCallBack) {
         UserJson userInfo = LoginUtils.getUserInfo(mContext);
         if (userInfo != null) {
             IBaseView iBaseView = (IBaseView) mContext;
@@ -253,6 +253,10 @@ public class ArticleContentPresenter {
                     if (httpCallBack != null) {
                         httpCallBack.onResponse(HttpCallBack.Status.SUCCESS);
                     }
+                    if (bool)
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_ADD, authorId));
+                    else
+                        EventBus.getDefault().post(new EventBusClass(EventBusClass.EVENT_ATTENTION_AUTHOR_DEL, authorId));
                 }
 
                 @Override
