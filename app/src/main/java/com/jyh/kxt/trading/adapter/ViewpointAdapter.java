@@ -602,6 +602,9 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
         List<ViewPointTradeBean> tradeBeanList = pointListMap.get(requestNavigationType);
+        if(tradeBeanList == null){
+            tradeBeanList = new ArrayList<>();
+        }
         if (mode == PullToRefreshBase.Mode.PULL_FROM_START) {
             tradeBeanList.clear();
             dataList.clear();
