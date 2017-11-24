@@ -211,7 +211,16 @@ public class ViewpointAdapter extends BaseAdapter implements
                         viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
                     }
                 } else {
+                    View.OnClickListener onUnClick = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    };
                     viewHolder2.tvNoDataText.setText("暂无任何数据");
+
+                    viewHolder2.ivNoDataImage.setOnClickListener(onUnClick);
+                    viewHolder2.tvNoDataText.setOnClickListener(onUnClick);
+
                     viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
                     viewHolder2.tvNoDataText.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -602,7 +611,7 @@ public class ViewpointAdapter extends BaseAdapter implements
                 break;
         }
         List<ViewPointTradeBean> tradeBeanList = pointListMap.get(requestNavigationType);
-        if(tradeBeanList == null){
+        if (tradeBeanList == null) {
             tradeBeanList = new ArrayList<>();
         }
         if (mode == PullToRefreshBase.Mode.PULL_FROM_START) {

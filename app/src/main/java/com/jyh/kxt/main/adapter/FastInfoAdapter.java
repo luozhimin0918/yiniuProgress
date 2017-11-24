@@ -1320,16 +1320,15 @@ public class FastInfoAdapter extends BaseAdapter implements FastInfoPinnedListVi
         timeMap.clear();
         if (flashJsons == null) return;
 
-        int size = flashJsons.size();
-
-        for (int i = 0; i < size; i++) {
-            Object obj = flashJsons.get(i);
+        Iterator it = flashJsons.iterator();
+        while(it.hasNext()){
+            Object obj = it.next();
             if (obj instanceof String) {
-                flashJsons.remove(obj);
+                it.remove();
             }
         }
 
-        size = flashJsons.size();
+        int size = flashJsons.size();
 
         for (int i = 0; i < size; i++) {
             FlashJson flashJson = (FlashJson) flashJsons.get(i);
