@@ -209,6 +209,15 @@ public class ViewpointAdapter extends BaseAdapter implements
                     } else {
                         viewHolder2.tvNoDataText.setText("暂无关注");
                         viewHolder2.tvNoDataText.setBackgroundColor(Color.TRANSPARENT);
+
+
+                        View.OnClickListener onUnGz = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        };
+                        viewHolder2.ivNoDataImage.setOnClickListener(onUnGz);
+                        viewHolder2.tvNoDataText.setOnClickListener(onUnGz);
                     }
                 } else {
                     View.OnClickListener onUnClick = new View.OnClickListener() {

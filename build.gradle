@@ -60,7 +60,7 @@ task clean(type: Delete) {
  * 发布须知!!!!!!!!!!!!!!!!!!!!!!!!
  */
 ext {
-    bakApkName = 'app-release-1122-16-43-49'
+    bakApkName = 'app-release-1123-17-46-50'
     patchMessage = '暂无提示'
 
     versionName = '6.2.0'
