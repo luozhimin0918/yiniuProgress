@@ -1,40 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:clipChildren="false"
+                android:orientation="vertical">
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/video_item_height">
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="17:10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_def_video" />
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_def_video" />
 
-        <ImageView
-            android:id="@+id/iv_playBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/icon_video_play_big" />
+            <ImageView
+                android:id="@+id/iv_playBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/icon_video_play_big" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/videoItemTitleHeight"
-            android:layout_gravity="bottom"
-            android:background="@color/translucent_color"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/videoItemTitlePaddingLeft"
-            android:textSize="@dimen/describe_font_size4" />
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/videoItemTitleHeight"
+                android:layout_gravity="bottom"
+                android:background="@color/translucent_color"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/videoItemTitlePaddingLeft"
+                android:textSize="@dimen/describe_font_size4" />
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
 
     <RelativeLayout
+        android:id="@+id/rlView"
+        android:layout_below="@id/clview"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:clipChildren="false"
@@ -95,8 +109,9 @@
     </RelativeLayout>
 
     <View
+        android:layout_below="@id/rlView"
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/videoItemLineHeight"
         android:background="@color/line_color2" />
-</LinearLayout>
+</RelativeLayout>
