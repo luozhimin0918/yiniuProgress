@@ -384,7 +384,9 @@ public class DatumFragment extends BaseFragment implements OnTabSelectListener {
             event.put(CalendarContract.Events.DESCRIPTION, calendarFinanceBean.getTitle());
             event.put(CalendarContract.Events.CALENDAR_ID, calendarId);
             event.put(CalendarContract.Events.DTSTART, baseTime);//起始时间
-            event.put(CalendarContract.Events.DTEND, baseTime); //截止时间
+
+            long endTime = baseTime + ( 5* 60 * 1000);
+            event.put(CalendarContract.Events.DTEND, endTime); //截止时间
             event.put(CalendarContract.Events.HAS_ALARM, 1); //控制是否事件触发报警，提醒如下
 
             try {
