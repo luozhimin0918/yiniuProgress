@@ -103,22 +103,35 @@ import static com.library.base.http.VarConstant.APP_WEB_URL;
 public class NewsContentActivity extends BaseActivity implements CommentPresenter.OnCommentClickListener,
         CommentPresenter.OnCommentPublishListener, PageLoadLayout.OnAfreshLoadListener {
 
-    @BindView(R.id.actionbar) RelativeLayout mActionBarLayout;
+    @BindView(R.id.actionbar)
+    RelativeLayout mActionBarLayout;
 
-    @BindView(R.id.pll_content) public PageLoadLayout pllContent;
-    @BindView(R.id.rv_message) public PullToRefreshListView ptrLvMessage;
-    @BindView(R.id.iv_ding) public ImageView ivGood;
+    @BindView(R.id.pll_content)
+    public PageLoadLayout pllContent;
+    @BindView(R.id.rv_message)
+    public PullToRefreshListView ptrLvMessage;
+    @BindView(R.id.iv_ding)
+    public ImageView ivGood;
 
-    @BindView(R.id.thumb_view_zan) public ThumbView3 mThumbView3;
-    @BindView(R.id.iv_collect) public ImageView ivCollect;
-    @BindView(R.id.tv_commentCount) TextView tvCommentCount;
-    @BindView(R.id.tv_ding_Count) public TextView tvDianCount;
+    @BindView(R.id.thumb_view_zan)
+    public ThumbView3 mThumbView3;
+    @BindView(R.id.iv_collect)
+    public ImageView ivCollect;
+    @BindView(R.id.tv_commentCount)
+    TextView tvCommentCount;
+    @BindView(R.id.tv_ding_Count)
+    public TextView tvDianCount;
 
-    @BindView(R.id.news_author_image) RoundImageView newsAuthorImage;
-    @BindView(R.id.news_author_nick) TextView newsAuthorNick;
-    @BindView(R.id.news_author_like) SelectedImageView newsAuthorLike;
-    @BindView(R.id.news_author_line) View newsAuthorLine;
-    @BindView(R.id.tv_bar_title) TextView newsTitleBar;
+    @BindView(R.id.news_author_image)
+    RoundImageView newsAuthorImage;
+    @BindView(R.id.news_author_nick)
+    TextView newsAuthorNick;
+    @BindView(R.id.news_author_like)
+    SelectedImageView newsAuthorLike;
+    @BindView(R.id.news_author_line)
+    View newsAuthorLine;
+    @BindView(R.id.tv_bar_title)
+    TextView newsTitleBar;
 
     private NewsContentPresenter newsContentPresenter;
     public CommentPresenter commentPresenter;
@@ -304,7 +317,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         selectView = (SelectLineView) customLayout.findViewById(R.id.sv_fontSize);
         String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
 
-        selectView.changeViewStatus(Integer.parseInt(RegexValidateUtil.isEmpty(fontSizeStr)?"1":fontSizeStr));
+        selectView.changeViewStatus(Integer.parseInt(RegexValidateUtil.isEmpty(fontSizeStr) ? "1" : fontSizeStr));
 
         tvTheme = (TextView) customLayout.findViewById(R.id.tv_theme);
         llTheme = (LinearLayout) customLayout.findViewById(R.id.ll_theme);
@@ -421,7 +434,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         String fontSizeStr = SPUtils.getString(NewsContentActivity.this, SpConstant.WEBFONTSIZE);
         if (RegexValidateUtil.isEmpty(fontSizeStr)) {
             font = fontM;
-            fontSizeStr="1";
+            fontSizeStr = "1";
         }
         switch (fontSizeStr) {
             case "0":
@@ -479,28 +492,42 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     }
 
     public class WebViewAndHead implements View.OnClickListener {
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.iv_photo) RoundImageView ivPhoto;
-        @BindView(R.id.tv_name) TextView tvName;
-        @BindView(R.id.tv_type) TextView tvType;
-        @BindView(R.id.tv_time) TextView tvTime;
-        @BindView(R.id.iv_like) SelectedImageView cbLike;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.iv_photo)
+        RoundImageView ivPhoto;
+        @BindView(R.id.tv_name)
+        TextView tvName;
+        @BindView(R.id.tv_type)
+        TextView tvType;
+        @BindView(R.id.tv_time)
+        TextView tvTime;
+        @BindView(R.id.iv_like)
+        SelectedImageView cbLike;
 
-        @BindView(R.id.news_head_line) View viewLine;
+        @BindView(R.id.news_head_line)
+        View viewLine;
 
-        @BindView(R.id.rl_exist_author) RelativeLayout rlExistAuthor;
-        @BindView(R.id.rl_not_author) RelativeLayout rlNotAuthor;
+        @BindView(R.id.rl_exist_author)
+        RelativeLayout rlExistAuthor;
+        @BindView(R.id.rl_not_author)
+        RelativeLayout rlNotAuthor;
 
         //        @BindView(R.id.tv_news_type) TextView tvNewsType;
 //        @BindView(R.id.tv_news_time) TextView tvNewsTime;
 
-        @BindView(R.id.tv_news_title) TextView tvNewsTitle;
-        @BindView(R.id.tv_news_time) TextView tvNewsTime;
-        @BindView(R.id.tv_news_label) TextView tvNewsLabel;
+        @BindView(R.id.tv_news_title)
+        TextView tvNewsTitle;
+        @BindView(R.id.tv_news_time)
+        TextView tvNewsTime;
+        @BindView(R.id.tv_news_label)
+        TextView tvNewsLabel;
 
 
-        @BindView(R.id.wv_content) public WebView wvContent;
-        @BindView(R.id.fl_web_content) FrameLayout flWebContent;
+        @BindView(R.id.wv_content)
+        public WebView wvContent;
+        @BindView(R.id.fl_web_content)
+        FrameLayout flWebContent;
 
         public LinearLayout headView;
         private NewsContentJson newsContentJson;
@@ -540,7 +567,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
             rlExistAuthor.setOnClickListener(this);
 
-            newsAuthorImage.setImageResource(R.mipmap.ic_launcher);
+            newsAuthorImage.setImageResource(R.mipmap.icon_user_def_photo);
             ivPhoto.setImageResource(R.mipmap.icon_user_def_photo);
 
             Glide.with(NewsContentActivity.this)
@@ -1062,8 +1089,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
         @JavascriptInterface
         public void imgClick(final String imgPath) {
-            if (imgPath != null && (imgPath.contains("/Uploads/Editor") || imgPath.contains("/uploads/editor") || imgPath.contains
-                    ("/uploads/Editor") || imgPath.contains("/Uploads/editor"))) {
+
+            if (imgPath != null) {
+                boolean isSyImage = imgPath.endsWith(".png") || imgPath.endsWith(".jpg");
+                if(!isSyImage){
+                    return;
+                }
                 imgStr = imgPath;
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1092,7 +1123,7 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                                             config.outsideTouchable = true;
                                             config.alpha = 0.5f;
                                             config.bgColor = 0X00000000;
-                                            config.animationStyle = R.style.PopupWindow_Style2;
+//                                            config.animationStyle = R.style.PopupWindow_Style2;
                                             config.width = WindowManager.LayoutParams.MATCH_PARENT;
                                             config.height = WindowManager.LayoutParams.MATCH_PARENT;
 
