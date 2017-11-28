@@ -63,7 +63,6 @@ import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
-import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -71,7 +70,6 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
-import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -135,8 +133,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     TextView newsAuthorNick;
     @BindView(R.id.news_author_like)
     SelectedImageView newsAuthorLike;
-    @BindView(R.id.news_author_chat)
-    TextView newsAuthorChat;
     @BindView(R.id.news_author_line)
     View newsAuthorLine;
     @BindView(R.id.tv_bar_title)
