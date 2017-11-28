@@ -1,5 +1,6 @@
 package com.jyh.kxt.main.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -62,6 +63,7 @@ import com.jyh.kxt.base.widget.SelectedImageView;
 import com.jyh.kxt.base.widget.ThumbView2;
 import com.jyh.kxt.base.widget.ThumbView3;
 import com.jyh.kxt.base.widget.night.ThemeUtil;
+import com.jyh.kxt.chat.ChatRoomActivity;
 import com.jyh.kxt.index.ui.WebActivity;
 import com.jyh.kxt.main.json.NewsContentJson;
 import com.jyh.kxt.main.json.SlideJson;
@@ -69,6 +71,7 @@ import com.jyh.kxt.main.presenter.NewsContentPresenter;
 import com.jyh.kxt.push.PushUtil;
 import com.jyh.kxt.trading.ui.AuthorActivity;
 import com.jyh.kxt.user.json.UserJson;
+import com.jyh.kxt.user.ui.LoginActivity;
 import com.library.base.http.HttpListener;
 import com.library.base.http.VarConstant;
 import com.library.base.http.VolleyRequest;
@@ -81,11 +84,15 @@ import com.library.widget.ZoomImageView;
 import com.library.widget.handmark.PullToRefreshBase;
 import com.library.widget.handmark.PullToRefreshListView;
 import com.library.widget.window.ToastView;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -128,6 +135,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
     TextView newsAuthorNick;
     @BindView(R.id.news_author_like)
     SelectedImageView newsAuthorLike;
+    @BindView(R.id.news_author_chat)
+    TextView newsAuthorChat;
     @BindView(R.id.news_author_line)
     View newsAuthorLine;
     @BindView(R.id.tv_bar_title)
@@ -165,6 +174,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
 
     private String memberId;
     private String authorName;
+
+    /**
+     * 详情界面的Image
+     */
+    private ArrayList<String> mWebImageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -449,6 +463,8 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         }
 
         content = newsContentJson.getContent();
+
+
         night = newsContentJson.getNight_style();
 
         try {
@@ -536,11 +552,11 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         public ThumbView2 attention;
         private boolean isAllowAttention;
 
-        private Bitmap authorBitmap;
 
         /**
          * ----------------创建顶部的Head
          */
+        @SuppressLint("JavascriptInterface")
         public void createWebViewAndHead(final NewsContentJson newsContentJson) {
             this.newsContentJson = newsContentJson;
             this.headView = commentPresenter.getHeadView();
@@ -579,7 +595,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
                                 glideAnimation) {
-                            WebViewAndHead.this.authorBitmap = resource;
                             ivPhoto.setImageBitmap(resource);
                             newsAuthorImage.setImageBitmap(resource);
                         }
@@ -702,12 +717,27 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             /**
              * ----------  创建WebView
              */
+
+
+            //处理Content
+            StringBuffer sb = new StringBuffer();
+
+            Pattern patternImgSrc = Pattern.compile("<img(.+?)src=\"(.+?)\"(.+?)/>");
+            Matcher localMatcher = patternImgSrc.matcher(content);
+            while (localMatcher.find()) {
+                String imageUrl = localMatcher.group(2);
+                mWebImageList.add(imageUrl);
+                localMatcher.appendReplacement(sb, "<p style=\"text-align:center;text-indent:0;\">" +
+                        "<img src=\"file:///android_asset/web_preload.png\"/> " +
+                        "</p>");
+            }
+            localMatcher.appendTail(sb);
+            content = sb.toString();
+
             final WebSettings settings = wvContent.getSettings();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             }
-
-//            settings.setBlockNetworkImage(true);
 
             settings.setJavaScriptEnabled(true);
             settings.setAppCacheEnabled(true);
@@ -737,7 +767,6 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
             }
             wvContent.addJavascriptInterface(new ImgClickListener(), "jsinfo");
             wvContent.setWebViewClient(new WebViewClient() {
-
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     boolean isUrl = !url.startsWith(APP_WEB_URL);
@@ -807,6 +836,18 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
+
+                    view.loadUrl("javascript:function loadImagePreload()" +
+                            "{" +
+                            "   var mImage = document.getElementsByTagName(\"img\");" +
+                            "   for(var i = 0; i < mImage.length; i++)" +
+                            "   {" +
+                            "      mImage[i].src = jsinfo.preloadConsole(i); " +
+                            "   }" +
+                            "}");
+                    view.loadUrl("javascript:loadImagePreload()");
+
+
                     view.loadUrl("javascript:function clickImg()" +
                             "{" +
                             "   var imgs = document.getElementsByTagName(\"img\");" +
@@ -820,29 +861,12 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
                             "}");
                     view.loadUrl("javascript:clickImg()");
 
-//                    settings.setBlockNetworkImage(false);
-//                    if (!settings.getLoadsImagesAutomatically()) { //判断webview是否加载了，图片资源
-//                        //设置wenView加载图片资源
-//                        settings.setLoadsImagesAutomatically(true);
-//                    }
                     flWebContent.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             flWebContent.setForeground(null);
                         }
                     }, 150);
-//                    view.loadUrl("javascript:function urlClick()" +
-//                            "{" +
-//                            "   var urls = document.getElementsByTagName(\"a\");" +
-//                            "   for(var i = 0; i < urls.length; i++)" +
-//                            "   {" +
-//                            "       urls[i].onclick = function()" +
-//                            "       {" +
-//                            "           jsinfo.urlClick(this.href); " +
-//                            "       }" +
-//                            "   }" +
-//                            "}");
-//                    view.loadUrl("javascript:urlClick()");
                 }
             });
             headView.addView(llFullContent, 0);
@@ -1082,65 +1106,93 @@ public class NewsContentActivity extends BaseActivity implements CommentPresente
         UmengShareUI.onActivityResult(this, requestCode, resultCode, data);
     }
 
+
     class ImgClickListener implements View.OnClickListener {
+
+        @JavascriptInterface
+        public String preloadConsole(int position) {
+            return mWebImageList.get(position);
+        }
+
+
         private PopupUtil popupUtil;
-        private ZoomImageView ivPop;
+        private ZoomImageView mZoomImageView;
         private ImageView ivDownLoad;
+        private ProgressWheel mProgressWheel;
 
         @JavascriptInterface
         public void imgClick(final String imgPath) {
 
             if (imgPath != null) {
                 boolean isSyImage = imgPath.endsWith(".png") || imgPath.endsWith(".jpg");
-                if(!isSyImage){
+                if (!isSyImage) {
                     return;
                 }
                 imgStr = imgPath;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+
+                        if (popupUtil == null) {
+                            popupUtil = new PopupUtil(NewsContentActivity.this);
+                            View inflate = popupUtil.createPopupView(R.layout.pop_img);
+                            mZoomImageView = (ZoomImageView) inflate.findViewById(R.id.iv_pop);
+                            mProgressWheel = (ProgressWheel) inflate.findViewById(R.id.id_volley_loading_pro);
+
+                            ivDownLoad = (ImageView) inflate.findViewById(R.id.iv_download);
+                            ivDownLoad.setVisibility(View.VISIBLE);
+                            ivDownLoad.setOnClickListener(ImgClickListener.this);
+                            mZoomImageView.setOnClickListener(ImgClickListener.this);
+
+                            PopupUtil.Config config = new PopupUtil.Config();
+
+                            config.outsideTouchable = true;
+                            config.alpha = 0.5f;
+                            config.bgColor = 0X00000000;
+                            config.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            config.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                            popupUtil.setConfig(config);
+                        }
+
+                        if (popupUtil.isShowing()) {
+                            popupUtil.dismiss();
+                        }
+                        popupUtil.setOnDismissListener(new PopupUtil.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                popupUtil = null;
+                                mZoomImageView = null;
+                                mProgressWheel = null;
+                            }
+                        });
+                        ViewGroup.LayoutParams layoutParams = mZoomImageView.getLayoutParams();
+                        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        mZoomImageView.setLayoutParams(layoutParams);
+                        popupUtil.showAtLocation(ivCollect, Gravity.CENTER, 0, 0);
+
+                        mProgressWheel.setVisibility(View.VISIBLE);
+
                         Glide.with(NewsContentActivity.this)
                                 .load(imgPath)
                                 .asBitmap()
                                 .error(R.mipmap.icon_def_video)
-                                .placeholder(R.mipmap.icon_def_video)
+                                .dontAnimate()
                                 .into(new SimpleTarget<Bitmap>() {
                                     @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                                            glideAnimation) {
-
-                                        if (popupUtil == null) {
-                                            popupUtil = new PopupUtil(NewsContentActivity.this);
-                                            View inflate = popupUtil.createPopupView(R.layout.pop_img);
-                                            ivPop = (ZoomImageView) inflate.findViewById(R.id.iv_pop);
-                                            ivDownLoad = (ImageView) inflate.findViewById(R.id.iv_download);
-                                            ivDownLoad.setVisibility(View.VISIBLE);
-                                            ivDownLoad.setOnClickListener(ImgClickListener.this);
-                                            ivPop.setOnClickListener(ImgClickListener.this);
-
-                                            PopupUtil.Config config = new PopupUtil.Config();
-
-                                            config.outsideTouchable = true;
-                                            config.alpha = 0.5f;
-                                            config.bgColor = 0X00000000;
-//                                            config.animationStyle = R.style.PopupWindow_Style2;
-                                            config.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                            config.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-                                            popupUtil.setConfig(config);
+                                    public void onResourceReady(Bitmap resource,
+                                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                                        try {
+                                            if (popupUtil == null || mProgressWheel == null || mZoomImageView == null) {
+                                                return;
+                                            }
+                                            mProgressWheel.setVisibility(View.GONE);
+                                            mZoomImageView.setImageBitmap(resource);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-
-                                        if (popupUtil.isShowing()) {
-                                            popupUtil.dismiss();
-                                        }
-
-                                        ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                                        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                        ivPop.setLayoutParams(layoutParams);
-
-                                        ivPop.setImageBitmap(resource);
-                                        popupUtil.showAtLocation(ivCollect, Gravity.CENTER, 0, 0);
                                     }
                                 });
                     }

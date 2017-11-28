@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
@@ -400,5 +401,8 @@ public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnS
             matrix.postTranslate(0, -dy);
         }
         setImageMatrix(matrix);
+    }
+
+    public void preLoading(){
     }
 }
